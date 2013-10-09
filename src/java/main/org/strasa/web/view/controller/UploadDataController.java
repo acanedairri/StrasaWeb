@@ -1,4 +1,4 @@
-package org.strasa.web.ui.controller;
+package org.strasa.web.view.controller;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

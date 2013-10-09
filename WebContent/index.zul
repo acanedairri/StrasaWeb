@@ -2,7 +2,7 @@
     <style> 
 
     </style>
-    <div width="600px"  apply="org.strasa.web.ui.controller.UploadDataController">
+    <div width="600px"  apply="org.strasa.web.view.controller.UploadDataController">
         <groupbox width="560px" sclass="main z-demo-config">
             <caption label="Enable Backups" />            
             <hlayout spacing="40px" style="padding-left: 10px;">
