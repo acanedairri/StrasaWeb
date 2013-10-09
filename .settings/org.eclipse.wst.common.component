@@ -2,6 +2,7 @@
     <wb-module deploy-name="StrasaWeb">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/java/main"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/java/resources"/>
         <property name="context-root" value="StrasaWeb"/>
         <property name="java-output-path" value="/StrasaWeb/build/classes"/>
     </wb-module>
