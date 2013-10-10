@@ -99,7 +99,22 @@
 		<table schema="MYSCHEMA" tableName="user" domainObjectName="User">
 		<generatedKey column="id" sqlStatement="JDBC" />
 		</table>
+		
+		<table schema="MYSCHEMA" tableName="keyabiotic" domainObjectName="KeyAbiotic">
+		<generatedKey column="id" sqlStatement="JDBC" />
+		</table>
+		
+		<table schema="MYSCHEMA" tableName="keybiotic" domainObjectName="KeyBiotic">
+		<generatedKey column="id" sqlStatement="JDBC" />
+		</table>
 
+		<table schema="MYSCHEMA" tableName="keygrainquality" domainObjectName="KeyGrainQuality">
+		<generatedKey column="id" sqlStatement="JDBC" />
+		</table>
+		
+		<table schema="MYSCHEMA" tableName="keymajorgenes" domainObjectName="KeyMajorGenes">
+		<generatedKey column="id" sqlStatement="JDBC" />
+		</table>
 
 	</context>
 </generatorConfiguration>
