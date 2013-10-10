@@ -1,5 +1,4 @@
-package org.strasa.web.view.controller;
-
+package org.strasa.web.view.model;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -11,23 +10,19 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.UploadEvent;
-import org.zkoss.zk.ui.select.SelectorComposer;
-import org.zkoss.zk.ui.select.annotation.Wire;
-import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
-public class UploadDataController extends SelectorComposer<Window> {
+public class UploadDataModel {
+	
 	
 
-	@Wire("#lblMsgUpload")
-	private Label lblUploadMessage;
-	
-	
 
 	@Command("uploadCSV")
 	public void uploadCSV(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view) {
@@ -39,7 +34,7 @@ public class UploadDataController extends SelectorComposer<Window> {
 		params.put("value","sample");
 		params.put("parent", view);
 	
-		Window popup = (Window) Executions.createComponents("popup.zul", view, params);
+		Window popup = (Window) Executions.createComponents("modal/popup.zul", view, params);
 		
 		popup.doModal();
 
@@ -64,7 +59,6 @@ public class UploadDataController extends SelectorComposer<Window> {
 	        
 
 		    
-	        lblUploadMessage.setValue("Filename: " + name + ".csv");
 		
 	}
 	public void uploadFile(String path, String name, String ext,
@@ -86,4 +80,5 @@ public class UploadDataController extends SelectorComposer<Window> {
 	
 	System.out.println("newVal: " + newValue);
 	}
+	
 }

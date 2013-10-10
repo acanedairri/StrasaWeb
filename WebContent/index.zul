@@ -2,7 +2,9 @@
     <style> 
 
     </style>
-    <div width="600px"  apply="org.strasa.web.view.controller.UploadDataController">
+    <div width="600px"  apply="org.zkoss.bind.BindComposer"
+
+viewModel="@id('vm') @init('org.strasa.web.view.model.UploadDataModel')">
         <groupbox width="560px" sclass="main z-demo-config">
             <caption label="Enable Backups" />            
             <hlayout spacing="40px" style="padding-left: 10px;">
@@ -51,7 +53,7 @@
                             <radiogroup>
                                
                                 <vlayout width="100%" spacing="10px">
-                                       <button id="uploadCSV" upload="true" label="Upload CSV" />
+                                       <button id="uploadCSV" upload="true" label="Upload CSV"  onUpload="@command('uploadCSV')"/>
                                         <label id="lblMsgUpload" />
                                 </vlayout>
                             </radiogroup>
