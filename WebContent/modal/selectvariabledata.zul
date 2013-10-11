@@ -1,15 +1,15 @@
 <zk>
   <window title="ModalWin" border="normal" closable="true"  apply="org.zkoss.bind.BindComposer"
-        viewModel="@id('vm') @init('org.strasa.web.view.model.ChangeVariableModel')">
+        viewModel="@id('vm') @init('org.strasa.web.view.model.ChangeVariableModel')" width = "35%">
  
         <separator />
         Inbox mails : 
         <grid height="350px" model="@load(vm.varData.mailData)"
             emptyMessage="Nothing in Inbox.">
             <columns>
-                <column label="Variable" width="50px" />
-                <column label="Selected" />
-                <column label="Ctrl" width="100px" />
+                <column label="Variable" width="40%" />
+                <column label="Selected" width="40%" />
+                <column label="Ctrl" width="20%" />
             </columns>
             <template name="model">
                 <row>

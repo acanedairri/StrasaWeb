@@ -61,8 +61,7 @@ public class UploadDataModel {
 			StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
 			CSVReader reader = new CSVReader(new FileReader(path+name+ ".csv"));
 			String[] header = reader.readNext();
-			   List<String[]> myEntries = reader.readAll();
-			for(String column : myEntries.get(0)){
+			for(String column : header){
 				if(!studyVarMan.hasVariable(column)){
 					invalidHeader.add(column);
 				}
