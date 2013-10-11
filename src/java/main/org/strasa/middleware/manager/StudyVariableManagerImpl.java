@@ -1,5 +1,7 @@
 package org.strasa.middleware.manager;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyVariableMapper;
@@ -14,7 +16,12 @@ public class StudyVariableManagerImpl {
 	
 	
 	private StudyVariableMapper getMapper(){
-		return session.getMapper(StudyVariableMapper.class);
+		return getSqlSession().getMapper(StudyVariableMapper.class);
+	}
+	private SqlSession getSqlSession(){
+		session =ConnectionFactory.getSqlSessionFactory().openSession();
+		return session;
+
 	}
 	public StudyVariableManagerImpl(){
 		ConnectionFactory con = new ConnectionFactory();
@@ -25,7 +32,7 @@ public class StudyVariableManagerImpl {
 		
 		try{
 			StudyVariableExample query = new StudyVariableExample();
-			query.createCriteria().andApplytofilterEqualTo(variable);
+			query.createCriteria().andVariablecodeEqualTo(variable);
 			if(getMapper().selectByExample(query).isEmpty()) return false;
 			
 		}
@@ -35,6 +42,18 @@ public class StudyVariableManagerImpl {
 		
 		return true;
 	}
+	
+	public List<StudyVariable> getVariables(){
+		
+		try{
+			return getMapper().selectByExample(null);
+		}
+		finally{
+			session.close();
+		}
+		
+	}
+	
 	
 	public StudyVariable getVariableByName(String var){
 		try{

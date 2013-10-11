@@ -14,7 +14,6 @@ public class PopupViewModel {
 	
 	private String value;
 	private Binder parBinder;
-	
 	public String getValue() {
 		return value;
 	}

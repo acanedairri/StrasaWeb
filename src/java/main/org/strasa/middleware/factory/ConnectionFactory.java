@@ -56,7 +56,7 @@ public class ConnectionFactory {
 		                sqlSessionFactory.getConfiguration().addMapper(GermplasmCharacteristicsMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(GermplasmMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(GermplasmReleaseInfoMapper.class);
-		                sqlSessionFactory.getConfiguration().addMapper(GermplasmMapper.class);  
+//		                sqlSessionFactory.getConfiguration().addMapper(GermplasmMapper.class);  
 		                sqlSessionFactory.getConfiguration().addMapper(LocationMapper.class);  
 		                sqlSessionFactory.getConfiguration().addMapper(PlantingTypeMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(ProgramMapper.class);
@@ -88,7 +88,7 @@ public class ConnectionFactory {
            
     }
  
-    public SqlSessionFactory getSqlSessionFactory() {
+    public static SqlSessionFactory getSqlSessionFactory() {
  
         return sqlSessionFactory;
     }

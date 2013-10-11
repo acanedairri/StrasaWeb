@@ -1,0 +1,24 @@
+<zk>
+  <window title="ModalWin" border="normal" closable="true"  apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.strasa.web.view.model.ChangeVariableModel')">
+ 
+        <separator />
+        Inbox mails : 
+        <grid height="350px" model="@load(vm.varData.mailData)"
+            emptyMessage="Nothing in Inbox.">
+            <columns>
+                <column label="Variable" width="50px" />
+                <column label="Selected" />
+                <column label="Ctrl" width="100px" />
+            </columns>
+            <template name="model">
+                <row>
+                    <label value="@load(each.currentVariable)" />
+                    <label value="@load(each.newVariable)" />
+                    <button label="Change" onClick="@command('changeVar', oldVar=each.currentVariable)" />
+                </row>
+            </template>
+        </grid>
+         
+    </window>
+</zk>
