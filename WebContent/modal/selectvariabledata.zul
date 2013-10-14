@@ -1,24 +1,29 @@
 <zk>
   <window title="ModalWin" border="normal" closable="true"  apply="org.zkoss.bind.BindComposer"
-        viewModel="@id('vm') @init('org.strasa.web.view.model.ChangeVariableModel')" width = "35%">
+        viewModel="@id('vm') @init('org.strasa.web.view.model.ChangeVariableModel')" width = "35%" height = "45%">
  
         <separator />
-        Inbox mails : 
-        <grid height="350px" model="@load(vm.varData.mailData)"
-            emptyMessage="Nothing in Inbox.">
-            <columns>
-                <column label="Variable" width="40%" />
-                <column label="Selected" width="40%" />
-                <column label="Ctrl" width="20%" />
-            </columns>
-            <template name="model">
-                <row>
-                    <label value="@load(each.currentVariable)" />
-                    <label value="@load(each.newVariable)" />
-                    <button label="Change" onClick="@command('changeVar', oldVar=each.currentVariable)" />
-                </row>
+       
+           <listbox 
+            model="@load(vm.varList)" selectedItem="@bind(vm.selectedVar)" height = "100%"  fixedLayout="true" vflex="true" style="overflow:scroll;">
+            <auxhead>
+                <auxheader colspan="3" class="topic">Variabe List</auxheader>
+            </auxhead>
+            <listhead>
+                <listheader label="Variable" width="80px" align="center" />
+                <listheader label="Property" align="center" />
+                <listheader label="Scale" width="80px" align="center" />
+                <listheader label="Method" width="80px" align="center" />
+            </listhead>
+            <template name="model" >
+                <listitem>
+                    <listcell label="@load(each.variablecode)" />
+                    <listcell label="@load(each.property)" />
+                    <listcell label="@load(each.scale)" />
+                       <listcell label="@load(each.method)" />
+                </listitem>
             </template>
-        </grid>
-         
+ 
+        </listbox>
     </window>
 </zk>

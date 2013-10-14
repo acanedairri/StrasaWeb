@@ -6,11 +6,9 @@
 
 viewModel="@id('vm') @init('org.strasa.web.view.model.UploadDataModel')">
         <groupbox width="560px" sclass="main z-demo-config">
-            <caption label="Enable Backups" />            
+                   
             <hlayout spacing="40px" style="padding-left: 10px;">
-                <image src="/widgets/layout/complex_group_box/img/backup_icon64.png"></image>
-                <n:h1 class="cg-title">Backup Your Files</n:h1>
-                <n:h3 class="cg-desc">The easiest way to backup your files</n:h3>                   
+           
             </hlayout>
             <separator height="15px"></separator>
             <vlayout spacing="15px">
@@ -48,29 +46,27 @@ viewModel="@id('vm') @init('org.strasa.web.view.model.UploadDataModel')">
                 </groupbox>
                          <groupbox id="grpUpload" mold="3d" width="100%" >
                     <caption  label="Upload Data" />
+                    <label value=""></label>
                     <hlayout spacing="50px">
                         <vlayout width="300px">
                             <radiogroup>
                                
                                 <vlayout width="100%" spacing="10px">
-                                       <button id="uploadCSV" upload="true" label="Upload CSV"  onUpload="@command('uploadCSV')"/>
-                                        <label id="lblMsgUpload" />
+                                      <hlayout>  <button id="uploadCSV" upload="true" label="Upload CSV"  onUpload="@command('uploadCSV')"/>
+                                       <label id="lblMsgUpload" visible="@load(vm.variableDataVisible)" value="@load(vm.dataFileName)" />
+                                          <button label="Remove" onClick="@command('removeUpload')" visible="@load(vm.variableDataVisible)" />
+                                        </hlayout>
                                 </vlayout>
                             </radiogroup>
                         </vlayout>
                         
                     </hlayout>
                 </groupbox>
-        
-            </vlayout>
-        </groupbox>
-    </div>
-    <window title="ModalWin" border="normal" closable="true" visible="false"  apply="org.zkoss.bind.BindComposer"
-        viewModel="@id('vm') @init('org.strasa.web.view.model.ChangeVariableModel')" width = "35%">
- 
-        <separator />
-        Inbox mails : 
-        <grid height="350px" model="@load(vm.varData.mailData)"
+          <groupbox id="grpVariableData" mold="3d" width="100%" visible="@load(vm.variableDataVisible)">
+                    <caption  label="Invalid Data Header" />
+                    <hlayout spacing="50px">
+                        <vlayout width="100%">
+                        <grid height="350px" width="99%" model="@load(vm.varData)"
             emptyMessage="Nothing in Inbox.">
             <columns>
                 <column label="Variable" width="40%" />
@@ -85,6 +81,14 @@ viewModel="@id('vm') @init('org.strasa.web.view.model.UploadDataModel')">
                 </row>
             </template>
         </grid>
-         
-    </window>
+        
+                    <button label="Save" onClick="@command('saveHeader')" />
+                        </vlayout>
+                        
+                    </hlayout>
+                </groupbox>
+            </vlayout>
+        </groupbox>
+    </div>
+
 </zk>

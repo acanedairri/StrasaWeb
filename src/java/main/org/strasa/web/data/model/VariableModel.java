@@ -1,4 +1,5 @@
-package org.strasa.web.pojos;
+package org.strasa.web.data.model;
+
 
 public class VariableModel {
 	

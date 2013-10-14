@@ -11,6 +11,7 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
@@ -29,6 +30,17 @@ public class UploadDataController extends SelectorComposer<Window> {
 	
 	
 
+	    @Command
+	    @NotifyChange("variableData")
+	    public void changeVar(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@BindingParam("oldVar") String oldVar) {
+	        System.out.print(oldVar);
+	    }
+
+	
+	
+	
+	    @NotifyChange("*")
+	    
 	@Command("uploadCSV")
 	public void uploadCSV(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view) {
 		
