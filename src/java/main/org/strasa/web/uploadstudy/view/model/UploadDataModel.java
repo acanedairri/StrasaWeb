@@ -1,4 +1,4 @@
-package org.strasa.web.view.model;
+package org.strasa.web.uploadstudy.view.model;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
-import org.strasa.web.pojos.VariableModel;
+import org.strasa.web.uploadstudy.view.pojos.VariableModel;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
@@ -31,19 +31,19 @@ import au.com.bytecode.opencsv.CSVWriter;
 public class UploadDataModel {
 
 
-	
+
 	public String dataFileName;
 	public boolean isVariableDataVisible = false;
-	 
-    public String getDataFileName() {
+
+	public String getDataFileName() {
 		return dataFileName;
 	}
-    
+
 
 	public List<VariableModel> varData = new ArrayList<VariableModel>();
 	private String path;
-     
-    public boolean isVariableDataVisible() {
+
+	public boolean isVariableDataVisible() {
 		return isVariableDataVisible;
 	}
 
@@ -52,45 +52,45 @@ public class UploadDataModel {
 	}
 
 	public List<VariableModel>  getVarData() {
-        return varData;
-    }
- 
-	    @Command
-	    @NotifyChange("variableData")
-	    public void changeVar(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@BindingParam("oldVar") String oldVar) {
+		return varData;
+	}
 
-			Map<String, Object> params = new HashMap<String, Object>();
-		     System.out.println(oldVar);
-			params.put("oldVar",oldVar);
-			params.put("parent", view);
+	@Command
+	@NotifyChange("variableData")
+	public void changeVar(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@BindingParam("oldVar") String oldVar) {
 
-			Window popup = (Window) Executions.createComponents("modal/selectvariabledata.zul", view, params);
+		Map<String, Object> params = new HashMap<String, Object>();
+		System.out.println(oldVar);
+		params.put("oldVar",oldVar);
+		params.put("parent", view);
 
-			popup.doModal();
-	    }
+		Window popup = (Window) Executions.createComponents("modal/selectvariabledata.zul", view, params);
 
-	
-	    @NotifyChange("*")
-		@Command("refreshVarList")
-	    public void refreshList(@BindingParam("newValue") String newValue, @BindingParam("oldVar") String oldVar){
-	    	for(int i = 0; i < varData.size(); i++){
-	    		
-	    		if(varData.get(i).getCurrentVariable().equals(oldVar)) {
-	    			System.out.println("   ss");
-	    			varData.get(i).setNewVariable(newValue);
-	    		}
-	    		
-	    	}
-	    	
-	    	
-	    }
-	
-	 @NotifyChange("*")
+		popup.doModal();
+	}
+
+
+	@NotifyChange("*")
+	@Command("refreshVarList")
+	public void refreshList(@BindingParam("newValue") String newValue, @BindingParam("oldVar") String oldVar){
+		for(int i = 0; i < varData.size(); i++){
+
+			if(varData.get(i).getCurrentVariable().equals(oldVar)) {
+				System.out.println("   ss");
+				varData.get(i).setNewVariable(newValue);
+			}
+
+		}
+
+
+	}
+
+	@NotifyChange("*")
 	@Command("uploadCSV")
 	public void uploadCSV(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view) {
 
 		UploadEvent event = (UploadEvent)ctx.getTriggerEvent();
-		if(event.getMedia().isBinary()){
+		if(!event.getMedia().isBinary()){
 			Messagebox.show("Error: File must be a text-based csv format", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
@@ -100,14 +100,14 @@ public class UploadDataModel {
 
 		String name = event.getMedia().getName();
 
-		 path = Sessions.getCurrent().getWebApp().getRealPath("/UPLOADS/") + "/";                
+		path = Sessions.getCurrent().getWebApp().getRealPath("/UPLOADS/") + "/";                
 
 
 		this.uploadFile(path, name,  event.getMedia().getStringData());       
 		BindUtils.postNotifyChange(null, null, this, "*");
 
 		ArrayList<String> invalidHeader = new ArrayList<String>();
-		
+
 		try {
 			StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
 			CSVReader reader = new CSVReader(new FileReader(path+name));
@@ -127,28 +127,28 @@ public class UploadDataModel {
 			e.printStackTrace();
 		}
 
-		
+
 		populateVarData(invalidHeader);
 		isVariableDataVisible = true;
 		dataFileName = name ;
 
 	}
-	 
 
-	 @NotifyChange("varData")
-	 public void populateVarData(ArrayList<String> list){
-		 for(String var : list){
-			 varData.add(new VariableModel(var,"-"));
-		 }
-	 }
-	 
-	 @NotifyChange("*")
-	 @Command("removeUpload")
-	 public void removeUpload(){
-		 isVariableDataVisible = false;
-		 dataFileName = "";
-		 varData.clear();
-	 }
+
+	@NotifyChange("varData")
+	public void populateVarData(ArrayList<String> list){
+		for(String var : list){
+			varData.add(new VariableModel(var,"-"));
+		}
+	}
+
+	@NotifyChange("*")
+	@Command("removeUpload")
+	public void removeUpload(){
+		isVariableDataVisible = false;
+		dataFileName = "";
+		varData.clear();
+	}
 	public void uploadFile(String path, String name, 
 			String data) {
 
@@ -163,19 +163,19 @@ public class UploadDataModel {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Command("saveHeader")
 	public void saveHeader(){
-		
+
 		String[] newHeader = new String[varData.size()];
 		for(int i = 0; i < varData.size(); i++)
-			{
-				if(varData.get(i).getNewVariable().equals("-")){
-					Messagebox.show("Error: Headers must be matched accordingly.", "Save Error", Messagebox.OK, Messagebox.ERROR);
-					return;
-				}
-				newHeader[i] = varData.get(i).getNewVariable();
+		{
+			if(varData.get(i).getNewVariable().equals("-")){
+				Messagebox.show("Error: Headers must be matched accordingly.", "Save Error", Messagebox.OK, Messagebox.ERROR);
+				return;
 			}
+			newHeader[i] = varData.get(i).getNewVariable();
+		}
 		FileWriter mFileWriter;
 		try {
 			CSVReader reader = new CSVReader(new FileReader(path+dataFileName));
@@ -190,12 +190,12 @@ public class UploadDataModel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
-		
+
+
 		Messagebox.show("CSV Data successfully updated!", "Save", Messagebox.OK, Messagebox.INFORMATION);
 		System.out.println("SavePath: "+path+dataFileName);
 	}
-	
+
 
 	@Command("change")
 	public void change(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view,@BindingParam("newValue") String newValue,@BindingParam("oldVar") String oldVar) {

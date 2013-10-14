@@ -1,0 +1,16 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="new page title" border="normal">
+    <div width="600px"  apply="org.zkoss.bind.BindComposer"
+viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.AddProject')">
+
+
+        <groupbox width="560px" sclass="main z-demo-config">
+Project Name<textbox value="@bind(vm.name)"/>
+Objective<textbox value="@bind(vm.objective)"/>
+	<button label="Add Project" onClick='@command("addProject")' />
+	<button label="Clear" onClick='@command("clear")' />
+</groupbox>
+</div>
+</window>
+</zk>

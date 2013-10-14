@@ -37,7 +37,7 @@ public class ConnectionFactory {
  
 
 
-    private static SqlSessionFactory sqlSessionFactory;
+    private  static SqlSessionFactory sqlSessionFactory;
  
     
     

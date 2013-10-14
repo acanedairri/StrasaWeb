@@ -1,4 +1,4 @@
-package org.strasa.web.view.model;
+package org.strasa.web.uploadstudy.view.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

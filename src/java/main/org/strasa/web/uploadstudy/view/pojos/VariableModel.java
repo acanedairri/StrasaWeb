@@ -1,4 +1,4 @@
-package org.strasa.web.pojos;
+package org.strasa.web.uploadstudy.view.pojos;
 
 public class VariableModel {
 	
