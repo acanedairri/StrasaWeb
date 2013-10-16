@@ -1,6 +1,6 @@
 <zk>
   <window title="ModalWin" border="normal" closable="true"  apply="org.zkoss.bind.BindComposer"
-        viewModel="@id('vm') @init('org.strasa.web.view.model.ChangeVariableModel')" width = "35%" height = "45%">
+        viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.ChangeCsvHeader')" width = "35%" height = "45%">
  
         <separator />
        

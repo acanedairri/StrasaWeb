@@ -1,6 +1,6 @@
 package org.strasa.web.uploadstudy.view.pojos;
 
-public class VariableModel {
+public class UploadCSVDataVariableModel {
 	
 	private String currentVariable;
 	private String newVariable;
@@ -21,7 +21,7 @@ public class VariableModel {
 		this.newVariable = newVariable;
 	}
 
-	public VariableModel(String curr, String newVar){
+	public UploadCSVDataVariableModel(String curr, String newVar){
 		currentVariable = curr;
 		newVariable = newVar;
 	}

@@ -5,18 +5,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
-import org.strasa.web.uploadstudy.view.pojos.VariableModel;
+import org.strasa.web.uploadstudy.view.pojos.UploadCSVDataVariableModel;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -28,20 +30,57 @@ import org.zkoss.zul.Window;
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 
-public class UploadDataModel {
+public class UploadData {
 
+	private List<String[]> dataList = new ArrayList<String[]>();
+	private List<String> columnList = new ArrayList<String>();
+	
+	
 
-
+	public List<String> getColumnList() {
+		return columnList;
+	}
+	public void setColumnList(List<String> columnList) {
+		this.columnList = columnList;
+	}
+	
+	public List<String[]> getDataList() {
+		return dataList;
+	}
+	public void setDataList(List<String[]> dataList) {
+		this.dataList = dataList;
+	}
 	public String dataFileName;
-	public boolean isVariableDataVisible = false;
+	public boolean isVariableDataVisible = true;
+	private Component mainView;
 
 	public String getDataFileName() {
 		return dataFileName;
 	}
+	
+	@Init
+	public void init(        @ContextParam(ContextType.VIEW) Component view){
+		mainView = view;
+	    CSVReader reader;
+		try {
+			reader = new CSVReader(new FileReader("/home/m00g33k/Workspaces/StrasaWorkspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/StrasaWeb/UPLOADS/sampledata.csv"));
+			 List<String[]> rawData = reader.readAll();
+			 columnList = Arrays.asList(rawData.get(0));
+			 rawData.remove(0);
+			 dataList = rawData;
+			 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-
-	public List<VariableModel> varData = new ArrayList<VariableModel>();
+	public List<UploadCSVDataVariableModel> varData = new ArrayList<UploadCSVDataVariableModel>();
 	private String path;
+	private String dataPath;
 
 	public boolean isVariableDataVisible() {
 		return isVariableDataVisible;
@@ -51,7 +90,7 @@ public class UploadDataModel {
 		this.isVariableDataVisible = isVariableDataVisible;
 	}
 
-	public List<VariableModel>  getVarData() {
+	public List<UploadCSVDataVariableModel>  getVarData() {
 		return varData;
 	}
 
@@ -64,11 +103,21 @@ public class UploadDataModel {
 		params.put("oldVar",oldVar);
 		params.put("parent", view);
 
-		Window popup = (Window) Executions.createComponents("modal/selectvariabledata.zul", view, params);
+		Window popup = (Window) Executions.createComponents(ChangeCsvHeader.ZUL_PATH, view, params);
 
 		popup.doModal();
 	}
 
+	public void openCSVHeaderValidator(String CSVPath){
+		Map<String, Object> params = new HashMap<String, Object>();
+		dataPath = CSVPath;
+		params.put("CSVPath",CSVPath);
+		params.put("parent", mainView);
+
+		Window popup = (Window) Executions.createComponents(ValidateCsvHeader.ZUL_PATH, mainView, params);
+
+		popup.doModal();
+	}
 
 	@NotifyChange("*")
 	@Command("refreshVarList")
@@ -90,7 +139,7 @@ public class UploadDataModel {
 	public void uploadCSV(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view) {
 
 		UploadEvent event = (UploadEvent)ctx.getTriggerEvent();
-		if(!event.getMedia().isBinary()){
+		if(event.getMedia().isBinary()){
 			Messagebox.show("Error: File must be a text-based csv format", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
@@ -131,6 +180,7 @@ public class UploadDataModel {
 		populateVarData(invalidHeader);
 		isVariableDataVisible = true;
 		dataFileName = name ;
+		openCSVHeaderValidator(path+name);
 
 	}
 
@@ -138,7 +188,7 @@ public class UploadDataModel {
 	@NotifyChange("varData")
 	public void populateVarData(ArrayList<String> list){
 		for(String var : list){
-			varData.add(new VariableModel(var,"-"));
+			varData.add(new UploadCSVDataVariableModel(var,"-"));
 		}
 	}
 
@@ -162,6 +212,26 @@ public class UploadDataModel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	@NotifyChange("*")
+	@Command("refreshCsv")
+	public void refreshCsv(){
+	    CSVReader reader;
+		try {
+			reader = new CSVReader(new FileReader(dataPath));
+			 List<String[]> rawData = reader.readAll();
+			 columnList = Arrays.asList(rawData.get(0));
+			 rawData.remove(0);
+			 dataList = rawData;
+			 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	   
 	}
 
 	@Command("saveHeader")
@@ -197,19 +267,5 @@ public class UploadDataModel {
 	}
 
 
-	@Command("change")
-	public void change(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view,@BindingParam("newValue") String newValue,@BindingParam("oldVar") String oldVar) {
-
-		Map<String, Object> params = new HashMap<String, Object>();
-
-		params.put("value",newValue);
-		params.put("oldVar",oldVar);
-		params.put("parent", view);
-
-		Window popup = (Window) Executions.createComponents("modal/selectvariabledata.zul", view, params);
-
-		popup.doModal();
-
-	}
 
 }
