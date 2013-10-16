@@ -24,8 +24,7 @@ public class StudyVariableManagerImpl {
 
 	}
 	public StudyVariableManagerImpl(){
-		ConnectionFactory con = new ConnectionFactory();
-		session =con.getSqlSessionFactory().openSession();
+		session = ConnectionFactory.getSqlSessionFactory().openSession();
 	}
 	
 	public boolean hasVariable(String variable){

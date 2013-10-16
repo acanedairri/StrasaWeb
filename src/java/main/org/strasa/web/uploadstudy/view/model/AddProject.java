@@ -1,6 +1,7 @@
 package org.strasa.web.uploadstudy.view.model;
 
 import org.strasa.middleware.manager.ProjectManagerImpl;
+import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.Project;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -24,6 +25,9 @@ public class AddProject {
 	
 	@Command("addProject")
 	public void addProject(){
+		StudyVariableManagerImpl studyVarMan =  new StudyVariableManagerImpl();
+		System.out.print(studyVarMan.getVariables().size());
+		
 		System.out.println("Name: " + name + " Objective:" + objective);
 		ProjectManagerImpl projectMan = new ProjectManagerImpl();
 		Project newProject = new Project();
