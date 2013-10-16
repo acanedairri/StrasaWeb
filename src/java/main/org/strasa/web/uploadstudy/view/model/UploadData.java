@@ -34,8 +34,13 @@ public class UploadData {
 
 	private List<String[]> dataList = new ArrayList<String[]>();
 	private List<String> columnList = new ArrayList<String>();
-	
-	
+	private ArrayList<String> programList = new ArrayList<String>();
+	private ArrayList<String> projectList = new ArrayList<String>();
+	private String txtProgram;
+	private String txtProject;
+	private String txtStudyName;
+	private String txtStudyType;
+	private String txtYear;
 
 	public List<String> getColumnList() {
 		return columnList;
@@ -51,7 +56,7 @@ public class UploadData {
 		this.dataList = dataList;
 	}
 	public String dataFileName;
-	public boolean isVariableDataVisible = true;
+	public boolean isVariableDataVisible = false;
 	private Component mainView;
 
 	public String getDataFileName() {
@@ -59,23 +64,10 @@ public class UploadData {
 	}
 	
 	@Init
-	public void init(        @ContextParam(ContextType.VIEW) Component view){
+	public void init(@ContextParam(ContextType.VIEW) Component view){
 		mainView = view;
-	    CSVReader reader;
-		try {
-			reader = new CSVReader(new FileReader("/home/m00g33k/Workspaces/StrasaWorkspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/StrasaWeb/UPLOADS/sampledata.csv"));
-			 List<String[]> rawData = reader.readAll();
-			 columnList = Arrays.asList(rawData.get(0));
-			 rawData.remove(0);
-			 dataList = rawData;
-			 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		dataPath = "/home/dtalay/workspace_strasa/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/StrasaWeb/UPLOADS/SampleMockData.csv";
+//		refreshCsv();
 	}
 
 	public List<UploadCSVDataVariableModel> varData = new ArrayList<UploadCSVDataVariableModel>();
@@ -220,9 +212,12 @@ public class UploadData {
 		try {
 			reader = new CSVReader(new FileReader(dataPath));
 			 List<String[]> rawData = reader.readAll();
-			 columnList = Arrays.asList(rawData.get(0));
+			 columnList.clear();
+			 dataList.clear();
+			 columnList = new ArrayList<String>(Arrays.asList(rawData.get(0)));
 			 rawData.remove(0);
-			 dataList = rawData;
+			 dataList = new ArrayList<String[]>(rawData);
+			 
 			 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -234,37 +229,7 @@ public class UploadData {
 	   
 	}
 
-	@Command("saveHeader")
-	public void saveHeader(){
 
-		String[] newHeader = new String[varData.size()];
-		for(int i = 0; i < varData.size(); i++)
-		{
-			if(varData.get(i).getNewVariable().equals("-")){
-				Messagebox.show("Error: Headers must be matched accordingly.", "Save Error", Messagebox.OK, Messagebox.ERROR);
-				return;
-			}
-			newHeader[i] = varData.get(i).getNewVariable();
-		}
-		FileWriter mFileWriter;
-		try {
-			CSVReader reader = new CSVReader(new FileReader(path+dataFileName));
-			List<String[]> currDataSet = reader.readAll();
-			currDataSet.set(0,  newHeader) ;
-			mFileWriter = new FileWriter(path+dataFileName);
-			CSVWriter mCsvWriter = new CSVWriter(mFileWriter);
-			mCsvWriter.writeAll(currDataSet);
-			mCsvWriter.flush();
-			mCsvWriter.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
-		Messagebox.show("CSV Data successfully updated!", "Save", Messagebox.OK, Messagebox.INFORMATION);
-		System.out.println("SavePath: "+path+dataFileName);
-	}
 
 
 

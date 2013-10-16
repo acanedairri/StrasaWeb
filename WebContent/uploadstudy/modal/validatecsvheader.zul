@@ -5,7 +5,7 @@
                     <hlayout spacing="50px">
                         <vlayout width="100%">
                         <grid height="350px" width="99%" model="@load(vm.varData)"
-            emptyMessage="Nothing in Inbox.">
+            >
             <columns>
                 <column label="Variable" width="40%" />
                 <column label="Selected" width="40%" />
