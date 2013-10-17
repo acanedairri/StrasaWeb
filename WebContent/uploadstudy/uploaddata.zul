@@ -44,12 +44,13 @@
 						</hlayout>
 						<hlayout spacing="10px">
 							<label class="name" value="Project:" />
-							<bandbox mold="rounded" autodrop="true">
+							<bandbox id="bdProject" mold="rounded" autodrop="true" value ="@load(vm.txtProject)">
 								<bandpopup>
 									<listbox height="250px"
 										width="450px" mold="paging" autopaging="true"
 										model="@load(vm.projectList)"
-										selectedItem="@bind(vm.txtProject)">
+										selectedItem="@bind(vm.txtProject)"
+										onSelect="bdProject.value=self.selectedItem.label;bdProject.close();">
 										<listhead>
 											<listheader
 												label="Existing Projects" />
@@ -59,7 +60,7 @@
 									</listbox>
 								</bandpopup>
 							</bandbox>
-							<button label="Add" onClick="@command('addStudy')" />
+							<button label="Add" onClick="@command('addProject')" />
 						</hlayout>
 						<hlayout spacing="10px">
 							<label class="name" value="Study Name:" />
@@ -69,12 +70,13 @@
 
 						<hlayout spacing="10px">
 							<label class="name" value="Study Type:" />
-							<bandbox mold="rounded" autodrop="true">
+							<bandbox  id="bdStudyType" mold="rounded" autodrop="true" value ="@load(vm.txtStudyType)">
 								<bandpopup>
 									<listbox height="250px"
 										width="450px" mold="paging" autopaging="true"
 										model="@load(vm.studyTypeList)"
-										selectedItem="@bind(vm.txtStudyType)">
+										selectedItem="@bind(vm.txtStudyType)"
+										onSelect="bdStudyType.value=self.selectedItem.label;bdStudyType.close();">
 										<listhead>
 											<listheader
 												label="Existing Study types" />
