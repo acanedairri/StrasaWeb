@@ -87,6 +87,12 @@
 		<table schema="MYSCHEMA" tableName="studysite" domainObjectName="StudySite">
 		<generatedKey column="id" sqlStatement="JDBC" />
 		</table>
+		
+		<table schema="MYSCHEMA" tableName="studyrawdata" domainObjectName="StudySiteByStudy">
+		<ignoreColumn column="id" />
+		<ignoreColumn column="datarow"/>
+		
+		</table>
 
 		<table schema="MYSCHEMA" tableName="studytype" domainObjectName="StudyType">
 		<generatedKey column="id" sqlStatement="JDBC" />
