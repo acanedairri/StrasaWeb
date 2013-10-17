@@ -11,7 +11,8 @@ import org.strasa.middleware.model.UserExample;
 public class UserManagerImpl {
 
 	public void addUser(User record){
-		SqlSession session = ConnectionFactory.getSqlSessionFactory().openSession();
+		 
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		UserMapper userMapper = session.getMapper(UserMapper.class);
 		try{
 			userMapper.insert(record);
@@ -24,7 +25,7 @@ public class UserManagerImpl {
 	}
 	
 	public List<User> getUser(String username, String password){
-		SqlSession session = ConnectionFactory.getSqlSessionFactory().openSession();
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		UserMapper userMapper = session.getMapper(UserMapper.class);
 		try{
 			UserExample example = new UserExample();

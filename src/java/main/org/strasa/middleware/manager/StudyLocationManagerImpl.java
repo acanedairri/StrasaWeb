@@ -10,7 +10,7 @@ import org.strasa.middleware.model.StudyLocation;
 public class StudyLocationManagerImpl {
 
 	public void addStudyLocation(StudyLocation record){
-		SqlSession session = ConnectionFactory.getSqlSessionFactory().openSession();
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
 		
 		try{
@@ -25,7 +25,7 @@ public class StudyLocationManagerImpl {
 	
 	
 	public void addStudyLocation(ArrayList<StudyLocation> records){
-		SqlSession session = ConnectionFactory.getSqlSessionFactory().openSession();
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
 		
 		try{
@@ -40,7 +40,7 @@ public class StudyLocationManagerImpl {
 	
 	
 	public void updateStudySite(ArrayList<StudyLocation> records){
-		SqlSession session = ConnectionFactory.getSqlSessionFactory().openSession();
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
 		
 		try{

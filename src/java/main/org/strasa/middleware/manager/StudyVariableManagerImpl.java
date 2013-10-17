@@ -19,12 +19,12 @@ public class StudyVariableManagerImpl {
 		return getSqlSession().getMapper(StudyVariableMapper.class);
 	}
 	private SqlSession getSqlSession(){
-		session =ConnectionFactory.getSqlSessionFactory().openSession();
+		session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		return session;
 
 	}
 	public StudyVariableManagerImpl(){
-		session = ConnectionFactory.getSqlSessionFactory().openSession();
+		 session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 	}
 	
 	public boolean hasVariable(String variable){

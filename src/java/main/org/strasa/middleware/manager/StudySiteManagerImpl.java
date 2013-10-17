@@ -10,7 +10,7 @@ import org.strasa.middleware.model.StudySite;
 public class StudySiteManagerImpl {
 
 	public void addStudySite(StudySite record){
-		SqlSession session = ConnectionFactory.getSqlSessionFactory().openSession();
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
 		
 		try{
@@ -25,7 +25,7 @@ public class StudySiteManagerImpl {
 	
 	
 	public void addStudySite(ArrayList<StudySite> records){
-		SqlSession session = ConnectionFactory.getSqlSessionFactory().openSession();
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
 		
 		try{
@@ -42,7 +42,7 @@ public class StudySiteManagerImpl {
 	
 	
 	public void updateStudySite(ArrayList<StudySite> records){
-		SqlSession session = ConnectionFactory.getSqlSessionFactory().openSession();
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
 		
 		try{

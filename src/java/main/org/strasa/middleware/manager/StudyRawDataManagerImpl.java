@@ -17,7 +17,7 @@ public class StudyRawDataManagerImpl {
 
 
 	public int addStudy(Study record){
-		SqlSession session =ConnectionFactory.getSqlSessionFactory().openSession();
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudyMapper studyMapper = session.getMapper(StudyMapper.class);
 		try{
 			studyMapper.insert(record);
@@ -31,7 +31,7 @@ public class StudyRawDataManagerImpl {
 
 
 	public void addStudyRawData(Study study, List<StudyRawData> studyData){
-		SqlSession session =ConnectionFactory.getSqlSessionFactory().openSession();
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudyRawDataMapper studyDataMapper = session.getMapper(StudyRawDataMapper.class);
 		StudyMapper studyMapper = session.getMapper(StudyMapper.class);
 		try{
@@ -50,7 +50,7 @@ public class StudyRawDataManagerImpl {
 	
 	public boolean hasSiteColumnData(int studyid){
 		
-		SqlSession session =ConnectionFactory.getSqlSessionFactory().openSession();
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudyRawDataByDataColumnMapper studySiteByStudyMapper = session.getMapper(StudyRawDataByDataColumnMapper.class);
 		StudyRawDataByDataColumnExample example= new StudyRawDataByDataColumnExample();
 		example.setDistinct(true);
@@ -63,7 +63,7 @@ public class StudyRawDataManagerImpl {
 	
 	public boolean hasLocationColumnData(int studyid){
 		
-		SqlSession session =ConnectionFactory.getSqlSessionFactory().openSession();
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudyRawDataByDataColumnMapper studySiteByStudyMapper = session.getMapper(StudyRawDataByDataColumnMapper.class);
 		StudyRawDataByDataColumnExample example= new StudyRawDataByDataColumnExample();
 		example.setDistinct(true);
@@ -75,14 +75,14 @@ public class StudyRawDataManagerImpl {
 	
 	public List<StudyRawDataByDataColumn> getStudyRawDataSite(int studyid,String column){
 		
-		SqlSession session =ConnectionFactory.getSqlSessionFactory().openSession();
-		StudyRawDataByDataColumnMapper studyRawDataUniqueStudyMapper = session.getMapper(StudyRawDataByDataColumnMapper.class);
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		StudyRawDataByDataColumnMapper StudyRawDataByDataColumnMapper = session.getMapper(StudyRawDataByDataColumnMapper.class);
 	
 		StudyRawDataByDataColumnExample example= new StudyRawDataByDataColumnExample();
 
 		example.createCriteria().andStudyidEqualTo(studyid).andDatacolumnEqualTo(column);
 		example.setDistinct(true);
-		return studyRawDataUniqueStudyMapper.selectByExample(example);
+		return StudyRawDataByDataColumnMapper.selectByExample(example);
 		
 	}
 
