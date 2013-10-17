@@ -21,6 +21,7 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
@@ -125,8 +126,7 @@ public class UploadData {
 	@Init
 	public void init(@ContextParam(ContextType.VIEW) Component view){
 		mainView = view;
-//		dataPath = "/home/dtalay/workspace_strasa/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/StrasaWeb/UPLOADS/SampleMockData.csv";
-//		refreshCsv();
+
 		refreshProgramList(null);
 		refreshProjectList(null);
 	}
@@ -327,6 +327,8 @@ public class UploadData {
 
 
 	}
+	
+	
 	@NotifyChange("*")
 	@Command("refreshProjectList")
 	public void refreshProjectList(@BindingParam("selected") String selected){
@@ -342,6 +344,12 @@ public class UploadData {
 
 
 	}
+
+	@GlobalCommand
+	public void testGlobalCom(@BindingParam("newVal")double newVal){
+		System.out.println("globalCom: " + newVal);
+	}
+	
 
 
 }

@@ -1,0 +1,26 @@
+<zk>
+	<?page title="new page title"
+	contentType="text/html;charset=UTF-8"?>
+	<?page title="My page" contentType="text/html;charset=UTF-8"?>
+	<div apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.Index')">
+
+		<tabbox>
+			<tabs>
+				<tab label="Tab1"></tab>
+				<!-- Other unimportant tabs -->
+				<tab label="Product 2" id="product2"
+					onSelect="@command('showzulfile', zulFileName='uploaddata.zul', target=self.linkedPanel)" />
+				<tab label="Tab 3" id="tab3"
+					onSelect="@command('showzulfile', zulFileName='testtab.zul', target=self.linkedPanel)" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+
+				</tabpanel>
+				<tabpanel></tabpanel>
+				<tabpanel></tabpanel>
+			</tabpanels>
+		</tabbox>
+	</div>
+</zk>

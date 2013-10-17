@@ -179,6 +179,7 @@
 					</hlayout>
 				</groupbox>
 			</vlayout>
+			<button label="NEXT"  onClick="@global-command('sampleCommand',model=vm)"></button>
 		</groupbox>
 	</div>
 
