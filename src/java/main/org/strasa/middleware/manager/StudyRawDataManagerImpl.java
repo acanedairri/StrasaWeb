@@ -60,6 +60,19 @@ public class StudyRawDataManagerImpl {
 		return false;
 	}
 	
+	
+	public boolean hasLocationColumnData(int studyid){
+		
+		SqlSession session =ConnectionFactory.getSqlSessionFactory().openSession();
+		StudyRawDataByDataColumnMapper studySiteByStudyMapper = session.getMapper(StudyRawDataByDataColumnMapper.class);
+		StudyRawDataByDataColumnExample example= new StudyRawDataByDataColumnExample();
+		example.setDistinct(true);
+		example.createCriteria().andStudyidEqualTo(studyid).andDatacolumnEqualTo("Location");
+		studySiteByStudyMapper.selectByExample(example);
+		
+		return false;
+	}
+	
 	public List<StudyRawDataByDataColumn> getStudyRawDataSite(int studyid,String column){
 		
 		SqlSession session =ConnectionFactory.getSqlSessionFactory().openSession();

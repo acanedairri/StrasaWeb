@@ -29,8 +29,8 @@ public class StudySiteManagerImpl {
 		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
 		
 		try{
-			for(StudySite s:records){
-				studySiteMapper.insert(s);
+			for(StudySite record:records){
+				studySiteMapper.insert(record);
 			}
 			session.commit();
 			
@@ -39,6 +39,24 @@ public class StudySiteManagerImpl {
 		}
 		
 	}
+	
+	
+	public void updateStudySite(ArrayList<StudySite> records){
+		SqlSession session = ConnectionFactory.getSqlSessionFactory().openSession();
+		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
+		
+		try{
+			for(StudySite record:records){
+				studySiteMapper.updateByPrimaryKey(record);
+			}
+			session.commit();
+			
+		}finally{
+			session.close();
+		}
+		
+	}
+	
 	
 
 
