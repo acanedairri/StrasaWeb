@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.strasa.middleware.model.StudySiteByStudy;
+import org.strasa.middleware.model.StudyRawDataByDataColumn;
 
 public class TestStudyRawDataManagerImpl {
 
@@ -32,15 +32,11 @@ public class TestStudyRawDataManagerImpl {
 	
 	@Test
 	public void testGetStudySiteByStudy() throws Exception {
-
 		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl();
-		
-		ArrayList<StudySiteByStudy> list= (ArrayList<StudySiteByStudy>) studyRawDataManagerImpl.getStudyRawDataSite(1);
-		
-		for(StudySiteByStudy s:list){
+		ArrayList<StudyRawDataByDataColumn> list= (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataSite(1,"Site");
+		for(StudyRawDataByDataColumn s:list){
 			System.out.println(s.getStudyid()+ " "+s.getDatacolumn()+ " "+ s.getDatavalue());
 		}
-		
 	}
 
 

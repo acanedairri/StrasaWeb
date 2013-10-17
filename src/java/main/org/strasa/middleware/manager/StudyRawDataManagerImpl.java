@@ -6,12 +6,12 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyMapper;
+import org.strasa.middleware.mapper.StudyRawDataByDataColumnMapper;
 import org.strasa.middleware.mapper.StudyRawDataMapper;
-import org.strasa.middleware.mapper.StudySiteByStudyMapper;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyRawData;
-import org.strasa.middleware.model.StudySiteByStudy;
-import org.strasa.middleware.model.StudySiteByStudyExample;
+import org.strasa.middleware.model.StudyRawDataByDataColumn;
+import org.strasa.middleware.model.StudyRawDataByDataColumnExample;
 
 public class StudyRawDataManagerImpl {
 
@@ -51,8 +51,8 @@ public class StudyRawDataManagerImpl {
 	public boolean hasSiteColumnData(int studyid){
 		
 		SqlSession session =ConnectionFactory.getSqlSessionFactory().openSession();
-		StudySiteByStudyMapper studySiteByStudyMapper = session.getMapper(StudySiteByStudyMapper.class);
-		StudySiteByStudyExample example= new StudySiteByStudyExample();
+		StudyRawDataByDataColumnMapper studySiteByStudyMapper = session.getMapper(StudyRawDataByDataColumnMapper.class);
+		StudyRawDataByDataColumnExample example= new StudyRawDataByDataColumnExample();
 		example.setDistinct(true);
 		example.createCriteria().andStudyidEqualTo(studyid).andDatacolumnEqualTo("Site");
 		studySiteByStudyMapper.selectByExample(example);
@@ -60,16 +60,16 @@ public class StudyRawDataManagerImpl {
 		return false;
 	}
 	
-	public List<StudySiteByStudy> getStudyRawDataSite(int studyid){
+	public List<StudyRawDataByDataColumn> getStudyRawDataSite(int studyid,String column){
 		
 		SqlSession session =ConnectionFactory.getSqlSessionFactory().openSession();
-		StudySiteByStudyMapper studySiteByStudyMapper = session.getMapper(StudySiteByStudyMapper.class);
+		StudyRawDataByDataColumnMapper studyRawDataUniqueStudyMapper = session.getMapper(StudyRawDataByDataColumnMapper.class);
 	
-		StudySiteByStudyExample example= new StudySiteByStudyExample();
+		StudyRawDataByDataColumnExample example= new StudyRawDataByDataColumnExample();
 
-		example.createCriteria().andStudyidEqualTo(studyid).andDatacolumnEqualTo("Site");
+		example.createCriteria().andStudyidEqualTo(studyid).andDatacolumnEqualTo(column);
 		example.setDistinct(true);
-		return studySiteByStudyMapper.selectByExample(example);
+		return studyRawDataUniqueStudyMapper.selectByExample(example);
 		
 	}
 

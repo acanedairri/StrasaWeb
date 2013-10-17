@@ -26,8 +26,8 @@ import org.strasa.middleware.mapper.StudyDesignMapper;
 import org.strasa.middleware.mapper.StudyFileMapper;
 import org.strasa.middleware.mapper.StudyLocationMapper;
 import org.strasa.middleware.mapper.StudyMapper;
+import org.strasa.middleware.mapper.StudyRawDataByDataColumnMapper;
 import org.strasa.middleware.mapper.StudyRawDataMapper;
-import org.strasa.middleware.mapper.StudySiteByStudyMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.mapper.StudyTypeMapper;
 import org.strasa.middleware.mapper.StudyVariableMapper;
@@ -69,7 +69,7 @@ public class ConnectionFactory {
 	                sqlSessionFactory.getConfiguration().addMapper(StudyMapper.class);
 	                sqlSessionFactory.getConfiguration().addMapper(StudyRawDataMapper.class);
 	                sqlSessionFactory.getConfiguration().addMapper(StudySiteMapper.class);
-	                sqlSessionFactory.getConfiguration().addMapper(StudySiteByStudyMapper.class);
+	                sqlSessionFactory.getConfiguration().addMapper(StudyRawDataByDataColumnMapper.class);
 	                sqlSessionFactory.getConfiguration().addMapper(StudyTypeMapper.class);
 	                sqlSessionFactory.getConfiguration().addMapper(StudyVariableMapper.class);
 	                sqlSessionFactory.getConfiguration().addMapper(UserMapper.class);

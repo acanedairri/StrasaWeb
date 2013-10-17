@@ -88,10 +88,14 @@
 		<generatedKey column="id" sqlStatement="JDBC" />
 		</table>
 		
+		<table schema="MYSCHEMA" tableName="studyrawdata" domainObjectName="StudyRawDataByDataColumn">
+		<ignoreColumn column="id" />
+		<ignoreColumn column="datarow"/>
+		</table>
+		
 		<table schema="MYSCHEMA" tableName="studyrawdata" domainObjectName="StudySiteByStudy">
 		<ignoreColumn column="id" />
 		<ignoreColumn column="datarow"/>
-		
 		</table>
 
 		<table schema="MYSCHEMA" tableName="studytype" domainObjectName="StudyType">
