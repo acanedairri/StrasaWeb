@@ -1,7 +1,6 @@
 package org.strasa.web.uploadstudy.view.model;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -10,7 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
+import org.strasa.middleware.model.Program;
 import org.strasa.web.uploadstudy.view.pojos.UploadCSVDataVariableModel;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
@@ -28,7 +29,6 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
 import au.com.bytecode.opencsv.CSVReader;
-import au.com.bytecode.opencsv.CSVWriter;
 
 public class UploadData {
 
@@ -36,12 +36,69 @@ public class UploadData {
 	private List<String> columnList = new ArrayList<String>();
 	private ArrayList<String> programList = new ArrayList<String>();
 	private ArrayList<String> projectList = new ArrayList<String>();
+	private ArrayList<String> studyTypeList = new ArrayList<String>();
+
+	private ArrayList<String> dataTypeList = new ArrayList<String>();
 	private String txtProgram;
 	private String txtProject;
 	private String txtStudyName;
 	private String txtStudyType;
 	private String txtYear;
 
+	public ArrayList<String> getProgramList() {
+		return programList;
+	}
+	public void setProgramList(ArrayList<String> programList) {
+		this.programList = programList;
+	}
+	public ArrayList<String> getProjectList() {
+		return projectList;
+	}
+	public void setProjectList(ArrayList<String> projectList) {
+		this.projectList = projectList;
+	}
+	public ArrayList<String> getDataTypeList() {
+		return dataTypeList;
+	}
+	public void setDataTypeList(ArrayList<String> dataTypeList) {
+		this.dataTypeList = dataTypeList;
+	}
+	public ArrayList<String> getStudyTypeList() {
+		return studyTypeList;
+	}
+	public void setStudyTypeList(ArrayList<String> studyTypeList) {
+		this.studyTypeList = studyTypeList;
+	}
+	public String getTxtProgram() {
+		return txtProgram;
+	}
+	public void setTxtProgram(String txtProgram) {
+		this.txtProgram = txtProgram;
+	}
+	public String getTxtProject() {
+		return txtProject;
+	}
+	public void setTxtProject(String txtProject) {
+		this.txtProject = txtProject;
+	}
+	public String getTxtStudyName() {
+		return txtStudyName;
+	}
+	public void setTxtStudyName(String txtStudyName) {
+		this.txtStudyName = txtStudyName;
+	}
+	public String getTxtStudyType() {
+		return txtStudyType;
+	}
+	public void setTxtStudyType(String txtStudyType) {
+		this.txtStudyType = txtStudyType;
+	}
+	public String getTxtYear() {
+		return txtYear;
+	}
+	public void setTxtYear(String txtYear) {
+		this.txtYear = txtYear;
+	}
 	public List<String> getColumnList() {
 		return columnList;
 	}
@@ -68,6 +125,7 @@ public class UploadData {
 		mainView = view;
 //		dataPath = "/home/dtalay/workspace_strasa/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/StrasaWeb/UPLOADS/SampleMockData.csv";
 //		refreshCsv();
+		refreshProgramList(null);
 	}
 
 	public List<UploadCSVDataVariableModel> varData = new ArrayList<UploadCSVDataVariableModel>();
@@ -229,8 +287,33 @@ public class UploadData {
 	   
 	}
 
+	@Command("addProgram")
+	public void addProgram(){
+		Map<String, Object> params = new HashMap<String, Object>();
+
+		params.put("oldVar",null);
+		params.put("parent", mainView);
+
+		Window popup = (Window) Executions.createComponents(UploadDataAddProgram.ZUL_PATH, mainView, params);
+
+		popup.doModal();
+	}
+	
+	@NotifyChange("*")
+	@Command("refreshProgramList")
+	public void refreshProgramList(@BindingParam("selected") String selected){
+
+		ProgramManagerImpl programMan = new ProgramManagerImpl();
+		programList.clear();
+		for(Program data : programMan.getProgramByUserId(1)){
+			programList.add(data.getName());
+			
+		}
+		System.out.print(selected);
+		txtProgram = selected;
 
 
+	}
 
 
 }
