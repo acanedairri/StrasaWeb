@@ -10,8 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.strasa.middleware.manager.ProgramManagerImpl;
+import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.Program;
+import org.strasa.middleware.model.Project;
 import org.strasa.web.uploadstudy.view.pojos.UploadCSVDataVariableModel;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
@@ -126,6 +128,7 @@ public class UploadData {
 //		dataPath = "/home/dtalay/workspace_strasa/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/StrasaWeb/UPLOADS/SampleMockData.csv";
 //		refreshCsv();
 		refreshProgramList(null);
+		refreshProjectList(null);
 	}
 
 	public List<UploadCSVDataVariableModel> varData = new ArrayList<UploadCSVDataVariableModel>();
@@ -298,7 +301,17 @@ public class UploadData {
 
 		popup.doModal();
 	}
-	
+	@Command("addProject")
+	public void addProject(){
+		Map<String, Object> params = new HashMap<String, Object>();
+
+		params.put("oldVar",null);
+		params.put("parent", mainView);
+
+		Window popup = (Window) Executions.createComponents(UploadDataAddProject.ZUL_PATH, mainView, params);
+
+		popup.doModal();
+	}
 	@NotifyChange("*")
 	@Command("refreshProgramList")
 	public void refreshProgramList(@BindingParam("selected") String selected){
@@ -311,6 +324,21 @@ public class UploadData {
 		}
 		System.out.print(selected);
 		txtProgram = selected;
+
+
+	}
+	@NotifyChange("*")
+	@Command("refreshProjectList")
+	public void refreshProjectList(@BindingParam("selected") String selected){
+
+		ProjectManagerImpl programMan = new ProjectManagerImpl();
+		projectList.clear();
+		for(Project data : programMan.getProjectByUserId(1)){
+			projectList.add(data.getName());
+			
+		}
+		System.out.print(selected);
+		txtProject = selected;
 
 
 	}

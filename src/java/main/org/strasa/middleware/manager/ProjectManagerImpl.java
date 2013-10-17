@@ -63,7 +63,7 @@ public class ProjectManagerImpl {
 		}
 	}
 	
-	public Project getProjectByUserId(int id){
+	public List<Project> getProjectByUserId(int id){
 		SqlSession session = ConnectionFactory.getSqlSessionFactory().openSession();
 		ProjectMapper projectMapper = session.getMapper(ProjectMapper.class);
 		
@@ -71,7 +71,7 @@ public class ProjectManagerImpl {
 			ProjectExample example= new ProjectExample();
 			example.createCriteria().andUseridEqualTo(id);
 			
-			return projectMapper.selectByExample(example).get(0);
+			return projectMapper.selectByExample(example);
 		}finally{
 			session.close();
 		}
