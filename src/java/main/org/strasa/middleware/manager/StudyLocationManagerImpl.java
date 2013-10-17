@@ -33,11 +33,9 @@ public class StudyLocationManagerImpl {
 				studyLocationMapper.insert(record);
 			}
 			session.commit();
-			
 		}finally{
 			session.close();
 		}
-		
 	}
 	
 	
@@ -54,7 +52,5 @@ public class StudyLocationManagerImpl {
 		}finally{
 			session.close();
 		}
-		
 	}
-	
 }
