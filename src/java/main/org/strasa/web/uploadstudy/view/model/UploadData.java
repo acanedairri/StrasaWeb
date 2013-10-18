@@ -14,6 +14,7 @@ import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
+import org.strasa.web.common.api.ProccessTabViewModel;
 import org.strasa.web.uploadstudy.view.pojos.UploadCSVDataVariableModel;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
@@ -21,6 +22,7 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -33,7 +35,7 @@ import org.zkoss.zul.Window;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-public class UploadData {
+public class UploadData implements ProccessTabViewModel{
 
 	private List<String[]> dataList = new ArrayList<String[]>();
 	private List<String> columnList = new ArrayList<String>();
@@ -348,6 +350,19 @@ public class UploadData {
 	@GlobalCommand
 	public void testGlobalCom(@BindingParam("newVal")double newVal){
 		System.out.println("globalCom: " + newVal);
+	}
+	@Override
+	public boolean validateTab() {
+		if(txtProgram == null) 
+		return false;
+		else
+			return true;
+	}
+	@Override
+	
+	public void init(@ExecutionArgParam("studyID") double studyID) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 

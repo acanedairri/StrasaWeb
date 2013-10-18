@@ -1,5 +1,5 @@
 <zk>
-	<?page title="new page title"
+	<?page title="Upload Study"
 	contentType="text/html;charset=UTF-8"?>
 	<?page title="My page" contentType="text/html;charset=UTF-8"?>
 	<div apply="org.zkoss.bind.BindComposer"
@@ -8,13 +8,13 @@
 		<tabbox selectedIndex="@bind(vm.selectedIndex)">
 			<tabs>
 
-				<tab label="Step 1: Define Study Information" id="tab1" disabled="@load(vm.tabDisabled[self.index])"
+				<tab label="Study Information" id="tab1" disabled="@load(vm.tabDisabled[self.index])"
 					onSelect="@command('showzulfile', zulFileName='uploaddata.zul', target=self.linkedPanel)" />
-				<tab label="Step 2: Define Study Site" id="tab2" disabled="@bind(vm.tabDisabled[self.index])"
+				<tab label="Study Site" id="tab2" disabled="@bind(vm.tabDisabled[self.index])"
 					onSelect="@command('showzulfile', zulFileName='testtab.zul', target=self.linkedPanel)" />
-				<tab label="Step 3: Define Study Location" id="tab3" disabled="@load(vm.tabDisabled[self.index])"
+				<tab label="Study Location" id="tab3" disabled="@load(vm.tabDisabled[self.index])"
 					onSelect="@command('showzulfile', zulFileName='testtab.zul', target=self.linkedPanel)" />
-				<tab label="Step 4: Define Germplasm Information"
+				<tab label="Germplasm Information"
 					id="tab4" disabled="@load(vm.tabDisabled[self.index])"
 					onSelect="@command('showzulfile', zulFileName='testtab.zul', target=self.linkedPanel)" />
 			</tabs>
