@@ -1,6 +1,6 @@
 <zk>
 	<window apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.UploadStudyStep3')">
+		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.DefineStudySite')">
 		<columnlayout>
 			<columnchildren width="65%">
 				<grid height="350px" model="@load(vm.sites)"
@@ -14,18 +14,22 @@
 					</columns>
 					<template name="model">
 						<row>
-							<label value="@load(each.sitename)" />
-							<label value="@load(each.sitelocation)" />
-							<label value="@load(each.ecotypeid)" />
-							<label value="@load(each.soiltype)" />
-							<label value="@load(each.soilph)" />
+							<textbox value="@load(each.sitename)" />
+							<textbox value="@load(each.sitelocation)" />
+							<combobox model="@load(vm.ecotypes)" >
+								<template name="model">
+									<comboitem value="@load(each.ecotype)" label="@load(each.ecotype)" />
+								</template>
+							</combobox>
+							<textbox value="@load(each.soiltype)" />
+							<textbox value="@load(each.soilph)" />
 						</row>
 					</template>
 				</grid>
 			</columnchildren>
 			<columnchildren width="35%">
 				<groupbox>
-				<caption label="Agronomy and Design Information"/>
+					<caption label="Agronomy and Design Information" />
 					<grid vflex="1">
 						<columns>
 							<column />
