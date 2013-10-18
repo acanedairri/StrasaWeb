@@ -32,9 +32,9 @@ public class TestStudyRawDataManagerImpl {
 	}
 	
 	@Test
-	public void testGetStudySiteByStudy() throws Exception {
+	public void testGetStudyRawDataColumn() throws Exception {
 		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl();
-		ArrayList<StudyRawDataByDataColumn> list= (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataSite(1,"GName");
+		ArrayList<StudyRawDataByDataColumn> list= (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataColumn(1,"GName");
 		for(StudyRawDataByDataColumn s:list){
 			System.out.println(s.getStudyid()+ " "+s.getDatacolumn()+ " "+ s.getDatavalue());
 		}

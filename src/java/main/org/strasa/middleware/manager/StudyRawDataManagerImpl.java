@@ -73,7 +73,7 @@ public class StudyRawDataManagerImpl {
 		return false;
 	}
 	
-	public List<StudyRawDataByDataColumn> getStudyRawDataSite(int studyid,String column){
+	public List<StudyRawDataByDataColumn> getStudyRawDataColumn(int studyid,String column){
 		
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudyRawDataByDataColumnMapper StudyRawDataByDataColumnMapper = session.getMapper(StudyRawDataByDataColumnMapper.class);

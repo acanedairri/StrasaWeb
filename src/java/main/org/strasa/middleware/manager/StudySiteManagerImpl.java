@@ -100,7 +100,7 @@ public class StudySiteManagerImpl {
 
 	public ArrayList<StudyRawDataByDataColumn> getStudySiteByStudy(int studyId) throws Exception {
 		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl();
-		ArrayList<StudyRawDataByDataColumn> list= (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataSite(studyId,"site");
+		ArrayList<StudyRawDataByDataColumn> list= (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataColumn(studyId,"site");
 		for(StudyRawDataByDataColumn s:list){
 			System.out.println(s.getStudyid()+ " "+s.getDatacolumn()+ " "+ s.getDatavalue());
 		}
