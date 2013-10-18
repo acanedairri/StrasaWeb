@@ -5,19 +5,24 @@
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.Index')">
 
-		<tabbox>
+		<tabbox selectedIndex="@bind(vm.selectedIndex)">
 			<tabs>
-				<tab label="Tab1"></tab>
-				<!-- Other unimportant tabs -->
-				<tab label="Product 2" id="product2"
+
+				<tab label="Step 1: Define Study Information" id="tab1" disabled="@load(vm.tabDisabled[self.index])"
 					onSelect="@command('showzulfile', zulFileName='uploaddata.zul', target=self.linkedPanel)" />
-				<tab label="Tab 3" id="tab3"
+				<tab label="Step 2: Define Study Site" id="tab2" disabled="@bind(vm.tabDisabled[self.index])"
+					onSelect="@command('showzulfile', zulFileName='testtab.zul', target=self.linkedPanel)" />
+				<tab label="Step 3: Define Study Location" id="tab3" disabled="@load(vm.tabDisabled[self.index])"
+					onSelect="@command('showzulfile', zulFileName='testtab.zul', target=self.linkedPanel)" />
+				<tab label="Step 4: Define Germplasm Information"
+					id="tab4" disabled="@load(vm.tabDisabled[self.index])"
 					onSelect="@command('showzulfile', zulFileName='testtab.zul', target=self.linkedPanel)" />
 			</tabs>
 			<tabpanels>
 				<tabpanel>
-
+					<include mode="defer" src="uploaddata.zul" />
 				</tabpanel>
+				<tabpanel></tabpanel>
 				<tabpanel></tabpanel>
 				<tabpanel></tabpanel>
 			</tabpanels>
