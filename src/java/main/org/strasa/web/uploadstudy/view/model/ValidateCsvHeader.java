@@ -30,7 +30,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 
 public class ValidateCsvHeader {
-	public static String ZUL_PATH = "/uploadstudy/modal/validatecsvheader.zul";
+	public static String ZUL_PATH = "/user/uploadstudy/modal/validatecsvheader.zul";
 
 	private String CsvPath;
 

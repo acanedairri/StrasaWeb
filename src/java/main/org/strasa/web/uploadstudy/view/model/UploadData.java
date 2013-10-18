@@ -14,7 +14,7 @@ import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
-import org.strasa.web.common.api.ProccessTabViewModel;
+import org.strasa.web.common.api.ProcessTabViewModel;
 import org.strasa.web.uploadstudy.view.pojos.UploadCSVDataVariableModel;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
@@ -35,7 +35,7 @@ import org.zkoss.zul.Window;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-public class UploadData implements ProccessTabViewModel{
+public class UploadData extends ProcessTabViewModel{
 
 	private List<String[]> dataList = new ArrayList<String[]>();
 	private List<String> columnList = new ArrayList<String>();
@@ -119,18 +119,20 @@ public class UploadData implements ProccessTabViewModel{
 	}
 	public String dataFileName;
 	public boolean isVariableDataVisible = false;
-	private Component mainView;
+
 
 	public String getDataFileName() {
 		return dataFileName;
 	}
 	
+
 	@Init
 	public void init(@ContextParam(ContextType.VIEW) Component view){
-		mainView = view;
+		setMainView(view);
 
 		refreshProgramList(null);
 		refreshProjectList(null);
+		System.out.println("LOADED");
 	}
 
 	public List<UploadCSVDataVariableModel> varData = new ArrayList<UploadCSVDataVariableModel>();
@@ -167,9 +169,9 @@ public class UploadData implements ProccessTabViewModel{
 		Map<String, Object> params = new HashMap<String, Object>();
 		dataPath = CSVPath;
 		params.put("CSVPath",CSVPath);
-		params.put("parent", mainView);
+		params.put("parent", getMainView());
 
-		Window popup = (Window) Executions.createComponents(ValidateCsvHeader.ZUL_PATH, mainView, params);
+		Window popup = (Window) Executions.createComponents(ValidateCsvHeader.ZUL_PATH, getMainView(), params);
 
 		popup.doModal();
 	}
@@ -297,9 +299,9 @@ public class UploadData implements ProccessTabViewModel{
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		params.put("oldVar",null);
-		params.put("parent", mainView);
+		params.put("parent", getMainView());
 
-		Window popup = (Window) Executions.createComponents(UploadDataAddProgram.ZUL_PATH, mainView, params);
+		Window popup = (Window) Executions.createComponents(UploadDataAddProgram.ZUL_PATH, getMainView(), params);
 
 		popup.doModal();
 	}
@@ -308,9 +310,9 @@ public class UploadData implements ProccessTabViewModel{
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		params.put("oldVar",null);
-		params.put("parent", mainView);
+		params.put("parent", getMainView());
 
-		Window popup = (Window) Executions.createComponents(UploadDataAddProject.ZUL_PATH, mainView, params);
+		Window popup = (Window) Executions.createComponents(UploadDataAddProject.ZUL_PATH, getMainView(), params);
 
 		popup.doModal();
 	}
@@ -353,16 +355,10 @@ public class UploadData implements ProccessTabViewModel{
 	}
 	@Override
 	public boolean validateTab() {
-		if(txtProgram == null) 
+		if(txtProgram.equals("anything")) 
 		return false;
 		else
 			return true;
-	}
-	@Override
-	
-	public void init(@ExecutionArgParam("studyID") double studyID) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 

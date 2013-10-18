@@ -1,13 +1,13 @@
 package org.strasa.web.uploadstudy.view.model;
 
-import org.strasa.web.common.api.ProccessTabViewModel;
+import org.strasa.web.common.api.ProcessTabViewModel;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 
-public class TestTab implements ProccessTabViewModel{
+public class TestTab extends ProcessTabViewModel{
 
 	private double sampleID;
 
@@ -41,7 +41,6 @@ public boolean validateTab() {
 }
 
 @Init
-@Override
 public void init(@ExecutionArgParam("studyID") double studyID) {
 	sampleID = studyID;	
 }
