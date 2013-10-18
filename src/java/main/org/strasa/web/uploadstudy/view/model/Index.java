@@ -3,7 +3,7 @@ package org.strasa.web.uploadstudy.view.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.strasa.web.common.api.ProccessTabViewModel;
+import org.strasa.web.common.api.ProcessTabViewModel;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -78,7 +78,7 @@ public class Index {
 	}
 	@NotifyChange("*")
 	@GlobalCommand("sampleCommand")
-	public void sampleCommand(@BindingParam("model") ProccessTabViewModel uploadData) {
+	public void sampleCommand(@BindingParam("model") ProcessTabViewModel uploadData) {
 		if(!uploadData.validateTab()){
 			return;
 		}

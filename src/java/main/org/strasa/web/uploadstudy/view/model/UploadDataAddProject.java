@@ -16,7 +16,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Messagebox;
 
 public class UploadDataAddProject {
-	public static String ZUL_PATH = "/uploadstudy/modal/addproject.zul";
+	public static String ZUL_PATH = "/user/uploadstudy/modal/addproject.zul";
 	private String name, objective, pi,fundingagency, coordinator, institute, collaborators;
 	private Component mainView;
 	private Binder parBinder;

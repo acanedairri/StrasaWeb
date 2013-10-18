@@ -21,15 +21,16 @@
 				<groupbox mold="3d" width="100%">
 					<caption label="Study Information" />
 					<vlayout spacing="7px">
+					
 						<hlayout spacing="10px">
 							<label class="name" value="Program:" />
 							<bandbox id="bdProgram" mold="rounded"
-								autodrop="true" value ="@load(vm.txtProgram)">
+								autodrop="true" value ="@bind(vm.txtProgram)">
 								<bandpopup>
 									<listbox height="250px"
 										width="450px" mold="paging" autopaging="true"
 										model="@load(vm.programList)"
-										selectedItem="@load(vm.txtProgram)"
+										selectedItem="@bind(vm.txtProgram)"
 										onSelect="bdProgram.value=self.selectedItem.label;bdProgram.close();"
 										>
 										<listhead>
@@ -44,7 +45,7 @@
 						</hlayout>
 						<hlayout spacing="10px">
 							<label class="name" value="Project:" />
-							<bandbox id="bdProject" mold="rounded" autodrop="true" value ="@load(vm.txtProject)">
+							<bandbox id="bdProject" mold="rounded" autodrop="true" value ="@bind(vm.txtProject)">
 								<bandpopup>
 									<listbox height="250px"
 										width="450px" mold="paging" autopaging="true"
