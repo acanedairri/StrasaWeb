@@ -38,4 +38,17 @@ public class UserManagerImpl {
 		
 	}
 
+	public List<User> getAllRegisteredUser() {
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		UserMapper userMapper = session.getMapper(UserMapper.class);
+		try{
+			
+			return  userMapper.selectByExample(null);
+			
+		}finally{
+			session.close();
+		}
+		
+	}
+
 }
