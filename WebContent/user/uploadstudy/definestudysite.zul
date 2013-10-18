@@ -80,6 +80,7 @@
 							</row>
 						</rows>
 					</grid>
+					<button label="NEXT"  onClick="@global-command('sampleCommand',model=vm)"></button>
 				</groupbox>
 			</columnchildren>
 		</columnlayout>
