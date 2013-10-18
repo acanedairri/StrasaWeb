@@ -24,6 +24,19 @@ public class UserManagerImpl {
 		
 	}
 	
+	public void updateUser(User record){
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		UserMapper userMapper = session.getMapper(UserMapper.class);
+		try{
+	
+			userMapper.updateByPrimaryKey(record);
+			session.commit();
+		}finally{
+			session.close();
+		}
+		
+	}
+	
 	public List<User> getUser(String username, String password){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		UserMapper userMapper = session.getMapper(UserMapper.class);
@@ -37,18 +50,31 @@ public class UserManagerImpl {
 		}
 		
 	}
-
-	public List<User> getAllRegisteredUser() {
+	public User getUserById(int userID){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		UserMapper userMapper = session.getMapper(UserMapper.class);
 		try{
-			
-			return  userMapper.selectByExample(null);
+			return  userMapper.selectByPrimaryKey(userID);
 			
 		}finally{
 			session.close();
 		}
 		
 	}
+
+	public List<User> getAllRegisteredUser() {
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		UserMapper userMapper = session.getMapper(UserMapper.class);
+		try{
+			UserExample example = new UserExample();
+			example.setOrderByClause("status");
+			return  userMapper.selectByExample(example);
+			
+		}finally{
+			session.close();
+		}
+		
+	}
+	
 
 }

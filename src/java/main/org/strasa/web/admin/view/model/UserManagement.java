@@ -6,11 +6,13 @@ import org.strasa.middleware.manager.UserManagerImpl;
 import org.strasa.middleware.model.User;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.NotifyChange;
 
-public class UserManagement extends User {
+public class UserManagement {
 
-	List<User> user ;
-	
+
+	List<User> user;
+
 	public List<User> getUser() {
 		return user = this.getAllRegisteredUser();
 	}
@@ -27,13 +29,11 @@ public class UserManagement extends User {
 		
 	}
 	
+	@NotifyChange("*")
 	@Command("onChecked")
-	public void addProject(@BindingParam("id") int id){
+	public void addProject(@BindingParam("user") User user){
 		UserManagerImpl userManagerImp =  new UserManagerImpl();
-		System.out.println(id);
-
-		
-	
+		userManagerImp.updateUser(user);
 	}
 
 
