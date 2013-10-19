@@ -14,21 +14,21 @@
 					</columns>
 					<template name="model">
 						<row>
-							<textbox value="@load(each.sitename)" />
-							<textbox value="@load(each.sitelocation)" />
-							<combobox model="@load(vm.ecotypes)" >
+							<toolbarbutton label="@load(each.sitename)" width="99%" onClick="@command('updateDesignInfo', id=each.id)"/>
+							<textbox value="@bind(each.sitelocation)" width="99%" />
+							<combobox model="@load(vm.ecotypes)" width="99%">
 								<template name="model">
 									<comboitem value="@load(each.ecotype)" label="@load(each.ecotype)" />
 								</template>
 							</combobox>
-							<textbox value="@load(each.soiltype)" />
-							<textbox value="@load(each.soilph)" />
+							<textbox value="@bind(each.soiltype)" width="99%"/>
+							<textbox value="@bind(each.soilph)" width="99%"/>
 						</row>
 					</template>
 				</grid>
 			</columnchildren>
 			<columnchildren width="35%">
-				<groupbox>
+				<groupbox width="99%">
 					<caption label="Agronomy and Design Information" />
 					<grid vflex="1">
 						<columns>
@@ -53,30 +53,30 @@
 							</row>
 							<row>
 								Sowing Date:
-								<datebox id="dbSowing" width="150px" />
+								<datebox id="dbSowing" width="99%" />
 							</row>
 							<row>
 								Harvest Date:
-								<datebox id="dbHarvest" width="150px" />
+								<datebox id="dbHarvest" width="99%" />
 							</row>
 							<row>
 								Fertilization:
-								<textbox width="150px" />
+								<textbox width="99%" />
 							</row>
 							<row>
 								Density:
 								<decimalbox format="###.##"
-									value="154.32" width="150px" />
+									value="154.32" width="99%" />
 							</row>
 							<row>
 								Treatment Structure:
 								<intbox constraint="no negative,no zero"
-									width="150px" value="12345678" />
+									width="99%" value="12345678" />
 							</row>
 							<row>
 								Plot Size:
 								<decimalbox format="###.##"
-									value="154.32" width="150px" />
+									value="154.32" width="99%" />
 							</row>
 						</rows>
 					</grid>

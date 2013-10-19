@@ -1,7 +1,9 @@
 package org.strasa.web.uploadstudy.view.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.strasa.middleware.manager.EcotypeManagerImpl;
 import org.strasa.middleware.manager.StudySiteManagerImpl;
@@ -19,14 +21,16 @@ import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zul.Rows;
+import org.zkoss.zul.Window;
 
  
 public class DefineStudySite extends ProcessTabViewModel{
     private StudySiteManagerImpl studySiteMan = new StudySiteManagerImpl();
     private EcotypeManagerImpl ecotypeMan = new EcotypeManagerImpl();
-	private List<StudySite> sites = studySiteMan.getAllStudySites(1);
-	
+	private List<StudySite> sites = studySiteMan.initializeStudySites(1);
+//	private Agronomy selectedAgrono;
 	private double sampleID;
 	
 	
@@ -64,6 +68,15 @@ public class DefineStudySite extends ProcessTabViewModel{
 		this.sites = sites;
 	}
 
+
+	@NotifyChange("*")
+	@Command("updateDesignInfo")
+	public void updateDesignInfo(@BindingParam("id") Integer id){
+//		selectedSite=
+			System.out.println("selected row id: "+ Integer.toString(id));
+			
+	}
+	
 	@Override
 	public boolean validateTab() {
 		// TODO Auto-generated method stub

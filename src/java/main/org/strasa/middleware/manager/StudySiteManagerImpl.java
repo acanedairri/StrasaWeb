@@ -64,50 +64,60 @@ public class StudySiteManagerImpl {
 		// TODO Auto-generated method stub
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
-
 		try{
 			List<StudySite> studySites = studySiteMapper.selectByExample(null);
-			if(studySites.isEmpty()){
-				studySites = initializeStudySites(studyId);
-			}
 			return studySites;
-
 		}finally{
 			session.close();
 		}
+
 	}
-	
-	private List<StudySite> initializeStudySites(int studyId) {
+
+	private void addEmptyRecordOnStudySite(int studyId) {
 		// TODO Auto-generated method stub
+		StudySite record = new StudySite();
+		//		record.setId(studyId);
+		record.setStudyid(studyId);
+		addStudySite(record);
+		System.out.println("Added Empty Record on site");
+	}
+
+
+	public List<StudySite> initializeStudySites(int studyId) {
+		// TODO Auto-generated method stub
+		List<StudySite> studySites = getAllStudySites(studyId);
+		if(studySites.isEmpty()){
 			try {
 				ArrayList<StudyRawDataByDataColumn> studyList = getStudySiteByStudy(studyId);
 				for(StudyRawDataByDataColumn s:studyList){
 					StudySite record = new StudySite();
 					record.setStudyid(s.getStudyid());
 					record.setSitename(s.getDatavalue());
-					
+
 					addStudySite(record);
 					System.out.println("added" + s.getDatavalue() + " to study id: "+ s.getStudyid());
 				}
-				return getAllStudySites(studyId);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			return null;
+			if(getAllStudySites(studyId).isEmpty()) addEmptyRecordOnStudySite(studyId);
+		}
+		return getAllStudySites(studyId);
+		
 	}
 
 
 	public ArrayList<StudyRawDataByDataColumn> getStudySiteByStudy(int studyId) throws Exception {
 		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl();
 		ArrayList<StudyRawDataByDataColumn> list= (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataColumn(studyId,"site");
-		for(StudyRawDataByDataColumn s:list){
-			System.out.println(s.getStudyid()+ " "+s.getDatacolumn()+ " "+ s.getDatavalue());
+		try{
+			for(StudyRawDataByDataColumn s:list){
+				System.out.println(s.getStudyid()+ " "+s.getDatacolumn()+ " "+ s.getDatavalue());
+			}
+		}catch(NullPointerException npe){//if still empty since there's no site data on the rawdata table
+			// TODO Auto-generated catch block
 		}
 		return list;
 	}
-
-
-
 
 }
