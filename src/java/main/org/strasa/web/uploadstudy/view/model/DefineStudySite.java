@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.strasa.middleware.manager.EcotypeManagerImpl;
+import org.strasa.middleware.manager.PlantingTypeManagerImpl;
 import org.strasa.middleware.manager.StudyAgronomyManagerImpl;
 import org.strasa.middleware.manager.StudyDesignManagerImpl;
 import org.strasa.middleware.manager.StudySiteManagerImpl;
 import org.strasa.middleware.model.Ecotype;
+import org.strasa.middleware.model.PlantingType;
 import org.strasa.middleware.model.StudyAgronomy;
 import org.strasa.middleware.model.StudyDesign;
 import org.strasa.middleware.model.StudySite;
@@ -34,18 +36,70 @@ public class DefineStudySite extends ProcessTabViewModel{
     private StudySiteManagerImpl studySiteMan = new StudySiteManagerImpl();
     private StudyAgronomyManagerImpl studyAgroMan = new StudyAgronomyManagerImpl();
     private StudyDesignManagerImpl studyDesignMan = new StudyDesignManagerImpl();    
-    private EcotypeManagerImpl ecotypeMan = new EcotypeManagerImpl();
+    private EcotypeManagerImpl ecotypeMan = new EcotypeManagerImpl();    
+    private PlantingTypeManagerImpl plantingtypeMan = new PlantingTypeManagerImpl();
     
 	private List<StudySite> sites = studySiteMan.initializeStudySites(1);
 	private List<StudyAgronomy> agroInfo = studyAgroMan.initializeStudyAgronomy(sites);
 	private List<StudyDesign> designInfo = studyDesignMan.initializeStudyDesign(sites);
 	private List<Ecotype> ecotypes = ecotypeMan.getAllEcotypes();
+	private List<PlantingType> plantingtypes = plantingtypeMan.getAllPlantingTypes();
+
+	public List<PlantingType> getPlantingtypes() {
+		return plantingtypes;
+	}
+
+	public void setPlantingtypes(List<PlantingType> plantingtypes) {
+		this.plantingtypes = plantingtypes;
+	}
+
+	private StudySite selectedSite = sites.get(0);
+	private StudyAgronomy selectedAgroInfo = getAgroInfoBySiteID(selectedSite.getId());
+	private StudyDesign selectedDesignInfo = getDesignInfoBySiteID(selectedSite.getId());
+	
+	public StudyAgronomy getSelectedAgroInfo() {
+		return selectedAgroInfo;
+	}
+
+	public void setSelectedAgroInfo(StudyAgronomy selectedAgroInfo) {
+		this.selectedAgroInfo = selectedAgroInfo;
+	}
+
+	public StudyDesign getSelectedDesignInfo() {
+		return selectedDesignInfo;
+	}
+
+	public void setSelectedDesignInfo(StudyDesign selectedDesignInfo) {
+		this.selectedDesignInfo = selectedDesignInfo;
+	}
 
 	private double sampleID;
 	
 	
 	public List<StudyAgronomy> getAgroInfo() {
 		return agroInfo;
+	}
+
+	private StudyDesign getDesignInfoBySiteID(Integer id) {
+		// TODO Auto-generated method stub
+		for(StudyDesign d: designInfo ){
+			if(d.getStudysiteid()==id){
+				System.out.println("Selected Design info id: "+ d.getStudysiteid());
+				return d;
+			}
+		}
+		return null;
+	}
+
+	private StudyAgronomy getAgroInfoBySiteID(Integer id) {
+		// TODO Auto-generated method stub
+		for(StudyAgronomy a: agroInfo ){
+			if(a.getStudysiteid()==id){
+				System.out.println("Selected Agronomy info id: "+ a.getStudysiteid());
+				return a;
+			}
+		}
+		return null;
 	}
 
 	public void setAgroInfo(List<StudyAgronomy> agroInfo) {

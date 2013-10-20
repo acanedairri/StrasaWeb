@@ -14,15 +14,21 @@
 					</columns>
 					<template name="model">
 						<row>
-							<toolbarbutton label="@load(each.sitename)" width="99%" onClick="@command('updateDesignInfo', id=each.id)"/>
-							<textbox value="@bind(each.sitelocation)" width="99%" />
-							<combobox model="@load(vm.ecotypes)" width="99%">
+							<toolbarbutton label="@load(each.sitename)"
+								width="99%" onClick="@command('updateDesignInfo', id=each.id)" />
+							<textbox value="@bind(each.sitelocation)"
+								width="99%" />
+							<combobox model="@load(vm.ecotypes)"
+								width="99%">
 								<template name="model">
-									<comboitem value="@load(each.ecotype)" label="@load(each.ecotype)" />
+									<comboitem
+										value="@load(each.ecotype)" label="@load(each.ecotype)" />
 								</template>
 							</combobox>
-							<textbox value="@bind(each.soiltype)" width="99%"/>
-							<textbox value="@bind(each.soilph)" width="99%"/>
+							<textbox value="@bind(each.soiltype)"
+								width="99%" />
+							<textbox value="@bind(each.soilph)"
+								width="99%" />
 						</row>
 					</template>
 				</grid>
@@ -39,48 +45,57 @@
 							<row>
 								Planting Type:
 								<hlayout>
-									<listbox
-										onSelect="db.setFormat(self.selectedItem.value)" mold="select"
-										rows="1">
-										<listitem label="Type A"
-											value="a" />
-										<listitem label="Type B"
-											value="b" />
-										<listitem label="Type C"
-											value="c" />
-									</listbox>
+									<combobox model="@load(vm.plantingtypes)"
+										width="99%">
+										<template name="model">
+											<comboitem
+												value="@load(each.planting)" label="@load(each.planting)" />
+										</template>
+									</combobox>
 								</hlayout>
 							</row>
 							<row>
 								Sowing Date:
-								<datebox id="dbSowing" width="99%" />
+								<datebox
+									value="@bind(vm.selectedAgroInfo.sowingdate)" width="99%" />
 							</row>
 							<row>
 								Harvest Date:
-								<datebox id="dbHarvest" width="99%" />
+								<datebox
+									value="@bind(vm.selectedAgroInfo.harvestdate)" width="99%" />
 							</row>
 							<row>
 								Fertilization:
-								<textbox width="99%" />
+								<textbox
+									value="@bind(vm.selectedAgroInfo.fertilization)" width="99%" />
 							</row>
 							<row>
 								Density:
-								<decimalbox format="###.##"
-									value="154.32" width="99%" />
+								<textbox
+									value="@bind(vm.selectedAgroInfo.density)" width="99%" />
 							</row>
 							<row>
 								Treatment Structure:
-								<intbox constraint="no negative,no zero"
-									width="99%" value="12345678" />
+								<textbox
+									value="@bind(vm.selectedDesignInfo.treatmentstructure)"
+									width="99%" />
+							</row>
+							<row>
+								Design Structure:
+								<textbox
+									value="@bind(vm.selectedDesignInfo.designstructure)"
+									width="99%" />
 							</row>
 							<row>
 								Plot Size:
-								<decimalbox format="###.##"
-									value="154.32" width="99%" />
+								<textbox
+									value="@bind(vm.selectedDesignInfo.plotsize)" width="99%" />
 							</row>
 						</rows>
 					</grid>
-					<button label="NEXT"  onClick="@global-command('sampleCommand',model=vm)"></button>
+					<button label="NEXT"
+						onClick="@global-command('sampleCommand',model=vm)">
+					</button>
 				</groupbox>
 			</columnchildren>
 		</columnlayout>
