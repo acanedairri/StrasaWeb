@@ -6,8 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.strasa.middleware.manager.EcotypeManagerImpl;
+import org.strasa.middleware.manager.StudyAgronomyManagerImpl;
+import org.strasa.middleware.manager.StudyDesignManagerImpl;
 import org.strasa.middleware.manager.StudySiteManagerImpl;
 import org.strasa.middleware.model.Ecotype;
+import org.strasa.middleware.model.StudyAgronomy;
+import org.strasa.middleware.model.StudyDesign;
 import org.strasa.middleware.model.StudySite;
 import org.strasa.web.common.api.ProcessTabViewModel;
 import org.zkoss.bind.BindContext;
@@ -28,12 +32,32 @@ import org.zkoss.zul.Window;
  
 public class DefineStudySite extends ProcessTabViewModel{
     private StudySiteManagerImpl studySiteMan = new StudySiteManagerImpl();
+    private StudyAgronomyManagerImpl studyAgroMan = new StudyAgronomyManagerImpl();
+    private StudyDesignManagerImpl studyDesignMan = new StudyDesignManagerImpl();
+    
     private EcotypeManagerImpl ecotypeMan = new EcotypeManagerImpl();
 	private List<StudySite> sites = studySiteMan.initializeStudySites(1);
-//	private Agronomy selectedAgrono;
+	private List<StudyAgronomy> agroInfo = studyAgroMan.initializeStudyAgronomy(sites);
+	private List<StudyDesign> designInfo = studyDesignMan.initializeStudyDesign(sites);
 	private double sampleID;
 	
 	
+	public List<StudyAgronomy> getAgroInfo() {
+		return agroInfo;
+	}
+
+	public void setAgroInfo(List<StudyAgronomy> agroInfo) {
+		this.agroInfo = agroInfo;
+	}
+
+	public List<StudyDesign> getDesignInfo() {
+		return designInfo;
+	}
+
+	public void setDesignInfo(List<StudyDesign> designInfo) {
+		this.designInfo = designInfo;
+	}
+
 	public double getSampleID() {
 		return sampleID;
 	}
@@ -42,11 +66,6 @@ public class DefineStudySite extends ProcessTabViewModel{
 		this.sampleID = sampleID;
 	}
 
-//	@Init
-//	public void init(@ExecutionArgParam("studyID")double newVal){
-//		sampleID = newVal;
-//	}
-	
 	
 	@GlobalCommand
 	@NotifyChange("sampleID")
