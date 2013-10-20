@@ -33,12 +33,14 @@ import org.zkoss.zul.Window;
 public class DefineStudySite extends ProcessTabViewModel{
     private StudySiteManagerImpl studySiteMan = new StudySiteManagerImpl();
     private StudyAgronomyManagerImpl studyAgroMan = new StudyAgronomyManagerImpl();
-    private StudyDesignManagerImpl studyDesignMan = new StudyDesignManagerImpl();
-    
+    private StudyDesignManagerImpl studyDesignMan = new StudyDesignManagerImpl();    
     private EcotypeManagerImpl ecotypeMan = new EcotypeManagerImpl();
+    
 	private List<StudySite> sites = studySiteMan.initializeStudySites(1);
 	private List<StudyAgronomy> agroInfo = studyAgroMan.initializeStudyAgronomy(sites);
 	private List<StudyDesign> designInfo = studyDesignMan.initializeStudyDesign(sites);
+	private List<Ecotype> ecotypes = ecotypeMan.getAllEcotypes();
+
 	private double sampleID;
 	
 	
@@ -66,14 +68,6 @@ public class DefineStudySite extends ProcessTabViewModel{
 		this.sampleID = sampleID;
 	}
 
-	
-	@GlobalCommand
-	@NotifyChange("sampleID")
-	public void testGlobalCom(@BindingParam("studyID")double newVal){
-		sampleID = newVal;
-	}
-	
-	private List<Ecotype> ecotypes = ecotypeMan.getAllEcotypes();
 	public List<Ecotype> getEcotypes() {
 		return ecotypes;
 	}
@@ -86,8 +80,13 @@ public class DefineStudySite extends ProcessTabViewModel{
 	public void setSites(List<StudySite> sites) {
 		this.sites = sites;
 	}
-
-
+	
+	@GlobalCommand
+	@NotifyChange("sampleID")
+	public void testGlobalCom(@BindingParam("studyID")double newVal){
+		sampleID = newVal;
+	}
+	
 	@NotifyChange("*")
 	@Command("updateDesignInfo")
 	public void updateDesignInfo(@BindingParam("id") Integer id){
