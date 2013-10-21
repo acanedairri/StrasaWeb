@@ -18,11 +18,9 @@
 								width="99%" onClick="@command('updateDesignInfo', id=each.id)" />
 							<textbox value="@bind(each.sitelocation)"
 								width="99%" />
-							<combobox model="@load(vm.ecotypes)"
-								width="99%">
+							<combobox model="@load(vm.ecotypes)" readonly="true" width="99%">
 								<template name="model">
-									<comboitem
-										value="@load(each.ecotype)" label="@load(each.ecotype)" />
+									<comboitem value="@load(each.id)" label="@load(each.ecotype)" />
 								</template>
 							</combobox>
 							<textbox value="@bind(each.soiltype)"
@@ -48,9 +46,9 @@
 									Planting Type:
 									<hlayout>
 										<combobox
-											model="@load(vm.plantingtypes)" width="99%">
+											model="@load(vm.plantingtypes)" readonly="true" selectedItem="@bind(vm.selectedSitePlantingType)" onSelect="@command('updateSelectedSitePlantingType')" width="99%">
 											<template name="model">
-												<comboitem
+												<comboitem 
 													value="@load(each.planting)" label="@load(each.planting)" />
 											</template>
 										</combobox>

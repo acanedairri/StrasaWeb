@@ -42,4 +42,18 @@ public class PlantingTypeManagerImpl {
 		// TODO Auto-generated method stub
 		return PlantingTypes;
 	}
+
+	public PlantingType getPlantingTypeById(Integer plantingtypeid) {
+		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		PlantingTypeMapper PlantingTypeMapper = session.getMapper(PlantingTypeMapper.class);
+		
+		try{
+			PlantingType PlantingType = PlantingTypeMapper.selectByPrimaryKey(plantingtypeid);
+			
+			return PlantingType;
+			
+		}finally{
+			session.close();
+		}
+	}
 }

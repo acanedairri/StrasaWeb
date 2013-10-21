@@ -26,6 +26,7 @@ import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zhtml.Messagebox;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zul.Rows;
@@ -45,6 +46,12 @@ public class DefineStudySite extends ProcessTabViewModel{
 	private List<Ecotype> ecotypes = ecotypeMan.getAllEcotypes();
 	private List<PlantingType> plantingtypes = plantingtypeMan.getAllPlantingTypes();
 
+
+	private StudySite selectedSite = sites.get(0);
+	private StudyAgronomy selectedAgroInfo = getAgroInfoBySiteID(selectedSite.getId());
+	private StudyDesign selectedDesignInfo = getDesignInfoBySiteID(selectedSite.getId());
+	private PlantingType selectedSitePlantingType = plantingtypes.get(selectedAgroInfo.getPlantingtypeid()-1); //.getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
+	
 	public List<PlantingType> getPlantingtypes() {
 		return plantingtypes;
 	}
@@ -52,11 +59,15 @@ public class DefineStudySite extends ProcessTabViewModel{
 	public void setPlantingtypes(List<PlantingType> plantingtypes) {
 		this.plantingtypes = plantingtypes;
 	}
-
-	private StudySite selectedSite = sites.get(0);
-	private StudyAgronomy selectedAgroInfo = getAgroInfoBySiteID(selectedSite.getId());
-	private StudyDesign selectedDesignInfo = getDesignInfoBySiteID(selectedSite.getId());
 	
+	public PlantingType getSelectedSitePlantingType() {
+		return selectedSitePlantingType;
+	}
+
+	public void setSelectedSitePlantingType(PlantingType selectedSitePlantingType) {
+		this.selectedSitePlantingType = selectedSitePlantingType;
+	}
+
 	public StudyAgronomy getSelectedAgroInfo() {
 		return selectedAgroInfo;
 	}
@@ -78,28 +89,6 @@ public class DefineStudySite extends ProcessTabViewModel{
 	
 	public List<StudyAgronomy> getAgroInfo() {
 		return agroInfo;
-	}
-
-	private StudyDesign getDesignInfoBySiteID(Integer id) {
-		// TODO Auto-generated method stub
-		for(StudyDesign d: designInfo ){
-			if(d.getStudysiteid()==id){
-				System.out.println("Selected Design info id: "+ d.getStudysiteid());
-				return d;
-			}
-		}
-		return null;
-	}
-
-	private StudyAgronomy getAgroInfoBySiteID(Integer id) {
-		// TODO Auto-generated method stub
-		for(StudyAgronomy a: agroInfo ){
-			if(a.getStudysiteid()==id){
-				System.out.println("Selected Agronomy info id: "+ a.getStudysiteid());
-				return a;
-			}
-		}
-		return null;
 	}
 
 	public void setAgroInfo(List<StudyAgronomy> agroInfo) {
@@ -135,6 +124,28 @@ public class DefineStudySite extends ProcessTabViewModel{
 		this.sites = sites;
 	}
 	
+	private StudyDesign getDesignInfoBySiteID(Integer id) {
+		// TODO Auto-generated method stub
+		for(StudyDesign d: designInfo ){
+			if(d.getStudysiteid()==id){
+				System.out.println("Selected Design info id: "+ d.getStudysiteid());
+				return d;
+			}
+		}
+		return null;
+	}
+
+	private StudyAgronomy getAgroInfoBySiteID(Integer id) {
+		// TODO Auto-generated method stub
+		for(StudyAgronomy a: agroInfo ){
+			if(a.getStudysiteid()==id){
+				System.out.println("Selected Agronomy info id: "+ a.getStudysiteid());
+				return a;
+			}
+		}
+		return null;
+	}
+
 	@GlobalCommand
 	@NotifyChange("sampleID")
 	public void testGlobalCom(@BindingParam("studyID")double newVal){
@@ -147,17 +158,26 @@ public class DefineStudySite extends ProcessTabViewModel{
 //		selectedSite=
 			setSelectedAgroInfo(getAgroInfoBySiteID(id));
 			setSelectedDesignInfo(getDesignInfoBySiteID(id));
+			selectedSitePlantingType = plantingtypes.get(selectedAgroInfo.getPlantingtypeid()-1); //.getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
 			System.out.println("selected row id: "+ Integer.toString(id));
 			
 	}
 	
+	
+	@Command("updateSelectedSitePlantingType")
+	public void updateSelectedSitePlantingType(){
+//		selectedSite=
+			selectedAgroInfo.setPlantingtypeid(selectedSitePlantingType.getId());
+	}
+	
 	@Command("saveSiteAgroDesignInfo")
-	public void saveSiteAgroDesignInfo(@BindingParam("id") Integer id){
+	public void saveSiteAgroDesignInfo(){
 //		selectedSite=
 			studySiteMan.updateStudySite(sites);
 			studyAgroMan.updateStudyAgronomy(agroInfo);
 			studyDesignMan.updateStudyDesign(designInfo);
 			
+			Messagebox.show("Changes saved.");
 	}
 	
 	@Override
