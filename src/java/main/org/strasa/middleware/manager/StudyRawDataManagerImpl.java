@@ -1,6 +1,7 @@
 package org.strasa.middleware.manager;
 
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -46,6 +47,35 @@ public class StudyRawDataManagerImpl {
 			session.close();
 		}
 
+	}
+	public void addStudyRawDataByRawCsvList(Study study, List<String[]> rawCSVData){
+		String[] header = rawCSVData.get(0);
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		StudyRawDataMapper studyDataMapper = session.getMapper(StudyRawDataMapper.class);
+		StudyMapper studyMapper = session.getMapper(StudyMapper.class);
+		try{
+			studyMapper.insert(study);
+			for(int i = 1; i < rawCSVData.size(); i++){
+				String[] row = rawCSVData.get(i);
+				for(int j = 0; j < header.length; j++){
+					
+					if(row.length == header.length){
+					StudyRawData record = new StudyRawData();
+					
+					record.setDatacolumn(header[j]);
+					record.setDatarow(i);
+					record.setDatavalue(row[j]);
+					record.setStudyid(study.getId());
+					studyDataMapper.insert(record);
+					}
+				}
+			}
+			session.commit();
+
+		}finally{
+			session.close();
+		}
+		
 	}
 	
 	public boolean hasSiteColumnData(int studyid){

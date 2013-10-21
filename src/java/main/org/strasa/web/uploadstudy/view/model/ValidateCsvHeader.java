@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
-import org.strasa.middleware.model.StudyVariable;
 import org.strasa.web.uploadstudy.view.pojos.UploadCSVDataVariableModel;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
@@ -39,10 +39,17 @@ public class ValidateCsvHeader {
 	private Binder parBinder;
 
 	public List<UploadCSVDataVariableModel> varData = new ArrayList<UploadCSVDataVariableModel>();
+
+	private boolean isHeaderClear = true;
+
+
+
 	@Init
-	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("CSVPath")  String CSVPath) {
+	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,
+			@ContextParam(ContextType.VIEW) Component view,
+			@ExecutionArgParam("CSVPath") String CSVPath) {
 		mainView = view;
-		parBinder = (Binder) view.getParent().getAttribute("binder");	
+		parBinder = (Binder) view.getParent().getAttribute("binder");
 		CsvPath = CSVPath;
 		ArrayList<String> invalidHeader = new ArrayList<String>();
 
@@ -50,10 +57,10 @@ public class ValidateCsvHeader {
 			StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
 			CSVReader reader = new CSVReader(new FileReader(CsvPath));
 			String[] header = reader.readNext();
-			for(String column : header){
-				if(!studyVarMan.hasVariable(column)){
-					invalidHeader.add(column);
-				}
+			for (String column : header) {
+
+				invalidHeader.add(column);
+
 			}
 			System.out.println(invalidHeader.size());
 
@@ -67,14 +74,24 @@ public class ValidateCsvHeader {
 
 		populateVarData(invalidHeader);
 	}
+
+	public void close() {
+		Map<String, Object> params = new HashMap<String, Object>();
+		// params.put("refreshCsv",null);
+
+		// this.parBinder.postCommand("change", params);
+		parBinder.postCommand("refreshCsv", null);
+		mainView.detach();
+	}
+
 	@Command("saveHeader")
-	public void saveHeader(){
+	public void saveHeader() {
 
 		String[] newHeader = new String[varData.size()];
-		for(int i = 0; i < varData.size(); i++)
-		{
-			if(varData.get(i).getNewVariable().equals("-")){
-				Messagebox.show("Error: Headers must be matched accordingly.", "Save Error", Messagebox.OK, Messagebox.ERROR);
+		for (int i = 0; i < varData.size(); i++) {
+			if (varData.get(i).getNewVariable().equals("-")) {
+				Messagebox.show("Error: Headers must be matched accordingly.",
+						"Save Error", Messagebox.OK, Messagebox.ERROR);
 				return;
 			}
 			newHeader[i] = varData.get(i).getNewVariable();
@@ -83,7 +100,7 @@ public class ValidateCsvHeader {
 		try {
 			CSVReader reader = new CSVReader(new FileReader(CsvPath));
 			List<String[]> currDataSet = reader.readAll();
-			currDataSet.set(0,  newHeader) ;
+			currDataSet.set(0, newHeader);
 			mFileWriter = new FileWriter(CsvPath);
 			CSVWriter mCsvWriter = new CSVWriter(mFileWriter);
 			mCsvWriter.writeAll(currDataSet);
@@ -94,60 +111,79 @@ public class ValidateCsvHeader {
 			e.printStackTrace();
 		}
 
+		Messagebox.show("CSV Data successfully updated!", "Save",
+				Messagebox.OK, Messagebox.INFORMATION);
+		System.out.println("SavePath: " + CsvPath);
 
-		Messagebox.show("CSV Data successfully updated!", "Save", Messagebox.OK, Messagebox.INFORMATION);
-		System.out.println("SavePath: "+CsvPath);
-		
-		
 		Binder bind = parBinder;
 		if (bind == null)
 			return;
-		
+
 		Map<String, Object> params = new HashMap<String, Object>();
-//		params.put("refreshCsv",null);
+		// params.put("refreshCsv",null);
 
 		// this.parBinder.postCommand("change", params);
 		bind.postCommand("refreshCsv", null);
-		mainView.detach();
+		try {
+			mainView.detach();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@NotifyChange("*")
 	@Command("refreshVarList")
-	public void refreshList(@BindingParam("newValue") String newValue, @BindingParam("oldVar") String oldVar){
-		for(int i = 0; i < varData.size(); i++){
+	public void refreshList(@BindingParam("newValue") String newValue,
+			@BindingParam("oldVar") String oldVar) {
+		for (int i = 0; i < varData.size(); i++) {
 
-			if(varData.get(i).getCurrentVariable().equals(oldVar)) {
+			if (varData.get(i).getCurrentVariable().equals(oldVar)) {
 				System.out.println("   ss");
 				varData.get(i).setNewVariable(newValue);
 			}
 
 		}
 
-
 	}
+
 	@Command("changeVar")
 	@NotifyChange("variableData")
-	public void changeVar(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@BindingParam("oldVar") String oldVar) {
+	public void changeVar(
+			@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,
+			@ContextParam(ContextType.VIEW) Component view,
+			@BindingParam("oldVar") String oldVar) {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 		System.out.println(oldVar);
-		params.put("oldVar",oldVar);
+		params.put("oldVar", oldVar);
 		params.put("parent", view);
 
-		Window popup = (Window) Executions.createComponents(ChangeCsvHeader.ZUL_PATH, view, params);
+		Window popup = (Window) Executions.createComponents(
+				ChangeCsvHeader.ZUL_PATH, view, params);
 
 		popup.doModal();
 	}
 
-	
 	@NotifyChange("varData")
-	public void populateVarData(ArrayList<String> list){
-		for(String var : list){
-			varData.add(new UploadCSVDataVariableModel(var,"-"));
+	public void populateVarData(ArrayList<String> list) {
+		StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
+
+		for (String var : list) {
+			if (!studyVarMan.hasVariable(var)) {
+				varData.add(new UploadCSVDataVariableModel(var, "-"));
+				isHeaderClear = false;
+			} else {
+				varData.add(new UploadCSVDataVariableModel(var, var, false));
+
+			}
+
 		}
+		
+		
 	}
-	
-	public List<UploadCSVDataVariableModel>  getVarData() {
+
+	public List<UploadCSVDataVariableModel> getVarData() {
 		return varData;
 	}
 }

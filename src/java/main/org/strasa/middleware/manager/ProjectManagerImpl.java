@@ -76,6 +76,19 @@ public class ProjectManagerImpl {
 			session.close();
 		}
 	}
+	public Project getProjectByName(String name,int id){
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		ProjectMapper projectMapper = session.getMapper(ProjectMapper.class);
+		
+		try{
+			ProjectExample example= new ProjectExample();
+			example.createCriteria().andUseridEqualTo(id).andNameEqualTo(name);
+			
+			return projectMapper.selectByExample(example).get(0);
+		}finally{
+			session.close();
+		}
+	}
 
 
 }

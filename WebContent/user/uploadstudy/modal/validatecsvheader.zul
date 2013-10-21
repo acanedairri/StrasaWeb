@@ -12,9 +12,9 @@
                 <column label="Ctrl" width="20%" />
             </columns>
             <template name="model">
-                <row>
+                <row visible = "@load(each.headerExisting)">
                     <label value="@load(each.currentVariable)" />
-                    <label value="@load(each.newVariable)" />
+                    <label value="@bind(each.newVariable)" />
                     <button label="Change" onClick="@command('changeVar', oldVar=each.currentVariable)" />
                 </row>
             </template>

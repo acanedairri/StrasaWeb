@@ -1,4 +1,5 @@
 package org.strasa.web.uploadstudy.view.model;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,11 +10,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.strasa.middleware.manager.GermplasmManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
+import org.strasa.middleware.manager.StudyGermplasmManagerImpl;
+import org.strasa.middleware.manager.StudyRawDataManagerImpl;
+import org.strasa.middleware.manager.StudyTypeManagerImpl;
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
+import org.strasa.middleware.model.Study;
+import org.strasa.middleware.model.StudyGermplasm;
+import org.strasa.middleware.model.StudyRawDataByDataColumn;
+import org.strasa.middleware.model.StudyType;
 import org.strasa.web.common.api.ProcessTabViewModel;
 import org.strasa.web.uploadstudy.view.pojos.UploadCSVDataVariableModel;
 import org.zkoss.bind.BindContext;
@@ -22,7 +31,6 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
-import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -37,18 +45,28 @@ import au.com.bytecode.opencsv.CSVReader;
 
 public class UploadData extends ProcessTabViewModel{
 
-	private List<String[]> dataList = new ArrayList<String[]>();
 	private List<String> columnList = new ArrayList<String>();
+	public String dataFileName;
+	private List<String[]> dataList = new ArrayList<String[]>();
 	private ArrayList<String> programList = new ArrayList<String>();
 	private ArrayList<String> projectList = new ArrayList<String>();
 	private ArrayList<String> studyTypeList = new ArrayList<String>();
 
 	private ArrayList<String> dataTypeList = new ArrayList<String>();
-	private String txtProgram;
-	private String txtProject;
-	private String txtStudyName;
-	private String txtStudyType;
-	private String txtYear;
+	private String txtProgram = new String();
+	private String txtProject =  new String();
+	private String txtStudyName = new String();
+	private String txtStudyType =  new String();
+	private String txtYear = "";
+
+	public boolean isVariableDataVisible = false;
+	private String path;
+	private String dataPath = new String();
+	private Study study;
+
+
+	public List<UploadCSVDataVariableModel> varData = new ArrayList<UploadCSVDataVariableModel>();
+	private int userId = 1;
 
 	public ArrayList<String> getProgramList() {
 		return programList;
@@ -69,6 +87,12 @@ public class UploadData extends ProcessTabViewModel{
 		this.dataTypeList = dataTypeList;
 	}
 	public ArrayList<String> getStudyTypeList() {
+		
+		studyTypeList.clear();
+				
+				for(StudyType studyType : new StudyTypeManagerImpl().getAllStudyType()){
+					studyTypeList.add(studyType.getStudytype());
+				};
 		return studyTypeList;
 	}
 	public void setStudyTypeList(ArrayList<String> studyTypeList) {
@@ -110,34 +134,16 @@ public class UploadData extends ProcessTabViewModel{
 	public void setColumnList(List<String> columnList) {
 		this.columnList = columnList;
 	}
-	
 	public List<String[]> getDataList() {
 		return dataList;
 	}
 	public void setDataList(List<String[]> dataList) {
 		this.dataList = dataList;
 	}
-	public String dataFileName;
-	public boolean isVariableDataVisible = false;
-
-
 	public String getDataFileName() {
 		return dataFileName;
 	}
 	
-
-	@Init
-	public void init(@ContextParam(ContextType.VIEW) Component view){
-		setMainView(view);
-
-		refreshProgramList(null);
-		refreshProjectList(null);
-		System.out.println("LOADED");
-	}
-
-	public List<UploadCSVDataVariableModel> varData = new ArrayList<UploadCSVDataVariableModel>();
-	private String path;
-	private String dataPath;
 
 	public boolean isVariableDataVisible() {
 		return isVariableDataVisible;
@@ -165,32 +171,6 @@ public class UploadData extends ProcessTabViewModel{
 		popup.doModal();
 	}
 
-	public void openCSVHeaderValidator(String CSVPath){
-		Map<String, Object> params = new HashMap<String, Object>();
-		dataPath = CSVPath;
-		params.put("CSVPath",CSVPath);
-		params.put("parent", getMainView());
-
-		Window popup = (Window) Executions.createComponents(ValidateCsvHeader.ZUL_PATH, getMainView(), params);
-
-		popup.doModal();
-	}
-
-	@NotifyChange("*")
-	@Command("refreshVarList")
-	public void refreshList(@BindingParam("newValue") String newValue, @BindingParam("oldVar") String oldVar){
-		for(int i = 0; i < varData.size(); i++){
-
-			if(varData.get(i).getCurrentVariable().equals(oldVar)) {
-				System.out.println("   ss");
-				varData.get(i).setNewVariable(newValue);
-			}
-
-		}
-
-
-	}
-
 	@NotifyChange("*")
 	@Command("uploadCSV")
 	public void uploadCSV(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view) {
@@ -207,13 +187,13 @@ public class UploadData extends ProcessTabViewModel{
 		String name = event.getMedia().getName();
 
 		path = Sessions.getCurrent().getWebApp().getRealPath("/UPLOADS/") + "/";                
-
+		new File(path).mkdirs();
 
 		this.uploadFile(path, name,  event.getMedia().getStringData());       
 		BindUtils.postNotifyChange(null, null, this, "*");
 
 		ArrayList<String> invalidHeader = new ArrayList<String>();
-
+		boolean isHeaderValid = true;
 		try {
 			StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
 			CSVReader reader = new CSVReader(new FileReader(path+name));
@@ -221,6 +201,7 @@ public class UploadData extends ProcessTabViewModel{
 			for(String column : header){
 				if(!studyVarMan.hasVariable(column)){
 					invalidHeader.add(column);
+					isHeaderValid = false;
 				}
 			}
 			System.out.println(invalidHeader.size());
@@ -233,29 +214,15 @@ public class UploadData extends ProcessTabViewModel{
 			e.printStackTrace();
 		}
 
-
-		populateVarData(invalidHeader);
+		dataPath = path+name;
 		isVariableDataVisible = true;
 		dataFileName = name ;
-		openCSVHeaderValidator(path+name);
+		if(!isHeaderValid)openCSVHeaderValidator(path+name);
+		else refreshCsv();
 
 	}
 
 
-	@NotifyChange("varData")
-	public void populateVarData(ArrayList<String> list){
-		for(String var : list){
-			varData.add(new UploadCSVDataVariableModel(var,"-"));
-		}
-	}
-
-	@NotifyChange("*")
-	@Command("removeUpload")
-	public void removeUpload(){
-		isVariableDataVisible = false;
-		dataFileName = "";
-		varData.clear();
-	}
 	public void uploadFile(String path, String name, 
 			String data) {
 
@@ -270,30 +237,6 @@ public class UploadData extends ProcessTabViewModel{
 			e.printStackTrace();
 		}
 	}
-	@NotifyChange("*")
-	@Command("refreshCsv")
-	public void refreshCsv(){
-	    CSVReader reader;
-		try {
-			reader = new CSVReader(new FileReader(dataPath));
-			 List<String[]> rawData = reader.readAll();
-			 columnList.clear();
-			 dataList.clear();
-			 columnList = new ArrayList<String>(Arrays.asList(rawData.get(0)));
-			 rawData.remove(0);
-			 dataList = new ArrayList<String[]>(rawData);
-			 
-			 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	   
-	}
-
 	@Command("addProgram")
 	public void addProgram(){
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -316,10 +259,77 @@ public class UploadData extends ProcessTabViewModel{
 
 		popup.doModal();
 	}
+	@GlobalCommand
+	public void testGlobalCom(@BindingParam("newVal")double newVal){
+		System.out.println("globalCom: " + newVal);
+	}
+	@Init
+	public void init(@ContextParam(ContextType.VIEW) Component view){
+		setMainView(view);
+	
+		refreshProgramList(null);
+		refreshProjectList(null);
+		System.out.println("LOADED");
+	}
+	public void openCSVHeaderValidator(String CSVPath){
+		Map<String, Object> params = new HashMap<String, Object>();
+		dataPath = CSVPath;
+		params.put("CSVPath",CSVPath);
+		params.put("parent", getMainView());
+	
+		Window popup = (Window) Executions.createComponents(ValidateCsvHeader.ZUL_PATH, getMainView(), params);
+	
+		popup.doModal();
+	}
+	@NotifyChange("*")
+	@Command("refreshVarList")
+	public void refreshList(@BindingParam("newValue") String newValue, @BindingParam("oldVar") String oldVar){
+		for(int i = 0; i < varData.size(); i++){
+	
+			if(varData.get(i).getCurrentVariable().equals(oldVar)) {
+				System.out.println("   ss");
+				varData.get(i).setNewVariable(newValue);
+			}
+	
+		}
+	
+	
+	}
+
+	@NotifyChange("*")
+	@Command("removeUpload")
+	public void removeUpload(){
+		isVariableDataVisible = false;
+		dataFileName = "";
+		varData.clear();
+	}
+	@NotifyChange("*")
+	@Command("refreshCsv")
+	public void refreshCsv(){
+	    CSVReader reader;
+		try {
+			reader = new CSVReader(new FileReader(dataPath));
+			 List<String[]> rawData = reader.readAll();
+			 columnList.clear();
+			 dataList.clear();
+			 columnList = new ArrayList<String>(Arrays.asList(rawData.get(0)));
+			 rawData.remove(0);
+			 dataList = new ArrayList<String[]>(rawData);
+			 
+			 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+	}
 	@NotifyChange("*")
 	@Command("refreshProgramList")
 	public void refreshProgramList(@BindingParam("selected") String selected){
-
+	
 		ProgramManagerImpl programMan = new ProgramManagerImpl();
 		programList.clear();
 		for(Program data : programMan.getProgramByUserId(1)){
@@ -328,15 +338,13 @@ public class UploadData extends ProcessTabViewModel{
 		}
 		System.out.print(selected);
 		txtProgram = selected;
-
-
+	
+	
 	}
-	
-	
 	@NotifyChange("*")
 	@Command("refreshProjectList")
 	public void refreshProjectList(@BindingParam("selected") String selected){
-
+	
 		ProjectManagerImpl programMan = new ProjectManagerImpl();
 		projectList.clear();
 		for(Project data : programMan.getProjectByUserId(1)){
@@ -345,20 +353,67 @@ public class UploadData extends ProcessTabViewModel{
 		}
 		System.out.print(selected);
 		txtProject = selected;
-
-
-	}
-
-	@GlobalCommand
-	public void testGlobalCom(@BindingParam("newVal")double newVal){
-		System.out.println("globalCom: " + newVal);
+	
+	
 	}
 	@Override
 	public boolean validateTab() {
-		if(txtProgram.equals("anything")) 
-		return false;
-		else
-			return true;
+		if(txtProgram == null || txtProject == null || txtStudyName == null || txtStudyType == null  || txtYear == null){
+			Messagebox.show("Error: All fields are required", "Upload Error", Messagebox.OK, Messagebox.ERROR);
+			
+			//TODO: must have message DIalog
+			return false;
+		}
+		
+		if(txtProgram.isEmpty() || txtProject.isEmpty() || txtStudyName.isEmpty() || txtStudyType.isEmpty() || txtYear.isEmpty()){
+			Messagebox.show("Error: All fields are required", "Upload Error", Messagebox.OK, Messagebox.ERROR);
+			
+			//TODO: must have message DIalog
+			return false;
+		}
+		if(dataPath.isEmpty() || !isVariableDataVisible){
+			Messagebox.show("Error: You must upload a data first", "Upload Error", Messagebox.OK, Messagebox.ERROR);
+			
+			return false;
+		}
+		StudyRawDataManagerImpl studyRawData = new StudyRawDataManagerImpl();
+		if(study == null){
+			study = new Study();
+		}
+			study.setName(txtStudyName);
+			study.setStudytypeid(new StudyTypeManagerImpl().getStudyTypeByName(txtStudyType).getId());
+			study.setProgramid(new ProgramManagerImpl().getProgramByName(txtProgram, userId).getId());
+			study.setProjectid(new ProjectManagerImpl().getProjectByName(txtProject, userId).getId());
+			
+			
+		
+		try {
+			studyRawData.addStudyRawDataByRawCsvList(study, new CSVReader(new FileReader(dataPath)).readAll());
+			GermplasmManagerImpl germplasmManager = new GermplasmManagerImpl();
+			StudyGermplasmManagerImpl studyGermplasmManager = new StudyGermplasmManagerImpl();
+			
+			StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl();
+			ArrayList<StudyRawDataByDataColumn> list= (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataColumn(study.getId(),"GName");
+			for(StudyRawDataByDataColumn s:list){
+				System.out.println(s.getStudyid()+ " "+s.getDatacolumn()+ " "+ s.getDatavalue());
+
+				if(!germplasmManager.isGermplasmExisting(s.getDatavalue())){
+					StudyGermplasm studyGermplasmData = new StudyGermplasm();
+					studyGermplasmData.setGermplasmname(s.getDatavalue());
+					studyGermplasmData.setStudyid(study.getId());
+					studyGermplasmManager.addStudyGermplasm(studyGermplasmData);
+				}
+				
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
+		
 	}
 	
 

@@ -25,13 +25,14 @@
 						<hlayout spacing="10px">
 							<label class="name" value="Program:" />
 							<bandbox id="bdProgram" mold="rounded"
-								autodrop="true" value ="@bind(vm.txtProgram)">
+								autodrop="true" value ="@bind(vm.txtProgram)" readonly="true">
 								<bandpopup>
 									<listbox height="250px"
 										width="450px" mold="paging" autopaging="true"
 										model="@load(vm.programList)"
 										selectedItem="@bind(vm.txtProgram)"
 										onSelect="bdProgram.value=self.selectedItem.label;bdProgram.close();"
+										 
 										>
 										<listhead>
 											<listheader
@@ -45,7 +46,7 @@
 						</hlayout>
 						<hlayout spacing="10px">
 							<label class="name" value="Project:" />
-							<bandbox id="bdProject" mold="rounded" autodrop="true" value ="@bind(vm.txtProject)">
+							<bandbox id="bdProject" mold="rounded" autodrop="true" value ="@bind(vm.txtProject)" readonly="true">
 								<bandpopup>
 									<listbox height="250px"
 										width="450px" mold="paging" autopaging="true"
@@ -71,7 +72,7 @@
 
 						<hlayout spacing="10px">
 							<label class="name" value="Study Type:" />
-							<bandbox  id="bdStudyType" mold="rounded" autodrop="true" value ="@load(vm.txtStudyType)">
+							<bandbox  id="bdStudyType" mold="rounded" autodrop="true" value ="@load(vm.txtStudyType)" readonly="true">
 								<bandpopup>
 									<listbox height="250px"
 										width="450px" mold="paging" autopaging="true"
