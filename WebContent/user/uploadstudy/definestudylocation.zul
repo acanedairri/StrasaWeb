@@ -1,7 +1,5 @@
-<?page title="Step 4:" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<window apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.middleware.model.DefineStudyLocation')">
+	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.DefineStudyLocation')">
 		<separator />
 		Step 4:
 		<separator />
@@ -18,19 +16,20 @@
 			</columns>
 			<template name="model">
 				<row>
-					<label value="@load(each.studyid)" />
-					<label value="@load(each.locationname)" />
-					<label value="@load(each.country)" />
-					<label value="@load(each.province)" />
-					<label value="@load(each.region)" />
-					<label value="@load(each.altitude)" />
-					<label value="@load(each.latitude)" />
-					<label value="@load(each.weatherstation)" />
+					<label value="@bind(each.locationname)" />
+					<textbox value="@bind(each.country)" />
+					<textbox value="@bind(each.province)" />
+					<textbox value="@bind(each.region)" />
+					<textbox value="@bind(each.altitude)" />
+					<textbox value="@bind(each.latitude)" />
+					<textbox value="@bind(each.weatherstation)" />
 				</row>
 			</template>
 		</grid>
+		<button label="SAVE" onClick="@command('saveLocationInfo')" />
 		<button label="NEXT"
 			onClick="@global-command('sampleCommand',model=vm)">
 		</button>
+		
 	</window>
 </zk>
