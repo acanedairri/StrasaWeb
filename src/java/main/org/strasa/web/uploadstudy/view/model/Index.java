@@ -31,8 +31,8 @@ public class Index {
 	Tab tab4;
 	private UploadData uploadData;
 	private int selectedIndex = 1;
-	private boolean[] tabDisabled = {false,true,true,true};
-	private long studyID;
+	private boolean[] tabDisabled = {false,false,false,false};
+	private long studyID = 7;
 	
 	public int getSelectedIndex() {
 		return selectedIndex;
