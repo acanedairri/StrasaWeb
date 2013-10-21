@@ -1,0 +1,33 @@
+<?page title="Step 4:" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.strasa.middleware.model.DefineStudyLocation')">
+		<separator />
+		Step 4:
+		<separator />
+		<grid id="step4" height="350px"  model="@load(vm.locations)" >
+			<columns hflex="1">
+				<column label="Study ID" />
+				<column label="Location" />
+				<column label="Country" />
+				<column label="Province" />
+				<column label="Region" />
+				<column label="Altitude" />
+				<column label="Latitude" />
+				<column label="Weather Station" />
+			</columns>
+			<template name="model">
+				<row>
+					<label value="@load(each.studyid)" />
+					<label value="@load(each.locationname)" />
+					<label value="@load(each.country)" />
+					<label value="@load(each.province)" />
+					<label value="@load(each.region)" />
+					<label value="@load(each.altitude)" />
+					<label value="@load(each.latitude)" />
+					<label value="@load(each.weatherstation)" />
+				</row>
+			</template>
+		</grid>
+
+	</window>
+</zk>
