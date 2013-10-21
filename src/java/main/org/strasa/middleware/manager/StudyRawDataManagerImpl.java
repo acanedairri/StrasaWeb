@@ -6,11 +6,9 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
-import org.strasa.middleware.mapper.EcotypeMapper;
 import org.strasa.middleware.mapper.StudyMapper;
 import org.strasa.middleware.mapper.StudyRawDataByDataColumnMapper;
 import org.strasa.middleware.mapper.StudyRawDataMapper;
-import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyRawData;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
