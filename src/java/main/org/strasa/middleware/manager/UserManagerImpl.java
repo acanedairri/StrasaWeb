@@ -37,6 +37,19 @@ public class UserManagerImpl {
 		
 	}
 	
+	
+	public void deleteUser(User record){
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		UserMapper userMapper = session.getMapper(UserMapper.class);
+		try{
+			userMapper.deleteByPrimaryKey(record.getId());
+			session.commit();
+		}finally{
+			session.close();
+		}
+		
+	}
+	
 	public List<User> getUser(String username, String password){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		UserMapper userMapper = session.getMapper(UserMapper.class);

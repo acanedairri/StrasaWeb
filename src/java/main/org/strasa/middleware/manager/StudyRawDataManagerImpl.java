@@ -117,5 +117,15 @@ public class StudyRawDataManagerImpl {
 	}
 
 
-
+	public List<StudyRawData> getAllStudyRawData() {
+		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		StudyRawDataMapper studyrawdataMapper = session.getMapper(StudyRawDataMapper.class);
+		
+		try{
+			List<StudyRawData> studyrawdata = studyrawdataMapper.selectByExample(null);
+			return studyrawdata;
+		}finally{
+			session.close();
+		}
+	}
 }
