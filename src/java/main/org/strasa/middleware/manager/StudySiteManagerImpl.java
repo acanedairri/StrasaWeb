@@ -43,12 +43,12 @@ public class StudySiteManagerImpl {
 	}
 
 
-	public void updateStudySite(ArrayList<StudySite> records){
+	public void updateStudySite(List<StudySite> sites){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
 
 		try{
-			for(StudySite record:records){
+			for(StudySite record:sites){
 				studySiteMapper.updateByPrimaryKey(record);
 			}
 			session.commit();
