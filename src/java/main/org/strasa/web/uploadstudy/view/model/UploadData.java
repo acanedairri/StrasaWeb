@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.input.ReaderInputStream;
 import org.strasa.middleware.manager.GermplasmManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
@@ -25,6 +27,7 @@ import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudyType;
 import org.strasa.web.common.api.ProcessTabViewModel;
 import org.strasa.web.uploadstudy.view.pojos.UploadCSVDataVariableModel;
+import org.strasa.web.utilities.FileUtilities;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
@@ -176,20 +179,21 @@ public class UploadData extends ProcessTabViewModel{
 	public void uploadCSV(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view) {
 
 		UploadEvent event = (UploadEvent)ctx.getTriggerEvent();
-		if(event.getMedia().isBinary()){
-			Messagebox.show("Error: File must be a text-based csv format", "Upload Error", Messagebox.OK, Messagebox.ERROR);
-			return;
-		}
+		
 
 		//		System.out.println(event.getMedia().getStringData());
 
 
 		String name = event.getMedia().getName();
-
+		if(!name.endsWith(".csv")){
+			Messagebox.show("Error: File must be a text-based csv format", "Upload Error", Messagebox.OK, Messagebox.ERROR);
+			return;
+		}
 		path = Sessions.getCurrent().getWebApp().getRealPath("/UPLOADS/") + "/";                
 		new File(path).mkdirs();
 
-		this.uploadFile(path, name,  event.getMedia().getStringData());       
+		InputStream in = event.getMedia().isBinary() ?event.getMedia().getStreamData() : new ReaderInputStream(event.getMedia().getReaderData());   
+		FileUtilities.uploadFile(path+name, in);
 		BindUtils.postNotifyChange(null, null, this, "*");
 
 		ArrayList<String> invalidHeader = new ArrayList<String>();
