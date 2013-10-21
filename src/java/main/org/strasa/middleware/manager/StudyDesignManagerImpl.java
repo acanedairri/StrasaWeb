@@ -44,12 +44,12 @@ public class StudyDesignManagerImpl {
 
 	}
 
-	public void updateStudyDesign(ArrayList<StudyDesign> records){
+	public void updateStudyDesign(List<StudyDesign> designInfo){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudyDesignMapper studyDesignMapper = session.getMapper(StudyDesignMapper.class);
 
 		try{
-			for(StudyDesign record:records){
+			for(StudyDesign record:designInfo){
 				studyDesignMapper.updateByPrimaryKey(record);
 			}
 			session.commit();

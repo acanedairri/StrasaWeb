@@ -43,12 +43,12 @@ public class StudyAgronomyManagerImpl {
 
 	}
 
-	public void updateStudyAgronomy(ArrayList<StudyAgronomy> records){
+	public void updateStudyAgronomy(List<StudyAgronomy> agroInfo){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudyAgronomyMapper studyAgronomyMapper = session.getMapper(StudyAgronomyMapper.class);
 
 		try{
-			for(StudyAgronomy record:records){
+			for(StudyAgronomy record:agroInfo){
 				studyAgronomyMapper.updateByPrimaryKey(record);
 			}
 			session.commit();

@@ -145,7 +145,18 @@ public class DefineStudySite extends ProcessTabViewModel{
 	@Command("updateDesignInfo")
 	public void updateDesignInfo(@BindingParam("id") Integer id){
 //		selectedSite=
+			setSelectedAgroInfo(getAgroInfoBySiteID(id));
+			setSelectedDesignInfo(getDesignInfoBySiteID(id));
 			System.out.println("selected row id: "+ Integer.toString(id));
+			
+	}
+	
+	@Command("saveSiteAgroDesignInfo")
+	public void saveSiteAgroDesignInfo(@BindingParam("id") Integer id){
+//		selectedSite=
+			studySiteMan.updateStudySite(sites);
+			studyAgroMan.updateStudyAgronomy(agroInfo);
+			studyDesignMan.updateStudyDesign(designInfo);
 			
 	}
 	
