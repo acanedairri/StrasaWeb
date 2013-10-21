@@ -152,7 +152,7 @@ public class DefineStudySite extends ProcessTabViewModel{
 	@Override
 	public boolean validateTab() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Init
