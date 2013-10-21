@@ -15,18 +15,25 @@
             <column hflex="1" label="Email Address" align="center" />
              <column hflex="1" label="Date Registered" align="center" />
             <column hflex="1" label="Status" align="center" />
+            <column hflex="1" label="Action" align="center" />
         </columns>
         <template name="model">
             <row>
                 <label value="@load(each.id)" visible="false" />
-	 			<label value="@load(each.firstname) @load(each.lastname)" />
+                <hbox>
+                <label value="@load(each.firstname)"/>
+                <label value="@load(each.lastname)"/>
+                </hbox>
+	 			
 	 			<label value="@load(each.agency)"/>
 				<label value="@load(each.country)"/>
 				<label value="@load(each.email)"/>
 				<label value="@load(each.dateregistered)"/>
-                <checkbox hflex="1" 
+				<checkbox hflex="1"  width="100px"
                     label="@load(each.status ?'Active':'Inactive')" 
                     checked="@bind(each.status)" onCheck='@command("onChecked", user= each)' />
+				 <button label="Delete" onClick="@command('deleteUser', user=each)" />
+                
             </row>
         </template>
     </grid>
