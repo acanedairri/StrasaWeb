@@ -87,8 +87,17 @@ public class Index {
 //		selectedIndex++;
 		System.out.println("Sample: " + selectedIndex);
 
-		tabDisabled[1] = false;
+		tabDisabled[selectedIndex + 1] = false;
+		switch(selectedIndex + 1){
+		case 1:
+			Events.sendEvent("onSelect",tab1,tab1);
+		case 2:
 			Events.sendEvent("onSelect",tab2,tab2);
+		case 3: 	
+			Events.sendEvent("onSelect",tab3,tab3);
+		case 4:
+			Events.sendEvent("onSelect",tab4,tab4);
+		}
 			changeTab();
 	
 	}
