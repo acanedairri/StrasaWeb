@@ -9,7 +9,7 @@ import org.zkoss.zk.ui.Component;
 
 public class ProcessTabViewModel {
 
-	private double studyID;
+	private long studyID;
 	private Component mainView;
 
 	
@@ -30,11 +30,11 @@ public class ProcessTabViewModel {
 		return false;
 	}
 
-	public double getStudyID() {
+	public long getStudyID() {
 		return studyID;
 	}
 
-	public void setStudyID(double studyID) {
+	public void setStudyID(long studyID) {
 		this.studyID = studyID;
 	}
 }

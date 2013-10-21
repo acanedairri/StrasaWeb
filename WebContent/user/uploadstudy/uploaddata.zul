@@ -21,32 +21,33 @@
 				<groupbox mold="3d" width="100%">
 					<caption label="Study Information" />
 					<vlayout spacing="7px">
-					
+
 						<hlayout spacing="10px">
 							<label class="name" value="Program:" />
 							<bandbox id="bdProgram" mold="rounded"
-								autodrop="true" value ="@bind(vm.txtProgram)" readonly="true">
+								autodrop="true" value="@bind(vm.txtProgram)" readonly="true">
 								<bandpopup>
 									<listbox height="250px"
 										width="450px" mold="paging" autopaging="true"
 										model="@load(vm.programList)"
 										selectedItem="@bind(vm.txtProgram)"
-										onSelect="bdProgram.value=self.selectedItem.label;bdProgram.close();"
-										 
-										>
+										onSelect="bdProgram.value=self.selectedItem.label;bdProgram.close();">
 										<listhead>
 											<listheader
-												label="Existing Programs" />
+												label="Select Program" />
 										</listhead>
 										<listitem label="${each}"
 											forEach="${languages}" />
 									</listbox>
 								</bandpopup>
-							</bandbox><button label="Add" onClick="@command('addProgram')" />
+							</bandbox>
+							<button label="Add"
+								onClick="@command('addProgram')" />
 						</hlayout>
 						<hlayout spacing="10px">
 							<label class="name" value="Project:" />
-							<bandbox id="bdProject" mold="rounded" autodrop="true" value ="@bind(vm.txtProject)" readonly="true">
+							<bandbox id="bdProject" mold="rounded"
+								autodrop="true" value="@bind(vm.txtProject)" readonly="true">
 								<bandpopup>
 									<listbox height="250px"
 										width="450px" mold="paging" autopaging="true"
@@ -55,14 +56,15 @@
 										onSelect="bdProject.value=self.selectedItem.label;bdProject.close();">
 										<listhead>
 											<listheader
-												label="Existing Projects" />
+												label="Select Project" />
 										</listhead>
 										<listitem label="${each}"
 											forEach="${languages}" />
 									</listbox>
 								</bandpopup>
 							</bandbox>
-							<button label="Add" onClick="@command('addProject')" />
+							<button label="Add"
+								onClick="@command('addProject')" />
 						</hlayout>
 						<hlayout spacing="10px">
 							<label class="name" value="Study Name:" />
@@ -72,7 +74,9 @@
 
 						<hlayout spacing="10px">
 							<label class="name" value="Study Type:" />
-							<bandbox  id="bdStudyType" mold="rounded" autodrop="true" value ="@load(vm.txtStudyType)" readonly="true">
+							<bandbox id="bdStudyType" mold="rounded"
+								autodrop="true" value="@load(vm.txtStudyType)"
+								readonly="true">
 								<bandpopup>
 									<listbox height="250px"
 										width="450px" mold="paging" autopaging="true"
@@ -81,7 +85,7 @@
 										onSelect="bdStudyType.value=self.selectedItem.label;bdStudyType.close();">
 										<listhead>
 											<listheader
-												label="Existing Study types" />
+												label="Select Study types" />
 										</listhead>
 										<listitem label="${each}"
 											forEach="${languages}" />
@@ -104,18 +108,18 @@
 						<vlayout width="300px">
 							<radiogroup>
 
-								<hlayout width="100%" >
-								    Type of Data :
+								<hlayout width="100%">
+									Type of Data :
 									<radio label="Raw Data" value="0"
 										selected="true" />
 									<radio label="Derived" value="1" />
 								</hlayout>
 							</radiogroup>
-							
+
 							<radiogroup>
 
 								<hlayout width="100%">
-									Upload to: 
+									Upload to:
 									<radio label="Database" value="0"
 										selected="true" />
 									<radio label="Folder" value="1" />
@@ -176,7 +180,9 @@
 					</hlayout>
 				</groupbox>
 			</vlayout>
-			<button label="NEXT"  onClick="@global-command('sampleCommand',model=vm)"></button>
+			<button label="NEXT"
+				onClick="@global-command('sampleCommand',model=vm)">
+			</button>
 		</groupbox>
 	</div>
 

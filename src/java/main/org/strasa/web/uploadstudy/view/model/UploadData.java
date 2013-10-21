@@ -60,6 +60,13 @@ public class UploadData extends ProcessTabViewModel{
 	private String txtProject =  new String();
 	private String txtStudyName = new String();
 	private String txtStudyType =  new String();
+	
+	public Study getStudy() {
+		return study;
+	}
+	public void setStudy(Study study) {
+		this.study = study;
+	}
 	private String txtYear = "";
 
 	public boolean isVariableDataVisible = false;
@@ -399,7 +406,7 @@ public class UploadData extends ProcessTabViewModel{
 			StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl();
 			ArrayList<StudyRawDataByDataColumn> list= (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataColumn(study.getId(),"GName");
 			for(StudyRawDataByDataColumn s:list){
-				System.out.println(s.getStudyid()+ " "+s.getDatacolumn()+ " "+ s.getDatavalue());
+//				System.out.println(s.getStudyid()+ " "+s.getDatacolumn()+ " "+ s.getDatavalue());
 
 				if(!germplasmManager.isGermplasmExisting(s.getDatavalue())){
 					StudyGermplasm studyGermplasmData = new StudyGermplasm();
@@ -416,6 +423,7 @@ public class UploadData extends ProcessTabViewModel{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		this.setStudyID(study.getId());
 		return true;
 		
 	}

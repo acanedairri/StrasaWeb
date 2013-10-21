@@ -171,10 +171,10 @@ public class ValidateCsvHeader {
 
 		for (String var : list) {
 			if (!studyVarMan.hasVariable(var)) {
-				varData.add(new UploadCSVDataVariableModel(var, "-"));
+				varData.add(new UploadCSVDataVariableModel(var, "-",true));
 				isHeaderClear = false;
 			} else {
-				varData.add(new UploadCSVDataVariableModel(var, var, false));
+				varData.add(new UploadCSVDataVariableModel(var, var));
 
 			}
 

@@ -10,13 +10,17 @@
 
 				<tab label="Study Information" id="tab1" disabled="@load(vm.tabDisabled[self.index])"
 					onSelect="@command('showzulfile', zulFileName='uploaddata.zul', target=self.linkedPanel)" />
+					
 				<tab label="Study Site" id="tab2" disabled="@bind(vm.tabDisabled[self.index])"
 					onSelect="@command('showzulfile', zulFileName='definestudysite.zul', target=self.linkedPanel)" />
+					
 				<tab label="Study Location" id="tab3" disabled="@load(vm.tabDisabled[self.index])"
 					onSelect="@command('showzulfile', zulFileName='definestudylocation.zul', target=self.linkedPanel)" />
+					
 				<tab label="Germplasm Information"
 					id="tab4" disabled="@load(vm.tabDisabled[self.index])"
-					onSelect="@command('showzulfile', zulFileName='testtab.zul', target=self.linkedPanel)" />
+					onSelect="@command('showzulfile', zulFileName='definegermplasminformation.zul', target=self.linkedPanel)" />
+					
 			</tabs>
 			<tabpanels>
 				<tabpanel>

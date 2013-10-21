@@ -30,9 +30,9 @@ public class Index {
 	@Wire("#tab4")
 	Tab tab4;
 	private UploadData uploadData;
-	private int selectedIndex = 0;
+	private int selectedIndex = 1;
 	private boolean[] tabDisabled = {false,true,true,true};
-	
+	private long studyID;
 	
 	public int getSelectedIndex() {
 		return selectedIndex;
@@ -61,6 +61,7 @@ public class Index {
 	  @AfterCompose
 	    public void afterCompose(@ContextParam(ContextType.VIEW) Component view){
 	        Selectors.wireComponents(view, this, false);
+			Events.sendEvent("onSelect",tab1,tab1);
 	        //wire event listener
 //	      Selectors.wireEventListeners(view, this);
 	    }
@@ -71,7 +72,7 @@ public class Index {
 
 		if (panel != null && panel.getChildren().isEmpty()) {
 			 Map arg = new HashMap();
-		        arg.put("studyID", Math.random());
+		        arg.put("studyID", studyID);
 			Executions.createComponents(zulFileName, panel, arg);
 			
 		}
@@ -79,15 +80,20 @@ public class Index {
 	@NotifyChange("*")
 	@GlobalCommand("sampleCommand")
 	public void sampleCommand(@BindingParam("model") ProcessTabViewModel uploadData) {
+		
+		
 		if(!uploadData.validateTab()){
 			return;
 		}
+		
+		studyID = uploadData.getStudyID();
 //		System.out.println("Sample: " + uploadData.getTxtProject());
 
 //		selectedIndex++;
 		System.out.println("Sample: " + selectedIndex);
 
 		tabDisabled[selectedIndex + 1] = false;
+		
 		switch(selectedIndex + 1){
 		case 1:
 			Events.sendEvent("onSelect",tab1,tab1);
