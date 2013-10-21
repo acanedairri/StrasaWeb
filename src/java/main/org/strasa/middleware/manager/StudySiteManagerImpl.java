@@ -78,6 +78,7 @@ public class StudySiteManagerImpl {
 		StudySite record = new StudySite();
 		//		record.setId(studyId);
 		record.setStudyid(studyId);
+		record.setEcotypeid(1);
 		addStudySite(record);
 		System.out.println("Added Empty Record on site");
 	}
@@ -93,7 +94,7 @@ public class StudySiteManagerImpl {
 					StudySite record = new StudySite();
 					record.setStudyid(s.getStudyid());
 					record.setSitename(s.getDatavalue());
-
+					record.setEcotypeid(1);
 					addStudySite(record);
 					System.out.println("added" + s.getDatavalue() + " to study id: "+ s.getStudyid());
 				}

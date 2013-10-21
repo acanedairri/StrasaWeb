@@ -41,6 +41,7 @@ public class DefineStudySite extends ProcessTabViewModel{
     private PlantingTypeManagerImpl plantingtypeMan = new PlantingTypeManagerImpl();
     
 	private List<StudySite> sites = studySiteMan.initializeStudySites(1);
+//		private List<StudySite> sites = studySiteMan.initializeStudySites(Integer.parseInt(Double.toString(sampleID)));
 	private List<StudyAgronomy> agroInfo = studyAgroMan.initializeStudyAgronomy(sites);
 	private List<StudyDesign> designInfo = studyDesignMan.initializeStudyDesign(sites);
 	private List<Ecotype> ecotypes = ecotypeMan.getAllEcotypes();

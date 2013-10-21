@@ -76,7 +76,7 @@ public class StudyAgronomyManagerImpl {
 		// TODO Auto-generated method stub
 		StudyAgronomy record = new StudyAgronomy();
 		record.setStudysiteid(studySiteId);
-
+		record.setPlantingtypeid(1);
 		addStudyAgronomy(record);
 		System.out.println("added empty record to studySiteId " + Integer.toString(studySiteId));
 	}
