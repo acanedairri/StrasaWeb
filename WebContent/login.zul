@@ -1,6 +1,6 @@
 <?page title="Login" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<window title="Login" border="normal" apply="org.zkoss.bind.BindComposer"
+	<window title="Login" border="normal" width="300px" apply="org.zkoss.bind.BindComposer"
 viewModel="@id('vm') @init('org.strasa.web.main.view.model.Login')" mode="overlapped" position="center">
 	
 		<grid>

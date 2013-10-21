@@ -1,6 +1,6 @@
 <?page title="Registration" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<window title="User Registration" border="normal"
+	<window title="User Registration" border="normal" width="800px" position="center"
 		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.main.view.model.Registration')"
 		validationMessages="@id('vmsgs')"
@@ -31,7 +31,7 @@
 
 				<row>
 					Agency
-					<textbox value="@bind(fx.agency)" width="150px"
+					<textbox value="@bind(fx.agency)" width="300px"
 						tabindex="4" />
 				</row>
 				<row>
