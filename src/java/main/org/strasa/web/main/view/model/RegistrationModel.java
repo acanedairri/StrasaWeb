@@ -1,5 +1,9 @@
 package org.strasa.web.main.view.model;
 
+import java.util.List;
+
+import org.strasa.middleware.manager.CountryManagerImpl;
+import org.strasa.middleware.model.Country;
 import org.strasa.middleware.model.User;
 
 public class RegistrationModel  {
@@ -9,6 +13,7 @@ public class RegistrationModel  {
 	private String retypedPassword;
 	private String captcha = rsg.getRandomString();
 	private String captchaInput;
+	private List<Country> countries=new CountryManagerImpl().getAllCountry();
 
 	public RegistrationCapthaGenerator getRsg() {
 		return rsg;
@@ -45,7 +50,12 @@ public class RegistrationModel  {
     public void regenerateCaptcha() {
         this.captcha = rsg.getRandomString();
     }
-	
-	
+	public List<Country> getCountries() {
+		return countries;
+	}
+	public void setCountries(List<Country> countries) {
+		this.countries = countries;
+	}
+
 	
 }

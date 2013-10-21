@@ -36,6 +36,7 @@ public class Registration extends RegistrationModel {
 
 	@Command
 	public void submit() {
+
 		UserManagerImpl userManger= new UserManagerImpl();
 		userManger.addUser(this.getUser());
 	}
