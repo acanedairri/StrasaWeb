@@ -1,5 +1,5 @@
 <zk>
-  <window title="ModalWin" border="normal" closable="true"  apply="org.zkoss.bind.BindComposer"
+  <window title="Add Project" border="normal" closable="true"  apply="org.zkoss.bind.BindComposer"
         viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.UploadDataAddProject')" width = "35%" height = "45%">
  
 

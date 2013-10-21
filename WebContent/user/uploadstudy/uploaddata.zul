@@ -99,28 +99,23 @@
 				</groupbox>
 
 				<groupbox id="gb" mold="3d" width="100%">
-					<caption label="Type of data" />
+					<caption label="Upload Option" />
 					<hlayout spacing="50px">
 						<vlayout width="300px">
 							<radiogroup>
 
-								<hlayout width="100%" spacing="50px">
+								<hlayout width="100%" >
+								    Type of Data :
 									<radio label="Raw Data" value="0"
 										selected="true" />
 									<radio label="Derived" value="1" />
 								</hlayout>
 							</radiogroup>
-						</vlayout>
-
-					</hlayout>
-				</groupbox>
-				<groupbox id="grpUploadTo" mold="3d" width="100%">
-					<caption label="Type of data" />
-					<hlayout spacing="50px">
-						<vlayout width="300px">
+							
 							<radiogroup>
 
-								<hlayout width="100%" spacing="50px">
+								<hlayout width="100%">
+									Upload to: 
 									<radio label="Database" value="0"
 										selected="true" />
 									<radio label="Folder" value="1" />
@@ -131,7 +126,7 @@
 					</hlayout>
 				</groupbox>
 				<groupbox id="grpUpload" mold="3d" width="100%">
-					<caption label="Upload Data" />
+					<caption label="Select Data" />
 					<label value=""></label>
 					<hlayout spacing="50px">
 						<vlayout width="300px">
@@ -140,7 +135,7 @@
 								<vlayout width="100%" spacing="10px">
 									<hlayout>
 										<button id="uploadCSV"
-											upload="true" label="Upload CSV"
+											upload="true" label="Browse"
 											onUpload="@command('uploadCSV')" />
 										<label id="lblMsgUpload"
 											visible="@load(vm.variableDataVisible)"
