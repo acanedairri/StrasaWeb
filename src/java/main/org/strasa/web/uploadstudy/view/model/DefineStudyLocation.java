@@ -53,8 +53,8 @@ public class DefineStudyLocation extends ProcessTabViewModel{
 		this.locations = locations;
 	}
 	
-	@Command("saveSiteAgroDesignInfo")
-	public void saveSiteAgroDesignInfo(){
+	@Command("saveLocationInfo")
+	public void saveLocationInfo(){
 //		selectedSite=
 		studyLocationManager.updateStudyLocation(locations);
 		
