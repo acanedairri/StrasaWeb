@@ -2,7 +2,6 @@
 	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.DefineStudyLocation')">
 		<grid id="step4" height="350px" model="@load(vm.locations)">
 			<columns hflex="1">
-				<column label="Study ID" />
 				<column label="Location" />
 				<column label="Country" />
 				<column label="Province" />
@@ -13,7 +12,6 @@
 			</columns>
 			<template name="model">
 				<row>
-					<label value="@bind(each.studyId)" />
 					<label value="@bind(each.locationname)" />
 					<textbox value="@bind(each.country)" />
 					<textbox value="@bind(each.province)" />
