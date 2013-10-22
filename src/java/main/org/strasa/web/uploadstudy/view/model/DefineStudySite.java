@@ -29,6 +29,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zhtml.Messagebox;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zul.Rows;
 import org.zkoss.zul.Window;
 
@@ -41,7 +42,6 @@ public class DefineStudySite extends ProcessTabViewModel{
     private PlantingTypeManagerImpl plantingtypeMan = new PlantingTypeManagerImpl();
     
 	private List<StudySite> sites = studySiteMan.initializeStudySites(1);
-//		private List<StudySite> sites = studySiteMan.initializeStudySites(Integer.parseInt(Double.toString(sampleID)));
 	private List<StudyAgronomy> agroInfo = studyAgroMan.initializeStudyAgronomy(sites);
 	private List<StudyDesign> designInfo = studyDesignMan.initializeStudyDesign(sites);
 	private List<Ecotype> ecotypes = ecotypeMan.getAllEcotypes();
@@ -52,6 +52,10 @@ public class DefineStudySite extends ProcessTabViewModel{
 	private StudyAgronomy selectedAgroInfo = getAgroInfoBySiteID(selectedSite.getId());
 	private StudyDesign selectedDesignInfo = getDesignInfoBySiteID(selectedSite.getId());
 	private PlantingType selectedSitePlantingType = plantingtypes.get(selectedAgroInfo.getPlantingtypeid()-1); //.getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
+	
+
+	private double sampleID;
+	protected boolean goToNextPage=true;
 	
 	public List<PlantingType> getPlantingtypes() {
 		return plantingtypes;
@@ -85,8 +89,6 @@ public class DefineStudySite extends ProcessTabViewModel{
 		this.selectedDesignInfo = selectedDesignInfo;
 	}
 
-	private double sampleID;
-	
 	
 	public List<StudyAgronomy> getAgroInfo() {
 		return agroInfo;
@@ -156,7 +158,6 @@ public class DefineStudySite extends ProcessTabViewModel{
 	@NotifyChange("*")
 	@Command("updateDesignInfo")
 	public void updateDesignInfo(@BindingParam("id") Integer id){
-//		selectedSite=
 			setSelectedAgroInfo(getAgroInfoBySiteID(id));
 			setSelectedDesignInfo(getDesignInfoBySiteID(id));
 			selectedSitePlantingType = plantingtypes.get(selectedAgroInfo.getPlantingtypeid()-1); //.getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
@@ -167,13 +168,11 @@ public class DefineStudySite extends ProcessTabViewModel{
 	
 	@Command("updateSelectedSitePlantingType")
 	public void updateSelectedSitePlantingType(){
-//		selectedSite=
 			selectedAgroInfo.setPlantingtypeid(selectedSitePlantingType.getId());
 	}
 	
 	@Command("saveSiteAgroDesignInfo")
 	public void saveSiteAgroDesignInfo(){
-//		selectedSite=
 			studySiteMan.updateStudySite(sites);
 			studyAgroMan.updateStudyAgronomy(agroInfo);
 			studyDesignMan.updateStudyDesign(designInfo);
@@ -183,8 +182,15 @@ public class DefineStudySite extends ProcessTabViewModel{
 	
 	@Override
 	public boolean validateTab() {
-		// TODO Auto-generated method stub
-		return true;
+//		goToNextPage=false;
+//		// TODO Auto-generated method stub
+//		if (Messagebox.show("Delete?", "Prompt", Messagebox.YES|Messagebox.NO,
+//			    Messagebox.QUESTION) == Messagebox.YES) {
+//			    //execute only if the YES button is clicked
+//			goToNextPage =true;
+//		}
+//		
+		return goToNextPage;
 	}
 
 	@Init
