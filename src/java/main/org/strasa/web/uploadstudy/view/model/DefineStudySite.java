@@ -52,12 +52,12 @@ public class DefineStudySite extends ProcessTabViewModel{
 	private StudyAgronomy selectedAgroInfo = getAgroInfoBySiteID(selectedSite.getId());
 	private StudyDesign selectedDesignInfo = getDesignInfoBySiteID(selectedSite.getId());
 	private PlantingType selectedSitePlantingType = plantingtypes.get(selectedAgroInfo.getPlantingtypeid()-1); //.getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
-	
 
 	private double sampleID;
 	protected boolean goToNextPage=true;
 	
 	public List<PlantingType> getPlantingtypes() {
+		
 		return plantingtypes;
 	}
 

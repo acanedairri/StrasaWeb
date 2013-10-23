@@ -155,28 +155,36 @@
 					</hlayout>
 				</groupbox>
 				<groupbox id="grpVariableData" mold="3d" width="100%"
-					height="400px" visible="@bind(vm.variableDataVisible)">
+					height="450px" visible="@bind(vm.variableDataVisible)">
 					<caption label="CSV Data Preview" />
 					<hlayout spacing="50px">
-						<grid model="@load(vm.dataList)" height="360px"
-							mold="paging" autopaging="true" vflex="true"
-							emptyMessage="No data loaded...">
-							<columns children="@load(vm.columnList)">
-								<template name="children">
-									<column hflex="1"
-										label="@load(each)" />
-								</template>
-							</columns>
-							<template name="model">
-								<row>
+						<vlayout>
 
-									<label forEach="${vm.dataList}"
-										value="${each[forEachStatus.index]}">
-									</label>
-								</row>
-							</template>
-						</grid>
 
+							<grid model="@bind(vm.dataList)"
+								height="360px" vflex="true" emptyMessage="No data loaded...">
+								<columns
+									children="@load(vm.columnList)">
+									<template name="children">
+										<column hflex="1"
+											label="@load(each)" />
+									</template>
+								</columns>
+								<rows children="@bind(vm.csvData)">
+									<template name="children"
+										var="data">
+										<row>
+											<label forEach="${data}"
+												value="${each}" />
+										</row>
+									</template>
+								</rows>
+							</grid>
+							<paging pageSize="@load(vm.pageSize)"
+								totalSize="@load(vm.totalSize)"
+								activePage="@bind(vm.activePage)" />
+
+						</vlayout>
 					</hlayout>
 				</groupbox>
 			</vlayout>
