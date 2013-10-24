@@ -12,6 +12,7 @@ import org.strasa.middleware.mapper.GeorefMapper;
 import org.strasa.middleware.mapper.GermplasmCharacteristicsMapper;
 import org.strasa.middleware.mapper.GermplasmMapper;
 import org.strasa.middleware.mapper.GermplasmReleaseInfoMapper;
+import org.strasa.middleware.mapper.GermplasmTypeMapper;
 import org.strasa.middleware.mapper.KeyAbioticMapper;
 import org.strasa.middleware.mapper.KeyBioticMapper;
 import org.strasa.middleware.mapper.KeyGrainQualityMapper;
@@ -80,7 +81,7 @@ public class ConnectionFactory {
 		                sqlSessionFactory.getConfiguration().addMapper(KeyAbioticMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(KeyGrainQualityMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(KeyMajorGenesMapper.class);
-
+		                sqlSessionFactory.getConfiguration().addMapper(GermplasmTypeMapper.class);
 //		                sqlSessionFactory.getConfiguration().addMapper();
 		            
 		            }
