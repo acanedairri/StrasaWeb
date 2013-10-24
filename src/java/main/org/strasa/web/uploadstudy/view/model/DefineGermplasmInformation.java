@@ -21,6 +21,10 @@ public class DefineGermplasmInformation extends ProcessTabViewModel{
 	public List<GermplasmType> getLstGermplasmType() {
 		return lstGermplasmType;
 	}
+	public String[] getCharacteristicTabs(){
+		return new String[]{"Sample 1", "Sample 2", "Sample 3"};
+		
+	}
 
 	public void setLstGermplasmType(List<GermplasmType> lstGermplasmType) {
 		this.lstGermplasmType = lstGermplasmType;

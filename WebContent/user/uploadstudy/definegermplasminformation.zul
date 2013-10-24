@@ -11,19 +11,18 @@
 						<columns>
 							<column label="GID" width="5%" />
 							<column label="GName" width="5%" />
-							<column label="OtherName" width="%8" />
-							<column label="Breeder" width="%8" />
-							<column label="GermplasmType" width="%28" />
-							<column label="IR Number" width="%6" />
-							<column label="IR Cross" width="%5" />
-							<column label="Parentage" width="%5" />
-							<column label="Female Parent" width="%5" />
-							<column label="Male Parent" width="%5" />
+							<column label="OtherName" width="8%" />
+							<column label="Breeder" width="8%" />
+							<column label="GermplasmType" width="10%" />
+							<column label="IR Number" width="6%" />
+							<column label="IR Cross" width="5%" />
+							<column label="Parentage" width="5%" />
+							<column label="Female Parent" width="5%" />
+							<column label="Male Parent" width="5%" />
 							<column label="Selection History"
 								width="%10" />
-							<column label="Source" width="%10" />
-							<column label="Characteristic" width="%10" />
-							<column label="Release Info" width="%10" />
+							<column label="Source" width="20%" />
+
 						</columns>
 						<template name="model">
 							<row>
@@ -58,45 +57,56 @@
 								<textbox value="@bind(each.maleparent)" />
 								<textbox
 									value="@bind(each.selectionhistory)" />
-							 <vbox>
-                                Simple Bandbox:
-                                <bandbox mold="rounded">
-                                        <bandpopup>
-                                                Bandbox Content
-                                        </bandpopup>
-                                </bandbox>
-                                <separator />
-                                Grid in Bandbox:
-                                <bandbox mold="rounded">
-                                        <bandpopup>
-                                                <vbox>
-                                                        <hbox>
-                                                                Search
-                                                                <textbox />
-                                                        </hbox>
-                                                        <listbox width="200px">
-                                                                <listhead>
-                                                                        <listheader label="Name" />
-                                                                        <listheader label="Description" />
-                                                                </listhead>
-                                                                <listitem>
-                                                                        <listcell label="John" />
-                                                                        <listcell label="CEO" />
-                                                                </listitem>
-                                                                <listitem>
-                                                                        <listcell label="Joe" />
-                                                                        <listcell label="Engineer" />
-                                                                </listitem>
-                                                                <listitem>
-                                                                        <listcell label="Mary" />
-                                                                        <listcell label="Supervisor" />
-                                                                </listitem>
-                                                        </listbox>
-                                                </vbox>
-                                        </bandpopup>
-                                </bandbox>
-                                <separator />
-                        </vbox>
+								<vbox>
+									<bandbox mold="rounded"
+										width="100%">
+										<bandpopup>
+											<vbox>
+											
+												<tabbox>
+												
+												<tabs > 
+													<tab label="Abiotic Stress" /> 
+											    		<tab label="Abiotic Stress" /> 
+											    
+											    </tabs>
+														<tabpanels>
+																<tabpanel>
+														<listbox
+															width="200px">
+															<listhead>
+																<listheader
+																	label="Name" />
+																<listheader
+																	label="Description" />
+															</listhead>
+															<listitem>
+																<listcell
+																	label="John" />
+																<listcell
+																	label="CEO" />
+															</listitem>
+															<listitem>
+																<listcell
+																	label="Joe" />
+																<listcell
+																	label="Engineer" />
+															</listitem>
+															<listitem>
+																<listcell
+																	label="Mary" />
+																<listcell
+																	label="Supervisor" />
+															</listitem>
+														</listbox>
+														</tabpanel>
+														</tabpanels>
+														</tabbox>
+											</vbox>
+										</bandpopup>
+									</bandbox>
+
+								</vbox>
 							</row>
 						</template>
 					</grid>
