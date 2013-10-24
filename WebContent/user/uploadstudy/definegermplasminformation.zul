@@ -1,20 +1,19 @@
 <zk>
-	<window title="" border="normal" closable="true"
-		apply="org.zkoss.bind.BindComposer"
+	<window title="" border="normal" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.DefineGermplasmInformation')"
 		width="100%" height="100%">
 		<groupbox mold="3d" width="100%">
 			<caption label="" />
 			<hlayout spacing="50px">
 				<vlayout width="100%">
-					<grid height="100%" width="99%"
+					<grid height="100%" width="100%"
 						model="@load(vm.lstStudyGermplasm)">
 						<columns>
 							<column label="GID" width="5%" />
-							<column label="GName" width="10%" />
+							<column label="GName" width="5%" />
 							<column label="OtherName" width="%8" />
 							<column label="Breeder" width="%8" />
-								<column label="GermplasmType" width="%8" />
+							<column label="GermplasmType" width="%28" />
 							<column label="IR Number" width="%6" />
 							<column label="IR Cross" width="%5" />
 							<column label="Parentage" width="%5" />
@@ -28,17 +27,27 @@
 						</columns>
 						<template name="model">
 							<row>
-								<label value="@bind(each.gid)" />
-								<label
-									value="@bind(each.germplasmname)" />
-								<textbox value="@bind(each.othername)" />
+								<label value="@bind(each.gid)"
+									if="${each.gid !=null}" />
+								<textbox value="@bind(each.gid)"
+									unless="${each.gid!=null}" />
+								<label value="@bind(each.germplasmname)"
+									if="${each.germplasmname !=null}" />
+								<textbox
+									value="@bind(each.germplasmname)"
+									unless="${each.germplasmname!=null}" />
+								<label value="@bind(each.othername)"
+									if="${each.othername !=null}" />
+								<textbox value="@bind(each.othername)"
+									unless="${each.othername!=null}" />
 								<textbox value="@bind(each.breeder)" />
 								<combobox
 									model="@load(vm.lstGermplasmType)"
 									selectedIndex="@bind(each.germplasmtypeid)" width="99%">
 									<template name="model">
 										<comboitem
-											value="@load(each.germplasmtype)" label="@load(each.germplasmtype)" />
+											value="@load(each.germplasmtype)"
+											label="@load(each.germplasmtype)" />
 									</template>
 								</combobox>
 								<textbox value="@bind(each.irnumber)" />
@@ -49,7 +58,45 @@
 								<textbox value="@bind(each.maleparent)" />
 								<textbox
 									value="@bind(each.selectionhistory)" />
-							
+							 <vbox>
+                                Simple Bandbox:
+                                <bandbox mold="rounded">
+                                        <bandpopup>
+                                                Bandbox Content
+                                        </bandpopup>
+                                </bandbox>
+                                <separator />
+                                Grid in Bandbox:
+                                <bandbox mold="rounded">
+                                        <bandpopup>
+                                                <vbox>
+                                                        <hbox>
+                                                                Search
+                                                                <textbox />
+                                                        </hbox>
+                                                        <listbox width="200px">
+                                                                <listhead>
+                                                                        <listheader label="Name" />
+                                                                        <listheader label="Description" />
+                                                                </listhead>
+                                                                <listitem>
+                                                                        <listcell label="John" />
+                                                                        <listcell label="CEO" />
+                                                                </listitem>
+                                                                <listitem>
+                                                                        <listcell label="Joe" />
+                                                                        <listcell label="Engineer" />
+                                                                </listitem>
+                                                                <listitem>
+                                                                        <listcell label="Mary" />
+                                                                        <listcell label="Supervisor" />
+                                                                </listitem>
+                                                        </listbox>
+                                                </vbox>
+                                        </bandpopup>
+                                </bandbox>
+                                <separator />
+                        </vbox>
 							</row>
 						</template>
 					</grid>

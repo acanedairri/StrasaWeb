@@ -49,8 +49,9 @@ public class DefineGermplasmInformation extends ProcessTabViewModel{
 	}
 	
 	@Init
-	public void init(@ExecutionArgParam("studyID") long studyID) {
-	this.studyID = studyID;	
+//	public void init(@ExecutionArgParam("studyID") long studyID) {
+	public void init() {
+	this.studyID = 9;	
 	System.out.println("Passed: " + studyID);
 	StudyGermplasmManagerImpl germplasmMan = new StudyGermplasmManagerImpl();
 	setLstStudyGermplasm(germplasmMan.getStudyGermplasmByStudyId((int)studyID));
