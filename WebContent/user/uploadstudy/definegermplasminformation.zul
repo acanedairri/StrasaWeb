@@ -59,49 +59,110 @@
 									value="@bind(each.selectionhistory)" />
 								<vbox>
 									<bandbox mold="rounded"
-										width="100%">
+										width="200px">
 										<bandpopup>
 											<vbox>
-											
+
 												<tabbox>
-												
-												<tabs > 
-													<tab label="Abiotic Stress" /> 
-											    		<tab label="Abiotic Stress" /> 
-											    
-											    </tabs>
-														<tabpanels>
-																<tabpanel>
-														<listbox
-															width="200px">
-															<listhead>
-																<listheader
-																	label="Name" />
-																<listheader
-																	label="Description" />
-															</listhead>
-															<listitem>
-																<listcell
-																	label="John" />
-																<listcell
-																	label="CEO" />
-															</listitem>
-															<listitem>
-																<listcell
-																	label="Joe" />
-																<listcell
-																	label="Engineer" />
-															</listitem>
-															<listitem>
-																<listcell
-																	label="Mary" />
-																<listcell
-																	label="Supervisor" />
-															</listitem>
-														</listbox>
+
+													<tabs>
+														<tab
+															label="Abiotic Stress" />
+														<tab
+															label="Biotic Stress" />
+																	<tab
+															label="Grain Quality" />
+																	<tab
+															label="Major Genes" />
+
+													</tabs>
+													<tabpanels>
+														<tabpanel>
+															<listbox
+																model="@load(each.keyAbiotic)" width="200px">
+																<listhead>
+																	<listheader
+																		label="Name" />
+																	<listheader
+																		label="Value" />
+																</listhead>
+																<template
+																	name="model">
+																       <listitem>
+                    														<listcell label="@load(each.name)" />
+                    															<listcell>
+                                      									<checkbox value="@bind(each.value)"></checkbox>
+                              										</listcell>
+																	</listitem>
+																
+																</template>
+															</listbox>
 														</tabpanel>
-														</tabpanels>
-														</tabbox>
+														<tabpanel>
+															<listbox
+																model="@load(each.keyBiotic)" width="200px">
+																<listhead>
+																	<listheader
+																		label="Name" />
+																	<listheader
+																		label="Value" />
+																</listhead>
+																<template
+																	name="model">
+																       <listitem>
+                    														<listcell label="@load(each.name)" />
+                    															<listcell>
+                                      									<checkbox value="@bind(each.value)"></checkbox>
+                              										</listcell>
+																	</listitem>
+																
+																</template>
+															</listbox>
+														</tabpanel>
+														<tabpanel>
+															<listbox
+																model="@load(each.keyGrainQuality)" width="200px">
+																<listhead>
+																	<listheader
+																		label="Name" />
+																	<listheader
+																		label="Value" />
+																</listhead>
+																<template
+																	name="model">
+																       <listitem>
+                    														<listcell label="@load(each.name)" />
+                    															<listcell>
+                                      									<checkbox value="@bind(each.value)"></checkbox>
+                              										</listcell>
+																	</listitem>
+																
+																</template>
+															</listbox>
+														</tabpanel>
+														<tabpanel>
+															<listbox
+																model="@load(each.keyMajorGenes)" width="200px">
+																<listhead>
+																	<listheader
+																		label="Name" />
+																	<listheader
+																		label="Value" />
+																</listhead>
+																<template
+																	name="model">
+																       <listitem>
+                    														<listcell label="@load(each.name)" />
+                    															<listcell>
+                                      									<checkbox value="@bind(each.value)"></checkbox>
+                              										</listcell>
+																	</listitem>
+																
+																</template>
+															</listbox>
+														</tabpanel>
+													</tabpanels>
+												</tabbox>
 											</vbox>
 										</bandpopup>
 									</bandbox>

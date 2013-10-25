@@ -8,7 +8,7 @@ import org.strasa.middleware.mapper.GermplasmMapper;
 import org.strasa.middleware.mapper.GermplasmTypeMapper;
 import org.strasa.middleware.model.GermplasmType;
 
-public class GermplasmTypeManager {
+public class GermplasmTypeManagerImpl {
 
 	public List<GermplasmType> getAllGermplasm() {
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
