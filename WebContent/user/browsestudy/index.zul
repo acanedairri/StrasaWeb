@@ -1,27 +1,36 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
 	<window apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Index')">
+		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SummaryByProject')">
 		<panel title="Splitter" border="normal" width="100%"
 			height="100%">
 			<panelchildren>
 				<hbox spacing="0" width="100%" height="100%">
 					<hbox width="20%">
-						<grid model="@load(vm.studies)">
-							<auxhead sclass="category-center">
-								<auxheader>
-									<textbox instant="true"
-										width="100px" value="@bind(vm.studyFilter.category)"
-										onChange="@command('changeFilter')" />
-								</auxheader>
-							</auxhead>
+						<grid model="@load(vm.summaryByProjectData)">
+
 							<columns>
-								<column>Study</column>
+								<column>ProjectId</column>
+								<column>Project Name</column>
+								<column>Program Name</column>
+								<column>Study Count</column>
 							</columns>
 							<template name="model">
-								<row>
-									<label value="@load(each.studyname)" />
-								</row>
+								
+									<row>
+										<label
+											value="@load(each.projectid)" />
+								
+										<label
+											value="@load(each.projectName)" />
+								
+										<label
+											value="@load(each.programName)" />
+									
+										<label
+											value="@load(each.studyCount)" />
+									</row>
+									
 							</template>
 						</grid>
 					</hbox>

@@ -1,9 +1,6 @@
 package org.strasa.web.uploadstudy.view.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.strasa.middleware.manager.EcotypeManagerImpl;
 import org.strasa.middleware.manager.PlantingTypeManagerImpl;
@@ -16,22 +13,13 @@ import org.strasa.middleware.model.StudyAgronomy;
 import org.strasa.middleware.model.StudyDesign;
 import org.strasa.middleware.model.StudySite;
 import org.strasa.web.common.api.ProcessTabViewModel;
-import org.zkoss.bind.BindContext;
-import org.zkoss.bind.Binder;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
-import org.zkoss.bind.annotation.ContextParam;
-import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zhtml.Messagebox;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zul.Rows;
-import org.zkoss.zul.Window;
 
  
 public class StudySiteInfo extends ProcessTabViewModel{
