@@ -1,0 +1,35 @@
+<zk>
+	<window title="Data Column Header Validation" border="normal"
+		closable="true" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.DataColumnValidation')"
+		width="35%" height="65%">
+		<groupbox mold="3d" width="100%">
+			<caption label="" />
+			<hlayout spacing="50px">
+				<vlayout width="100%">
+					<grid height="350px" width="99%"
+						model="@load(vm.varData)">
+						<columns>
+							<column label="Variable" width="40%" />
+							<column label="Selected" width="40%" />
+							<column label="Ctrl" width="20%" />
+						</columns>
+						<template name="model">
+							<row visible="@load(each.headerExisting)">
+								<label
+									value="@load(each.currentVariable)" />
+								<label value="@bind(each.newVariable)" />
+								<button label="Change"
+									onClick="@command('changeVar', oldVar=each.currentVariable)" />
+							</row>
+						</template>
+					</grid>
+
+				</vlayout>
+
+			</hlayout>
+		</groupbox>
+		<button label="Save" onClick="@command('saveHeader')" />
+
+	</window>
+</zk>

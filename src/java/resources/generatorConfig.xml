@@ -129,6 +129,14 @@
 		<table schema="MYSCHEMA" tableName="keymajorgenes" domainObjectName="KeyMajorGenes">
 		<generatedKey column="id" sqlStatement="JDBC" />
 		</table>
+		
+		<table schema="MYSCHEMA" tableName="extensiondata" domainObjectName="ExtensionData">
+		<generatedKey column="id" sqlStatement="JDBC" />
+		</table>
+		
+		<table schema="MYSCHEMA" tableName="studygermplasmcharacteristics" domainObjectName="StudyGermplasmCharacteristics">
+		<generatedKey column="id" sqlStatement="JDBC" />
+		</table>
 
 	</context>
 </generatorConfiguration>

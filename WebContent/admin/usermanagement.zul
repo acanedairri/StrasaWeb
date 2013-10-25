@@ -9,11 +9,11 @@
         mold="paging" pageSize="6">
         <columns>
        	    <column hflex="1" label="id" align="left" visible="false"/>
-            <column hflex="1" label="Name" align="left" />
-            <column hflex="2" label="Agency" align="center" />
-            <column hflex="2" label="Country" align="center" />
+            <column hflex="1" label="Name(Lastname,Firstname)" align="left" sort="auto(lastname)" />
+            <column hflex="2" label="Agency" align="center" sort="auto(agency)" />
+            <column hflex="2" label="Country" align="center" sort="auto(country)"/>
             <column hflex="1" label="Email Address" align="center" />
-             <column hflex="1" label="Date Registered" align="center" />
+             <column hflex="1" label="Date Registered" align="center" sort="auto(dateregistered)" />
             <column hflex="1" label="Status" align="center" />
             <column hflex="1" label="Action" align="center" />
         </columns>
@@ -21,8 +21,9 @@
             <row>
                 <label value="@load(each.id)" visible="false" />
                 <hbox>
-                <label value="@load(each.firstname)"/>
                 <label value="@load(each.lastname)"/>
+                <label value=","/>
+                <label value="@load(each.firstname)"/>
                 </hbox>
 	 			
 	 			<label value="@load(each.agency)"/>
