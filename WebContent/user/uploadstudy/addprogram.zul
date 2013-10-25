@@ -1,6 +1,6 @@
 <zk>
-  <window title="Add Project" border="normal" closable="true"  apply="org.zkoss.bind.BindComposer"
-        viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.UploadDataAddProject')" width = "35%" height = "45%">
+  <window title="Add Program" border="normal" closable="true"  apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.AddProgram')" width = "35%" height = "45%">
  
 
 <grid vflex="1">
@@ -18,20 +18,16 @@
 			<textbox value='@bind(vm.objective)' width="150px" />
 		</row>
 		<row>
-			<label value="Funding Agency" width="150px" />
-			<textbox value='@bind(vm.fundingagency)' width="150px" />
-		</row>
-		<row>
-			<label value="PI" width="150px" />
-			<textbox value='@bind(vm.pi)' width="150px" />
+			<label value="Coordinator" width="150px" />
+			<textbox value='@bind(vm.coordinator)' width="150px" />
 		</row>
 		<row>
 			<label value="Leading Institute" width="150px" />
 			<textbox value='@bind(vm.institute)' width="150px" />
 		</row>
 		<row>
-			<label value="Collaborators" width="150px" />
-			<textbox value='@bind(vm.collaborators)' width="150px" />
+			<label value="Collaborator" width="150px" />
+			<textbox value='@bind(vm.collaborator)' width="150px" />
 		</row>
 	
 	

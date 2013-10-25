@@ -34,7 +34,7 @@ import org.zkoss.zul.Rows;
 import org.zkoss.zul.Window;
 
  
-public class DefineStudySite extends ProcessTabViewModel{
+public class StudySiteInfo extends ProcessTabViewModel{
     private StudySiteManagerImpl studySiteMan = new StudySiteManagerImpl();
     private StudyAgronomyManagerImpl studyAgroMan = new StudyAgronomyManagerImpl();
     private StudyDesignManagerImpl studyDesignMan = new StudyDesignManagerImpl();    

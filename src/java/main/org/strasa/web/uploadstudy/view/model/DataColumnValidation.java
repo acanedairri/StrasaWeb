@@ -29,8 +29,8 @@ import org.zkoss.zul.Window;
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 
-public class ValidateCsvHeader {
-	public static String ZUL_PATH = "/user/uploadstudy/modal/validatecsvheader.zul";
+public class DataColumnValidation {
+	public static String ZUL_PATH = "/user/uploadstudy/datacolumnvalidation.zul";
 
 	private String CsvPath;
 
@@ -160,7 +160,7 @@ public class ValidateCsvHeader {
 		params.put("parent", view);
 
 		Window popup = (Window) Executions.createComponents(
-				ChangeCsvHeader.ZUL_PATH, view, params);
+				DataColumnChanged.ZUL_PATH, view, params);
 
 		popup.doModal();
 	}

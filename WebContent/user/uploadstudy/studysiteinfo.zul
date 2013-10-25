@@ -1,6 +1,6 @@
 <zk>
 	<window apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.DefineStudySite')">
+		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudySiteInfo')">
 		<columnlayout>
 			<columnchildren width="65%">
 				<grid height="350px" model="@load(vm.sites)"

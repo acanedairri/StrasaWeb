@@ -20,8 +20,8 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zul.Row;
 
-public class ChangeCsvHeader {
-	public static String ZUL_PATH = "/user/uploadstudy/modal/changecsvheader.zul";
+public class DataColumnChanged {
+	public static String ZUL_PATH = "/user/uploadstudy/datacolumnchanged.zul";
 	private Binder parBinder;
 	private String oldVar;
 	private Component mainView;

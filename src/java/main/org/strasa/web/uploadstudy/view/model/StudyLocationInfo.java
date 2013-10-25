@@ -15,7 +15,7 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zhtml.Messagebox;
 
-public class DefineStudyLocation extends ProcessTabViewModel{
+public class StudyLocationInfo extends ProcessTabViewModel{
     
 	private StudyLocationManagerImpl studyLocationManager = new StudyLocationManagerImpl();
 	

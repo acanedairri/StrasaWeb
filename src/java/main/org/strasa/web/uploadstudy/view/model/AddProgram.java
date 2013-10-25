@@ -16,8 +16,8 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Messagebox;
 
-public class UploadDataAddProgram {
-	public static String ZUL_PATH = "/user/uploadstudy/modal/addprogram.zul";
+public class AddProgram {
+	public static String ZUL_PATH = "/user/uploadstudy/addprogram.zul";
 	private String name, objective, coordinator, institute, collaborator;
 	private Component mainView;
 	private Binder parBinder;

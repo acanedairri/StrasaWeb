@@ -253,7 +253,7 @@ public class UploadData extends ProcessTabViewModel {
 		params.put("parent", view);
 
 		Window popup = (Window) Executions.createComponents(
-				ChangeCsvHeader.ZUL_PATH, view, params);
+				DataColumnChanged.ZUL_PATH, view, params);
 
 		popup.doModal();
 	}
@@ -337,7 +337,7 @@ public class UploadData extends ProcessTabViewModel {
 		params.put("parent", getMainView());
 
 		Window popup = (Window) Executions.createComponents(
-				UploadDataAddProgram.ZUL_PATH, getMainView(), params);
+				AddProgram.ZUL_PATH, getMainView(), params);
 
 		popup.doModal();
 	}
@@ -350,7 +350,7 @@ public class UploadData extends ProcessTabViewModel {
 		params.put("parent", getMainView());
 
 		Window popup = (Window) Executions.createComponents(
-				UploadDataAddProject.ZUL_PATH, getMainView(), params);
+				AddProject.ZUL_PATH, getMainView(), params);
 
 		popup.doModal();
 	}
@@ -376,7 +376,7 @@ public class UploadData extends ProcessTabViewModel {
 		params.put("parent", getMainView());
 
 		Window popup = (Window) Executions.createComponents(
-				ValidateCsvHeader.ZUL_PATH, getMainView(), params);
+				DataColumnValidation.ZUL_PATH, getMainView(), params);
 
 		popup.doModal();
 	}

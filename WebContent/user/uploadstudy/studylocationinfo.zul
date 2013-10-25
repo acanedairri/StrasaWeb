@@ -1,5 +1,5 @@
 <zk>
-	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.DefineStudyLocation')">
+	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudyLocationInfo')">
 		<grid id="step4" height="350px" model="@load(vm.locations)">
 			<columns hflex="1">
 				<column label="Location" />

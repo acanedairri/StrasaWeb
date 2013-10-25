@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.strasa.middleware.mapper.CountryMapper;
 import org.strasa.middleware.mapper.EcotypeMapper;
+import org.strasa.middleware.mapper.ExtensionDataMapper;
 import org.strasa.middleware.mapper.GeorefMapper;
 import org.strasa.middleware.mapper.GermplasmCharacteristicsMapper;
 import org.strasa.middleware.mapper.GermplasmMapper;
@@ -25,6 +26,7 @@ import org.strasa.middleware.mapper.StudyAgronomyMapper;
 import org.strasa.middleware.mapper.StudyDerivedDataMapper;
 import org.strasa.middleware.mapper.StudyDesignMapper;
 import org.strasa.middleware.mapper.StudyFileMapper;
+import org.strasa.middleware.mapper.StudyGermplasmCharacteristicsMapper;
 import org.strasa.middleware.mapper.StudyGermplasmMapper;
 import org.strasa.middleware.mapper.StudyLocationMapper;
 import org.strasa.middleware.mapper.StudyMapper;
@@ -34,6 +36,7 @@ import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.mapper.StudyTypeMapper;
 import org.strasa.middleware.mapper.StudyVariableMapper;
 import org.strasa.middleware.mapper.UserMapper;
+import org.strasa.middleware.model.StudyGermplasmCharacteristics;
 import org.strasa.middleware.model.StudySiteByStudy;
 
  
@@ -82,6 +85,9 @@ public class ConnectionFactory {
 		                sqlSessionFactory.getConfiguration().addMapper(KeyGrainQualityMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(KeyMajorGenesMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(GermplasmTypeMapper.class);
+		                sqlSessionFactory.getConfiguration().addMapper(StudyGermplasmCharacteristics.class);
+		                sqlSessionFactory.getConfiguration().addMapper(StudyGermplasmCharacteristicsMapper.class);
+		                sqlSessionFactory.getConfiguration().addMapper(ExtensionDataMapper.class);
 //		                sqlSessionFactory.getConfiguration().addMapper();
 		            
 		            }
