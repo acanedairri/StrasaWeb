@@ -1,0 +1,85 @@
+<?page title="Germaplasm Query" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:x="xhtml">
+    <style>   
+        .nav_tabs .z-tabpanel { padding: 0; border-bottom: 0 none;}
+        .nav_tabs .z-tabpanels .z-toolbarbutton-cnt { padding: 4px;}
+        .nav_category { cursor:pointer; }
+        .nav_text { color: #6B8E23; font-size : 24px; font-weight: bold;}
+    </style>
+	<window title="Germaplasm Query" border="normal">
+
+		<hlayout>
+			<separator spacing="20px" />
+			<label value="Search Germaplasm By:" class="boxlabel" />
+			<combobox id="searchbygermaplasm" width="150px"></combobox>
+
+			<separator spacing="10px" />
+			<textbox id="searchlike" width="150px" />
+
+			<button label="Go">
+				<!--     		<attribute name="onClick"><![CDATA[ -->
+				<!--     		]]></attribute> -->
+			</button>
+		</hlayout>
+		<vbox>
+			<grid id="step4" height="350px">
+				<columns hflex="1">
+					<column label="Germaplasm Name" />
+					<column label="Other Name" />
+					<column label="Year" />
+				</columns>
+				<template name="model">
+					<row>
+					</row>
+				</template>
+			</grid>
+			<button label="Export" />
+		</vbox>
+		<vbox>
+			<tabbox sclass="nav_tabs">
+				<tabs id="tabs">
+					<tab label="Sample Tab 1" onSelect="updateCategory(self.label)"/>
+					<tab label="Sample Tab 2" onSelect="updateCategory(self.label)"/>
+					<tab label="Sample Tab 3" onSelect="updateCategory(self.label)"/>
+				</tabs>
+				<tabpanels>
+					<tabpanel>
+						<toolbar hflex="true">
+							<toolbarbutton label="Live Demo 1" onClick="updateCategory(self.label)" />
+							<toolbarbutton label="Live Demo 2" onClick="updateCategory(self.label)"/>
+							<toolbarbutton label="Live Demo 3" onClick="updateCategory(self.label)"/>
+						</toolbar>
+					</tabpanel>
+					<tabpanel>
+						<toolbar hflex="true">
+							<toolbarbutton label="Documentation 1" onClick="updateCategory(self.label)"/>
+							<toolbarbutton label="Documentation 2" onClick="updateCategory(self.label)"/>
+							<toolbarbutton label="Documentation 3" onClick="updateCategory(self.label)"/>
+						</toolbar>
+					</tabpanel>
+					<tabpanel>
+						<toolbar hflex="true">
+							<toolbarbutton label="Orlando 1" onClick="updateCategory(self.label)"/>
+							<toolbarbutton label="Miranda 2" onClick="updateCategory(self.label)"/>
+							<toolbarbutton label="Johnny Depp 3" onClick="updateCategory(self.label)"/>
+						</toolbar>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+			 <zscript><![CDATA[
+        void updateCategory(String category) {
+            current_category.setValue(category);
+            current_subpage.setValue("Index");
+        }
+        void updateSubPage(String sub) {
+            current_subpage.setValue(sub);
+        }
+    ]]></zscript>
+    <hlayout>
+        <label id="current_category" sclass="nav_text nav_category" onClick='updateSubPage("Index")'>Our Product</label>
+        <label sclass="nav_text">-</label>
+        <label id="current_subpage" sclass="nav_text">Index</label>
+    </hlayout>
+		</vbox>
+	</window>
+</zk>
