@@ -6,8 +6,8 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyLocationMapper;
-import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudyLocation;
+import org.strasa.middleware.model.StudyRawDataByDataColumn;
 
 public class StudyLocationManagerImpl {
 

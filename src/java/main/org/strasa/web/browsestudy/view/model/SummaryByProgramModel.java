@@ -2,6 +2,18 @@ package org.strasa.web.browsestudy.view.model;
 
 public class SummaryByProgramModel {
 
+	int programid;
+	int projectid;
+	String programName;
+	int projectCount;
+	int studyCount;
+	int countStudyTypePBT;
+	int countStudyTypeOnFarm;
+	int countStudyTypeExprimentStation;
+	int countStudyTypeGlasshouse;
+	int countStudyTypeLab;
+	
+	
 	public int getProgramid() {
 		return programid;
 	}
@@ -32,11 +44,7 @@ public class SummaryByProgramModel {
 	public void setStudyCount(int studyCount) {
 		this.studyCount = studyCount;
 	}
-	int programid;
-	int projectid;
-	String programName;
-	int projectCount;
-	int studyCount;
+
 	
 	
 
