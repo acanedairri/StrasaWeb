@@ -7,22 +7,24 @@
 			<hlayout spacing="50px">
 				<vlayout width="100%">
 					<grid height="100%" width="100%"
-						model="@load(vm.lstStudyGermplasm)">
+						model="@load(vm.lstStudyGermplasm)" vflex="1"
+						style="overflow: scroll;">
 						<columns>
-							<column label="GID" width="5%" />
-							<column label="GName" width="5%" />
-							<column label="OtherName" width="8%" />
-							<column label="Breeder" width="8%" />
-							<column label="GermplasmType" width="10%" />
-							<column label="IR Number" width="6%" />
-							<column label="IR Cross" width="5%" />
-							<column label="Parentage" width="5%" />
-							<column label="Female Parent" width="5%" />
-							<column label="Male Parent" width="5%" />
+							<column label="GID" width="5.69%" />
+							<column label="GName" width="7.69%" />
+							<column label="OtherName" width="7.69%" />
+							<column label="Breeder" width="7.69%" />
+							<column label="GermplasmType" width="7.69%" />
+							<column label="IR Number" width="7.69%" />
+							<column label="IR Cross" width="7.69%" />
+							<column label="Parentage" width="7.69%" />
+							<column label="Female Parent" width="7.69%" />
+							<column label="Male Parent" width="7.69%" />
 							<column label="Selection History"
-								width="%10" />
-							<column label="Source" width="20%" />
-
+								width="7.69%" />
+							<column label="Source" width="7.69%" />
+							<column label="Characteristic"
+								width="9.69%" />
 						</columns>
 						<template name="model">
 							<row>
@@ -57,9 +59,11 @@
 								<textbox value="@bind(each.maleparent)" />
 								<textbox
 									value="@bind(each.selectionhistory)" />
+								<textbox
+									value="@bind(each.source)" />
 								<vbox>
 									<bandbox mold="rounded"
-										width="200px">
+										width="84%" value="sample">
 										<bandpopup>
 											<vbox>
 
@@ -70,9 +74,9 @@
 															label="Abiotic Stress" />
 														<tab
 															label="Biotic Stress" />
-																	<tab
+														<tab
 															label="Grain Quality" />
-																	<tab
+														<tab
 															label="Major Genes" />
 
 													</tabs>
@@ -88,13 +92,16 @@
 																</listhead>
 																<template
 																	name="model">
-																       <listitem>
-                    														<listcell label="@load(each.name)" />
-                    															<listcell>
-                                      									<checkbox value="@bind(each.value)"></checkbox>
-                              										</listcell>
+																	<listitem>
+																		<listcell
+																			label="@load(each.name)" />
+																		<listcell>
+																			<checkbox
+																				value="@bind(each.value)">
+																			</checkbox>
+																		</listcell>
 																	</listitem>
-																
+
 																</template>
 															</listbox>
 														</tabpanel>
@@ -109,13 +116,16 @@
 																</listhead>
 																<template
 																	name="model">
-																       <listitem>
-                    														<listcell label="@load(each.name)" />
-                    															<listcell>
-                                      									<checkbox value="@bind(each.value)"></checkbox>
-                              										</listcell>
+																	<listitem>
+																		<listcell
+																			label="@load(each.name)" />
+																		<listcell>
+																			<checkbox
+																				value="@bind(each.value)">
+																			</checkbox>
+																		</listcell>
 																	</listitem>
-																
+
 																</template>
 															</listbox>
 														</tabpanel>
@@ -130,13 +140,16 @@
 																</listhead>
 																<template
 																	name="model">
-																       <listitem>
-                    														<listcell label="@load(each.name)" />
-                    															<listcell>
-                                      									<checkbox value="@bind(each.value)"></checkbox>
-                              										</listcell>
+																	<listitem>
+																		<listcell
+																			label="@load(each.name)" />
+																		<listcell>
+																			<checkbox
+																				value="@bind(each.value)">
+																			</checkbox>
+																		</listcell>
 																	</listitem>
-																
+
 																</template>
 															</listbox>
 														</tabpanel>
@@ -151,13 +164,16 @@
 																</listhead>
 																<template
 																	name="model">
-																       <listitem>
-                    														<listcell label="@load(each.name)" />
-                    															<listcell>
-                                      									<checkbox value="@bind(each.value)"></checkbox>
-                              										</listcell>
+																	<listitem>
+																		<listcell
+																			label="@load(each.name)" />
+																		<listcell>
+																			<checkbox
+																				value="@bind(each.value)">
+																			</checkbox>
+																		</listcell>
 																	</listitem>
-																
+
 																</template>
 															</listbox>
 														</tabpanel>

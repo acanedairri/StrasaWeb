@@ -15,7 +15,10 @@ import org.strasa.middleware.model.KeyMajorGenes;
 import org.strasa.middleware.model.StudyGermplasm;
 import org.strasa.middleware.model.StudyGermplasmCharacteristics;
 import org.strasa.web.common.api.ProcessTabViewModel;
+import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
 
 public class StudyGermplasmInfo extends ProcessTabViewModel{
 
@@ -108,11 +111,14 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 		CharacteristicModel newData = new CharacteristicModel();
 		newData.setName(data.getValue());
 		newData.setValue(keyCharMap.contains(lstStudyGermplasm.get(i).getGermplasmname()+"Biotic"+data.getValue()));
+		newData.primaryid = i;
 		lstBioticKey.add(newData);
+		
 	}
 	List<CharacteristicModel> lstAbioticKey = new ArrayList<CharacteristicModel>();
 	for(KeyAbiotic data : lstAbiotics){
 		CharacteristicModel newData = new CharacteristicModel();
+		newData.primaryid = i;
 		newData.setName(data.getValue());
 		newData.setValue(keyCharMap.contains(lstStudyGermplasm.get(i).getGermplasmname()+"Abiotic"+data.getValue()));
 		lstAbioticKey.add(newData);
@@ -120,6 +126,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 	List<CharacteristicModel> lstGrainQuality = new ArrayList<CharacteristicModel>();
 	for(KeyGrainQuality data : lstGrainQualities){
 		CharacteristicModel newData = new CharacteristicModel();
+		newData.primaryid = i;
 		newData.setName(data.getValue());
 
 		newData.setValue(keyCharMap.contains(lstStudyGermplasm.get(i).getGermplasmname()+"Grain Quality"+data.getValue()));
@@ -128,6 +135,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 	List<CharacteristicModel> lstMajorGenes = new ArrayList<CharacteristicModel>();
 	for(KeyMajorGenes data : lstAllMajorGenes){
 		CharacteristicModel newData = new CharacteristicModel();
+		newData.primaryid = i;
 		newData.setName(data.getValue());
 
 		newData.setValue(keyCharMap.contains(lstStudyGermplasm.get(i).getGermplasmname()+"Major Genes"+data.getValue()));
@@ -140,6 +148,13 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 	
 	}
 	
+	}
+	@Command
+	@NotifyChange("*")
+	public void updateCharacteristicInfo(@BindingParam("model") CharacteristicModel model ){
+		
+		lstStudyGermplasm.get(model.primaryid).characteristic = lstStudyGermplasm.get(model.primaryid).characteristic + model.name; 
+		
 	}
 	
 	@Override
@@ -164,6 +179,13 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 	 private List<CharacteristicModel> keyAbiotic = new ArrayList<CharacteristicModel>();
 	 private List<CharacteristicModel> keyGrainQuality = new ArrayList<CharacteristicModel>();		
 	 private List<CharacteristicModel> keyMajorGenes = new ArrayList<CharacteristicModel>();
+	 private String characteristic; 
+	public String getCharacteristic() {
+		return characteristic;
+	}
+	public void setCharacteristic(String characteristic) {
+		this.characteristic = characteristic;
+	}
 	public List<CharacteristicModel> getKeyBiotic() {
 		return keyBiotic;
 	}
@@ -193,6 +215,14 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 	public class CharacteristicModel {
 		private String name;
 		private boolean value;
+		private int primaryid;
+		
+		public int getPrimaryid() {
+			return primaryid;
+		}
+		public void setPrimaryid(int primaryid) {
+			this.primaryid = primaryid;
+		}
 		public String getName() {
 			return name;
 		}
