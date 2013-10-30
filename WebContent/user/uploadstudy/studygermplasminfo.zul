@@ -62,9 +62,9 @@
 								<textbox
 									value="@bind(each.source)" />
 								<vbox>
-									<bandbox mold="rounded"
-										width="84%" value="sample">
-										<bandpopup>
+									<bandbox id = "${each.id}"  readonly="true" mold="rounded" 
+										width="54%" value="@bind(each.characteristic)" onBlur ='@command("updateCharacteristicInfo", model= each)'>
+										<bandpopup fulfill="${each.id}.onOpen">
 											<vbox>
 
 												<tabbox>
@@ -97,7 +97,7 @@
 																			label="@load(each.name)" />
 																		<listcell>
 																			<checkbox
-																				value="@bind(each.value)">
+																				checked="@bind(each.value)">
 																			</checkbox>
 																		</listcell>
 																	</listitem>
@@ -121,7 +121,7 @@
 																			label="@load(each.name)" />
 																		<listcell>
 																			<checkbox
-																				value="@bind(each.value)">
+																					checked="@bind(each.value)">
 																			</checkbox>
 																		</listcell>
 																	</listitem>
@@ -145,7 +145,7 @@
 																			label="@load(each.name)" />
 																		<listcell>
 																			<checkbox
-																				value="@bind(each.value)">
+																					checked="@bind(each.value)">
 																			</checkbox>
 																		</listcell>
 																	</listitem>
@@ -169,7 +169,7 @@
 																			label="@load(each.name)" />
 																		<listcell>
 																			<checkbox
-																				value="@bind(each.value)">
+																					checked="@bind(each.value)">
 																			</checkbox>
 																		</listcell>
 																	</listitem>

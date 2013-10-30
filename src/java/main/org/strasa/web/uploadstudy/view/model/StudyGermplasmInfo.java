@@ -65,7 +65,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 	@Init
 //	public void init(@ExecutionArgParam("studyID") long studyID) {
 	public void init() {
-	this.studyID = 5;	
+	this.studyID = 1;	
 	System.out.println("Passed: " + studyID);
 	StudyGermplasmManagerImpl germplasmMan = new StudyGermplasmManagerImpl();
 	List<StudyGermplasm> lst = germplasmMan.getStudyGermplasmByStudyId((int)studyID);
@@ -151,9 +151,81 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 	}
 	@Command
 	@NotifyChange("*")
-	public void updateCharacteristicInfo(@BindingParam("model") CharacteristicModel model ){
+	public void updateCharacteristicInfo(@BindingParam("model") GermplasmDeepInfoModel model ){
+		System.out.println("Called");
+		model.characteristic = "";
+		StringBuilder strVal = new StringBuilder();
+		String tmpStr = "";
+		for(CharacteristicModel charData: model.keyAbiotic){
+			if(charData.value){
+				if(strVal.length() == 0){
+					strVal.append("Abiotic: {");
+				}
+				else{
+					strVal.append(" ,");
+				}
+				strVal.append(charData.name);
+			}
+		}
+		if(strVal.length() > 0){
+			strVal.append( "} ");
+			tmpStr = tmpStr + strVal.toString();
+			strVal = new StringBuilder();
+		}
 		
-		lstStudyGermplasm.get(model.primaryid).characteristic = lstStudyGermplasm.get(model.primaryid).characteristic + model.name; 
+		for(CharacteristicModel charData: model.keyBiotic){
+			if(charData.value){
+				if(strVal.length() == 0){
+					strVal.append("Biotic: {");
+				}
+				else{
+					strVal.append(" ,");
+				}
+				strVal.append(charData.name);
+			}
+		}
+		if(strVal.length() > 0){
+			strVal.append( "} ");
+			tmpStr = tmpStr + strVal.toString();
+			strVal = new StringBuilder();
+		}
+		
+		for(CharacteristicModel charData: model.keyGrainQuality){
+			if(charData.value){
+				if(strVal.length() == 0){
+					strVal.append("Grain Quality: {");
+				}
+				else{
+					strVal.append(" ,");
+				}
+				strVal.append(charData.name);
+			}
+		}
+		if(strVal.length() > 0){
+			strVal.append( "} ");
+		tmpStr = tmpStr + strVal.toString();
+		strVal = new StringBuilder();
+		}
+		for(CharacteristicModel charData: model.keyMajorGenes){
+			if(charData.value){
+				if(strVal.length() == 0){
+					strVal.append("Major Genes: {");
+				}
+				else{
+					strVal.append(" ,");
+				}
+				strVal.append(charData.name);
+			}
+		}
+		if(strVal.length() > 0){
+			strVal.append( "} ");
+			tmpStr = tmpStr + strVal.toString();
+			strVal = new StringBuilder();
+		}
+		
+		model.characteristic = tmpStr;
+		
+		//		lstStudyGermplasm.get(model.primaryid).characteristic = lstStudyGermplasm.get(model.primaryid).characteristic + model.name; 
 		
 	}
 	
@@ -232,8 +304,9 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 		public boolean isValue() {
 			return value;
 		}
-		public void setValue(boolean value) {
+			public void setValue(boolean value) {
 			this.value = value;
+			
 		}
 		
 	}
