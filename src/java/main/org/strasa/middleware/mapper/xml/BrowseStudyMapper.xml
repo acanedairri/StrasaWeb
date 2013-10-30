@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BrowseStudy">
+
+	<select id="getStudySearchResult" resultType="StudySearchResultModel"
+		parameterType="StudySearchFilterModel">
+		select
+		t1.shared as shared,
+		t1.id as id,
+		t1.programid as programid,
+		t2.name as programname,
+		t1.projectid as projectid,
+		t3.name as projectname,
+		t1.name as studyname,
+		t1.studytypeid as studytypeid,
+		t4.studytype as studytypename,
+		t1.startyear as startyear,
+		t1.endyear as endyear
+		from study as t1
+		left join program as t2 on t1.programid=t2.id
+		left join project as t3 on t1.projectid=t3.id
+		left join studytype as t4 on t1.studytypeid=t4.id
+
+		<where>
+		
+		<if test="shared != null">
+			AND t1.shared=#{shared}
+		</if>
+		<if test="studyname != null">
+			AND t1.name=#{studyname}
+		</if>
+		
+		<if test="studytypeid != 0">
+			AND t1.studytypeid=#{studytypeid}
+		</if>
+		
+		<if test="projectid != 0">
+			AND t1.projectid=#{projectid}
+		</if>
+		
+		<if test="programid != 0">
+			AND t1.programid=#{programid}
+		</if>
+		
+		<if test="programid != 0">
+			AND t1.programid=#{programid}
+		</if>
+		
+		<if test="startyear != null">
+			AND t1.startyear=#{startyear}
+		</if>
+		
+		<if test="endyear != null">
+			AND t1.endyear=#{endyear}
+		</if>
+		
+		</where>
+
+	</select>
+
+</mapper>
