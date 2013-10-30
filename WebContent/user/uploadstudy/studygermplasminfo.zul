@@ -63,8 +63,8 @@
 									value="@bind(each.source)" />
 								<vbox>
 									<bandbox id = "${each.id}"  readonly="true" mold="rounded" 
-										width="54%" value="@bind(each.characteristic)" onBlur ='@command("updateCharacteristicInfo", model= each)'>
-										<bandpopup fulfill="${each.id}.onOpen">
+										width="100%" value="Select..." onBlur ='@command("updateCharacteristicInfo", model= each)'>
+										<bandpopup >
 											<vbox>
 
 												<tabbox>
@@ -182,7 +182,7 @@
 											</vbox>
 										</bandpopup>
 									</bandbox>
-
+								<label value = "@bind(each.characteristic)" multiline=""></label>
 								</vbox>
 							</row>
 						</template>
