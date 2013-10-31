@@ -56,8 +56,10 @@ public class TestBrowseStudyManagerImpl {
 //		filter.setStudytypeid(4);
 //		filter.setProjectid(5);
 //		filter.setProgramid(2);
-		filter.setStartyear("2010");
-		filter.setEndyear("2012");
+//		filter.setStartyear("2010");
+//		filter.setEndyear("2012");
+//		filter.setLocationid(1);
+		filter.setCountry("PHIL");
 
 		List<StudySearchResultModel> toreturn= browseStudyManagerImpl.getStudySearchResult(filter);
 		System.out.println("Size:"+toreturn.size());

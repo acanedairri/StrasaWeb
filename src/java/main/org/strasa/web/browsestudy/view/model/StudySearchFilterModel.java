@@ -10,7 +10,7 @@ public class StudySearchFilterModel {
 	String startyear;
 	String endyear;
 	String country;
-	String location;
+	int locationid;
 	
 	
 	
@@ -25,7 +25,7 @@ public class StudySearchFilterModel {
 		this.startyear = null;
 		this.endyear = null;
 		this.country = null;
-		this.location = null;
+		this.locationid = 0;
 	}
 	public String getShared() {
 		return shared;
@@ -75,14 +75,12 @@ public class StudySearchFilterModel {
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	public String getLocation() {
-		return location;
+	public int getLocationid() {
+		return locationid;
 	}
-	public void setLocation(String location) {
-		this.location = location;
+	public void setLocationid(int locationid) {
+		this.locationid = locationid;
 	}
-	
-	
 	
 
 }

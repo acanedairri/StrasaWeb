@@ -8,6 +8,7 @@
 	<select id="getStudySearchResult" resultType="StudySearchResultModel"
 		parameterType="StudySearchFilterModel">
 		select
+		distinct 
 		t1.shared as shared,
 		t1.id as id,
 		t1.programid as programid,
@@ -18,11 +19,16 @@
 		t1.studytypeid as studytypeid,
 		t4.studytype as studytypename,
 		t1.startyear as startyear,
-		t1.endyear as endyear
+		t1.endyear as endyear,
+		t5.locationid as locationid,
+		t6.locationname as locationname,
+		t6.country as country
 		from study as t1
 		left join program as t2 on t1.programid=t2.id
 		left join project as t3 on t1.projectid=t3.id
 		left join studytype as t4 on t1.studytypeid=t4.id
+		left join studylocation as t5 on t1.id=t5.studyid
+		left join location as t6 on t5.locationid=t6.id
 
 		<where>
 		
@@ -55,6 +61,14 @@
 		
 		<if test="endyear != null">
 			AND t1.endyear=#{endyear}
+		</if>
+		
+		<if test="locationid != 0">
+			AND t5.locationid=#{locationid}
+		</if>
+		
+		<if test="country != null">
+			AND t6.country=#{country}
 		</if>
 		
 		</where>

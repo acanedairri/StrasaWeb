@@ -13,6 +13,9 @@ public class StudySearchResultModel{
 	String studytypename;
 	String startyear;
 	String endyear;
+	int locationid;
+	String locationname;
+	String country;
 	
 	public int getId() {
 		return id;
@@ -74,6 +77,26 @@ public class StudySearchResultModel{
 	public void setEndyear(String endyear) {
 		this.endyear = endyear;
 	}
+	public int getLocationid() {
+		return locationid;
+	}
+	public void setLocationid(int locationid) {
+		this.locationid = locationid;
+	}
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	
+	
+	public String getLocationname() {
+		return locationname;
+	}
+	public void setLocationname(String locationname) {
+		this.locationname = locationname;
+	}
 	@Override
 	public String toString() {
 		return "StudySearchResultModel [id=" + id + ", programid=" + programid
@@ -81,8 +104,10 @@ public class StudySearchResultModel{
 				+ ", studytypeid=" + studytypeid + ", programname="
 				+ programname + ", projectname=" + projectname
 				+ ", studytypename=" + studytypename + ", startyear="
-				+ startyear + ", endyear=" + endyear + "]";
+				+ startyear + ", endyear=" + endyear + ", locationid="
+				+ locationid + ", country=" + country + "]";
 	}
+
 	
 
 	
