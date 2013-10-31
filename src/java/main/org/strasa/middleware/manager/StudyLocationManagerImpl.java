@@ -92,8 +92,8 @@ public class StudyLocationManagerImpl {
 				for(StudyRawDataByDataColumn s:studyList){
 					StudyLocation record = new StudyLocation();
 					record.setStudyid(s.getStudyid());
-					record.setLocationname(s.getDatavalue());
-
+					record.setLocationid(new LocationManagerImpl().getLocationByLocationName(s.getDatavalue()).getId());
+					
 					addStudyLocation(record);
 					System.out.println("added" + s.getDatavalue() + " to study id: "+ s.getStudyid());
 				}
