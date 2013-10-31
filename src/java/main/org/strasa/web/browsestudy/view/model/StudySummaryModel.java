@@ -1,4 +1,4 @@
-package org.strasa.middleware.model.other;
+package org.strasa.web.browsestudy.view.model;
 
 public class StudySummaryModel {
 
