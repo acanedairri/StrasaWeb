@@ -168,7 +168,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 			}
 		}
 		if(strVal.length() > 0){
-			strVal.append( "} ");
+			strVal.append( "} \n");
 			tmpStr = tmpStr + strVal.toString();
 			strVal = new StringBuilder();
 		}
@@ -176,7 +176,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 		for(CharacteristicModel charData: model.keyBiotic){
 			if(charData.value){
 				if(strVal.length() == 0){
-					strVal.append("Biotic: {");
+					strVal.append("<b>Biotic:</b> {");
 				}
 				else{
 					strVal.append(" ,");
@@ -185,7 +185,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 			}
 		}
 		if(strVal.length() > 0){
-			strVal.append( "} ");
+			strVal.append( "} \n");
 			tmpStr = tmpStr + strVal.toString();
 			strVal = new StringBuilder();
 		}
@@ -202,7 +202,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 			}
 		}
 		if(strVal.length() > 0){
-			strVal.append( "} ");
+			strVal.append( "} \n");
 		tmpStr = tmpStr + strVal.toString();
 		strVal = new StringBuilder();
 		}
@@ -218,7 +218,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 			}
 		}
 		if(strVal.length() > 0){
-			strVal.append( "} ");
+			strVal.append( "} \n");
 			tmpStr = tmpStr + strVal.toString();
 			strVal = new StringBuilder();
 		}

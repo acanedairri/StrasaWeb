@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.strasa.middleware.model.other.StudySummaryModel;
+import org.strasa.middleware.model.Study;
+import org.strasa.web.browsestudy.view.model.StudySummaryModel;
 
 
-public interface StudyQueryMapper {
+public interface StudySummaryMapper {
 	
 
 	@Select("SELECT DISTINCT t1.programid as programId,t2.name as programName FROM study as t1 left join program as t2 on t1.programid=t2.id group by t1.programid")
@@ -23,5 +24,7 @@ public interface StudyQueryMapper {
 	List<StudySummaryModel> selectCountOfStudyByStudyType(@Param("programId") int programId,@Param("studyTypeId") int studyTypeId);
 	
 	
+
+
 	
 }

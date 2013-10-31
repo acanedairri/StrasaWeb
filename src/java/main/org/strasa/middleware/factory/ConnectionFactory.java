@@ -36,7 +36,7 @@ import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.mapper.StudyTypeMapper;
 import org.strasa.middleware.mapper.StudyVariableMapper;
 import org.strasa.middleware.mapper.UserMapper;
-import org.strasa.middleware.mapper.other.StudyQueryMapper;
+import org.strasa.middleware.mapper.other.StudySummaryMapper;
 import org.strasa.middleware.model.StudyGermplasmCharacteristics;
 import org.strasa.middleware.model.StudySiteByStudy;
 
@@ -89,7 +89,7 @@ public class ConnectionFactory {
 		                sqlSessionFactory.getConfiguration().addMapper(StudyGermplasmCharacteristics.class);
 		                sqlSessionFactory.getConfiguration().addMapper(StudyGermplasmCharacteristicsMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(ExtensionDataMapper.class);
-		                sqlSessionFactory.getConfiguration().addMapper(StudyQueryMapper.class);
+		                sqlSessionFactory.getConfiguration().addMapper(StudySummaryMapper.class);
 //		                sqlSessionFactory.getConfiguration().addMapper();
 		            
 		            }
