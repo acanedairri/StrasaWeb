@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyLocationMapper;
+import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.StudyLocation;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 
@@ -72,6 +73,18 @@ public class StudyLocationManagerImpl {
 		}
 
 	}
+	public List<StudyLocation> getUnknownStudyLocations(int studyId) {
+		// TODO Auto-generated method stub
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
+		try{
+			List<StudyLocation> studyLocations = studyLocationMapper.selectByExample(null);
+			return studyLocations;
+		}finally{
+			session.close();
+		}
+
+	}
 
 	private void addEmptyRecordOnStudyLocation(int studyId) {
 		// TODO Auto-generated method stub
@@ -83,7 +96,29 @@ public class StudyLocationManagerImpl {
 	}
 
 
-	public List<StudyLocation> initializeStudyLocations(int studyId) {
+	public List<List<Location>> initializeStudyLocations(int studyId) {
+		// TODO Auto-generated method stub
+		List<List<Location>> returnVal = new ArrayList<List<Location>>();
+		List<Location> lstKnownLocations = new ArrayList<Location>();
+		List<Location> lstUnKnownLocations = new ArrayList<Location>();
+		ArrayList<StudyRawDataByDataColumn> studyList = getStudyLocationByStudy(studyId);
+		LocationManagerImpl locMan = new LocationManagerImpl();
+		for(StudyRawDataByDataColumn s:studyList){
+			if(locMan.getLocationByLocationName(s.getDatavalue()) == null){
+				Location location = new Location();
+				location.setLocationname(s.getDatavalue());
+				lstUnKnownLocations.add(location);
+			}
+			else lstKnownLocations.add(locMan.getLocationByLocationName(s.getDatavalue()));
+		}
+		returnVal.add(lstKnownLocations);
+		returnVal.add(lstUnKnownLocations);
+		return returnVal;
+		
+	}
+
+
+	public List<StudyLocation> initializeUnknownStudyLocations(int studyId) {
 		// TODO Auto-generated method stub
 		List<StudyLocation> studyLocations = getAllStudyLocations(studyId);
 		if(studyLocations.isEmpty()){
@@ -106,8 +141,9 @@ public class StudyLocationManagerImpl {
 		
 	}
 
-
-	public ArrayList<StudyRawDataByDataColumn> getStudyLocationByStudy(int studyId) throws Exception {
+	
+	
+	public ArrayList<StudyRawDataByDataColumn> getStudyLocationByStudy(int studyId) {
 		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl();
 		ArrayList<StudyRawDataByDataColumn> list= (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataColumn(studyId,"location");
 		try{
