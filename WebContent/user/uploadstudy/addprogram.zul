@@ -1,6 +1,6 @@
 <zk>
   <window title="Add Program" border="normal" closable="true"  apply="org.zkoss.bind.BindComposer"
-        viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.AddProgram')" width = "35%" height = "45%">
+        viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.AddProgram')" width = "35%">
  
 
 <grid vflex="1">
@@ -11,23 +11,23 @@
 	<rows>
 		<row>
 			<label value="Name" width="150px" />
-			<textbox value='@bind(vm.name)' width="150px" />
+			<textbox value='@bind(vm.programModel.name)' constraint="no empty" width="150px" />
 		</row>
 		<row>
 			<label value="Objective" width="150px" />
-			<textbox value='@bind(vm.objective)' width="150px" />
+			<textbox value='@bind(vm.programModel.objective)' constraint="no empty" width="150px" />
 		</row>
 		<row>
 			<label value="Coordinator" width="150px" />
-			<textbox value='@bind(vm.coordinator)' width="150px" />
+			<textbox value='@bind(vm.programModel.coordinator)' constraint="no empty" width="150px" />
 		</row>
 		<row>
 			<label value="Leading Institute" width="150px" />
-			<textbox value='@bind(vm.institute)' width="150px" />
+			<textbox value='@bind(vm.programModel.leadinginstitute)' constraint="no empty" width="150px" />
 		</row>
 		<row>
 			<label value="Collaborator" width="150px" />
-			<textbox value='@bind(vm.collaborator)' width="150px" />
+			<textbox value='@bind(vm.programModel.collaborator)' constraint="no empty" width="150px" />
 		</row>
 	
 	

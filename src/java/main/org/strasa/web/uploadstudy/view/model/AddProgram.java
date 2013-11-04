@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.strasa.middleware.manager.ProgramManagerImpl;
-import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.Program;
+import org.strasa.web.common.api.FormValidator;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.annotation.Command;
@@ -18,49 +18,17 @@ import org.zkoss.zul.Messagebox;
 
 public class AddProgram {
 	public static String ZUL_PATH = "/user/uploadstudy/addprogram.zul";
-	private String name, objective, coordinator, institute, collaborator;
+	private Program programModel = new Program();
 	private Component mainView;
 	private Binder parBinder;
-
-	public String getName() {
-		return name;
+	public Program getProgramModel() {
+		return programModel;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setProgramModel(Program programModel) {
+		this.programModel = programModel;
 	}
 
-	public String getObjective() {
-		return objective;
-	}
-
-	public void setObjective(String objective) {
-		this.objective = objective;
-	}
-
-	public String getCoordinator() {
-		return coordinator;
-	}
-
-	public void setCoordinator(String coordinator) {
-		this.coordinator = coordinator;
-	}
-
-	public String getInstitute() {
-		return institute;
-	}
-
-	public void setInstitute(String institute) {
-		this.institute = institute;
-	}
-
-	public String getCollaborator() {
-		return collaborator;
-	}
-
-	public void setCollaborator(String collaborator) {
-		this.collaborator = collaborator;
-	}
 	@Init
 	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar) {
 
@@ -72,19 +40,23 @@ public class AddProgram {
 	@Command("add")
 	public void add(){
 		ProgramManagerImpl programMan = new ProgramManagerImpl();
-		Program record = new Program();
-		record.setCollaborator(collaborator);
-		record.setCoordinator(coordinator);
-		record.setLeadinginstitute(institute);
-		record.setName(name);
-		record.setObjective(objective);
 		
+		try {
+			if(new FormValidator().getBlankVariables(programModel, new String[]{"userid","id"}).isEmpty() == false){
+
+				Messagebox.show("All fields are required", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
+				return;
+			}
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//TODO IMPORTANT!!! Must change this to real UserID
-		record.setUserid(1);
-		programMan.addProgram(record);
+		programModel.setUserid(1);
+		programMan.addProgram(programModel);
 		
 		//TODO Validate!!
-		Messagebox.show("CSV Data successfully updated!", "Save", Messagebox.OK, Messagebox.INFORMATION);
+		Messagebox.show("Program successfully added to database!", "OK", Messagebox.OK, Messagebox.INFORMATION);
 //		System.out.println("SavePath: "+CsvPath);
 		
 		
@@ -93,7 +65,7 @@ public class AddProgram {
 			return;
 		
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("selected",name);
+		params.put("selected",programModel.getName());
 
 		// this.parBinder.postCommand("change", params);
 		bind.postCommand("refreshProgramList", params);

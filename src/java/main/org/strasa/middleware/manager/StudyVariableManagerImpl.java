@@ -53,6 +53,19 @@ public class StudyVariableManagerImpl {
 		
 	}
 	
+	public List<StudyVariable> getVariables(String sort){
+		
+		try{
+			StudyVariableExample example = new StudyVariableExample();
+			example.setOrderByClause(buildRelevanceClause(sort));
+			return getMapper().selectByExample(example);
+		}
+		finally{
+			session.close();
+		}
+		
+	}
+	
 	
 	public StudyVariable getVariableByName(String var){
 		try{
@@ -66,4 +79,7 @@ public class StudyVariableManagerImpl {
 		
 	}
 
+	private String buildRelevanceClause(String var){
+		return "CASE WHEN variablecode like '" + var +" %' THEN 0  WHEN variablecode like '" + var +"%' THEN 1 WHEN variablecode like '% " + var +"%' THEN 2 ELSE 3  END, variablecode";
+	}
 }

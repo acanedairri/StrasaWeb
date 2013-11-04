@@ -6,6 +6,7 @@ import java.io.Reader;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.strasa.middleware.manager.UserDataFileManagerImpl;
 import org.strasa.middleware.mapper.CountryMapper;
 import org.strasa.middleware.mapper.EcotypeMapper;
 import org.strasa.middleware.mapper.ExtensionDataMapper;
@@ -35,10 +36,12 @@ import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.mapper.StudyTypeMapper;
 import org.strasa.middleware.mapper.StudyVariableMapper;
+import org.strasa.middleware.mapper.UserDataFileMapper;
 import org.strasa.middleware.mapper.UserMapper;
 import org.strasa.middleware.mapper.other.StudySummaryMapper;
 import org.strasa.middleware.model.StudyGermplasmCharacteristics;
 import org.strasa.middleware.model.StudySiteByStudy;
+import org.strasa.middleware.model.UserDataFile;
 
  
 public class ConnectionFactory {
@@ -90,6 +93,7 @@ public class ConnectionFactory {
 		                sqlSessionFactory.getConfiguration().addMapper(StudyGermplasmCharacteristicsMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(ExtensionDataMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(StudySummaryMapper.class);
+		                sqlSessionFactory.getConfiguration().addMapper(UserDataFileMapper.class);
 //		                sqlSessionFactory.getConfiguration().addMapper();
 		            
 		            }

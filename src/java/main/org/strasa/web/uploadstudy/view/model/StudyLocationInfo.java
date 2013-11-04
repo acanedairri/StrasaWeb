@@ -1,15 +1,15 @@
 package org.strasa.web.uploadstudy.view.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.strasa.middleware.manager.CountryManagerImpl;
 import org.strasa.middleware.manager.StudyLocationManagerImpl;
-import org.strasa.middleware.manager.StudyRawDataManagerImpl;
-import org.strasa.middleware.model.StudyLocation;
-import org.strasa.middleware.model.StudyRawData;
+import org.strasa.middleware.model.Country;
+import org.strasa.middleware.model.Location;
 import org.strasa.web.common.api.ProcessTabViewModel;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
-import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -19,7 +19,11 @@ public class StudyLocationInfo extends ProcessTabViewModel{
     
 	private StudyLocationManagerImpl studyLocationManager = new StudyLocationManagerImpl();
 	
-	private List<StudyLocation> locations = studyLocationManager.initializeStudyLocations(1);
+	private List<Location> lstUnknownLocations = new ArrayList<Location>();
+	private List<Location> lstKnowLocations = new ArrayList<Location>();
+	public List<Country> getCountryList(){
+		return new CountryManagerImpl().getAllCountry();
+	}
 
 	private double sampleID;
 	@GlobalCommand
@@ -29,14 +33,43 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 	}
 
 
+	public List<Location> getLstUnknownLocations() {
+		return lstUnknownLocations;
+	}
+
+
+	public void setLstUnknownLocations(List<Location> lstUnknownLocations) {
+		this.lstUnknownLocations = lstUnknownLocations;
+	}
+
+
+	public List<Location> getLstKnowLocations() {
+		return lstKnowLocations;
+	}
+
+
+	public void setLstKnowLocations(List<Location> lstKnowLocations) {
+		this.lstKnowLocations = lstKnowLocations;
+	}
+
+
 	public boolean validateTab() {
 	// TODO Auto-generated method stub
 	return false;
 	}
 
+//	@Init
+//	public void init(@ExecutionArgParam("studyID") double studyID) {
+//	sampleID = studyID;	
+//	
+//	
+//	}
+	
 	@Init
-	public void init(@ExecutionArgParam("studyID") double studyID) {
-	sampleID = studyID;	
+	public void init(){
+		List<List<Location>> locationInit = studyLocationManager.initializeStudyLocations(1);
+		lstKnowLocations.addAll(locationInit.get(0));
+		lstUnknownLocations.addAll(locationInit.get(1));
 	}
 	
 	
@@ -46,17 +79,12 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 	public void setSampleID(double sampleID) {
 		this.sampleID = sampleID;
 	}
-	public List<StudyLocation> getLocations() {
-		return locations;
-	}
-	public void setlocations(List<StudyLocation> locations) {
-		this.locations = locations;
-	}
+	
 	
 	@Command("saveLocationInfo")
 	public void saveLocationInfo(){
 //		selectedSite=
-		studyLocationManager.updateStudyLocation(locations);
+//		studyLocationManager.updateStudyLocation(locations);
 		
 		Messagebox.show("Changes saved.");
 	}

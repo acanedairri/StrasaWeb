@@ -34,7 +34,7 @@ public class DataColumnChanged {
 	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar) {
 
 	        StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
-	        varList = studyVarMan.getVariables();
+	        varList = studyVarMan.getVariables(oldVar);
 	        this.oldVar = oldVar;
 	        System.out.println(oldVar);
 	        mainView = view;

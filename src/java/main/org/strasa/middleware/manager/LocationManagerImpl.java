@@ -17,6 +17,7 @@ public class LocationManagerImpl {
 		try{
 			LocationExample example = new LocationExample();
 			example.createCriteria().andLocationnameEqualTo(locationName);
+			if(mapper.selectByExample(example).isEmpty()) return null;
 			return mapper.selectByExample(example).get(0);
 		}
 		finally{

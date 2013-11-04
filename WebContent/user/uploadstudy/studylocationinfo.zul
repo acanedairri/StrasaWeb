@@ -1,31 +1,72 @@
 <zk>
-	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudyLocationInfo')">
-		<grid id="step4" height="350px" model="@load(vm.locations)">
-			<columns hflex="1">
-				<column label="Location" />
-				<column label="Country" />
-				<column label="Province" />
-				<column label="Region" />
-				<column label="Altitude" />
-				<column label="Latitude" />
-				<column label="Weather Station" />
-			</columns>
-			<template name="model">
-				<row>
-					<label value="@bind(each.locationname)" />
-					<textbox value="@bind(each.country)" />
-					<textbox value="@bind(each.province)" />
-					<textbox value="@bind(each.region)" />
-					<textbox value="@bind(each.altitude)" />
-					<textbox value="@bind(each.latitude)" />
-					<textbox value="@bind(each.weatherstation)" />
-				</row>
-			</template>
-		</grid>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudyLocationInfo')">
+
+		<groupbox id="gb" mold="3d" width="100%">
+			<caption label="List of known location" />
+			<grid id="step4" height="350px"
+				model="@load(vm.lstKnowLocations)">
+				<columns hflex="1">
+					<column label="Location" />
+					<column label="Country" />
+					<column label="Province" />
+					<column label="Region" />
+					<column label="Altitude" />
+					<column label="Latitude" />
+					<column label="Weather Station" />
+				</columns>
+				<template name="model">
+					<row>
+						<label value="@bind(each.locationname)" />
+						<label value="@bind(each.country)" />
+						<label value="@bind(each.province)" />
+						<label value="@bind(each.region)" />
+						<label value="@bind(each.altitude)" />
+						<label value="@bind(each.latitude)" />
+						<label value="@bind(each.weatherstation)" />
+					</row>
+				</template>
+			</grid>
+		</groupbox>
+		
+				<groupbox mold="3d" width="100%">
+			<caption label="List of unknown location" />
+			<grid  height="350px"
+				model="@load(vm.lstUnknownLocations)">
+				<columns hflex="1">
+					<column label="Location" />
+					<column label="Country" />
+					<column label="Province" />
+					<column label="Region" />
+					<column label="Altitude" />
+					<column label="Latitude" />
+					<column label="Weather Station" />
+				</columns>
+				<template name="model">
+					<row>
+						<textbox value="@bind(each.locationname)" />
+								<combobox
+									model="@load(vm.countryList)"
+									selectedItem="@bind(each.country)" width="99%">
+									<template name="model">
+										<comboitem
+											value="@load(each.isoabbr)"
+											label="@load(each.isoabbr)" />
+									</template>
+								</combobox>
+						<textbox value="@bind(each.province)" />
+						<textbox value="@bind(each.region)" />
+						<textbox value="@bind(each.altitude)" />
+						<textbox value="@bind(each.latitude)" />
+						<textbox value="@bind(each.weatherstation)" />
+					</row>
+				</template>
+			</grid>
+		</groupbox>
 		<button label="SAVE" onClick="@command('saveLocationInfo')" />
 		<button label="NEXT"
 			onClick="@global-command('sampleCommand',model=vm)">
 		</button>
-		
+
 	</window>
 </zk>

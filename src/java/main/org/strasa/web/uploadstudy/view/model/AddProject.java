@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.model.Project;
+import org.strasa.web.common.api.FormValidator;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.annotation.Command;
@@ -17,67 +18,29 @@ import org.zkoss.zul.Messagebox;
 
 public class AddProject {
 	public static String ZUL_PATH = "/user/uploadstudy/addproject.zul";
-	private String name, objective, pi,fundingagency, coordinator, institute, collaborators;
-	private Component mainView;
+		private Component mainView;
 	private Binder parBinder;
+	private FormValidator formValidator;
+	private Project projectModel = new Project();
+	
 
-
-	public String getName() {
-		return name;
+	public Project getProjectModel() {
+		return projectModel;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setProjectModel(Project projectModel) {
+		this.projectModel = projectModel;
 	}
 
-	public String getObjective() {
-		return objective;
+	public FormValidator getFormValidator() {
+		return formValidator;
 	}
 
-	public void setObjective(String objective) {
-		this.objective = objective;
+	public void setFormValidator(FormValidator formValidator) {
+		this.formValidator = formValidator;
 	}
 
-	public String getPi() {
-		return pi;
-	}
-
-	public void setPi(String pi) {
-		this.pi = pi;
-	}
-
-	public String getFundingagency() {
-		return fundingagency;
-	}
-
-	public void setFundingagency(String fundingagency) {
-		this.fundingagency = fundingagency;
-	}
-
-	public String getCoordinator() {
-		return coordinator;
-	}
-
-	public void setCoordinator(String coordinator) {
-		this.coordinator = coordinator;
-	}
-
-	public String getInstitute() {
-		return institute;
-	}
-
-	public void setInstitute(String institute) {
-		this.institute = institute;
-	}
-
-	public String getCollaborators() {
-		return collaborators;
-	}
-
-	public void setCollaborators(String collaborators) {
-		this.collaborators = collaborators;
-	}
-
+	
 	public Component getMainView() {
 		return mainView;
 	}
@@ -104,17 +67,24 @@ public class AddProject {
 	
 	@Command("add")
 	public void add(){
-		ProjectManagerImpl programMan = new ProjectManagerImpl();
-		Project record = new Project();
-		record.setCollaborators(collaborators);
-//		record.setCoordinators(coordinator);
-		record.setLeadinginstitute(institute);
-		record.setName(name);
-		record.setObjective(objective);
 		
+		try {
+			if(!formValidator.getBlankVariables(projectModel,new String[]{"id","userid"}).isEmpty()){
+				Messagebox.show("All fields are requied.", "Validation Error", Messagebox.OK, Messagebox.EXCLAMATION);
+				return;
+			}
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ProjectManagerImpl projectMan = new ProjectManagerImpl();
+
 		//TODO IMPORTANT!!! Must change this to real UserID
-		record.setUserid(1);
-		programMan.addProject(record);
+		projectModel.setUserid(1);
+		projectMan.addProject(projectModel);
 		
 		//TODO Validate!!
 		Messagebox.show("Program successfully added to database!", "Add", Messagebox.OK, Messagebox.INFORMATION);
@@ -126,7 +96,7 @@ public class AddProject {
 			return;
 		
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("selected",name);
+		params.put("selected",projectModel.getName());
 
 		// this.parBinder.postCommand("change", params);
 		bind.postCommand("refreshProjectList", params);

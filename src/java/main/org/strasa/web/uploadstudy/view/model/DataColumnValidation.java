@@ -41,16 +41,19 @@ public class DataColumnValidation {
 	public List<UploadCSVDataVariableModel> varData = new ArrayList<UploadCSVDataVariableModel>();
 
 	private boolean isHeaderClear = true;
-
-
-
+	public boolean showAll;
+	public boolean isShowAll(){
+		return !showAll;
+	}
 	@Init
 	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,
 			@ContextParam(ContextType.VIEW) Component view,
-			@ExecutionArgParam("CSVPath") String CSVPath) {
+			@ExecutionArgParam("CSVPath") String CSVPath,
+			@ExecutionArgParam("showAll") boolean showAll) {
 		mainView = view;
 		parBinder = (Binder) view.getParent().getAttribute("binder");
 		CsvPath = CSVPath;
+		this.showAll = showAll;
 		ArrayList<String> invalidHeader = new ArrayList<String>();
 
 		try {
@@ -170,17 +173,20 @@ public class DataColumnValidation {
 		StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
 
 		for (String var : list) {
-			if (!studyVarMan.hasVariable(var)) {
-				varData.add(new UploadCSVDataVariableModel(var, "-",true));
+			if (showAll) {
+				varData.add(new UploadCSVDataVariableModel(var, var, true));
 				isHeaderClear = false;
 			} else {
-				varData.add(new UploadCSVDataVariableModel(var, var));
-
+				if (!studyVarMan.hasVariable(var)) {
+					varData.add(new UploadCSVDataVariableModel(var, "-", true));
+					isHeaderClear = false;
+				} else {
+					varData.add(new UploadCSVDataVariableModel(var, var));
+					
+				}
 			}
-
 		}
-		
-		
+
 	}
 
 	public List<UploadCSVDataVariableModel> getVarData() {
