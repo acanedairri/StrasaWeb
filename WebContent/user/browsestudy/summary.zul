@@ -1,6 +1,34 @@
-<?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-<window title="new page title" border="normal">
-New Content Here!
-</window>
+	<window title="Summary" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Summary')">
+		<grid  model="@load(vm.summary)">
+			<auxhead>
+				<auxheader label="" colspan="3" />
+				<auxheader label="Study Type" colspan="5"
+					align="center" />
+			</auxhead>
+			<columns>
+				<column label="Program Name" />
+				<column label="Project Count" />
+				<column label="Study Count" />
+				<column label="PBT" />
+				<column label="On Farm" />
+				<column label="Experiment Station" />
+				<column label="Glass House" />
+				<column label="Lab" />
+			</columns>
+			<template name="model">
+				<row>
+					<toolbarbutton label="@load(each.programName)" width="99%"/>
+					<toolbarbutton label="@load(each.projectCount)" width="99%"/>
+					<toolbarbutton label="@load(each.studyCount)" width="99%"/>
+					<toolbarbutton label="@load(each.countPbt)" width="99%"/>
+					<toolbarbutton label="@load(each.countOnFarm)" width="99%"/>
+					<toolbarbutton label="@load(each.countExperiment)" width="99%"/>
+					<toolbarbutton label="@load(each.countGlassHouse)" width="99%"/>
+					<toolbarbutton label="@load(each.countLab)" width="99%"/>
+				</row>
+			</template>
+		</grid>
+	</window>
 </zk>

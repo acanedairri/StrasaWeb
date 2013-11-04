@@ -1,0 +1,107 @@
+<zk>
+	<style dynamic="true">
+
+		<!-- Make Plain Grid -->
+		.GridLayoutNoBorder tr.z-row td.z-row-inner, tr.z-row
+		.z-cell,div.z-grid { border: none; overflow: hidden; zoom: 1;
+		background: white; border-top: none; border-left: none;
+		border-right: none; border-bottom: none; }
+
+	</style>
+
+	<vlayout>
+		<groupbox mold="3d" width="100%">
+			<caption label="Study Detail" />
+			<grid sclass="GridLayoutNoBorder">
+				<columns width="200px">
+					<column label="" />
+					<column label="" />
+					<column label="" />
+				</columns>
+				<rows>
+						<row>
+							<label value="Program Name" />
+							<label value="" />
+							<label value="Program 1" />
+						</row>
+						<row>
+							<label value="" />
+							<label value="Objective" />
+							<label value="Objective 1" />
+						</row>
+						<row>
+							<label value="" />
+							<label value="Coordinator" />
+							<label value="coord 1" />
+						</row>
+						<row>
+							<label value="" />
+							<label value="Leading Institute" />
+							<label value="IRRI" />
+						</row>
+						<row>
+							<label value="" />
+							<label value="Collaborator" />
+							<label value="Japan" />
+						</row>
+						<row>
+							<label value="Project" />
+							<label value="" />
+							<label value="Rice underwater" />
+						</row>
+						<row>
+							<label value="" />
+							<label value="Objective" />
+							<label value="project objective" />
+						</row>
+						<row>
+							<label value="" />
+							<label value="PI" />
+							<label value="pi" />
+						</row>
+						<row>
+							<label value="" />
+							<label value="Leading Institute" />
+							<label value="IRRI" />
+						</row>
+						<row>
+							<label value="" />
+							<label value="Collaborators" />
+							<label value="collabs" />
+						</row>
+						<row>
+							<label value="" />
+							<label value="Funding" />
+							<label value="Inifinite" />
+						</row>
+
+						<row>
+							<label value="Study Name" />
+							<label value="" />
+							<label value="CRIL study" />
+						</row>
+						<row>
+							<label value="Description" />
+							<label value="" />
+							<label value="A study about rice" />
+						</row>
+						<row>
+							<label value="Study Type" />
+							<label value="" />
+							<label value="PBT" />
+						</row>
+						<row>
+							<label value="Start Year" />
+							<label value="" />
+							<label value="January 2013" />
+						</row>
+						<row>
+							<label value="End Year" />
+							<label value="" />
+							<label value="December 2013" />
+						</row>
+				</rows>
+			</grid>
+		</groupbox>
+	</vlayout>
+</zk>
