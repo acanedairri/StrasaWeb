@@ -1,7 +1,7 @@
 <?page title="" contentType="text/html;charset=UTF-8"?>
 <zk>
 	<window title="Germplasm Query" border="normal" apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudySiteInfo')">
+		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.GermplasmQuery')">
 
 		<hbox>
 			<separator spacing="20px" />
@@ -21,7 +21,7 @@
 
 		<!-- Table (Columns / Rows) -->
 		<vbox>
-			<grid id="step4" height="350px">
+			<grid id="step4" height="350px" model="@load(vm.)">
 				<columns hflex="1">
 					<column label="Germplasm Name" />
 					<column label="Other Name" />

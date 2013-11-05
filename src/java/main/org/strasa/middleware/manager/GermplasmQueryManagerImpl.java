@@ -1,14 +1,18 @@
 package org.strasa.middleware.manager;
 
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.GermplasmMapper;
 import org.strasa.middleware.mapper.StudyMapper;
+import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.mapper.StudyTypeMapper;
 import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.GermplasmExample;
 import org.strasa.middleware.model.Study;
+import org.strasa.middleware.model.StudySite;
 import org.strasa.middleware.model.StudyType;
 import org.strasa.middleware.model.StudyTypeExample;
 
@@ -50,6 +54,17 @@ public class GermplasmQueryManagerImpl {
 		return record.getId();
 	}
 
-	
+	public List<StudySite> getAllStudySites(int studyId) {
+		// TODO Auto-generated method stub
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
+		try{
+			List<StudySite> studySites = studySiteMapper.selectByExample(null);
+			return studySites;
+		}finally{
+			session.close();
+		}
+
+	}
 		
 }
