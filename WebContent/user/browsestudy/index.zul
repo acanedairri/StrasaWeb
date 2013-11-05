@@ -1,53 +1,13 @@
-<?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<window apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SummaryByProject')">
-		<panel title="Splitter" border="normal" width="100%"
-			height="100%">
-			<panelchildren>
-				<hbox spacing="0" width="100%" height="100%">
-					<hbox width="20%">
-						<grid model="@load(vm.summaryByProjectData)">
-
-							<columns>
-								<column>ProjectId</column>
-								<column>Project Name</column>
-								<column>Program Name</column>
-								<column>Study Count</column>
-							</columns>
-							<template name="model">
-								
-									<row>
-										<label
-											value="@load(each.projectid)" />
-								
-										<label
-											value="@load(each.projectName)" />
-								
-										<label
-											value="@load(each.programName)" />
-									
-										<label
-											value="@load(each.studyCount)" />
-									</row>
-									
-							</template>
-						</grid>
-					</hbox>
-					<splitter id="s2" collapse="before" />
-
-					<groupbox id="gb" mold="3d" width="100%">
-						<caption label="Study Data" />
-						<hlayout spacing="50px">
-							<vlayout width="300px">
-
-							</vlayout>
-
-						</hlayout>
-					</groupbox>
-
-				</hbox>
-			</panelchildren>
-		</panel>
+	<window width="100%" height="100%">
+		<hbox spacing="0" widths="35%,65%" height="100%">
+			<include src="searchfilter.zul" />
+				<splitter id="s2" collapse="before" />
+				<vbox spacing="0" width="100%" heights="65%,35%" >
+					<include src="summary.zul" />
+						<splitter id="s1" collapse="before" />
+						<include src="searchresult.zul" />
+				</vbox>
+		</hbox>
 	</window>
 </zk>

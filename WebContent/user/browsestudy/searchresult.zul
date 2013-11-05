@@ -1,6 +1,29 @@
-<?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-<window title="new page title" border="normal">
-New Content Here!
-</window>
+	<window title="Search Result" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchFilter')">
+		<grid height="350px" emptyMessage="No study site found.">
+			<columns>
+				<column label="Study Name" />
+				<column label="Program" />
+				<column label="Project" />
+				<column label="Study Type" />
+				<column label="Country" />
+				<column label="Location" />
+				<column label="Start Year" />
+				<column label="End Year" />
+			</columns>
+			<rows>
+				<row>
+					<label value="1,000" />
+					<label value="1,100" />
+					<label value="1,200" />
+					<label value="1,300" />
+					<label value="1,400" />
+					<label value="1,500" />
+					<label value="1,600" />
+					<label value="1,700" />
+				</row>
+			</rows>
+		</grid>
+	</window>
 </zk>
