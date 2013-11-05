@@ -39,6 +39,7 @@ public class TestStudyRawDataManagerImpl {
 			System.out.println(s.getStudyid()+ " "+s.getDatacolumn()+ " "+ s.getDatavalue());
 		}
 	}
+	
 
 
 }
