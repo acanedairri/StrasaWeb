@@ -30,7 +30,7 @@ public class StudyRawDataManagerImpl {
 	}
 
 	public ArrayList<ArrayList<String>> constructDataRaw(int studyid,
-			String[] columns, String baseColumn) {
+			String[] columns, String baseColumn, boolean isDistinct) {
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
 				.openSession();
 		StudyRawDataMapper mapper = session
@@ -45,12 +45,19 @@ public class StudyRawDataManagerImpl {
 		ArrayList<ArrayList<String>> returnVal = new ArrayList<ArrayList<String>>();
 		for (StudyRawData rowData : lstBaseRaw) {
 			ArrayList<String> rowConstructed = new ArrayList<String>();
-			for (int i = 0; i < columns.length; i++) {
+			for (String col : columns) {
 					example.clear();
-					example.createCriteria().andDatacolumnEqualTo(columns[i]).andStudyidEqualTo(studyid).andDatarowEqualTo(rowData.getDatarow());
-					rowConstructed.add(mapper.selectByExample(example).get(0).getDatavalue());
+//					System.out.println("StudyID: " + studyid + " DataCol:  " + col + " Row: " + rowData.getDatarow() );
+					example.createCriteria().andDatacolumnEqualTo(col).andStudyidEqualTo(studyid).andDatarowEqualTo(rowData.getDatarow());
+					List<StudyRawData> subList = mapper.selectByExample(example);
+					if(subList.isEmpty()) rowConstructed.add("");
+					else
+					rowConstructed.add(subList.get(0).getDatavalue());
 			}
-			returnVal.add(rowConstructed);
+			if(isDistinct){
+				if(!returnVal.contains(rowConstructed)) returnVal.add(rowConstructed);
+			}
+			else returnVal.add(rowConstructed);
 			
 		}
 		return returnVal;

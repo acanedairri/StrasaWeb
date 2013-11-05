@@ -1,6 +1,7 @@
 package org.strasa.middleware.manager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,6 +41,15 @@ public class TestStudyRawDataManagerImpl {
 		}
 	}
 	
-
+	@Test
+	public void testBuildColumnRaw() throws Exception {
+		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl();
+		ArrayList<ArrayList<String>> list= studyRawDataManagerImpl.constructDataRaw(1, new String[]{"GName","Source"}, "Gname",true);
+		
+		for(ArrayList<String> sublist : list){
+			System.out.println(Arrays.toString(sublist.toArray(new String[sublist.size()])));
+		}
+	}
+	
 
 }
