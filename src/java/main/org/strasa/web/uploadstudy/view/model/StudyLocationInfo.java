@@ -21,7 +21,7 @@ import org.zkoss.zhtml.Messagebox;
 public class StudyLocationInfo extends ProcessTabViewModel{
     
 	private StudyLocationManagerImpl studyLocationManager = new StudyLocationManagerImpl();
-	private int mockStudyId = 24;
+	private int mockStudyId = 22;
 	private List<Location> lstUnknownLocations = new ArrayList<Location>();
 	private List<Location> lstKnowLocations = new ArrayList<Location>();
 	private List<String> lstCountry = new ArrayList<String>();
@@ -99,6 +99,8 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 		for(Country data : lCountries){
 			lstCountry.add(data.getIsoabbr());
 		}
+		System.out.println(lstUnknownLocations.get(0).getId());
+		lstKnowLocations.addAll(lstUnknownLocations);
 	}
 	
 	

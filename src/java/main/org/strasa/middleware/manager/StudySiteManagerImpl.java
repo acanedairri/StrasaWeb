@@ -8,6 +8,7 @@ import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudySite;
+import org.strasa.middleware.model.StudySiteExample;
 
 public class StudySiteManagerImpl {
 
@@ -65,7 +66,9 @@ public class StudySiteManagerImpl {
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
 		try{
-			List<StudySite> studySites = studySiteMapper.selectByExample(null);
+			StudySiteExample example = new StudySiteExample();
+			example.createCriteria().andStudyidEqualTo(studyId);
+			List<StudySite> studySites = studySiteMapper.selectByExample(example);
 			return studySites;
 		}finally{
 			session.close();
