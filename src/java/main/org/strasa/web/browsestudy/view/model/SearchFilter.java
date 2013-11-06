@@ -2,6 +2,7 @@ package org.strasa.web.browsestudy.view.model;
 
 import java.util.List;
 
+import org.strasa.middleware.manager.BrowseStudyManagerImpl;
 import org.strasa.middleware.manager.CountryManagerImpl;
 import org.strasa.middleware.manager.LocationManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
@@ -20,8 +21,7 @@ public class SearchFilter {
 	private ProjectManagerImpl projectMan = new ProjectManagerImpl();
 	private StudyTypeManagerImpl studyTypeMan = new StudyTypeManagerImpl();
 	private CountryManagerImpl countryMan = new CountryManagerImpl();
-	private LocationManagerImpl locationMan = new LocationManagerImpl();
-	
+//	private LocationManagerImpl locationMan = new LocationManagerImpl();
 	private StudySearchFilterModel searchFilter = new StudySearchFilterModel();
 	private List<Program> programList = programMan.getAllProgram();
 	private List<Project> projectList = projectMan.getAllProject();
@@ -38,6 +38,7 @@ public class SearchFilter {
 	}
 
 	public List<Program> getProgramList() {
+		programList.add(0, new Program());
 		return programList;
 	}
 
@@ -46,19 +47,16 @@ public class SearchFilter {
 	}
 
 	public List<Project> getProjectList() {
+		projectList.add(0, new Project());
 		return projectList;
 	}
 
 	public void setProjectList(List<Project> projectList) {
 		this.projectList = projectList;
 	}
-
-	@NotifyChange("*")
-	@Command("updateSearchFilter")
-	public void updateSearchFilter(){
-	}
-
+	
 	public List<StudyType> getStudyTypeList() {
+		studyTypeList.add(0, new StudyType());
 		return studyTypeList;
 	}
 
@@ -67,6 +65,7 @@ public class SearchFilter {
 	}
 
 	public List<Country> getCountryList() {
+		countryList.add(0, new Country());
 		return countryList;
 	}
 
@@ -74,4 +73,5 @@ public class SearchFilter {
 		this.countryList = countryList;
 	}
 
+	
 }
