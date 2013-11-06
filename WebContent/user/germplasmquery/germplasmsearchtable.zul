@@ -1,7 +1,8 @@
 <?page title="" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<window title="Germplasm Query" border="normal" apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.GermplasmQuery')">
+	<window title="Germplasm Query" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.GermplasmSearchTable')">
 
 		<hbox>
 			<separator spacing="20px" />
@@ -21,17 +22,21 @@
 
 		<!-- Table (Columns / Rows) -->
 		<vbox>
-			<grid id="step4" height="350px" model="@load(vm.)">
+			<grid id="step4" height="350px"
+				model="@load(vm.germplasmnames)">
 				<columns hflex="1">
 					<column label="Germplasm Name" />
 					<column label="Other Name" />
-					<column label="Year" />
+					<column label="Breeder" />
 				</columns>
 				<template name="model">
 					<row>
-						<label value="IR8" />
-						<label value="IR64" />
-						<label value="IR88" />
+						<label value="@bind(each.germplasmname)"
+							width="99%" />
+						<label value="@bind(each.othername)"
+							width="99%" />
+						<label value="@bind(each.breeder)" width="99%" />
+
 					</row>
 				</template>
 			</grid>

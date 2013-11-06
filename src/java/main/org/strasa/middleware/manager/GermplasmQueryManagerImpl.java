@@ -1,20 +1,19 @@
 package org.strasa.middleware.manager;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.GermplasmMapper;
-import org.strasa.middleware.mapper.StudyMapper;
+import org.strasa.middleware.mapper.StudyGermplasmCharacteristicsMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
-import org.strasa.middleware.mapper.StudyTypeMapper;
 import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.GermplasmExample;
-import org.strasa.middleware.model.Study;
+import org.strasa.middleware.model.StudyGermplasmCharacteristics;
+import org.strasa.middleware.model.StudyGermplasmCharacteristicsExample;
 import org.strasa.middleware.model.StudySite;
-import org.strasa.middleware.model.StudyType;
-import org.strasa.middleware.model.StudyTypeExample;
 
 public class GermplasmQueryManagerImpl {
 
@@ -35,35 +34,112 @@ public class GermplasmQueryManagerImpl {
 		}
 	}
 	
+	public Germplasm getGermplasmById(int value){
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
+		
+		try{
+			GermplasmExample example = new GermplasmExample();
+			example.createCriteria().andGermplasmtypeidEqualTo(value);
+			if(mapper.selectByExample(example).isEmpty()) return null;
+			return mapper.selectByExample(example).get(0);
+			
+		}
+		finally{
+				session.close();
+		}
+	}
+	
 	public boolean isGermplasmExisting(String value){
 		if(this.getGermplasmByName(value) == null) return false;
 		return true;
 	}
 	
 
-	public int addGermplasm(Germplasm record){
+	public void addGermplasm(Germplasm record){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
+		GermplasmMapper germplasmmapper = session.getMapper(GermplasmMapper.class);
 		try{
-			mapper.insert(record);
+			germplasmmapper.insert(record);
 			session.commit();
 		}
 		finally{
 			session.close();
 		}
-		return record.getId();
 	}
-
-	public List<StudySite> getAllStudySites(int studyId) {
+	
+	public List<Germplasm> getAllGermplasms(int germplasmname) {
 		// TODO Auto-generated method stub
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
+		GermplasmMapper germplasmQueryMapper = session.getMapper(GermplasmMapper.class);
 		try{
-			List<StudySite> studySites = studySiteMapper.selectByExample(null);
-			return studySites;
+			List<Germplasm> germplasms = germplasmQueryMapper.selectByExample(null);
+			return germplasms;
 		}finally{
 			session.close();
 		}
+
+	}
+	
+	private void addEmptyRecordOnGermplasm(int studyId) {
+		// TODO Auto-generated method stub
+		Germplasm record = new Germplasm();
+		record.setId(studyId);
+		record.setGermplasmtypeid(1);
+		addGermplasm(record);
+		System.out.println("Added Empty Record on germplasm");
+	}
+	
+	public List<Germplasm> initializeGermplasmQuerys(int studyid) {
+		// TODO Auto-generated method stub
+		List<Germplasm> germplasmQuerys = getAllGermplasms(studyid);
+		if(germplasmQuerys.isEmpty()){
+			try {
+				ArrayList<StudyGermplasmCharacteristics> studyList = getGermplasmByName(studyid);
+				for(StudyGermplasmCharacteristics s:studyList){
+					Germplasm record = new Germplasm();
+					record.setId(s.getId());
+					record.setGermplasmname(s.getGermplasmname());
+					record.setGid(1);
+					addGermplasm(record);
+					System.out.println("added" + s.getGermplasmname() + " to study id: "+ s.getId());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			if(getAllGermplasms(studyid).isEmpty()) addEmptyRecordOnGermplasm(studyid);
+		}
+		return getAllGermplasms(studyid);
+		
+	}
+	
+	public ArrayList<StudyGermplasmCharacteristics> getGermplasmByName(int studyid) throws Exception {
+		GermplasmQueryManagerImpl germplasmQueryManagerImpl= new GermplasmQueryManagerImpl();
+		ArrayList<StudyGermplasmCharacteristics> list= (ArrayList<StudyGermplasmCharacteristics>) germplasmQueryManagerImpl.getStudyGermplasmCharacteristics(studyid,"germplasmname");
+		try{
+			for(StudyGermplasmCharacteristics s:list){
+				System.out.println(s.getId()+ " "+s.getAttribute()+ " "+ s.getGermplasmname());
+			}
+		}catch(NullPointerException npe){//if still empty since there's no site data on the rawdata table
+			// TODO Auto-generated catch block
+		}
+		return list;
+	}
+
+	public List<StudyGermplasmCharacteristics> getStudyGermplasmCharacteristics(int studyid,
+			String column) {
+
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudyGermplasmCharacteristicsMapper StudyGermplasmCharacteristicsMapper = session
+				.getMapper(StudyGermplasmCharacteristicsMapper.class);
+
+		StudyGermplasmCharacteristicsExample example = new StudyGermplasmCharacteristicsExample();
+
+		example.createCriteria().andIdEqualTo(studyid)
+				.andAttributeEqualTo(column);
+		example.setDistinct(true);
+		return StudyGermplasmCharacteristicsMapper.selectByExample(example);
 
 	}
 		
