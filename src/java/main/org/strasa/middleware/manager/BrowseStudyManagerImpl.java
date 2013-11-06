@@ -30,30 +30,31 @@ public class BrowseStudyManagerImpl {
 				rec.setStudyCount(studyCount.get(0).getStudyCount());
 
 				// count StypeType PBT
-				List<StudySummaryModel> pbtStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(),1);
-				rec.setStudyTypeIdPbt(pbtStudyType.get(0).getStudyTypeId());
+				rec.setStudyTypeIdPbt(1);
+				List<StudySummaryModel> pbtStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(),rec.getStudyTypeIdPbt());
 				rec.setCountPbt(pbtStudyType.get(0).getCountStudyTypeId());
 
 				// count StypeType OnFarm
-				List<StudySummaryModel> onFarmStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), 2);
-				rec.setStudyTypeIdOnFarm(onFarmStudyType.get(0).getStudyTypeId());
+				rec.setStudyTypeIdOnFarm(2);
+				List<StudySummaryModel> onFarmStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdOnFarm());
 				rec.setCountOnFarm(onFarmStudyType.get(0).getCountStudyTypeId());
 
 				// count StypeType Experiment Station
-				List<StudySummaryModel> experimentStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), 3);
-				rec.setStudyTypeIdExperiment(experimentStudyType.get(0).getStudyTypeId());
+				rec.setStudyTypeIdExperiment(3);
+				List<StudySummaryModel> experimentStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdExperiment());
 				rec.setCountExperiment(experimentStudyType.get(0).getCountStudyTypeId());
 
 				// count StypeType Glass House
-				List<StudySummaryModel> glassHouseStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), 4);
-				rec.setStudytypeIdGlassHouse(glassHouseStudyType.get(0).getStudyTypeId());
+				rec.setStudytypeIdGlassHouse(4);
+				List<StudySummaryModel> glassHouseStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudytypeIdGlassHouse());
 				rec.setCountGlassHouse(glassHouseStudyType.get(0).getCountStudyTypeId());
 
 				// count StypeType Lab
-				List<StudySummaryModel> labStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), 5);
-				rec.setStudyTypeIdLab(labStudyType.get(0).getStudyTypeId());
+				rec.setStudyTypeIdLab(5);
+				List<StudySummaryModel> labStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdLab());
 				rec.setCountLab(labStudyType.get(0).getCountStudyTypeId());
-
+				
+				System.out.println("rec:"+rec.toString());
 				s.add(rec);
 
 			}
