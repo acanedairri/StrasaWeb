@@ -46,12 +46,12 @@
 					<row>
 						<textbox value="@bind(each.locationname)" />
 								<combobox
-									model="@load(vm.countryList)"
+									model="@load(vm.lstCountry)"
 									selectedItem="@bind(each.country)" width="99%">
-									<template name="model">
+									<template name="model" var="p1">
 										<comboitem
-											value="@load(each.isoabbr)"
-											label="@load(each.isoabbr)" />
+											value="@load(p1)"
+											label="@load(p1)" />
 									</template>
 								</combobox>
 						<textbox value="@bind(each.province)" />

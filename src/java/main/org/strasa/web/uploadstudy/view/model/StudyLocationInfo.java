@@ -21,9 +21,21 @@ import org.zkoss.zhtml.Messagebox;
 public class StudyLocationInfo extends ProcessTabViewModel{
     
 	private StudyLocationManagerImpl studyLocationManager = new StudyLocationManagerImpl();
-	private int mockStudyId = 22;
+	private int mockStudyId = 24;
 	private List<Location> lstUnknownLocations = new ArrayList<Location>();
 	private List<Location> lstKnowLocations = new ArrayList<Location>();
+	private List<String> lstCountry = new ArrayList<String>();
+	
+	public List<String> getLstCountry() {
+		return lstCountry;
+	}
+
+
+	public void setLstCountry(List<String> lstCountry) {
+		this.lstCountry = lstCountry;
+	}
+
+
 	public List<Country> getCountryList(){
 		return new CountryManagerImpl().getAllCountry();
 	}
@@ -80,8 +92,12 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 		}
 		for(int i = 0 ; i < lstUnknownLocations.size(); i++){
 			lstUnknownLocations.get(i).setLocationname(constructedRow.get(lstUnknownLocations.get(i).getLocationname()).get(0));
-			lstUnknownLocations.get(i).setCountry(constructedRow.get(lstUnknownLocations.get(i).getLocationname()).get(1));
+			lstUnknownLocations.get(i).setCountry("India");
 			System.out.println(constructedRow.get(lstUnknownLocations.get(i).getLocationname()).get(1) + " COUNTRY");
+		}
+		List<Country> lCountries = getCountryList();
+		for(Country data : lCountries){
+			lstCountry.add(data.getIsoabbr());
 		}
 	}
 	
