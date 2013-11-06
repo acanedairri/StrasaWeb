@@ -18,4 +18,5 @@ public class StudyManagerImpl {
 			session.close();
 		}
 	}
+	
 }

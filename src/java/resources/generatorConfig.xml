@@ -137,6 +137,10 @@
 		<table schema="MYSCHEMA" tableName="studygermplasmcharacteristics" domainObjectName="StudyGermplasmCharacteristics">
 		<generatedKey column="id" sqlStatement="JDBC" />
 		</table>
+		
+		<table schema="MYSCHEMA" tableName="studydatacolumn" domainObjectName="StudyDataColumn">
+		<generatedKey column="id" sqlStatement="JDBC" />
+		</table>
 
 
 	</context>

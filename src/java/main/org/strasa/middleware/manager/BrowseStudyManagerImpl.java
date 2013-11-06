@@ -1,11 +1,14 @@
 package org.strasa.middleware.manager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.other.StudySummaryMapper;
+import org.strasa.middleware.model.StudyDataColumn;
+import org.strasa.web.browsestudy.view.model.StudyDataColumnModel;
 import org.strasa.web.browsestudy.view.model.StudySearchFilterModel;
 import org.strasa.web.browsestudy.view.model.StudySearchResultModel;
 import org.strasa.web.browsestudy.view.model.StudySummaryModel;
@@ -71,6 +74,38 @@ public class BrowseStudyManagerImpl {
 		try{
 			
 			List<StudySearchResultModel> toreturn= session.selectList("BrowseStudy.getStudySearchResult",filter);
+			
+			return toreturn;
+			
+		}finally{
+			session.close();
+		}
+		
+		
+	}
+	
+	public List<HashMap<String,String>> getStudyRawData(int studyId){
+		
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		try{
+			StudyDataColumnManagerImpl mgr= new StudyDataColumnManagerImpl();
+		
+			List<StudyDataColumn> studyDataColumn =mgr.getStudyDataColumnByStudyId(studyId,"rd");
+			ArrayList<StudyDataColumnModel> dataColumns= new ArrayList<StudyDataColumnModel>();
+			
+			int count=1;
+			int columnCount=studyDataColumn.size();
+			for(StudyDataColumn s: studyDataColumn){
+				StudyDataColumnModel m= new StudyDataColumnModel();
+				m.setColumnheader(s.getColumnheader());
+				m.setStudyid(s.getStudyid());
+				m.setOrder(count);
+				m.setCount(columnCount);
+				dataColumns.add(m);
+				count++;
+			}
+
+			List<HashMap<String,String>> toreturn= session.selectList("BrowseStudy.getStudyRawData",dataColumns);
 			
 			return toreturn;
 			

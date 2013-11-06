@@ -74,5 +74,24 @@
 		</where>
 
 	</select>
+	
+	<select id="getStudyRawData" resultType="hashmap"
+		parameterType="StudyDataColumnModel">
+		select 
+		<foreach item="item" index="index" collection="list">
+			
+			<if test="item.order != item.count" >
+				(Select t2.datavalue from studyrawdata as t2 where t2.datacolumn=#{item.columnheader} and t2.datarow=t1.datarow and t2.studyid=#{item.studyid}) as #{item.columnheader},
+			</if>
+	  		
+			<if test="item.order == item.count" >
+				(Select t2.datavalue from studyrawdata as t2 where t2.datacolumn=#{item.columnheader} and t2.datarow=t1.datarow and t2.studyid=#{item.studyid}) as #{item.columnheader},
+				t1.studyid from studyrawdata as t1 where t1.datacolumn='GName' and t1.studyid=#{item.studyid}
+			</if>
+			
+		</foreach>
+		
+		
+	</select>
 
 </mapper>
