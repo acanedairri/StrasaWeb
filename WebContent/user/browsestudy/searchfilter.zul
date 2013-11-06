@@ -22,9 +22,8 @@
 					<combobox model="@load(vm.programList)"
 						readonly="true" selectedIndex="@bind(vm.searchFilter.programid)"
 						width="99%">
-
 						<template name="model">
-							<comboitem value="@load(each.name)"
+							<comboitem value="@load(each.id)"
 								label="@load(each.name)" />
 						</template>
 					</combobox>
@@ -35,7 +34,7 @@
 						readonly="true" width="99%"
 						selectedIndex="@bind(vm.searchFilter.projectid)">
 						<template name="model">
-							<comboitem value="@load(each.name)"
+							<comboitem value="@load(each.id)"
 								label="@load(each.name)" />
 						</template>
 					</combobox>
@@ -46,7 +45,7 @@
 						readonly="true" width="99%"
 						selectedIndex="@bind(vm.searchFilter.studytypeid)">
 						<template name="model">
-							<comboitem value="@load(each.studytype)"
+							<comboitem value="@load(each.id)"
 								label="@load(each.studytype)" />
 						</template>
 					</combobox>
@@ -56,15 +55,15 @@
 					Country
 					<combobox model="@load(vm.countryList)"
 						readonly="true" width="99%"
-						selectedIndex="@bind(vm.searchFilter.country)">
+						value="@bind(vm.searchFilter.country)">
 						<template name="model">
-							<comboitem value="@load(each.cntryid)"
+							<comboitem value="@load(each.isoabbr)"
 								label="@load(each.isoabbr)" />
 						</template>
 					</combobox>
 				</row>
 			</rows>
 		</grid>
-		 <button label="Search" />
+		 <button label="Search" onClick=" @global-command('updateSearchResult', searchFilter=vm.searchFilter)"/>
 	</window>
 </zk>

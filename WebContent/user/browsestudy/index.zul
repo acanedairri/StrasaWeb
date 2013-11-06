@@ -1,13 +1,14 @@
 <zk>
 	<window width="100%" height="100%">
 		<hbox spacing="0" widths="35%,65%" height="100%">
-			<include src="searchfilter.zul" />
+			<include  id="searchFilterPanel" src="searchfilter.zul" mode="defer" />
 				<splitter id="s2" collapse="before" />
 				<vbox spacing="0" width="100%" heights="65%,35%" >
-					<include src="summary.zul" />
+					<include id="summaryPanel" src="summary.zul"  mode="defer" progressing="true"/>
 						<splitter id="s1" collapse="before" />
-						<include src="searchresult.zul" />
+						<include id="searchResultPanel"  src="searchresult.zul"  mode="defer" progressing="true"/>
 				</vbox>
 		</hbox>
 	</window>
 </zk>
+
