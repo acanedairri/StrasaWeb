@@ -11,9 +11,9 @@
 		<hbox>
 			<include src="germplasmsearchtable.zul" />
 		</hbox>
-		<!-- Tabs -->
+		<!-- Detail Study and Study Tested -->
 		<hbox>
-			<include src="germplasmtab.zul" />
+			<include src="germplasmdetailstudyandstudytested.zul" />
 		</hbox>
 	</window>
 </zk>
