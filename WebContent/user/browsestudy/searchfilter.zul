@@ -64,6 +64,6 @@
 				</row>
 			</rows>
 		</grid>
-		 <button label="Search" onClick=" @global-command('updateSearchResult', searchFilter=vm.searchFilter)"/>
+		 <button label="Search" onClick=" @global-command('updateSearchFilterResult', searchFilter=vm.searchFilter)"/>
 	</window>
 </zk>

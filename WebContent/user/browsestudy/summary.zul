@@ -19,14 +19,14 @@
 			</columns>
 			<template name="model">
 				<row>
-					<toolbarbutton label="@load(each.programName)" width="99%"/>
-					<toolbarbutton label="@load(each.projectCount)" width="99%"/>
-					<toolbarbutton label="@load(each.studyCount)" width="99%"/>
-					<toolbarbutton label="@load(each.countPbt)" width="99%"/>
-					<toolbarbutton label="@load(each.countOnFarm)" width="99%"/>
-					<toolbarbutton label="@load(each.countExperiment)" width="99%"/>
-					<toolbarbutton label="@load(each.countGlassHouse)" width="99%"/>
-					<toolbarbutton label="@load(each.countLab)" width="99%"/>
+					<toolbarbutton label="@load(each.programName)" width="99%" onClick="@global-command('updateSummaryResult', summaryFilter=each)"/>
+					<toolbarbutton label="@load(each.projectCount)" width="99%" onClick="@global-command('updateSummaryResult', summaryFilter=each)"/>
+					<toolbarbutton label="@load(each.studyCount)" width="99%" onClick="@global-command('updateSummaryResult', summaryFilter=each)"/>
+					<toolbarbutton label="@load(each.countPbt)" width="99%" onClick="@global-command('updateSummaryResultByStudyType', summaryFilter=each, studyTypeId=each.studyTypeIdPbt)"/>
+					<toolbarbutton label="@load(each.countOnFarm)" width="99%" onClick="@global-command('updateSummaryResultByStudyType', summaryFilter=each, studyTypeId=each.studyTypeIdOnFarm)"/>
+					<toolbarbutton label="@load(each.countExperiment)" width="99%" onClick="@global-command('updateSummaryResultByStudyType', summaryFilter=each, studyTypeId=each.studyTypeIdExperiment)"/>
+					<toolbarbutton label="@load(each.countGlassHouse)" width="99%" onClick="@global-command('updateSummaryResultByStudyType', summaryFilter=each, studyTypeId=each.studytypeIdGlassHouse)"/>
+					<toolbarbutton label="@load(each.countLab)" width="99%" onClick="@global-command('updateSummaryResultByStudyType', summaryFilter=each, studyTypeId=each.studyTypeIdLab)"/>
 				</row>
 			</template>
 		</grid>

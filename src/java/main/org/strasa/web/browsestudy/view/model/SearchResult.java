@@ -24,7 +24,7 @@ public class SearchResult {
 
 	@NotifyChange("*")
 	@GlobalCommand
-	public void updateSearchResult(@BindingParam("searchFilter")StudySearchFilterModel searchFilter){
+	public void updateSearchFilterResult(@BindingParam("searchFilter")StudySearchFilterModel searchFilter){
 		System.out.println("Search for: " + "\n programID" +Integer.toString(searchFilter.programid)+ "\n projectID" +Integer.toString(searchFilter.projectid)+ "\n studytypeID" +Integer.toString(searchFilter.studytypeid));
 		System.out.print(searchFilter.country);
 
@@ -35,7 +35,29 @@ public class SearchResult {
 		System.out.println("Size:"+searchResult.size());
 
 	}
+	
+	@NotifyChange("*")
+	@GlobalCommand
+	public void updateSummaryResult(@BindingParam("summaryFilter")StudySummaryModel summary){
+		StudySearchFilterModel searchFilter = new StudySearchFilterModel();
+		searchFilter.setProgramid(summary.getProgramId());
+		searchFilter.setProjectid(summary.getProjectId());
+		
+		searchResult = browseStudyManagerImpl.getStudySearchResult(searchFilter);
+		System.out.println("Size:"+searchResult.size());
 
+	}
+	@NotifyChange("*")
+	@GlobalCommand
+	public void updateSummaryResultByStudyType(@BindingParam("summaryFilter")StudySummaryModel summary, @BindingParam("studyTypeId")Integer studyTypeId){
+		StudySearchFilterModel searchFilter = new StudySearchFilterModel();
+		searchFilter.setProgramid(summary.getProgramId());
+		searchFilter.setProjectid(summary.getProjectId());
+		searchFilter.setStudytypeid(studyTypeId);
+		searchResult = browseStudyManagerImpl.getStudySearchResult(searchFilter);
+		System.out.println("Result "+summary.toString());
+
+	}
 	private String checkIfEmpty(String string) {
 		// TODO Auto-generated method stub
 		try{
