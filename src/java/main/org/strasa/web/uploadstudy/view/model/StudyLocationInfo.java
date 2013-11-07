@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.strasa.middleware.manager.CountryManagerImpl;
+import org.strasa.middleware.manager.StudyDerivedDataManagerImpl;
 import org.strasa.middleware.manager.StudyLocationManagerImpl;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.model.Country;
@@ -20,12 +21,13 @@ import org.zkoss.zhtml.Messagebox;
 
 public class StudyLocationInfo extends ProcessTabViewModel{
     
-	private StudyLocationManagerImpl studyLocationManager = new StudyLocationManagerImpl();
-	private int mockStudyId = 22;
+	private int mockStudyId = 25;
+	private boolean isRaw = false;
 	private List<Location> lstUnknownLocations = new ArrayList<Location>();
 	private List<Location> lstKnowLocations = new ArrayList<Location>();
 	private List<String> lstCountry = new ArrayList<String>();
-	
+
+	private StudyLocationManagerImpl studyLocationManager = new StudyLocationManagerImpl(isRaw);
 	public List<String> getLstCountry() {
 		return lstCountry;
 	}
@@ -86,7 +88,14 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 		lstKnowLocations.addAll(locationInit.get(0));
 		lstUnknownLocations.addAll(locationInit.get(1));
 		Map<String,ArrayList<String>> constructedRow = new HashMap<String,ArrayList<String>>();
-		ArrayList<ArrayList<String>> lstPreCons = new StudyRawDataManagerImpl().constructDataRaw(mockStudyId, new String[]{"Location","Country"}, "Location", true);
+		ArrayList<ArrayList<String>> lstPreCons;
+		if(isRaw) {
+			lstPreCons = new StudyRawDataManagerImpl().constructDataRaw(mockStudyId, new String[]{"Location","Country"}, "Location", true);
+		}
+		else{
+			lstPreCons = new StudyDerivedDataManagerImpl().constructDataRaw(mockStudyId, new String[]{"Location","Country"}, "Location", true);
+			System.out.println("DERIVED");
+		}
 		for(ArrayList<String> lstSubCons : lstPreCons){
 			constructedRow.put(lstSubCons.get(0), lstSubCons);
 		}
@@ -99,7 +108,6 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 		for(Country data : lCountries){
 			lstCountry.add(data.getIsoabbr());
 		}
-		System.out.println(lstUnknownLocations.get(0).getId());
 		lstKnowLocations.addAll(lstUnknownLocations);
 	}
 	

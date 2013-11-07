@@ -17,7 +17,7 @@
 							<textbox value="@bind(each.sitename)"
 								width="99%" if="${each.sitename==null}" />
 							<toolbarbutton label="@load(each.sitename)"
-								width="99%" onClick="@command('updateDesignInfo', id=each.id)"
+								width="99%" onClick="@command('updateDesignInfo', id=forEachStatus.index)"
 								unless="${each.sitename==null}" />
 							<textbox value="@bind(each.sitelocation)"
 								width="99%" />
@@ -53,8 +53,7 @@
 									<hlayout>
 										<combobox
 											model="@load(vm.plantingtypes)" readonly="true"
-											selectedItem="@bind(vm.selectedSitePlantingType)"
-											onSelect="@command('updateSelectedSitePlantingType')"
+											selectedIndex="@bind(vm.selectedPlantingIndex)"
 											width="99%">
 											<template name="model">
 												<comboitem
@@ -106,8 +105,11 @@
 					<hlayout valign="middle">
 						<button label="SAVE"
 							onClick="@command('saveSiteAgroDesignInfo')" />
+					<button label="Apply to ALL"
+							onClick="@command('applyToAll')" />
 						<button label="NEXT"
 							onClick="@global-command('sampleCommand',model=vm)" />
+							
 					</hlayout>
 				</vlayout>
 			</columnchildren>

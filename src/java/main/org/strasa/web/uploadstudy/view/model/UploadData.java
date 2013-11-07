@@ -594,7 +594,6 @@ public class UploadData extends ProcessTabViewModel {
 					GermplasmManagerImpl germplasmManager = new GermplasmManagerImpl();
 					StudyGermplasmManagerImpl studyGermplasmManager = new StudyGermplasmManagerImpl();
 
-					StudyRawDataManagerImpl studyRawDataManagerImpl = new StudyRawDataManagerImpl();
 					ArrayList<StudyRawDataByDataColumn> list = (ArrayList<StudyRawDataByDataColumn>) studyDerivedDataMan
 							.getStudyRawDataColumn(study.getId(), "GName");
 					for (StudyRawDataByDataColumn s : list) {

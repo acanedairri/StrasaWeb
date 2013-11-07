@@ -30,6 +30,18 @@ public class EcotypeManagerImpl {
 		}
 		
 	}
+	public Ecotype getEcotypeById(int id){
+		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		EcotypeMapper ecotypeMapper = session.getMapper(EcotypeMapper.class);
+		try{
+			Ecotype ecotypes = ecotypeMapper.selectByPrimaryKey(id);
+			
+			return ecotypes;
+			
+		}finally{
+			session.close();
+		}
+	}
 
 	@SuppressWarnings("null")
 	public List<String> getAllEcotypesAsString() {

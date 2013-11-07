@@ -8,6 +8,7 @@ import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyAgronomyMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.model.StudyAgronomy;
+import org.strasa.middleware.model.StudyAgronomyExample;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudySite;
 
@@ -82,7 +83,19 @@ public class StudyAgronomyManagerImpl {
 	}
 
 
-
+	public StudyAgronomy getStudyAgronomy(int studyid) {
+		// TODO Auto-generated method stub
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		StudyAgronomyMapper studyAgronomyMapper = session.getMapper(StudyAgronomyMapper.class);
+		try{
+			StudyAgronomyExample example = new StudyAgronomyExample();
+			example.createCriteria().andStudysiteidEqualTo(studyid);
+			List<StudyAgronomy> studyAgronomy = studyAgronomyMapper.selectByExample(null);
+			return (studyAgronomy.isEmpty()) ? null : studyAgronomy.get(0);
+		}finally{
+			session.close();
+		}
+	}
 
 	public List<StudyAgronomy> initializeStudyAgronomy(List<StudySite> sites) {
 		// TODO Auto-generated method stub

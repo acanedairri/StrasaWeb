@@ -30,6 +30,18 @@ public class PlantingTypeManagerImpl {
 		}
 		
 	}
+	public PlantingType getPlantingTypeById(int id){
+		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		PlantingTypeMapper PlantingTypeMapper = session.getMapper(PlantingTypeMapper.class);
+		
+		try{
+			return PlantingTypeMapper.selectByPrimaryKey(id);
+			
+		}finally{
+			session.close();
+		}
+		
+	}
 
 	@SuppressWarnings("null")
 	public List<String> getAllPlantingTypesAsString() {
