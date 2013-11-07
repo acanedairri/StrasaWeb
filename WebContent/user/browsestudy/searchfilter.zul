@@ -1,18 +1,7 @@
 <zk>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchFilter')">
-<<<<<<< HEAD
-
 		<grid>
-=======
-		
-		<radiogroup  onCreate="self.setSelectedIndex(2)"  selectedItem="@bind(vm.searchFilter.shared)" >
-			<radio label="My Data" value="private"/>
-			<radio label="Shared Data" value="public"/>
-			<radio label="Both" value=""/>
-		</radiogroup>
-		<grid >
->>>>>>> 4bb48dbe2e6e436214323b7b5e9ae9e027ee1b53
 			<columns width="200px">
 				<column label="" />
 				<column label="" />
@@ -20,7 +9,8 @@
 			<rows>
 				<row>
 					Data
-					<radiogroup>
+					<radiogroup onCreate="self.setSelectedIndex(2)"
+						selectedItem="@bind(vm.searchFilter.shared)">
 						<radio label="My Data" />
 						<radio label="Shared" />
 						<radio label="Both" />
@@ -66,15 +56,13 @@
 				</row>
 				<row>
 					Start Year
-					<intbox
-						value="@bind(vm.searchFilter.startyear)" hflex="1"
-						/>
+					<intbox value="@bind(vm.searchFilter.startyear)"
+						hflex="1" />
 				</row>
 				<row>
 					End Year
-					<intbox
-						value="@bind(vm.searchFilter.endyear)" hflex="1"
-						/>
+					<intbox value="@bind(vm.searchFilter.endyear)"
+						hflex="1" />
 				</row>
 				<row>
 					Country
