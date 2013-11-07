@@ -1,6 +1,6 @@
 <zk>
 	<window title="Summary" apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Summary')">
+		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Summary')" width="98%">
 		<grid  model="@load(vm.summary)">
 			<auxhead>
 				<auxheader label="" colspan="3" />
@@ -9,8 +9,8 @@
 			</auxhead>
 			<columns>
 				<column label="Program Name" />
-				<column label="Project Count" />
-				<column label="Study Count" />
+				<column label="Project" />
+				<column label="Study" />
 				<column label="PBT" />
 				<column label="On Farm" />
 				<column label="Experiment Station" />

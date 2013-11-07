@@ -1,17 +1,21 @@
 <zk>
 	<window title="Search Study" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchFilter')">
-		<radiogroup>
-			<radio label="My Data" />
-			<radio label="Shared Data" />
-			<radio label="Both" />
-		</radiogroup>
+
 		<grid>
 			<columns width="200px">
 				<column label="" />
 				<column label="" />
 			</columns>
 			<rows>
+				<row>
+					Data
+					<radiogroup>
+						<radio label="My Data" />
+						<radio label="Shared" />
+						<radio label="Both" />
+					</radiogroup>
+				</row>
 				<row>
 					Study Name
 					<textbox width="99%"
@@ -64,6 +68,7 @@
 				</row>
 			</rows>
 		</grid>
-		 <button label="Search" onClick=" @global-command('updateSearchFilterResult', searchFilter=vm.searchFilter)"/>
+		<button label="Search"
+			onClick=" @global-command('updateSearchFilterResult', searchFilter=vm.searchFilter)" />
 	</window>
 </zk>

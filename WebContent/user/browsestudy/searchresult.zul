@@ -1,6 +1,6 @@
 <zk>
 	<window title="Search Result" apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchResult')">
+		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchResult')" width="98%">
 		<grid height="350px" model="@load(vm.searchResult)" emptyMessage="No study site found.">
 			<columns>
 				<column label="Study Name" />

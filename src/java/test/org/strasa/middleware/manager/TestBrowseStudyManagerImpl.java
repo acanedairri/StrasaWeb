@@ -83,7 +83,6 @@ public class TestBrowseStudyManagerImpl {
 
 		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyRawData(1);
 		System.out.println("Size:"+toreturn.size());
-		int row=1;
 		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(1,"rd"); // rd as raw data, dd as derived data
 		//Column Header
 		for (StudyDataColumn d: columns) {
@@ -96,8 +95,31 @@ public class TestBrowseStudyManagerImpl {
 				System.out.print(value + "\t");
 			}
 			System.out.println("\n ");
-			row++;
+		}
 
+	}
+
+	@Test
+	public void testGetStudyDerivedData() throws Exception {
+
+		final BrowseStudyManagerImpl browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
+
+		browseStudyManagerImpl.getStudyRawData(1);
+
+		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyRawData(1);
+		System.out.println("Size:"+toreturn.size());
+		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(1,"dd"); // rd as raw data, dd as derived data
+		//Column Header
+		for (StudyDataColumn d: columns) {
+			System.out.print(d.getColumnheader()+ "\t");
+		}
+		System.out.println("\n ");
+		for( HashMap<String,String> rec:toreturn){
+			for (StudyDataColumn d: columns) {
+				String value= rec.get(d.getColumnheader());
+				System.out.print(value + "\t");
+			}
+			System.out.println("\n ");
 		}
 
 	}

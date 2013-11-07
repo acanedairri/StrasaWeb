@@ -1,0 +1,6 @@
+<?link rel="stylesheet" type="text/css" href="css/main.css"?>
+
+<div hflex="1" vflex="1">
+	<vbox align="center" width="800px">
+	</vbox>
+</div>

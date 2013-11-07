@@ -8,90 +8,125 @@
 	<select id="getStudySearchResult" resultType="StudySearchResultModel"
 		parameterType="StudySearchFilterModel">
 		select
-		distinct 
+		distinct
 		t1.shared as shared,
 		t1.id as id,
 		t1.programid as programid,
-		t2.name as programname,
+		t2.name as
+		programname,
 		t1.projectid as projectid,
 		t3.name as projectname,
-		t1.name as studyname,
+		t1.name
+		as studyname,
 		t1.studytypeid as studytypeid,
-		t4.studytype as studytypename,
+		t4.studytype as
+		studytypename,
 		t1.startyear as startyear,
 		t1.endyear as endyear,
 		t5.locationid as locationid,
 		t6.locationname as locationname,
 		t6.country as country
 		from study as t1
-		left join program as t2 on t1.programid=t2.id
+		left join program as t2 on
+		t1.programid=t2.id
 		left join project as t3 on t1.projectid=t3.id
-		left join studytype as t4 on t1.studytypeid=t4.id
-		left join studylocation as t5 on t1.id=t5.studyid
+		left
+		join studytype as t4 on t1.studytypeid=t4.id
+		left join studylocation as
+		t5 on t1.id=t5.studyid
 		left join location as t6 on t5.locationid=t6.id
 
 		<where>
-		
-		<if test="shared != null">
-			AND t1.shared=#{shared}
-		</if>
-		<if test="studyname != null">
-			AND t1.name=#{studyname}
-		</if>
-		
-		<if test="studytypeid != 0">
-			AND t1.studytypeid=#{studytypeid}
-		</if>
-		
-		<if test="projectid != 0">
-			AND t1.projectid=#{projectid}
-		</if>
-		
-		<if test="programid != 0">
-			AND t1.programid=#{programid}
-		</if>
-		
-		<if test="programid != 0">
-			AND t1.programid=#{programid}
-		</if>
-		
-		<if test="startyear != null">
-			AND t1.startyear=#{startyear}
-		</if>
-		
-		<if test="endyear != null">
-			AND t1.endyear=#{endyear}
-		</if>
-		
-		<if test="locationid != 0">
-			AND t5.locationid=#{locationid}
-		</if>
-		
-		<if test="country != null">
-			AND t6.country=#{country}
-		</if>
-		
+
+			<if test="shared != null">
+				AND t1.shared=#{shared}
+			</if>
+			<if test="studyname != null">
+				AND t1.name=#{studyname}
+			</if>
+
+			<if test="studytypeid != 0">
+				AND t1.studytypeid=#{studytypeid}
+			</if>
+
+			<if test="projectid != 0">
+				AND t1.projectid=#{projectid}
+			</if>
+
+			<if test="programid != 0">
+				AND t1.programid=#{programid}
+			</if>
+
+			<if test="programid != 0">
+				AND t1.programid=#{programid}
+			</if>
+
+			<if test="startyear != null">
+				AND t1.startyear=#{startyear}
+			</if>
+
+			<if test="endyear != null">
+				AND t1.endyear=#{endyear}
+			</if>
+
+			<if test="locationid != 0">
+				AND t5.locationid=#{locationid}
+			</if>
+
+			<if test="country != null">
+				AND t6.country=#{country}
+			</if>
+
 		</where>
 
 	</select>
-	
-	<select id="getStudyRawData" resultType="hashmap"
-		parameterType="StudyDataColumnModel">
-		select 
+
+	<select id="getStudyRawData" resultType="hashmap" parameterType="StudyDataColumnModel">
+		select
 		<foreach item="item" index="index" collection="list">
-			
-			<if test="item.order != item.count" >
-				(Select t2.datavalue from studyrawdata as t2 where t2.datacolumn=#{item.columnheader} and t2.datarow=t1.datarow and t2.studyid=#{item.studyid}) as #{item.columnheader},
+
+			<if test="item.order != item.count">
+				(Select t2.datavalue from
+				studyrawdata as t2 where t2.datacolumn=#{item.columnheader} and
+				t2.datarow=t1.datarow and t2.studyid=#{item.studyid}) as
+				#{item.columnheader},
 			</if>
-	  		
-			<if test="item.order == item.count" >
-				(Select t2.datavalue from studyrawdata as t2 where t2.datacolumn=#{item.columnheader} and t2.datarow=t1.datarow and t2.studyid=#{item.studyid}) as #{item.columnheader},
-				t1.studyid from studyrawdata as t1 where t1.datacolumn='GName' and t1.studyid=#{item.studyid}
+
+			<if test="item.order == item.count">
+				(Select t2.datavalue from
+				studyrawdata as t2 where t2.datacolumn=#{item.columnheader} and
+				t2.datarow=t1.datarow and t2.studyid=#{item.studyid}) as
+				#{item.columnheader},
+				t1.studyid from studyrawdata as t1 where
+				t1.datacolumn='GName' and t1.studyid=#{item.studyid}
 			</if>
-			
+
 		</foreach>
-		
-		
+
+	</select>
+
+	<select id="getStudyDerivedData" resultType="hashmap" parameterType="StudyDataColumnModel">
+		select
+		<foreach item="item" index="index" collection="list">
+
+			<if test="item.order != item.count">
+				(Select t2.datavalue from
+				studyrawdata as t2 where t2.datacolumn=#{item.columnheader} and
+				t2.datarow=t1.datarow and t2.studyid=#{item.studyid}) as
+				#{item.columnheader},
+			</if>
+
+			<if test="item.order == item.count">
+				(Select t2.datavalue from
+				studyrawdata as t2 where t2.datacolumn=#{item.columnheader} and
+				t2.datarow=t1.datarow and t2.studyid=#{item.studyid}) as
+				#{item.columnheader},
+				t1.studyid from studyderiveddata as t1 where
+				t1.datacolumn='GName' and t1.studyid=#{item.studyid}
+			</if>
+
+		</foreach>
+
 	</select>
 
 </mapper>
