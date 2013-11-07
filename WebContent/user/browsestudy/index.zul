@@ -1,4 +1,5 @@
 <zk>
+<<<<<<< HEAD
 	<window width="100%" height="100%">
 		<hbox spacing="0" widths="35%,65%" height="100%">
 			<include  id="searchFilterPanel" src="/user/browsestudy/searchfilter.zul" mode="defer" />
@@ -9,6 +10,38 @@
 						<include id="searchResultPanel"  src="/user/browsestudy/searchresult.zul"  mode="defer" progressing="true"/>
 				</vbox>
 		</hbox>
+=======
+	<window width="100%" height="100%" title="Brows Study"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Index')">
+		<tabbox id="tabBox" hflex="1" vflex="1">
+			<tabs id="tabs">
+				<tab label="Search Study" />
+				<tab label="Study Information"/>
+			</tabs>
+			<tabpanels id="tabPanels">
+				<tabpanel>
+					<hbox spacing="0" widths="35%,65%" height="100%"
+						hflex="1" vflex="1">
+						<include id="searchFilterPanel"
+							src="searchfilter.zul" mode="defer" />
+						<splitter id="s2" collapse="before" />
+						<vbox spacing="0" width="100%" heights="35%,65%"
+							hflex="1" vflex="1">
+							<include id="summaryPanel" src="summary.zul"
+								mode="defer" progressing="true" />
+							<splitter id="s1" collapse="before" />
+							<include id="searchResultPanel"
+								src="searchresult.zul" mode="defer" progressing="true" />
+						</vbox>
+					</hbox>
+				</tabpanel>
+				<tabpanel>
+				<include id="studyInformationPanel"
+								src="studyinformation.zul" mode="defer" progressing="true" />
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+>>>>>>> 4bb48dbe2e6e436214323b7b5e9ae9e027ee1b53
 	</window>
 </zk>
-

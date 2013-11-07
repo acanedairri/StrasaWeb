@@ -11,6 +11,11 @@ import org.strasa.middleware.model.StudyLocation;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 
 public class StudyLocationManagerImpl {
+	
+	public boolean isRaw;
+	public StudyLocationManagerImpl(boolean isRaw){
+		this.isRaw = isRaw;
+	}
 
 	public void addStudyLocation(StudyLocation record){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
@@ -145,15 +150,11 @@ public class StudyLocationManagerImpl {
 	
 	public ArrayList<StudyRawDataByDataColumn> getStudyLocationByStudy(int studyId) {
 		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl();
-		ArrayList<StudyRawDataByDataColumn> list= (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataColumn(studyId,"location");
-		try{
-			for(StudyRawDataByDataColumn s:list){
-				System.out.println(s.getStudyid()+ " "+s.getDatacolumn()+ " "+ s.getDatavalue());
-			}
-		}catch(NullPointerException npe){//if still empty since there's no Location data on the rawdata table
-			// TODO Auto-generated catch block
-		}
-		return list;
+		StudyDerivedDataManagerImpl studyDerivedDataMan = new StudyDerivedDataManagerImpl();
+		
+		if(isRaw) return (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataColumn(studyId,"Location");
+		else return (ArrayList<StudyRawDataByDataColumn>) studyDerivedDataMan.getStudyRawDataColumn(studyId, "Location");
+		
 	}
 
 }

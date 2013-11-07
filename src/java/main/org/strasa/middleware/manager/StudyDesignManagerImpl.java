@@ -8,6 +8,7 @@ import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyDesignMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.model.StudyDesign;
+import org.strasa.middleware.model.StudyDesignExample;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudySite;
 
@@ -67,6 +68,20 @@ public class StudyDesignManagerImpl {
 		try{
 			List<StudyDesign> studyDesign = studyDesignMapper.selectByExample(null);
 			return studyDesign;
+		}finally{
+			session.close();
+		}
+	}
+	public StudyDesign getStudyDesign(int studysiteid) {
+		// TODO Auto-generated method stub
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		StudyDesignMapper studyDesignMapper = session.getMapper(StudyDesignMapper.class);
+		try{
+			StudyDesignExample example = new StudyDesignExample();
+			example.createCriteria().andStudysiteidEqualTo(studysiteid);
+			List<StudyDesign> studyDesign = studyDesignMapper.selectByExample(example);
+			return (studyDesign.isEmpty()) ? null : studyDesign.get(0);
+		
 		}finally{
 			session.close();
 		}

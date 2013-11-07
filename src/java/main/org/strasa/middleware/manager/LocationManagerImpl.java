@@ -5,8 +5,10 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.LocationMapper;
+import org.strasa.middleware.mapper.StudyLocationMapper;
 import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.LocationExample;
+import org.strasa.middleware.model.StudyLocation;
 
 public class LocationManagerImpl {
 
@@ -23,9 +25,19 @@ public class LocationManagerImpl {
 		finally{
 			session.close();
 		}
-		
-		
-		
+	}
+	
+	public List<Location> getAllLocations(){
+		// TODO Auto-generated method stub
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		LocationMapper locationMapper = session.getMapper(LocationMapper.class);
+		try{
+			List<Location> locations = locationMapper.selectByExample(null);
+			return locations;
+		}finally{
+			session.close();
+		}
+
 	}
 
 }

@@ -9,6 +9,7 @@ import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyTypeManagerImpl;
 import org.strasa.middleware.model.Country;
+import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.StudyType;
@@ -21,13 +22,14 @@ public class SearchFilter {
 	private ProjectManagerImpl projectMan = new ProjectManagerImpl();
 	private StudyTypeManagerImpl studyTypeMan = new StudyTypeManagerImpl();
 	private CountryManagerImpl countryMan = new CountryManagerImpl();
-//	private LocationManagerImpl locationMan = new LocationManagerImpl();
+	private LocationManagerImpl locationMan = new LocationManagerImpl();
+	
 	private StudySearchFilterModel searchFilter = new StudySearchFilterModel();
 	private List<Program> programList = programMan.getAllProgram();
 	private List<Project> projectList = projectMan.getAllProject();
 	private List<StudyType> studyTypeList = studyTypeMan.getAllStudyType();
 	private List<Country> countryList = countryMan.getAllCountry();
-//	private List<Location> locationList = locationMan.
+	private List<Location> locationList = locationMan.getAllLocations();
 	
 	public StudySearchFilterModel getSearchFilter() {
 		return searchFilter;
@@ -71,6 +73,15 @@ public class SearchFilter {
 
 	public void setCountryList(List<Country> countryList) {
 		this.countryList = countryList;
+	}
+
+	public List<Location> getLocationList() {
+		locationList.add(0, new Location());
+		return locationList;
+	}
+
+	public void setLocationList(List<Location> locationList) {
+		this.locationList = locationList;
 	}
 
 	

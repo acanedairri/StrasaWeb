@@ -1,6 +1,7 @@
 package org.strasa.middleware.manager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -62,6 +63,18 @@ public class StudyRawDataManagerImpl {
 		}
 		return returnVal;
 
+	}
+	public HashMap<String,ArrayList<String>> constructDataRawAsMap(int studyid,
+			String[] columns, String baseColumn, boolean isDistinct) {
+		
+
+			ArrayList<ArrayList<String>>lstBaseData = constructDataRaw(studyid, columns, baseColumn, isDistinct);
+			HashMap<String,ArrayList<String>> returnVal = new HashMap<String,ArrayList<String>> ();
+			for(ArrayList<String> row : lstBaseData){
+				returnVal.put(row.get(0), row);
+			}
+			return returnVal;
+		
 	}
 
 	public void addStudyRawData(Study study, List<StudyRawData> studyData) {

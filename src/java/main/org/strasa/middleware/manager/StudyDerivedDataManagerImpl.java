@@ -1,18 +1,23 @@
 package org.strasa.middleware.manager;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
+import org.strasa.middleware.mapper.StudyDerivedDataByDataColumnMapper;
 import org.strasa.middleware.mapper.StudyDerivedDataMapper;
 import org.strasa.middleware.mapper.StudyMapper;
 import org.strasa.middleware.mapper.StudyRawDataByDataColumnMapper;
+import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyDerivedData;
 import org.strasa.middleware.model.StudyRawData;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudyRawDataByDataColumnExample;
+import org.strasa.middleware.model.StudyDerivedDataExample;
 
 public class StudyDerivedDataManagerImpl {
 
@@ -106,9 +111,9 @@ public class StudyDerivedDataManagerImpl {
 	public List<StudyRawDataByDataColumn> getStudyRawDataColumn(int studyid,String column){
 		
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		StudyRawDataByDataColumnMapper StudyRawDataByDataColumnMapper = session.getMapper(StudyRawDataByDataColumnMapper.class);
+		StudyDerivedDataByDataColumnMapper StudyRawDataByDataColumnMapper = session.getMapper(StudyDerivedDataByDataColumnMapper.class);
 	
-		StudyRawDataByDataColumnExample example= new StudyRawDataByDataColumnExample();
+		StudyDerivedDataByDataColumnExample example= new StudyRawDataByDataColumnExample();
 
 		example.createCriteria().andStudyidEqualTo(studyid).andDatacolumnEqualTo(column);
 		example.setDistinct(true);
@@ -128,4 +133,54 @@ public class StudyDerivedDataManagerImpl {
 			session.close();
 		}
 	}
+	
+	public ArrayList<ArrayList<String>> constructDataRaw(int studyid,
+			String[] columns, String baseColumn, boolean isDistinct) {
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudyDerivedDataMapper mapper = session
+				.getMapper(StudyDerivedDataMapper.class);
+
+		StudyDerivedDataExample example = new StudyDerivedDataExample();
+		example.createCriteria().andStudyidEqualTo(studyid)
+				.andDatacolumnEqualTo(baseColumn);
+
+		List<StudyDerivedData> lstBaseRaw = mapper
+				.selectByExample(example);
+		ArrayList<ArrayList<String>> returnVal = new ArrayList<ArrayList<String>>();
+		for (StudyDerivedData rowData : lstBaseRaw) {
+			ArrayList<String> rowConstructed = new ArrayList<String>();
+			for (String col : columns) {
+					example.clear();
+//					System.out.println("StudyID: " + studyid + " DataCol:  " + col + " Row: " + rowData.getDatarow() );
+					example.createCriteria().andDatacolumnEqualTo(col).andStudyidEqualTo(studyid).andDatarowEqualTo(rowData.getDatarow());
+					List<StudyDerivedData> subList = mapper.selectByExample(example);
+					if(subList.isEmpty()) rowConstructed.add("");
+					else
+					rowConstructed.add(subList.get(0).getDatavalue());
+			}
+			if(isDistinct){
+				if(!returnVal.contains(rowConstructed)) returnVal.add(rowConstructed);
+			}
+			else returnVal.add(rowConstructed);
+			
+		}
+		System.out.println("TOTAL ARR: " + returnVal.size());
+		return returnVal;
+
+	}
+	public HashMap<String,ArrayList<String>> constructDataRawAsMap(int studyid,
+			String[] columns, String baseColumn, boolean isDistinct) {
+		
+
+			ArrayList<ArrayList<String>>lstBaseData = constructDataRaw(studyid, columns, baseColumn, isDistinct);
+			HashMap<String,ArrayList<String>> returnVal = new HashMap<String,ArrayList<String>> ();
+			for(ArrayList<String> row : lstBaseData){
+				returnVal.put(row.get(0), row);
+			}
+			return returnVal;
+		
+	}
+
+	
 }

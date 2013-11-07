@@ -1,7 +1,17 @@
 <zk>
+<<<<<<< HEAD
 	<window title="Summary" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Summary')" width="98%">
 		<grid  model="@load(vm.summary)">
+=======
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Summary')">
+		
+		<grid  model="@load(vm.summary)" hflex="1" vflex="1">
+			<auxhead>
+				<auxheader label="Summary" colspan="8"  align="center"/>
+			</auxhead>
+>>>>>>> 4bb48dbe2e6e436214323b7b5e9ae9e027ee1b53
 			<auxhead>
 				<auxheader label="" colspan="3" />
 				<auxheader label="Study Type" colspan="5"

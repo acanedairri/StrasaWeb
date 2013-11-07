@@ -40,6 +40,22 @@ public class StudyTypeManagerImpl {
 				session.close();
 		}
 	}
+
+	public StudyType getStudyTypeById(Integer studytypeid) {
+		// TODO Auto-generated method stub
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		StudyTypeMapper mapper = session.getMapper(StudyTypeMapper.class);
+		
+		try{
+			
+			StudyTypeExample example = new StudyTypeExample();
+			example.createCriteria().andIdEqualTo(studytypeid);
+			return mapper.selectByExample(example).get(0);
+		}
+		finally{
+				session.close();
+		}
+	}
 		
 
 		
