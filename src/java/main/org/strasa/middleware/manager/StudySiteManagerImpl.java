@@ -12,6 +12,11 @@ import org.strasa.middleware.model.StudySiteExample;
 
 public class StudySiteManagerImpl {
 
+	
+	private boolean isRaw = true;
+	public StudySiteManagerImpl (boolean isRaw){
+		this.isRaw = isRaw;
+	}
 	public void addStudySite(StudySite record){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
@@ -112,7 +117,7 @@ public class StudySiteManagerImpl {
 
 
 	public ArrayList<StudyRawDataByDataColumn> getStudySiteByStudy(int studyId) throws Exception {
-		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl();
+		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl(isRaw);
 		ArrayList<StudyRawDataByDataColumn> list= (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataColumn(studyId,"site");
 		try{
 			for(StudyRawDataByDataColumn s:list){

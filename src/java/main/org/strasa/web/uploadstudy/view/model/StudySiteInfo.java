@@ -43,6 +43,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	private PlantingType selectedSitePlantingType; // .getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
 	private int selectedID = 0;
 	private double sampleID;
+	private boolean isRaw = false;
 	protected boolean goToNextPage = true;
 	private int selectedPlantingIndex =0;
 	public int getSelectedPlantingIndex() {
@@ -201,7 +202,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	public void init() {
 		sampleID = 22;
 		
-		studySiteMan = new StudySiteManagerImpl();
+		studySiteMan = new StudySiteManagerImpl(isRaw);
 		studyAgroMan = new StudyAgronomyManagerImpl();
 		studyDesignMan = new StudyDesignManagerImpl();
 		ecotypeMan = new EcotypeManagerImpl();
@@ -226,7 +227,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 		selectedSite = sites.get(0);
 		
-		StudyRawDataManagerImpl studyRawMan = new StudyRawDataManagerImpl();
+		StudyRawDataManagerImpl studyRawMan = new StudyRawDataManagerImpl(isRaw);
 		 HashMap<String, ArrayList<String>> lstRawData = studyRawMan.constructDataRawAsMap((int)sampleID, new String[]{"Site","Location"}, "Site", true);
 		
 		for(int i = 0; i < sites.size(); i++){

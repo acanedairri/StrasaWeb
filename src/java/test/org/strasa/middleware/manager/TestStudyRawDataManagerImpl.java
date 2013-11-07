@@ -34,7 +34,7 @@ public class TestStudyRawDataManagerImpl {
 	
 	@Test
 	public void testGetStudyRawDataColumn() throws Exception {
-		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl();
+		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl(true);
 		ArrayList<StudyRawDataByDataColumn> list= (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataColumn(1,"GName");
 		for(StudyRawDataByDataColumn s:list){
 			System.out.println(s.getStudyid()+ " "+s.getDatacolumn()+ " "+ s.getDatavalue());
@@ -43,8 +43,8 @@ public class TestStudyRawDataManagerImpl {
 	
 	@Test
 	public void testBuildColumnRaw() throws Exception {
-		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl();
-		ArrayList<ArrayList<String>> list= studyRawDataManagerImpl.constructDataRaw(1, new String[]{"GName","Source"}, "Gname",true);
+		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl(false);
+		ArrayList<ArrayList<String>> list= studyRawDataManagerImpl.constructDataRaw(23, new String[]{"GName","Source"}, "Gname",true);
 		
 		for(ArrayList<String> sublist : list){
 			System.out.println(Arrays.toString(sublist.toArray(new String[sublist.size()])));

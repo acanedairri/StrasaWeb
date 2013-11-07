@@ -547,7 +547,7 @@ public class UploadData extends ProcessTabViewModel {
 		}
 
 		UserFileManager fileMan = new UserFileManager();
-		StudyRawDataManagerImpl studyRawData = new StudyRawDataManagerImpl();
+		StudyRawDataManagerImpl studyRawData = new StudyRawDataManagerImpl(studyType.equals("rawdata"));
 		StudyDerivedDataManagerImpl studyDerivedDataMan = new StudyDerivedDataManagerImpl();
 		if (study == null) {
 			study = new Study();
@@ -562,13 +562,13 @@ public class UploadData extends ProcessTabViewModel {
 
 		if (uploadTo.equals("database")) {
 			try {
-				if (studyType.equals("rawdata")) {
+				
 					studyRawData.addStudyRawDataByRawCsvList(study,
 							new CSVReader(new FileReader(tempFile)).readAll());
 					GermplasmManagerImpl germplasmManager = new GermplasmManagerImpl();
 					StudyGermplasmManagerImpl studyGermplasmManager = new StudyGermplasmManagerImpl();
 
-					StudyRawDataManagerImpl studyRawDataManagerImpl = new StudyRawDataManagerImpl();
+					StudyRawDataManagerImpl studyRawDataManagerImpl = new StudyRawDataManagerImpl(studyType.equals("rawdata"));
 					ArrayList<StudyRawDataByDataColumn> list = (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl
 							.getStudyRawDataColumn(study.getId(), "GName");
 					for (StudyRawDataByDataColumn s : list) {
@@ -586,32 +586,8 @@ public class UploadData extends ProcessTabViewModel {
 									.addStudyGermplasm(studyGermplasmData);
 						}
 
-					}
 
-				} else {
-					studyDerivedDataMan.addStudyDerivedDataByRawCsvList(study,
-							new CSVReader(new FileReader(tempFile)).readAll());
-					GermplasmManagerImpl germplasmManager = new GermplasmManagerImpl();
-					StudyGermplasmManagerImpl studyGermplasmManager = new StudyGermplasmManagerImpl();
-
-					ArrayList<StudyRawDataByDataColumn> list = (ArrayList<StudyRawDataByDataColumn>) studyDerivedDataMan
-							.getStudyRawDataColumn(study.getId(), "GName");
-					for (StudyRawDataByDataColumn s : list) {
-						// System.out.println(s.getStudyid()+
-						// " "+s.getDatacolumn()+
-						// " "+ s.getDatavalue());
-
-						if (!germplasmManager.isGermplasmExisting(s
-								.getDatavalue())) {
-							StudyGermplasm studyGermplasmData = new StudyGermplasm();
-							studyGermplasmData.setGermplasmname(s
-									.getDatavalue());
-							studyGermplasmData.setStudyid(study.getId());
-							studyGermplasmManager
-									.addStudyGermplasm(studyGermplasmData);
-						}
-
-					}
+				 
 				}
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block

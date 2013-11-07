@@ -90,7 +90,7 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 		Map<String,ArrayList<String>> constructedRow = new HashMap<String,ArrayList<String>>();
 		ArrayList<ArrayList<String>> lstPreCons;
 		if(isRaw) {
-			lstPreCons = new StudyRawDataManagerImpl().constructDataRaw(mockStudyId, new String[]{"Location","Country"}, "Location", true);
+			lstPreCons = new StudyRawDataManagerImpl(isRaw).constructDataRaw(mockStudyId, new String[]{"Location","Country"}, "Location", true);
 		}
 		else{
 			lstPreCons = new StudyDerivedDataManagerImpl().constructDataRaw(mockStudyId, new String[]{"Location","Country"}, "Location", true);

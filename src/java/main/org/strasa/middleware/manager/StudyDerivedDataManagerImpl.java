@@ -107,19 +107,7 @@ public class StudyDerivedDataManagerImpl {
 		
 		return false;
 	}
-	
-	public List<StudyRawDataByDataColumn> getStudyRawDataColumn(int studyid,String column){
-		
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		StudyDerivedDataByDataColumnMapper StudyRawDataByDataColumnMapper = session.getMapper(StudyDerivedDataByDataColumnMapper.class);
-	
-		StudyDerivedDataByDataColumnExample example= new StudyRawDataByDataColumnExample();
 
-		example.createCriteria().andStudyidEqualTo(studyid).andDatacolumnEqualTo(column);
-		example.setDistinct(true);
-		return StudyRawDataByDataColumnMapper.selectByExample(example);
-		
-	}
 
 
 	public List<StudyDerivedData> getAllStudyRawData() {
