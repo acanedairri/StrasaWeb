@@ -1,12 +1,13 @@
 <zk>
-	<window title="Search Study" apply="org.zkoss.bind.BindComposer"
+	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchFilter')">
+		
 		<radiogroup  onCreate="self.setSelectedIndex(2)"  selectedItem="@bind(vm.searchFilter.shared)" >
 			<radio label="My Data" value="private"/>
 			<radio label="Shared Data" value="public"/>
 			<radio label="Both" value=""/>
 		</radiogroup>
-		<grid>
+		<grid >
 			<columns width="200px">
 				<column label="" />
 				<column label="" />

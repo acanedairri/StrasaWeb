@@ -1,7 +1,10 @@
 <zk>
-	<window title="Search Result" apply="org.zkoss.bind.BindComposer"
+	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchResult')">
 		<grid height="350px" model="@load(vm.searchResult)" emptyMessage="No study site found.">
+			<auxhead>
+				<auxheader label="Search Result" colspan="8"  align="center"/>
+			</auxhead>
 			<columns>
 				<column label="Study Name" />
 				<column label="Program" />
@@ -14,7 +17,7 @@
 			</columns>
 			<template name="model">
 				<row>
-					<toolbarbutton label="@load(each.studyname)" width="99%"/>
+					<toolbarbutton label="@load(each.studyname)" width="99%" onClick="@global-command('openStudyData', studyId=each.id)" />
 					<label value="@load(each.programname)" width="99%" />
 					<label value="@load(each.projectname)" width="99%" />
 					<label value="@load(each.studytypename)" width="99%" />
