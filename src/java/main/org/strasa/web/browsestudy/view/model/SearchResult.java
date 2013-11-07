@@ -25,9 +25,8 @@ public class SearchResult {
 	@NotifyChange("*")
 	@GlobalCommand
 	public void updateSearchFilterResult(@BindingParam("searchFilter")StudySearchFilterModel searchFilter){
-		System.out.println("Search for: " + "\n programID" +Integer.toString(searchFilter.programid)+ "\n projectID" +Integer.toString(searchFilter.projectid)+ "\n studytypeID" +Integer.toString(searchFilter.studytypeid));
-		System.out.print(searchFilter.country);
 
+		searchFilter.shared = checkIfEmpty(searchFilter.shared);
 		searchFilter.studyname = checkIfEmpty(searchFilter.studyname);
 		searchFilter.country = checkIfEmpty(searchFilter.country);
 		

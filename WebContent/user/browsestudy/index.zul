@@ -1,9 +1,9 @@
 <zk>
 	<window width="100%" height="100%">
-		<hbox spacing="0" widths="35%,65%" height="100%">
+		<hbox spacing="0" widths="35%,65%" height="100%" hflex="1" vflex="1" >
 			<include  id="searchFilterPanel" src="searchfilter.zul" mode="defer" />
 				<splitter id="s2" collapse="before" />
-				<vbox spacing="0" width="100%" heights="65%,35%" >
+				<vbox spacing="0" width="100%" heights="35%,65%" hflex="1" vflex="1"  >
 					<include id="summaryPanel" src="summary.zul"  mode="defer" progressing="true"/>
 						<splitter id="s1" collapse="before" />
 						<include id="searchResultPanel"  src="searchresult.zul"  mode="defer" progressing="true"/>
