@@ -6,17 +6,29 @@
 
 		<hbox>
 			<separator spacing="20px" />
-			<label value="Search Gerplasm By:" class="boxlabel" />
-			<selectbox id="searchgermplasmby" width="150px"></selectbox>
-			<separator spacing="10px" />
-
-			<selectbox id="selectbox2" width="150px"></selectbox>
-			<separator spacing="10px" />
-
-			<selectbox id="selectbox3" width="150px"></selectbox>
-			<separator spacing="10px" />
-
+			Search By Germplasm:
+			<combobox readonly="true">
+				<!--model="@load(vm.searchFilter)" readonly="true" width="99%" selectedIndex="@bind(vm.searchFilter.germplasmname)"  -->
+				<comboitem label="Name" />
+				<comboitem label="Key Characteristic" />
+				<comboitem label="Type" />
+			</combobox>
+			
 			<textbox id="searchlikeTextbox" width="150px" />
+			
+			<combobox width="100px">
+				<comboitem label="Biotic" />
+				<comboitem label="Abiotic Stress" />
+				<comboitem label="Grain Quality" />
+				<comboitem label="Major Genes" />
+			</combobox>
+			
+			<combobox width="150px" >
+				<comboitem label="Blast" />
+				<comboitem label="Bacterial Light" />
+				<comboitem label="Tungo" />
+			</combobox>
+
 			<button label="Go" />
 		</hbox>
 
