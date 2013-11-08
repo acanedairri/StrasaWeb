@@ -87,14 +87,15 @@ public class Index {
 		if(!uploadData.validateTab()){
 			return;
 		}
-		if(selectedIndex == 1){
+		if(selectedIndex == 0){
 			isRaw = uploadData.isRaw;
 		}
 		studyID = uploadData.getStudyID();
 //		System.out.println("Sample: " + uploadData.getTxtProject());
 
 //		selectedIndex++;
-		System.out.println("Sample: " + selectedIndex);
+		System.out.println("__________________SEELCTED TAB: " + selectedIndex + " RAW " + isRaw);
+		
 
 		tabDisabled[selectedIndex + 1] = false;
 		

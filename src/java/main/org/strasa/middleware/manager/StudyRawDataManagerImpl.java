@@ -22,6 +22,10 @@ public class StudyRawDataManagerImpl {
 	private boolean isRaw = true;
 	public StudyRawDataManagerImpl(boolean isRaw){
 		this.isRaw = isRaw;
+		System.out.println("______________________________________________");
+		System.out.println((isRaw) ? "Raw Init" : "Derived Init");
+		System.out.println("______________________________________________");
+		
 	}
 	public int addStudy(Study record) {
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
@@ -106,8 +110,7 @@ public class StudyRawDataManagerImpl {
 		String[] header = rawCSVData.get(0);
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
 				.openSession();
-		StudyRawDataMapper studyDataMapper = (StudyRawDataMapper)session
-				.getMapper(StudyDerivedRawDataMapper.class);
+		StudyRawDataMapper studyDataMapper = getStudyRawMapper(session);
 		StudyMapper studyMapper = session.getMapper(StudyMapper.class);
 		try {
 			studyMapper.insert(study);

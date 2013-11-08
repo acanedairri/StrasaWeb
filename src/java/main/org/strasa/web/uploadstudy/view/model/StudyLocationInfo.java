@@ -85,17 +85,8 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 		lstKnowLocations.addAll(locationInit.get(0));
 		lstUnknownLocations.addAll(locationInit.get(1));
 		Map<String,ArrayList<String>> constructedRow = new HashMap<String,ArrayList<String>>();
-		ArrayList<ArrayList<String>> lstPreCons;
-		if(isRaw) {
-			lstPreCons = new StudyRawDataManagerImpl(isRaw).constructDataRaw(mockStudyId, new String[]{"Location","Country"}, "Location", true);
-		}
-		else{
-			lstPreCons = new StudyDerivedDataManagerImpl().constructDataRaw(mockStudyId, new String[]{"Location","Country"}, "Location", true);
-			System.out.println("DERIVED");
-		}
-		for(ArrayList<String> lstSubCons : lstPreCons){
-			constructedRow.put(lstSubCons.get(0), lstSubCons);
-		}
+		
+		
 		for(int i = 0 ; i < lstUnknownLocations.size(); i++){
 			lstUnknownLocations.get(i).setLocationname(constructedRow.get(lstUnknownLocations.get(i).getLocationname()).get(0));
 			lstUnknownLocations.get(i).setCountry("India");

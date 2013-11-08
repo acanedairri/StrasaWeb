@@ -521,6 +521,8 @@ public class UploadData extends ProcessTabViewModel {
 
 	@Override
 	public boolean validateTab() {
+		boolean isRawData =  studyType.equalsIgnoreCase("rawdata");
+		System.out.println("StudyType: " + studyType + " + " + isRawData);
 		if (txtProgram == null || txtProject == null || txtStudyName == null
 				|| txtStudyType == null) {
 			Messagebox.show("Error: All fields are required", "Upload Error",
@@ -547,7 +549,7 @@ public class UploadData extends ProcessTabViewModel {
 		}
 
 		UserFileManager fileMan = new UserFileManager();
-		StudyRawDataManagerImpl studyRawData = new StudyRawDataManagerImpl(studyType.equals("rawdata"));
+		StudyRawDataManagerImpl studyRawData = new StudyRawDataManagerImpl(isRawData);
 		StudyDerivedDataManagerImpl studyDerivedDataMan = new StudyDerivedDataManagerImpl();
 		if (study == null) {
 			study = new Study();
@@ -568,7 +570,7 @@ public class UploadData extends ProcessTabViewModel {
 					GermplasmManagerImpl germplasmManager = new GermplasmManagerImpl();
 					StudyGermplasmManagerImpl studyGermplasmManager = new StudyGermplasmManagerImpl();
 
-					StudyRawDataManagerImpl studyRawDataManagerImpl = new StudyRawDataManagerImpl(studyType.equals("rawdata"));
+					StudyRawDataManagerImpl studyRawDataManagerImpl = new StudyRawDataManagerImpl(isRawData);
 					ArrayList<StudyRawDataByDataColumn> list = (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl
 							.getStudyRawDataColumn(study.getId(), "GName");
 					for (StudyRawDataByDataColumn s : list) {
@@ -604,7 +606,7 @@ public class UploadData extends ProcessTabViewModel {
 			fileMan.createNewFileFromUpload(1, study.getId(), genoFile.tempFile);
 		}
 		this.setStudyID(study.getId());
-		this.isRaw = studyType.equals("rawdata");
+		this.isRaw = isRawData;
 		return true;
 
 	}

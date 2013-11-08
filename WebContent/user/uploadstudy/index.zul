@@ -11,22 +11,22 @@
 			<tabs>
 
 				<tab label="Study Information" id="tab1" disabled="@load(vm.tabDisabled[self.index])"
-					onSelect="@command('showzulfile', zulFileName='uploaddata.zul', target=self.linkedPanel)" />
+					onSelect="@command('showzulfile', zulFileName='/user/uploadstudy/uploaddata.zul', target=self.linkedPanel)" />
 					
 				<tab label="Study Site" id="tab2" disabled="@bind(vm.tabDisabled[self.index])"
-					onSelect="@command('showzulfile', zulFileName='studysiteinfo.zul', target=self.linkedPanel)" />
+					onSelect="@command('showzulfile', zulFileName='/user/uploadstudy/studysiteinfo.zul', target=self.linkedPanel)" />
 					
 				<tab label="Study Location" id="tab3" disabled="@load(vm.tabDisabled[self.index])"
-					onSelect="@command('showzulfile', zulFileName='studylocationinfo.zul', target=self.linkedPanel)" />
+					onSelect="@command('showzulfile', zulFileName='/user/uploadstudy/studylocationinfo.zul', target=self.linkedPanel)" />
 					
 				<tab label="Germplasm Information"
 					id="tab4" disabled="@load(vm.tabDisabled[self.index])"
-					onSelect="@command('showzulfile', zulFileName='studygermplasminfo.zul', target=self.linkedPanel)" />
+					onSelect="@command('showzulfile', zulFileName='/user/uploadstudy/studygermplasminfo.zul', target=self.linkedPanel)" />
 					
 			</tabs>
 			<tabpanels>
 				<tabpanel>
-					<include mode="defer" src="uploaddata.zul" />
+					<include mode="defer" src="/user/uploadstudy/uploaddata.zul" />
 				</tabpanel>
 				<tabpanel></tabpanel>
 				<tabpanel></tabpanel>
