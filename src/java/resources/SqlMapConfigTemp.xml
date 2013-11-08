@@ -10,6 +10,8 @@
 			type="org.strasa.web.browsestudy.view.model.StudySearchResultModel" />
 		<typeAlias alias="StudySearchFilterModel"
 			type="org.strasa.web.browsestudy.view.model.StudySearchFilterModel" />	
+		<typeAlias alias="StudyDataColumnModel"
+			type="org.strasa.web.browsestudy.view.model.StudyDataColumnModel" />	
 	</typeAliases>
 
 
