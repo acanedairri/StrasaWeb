@@ -31,8 +31,9 @@ public class Index {
 	Tab tab4;
 	private UploadData uploadData;
 	private int selectedIndex = 1;
-	private boolean[] tabDisabled = {false,false,false,false};
+	private boolean[] tabDisabled = {false,true,true,true};
 	private long studyID = 7;
+	private boolean isRaw;
 	
 	public int getSelectedIndex() {
 		return selectedIndex;
@@ -69,23 +70,26 @@ public class Index {
 	@Command("showzulfile")
 	public void showzulfile(@BindingParam("zulFileName") String zulFileName,
 			@BindingParam("target") Tabpanel panel) {
-
+		System.out.println(zulFileName);
 		if (panel != null && panel.getChildren().isEmpty()) {
 			 Map arg = new HashMap();
 		        arg.put("studyID", studyID);
+		        arg.put("isRaw", isRaw);
 			Executions.createComponents(zulFileName, panel, arg);
 			
 		}
 	}
 	@NotifyChange("*")
-	@GlobalCommand("sampleCommand")
-	public void sampleCommand(@BindingParam("model") ProcessTabViewModel uploadData) {
+	@GlobalCommand("nextTab")
+	public void nextTab(@BindingParam("model") ProcessTabViewModel uploadData) {
 		
 		
 		if(!uploadData.validateTab()){
 			return;
 		}
-		
+		if(selectedIndex == 1){
+			isRaw = uploadData.isRaw;
+		}
 		studyID = uploadData.getStudyID();
 //		System.out.println("Sample: " + uploadData.getTxtProject());
 

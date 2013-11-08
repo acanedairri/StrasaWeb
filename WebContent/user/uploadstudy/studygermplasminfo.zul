@@ -1,14 +1,13 @@
 <zk>
-	<window title="" border="normal" apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudyGermplasmInfo')"
-		width="100%" height="100%">
-		<groupbox mold="3d" width="100%">
-			<caption label="" />
+		<div width="100%" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudyGermplasmInfo')">
+
+
 			<hlayout spacing="50px">
 				<vlayout width="100%">
 					<grid height="100%" width="100%"
 						model="@load(vm.lstStudyGermplasm)" vflex="1"
-						style="overflow: scroll;">
+						hflex="1">
 						<columns>
 							<column label="GID" width="5.69%" />
 							<column label="GName" width="7.69%" />
@@ -61,9 +60,9 @@
 									value="@bind(each.selectionhistory)" />
 								<textbox
 									value="@bind(each.source)" />
-								<vbox>
+								<vbox width="65%">
 									<bandbox id = "${each.id}"  readonly="true" mold="rounded" 
-										width="100%" value="Select..." onBlur ='@command("updateCharacteristicInfo", model= each)'>
+										width="65%" value="Select..." onBlur ='@command("updateCharacteristicInfo", model= each)'>
 										<bandpopup >
 											<vbox>
 
@@ -191,8 +190,10 @@
 				</vlayout>
 
 			</hlayout>
-		</groupbox>
-		<button label="Finish" onClick="@command('saveHeader')" />
+	
+	<button label="NEXT"
+			onClick="@global-command('nextTab',model=vm)">
+		</button>
 
-	</window>
+	</div>
 </zk>

@@ -46,10 +46,13 @@
 		</groupbox>
 		
 				
-		<button label="SAVE" onClick="@command('saveLocationInfo')" />
-		<button label="NEXT"
-			onClick="@global-command('sampleCommand',model=vm)">
+		<hlayout style="float:right;">
+	 
+		<button label="Next" 
+			onClick="@global-command('nextTab',model=vm)" sclass="btn-plain">
 		</button>
+	
+		</hlayout>
 
 	</window>
 </zk>

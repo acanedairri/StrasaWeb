@@ -1,12 +1,17 @@
 package org.strasa.web.uploadstudy.view.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.strasa.middleware.manager.GermplasmTypeManagerImpl;
 import org.strasa.middleware.manager.KeyCharacteristicManagerImpl;
 import org.strasa.middleware.manager.StudyGermplasmCharacteristicsManagerImpl;
 import org.strasa.middleware.manager.StudyGermplasmManagerImpl;
+import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.model.GermplasmType;
 import org.strasa.middleware.model.KeyAbiotic;
 import org.strasa.middleware.model.KeyBiotic;
@@ -17,6 +22,7 @@ import org.strasa.middleware.model.StudyGermplasmCharacteristics;
 import org.strasa.web.common.api.ProcessTabViewModel;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 
@@ -63,11 +69,13 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 	}
 	
 	@Init
-//	public void init(@ExecutionArgParam("studyID") long studyID) {
-	public void init() {
-	this.studyID = 1;	
-	System.out.println("Passed: " + studyID);
+	public void init(@ExecutionArgParam("studyID") long studyID, @ExecutionArgParam("isRaw") boolean isRaw ) {
+	this.studyID = studyID;	
+	System.out.println("Geno Passed: " + studyID + " IsRaw: " + isRaw);
 	StudyGermplasmManagerImpl germplasmMan = new StudyGermplasmManagerImpl();
+	StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
+	Map<String, ArrayList<String>> rawMap = rawMan.constructDataRawAsMap((int)studyID, new String[]{"GName","Breeder","FemaleParent","GID","IRCross","IRNumber","MaleParent","OtherName","Parentage","Remarks","Source"},"GName" , true);
+//	debugMap(rawMap);
 	List<StudyGermplasm> lst = germplasmMan.getStudyGermplasmByStudyId((int)studyID);
 	for(StudyGermplasm data : lst){
 		GermplasmDeepInfoModel newData = new GermplasmDeepInfoModel();
@@ -87,6 +95,25 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 		newData.setSource(data.getSource());
 		newData.setStudyid(data.getStudyid());
 		
+		//RawDataMapping
+		if(rawMap.containsKey(data.getGermplasmname())){
+			ArrayList<String> r = rawMap.get(data.getGermplasmname());
+			r.remove(0);
+			if(newData.getBreeder() == null  && !r.get(0).equals("") ) newData.setBreeder(r.get(0));
+			if(newData.getFemaleparent() == null  && !r.get(1).equals("")) newData.setFemaleparent(r.get(1));
+			if(newData.getGid() == null && !r.get(2).equals("")) newData.setGid(Integer.parseInt(r.get(2)));
+			if(newData.getIrcross() == null  && !r.get(3).equals("")) newData.setIrcross(r.get(3));
+			if(newData.getIrnumber()== null  && !r.get(4).equals("")) newData.setIrnumber(r.get(4));
+			
+			if(newData.getMaleparent() == null  && !r.get(5).equals("")) newData.setMaleparent(r.get(5));
+			if(newData.getOthername() == null  && !r.get(6).equals("")) newData.setOthername(r.get(6));
+			if(newData.getParentage() == null  && !r.get(7).equals("")) newData.setRemarks(r.get(7));
+			if(newData.getRemarks() == null  && !r.get(8).equals("")) newData.setBreeder(r.get(8));
+			if(newData.getSelectionhistory() == null  && !r.get(9).equals("")) newData.setSelectionhistory(r.get(9));
+		
+	
+			
+		}
 		lstStudyGermplasm.add(newData);
 		
 	}
@@ -309,6 +336,15 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 			
 		}
 		
+	}
+	
+	public void debugMap(Map<String, ArrayList<String>> map){
+		for (Entry<String, ArrayList<String>> entry : map.entrySet()) {
+		    String key = entry.getKey();
+		    ArrayList<String> value = entry.getValue();
+		    System.out.println("Key: " + key + " Arr: " + value.toString());
+		    // ...
+		}
 	}
 	
 }

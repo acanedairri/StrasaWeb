@@ -14,6 +14,7 @@ import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
@@ -26,15 +27,37 @@ public class DataColumnChanged {
 	private String oldVar;
 	private Component mainView;
 	private StudyVariable selectedVar;
+	private String filter = new String();
 	
 	 
+	public String getFilter() {
+		return filter;
+	}
+	@NotifyChange("*")
+	public void setFilter(String filter) {
+		this.filter = filter;
+		   StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
+		   varList.clear();
+	        varList.addAll(studyVarMan.getVariables(filter));
+	        System.out.print(filter);
+	}
+	@Command
+	public void updatefilter(){
+		
+		   StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
+		   varList.clear();
+	        varList.addAll(studyVarMan.getVariables(filter));
+	        System.out.print(filter);
+	}
+
+
 	private List<StudyVariable> varList = new ArrayList<StudyVariable>(); 
 	
 	@Init
 	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar) {
 
 	        StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
-	        varList = studyVarMan.getVariables(oldVar);
+	        varList = studyVarMan.getVariables();
 	        this.oldVar = oldVar;
 	        System.out.println(oldVar);
 	        mainView = view;

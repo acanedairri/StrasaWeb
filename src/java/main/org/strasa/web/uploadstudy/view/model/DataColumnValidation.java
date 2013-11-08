@@ -134,6 +134,11 @@ public class DataColumnValidation {
 			e.printStackTrace();
 		}
 	}
+	
+	@Command
+	public void cancel(){
+		mainView.detach();
+	}
 
 	@NotifyChange("*")
 	@Command("refreshVarList")

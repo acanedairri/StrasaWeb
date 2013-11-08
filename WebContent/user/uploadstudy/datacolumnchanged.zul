@@ -1,13 +1,10 @@
 <zk>
   <window title="Variable List" border="normal" closable="true"  apply="org.zkoss.bind.BindComposer"
         viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.DataColumnChanged')" width = "35%" height = "45%">
- 
-        <separator />
-       
            <listbox 
-            model="@load(vm.varList)" selectedItem="@bind(vm.selectedVar)" height = "100%"  fixedLayout="true" vflex="true" style="overflow:scroll;"  mold="paging" pageSize="6">
-            <auxhead>
-                <auxheader colspan="3" class="topic">Variabe List</auxheader>
+            model="@load(vm.varList)" selectedItem="@bind(vm.selectedVar)" height = "100%" vflex="1">
+         <auxhead>
+                <auxheader colspan="3" class="topic">Filter: <textbox value="@bind(vm.filter)" onChange="@command('updatefilter')" onOK="@command('updatefilter')"></textbox></auxheader>
             </auxhead>
             <listhead>
                 <listheader label="Variable" width="80px" align="center" />
@@ -23,7 +20,6 @@
                        <listcell label="@load(each.method)" />
                 </listitem>
             </template>
- 
         </listbox>
     </window>
 </zk>
