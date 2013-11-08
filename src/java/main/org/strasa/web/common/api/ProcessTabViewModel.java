@@ -8,7 +8,7 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.zk.ui.Component;
 
 public class ProcessTabViewModel {
-
+	public boolean isRaw = true;
 	private long studyID;
 	private Component mainView;
 

@@ -1,40 +1,39 @@
 <zk>
+
 	<window title="Data Column Header Validation" border="normal"
 		closable="true" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.DataColumnValidation')"
-		width="360px" height="420px">
-		<groupbox mold="3d" width="100%">
-			<caption label="" />
-			<hlayout spacing="10px">
-				<vlayout width="100%">
-					<div width="339px" height="300px"
-						style="overflow: auto;">
-						<grid height="100%" width="80%"
-							model="@load(vm.varData)" hflex="true" vflex="true" >
-							<columns>
-								<column label="Variable" width="40%" />
-								<column label="Selected" width="30%"
-									visible="@load(vm.showAll)" />
-								<column label="Ctrl" width="30%" />
-							</columns>
-							<template name="model">
-								<row
-									visible="@load(each.headerExisting)">
-									<label
-										value="@load(each.currentVariable)" />
-									<label
-										value="@bind(each.newVariable)" />
-									<button label="Change"
-										onClick="@command('changeVar', oldVar=each.currentVariable)" />
-								</row>
-							</template>
-						</grid>
-					</div>
+		width="360px" height="475px">
+		<style src="/css/main.css"></style>
+		<vlayout width="100%" height="90%">
+			<grid height="50%" width="99%" model="@load(vm.varData)"
+				hflex="true" vflex="1">
+				<columns>
+					<column label="Variable" width="40%" />
+					<column label="Selected" width="30%"
+						visible="@load(vm.showAll)" />
+					<column label="Action" width="30%" />
+				</columns>
+				<template name="model">
+					<row visible="@load(each.headerExisting)">
+						<label value="@load(each.currentVariable)" />
+						<label value="@bind(each.newVariable)" />
+						<button label="Change"
+							onClick="@command('changeVar', oldVar=each.currentVariable)" />
+					</row>
+				</template>
+			</grid>
+		
 				</vlayout>
+<separator spacing="5px" />
+		<hlayout style="float:right;">
+					<button label="Save"
+						onClick="@command('saveHeader')" sclass="btn-ok" />
+					<button label="Cancel"
+						onClick="@command('cancel')"  sclass="btn-cancel" />
+				</hlayout>
 
-			</hlayout>
-		</groupbox>
-		<button label="Save" onClick="@command('saveHeader')" />
+
 
 	</window>
 </zk>

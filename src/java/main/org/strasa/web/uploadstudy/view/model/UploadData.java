@@ -604,6 +604,7 @@ public class UploadData extends ProcessTabViewModel {
 			fileMan.createNewFileFromUpload(1, study.getId(), genoFile.tempFile);
 		}
 		this.setStudyID(study.getId());
+		this.isRaw = studyType.equals("rawdata");
 		return true;
 
 	}

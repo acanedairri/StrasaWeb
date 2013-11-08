@@ -5,9 +5,12 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
+import org.strasa.middleware.mapper.LocationMapper;
 import org.strasa.middleware.mapper.StudyLocationMapper;
 import org.strasa.middleware.model.Location;
+import org.strasa.middleware.model.LocationExample;
 import org.strasa.middleware.model.StudyLocation;
+import org.strasa.middleware.model.StudyLocationExample;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 
 public class StudyLocationManagerImpl {
@@ -49,13 +52,48 @@ public class StudyLocationManagerImpl {
 	}
 
 
-	public void updateStudyLocation(List<StudyLocation> Locations){
+	public boolean isStudyLocationExist(int studyid, int locationid){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
 
 		try{
-			for(StudyLocation record:Locations){
-				studyLocationMapper.updateByPrimaryKey(record);
+			StudyLocationExample example = new StudyLocationExample();
+			example.createCriteria().andStudyidEqualTo(studyid).andLocationidEqualTo(locationid);
+				
+				return (!studyLocationMapper.selectByExample(example).isEmpty());
+		}
+		finally{
+			
+		}
+	}
+	public boolean LocationExist(Location location){
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		LocationMapper studyLocationMapper = session.getMapper(LocationMapper.class);
+
+		try{
+			LocationExample example = new LocationExample();
+			example.createCriteria().andAltitudeEqualTo(location.getAltitude()).andCountryEqualTo(location.getCountry());
+				
+				return (!studyLocationMapper.selectByExample(example).isEmpty());
+		}
+		finally{
+			
+		}
+	}
+	public void updateStudyLocation(List<Location> lstKnowLocations,int studyid){
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
+		LocationMapper locationMapper = session.getMapper(LocationMapper.class);
+
+		try{
+			for(Location record:lstKnowLocations){
+				if(record.getId() == null){
+					locationMapper.insert(record);
+				}
+				StudyLocation newData = new StudyLocation();
+				newData.setLocationid(record.getId());
+				newData.setStudyid(studyid);
+				studyLocationMapper.insert(newData);
 			}
 			session.commit();
 

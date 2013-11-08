@@ -14,6 +14,7 @@ import org.strasa.middleware.model.Location;
 import org.strasa.web.common.api.ProcessTabViewModel;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -71,19 +72,15 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 
 
 	public boolean validateTab() {
-	// TODO Auto-generated method stub
-	return false;
+		studyLocationManager.updateStudyLocation(lstKnowLocations,mockStudyId);
+		return true;
 	}
 
-//	@Init
-//	public void init(@ExecutionArgParam("studyID") double studyID) {
-//	sampleID = studyID;	
-//	
-//	
-//	}
-	
 	@Init
-	public void init(){
+	public void init(@ExecutionArgParam("studyID") double studyID,@ExecutionArgParam("isRaw") boolean isRaw) {
+
+		this.isRaw = isRaw;
+		mockStudyId = (int) studyID;
 		List<List<Location>> locationInit = studyLocationManager.initializeStudyLocations(mockStudyId);
 		lstKnowLocations.addAll(locationInit.get(0));
 		lstUnknownLocations.addAll(locationInit.get(1));
