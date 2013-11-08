@@ -7,28 +7,30 @@
 		<hbox>
 			<separator spacing="20px" />
 			Search By Germplasm:
-			<combobox readonly="true">
-				<!--model="@load(vm.searchFilter)" readonly="true" width="99%" selectedIndex="@bind(vm.searchFilter.germplasmname)"  -->
+			<combobox readonly="true"
+				onChange="@command('viewKeyChar', selectedGermplasmSearch=self.value)">
+				<!--model="@load(vm.searchFilter)" readonly="true" width="99%" selectedItem="@bind(vm.searchFilter.germplasmname)"  -->
 				<comboitem label="Name" />
 				<comboitem label="Key Characteristic" />
 				<comboitem label="Type" />
 			</combobox>
-			
-			<textbox id="searchlikeTextbox" width="150px" />
-			
-			<combobox width="100px">
-				<comboitem label="Biotic" />
-				<comboitem label="Abiotic Stress" />
-				<comboitem label="Grain Quality" />
-				<comboitem label="Major Genes" />
-			</combobox>
-			
-			<combobox width="150px" >
-				<comboitem label="Blast" />
-				<comboitem label="Bacterial Light" />
-				<comboitem label="Tungo" />
-			</combobox>
+			<template name="model">
+				<textbox id="searchlikeTextbox" width="150px"
+					visible="${vm.angel==true}" />
 
+				<combobox width="100px" visible="${vm.angel==false}">
+					<comboitem label="Biotic" />
+					<comboitem label="Abiotic Stress" />
+					<comboitem label="Grain Quality" />
+					<comboitem label="Major Genes" />
+				</combobox>
+
+				<combobox width="150px" visible="${vm.angel==false}">
+					<comboitem label="Blast" />
+					<comboitem label="Bacterial Light" />
+					<comboitem label="Tungo" />
+				</combobox>
+			</template>
 			<button label="Go" />
 		</hbox>
 
@@ -44,7 +46,7 @@
 				<template name="model">
 					<row>
 						<label value="@bind(each.germplasmname)"
-							width="99%" />
+							width="99%" onClick="" />
 						<label value="@bind(each.othername)"
 							width="99%" />
 						<label value="@bind(each.breeder)" width="99%" />
