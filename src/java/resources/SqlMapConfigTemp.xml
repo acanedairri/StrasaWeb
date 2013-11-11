@@ -5,13 +5,16 @@
 
 <configuration>
 
-	<typeAliases>
+<typeAliases>
 		<typeAlias alias="StudySearchResultModel"
 			type="org.strasa.web.browsestudy.view.model.StudySearchResultModel" />
 		<typeAlias alias="StudySearchFilterModel"
-			type="org.strasa.web.browsestudy.view.model.StudySearchFilterModel" />	
+			type="org.strasa.web.browsestudy.view.model.StudySearchFilterModel" />
 		<typeAlias alias="StudyDataColumnModel"
-			type="org.strasa.web.browsestudy.view.model.StudyDataColumnModel" />	
+			type="org.strasa.web.browsestudy.view.model.StudyDataColumnModel" />
+			
+		<typeAlias alias="CrossStudyQueryFilterModel"
+			type="org.strasa.web.crossstudyquery.view.model.CrossStudyQueryFilterModel" />
 	</typeAliases>
 
 

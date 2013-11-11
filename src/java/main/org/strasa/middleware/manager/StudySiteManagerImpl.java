@@ -55,11 +55,7 @@ public class StudySiteManagerImpl {
 
 		try{
 			for(StudySite record:sites){
-				if(record.getId() == null) 
-					studySiteMapper.insert(record);
-				else{
-					studySiteMapper.updateByPrimaryKey(record);
-				}
+				studySiteMapper.updateByPrimaryKey(record);
 			}
 			session.commit();
 

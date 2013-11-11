@@ -79,11 +79,11 @@ public class TestBrowseStudyManagerImpl {
 
 		final BrowseStudyManagerImpl browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
 
-		browseStudyManagerImpl.getStudyRawData(1);
+		browseStudyManagerImpl.getStudyRawData(2);
 
-		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyRawData(1);
+		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyRawData(2);
 		System.out.println("Size:"+toreturn.size());
-		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(1,"rd"); // rd as raw data, dd as derived data
+		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(2,"rd"); // rd as raw data, dd as derived data
 		//Column Header
 		for (StudyDataColumn d: columns) {
 			System.out.print(d.getColumnheader()+ "\t");

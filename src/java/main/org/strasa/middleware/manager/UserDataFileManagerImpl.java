@@ -4,17 +4,16 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
-import org.strasa.middleware.mapper.StudyFileMapper;
-import org.strasa.middleware.model.StudyFile;
-import org.strasa.middleware.model.StudyFile;
-import org.strasa.middleware.model.StudyFileExample;
+import org.strasa.middleware.mapper.UserDataFileMapper;
+import org.strasa.middleware.model.UserDataFile;
+import org.strasa.middleware.model.UserDataFileExample;
 
-public class StudyFileManagerImpl {
+public class UserDataFileManagerImpl {
 
-	public void addRecord(StudyFile record){
+	public void addRecord(UserDataFile record){
 
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		StudyFileMapper mapper = session.getMapper(StudyFileMapper.class);
+		UserDataFileMapper mapper = session.getMapper(UserDataFileMapper.class);
 		try{
 				mapper.insert(record);
 		}
@@ -24,10 +23,10 @@ public class StudyFileManagerImpl {
 		}
 	}
 	
-	public void updateRecord(StudyFile record){
+	public void updateRecord(UserDataFile record){
 
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		StudyFileMapper mapper = session.getMapper(StudyFileMapper.class);
+		UserDataFileMapper mapper = session.getMapper(UserDataFileMapper.class);
 		try{
 				mapper.updateByPrimaryKey(record);
 		}
@@ -36,10 +35,10 @@ public class StudyFileManagerImpl {
 			session.close();
 		}
 	}
-	public void deleteRecord(StudyFile record){
+	public void deleteRecord(UserDataFile record){
 
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		StudyFileMapper mapper = session.getMapper(StudyFileMapper.class);
+		UserDataFileMapper mapper = session.getMapper(UserDataFileMapper.class);
 		try{
 				mapper.deleteByPrimaryKey(record.getId());
 		}
@@ -49,11 +48,11 @@ public class StudyFileManagerImpl {
 		}
 	}
 	
-	public List<StudyFile> getFileByStudyId(int studyid){
+	public List<UserDataFile> getFileByStudyId(int studyid){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		StudyFileMapper mapper = session.getMapper(StudyFileMapper.class);
+		UserDataFileMapper mapper = session.getMapper(UserDataFileMapper.class);
 		try{
-			StudyFileExample example = new StudyFileExample();
+			UserDataFileExample example = new UserDataFileExample();
 			example.createCriteria().andStudyidEqualTo(studyid);
 			return mapper.selectByExample(example);
 		}
@@ -62,11 +61,11 @@ public class StudyFileManagerImpl {
 		}
 	}
 	
-	public List<StudyFile> getFileByFileName(String filename){
+	public List<UserDataFile> getFileByFileName(String filename){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		StudyFileMapper mapper = session.getMapper(StudyFileMapper.class);
+		UserDataFileMapper mapper = session.getMapper(UserDataFileMapper.class);
 		try{
-			StudyFileExample example = new StudyFileExample();
+			UserDataFileExample example = new UserDataFileExample();
 			example.createCriteria().andFilenameEqualTo(filename);
 			return mapper.selectByExample(example);
 		}
@@ -75,11 +74,11 @@ public class StudyFileManagerImpl {
 		}
 	}
 	
-	public List<StudyFile> getFile(String filename, int studyid, int userid){
+	public List<UserDataFile> getFile(String filename, int studyid, int userid){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		StudyFileMapper mapper = session.getMapper(StudyFileMapper.class);
+		UserDataFileMapper mapper = session.getMapper(UserDataFileMapper.class);
 		try{
-			StudyFileExample example = new StudyFileExample();
+			UserDataFileExample example = new UserDataFileExample();
 			example.createCriteria().andFilenameEqualTo(filename).andStudyidEqualTo(studyid).andUseridEqualTo(userid);
 			return mapper.selectByExample(example);
 		}

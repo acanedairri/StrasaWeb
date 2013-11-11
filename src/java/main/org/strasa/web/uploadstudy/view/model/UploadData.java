@@ -547,18 +547,6 @@ public class UploadData extends ProcessTabViewModel {
 
 			return false;
 		}
-		if(startYear < Calendar.getInstance().get(Calendar.YEAR)){
-			Messagebox.show("Error: Invalid start year. Year must be greater or equal than the present year(" + Calendar.getInstance().get(Calendar.YEAR) +  " )",
-					"Upload Error", Messagebox.OK, Messagebox.ERROR);
-
-			return false;
-		}
-		if(endYear < Calendar.getInstance().get(Calendar.YEAR)){
-			Messagebox.show("Error: Invalid end year. Year must be greater or equal than the present year(" + Calendar.getInstance().get(Calendar.YEAR) +  " )",
-					"Upload Error", Messagebox.OK, Messagebox.ERROR);
-
-			return false;
-		}
 
 		UserFileManager fileMan = new UserFileManager();
 		StudyRawDataManagerImpl studyRawData = new StudyRawDataManagerImpl(isRawData);
@@ -612,15 +600,13 @@ public class UploadData extends ProcessTabViewModel {
 			}
 		}
 		else{
-			fileMan.createNewFileFromUpload(1, study.getId(), dataFileName, tempFile, (isRaw) ? "rd":"dd");
-	 
+			fileMan.createNewFileFromUpload(1, study.getId(), tempFile);
 		}
 		for(GenotypeFileModel genoFile : genotypeFileList){
-			fileMan.createNewFileFromUpload(1, study.getId(), genoFile.name, genoFile.tempFile,"gd");
+			fileMan.createNewFileFromUpload(1, study.getId(), genoFile.tempFile);
 		}
 		this.setStudyID(study.getId());
 		this.isRaw = isRawData;
-		
 		return true;
 
 	}

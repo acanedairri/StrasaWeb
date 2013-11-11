@@ -146,9 +146,7 @@ public class StudyLocationManagerImpl {
 		List<Location> lstUnKnownLocations = new ArrayList<Location>();
 		ArrayList<StudyRawDataByDataColumn> studyList = getStudyLocationByStudy(studyId);
 		LocationManagerImpl locMan = new LocationManagerImpl();
-		System.out.println("STUDYLIST : " + studyList.size());
 		for(StudyRawDataByDataColumn s:studyList){
-			System.out.println(s.toString());
 			if(locMan.getLocationByLocationName(s.getDatavalue()) == null){
 				Location location = new Location();
 				location.setLocationname(s.getDatavalue());
@@ -189,9 +187,16 @@ public class StudyLocationManagerImpl {
 	
 	
 	public ArrayList<StudyRawDataByDataColumn> getStudyLocationByStudy(int studyId) {
-        StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl(isRaw);
-        return (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataColumn(studyId,"Location");
-        
+		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl(isRaw);
+		ArrayList<StudyRawDataByDataColumn> list= (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataColumn(studyId,"location");
+		try{
+			for(StudyRawDataByDataColumn s:list){
+				System.out.println(s.getStudyid()+ " "+s.getDatacolumn()+ " "+ s.getDatavalue());
+			}
+		}catch(NullPointerException npe){//if still empty since there's no Location data on the rawdata table
+			// TODO Auto-generated catch block
+		}
+		return list;
 	}
 
 }

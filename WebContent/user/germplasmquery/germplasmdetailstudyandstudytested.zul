@@ -3,11 +3,11 @@
 	<hbox>
 		<groupbox mold="3d" width="100%" >
 			<caption label="Detail Study" />
-			<include src="germplasmdetailstudy.zul" />
+			<include src="germplasmquery/germplasmdetailstudy.zul" />
 		</groupbox>
 		<groupbox mold="3d" width="100%">
 			<caption label=" Study Tested" />
-			<include src="germplasmstudytested.zul" />
+			<include src="germplasmquery/germplasmstudytested.zul" />
 		</groupbox>
 		</hbox>
 </zk>

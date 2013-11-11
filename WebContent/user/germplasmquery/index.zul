@@ -9,11 +9,11 @@
 	<window>
 		<!-- Search and Table (Columns/Rows) -->
 		<hbox>
-			<include src="germplasmsearchtable.zul" />
+			<include src="germplasmquery/germplasmsearchtable.zul" />
 		</hbox>
 		<!-- Detail Study and Study Tested -->
 		<hbox>
-			<include src="germplasmdetailstudyandstudytested.zul" />
+			<include src="germplasmquery/germplasmdetailstudyandstudytested.zul" />
 		</hbox>
 	</window>
 </zk>

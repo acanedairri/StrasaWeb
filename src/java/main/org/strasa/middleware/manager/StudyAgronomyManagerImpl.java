@@ -50,8 +50,7 @@ public class StudyAgronomyManagerImpl {
 
 		try{
 			for(StudyAgronomy record:agroInfo){
-				if(record.getId() == null) studyAgronomyMapper.insert(record);
-				else studyAgronomyMapper.updateByPrimaryKey(record);
+				studyAgronomyMapper.updateByPrimaryKey(record);
 			}
 			session.commit();
 
