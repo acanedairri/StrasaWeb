@@ -1,16 +1,19 @@
 package org.strasa.web.common.api;
 
+import org.jasypt.util.password.ConfigurablePasswordEncryptor;
+
 public class Encryptions {
 
 	
 	public static String encryptStringToNumber(String strInput, long l) {
-        StringBuffer strEncryptedData = new StringBuffer();
-        for(int numCnt = 0; numCnt < strInput.length(); numCnt++) {
-             int numVal = Character.getNumericValue(strInput.charAt(numCnt));
-             
-             strEncryptedData.append(numVal - 9 + l);
-        }
-        return strEncryptedData.toString();
+		ConfigurablePasswordEncryptor passwordEncryptor = new ConfigurablePasswordEncryptor();
+		passwordEncryptor.setAlgorithm("SHA-1");
+		passwordEncryptor.setPlainDigest(true);
+		String encryptedPassword = passwordEncryptor.encryptPassword(strInput);
+		System.out.println("Sample: " + passwordEncryptor.encryptPassword("SAMPLE"));
+
+		System.out.println("Sample: " + passwordEncryptor.encryptPassword("SAMPLE"));
+		return  encryptedPassword;
    }
 
 	public static String encryptStringToNumber(String name, long time,

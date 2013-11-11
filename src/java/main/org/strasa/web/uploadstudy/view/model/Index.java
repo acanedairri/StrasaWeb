@@ -89,31 +89,37 @@ public class Index {
 		}
 		if(selectedIndex == 0){
 			isRaw = uploadData.isRaw;
+			studyID = uploadData.getStudyID();
+			System.out.println("IsRaw: " + isRaw );
+
 		}
-		studyID = uploadData.getStudyID();
+
 //		System.out.println("Sample: " + uploadData.getTxtProject());
 
 //		selectedIndex++;
-		System.out.println("__________________SEELCTED TAB: " + selectedIndex + " RAW " + isRaw);
 		
 
 		tabDisabled[selectedIndex + 1] = false;
 		
-		switch(selectedIndex + 1){
-		case 1:
-			Events.sendEvent("onSelect",tab1,tab1);
-		case 2:
-			Events.sendEvent("onSelect",tab2,tab2);
-		case 3: 	
-			Events.sendEvent("onSelect",tab3,tab3);
-		case 4:
-			Events.sendEvent("onSelect",tab4,tab4);
-		}
-			changeTab();
+		Tab[] tabs = {tab1,tab2,tab3,tab4};
+		
+		Events.sendEvent("onSelect",tabs[selectedIndex + 1],tabs[selectedIndex + 1]);
+//		switch(selectedIndex + 1){
+//		case 1:
+//			Events.sendEvent("onSelect",tab1,tab1);
+//		case 2:
+//			Events.sendEvent("onSelect",tab2,tab2);
+//		case 3: 	
+//			Events.sendEvent("onSelect",tab3,tab3);
+//		case 4:
+//			Events.sendEvent("onSelect",tab4,tab4);
+//		}
+			selectedIndex++;
 	
 	}
 	@NotifyChange("*")
 	public void changeTab(){
+		System.out.println("Called to change tab");
 		selectedIndex++;
 	}
 }

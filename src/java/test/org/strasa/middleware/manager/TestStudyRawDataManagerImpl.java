@@ -35,7 +35,7 @@ public class TestStudyRawDataManagerImpl {
 	@Test
 	public void testGetStudyRawDataColumn() throws Exception {
 		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl(true);
-		ArrayList<StudyRawDataByDataColumn> list= (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataColumn(1,"GName");
+		ArrayList<StudyRawDataByDataColumn> list= (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataColumn(45,"Location");
 		for(StudyRawDataByDataColumn s:list){
 			System.out.println(s.getStudyid()+ " "+s.getDatacolumn()+ " "+ s.getDatavalue());
 		}
@@ -49,6 +49,13 @@ public class TestStudyRawDataManagerImpl {
 		for(ArrayList<String> sublist : list){
 			System.out.println(Arrays.toString(sublist.toArray(new String[sublist.size()])));
 		}
+	}
+	
+	@Test
+	public void testLargeDataInser() throws Exception{
+		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl(false);
+		
+		
 	}
 	
 

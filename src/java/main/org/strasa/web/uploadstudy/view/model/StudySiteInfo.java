@@ -161,8 +161,8 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 		
 		sites.get(selectedID).selectedPlantingIndex = selectedPlantingIndex;
-		selectedAgroInfo = sites.get(id).selectedAgroInfo;
-		selectedDesignInfo = sites.get(id).selectedDesignInfo;
+		selectedAgroInfo = sites.get(id).getSelectedAgroInfo();
+		selectedDesignInfo = sites.get(id).getSelectedDesignInfo();
 			selectedPlantingIndex = sites.get(id).selectedPlantingIndex;
 		selectedID = id;
 		
@@ -199,6 +199,8 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 	@Override
 	public boolean validateTab() {
+
+		 System.out.println("LOOP : " + sites.size());
 		List<StudySite> lstSites = new ArrayList<StudySite>();
 		 List<StudyAgronomy> lstAgro = new ArrayList<StudyAgronomy>();
 		 List<StudyDesign> designInfo = new ArrayList<StudyDesign>();
@@ -206,6 +208,8 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			 StudySite siteData = data;
 			 lstAgro.add(data.getSelectedAgroInfo());
 			 designInfo.add(data.selectedDesignInfo);
+			 lstSites.add(siteData);
+			 System.out.println("LOOP IN");
 		 }
 		studySiteMan.updateStudySite(lstSites);
 		studyAgroMan.updateStudyAgronomy(lstAgro);
@@ -223,7 +227,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		ecotypeMan = new EcotypeManagerImpl();
 		plantingtypeMan = new PlantingTypeManagerImpl();
 		sites = new ArrayList<StudySiteInfoModel>();
-		List<StudySite> subsites = studySiteMan.initializeStudySites(22);
+		List<StudySite> subsites = studySiteMan.initializeStudySites(sampleID);
 		for(StudySite siteD : subsites){
 			
 			StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteD);
@@ -290,12 +294,20 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			
 		}
 		public StudyAgronomy getSelectedAgroInfo() {
+			if(selectedAgroInfo == null) return new StudyAgronomy();
 			return selectedAgroInfo;
 		}
 		public void setSelectedAgroInfo(StudyAgronomy selectedAgroInfo) {
+
 			this.selectedAgroInfo = selectedAgroInfo;
 		}
 		public StudyDesign getSelectedDesignInfo() {
+			
+			if(selectedDesignInfo == null){
+				StudyDesign rec = new StudyDesign();
+				rec.setId(sampleID);
+				return rec;
+			}
 			return selectedDesignInfo;
 		}
 		public void setSelectedDesignInfo(StudyDesign selectedDesignInfo) {
