@@ -8,7 +8,7 @@ public class CrossStudyQueryFilterModel {
 	double valueDouble;
 	String dataType;
 	String orderCriteria;
-	String columnRemark;
+	String columnAs;
 	
 	
 	
@@ -48,12 +48,14 @@ public class CrossStudyQueryFilterModel {
 	public void setOrderCriteria(String orderCriteria) {
 		this.orderCriteria = orderCriteria;
 	}
-	public String getColumnRemark() {
-		return columnRemark;
+	public String getColumnAs() {
+		return columnAs;
 	}
-	public void setColumnRemark(String columnRemark) {
-		this.columnRemark = columnRemark;
+	public void setColumnAs(String columnAs) {
+		this.columnAs = columnAs;
 	}
+
+	
 
 	
 	
