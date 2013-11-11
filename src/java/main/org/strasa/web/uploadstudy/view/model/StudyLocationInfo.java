@@ -106,9 +106,11 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 		System.out.println("UnknownLocationSize:" + lstUnknownLocations.size());
 		
 		for(int i = 0 ; i < lstUnknownLocations.size(); i++){
+			if(constructedRow.containsKey(lstUnknownLocations.get(i).getLocationname())){
 			lstUnknownLocations.get(i).setLocationname(constructedRow.get(lstUnknownLocations.get(i).getLocationname()).get(0));
 			lstUnknownLocations.get(i).setCountry(constructedRow.get(lstUnknownLocations.get(i).getLocationname()).get(1));
 			System.out.println(constructedRow.get(lstUnknownLocations.get(i).getLocationname()).get(1) + " COUNTRY");
+			}
 		}
 		List<Country> lCountries = getCountryList();
 		for(Country data : lCountries){
