@@ -1,22 +1,2 @@
-.studyInfoTitle.z-label {
-	color: #8000FF;
-	font-size: 28px;
-}
+<c:set var="ImgUrl" value="${c:encodeURL('/widgets/layout/group_box/img')}" scope="request" />
 
-.studyInfoSubTitle.z-label {
-	color: #8000FF;
-	font-size: 28px;
-}
-
-.studyInfoLabel.z-label {
-	color: #8000FF;
-	font-size: 28px;
-}
-
-.myGridWithNoBorder {
-	border: 0px #CCC;
-}
-
-.myGridWithNoBorder.z-row {
-background:#FFFFFF;
-}

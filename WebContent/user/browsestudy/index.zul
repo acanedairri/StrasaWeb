@@ -6,7 +6,7 @@
 		<tabbox id="tabBox" hflex="1" vflex="1">
 			<tabs id="tabs">
 				<tab label="Search Study" />
-				<tab label="Study Information"/>
+				<tab label="OYT-5WH-2012"/>
 			</tabs>
 			<tabpanels id="tabPanels">
 				<tabpanel>
