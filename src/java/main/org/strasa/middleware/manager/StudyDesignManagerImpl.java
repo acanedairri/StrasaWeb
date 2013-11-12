@@ -15,30 +15,34 @@ import org.strasa.middleware.model.StudySite;
 public class StudyDesignManagerImpl {
 
 	public void addStudyDesign(StudyDesign record){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		StudyDesignMapper studyDesignMapper = session.getMapper(StudyDesignMapper.class);
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudyDesignMapper studyDesignMapper = session
+				.getMapper(StudyDesignMapper.class);
 
-		try{
+		try {
 			studyDesignMapper.insert(record);
 			session.commit();
 
-		}finally{
+		} finally {
 			session.close();
 		}
 
 	}
 
-	public void addStudyDesign(ArrayList<StudyDesign> records){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		StudyDesignMapper studyDesignMapper = session.getMapper(StudyDesignMapper.class);
+	public void addStudyDesign(ArrayList<StudyDesign> records) {
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudyDesignMapper studyDesignMapper = session
+				.getMapper(StudyDesignMapper.class);
 
-		try{
-			for(StudyDesign record:records){
+		try {
+			for (StudyDesign record : records) {
 				studyDesignMapper.insert(record);
 			}
 			session.commit();
 
-		}finally{
+		} finally {
 			session.close();
 		}
 
@@ -50,7 +54,10 @@ public class StudyDesignManagerImpl {
 
 		try{
 			for(StudyDesign record:designInfo){
-				studyDesignMapper.updateByPrimaryKey(record);
+				if(record.getId() == null)
+				studyDesignMapper.insert(record);
+				else
+					studyDesignMapper.updateByPrimaryKey(record);
 			}
 			session.commit();
 
@@ -60,29 +67,35 @@ public class StudyDesignManagerImpl {
 
 	}
 
-
 	public List<StudyDesign> getAllStudyDesign() {
 		// TODO Auto-generated method stub
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		StudyDesignMapper studyDesignMapper = session.getMapper(StudyDesignMapper.class);
-		try{
-			List<StudyDesign> studyDesign = studyDesignMapper.selectByExample(null);
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudyDesignMapper studyDesignMapper = session
+				.getMapper(StudyDesignMapper.class);
+		try {
+			List<StudyDesign> studyDesign = studyDesignMapper
+					.selectByExample(null);
 			return studyDesign;
-		}finally{
+		} finally {
 			session.close();
 		}
 	}
+
 	public StudyDesign getStudyDesign(int studysiteid) {
 		// TODO Auto-generated method stub
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		StudyDesignMapper studyDesignMapper = session.getMapper(StudyDesignMapper.class);
-		try{
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudyDesignMapper studyDesignMapper = session
+				.getMapper(StudyDesignMapper.class);
+		try {
 			StudyDesignExample example = new StudyDesignExample();
 			example.createCriteria().andStudysiteidEqualTo(studysiteid);
-			List<StudyDesign> studyDesign = studyDesignMapper.selectByExample(example);
+			List<StudyDesign> studyDesign = studyDesignMapper
+					.selectByExample(example);
 			return (studyDesign.isEmpty()) ? null : studyDesign.get(0);
-		
-		}finally{
+
+		} finally {
 			session.close();
 		}
 	}
@@ -93,18 +106,16 @@ public class StudyDesignManagerImpl {
 		record.setStudysiteid(studySiteId);
 
 		addStudyDesign(record);
-		System.out.println("added empty record to studySiteId " + Integer.toString(studySiteId));
+		System.out.println("added empty record to studySiteId "
+				+ Integer.toString(studySiteId));
 	}
-
-
-
 
 	public List<StudyDesign> initializeStudyDesign(List<StudySite> sites) {
 		// TODO Auto-generated method stub
 		try {
 			List<StudyDesign> studyDesignInfoList = getAllStudyDesign();
-			if(studyDesignInfoList.isEmpty()){
-				for(StudySite site:sites){//for each site
+			if (studyDesignInfoList.isEmpty()) {
+				for (StudySite site : sites) {// for each site
 					addEmptyRecordOnStudyDesign(site.getId());
 				}
 				studyDesignInfoList = getAllStudyDesign();
