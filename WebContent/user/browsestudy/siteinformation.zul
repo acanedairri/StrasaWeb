@@ -1,0 +1,108 @@
+<zk>
+	<style>
+		.heavy { font-weight: bold; font-size: 11px; } .heavier {
+		font-weight: bold; font-size: 12px; } .searchLabel {font-size:
+		13px; }
+	</style>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SiteInformation')">
+		<columnlayout>
+			<columnchildren width="65%">
+				<grid height="350px" model="@load(vm.sites)"
+					emptyMessage="No study site found.">
+					<columns>
+						<column label="Site Name" />
+						<column label="Site Location" />
+						<column label="Ecotype" />
+						<column label="Soil Type" />
+						<column label="Soil PH" />
+					</columns>
+					<template name="model">
+						<row>
+							<toolbarbutton label="@load(each.sitename)"
+								width="99%"
+								onClick="@command('updateDesignInfo', id=each.studyid)"/>
+							<label value="@bind(each.sitelocation)"
+								width="99%" />
+							<label value="@bind(each.ecotype.ecotype)"
+								width="99%" />
+							<label value="@bind(each.soiltype)"
+								width="99%" />
+							<label value="@bind(each.soilph)"
+								width="99%" />
+						</row>
+					</template>
+				</grid>
+			</columnchildren>
+			<columnchildren width="35%">
+				<vlayout>
+					<groupbox width="99%">
+						<caption label="Agronomy" />
+						<grid vflex="1">
+							<columns>
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row>
+									Planting Type:
+									<label
+										value="@bind(vm.selectedSitePlantingType)" width="99%" />
+								</row>
+								<row>
+									Sowing Date:
+									<label
+										value="@bind(vm.selectedAgroInfo.sowingdate)" width="99%" />
+								</row>
+								<row>
+									Harvest Date:
+									<label
+										value="@bind(vm.selectedAgroInfo.harvestdate)" width="99%" />
+								</row>
+							</rows>
+
+						</grid>
+					</groupbox>
+					<groupbox width="99%">
+						<caption label="Design Information" />
+						<grid vflex="1">
+							<columns>
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row>
+									Fertilization:
+									<label
+										value="@bind(vm.selectedAgroInfo.fertilization)" width="99%" />
+								</row>
+								<row>
+									Density:
+									<label
+										value="@bind(vm.selectedAgroInfo.density)" width="99%" />
+								</row>
+								<row>
+									Treatment Structure:
+									<label
+										value="@bind(vm.selectedDesignInfo.treatmentstructure)"
+										width="99%" />
+								</row>
+								<row>
+									Design Structure:
+									<label
+										value="@bind(vm.selectedDesignInfo.designstructure)"
+										width="99%" />
+								</row>
+								<row>
+									Plot Size:
+									<label
+										value="@bind(vm.selectedDesignInfo.plotsize)" width="99%" />
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+				</vlayout>
+			</columnchildren>
+		</columnlayout>
+	</window>
+</zk>
