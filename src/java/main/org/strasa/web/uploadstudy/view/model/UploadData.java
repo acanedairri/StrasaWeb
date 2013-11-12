@@ -65,6 +65,7 @@ public class UploadData extends ProcessTabViewModel {
 	private ArrayList<GenotypeFileModel> genotypeFileList = new ArrayList<UploadData.GenotypeFileModel>();
 	private String txtProgram = new String();
 	private String txtProject = new String();
+
 	private String txtStudyName = new String();
 	private String txtStudyType = new String();
 	private int startYear = Calendar.getInstance().get(Calendar.YEAR);

@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyDerivedRawDataMapper;
 import org.strasa.middleware.mapper.StudyMapper;
+import org.strasa.middleware.mapper.StudyRawDataBatch;
 import org.strasa.middleware.mapper.StudyRawDataByDataColumnMapper;
 import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.mapper.StudyRawDerivedDataByDataColumnMapper;
@@ -109,11 +111,12 @@ public class StudyRawDataManagerImpl {
 			List<String[]> rawCSVData) {
 		String[] header = rawCSVData.get(0);
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
-		StudyRawDataMapper studyDataMapper = getStudyRawMapper(session);
-		StudyMapper studyMapper = session.getMapper(StudyMapper.class);
+				.openSession(ExecutorType.BATCH);
+		StudyRawDataBatch studyRawBatch = session.getMapper(StudyRawDataBatch.class);
 		try {
-			studyMapper.insert(study);
+			addStudy(study);
+			List<StudyRawData> lstData = new ArrayList<StudyRawData>();
+			System.out.println("StudyID: " + study.getId());
 			for (int i = 1; i < rawCSVData.size(); i++) {
 				String[] row = rawCSVData.get(i);
 				for (int j = 0; j < header.length; j++) {
@@ -125,10 +128,13 @@ public class StudyRawDataManagerImpl {
 						record.setDatarow(i);
 						record.setDatavalue(row[j]);
 						record.setStudyid(study.getId());
-						studyDataMapper.insert(record);
+//						studyDataMapper.insert(record);
+						lstData.add(record);
 					}
 				}
 			}
+			if(isRaw) studyRawBatch.insertBatchRaw(lstData);
+			else studyRawBatch.insertBatchDerived(lstData);
 			session.commit();
 
 		} finally {

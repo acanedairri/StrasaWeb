@@ -10,12 +10,23 @@ import org.zkoss.bind.validator.AbstractValidator;
 
 public class FormValidator {
 
+	public boolean isAllValid = true;
+	
+	public boolean isAllValidated(){
+		return isAllValid;
+	}
+	
+	
 	public Validator getTextValidator(){
 	    return new AbstractValidator() {
 	        public void validate(ValidationContext ctx) {
 	          
 	        	if(ctx.getProperty().getValue() == null) {
 	        		addInvalidMessage(ctx, ctx.getProperty().getProperty() + " must not be empty.");
+	        		isAllValid = false;
+	        	}
+	        	else{
+	        		
 	        	}
 	        	
 	        }

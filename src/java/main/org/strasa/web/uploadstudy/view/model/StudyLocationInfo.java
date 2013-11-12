@@ -10,7 +10,9 @@ import org.strasa.middleware.manager.CountryManagerImpl;
 import org.strasa.middleware.manager.StudyLocationManagerImpl;
 import org.strasa.middleware.model.Country;
 import org.strasa.middleware.model.Location;
+import org.strasa.web.common.api.FormValidator;
 import org.strasa.web.common.api.ProcessTabViewModel;
+import org.zkoss.bind.Validator;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ExecutionArgParam;
@@ -22,6 +24,7 @@ import org.zkoss.zhtml.Messagebox;
 public class StudyLocationInfo extends ProcessTabViewModel{
     
 	private int studyId = 25;
+	private FormValidator formValidator = new FormValidator();
 	private boolean isRaw = false;
 	private List<Location> lstUnknownLocations = new ArrayList<Location>();
 	private List<Location> lstLocations = new ArrayList<Location>();
@@ -60,26 +63,44 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 	}
 
 
-	public List<Location> getLstKnowLocations() {
+
+
+
+	public List<Location> getLstLocations() {
 		return lstLocations;
 	}
 
 
-	public void setLstKnowLocations(List<Location> lstKnowLocations) {
-		this.lstLocations = lstKnowLocations;
+	public void setLstLocations(List<Location> lstLocations) {
+		this.lstLocations = lstLocations;
 	}
 
 
 	public boolean validateTab() {
-		for(Location loc:lstLocations){
-			if(loc.getLocationname().isEmpty()){
-				Messagebox.show("Location must not be empty", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
-				return false;
-			}
+//		for(Location loc:lstLocations){
+//			if(loc.getLocationname().isEmpty()){
+//				Messagebox.show("Location must not be empty", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
+//				return false;
+//			}
+//		}
+		
+		if(formValidator.isAllValidated()){
+			Messagebox.show("Location must not be empty", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
+			return false;
 		}
 		studyLocationManager.updateStudyLocation(lstLocations,studyId);
 		return true;
 	}
+
+	public FormValidator getFormValidator() {
+		return formValidator;
+	}
+
+
+	public void setFormValidator(FormValidator formValidator) {
+		this.formValidator = formValidator;
+	}
+
 
 	@Init
 	public void init(@ExecutionArgParam("studyID") double studyID,@ExecutionArgParam("isRaw") boolean isRaw) {

@@ -1,0 +1,48 @@
+GName,Location,Site,Country,Year,Season,Rep,RowBlock,ColBlock,Block,FieldRow,FieldColmn,PH,DF,Yld
+ IR8,Los Banos,IRRI,Philippines,2013,D,1,na,na,1,1,1,110,80,5
+ IR22,Los Banos,IRRI,Philippines,2013,D,1,na,na,1,2,1,115,85,5.5
+ IR36,Los Banos,IRRI,Philippines,2013,D,1,na,na,1,3,1,120,90,6
+ IR64,Los Banos,IRRI,Philippines,2013,D,1,na,na,1,4,1,113,91,6.5
+ IR72,Los Banos,IRRI,Philippines,2013,D,1,na,na,1,5,1,105,96,7
+RC222,Los Banos,IRRI,Philippines,2013,D,1,na,na,1,6,1,na,na,na
+IR46sub1,Los Banos,IRRI,Philippines,2013,D,1,na,na,1,7,1,111,88,7.3
+ IR8,Los Banos,IRRI,Philippines,2013,D,2,na,na,2,1,2,111,82,5.1
+ IR22,Los Banos,IRRI,Philippines,2013,D,2,na,na,2,2,2,116,87,5.6
+ IR36,Los Banos,IRRI,Philippines,2013,D,2,na,na,2,3,2,121,92,6.1
+ IR64,Los Banos,IRRI,Philippines,2013,D,2,na,na,2,4,2,114,93,6.6
+ IR72,Los Banos,IRRI,Philippines,2013,D,2,na,na,2,5,2,106,98,7.1
+RC222,Los Banos,IRRI,Philippines,2013,D,2,na,na,2,6,2,101,88,7.3
+IR46sub1,Los Banos,IRRI,Philippines,2013,D,2,na,na,2,7,2,112,90,7.4
+ IR8,Los Banos,IRRI,Philippines,2013,D,3,na,na,3,1,3,109,85,5.15
+ IR22,Los Banos,IRRI,Philippines,2013,D,3,na,na,3,2,3,114,90,na
+ IR36,Los Banos,IRRI,Philippines,2013,D,3,na,na,3,3,3,119,95,6.15
+ IR64,Los Banos,IRRI,Philippines,2013,D,3,na,na,3,4,3,112,96,6.65
+ IR72,Los Banos,IRRI,Philippines,2013,D,3,na,na,3,5,3,104,101,7.15
+RC222,Los Banos,IRRI,Philippines,2013,D,3,na,na,3,6,3,99,91,na
+IR46sub1,Los Banos,IRRI,Philippines,2013,D,3,na,na,3,7,3,110,93,7.45
+ IR8,Nueva Ecija,PhilRice,India,2013,D,1,na,na,1,1,1,112,80.5,5.3
+ IR22,Nueva Ecija,PhilRice,India,2013,D,1,na,na,1,2,1,117,85.5,5.8
+ IR36,Nueva Ecija,PhilRice,India,2013,D,1,na,na,1,3,1,122,90.5,6.3
+ IR64,Nueva Ecija,PhilRice,India,2013,D,1,na,na,1,4,1,115,91.5,6.8
+ IR72,Nueva Ecija,PhilRice,India,2013,D,1,na,na,1,5,1,107,96.5,7.3
+PR01,Nueva Ecija,PhilRice,India,2013,D,1,na,na,1,6,1,102,86.5,7.5
+PR02,Nueva Ecija,PhilRice,India,2013,D,1,na,na,1,7,1,113,na,na
+PR03,Nueva Ecija,PhilRice,India,2013,D,1,na,na,1,8,1,113,82.5,5.4
+PR04,Nueva Ecija,PhilRice,India,2013,D,1,na,na,1,9,1,118,87.5,5.9
+ IR8,Nueva Ecija,PhilRice,India,2013,D,2,na,na,2,1,2,123,92.5,6.4
+ IR22,Nueva Ecija,PhilRice,India,2013,D,2,na,na,2,2,2,116,93.5,6.9
+ IR36,Nueva Ecija,PhilRice,India,2013,D,2,na,na,2,3,2,108,98.5,7.4
+ IR64,Nueva Ecija,PhilRice,India,2013,D,2,na,na,2,4,2,103,88.5,7.6
+ IR72,Nueva Ecija,PhilRice,India,2013,D,2,na,na,2,5,2,114,90.5,7.7
+PR01,Nueva Ecija,PhilRice,India,2013,D,1,na,na,1,6,2,111,85.5,5.45
+PR02,Nueva Ecija,PhilRice,India,2013,D,1,na,na,1,7,2,116,90.5,5.95
+PR03,Nueva Ecija,PhilRice,India,2013,D,1,na,na,1,8,2,121,95.5,6.45
+PR04,Nueva Ecija,PhilRice,India,2013,D,1,na,na,1,9,3,na,na,na
+ IR22,Nueva Ecija,PhilRice,India,2013,D,3,na,na,3,2,3,106,101.5,7.45
+ IR36,Nueva Ecija,PhilRice,India,2013,D,3,na,na,3,3,3,101,91.5,7.65
+ IR64,Nueva Ecija,PhilRice,India,2013,D,3,na,na,3,4,3,112,93.5,7.75
+ IR72,Nueva Ecija,PhilRice,India,2013,D,3,na,na,3,5,3,114,81,5.6
+PR01,Nueva Ecija,PhilRice,India,2013,D,1,na,na,1,6,3,119,86,6.1
+PR02,Nueva Ecija,PhilRice,India,2013,D,1,na,na,1,7,3,124,91,6.6
+PR03,Nueva Ecija,PhilRice,India,2013,D,1,na,na,1,8,3,117,92,7.1
+PR04,Nueva Ecija,PhilRice,India,2013,D,1,na,na,1,9,3,109,97,7.6

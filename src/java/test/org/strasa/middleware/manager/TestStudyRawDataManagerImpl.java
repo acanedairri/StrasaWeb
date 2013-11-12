@@ -1,5 +1,7 @@
 package org.strasa.middleware.manager;
 
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -7,8 +9,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.strasa.middleware.mapper.StudyRawDataByDataColumnMapper;
+import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 public class TestStudyRawDataManagerImpl {
 
@@ -43,12 +47,22 @@ public class TestStudyRawDataManagerImpl {
 	
 	@Test
 	public void testBuildColumnRaw() throws Exception {
-		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl(false);
-		ArrayList<ArrayList<String>> list= studyRawDataManagerImpl.constructDataRaw(23, new String[]{"GName","Source"}, "Gname",true);
+		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl(true);
+		ArrayList<ArrayList<String>> list= studyRawDataManagerImpl.constructDataRaw(122, new String[]{"Site","Location"}, "Site",true);
 		
 		for(ArrayList<String> sublist : list){
 			System.out.println(Arrays.toString(sublist.toArray(new String[sublist.size()])));
 		}
+	}
+	@Test
+	public void testLargeDataInsert() throws Exception{
+		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl(true);
+		CSVReader csvMaster = new CSVReader(new FileReader(new File("/home/m00g33k/dumps/sampledata.csv")));
+		Study study = new Study();
+		study.setDescription("Sample");
+		study.setName("SampleAgain");
+		study.setUserid(1);
+		studyRawDataManagerImpl.addStudyRawDataByRawCsvList(study, csvMaster.readAll());
 	}
 	
 

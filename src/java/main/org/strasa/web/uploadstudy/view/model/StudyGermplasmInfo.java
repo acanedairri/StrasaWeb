@@ -203,7 +203,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 		for(CharacteristicModel charData: model.keyBiotic){
 			if(charData.value){
 				if(strVal.length() == 0){
-					strVal.append("<b>Biotic:</b> {");
+					strVal.append("Biotic: {");
 				}
 				else{
 					strVal.append(" ,");
