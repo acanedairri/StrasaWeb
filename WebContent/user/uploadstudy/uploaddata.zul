@@ -221,7 +221,7 @@
 							</template>
 						</grid>
 						<button id="uploadGenotype" upload="true"
-							label="Browse" onUpload="@command('uploadGenotypeData')" />
+							label="Attach Genotype file..." onUpload="@command('uploadGenotypeData')" />
 
 					</vlayout>
 

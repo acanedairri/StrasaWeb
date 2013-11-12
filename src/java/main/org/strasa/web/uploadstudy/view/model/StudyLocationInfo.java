@@ -21,10 +21,10 @@ import org.zkoss.zhtml.Messagebox;
 
 public class StudyLocationInfo extends ProcessTabViewModel{
     
-	private int mockStudyId = 25;
+	private int studyId = 25;
 	private boolean isRaw = false;
 	private List<Location> lstUnknownLocations = new ArrayList<Location>();
-	private List<Location> lstKnowLocations = new ArrayList<Location>();
+	private List<Location> lstLocations = new ArrayList<Location>();
 	private List<String> lstCountry = new ArrayList<String>();
 
 	private StudyLocationManagerImpl studyLocationManager;
@@ -61,17 +61,23 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 
 
 	public List<Location> getLstKnowLocations() {
-		return lstKnowLocations;
+		return lstLocations;
 	}
 
 
 	public void setLstKnowLocations(List<Location> lstKnowLocations) {
-		this.lstKnowLocations = lstKnowLocations;
+		this.lstLocations = lstKnowLocations;
 	}
 
 
 	public boolean validateTab() {
-		studyLocationManager.updateStudyLocation(lstKnowLocations,mockStudyId);
+		for(Location loc:lstLocations){
+			if(loc.getLocationname().isEmpty()){
+				Messagebox.show("Location must not be empty", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
+				return false;
+			}
+		}
+		studyLocationManager.updateStudyLocation(lstLocations,studyId);
 		return true;
 	}
 
@@ -91,18 +97,18 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 		System.out.println("Raw: " + isRaw);
 		System.out.println("StudyID: " + studyID);
 		this.isRaw = isRaw;
-		mockStudyId = (int) studyID;
+		studyId = (int) studyID;
 //	public void init(){
 //		
 //		this.isRaw = true;
 //		mockStudyId = 45;
 		
 		 studyLocationManager = new StudyLocationManagerImpl(isRaw);
-		List<List<Location>> locationInit = studyLocationManager.initializeStudyLocations(mockStudyId);
-		lstKnowLocations.addAll(locationInit.get(0));
+		List<List<Location>> locationInit = studyLocationManager.initializeStudyLocations(studyId);
+		lstLocations.addAll(locationInit.get(0));
 		lstUnknownLocations.addAll(locationInit.get(1));
 		Map<String,ArrayList<String>> constructedRow = new HashMap<String,ArrayList<String>>();
-		System.out.println("KnownLocationSize: " + lstKnowLocations.size());
+		System.out.println("KnownLocationSize: " + lstLocations.size());
 		System.out.println("UnknownLocationSize:" + lstUnknownLocations.size());
 		
 		for(int i = 0 ; i < lstUnknownLocations.size(); i++){
@@ -116,9 +122,9 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 		for(Country data : lCountries){
 			lstCountry.add(data.getIsoabbr());
 		}
-		lstKnowLocations.addAll(lstUnknownLocations);
-		if(lstKnowLocations.isEmpty()){
-			lstKnowLocations.add(new Location());
+		lstLocations.addAll(lstUnknownLocations);
+		if(lstLocations.isEmpty()){
+			lstLocations.add(new Location());
 		}
 		
 	}

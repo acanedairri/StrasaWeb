@@ -5,7 +5,7 @@
 		<groupbox id="gb" mold="3d" width="100%">
 			<caption label="List of known location" />
 			<grid id="step4" height="350px"
-				model="@load(vm.lstKnowLocations)">
+				model="@load(vm.lstLocations)">
 				<columns hflex="1">
 					<column label="Location" />
 					<column label="Country" />
@@ -18,7 +18,7 @@
 				<template name="model">
 					<row>
 						<label value="@bind(each.locationname)" if="${each.id !=null}"/>
-						<textbox value="@bind(each.locationname)" unless="${each.id !=null}" />
+						<textbox value="@bind(each.locationname)" unless="${each.id !=null}" width = "100%" constraint="no empty" />
 											
 						<label value="@bind(each.country)" if="${each.id  != null}"/>
 						<combobox
@@ -31,15 +31,15 @@
 									</template>
 								</combobox>
 						<label value="@bind(each.province)" if="${each.id !=null}"/>
-						<textbox value="@bind(each.province)" unless="${each.id !=null}"/>
-						<label value="@bind(each.region)" if="${each.id !=null}"/>
-						<textbox value="@bind(each.region)" unless="${each.id !=null}"/>
+						<textbox value="@bind(each.province)" unless="${each.id !=null}" width = "100%"/>
+						<label value="@bind(each.region)" if="${each.id !=null}" />
+						<textbox value="@bind(each.region)" unless="${each.id !=null}" width = "100%"/>
 						<label value="@bind(each.altitude)" if="${each.id !=null}"/>
-						<textbox value="@bind(each.altitude)" unless="${each.id !=null}"/>
+						<textbox value="@bind(each.altitude)" unless="${each.id !=null}" width = "100%"/>
 						<label value="@bind(each.latitude)" if="${each.id !=null}"/>
-						<textbox value="@bind(each.latitude)" unless="${each.id !=null}"/>
+						<textbox value="@bind(each.latitude)" unless="${each.id !=null}" width = "100%"/>
 						<label value="@bind(each.weatherstation)" if="${each.id !=null}"/>
-						<textbox value="@bind(each.weatherstation)" unless="${each.id !=null}"/>
+						<textbox value="@bind(each.weatherstation)" unless="${each.id !=null}" width = "100%"/>
 					</row>
 				</template>
 			</grid>
