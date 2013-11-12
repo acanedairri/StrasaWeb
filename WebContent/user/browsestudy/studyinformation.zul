@@ -1,6 +1,11 @@
 <zk>
+	<style dynamic="true">
 
-	<style src="/css/browsestudy.css"></style>
+		<!-- cut/hide the vertical borders in the grid rows -->
+		.myGridWithNoBorder tr.z-row td.z-row-inner { border-right: 0px
+		#CCC; }
+
+	</style>
 
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.StudyInformation')">
@@ -10,9 +15,9 @@
 				<grid sclass="myGridWithNoBorder"
 					emptyMessage="Search and select a study.">
 					<columns width="200px">
-						<column label="" width="10%"/>
-						<column label="" width="10%"/>
-						<column label=""/>
+						<column label="" />
+						<column label="" />
+						<column label="" />
 					</columns>
 					<rows>
 						<row>
@@ -22,7 +27,7 @@
 							<label
 								value="@bind(vm.selectedProgram.name)" />
 						</row>
-						<row style="background:#FFFFFF;">
+						<row>
 							<label value="" />
 							<label value="Objective" />
 							<label
@@ -34,7 +39,7 @@
 							<label
 								value="@bind(vm.selectedProgram.coordinator)" />
 						</row>
-						<row style="background:#FFFFFF;">
+						<row>
 							<label value="" />
 							<label value="Leading Institute" />
 							<label
@@ -46,7 +51,7 @@
 							<label
 								value="@bind(vm.selectedProgram.collaborator)" />
 						</row>
-						<row style="background:#FFFFFF;">
+						<row>
 							<label value="Project" />
 							<label value="" />
 							<label
@@ -58,7 +63,7 @@
 							<label
 								value="@bind(vm.selectedProject.objective)" />
 						</row>
-						<row style="background:#FFFFFF;">
+						<row>
 							<label value="" />
 							<label value="PI" />
 							<label value="@bind(vm.selectedProject.pi)" />
@@ -69,7 +74,7 @@
 							<label
 								value="@bind(vm.selectedProject.leadinginstitute)" />
 						</row>
-						<row style="background:#FFFFFF;">
+						<row>
 							<label value="" />
 							<label value="Collaborators" />
 							<label
@@ -82,7 +87,7 @@
 								value="@bind(vm.selectedProject.fundingagency)" />
 						</row>
 
-						<row style="background:#FFFFFF;">
+						<row>
 							<label value="Study Name" />
 							<label value="" />
 							<label value="@bind(vm.selectedStudy.name)" />
@@ -93,11 +98,10 @@
 							<label
 								value="@bind(vm.selectedStudy.description)" />
 						</row>
-						<row style="background:#FFFFFF;">
+						<row>
 							<label value="Study Type" />
 							<label value="" />
-							<label
-								value="@bind(vm.selectedStudyType.studytype)" />
+							<label value="@bind(vm.selectedStudyType.studytype)" />
 						</row>
 						<row>
 							<label value="Start Year" />
@@ -105,7 +109,7 @@
 							<label
 								value="@bind(vm.selectedStudy.startyear)" />
 						</row>
-						<row style="background:#FFFFFF;">
+						<row>
 							<label value="End Year" />
 							<label value="" />
 							<label
