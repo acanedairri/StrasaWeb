@@ -31,7 +31,7 @@ public class UserFileManager {
 			e.printStackTrace();
 		}
 		//		dataFile.renameTo(new File(BASE_FOLDER.getAbsolutePath() + dataFile.getName())); 
-		System.out.println("File moved to: " + BASE_FOLDER.getAbsolutePath());
+//		System.out.println("File moved to: " + BASE_FOLDER.getAbsolutePath());
 		StudyFile fileRec = new StudyFile();
 		fileRec.setFilename(realName);
 		fileRec.setFilenamegen(dataFile.getName());
