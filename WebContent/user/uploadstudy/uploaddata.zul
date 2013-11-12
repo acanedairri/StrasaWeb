@@ -107,48 +107,19 @@
 
 			<groupbox id="gb" mold="3d" width="100%">
 				<caption label="Upload Option" />
-				<hlayout spacing="30px">
-					<groupbox id="grpUploadGenotypeData"
-				width="240px">
-				<caption label="Select Genotype Data" />
-				<label value=""></label>
-				<hlayout spacing="30px">
-					<vlayout width="100%">
-						<grid width="99%"
-							model="@bind(vm.genotypeFileList)" height="160px" vflex="true"
-							emptyMessage="No genotype file uploaded...">
-					
-							<template name="model" var="item">
-								<row>
+				<hlayout spacing="30px" height = "120px">
 
-									<label value="@bind(item.name)" />
-									<hbox>
-
-										<button label="Remove"
-											onClick="@command('removeGenotypeFile', index=itemStatus.index)" />
-									</hbox>
-								</row>
-							</template>
-						</grid>
-						<button id="uploadGenotype"
-										upload="true" label="Browse"
-										onUpload="@command('uploadGenotypeData')" />
-						
-					</vlayout>
-
-				</hlayout>
-			</groupbox>
 					<vlayout width="300px">
 						<groupbox width="99%">
 							<caption label="Type of Data" />
 							<radiogroup
 								selectedItem="@bind(vm.studyType)">
-								<vlayout width="100%">
+								<hlayout width="100%">
 									<radio label="Raw Data"
 										value="rawdata" selected="true" />
 									<radio label="Derived"
 										value="derived" />
-								</vlayout>
+								</hlayout>
 							</radiogroup>
 						</groupbox>
 						<groupbox width="99%">
@@ -156,12 +127,12 @@
 
 							<radiogroup
 								selectedItem="@bind(vm.uploadTo)">
-								<vlayout width="100%">
+								<hlayout width="100%">
 									<radio label="Database"
 										value="database" selected="true" />
 									<radio label="Folder"
 										value="folder" />
-								</vlayout>
+								</hlayout>
 							</radiogroup>
 						</groupbox>
 
@@ -228,18 +199,45 @@
 					</vlayout>
 				</hlayout>
 			</groupbox>
+			<groupbox id="grpUploadGenotypeData" width="100%" mold="3d">
+				<caption label="Select Genotype Data" />
+				<label value=""></label>
+				<hlayout spacing="30px">
+					<vlayout  width="240px" >
+						<grid width="99%"
+							model="@bind(vm.genotypeFileList)" height="160px" vflex="true"
+							emptyMessage="No genotype file uploaded...">
 
-		
+							<template name="model" var="item">
+								<row>
+
+									<label value="@bind(item.name)" />
+									<hbox>
+
+										<button label="Remove"
+											onClick="@command('removeGenotypeFile', index=itemStatus.index)" />
+									</hbox>
+								</row>
+							</template>
+						</grid>
+						<button id="uploadGenotype" upload="true"
+							label="Browse" onUpload="@command('uploadGenotypeData')" />
+
+					</vlayout>
+
+				</hlayout>
+			</groupbox>
+
 		</vlayout>
-	<separator spacing="20px" />
-	<hlayout style="float:right;">
-	 
-		<button label="Next" 
-			onClick="@global-command('nextTab',model=vm)" sclass="btn-plain">
-		</button>
-	
+		<separator spacing="20px" />
+		<hlayout style="float:right;">
+
+			<button label="Next"
+				onClick="@global-command('nextTab',model=vm)" sclass="btn-plain">
+			</button>
+
 		</hlayout>
-	<separator spacing="40px" />
+		<separator spacing="40px" />
 	</div>
-	
+
 </zk>
