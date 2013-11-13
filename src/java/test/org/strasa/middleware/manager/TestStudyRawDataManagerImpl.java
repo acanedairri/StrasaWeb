@@ -3,12 +3,16 @@ package org.strasa.middleware.manager;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
+import org.apache.ibatis.session.SqlSession;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.strasa.middleware.factory.ConnectionFactory;
+import org.strasa.middleware.mapper.StudyRawDataBatch;
+import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 
@@ -48,11 +52,20 @@ public class TestStudyRawDataManagerImpl {
 	@Test
 	public void testBuildColumnRaw() throws Exception {
 		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl(true);
-		ArrayList<ArrayList<String>> list= studyRawDataManagerImpl.constructDataRaw(122, new String[]{"Site","Location"}, "Site",true);
+		ArrayList<ArrayList<String>> list= studyRawDataManagerImpl.constructDataRaw(122, new String[]{"Location","Country","Province","Region","Altitude","Latitude","WeatherStation"}, "Location",true);
 		
-		for(ArrayList<String> sublist : list){
-			System.out.println(Arrays.toString(sublist.toArray(new String[sublist.size()])));
-		}
+		 System.out.println(list.size());
+	}
+	@Test
+	public void testNewBuildColumnRaw() throws Exception {
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
+		 List<Location> lstData = mapper.getRawLocation(55, "studyrawdata");
+		 System.out.println(lstData.size());
+		 for(Location loc : lstData){
+			 System.out.println(loc.toString());
+		 }
 	}
 	@Test
 	public void testLargeDataInsert() throws Exception{

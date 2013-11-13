@@ -8,8 +8,10 @@ import java.util.Map;
 
 import org.strasa.middleware.manager.CountryManagerImpl;
 import org.strasa.middleware.manager.StudyLocationManagerImpl;
+import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.model.Country;
 import org.strasa.middleware.model.Location;
+import org.strasa.middleware.model.custom.RawLocationModel;
 import org.strasa.web.common.api.FormValidator;
 import org.strasa.web.common.api.ProcessTabViewModel;
 import org.zkoss.bind.Validator;
@@ -28,16 +30,18 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 	private boolean isRaw = false;
 	private List<Location> lstUnknownLocations = new ArrayList<Location>();
 	private List<Location> lstLocations = new ArrayList<Location>();
-	private List<String> lstCountry = new ArrayList<String>();
+	private ArrayList<String> cmbCountry = new ArrayList<String>();
 
 	private StudyLocationManagerImpl studyLocationManager;
-	public List<String> getLstCountry() {
-		return lstCountry;
+	
+
+	public ArrayList<String> getCmbCountry() {
+		return cmbCountry;
 	}
 
 
-	public void setLstCountry(List<String> lstCountry) {
-		this.lstCountry = lstCountry;
+	public void setCmbCountry(ArrayList<String> cmbCountry) {
+		this.cmbCountry = cmbCountry;
 	}
 
 
@@ -105,12 +109,7 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 	@Init
 	public void init(@ExecutionArgParam("studyID") double studyID,@ExecutionArgParam("isRaw") boolean isRaw) {
 		
-		try {
-			Runtime.getRuntime().exec("clear");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
 		
 		System.out.println("_______________________________________________________________");
 		System.out.println("Staring debugging :" + StudyLocationInfo.class.getName());
@@ -131,22 +130,28 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 		Map<String,ArrayList<String>> constructedRow = new HashMap<String,ArrayList<String>>();
 		System.out.println("KnownLocationSize: " + lstLocations.size());
 		System.out.println("UnknownLocationSize:" + lstUnknownLocations.size());
+		StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
+		 HashMap<String,Location> lstRawLoc = rawMan.getStudyLocationInfoToMap(studyId);
 		
 		for(int i = 0 ; i < lstUnknownLocations.size(); i++){
-			if(constructedRow.containsKey(lstUnknownLocations.get(i).getLocationname())){
-			lstUnknownLocations.get(i).setLocationname(constructedRow.get(lstUnknownLocations.get(i).getLocationname()).get(0));
-			lstUnknownLocations.get(i).setCountry(constructedRow.get(lstUnknownLocations.get(i).getLocationname()).get(1));
-			System.out.println(constructedRow.get(lstUnknownLocations.get(i).getLocationname()).get(1) + " COUNTRY");
+			if(lstRawLoc.containsKey(lstUnknownLocations.get(i).getLocationname())){
+				
+					lstLocations.add(lstRawLoc.get(lstUnknownLocations.get(i).getLocationname()));
+				
 			}
 		}
+		
+		
+		
 		List<Country> lCountries = getCountryList();
 		for(Country data : lCountries){
-			lstCountry.add(data.getIsoabbr());
+			cmbCountry.add(data.getIsoabbr());
 		}
-		lstLocations.addAll(lstUnknownLocations);
+		System.out.println("ConSize: " + cmbCountry.size());
 		if(lstLocations.isEmpty()){
 			lstLocations.add(new Location());
 		}
+
 		
 	}
 	
