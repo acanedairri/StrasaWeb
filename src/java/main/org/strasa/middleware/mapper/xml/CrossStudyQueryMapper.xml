@@ -82,14 +82,30 @@
 					<if test="item.operator == 'lessthan'">
 						&lt; #{item.valueDouble}
 					</if>
+					<if test="item.operator == 'greaterthanequal'">
+						&gt;= #{item.valueDouble}
+					</if>
+					<if test="item.operator == 'lessthanequal'">
+						&lt;= #{item.valueDouble}
+					</if>
 				</if>
 
 				<if test="item.dataType == 'String'">
-					(Select t2.datavalue from studyrawdata as t2 where
-					t2.datacolumn=#{item.variable}
-					and t2.datarow=t1.datarow and
-					t2.studyid=t1.studyid) =
-					#{item.valueString}
+					<if test="item.operator == 'equalto'">
+						(Select t2.datavalue from studyrawdata as t2 where
+						t2.datacolumn=#{item.variable}
+						and t2.datarow=t1.datarow and
+						t2.studyid=t1.studyid) =
+						#{item.valueString}
+					</if>
+
+					<if test="item.operator == 'like'">
+						(Select t2.datavalue from studyrawdata as t2 where
+						t2.datacolumn=#{item.variable}
+						and t2.datarow=t1.datarow and
+						t2.studyid=t1.studyid) like
+						#{item.valueString}
+					</if>
 
 				</if>
 
@@ -100,7 +116,7 @@
 					(Select t2.datavalue from studyrawdata as t2 where
 					t2.datacolumn=#{item.variable}
 					and t2.datarow=t1.datarow and
-					t2.studyid=t1.studyid) 
+					t2.studyid=t1.studyid)
 					<if test="item.operator == 'greaterthan'">
 						&gt; #{item.valueDouble} and
 					</if>
@@ -108,7 +124,7 @@
 					<if test="item.operator == 'lessthan'">
 						&lt; #{item.valueDouble} and
 					</if>
-					
+
 				</if>
 
 				<if test="item.dataType == 'String'">
