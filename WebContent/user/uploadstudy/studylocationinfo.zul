@@ -22,7 +22,7 @@
 											
 						<label value="@bind(each.country)" if="${each.id  != null}"/>
 						<combobox
-									model="@load(vm.lstCountry)"
+									model="@load(vm.cmbCountry)"
 									selectedItem="@bind(each.country)" width="99%" unless="${each.id !=null}">
 									<template name="model" var="p1">
 										<comboitem

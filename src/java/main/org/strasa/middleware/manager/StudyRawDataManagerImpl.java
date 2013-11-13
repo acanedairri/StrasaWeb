@@ -13,11 +13,13 @@ import org.strasa.middleware.mapper.StudyRawDataBatch;
 import org.strasa.middleware.mapper.StudyRawDataByDataColumnMapper;
 import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.mapper.StudyRawDerivedDataByDataColumnMapper;
+import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyRawData;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudyRawDataByDataColumnExample;
 import org.strasa.middleware.model.StudyRawDataExample;
+import org.strasa.middleware.model.custom.RawLocationModel;
 
 public class StudyRawDataManagerImpl {
 
@@ -42,6 +44,23 @@ public class StudyRawDataManagerImpl {
 		return record.getId();
 	}
 
+	public List<Location> getStudyLocationInfo(int studyid){
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
+		 List<Location> lstData = mapper.getRawLocation(studyid, getStudyRawTable());
+		 return lstData;
+	}
+	
+	public HashMap<String,Location> getStudyLocationInfoToMap(int studyid){
+		List<Location> lstRaw = getStudyLocationInfo(studyid);
+		HashMap<String,Location> returnVal = new HashMap<String,Location>();
+		for(Location data : lstRaw){
+			returnVal.put(data.getLocationname(), data);
+		}
+		return returnVal;
+	}
+	
 	public ArrayList<ArrayList<String>> constructDataRaw(int studyid,
 			String[] columns, String baseColumn, boolean isDistinct) {
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
@@ -213,6 +232,10 @@ public class StudyRawDataManagerImpl {
 				.getMapper(StudyRawDataByDataColumnMapper.class);
 		else return (StudyRawDataByDataColumnMapper)session
 		.getMapper(StudyRawDerivedDataByDataColumnMapper.class);
+	}
+	private String getStudyRawTable() {
+		return (isRaw) ? "studyrawdata" : "studyderiveddata";
+				
 	}
 	
 	
