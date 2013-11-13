@@ -47,7 +47,7 @@
 								<row>
 									Planting Type:
 									<label
-										value="@bind(vm.selectedSitePlantingType)" width="99%" />
+										value="@bind(vm.selectedSitePlantingType.planting)" width="99%" />
 								</row>
 								<row>
 									Sowing Date:

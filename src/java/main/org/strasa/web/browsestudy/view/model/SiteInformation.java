@@ -132,6 +132,7 @@ public class SiteInformation extends ProcessTabViewModel {
 	@NotifyChange("*")
 	@Command("updateDesignInfo")
 	public void updateDesignInfo(@BindingParam("id") Integer id) {
+		System.out.println(id);
 		selectedAgroInfo = sites.get(id).selectedAgroInfo;
 		selectedDesignInfo = sites.get(id).selectedDesignInfo;
 		selectedSitePlantingType =plantingtypeMan.getPlantingTypeById(id);
@@ -199,9 +200,10 @@ public class SiteInformation extends ProcessTabViewModel {
 			this.setSitename(s.getSitename());
 			this.setSoilph(s.getSoilph());
 			this.setSoiltype(s.getSoiltype());
-			this.setSoiltype(this.getSoiltype());
-			this.setStudyid(this.getStudyid());
-			this.setYear(this.getYear());
+			this.setSoiltype(s.getSoiltype());
+			this.setStudyid(s.getStudyid());
+			this.setYear(s.getYear());
+			this.setId(s.getId());
 			
 		}
 		public StudyAgronomy getSelectedAgroInfo() {
