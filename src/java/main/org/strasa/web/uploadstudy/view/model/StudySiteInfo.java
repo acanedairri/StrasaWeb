@@ -248,12 +248,12 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		selectedSite = sites.get(0);
 		
 		StudyRawDataManagerImpl studyRawMan = new StudyRawDataManagerImpl(isRaw);
-		 HashMap<String, ArrayList<String>> lstRawData = studyRawMan.constructDataRawAsMap((int)sampleID, new String[]{"Site","Location"}, "Site", true);
+		  HashMap<String, StudySite> lstRawData = studyRawMan.getStudySiteInfoToMap(sampleID);
 		
 		for(int i = 0; i < sites.size(); i++){
 			if(lstRawData.containsKey(sites.get(i).getSitename())) {
-				sites.get(i).setSitename(lstRawData.get(sites.get(i).getSitename()).get(0));
-				sites.get(i).setSitelocation(lstRawData.get(sites.get(i).getSitename()).get(1));
+				sites.get(i).setSitename(lstRawData.get(sites.get(i).getSitename()).getSitename());
+				sites.get(i).setSitename(lstRawData.get(sites.get(i).getSitename()).getSitelocation());
 			}
 		}
 		
@@ -288,9 +288,9 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			this.setSitename(s.getSitename());
 			this.setSoilph(s.getSoilph());
 			this.setSoiltype(s.getSoiltype());
-			this.setSoiltype(this.getSoiltype());
-			this.setStudyid(this.getStudyid());
-			this.setYear(this.getYear());
+			this.setSoiltype(s.getSoiltype());
+			this.setStudyid(s.getStudyid());
+			this.setYear(s.getYear());
 			
 		}
 		public StudyAgronomy getSelectedAgroInfo() {

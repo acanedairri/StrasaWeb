@@ -15,11 +15,12 @@ import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.mapper.StudyRawDerivedDataByDataColumnMapper;
 import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.Study;
+import org.strasa.middleware.model.StudyGermplasm;
 import org.strasa.middleware.model.StudyRawData;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudyRawDataByDataColumnExample;
 import org.strasa.middleware.model.StudyRawDataExample;
-import org.strasa.middleware.model.custom.RawLocationModel;
+import org.strasa.middleware.model.StudySite;
 
 public class StudyRawDataManagerImpl {
 
@@ -60,7 +61,36 @@ public class StudyRawDataManagerImpl {
 		}
 		return returnVal;
 	}
-	
+	public List<StudySite> getStudySiteInfo(int studyid){
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
+		 List<StudySite> lstData = mapper.getRawSite(studyid, getStudyRawTable());
+		 return lstData;
+	}
+	public List<StudyGermplasm> getStudyGermplasmInfo(int studyid){
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
+		 List<StudyGermplasm> lstData = mapper.getRawGermplasm(studyid, getStudyRawTable());
+		 return lstData;
+	}
+	public HashMap<String,StudySite> getStudySiteInfoToMap(int studyid){
+		List<StudySite> lstRaw = getStudySiteInfo(studyid);
+		HashMap<String,StudySite> returnVal = new HashMap<String,StudySite>();
+		for(StudySite data : lstRaw){
+			returnVal.put(data.getSitename(), data);
+		}
+		return returnVal;
+	}
+	public HashMap<String,StudyGermplasm> getStudyGermplasmInfoToMap(int studyid){
+		List<StudyGermplasm> lstRaw = getStudyGermplasmInfo(studyid);
+		HashMap<String,StudyGermplasm> returnVal = new HashMap<String,StudyGermplasm>();
+		for(StudyGermplasm data : lstRaw){
+			returnVal.put(data.getGermplasmname(), data);
+		}
+		return returnVal;
+	}
 	public ArrayList<ArrayList<String>> constructDataRaw(int studyid,
 			String[] columns, String baseColumn, boolean isDistinct) {
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()

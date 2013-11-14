@@ -25,7 +25,7 @@ import org.zkoss.zhtml.Messagebox;
 
 public class StudyLocationInfo extends ProcessTabViewModel{
     
-	private int studyId = 25;
+	private int studyId ;
 	private FormValidator formValidator = new FormValidator();
 	private boolean isRaw = false;
 	private List<Location> lstUnknownLocations = new ArrayList<Location>();
@@ -88,7 +88,7 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 //			}
 //		}
 		
-		if(formValidator.isAllValidated()){
+		if(!formValidator.isAllValidated()){
 			Messagebox.show("Location must not be empty", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
 			return false;
 		}

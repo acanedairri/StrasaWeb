@@ -15,6 +15,7 @@ import org.strasa.middleware.mapper.StudyRawDataBatch;
 import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
+import org.strasa.middleware.model.StudySite;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -61,16 +62,16 @@ public class TestStudyRawDataManagerImpl {
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
 				.openSession();
 		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
-		 List<Location> lstData = mapper.getRawLocation(55, "studyrawdata");
+		 List<StudySite> lstData = mapper.getRawSite(129, "studyrawdata");
 		 System.out.println(lstData.size());
-		 for(Location loc : lstData){
+		 for(StudySite loc : lstData){
 			 System.out.println(loc.toString());
 		 }
 	}
 	@Test
 	public void testLargeDataInsert() throws Exception{
 		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl(true);
-		CSVReader csvMaster = new CSVReader(new FileReader(new File("/home/m00g33k/dumps/sampledata.csv")));
+		CSVReader csvMaster = new CSVReader(new FileReader(new File("/home/m00g33k/dumps/SaltSample3.csv")));
 		Study study = new Study();
 		study.setDescription("Sample");
 		study.setName("SampleAgain");

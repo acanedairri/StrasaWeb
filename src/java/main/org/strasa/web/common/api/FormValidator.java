@@ -21,12 +21,14 @@ public class FormValidator {
 	    return new AbstractValidator() {
 	        public void validate(ValidationContext ctx) {
 	          
-	        	if(ctx.getProperty().getValue() == null) {
+	        	if(ctx.getProperty().getValue().toString().isEmpty()) {
 	        		addInvalidMessage(ctx, ctx.getProperty().getProperty() + " must not be empty.");
+	        		System.out.println("INVALID " + ctx.getProperty().getProperty());
 	        		isAllValid = false;
 	        	}
 	        	else{
-	        		
+	        		System.out.println("Valid");
+	        		isAllValid = true;
 	        	}
 	        	
 	        }

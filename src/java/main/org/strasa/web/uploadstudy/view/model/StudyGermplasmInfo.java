@@ -74,9 +74,9 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 	System.out.println("Geno Passed: " + studyID + " IsRaw: " + isRaw);
 	StudyGermplasmManagerImpl germplasmMan = new StudyGermplasmManagerImpl();
 	StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
-	Map<String, ArrayList<String>> rawMap = rawMan.constructDataRawAsMap((int)studyID, new String[]{"GName","Breeder","FemaleParent","GID","IRCross","IRNumber","MaleParent","OtherName","Parentage","Remarks","Source"},"GName" , true);
-//	debugMap(rawMap);
-	List<StudyGermplasm> lst = germplasmMan.getStudyGermplasmByStudyId((int)studyID);
+	HashMap<String, StudyGermplasm> rawMap = rawMan.getStudyGermplasmInfoToMap((int)studyID);
+			
+   List<StudyGermplasm> lst = germplasmMan.getStudyGermplasmByStudyId((int)studyID);
 	for(StudyGermplasm data : lst){
 		GermplasmDeepInfoModel newData = new GermplasmDeepInfoModel();
 		newData.setBreeder(data.getBreeder());
@@ -97,23 +97,20 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 		
 		//RawDataMapping
 		if(rawMap.containsKey(data.getGermplasmname())){
-			ArrayList<String> r = rawMap.get(data.getGermplasmname());
-			r.remove(0);
-			if(newData.getBreeder() == null  && !r.get(0).equals("") ) newData.setBreeder(r.get(0));
-			if(newData.getFemaleparent() == null  && !r.get(1).equals("")) newData.setFemaleparent(r.get(1));
-			if(newData.getGid() == null && !r.get(2).equals("")) newData.setGid(Integer.parseInt(r.get(2)));
-			if(newData.getIrcross() == null  && !r.get(3).equals("")) newData.setIrcross(r.get(3));
-			if(newData.getIrnumber()== null  && !r.get(4).equals("")) newData.setIrnumber(r.get(4));
+			StudyGermplasm r = rawMap.get(data.getGermplasmname());
 			
-			if(newData.getMaleparent() == null  && !r.get(5).equals("")) newData.setMaleparent(r.get(5));
-			if(newData.getOthername() == null  && !r.get(6).equals("")) newData.setOthername(r.get(6));
-			if(newData.getParentage() == null  && !r.get(7).equals("")) newData.setRemarks(r.get(7));
-			if(newData.getRemarks() == null  && !r.get(8).equals("")) newData.setBreeder(r.get(8));
-			if(newData.getSelectionhistory() == null  && !r.get(9).equals("")) newData.setSelectionhistory(r.get(9));
-		
-	
+			if(newData.getBreeder() == null  && !r.getBreeder().equals("") ) newData.setBreeder(r.getBreeder());
+			if(newData.getFemaleparent() == null  && !r.getFemaleparent().equals("")) newData.setFemaleparent(r.getFemaleparent());
+			if(newData.getGid() == null && !r.getGid().equals("")) newData.setGid(r.getGid());
+			if(newData.getIrcross() == null  && !r.getIrcross().equals("")) newData.setIrcross(r.getIrcross());
+			if(newData.getIrnumber()== null  && !r.getIrnumber().equals("")) newData.setIrnumber(r.getIrnumber());
 			
-		}
+			if(newData.getMaleparent() == null  && !r.getMaleparent().equals("")) newData.setMaleparent(r.getMaleparent());
+			if(newData.getOthername() == null  && !r.getOthername().equals("")) newData.setOthername(r.getOthername());
+			if(newData.getParentage() == null  && !r.getParentage().equals("")) newData.setRemarks(r.getParentage());
+			if(newData.getRemarks() == null  && !r.getRemarks().equals("")) newData.setBreeder(r.getRemarks());
+			if(newData.getSelectionhistory() == null  && !r.getSelectionhistory().equals("")) newData.setSelectionhistory(r.getSelectionhistory());
+			}
 		lstStudyGermplasm.add(newData);
 		
 	}
