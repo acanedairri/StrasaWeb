@@ -14,6 +14,7 @@ import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyRawDataBatch;
 import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.Study;
+import org.strasa.middleware.model.StudyGermplasm;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudySite;
 
@@ -63,6 +64,31 @@ public class TestStudyRawDataManagerImpl {
 				.openSession();
 		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
 		 List<StudySite> lstData = mapper.getRawSite(129, "studyrawdata");
+		 System.out.println(lstData.size());
+		 for(StudySite loc : lstData){
+			 System.out.println(loc.toString());
+		 }
+	}
+	
+	@Test
+	public void testGermplasmRaw() throws Exception{
+		System.out.println("Start");
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
+		 List<StudyGermplasm> lstData = mapper.getRawGermplasm(60, "studyrawdata");
+		 System.out.println(lstData.size());
+		 for(StudyGermplasm loc : lstData){
+			 System.out.println(loc.toString());
+		 }
+	}
+	@Test
+	public void testSiteRaw() throws Exception{
+		System.out.println("Start");
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
+		 List<StudySite> lstData = mapper.getRawSite(60, "studyrawdata");
 		 System.out.println(lstData.size());
 		 for(StudySite loc : lstData){
 			 System.out.println(loc.toString());

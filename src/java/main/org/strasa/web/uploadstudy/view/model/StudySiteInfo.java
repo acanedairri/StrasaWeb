@@ -42,7 +42,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	private StudyDesign selectedDesignInfo = new StudyDesign();; 
 	private PlantingType selectedSitePlantingType; // .getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
 	private int selectedID = 0;
-	private int sampleID;
+	private int sID;
 	private boolean isRaw = false;
 	protected boolean goToNextPage = true;
 	private int selectedPlantingIndex =0;
@@ -106,11 +106,11 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	}
 
 	public double getSampleID() {
-		return sampleID;
+		return sID;
 	}
 
 	public void setSampleID(int sampleID) {
-		this.sampleID = sampleID;
+		this.sID = sampleID;
 	}
 
 	public List<Ecotype> getEcotypes() {
@@ -204,22 +204,36 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		List<StudySite> lstSites = new ArrayList<StudySite>();
 		 List<StudyAgronomy> lstAgro = new ArrayList<StudyAgronomy>();
 		 List<StudyDesign> designInfo = new ArrayList<StudyDesign>();
+		 StudySiteManagerImpl siteMan = new StudySiteManagerImpl(isRaw);
 		 for(StudySiteInfoModel data : sites){
-			 StudySite siteData = data;
-			 lstAgro.add(data.getSelectedAgroInfo());
-			 designInfo.add(data.selectedDesignInfo);
-			 lstSites.add(siteData);
-			 System.out.println("LOOP IN");
+		
+			 if(data.getId() == null){
+				 StudySite siteData = data;
+				 siteMan.addStudySite(siteData);
+				 data.selectedAgroInfo.setStudysiteid(data.getId());
+				 data.selectedDesignInfo.setStudysiteid(data.getId());
+				 
+			 }
+			 else{
+				 
+				 siteMan.updateStudySite(data);
+				 studyAgroMan.updateStudyAgronomy(data.selectedAgroInfo);
+				 studyDesignMan.updateStudyDesign(data.selectedDesignInfo);
+			 }
+			 
 		 }
-		studySiteMan.updateStudySite(lstSites);
-		studyAgroMan.updateStudyAgronomy(lstAgro);
-		studyDesignMan.updateStudyDesign(designInfo);
+
+		
+		
+		
+		
+		
 		return goToNextPage;
 	}
 
 	@Init
 	public void init(@ExecutionArgParam("studyID") long studyID, @ExecutionArgParam("isRaw") boolean isRaw ) {
-		sampleID = (int) studyID;
+		sID = (int) studyID;
 		this.isRaw = isRaw;
 		studySiteMan = new StudySiteManagerImpl(isRaw);
 		studyAgroMan = new StudyAgronomyManagerImpl();
@@ -227,35 +241,69 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		ecotypeMan = new EcotypeManagerImpl();
 		plantingtypeMan = new PlantingTypeManagerImpl();
 		sites = new ArrayList<StudySiteInfoModel>();
-		List<StudySite> subsites = studySiteMan.initializeStudySites(sampleID);
-		for(StudySite siteD : subsites){
-			
-			StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteD);
-			siteInfo.selectedAgroInfo = studyAgroMan.getStudyAgronomy(siteD.getId());
-			siteInfo.selectedDesignInfo = studyDesignMan.getStudyDesign(siteD.getId());
-			if(siteInfo.selectedDesignInfo == null) siteInfo.selectedDesignInfo = new StudyDesign();
-			if(siteInfo.selectedAgroInfo != null) siteInfo.selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(siteInfo.getSelectedAgroInfo().getPlantingtypeid());
-			else{
-				siteInfo.selectedSitePlantingType = new PlantingType();
-			}
+		
+//		List<StudySite> subsites = studySiteMan.initializeStudySites(sID);
+//		for(StudySite siteD : subsites){
+//			
+//			StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteD);
+//			siteInfo.selectedAgroInfo = studyAgroMan.getStudyAgronomy(siteD.getId());
+//			siteInfo.selectedDesignInfo = studyDesignMan.getStudyDesign(siteD.getId());
+//			if(siteInfo.selectedDesignInfo == null) siteInfo.selectedDesignInfo = new StudyDesign();
+//			if(siteInfo.selectedAgroInfo != null) siteInfo.selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(siteInfo.getSelectedAgroInfo().getPlantingtypeid());
+//			else{
+//				siteInfo.selectedSitePlantingType = new PlantingType();
+//			}
+//			sites.add(siteInfo);
+//			
+//		}
+
+		StudyRawDataManagerImpl studyRawMan = new StudyRawDataManagerImpl(isRaw);
+		if(!studyRawMan.hasSiteColumnData(sID)){
+			StudySiteInfoModel siteInfo = new StudySiteInfoModel();
+			siteInfo.selectedDesignInfo = new StudyDesign();
+			siteInfo.selectedSitePlantingType = new PlantingType();
+			siteInfo.selectedAgroInfo = new StudyAgronomy();
 			sites.add(siteInfo);
+			ecotypes = ecotypeMan.getAllEcotypes();
+			plantingtypes = plantingtypeMan.getAllPlantingTypes();
+			selectedSite = sites.get(0);
+			return;
+		}
+		List<StudySite> subsites = studySiteMan.getAllStudySites(sID);
+		if(subsites.isEmpty()){
+				List<StudySite> lstSiteRaw = studyRawMan.getStudySiteInfo(sID);
+				for(StudySite siteData : lstSiteRaw){
+					StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteData);
+					siteInfo.selectedDesignInfo = new StudyDesign();
+					siteInfo.selectedSitePlantingType = new PlantingType();
+					siteInfo.selectedAgroInfo = new StudyAgronomy();
+					sites.add(siteInfo);
+				}
+		}
+		else{
+			for(StudySite siteData : subsites) {
+				StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteData);
+				siteInfo.selectedDesignInfo = studyDesignMan.getStudyDesign(siteData.getId());
+				siteInfo.selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(siteInfo.getSelectedAgroInfo().getPlantingtypeid());
+				siteInfo.selectedAgroInfo = studyAgroMan.getStudyAgronomy(siteInfo.getId());
+				sites.add(siteInfo);
+			}
 			
 		}
-	
+		
+		
 		ecotypes = ecotypeMan.getAllEcotypes();
 		plantingtypes = plantingtypeMan.getAllPlantingTypes();
-
 		selectedSite = sites.get(0);
 		
-		StudyRawDataManagerImpl studyRawMan = new StudyRawDataManagerImpl(isRaw);
-		  HashMap<String, StudySite> lstRawData = studyRawMan.getStudySiteInfoToMap(sampleID);
-		
-		for(int i = 0; i < sites.size(); i++){
-			if(lstRawData.containsKey(sites.get(i).getSitename())) {
-				sites.get(i).setSitename(lstRawData.get(sites.get(i).getSitename()).getSitename());
-				sites.get(i).setSitename(lstRawData.get(sites.get(i).getSitename()).getSitelocation());
-			}
-		}
+//		  HashMap<String, StudySite> lstRawData = studyRawMan.getStudySiteInfoToMap(sID);
+//		
+//		for(int i = 0; i < sites.size(); i++){
+//			if(lstRawData.containsKey(sites.get(i).getSitename())) {
+//				sites.get(i).setSitename(lstRawData.get(sites.get(i).getSitename()).getSitename());
+//				sites.get(i).setSitelocation(lstRawData.get(sites.get(i).getSitename()).getSitelocation());
+//			}
+//		}
 		
 		updateDesignInfo(0);
 		
@@ -293,6 +341,9 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			this.setYear(s.getYear());
 			
 		}
+		public StudySiteInfoModel(){
+			
+		}
 		public StudyAgronomy getSelectedAgroInfo() {
 			if(selectedAgroInfo == null) return new StudyAgronomy();
 			return selectedAgroInfo;
@@ -305,7 +356,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			
 			if(selectedDesignInfo == null){
 				StudyDesign rec = new StudyDesign();
-				rec.setId(sampleID);
+				rec.setId(sID);
 				return rec;
 			}
 			return selectedDesignInfo;

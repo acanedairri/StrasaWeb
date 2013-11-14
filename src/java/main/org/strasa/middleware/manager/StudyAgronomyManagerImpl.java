@@ -60,6 +60,20 @@ public class StudyAgronomyManagerImpl {
 		}
 
 	}
+	public void updateStudyAgronomy(StudyAgronomy record){
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		StudyAgronomyMapper studyAgronomyMapper = session.getMapper(StudyAgronomyMapper.class);
+
+		try{
+			studyAgronomyMapper.updateByPrimaryKey(record);
+			
+			session.commit();
+
+		}finally{
+			session.close();
+		}
+
+	}
 
 
 	public List<StudyAgronomy> getAllStudyAgronomy() {

@@ -62,7 +62,6 @@ public class StudyGermplasmManagerImpl {
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
 		try{
-			
 			mapper.updateByPrimaryKey(record);
 			session.commit();
 		}

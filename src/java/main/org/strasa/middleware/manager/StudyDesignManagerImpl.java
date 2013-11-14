@@ -66,6 +66,23 @@ public class StudyDesignManagerImpl {
 		}
 
 	}
+	public void updateStudyDesign(StudyDesign record) {
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudyDesignMapper studyDesignMapper = session
+				.getMapper(StudyDesignMapper.class);
+
+		try {
+			studyDesignMapper.updateByPrimaryKey(record);
+
+			session.commit();
+
+		} finally {
+			session.close();
+		}
+
+	}
+
 
 	public List<StudyDesign> getAllStudyDesign() {
 		// TODO Auto-generated method stub

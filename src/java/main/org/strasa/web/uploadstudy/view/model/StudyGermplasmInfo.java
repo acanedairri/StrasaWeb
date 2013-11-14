@@ -102,9 +102,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 			if(newData.getBreeder() == null  && !r.getBreeder().equals("") ) newData.setBreeder(r.getBreeder());
 			if(newData.getFemaleparent() == null  && !r.getFemaleparent().equals("")) newData.setFemaleparent(r.getFemaleparent());
 			if(newData.getGid() == null && !r.getGid().equals("")) newData.setGid(r.getGid());
-			if(newData.getIrcross() == null  && !r.getIrcross().equals("")) newData.setIrcross(r.getIrcross());
 			if(newData.getIrnumber()== null  && !r.getIrnumber().equals("")) newData.setIrnumber(r.getIrnumber());
-			
 			if(newData.getMaleparent() == null  && !r.getMaleparent().equals("")) newData.setMaleparent(r.getMaleparent());
 			if(newData.getOthername() == null  && !r.getOthername().equals("")) newData.setOthername(r.getOthername());
 			if(newData.getParentage() == null  && !r.getParentage().equals("")) newData.setRemarks(r.getParentage());

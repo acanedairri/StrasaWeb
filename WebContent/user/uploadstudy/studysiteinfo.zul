@@ -15,11 +15,11 @@
 					<template name="model">
 						<row>
 							<textbox value="@bind(each.sitename)"
-								width="99%" if="${each.sitename==null}" />
+								width="99%" if="${each.id==null}" />
 							<toolbarbutton label="@load(each.sitename)"
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-								unless="${each.sitename==null}" />
+								unless="${each.id==null}" />
 							<textbox value="@bind(each.sitelocation)"
 								width="99%" />
 							<combobox model="@load(vm.ecotypes)"
