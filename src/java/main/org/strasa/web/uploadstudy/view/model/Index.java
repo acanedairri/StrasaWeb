@@ -29,9 +29,11 @@ public class Index {
 	Tab tab3;
 	@Wire("#tab4")
 	Tab tab4;
+	@Wire("#tab5")
+	Tab tab5;
 	private UploadData uploadData;
 	private int selectedIndex = 1;
-	private boolean[] tabDisabled = {false,true,true,true};
+	private boolean[] tabDisabled = {false,true,true,true,true};
 	private long studyID = 7;
 	private boolean isRaw;
 	
@@ -101,7 +103,7 @@ public class Index {
 
 		tabDisabled[selectedIndex + 1] = false;
 		
-		Tab[] tabs = {tab1,tab2,tab3,tab4};
+		Tab[] tabs = {tab1,tab2,tab3,tab4,tab5};
 		
 		Events.sendEvent("onSelect",tabs[selectedIndex + 1],tabs[selectedIndex + 1]);
 //		switch(selectedIndex + 1){

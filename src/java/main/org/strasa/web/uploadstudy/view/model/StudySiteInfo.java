@@ -8,6 +8,7 @@ import org.strasa.middleware.manager.EcotypeManagerImpl;
 import org.strasa.middleware.manager.PlantingTypeManagerImpl;
 import org.strasa.middleware.manager.StudyAgronomyManagerImpl;
 import org.strasa.middleware.manager.StudyDesignManagerImpl;
+import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.manager.StudySiteManagerImpl;
 import org.strasa.middleware.model.Ecotype;
@@ -46,6 +47,15 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	private boolean isRaw = false;
 	protected boolean goToNextPage = true;
 	private int selectedPlantingIndex =0;
+	private boolean applyToAll = false;
+	public boolean isApplyToAll() {
+		return applyToAll;
+	}
+
+	public void setApplyToAll(boolean applyToAll) {
+		this.applyToAll = applyToAll;
+	}
+
 	public int getSelectedPlantingIndex() {
 		return selectedPlantingIndex;
 	}
@@ -166,11 +176,12 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			selectedPlantingIndex = sites.get(id).selectedPlantingIndex;
 		selectedID = id;
 		
+		
 //		setSelectedAgroInfo(getAgroInfoBySiteID(id));
 //		setSelectedDesignInfo(getDesignInfoBySiteID(id));
 //		selectedSitePlantingType = plantingtypes.get(selectedAgroInfo
 //				.getPlantingtypeid() - 1); // .getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
-//		System.out.println("selected row id: " + Integer.toString(id));
+		System.out.println("selected row id: " + Integer.toString(id));
 
 	}
 
@@ -205,20 +216,47 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		 List<StudyAgronomy> lstAgro = new ArrayList<StudyAgronomy>();
 		 List<StudyDesign> designInfo = new ArrayList<StudyDesign>();
 		 StudySiteManagerImpl siteMan = new StudySiteManagerImpl(isRaw);
+		 if(applyToAll){
+			 
+		 selectedAgroInfo = sites.get(selectedID).selectedAgroInfo;
+		 selectedDesignInfo = sites.get(selectedID).selectedDesignInfo;
+		 }
 		 for(StudySiteInfoModel data : sites){
-		
+			 data.setStudyid(sID);
 			 if(data.getId() == null){
+				 
 				 StudySite siteData = data;
+				 
 				 siteMan.addStudySite(siteData);
+				 
+				 if(applyToAll){
+					 selectedAgroInfo.setStudysiteid(data.getId());
+					 selectedDesignInfo.setStudysiteid(data.getId());
+					 studyAgroMan.addStudyAgronomy(selectedAgroInfo);
+					 studyDesignMan.addStudyDesign(selectedDesignInfo);
+				 }
+				 else{
 				 data.selectedAgroInfo.setStudysiteid(data.getId());
 				 data.selectedDesignInfo.setStudysiteid(data.getId());
-				 
+				 studyAgroMan.addStudyAgronomy(data.selectedAgroInfo);
+				 studyDesignMan.addStudyDesign(data.selectedDesignInfo);
+				 }
 			 }
 			 else{
-				 
 				 siteMan.updateStudySite(data);
-				 studyAgroMan.updateStudyAgronomy(data.selectedAgroInfo);
-				 studyDesignMan.updateStudyDesign(data.selectedDesignInfo);
+
+				 if(applyToAll){
+					 selectedAgroInfo.setStudysiteid(data.getId());
+					 selectedDesignInfo.setStudysiteid(data.getId());
+					 studyAgroMan.updateStudyAgronomy(selectedAgroInfo);
+					 studyDesignMan.updateStudyDesign(selectedDesignInfo);
+					 
+				 }
+				 else{
+					 studyAgroMan.updateStudyAgronomy(data.selectedAgroInfo);
+					 studyDesignMan.updateStudyDesign(data.selectedDesignInfo);
+					 	 
+				 }
 			 }
 			 
 		 }
@@ -269,11 +307,18 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			selectedSite = sites.get(0);
 			return;
 		}
+		String studyStartYear = new StudyManagerImpl().getStudyById(sID).getStartyear();
+		
 		List<StudySite> subsites = studySiteMan.getAllStudySites(sID);
 		if(subsites.isEmpty()){
 				List<StudySite> lstSiteRaw = studyRawMan.getStudySiteInfo(sID);
 				for(StudySite siteData : lstSiteRaw){
 					StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteData);
+					if(siteInfo.getYear().isEmpty() || siteInfo.getYear().equals("") || siteInfo.getYear() == null) {
+				
+						siteInfo.setYear(studyStartYear);
+					}
+						
 					siteInfo.selectedDesignInfo = new StudyDesign();
 					siteInfo.selectedSitePlantingType = new PlantingType();
 					siteInfo.selectedAgroInfo = new StudyAgronomy();

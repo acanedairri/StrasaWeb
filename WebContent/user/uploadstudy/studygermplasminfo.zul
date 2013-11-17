@@ -34,7 +34,7 @@
 								<label value="@bind(each.germplasmname)"
 									if="${each.germplasmname !=null}" />
 								<textbox
-									value="@bind(each.germplasmname)"
+									value="@bind(each.germplasmname) @validator(vm.formValidator.textValidator)" constraint="no empty"
 									unless="${each.germplasmname!=null}" />
 								<label value="@bind(each.othername)"
 									if="${each.othername !=null}" />
