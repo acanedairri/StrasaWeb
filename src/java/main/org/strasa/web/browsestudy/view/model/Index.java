@@ -29,41 +29,41 @@ public class Index extends SelectorComposer<Component>{
 	Tabs tabs;
 	@Wire
 	Tabpanels tabPanels;
-	
-	public void createNewTab(){
-		Tab newTab = new Tab();
-		newTab.setLabel("study1");
-		
-		Tabpanel newPanel = new Tabpanel();
-		//initialize view after view construction.
-		Include pageDefineStudySite = new Include();
-		pageDefineStudySite.setSrc("/user/browsestudy/studyinformation.zul");
-		pageDefineStudySite.setParent(newPanel);
-		newPanel.appendChild(pageDefineStudySite);
-		
-		tabPanels.appendChild(newPanel);
-		tabs.appendChild(newTab);
-		
-		tabBox.setSelectedIndex(1);	
-	}
+//	
+//	public void createNewTab(){
+//		Tab newTab = new Tab();
+//		newTab.setLabel("study1");
+//		
+//		Tabpanel newPanel = new Tabpanel();
+//		//initialize view after view construction.
+//		Include pageDefineStudySite = new Include();
+//		pageDefineStudySite.setSrc("/user/browsestudy/studyinformation.zul");
+//		pageDefineStudySite.setParent(newPanel);
+//		newPanel.appendChild(pageDefineStudySite);
+//		
+//		tabPanels.appendChild(newPanel);
+//		tabs.appendChild(newTab);
+//		
+//		tabBox.setSelectedIndex(1);	
+//	}
 
 	@Override
 	public void doAfterCompose(Component comp) throws Exception{
 		super.doAfterCompose(comp);
-		Tab newTab = new Tab();
-		newTab.setLabel("study1");
-		
-		Tabpanel newPanel = new Tabpanel();
-		//initialize view after view construction.
-		Include pageDefineStudySite = new Include();
-		pageDefineStudySite.setSrc("/user/browsestudy/studyinformation.zul");
-		pageDefineStudySite.setParent(newPanel);
-		newPanel.appendChild(pageDefineStudySite);
-		
-		tabPanels.appendChild(newPanel);
-		tabs.appendChild(newTab);
-		
-		tabBox.setSelectedIndex(2);	
+//		Tab newTab = new Tab();
+//		newTab.setLabel("study1");
+//		
+//		Tabpanel newPanel = new Tabpanel();
+//		//initialize view after view construction.
+//		Include pageDefineStudySite = new Include();
+//		pageDefineStudySite.setSrc("/user/browsestudy/studyinformation.zul");
+//		pageDefineStudySite.setParent(newPanel);
+//		newPanel.appendChild(pageDefineStudySite);
+//		
+//		tabPanels.appendChild(newPanel);
+//		tabs.appendChild(newTab);
+//		
+//		tabBox.setSelectedIndex(2);	
 	}
 	
 }

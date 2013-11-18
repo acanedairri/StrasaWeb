@@ -19,7 +19,7 @@
 			</columns>
 			<template name="model">
 				<row>
-					<toolbarbutton id="studyNameUrl" label="@load(each.studyname)" width="99%" onClick=" Index.createNewTab();@global-command('openStudyData', studyId=each.id)" />
+					<toolbarbutton label="@load(each.studyname)" width="99%" onClick="@global-command('openStudyData', studyId=each.id)" />
 					<label value="@load(each.programname)" width="99%" />
 					<label value="@load(each.projectname)" width="99%" />
 					<label value="@load(each.studytypename)" width="99%" />

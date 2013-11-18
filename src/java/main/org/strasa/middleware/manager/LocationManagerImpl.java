@@ -26,7 +26,19 @@ public class LocationManagerImpl {
 			session.close();
 		}
 	}
-	
+	public Location getLocationById(Integer id){
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		LocationMapper mapper = session.getMapper(LocationMapper.class);
+		try{
+			LocationExample example = new LocationExample();
+			example.createCriteria().andIdEqualTo(id);
+			if(mapper.selectByExample(example).isEmpty()) return null;
+			return mapper.selectByExample(example).get(0);
+		}
+		finally{
+			session.close();
+		}
+	}
 	public List<Location> getAllLocations(){
 		// TODO Auto-generated method stub
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();

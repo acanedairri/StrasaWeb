@@ -116,6 +116,21 @@ public class StudyLocationManagerImpl {
 		}
 
 	}
+	
+	public List<StudyLocation> getStudyLocationsById(int studyId) {
+		// TODO Auto-generated method stub
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
+		try{
+			StudyLocationExample example = new StudyLocationExample();
+			example.createCriteria().andStudyidEqualTo(studyId);
+			List<StudyLocation> studyLocations = studyLocationMapper.selectByExample(example);
+			return studyLocations;
+		}finally{
+			session.close();
+		}
+
+	}
 	public List<StudyLocation> getUnknownStudyLocations(int studyId) {
 		// TODO Auto-generated method stub
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();

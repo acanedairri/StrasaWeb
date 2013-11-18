@@ -21,7 +21,7 @@
 						<row>
 							<toolbarbutton label="@load(each.sitename)"
 								width="99%"
-								onClick="@command('updateDesignInfo', id=each.studyid)"/>
+								onClick="@command('updateDesignInfo', studysiteid=each.id)"/>
 							<label value="@bind(each.sitelocation)"
 								width="99%" />
 							<label value="@bind(each.ecotype.ecotype)"

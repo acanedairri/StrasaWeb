@@ -143,11 +143,11 @@
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Site Information" />
-						<include src="/user/browsestudy/siteinformation.zul" mode="defer" />
+						<include src="/user/browsestudy/siteinfo.zul" mode="defer" />
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Study Location" />
-						<!-- 				<include src="/user/browsestudy/siteinformation.zul" mode="defer" /> -->
+										<include src="/user/browsestudy/locationinfo.zul" mode="defer" />
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Germplasm Information" />
