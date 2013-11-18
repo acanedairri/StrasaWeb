@@ -162,9 +162,11 @@ public class StudyRawDataManagerImpl {
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
 				.openSession(ExecutorType.BATCH);
 		StudyRawDataBatch studyRawBatch = session.getMapper(StudyRawDataBatch.class);
+		StudyRawDataMapper rawMapper = session.getMapper(StudyRawDataMapper.class);
 		try {
 			addStudy(study);
 			List<StudyRawData> lstData = new ArrayList<StudyRawData>();
+			
 			System.out.println("StudyID: " + study.getId());
 			for (int i = 1; i < rawCSVData.size(); i++) {
 				String[] row = rawCSVData.get(i);
@@ -179,6 +181,9 @@ public class StudyRawDataManagerImpl {
 						record.setStudyid(study.getId());
 //						studyDataMapper.insert(record);
 						lstData.add(record);
+//						rawMapper.insert(record);
+//						System.out.println("Record " + record.toString());
+						
 					}
 				}
 			}

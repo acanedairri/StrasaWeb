@@ -49,7 +49,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 	public String[] getArrGermplasmType() {
 		GermplasmTypeManagerImpl germMan = new GermplasmTypeManagerImpl();
 		ArrayList<String> strVal = new ArrayList<String>();
-		for(GermplasmType data : germMan.getAllGermplasm()){
+		for(GermplasmType data : germMan.getAllGermplasmType()){
 			strVal.add(data.getGermplasmtype());
 		}
 		arrGermplasmType = strVal.toArray(new String[strVal.size()]);
@@ -114,7 +114,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 	}
 	
 	GermplasmTypeManagerImpl germMan = new GermplasmTypeManagerImpl();
-	lstGermplasmType = germMan.getAllGermplasm();
+	lstGermplasmType = germMan.getAllGermplasmType();
 	StudyGermplasmCharacteristicsManagerImpl studyCharMan = new StudyGermplasmCharacteristicsManagerImpl();
 	KeyCharacteristicManagerImpl keyMan = new KeyCharacteristicManagerImpl();
 	List<StudyGermplasmCharacteristics> arrCharList = studyCharMan.getCharacteristicsByStudyID((int) studyID);

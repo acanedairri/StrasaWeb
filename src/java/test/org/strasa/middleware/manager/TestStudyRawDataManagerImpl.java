@@ -12,9 +12,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyRawDataBatch;
+import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyGermplasm;
+import org.strasa.middleware.model.StudyRawData;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudySite;
 
@@ -95,10 +97,26 @@ public class TestStudyRawDataManagerImpl {
 		 }
 	}
 	@Test
+	public void testRawCount(){
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudyRawDataMapper mapper = session.getMapper(StudyRawDataMapper.class);
+		StudyRawData data = new StudyRawData();
+		data.setDatacolumn("s");
+		data.setDatarow(1);
+		data.setDatavalue("ss");
+		
+		mapper.insert(data);
+		System.out.println(mapper.countByExample(null));
+	}
+	@Test
 	public void testLargeDataInsert() throws Exception{
 		StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl(true);
-		CSVReader csvMaster = new CSVReader(new FileReader(new File("/home/m00g33k/dumps/SaltSample3.csv")));
+		CSVReader csvMaster = new CSVReader(new FileReader(new File("c://SaltSample2.csv")));
 		Study study = new Study();
+//		3.447850592 s
+//		3.048389672
+		
 		study.setDescription("Sample");
 		study.setName("SampleAgain");
 		study.setUserid(1);

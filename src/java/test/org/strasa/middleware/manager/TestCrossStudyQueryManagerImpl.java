@@ -8,10 +8,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.strasa.middleware.model.StudyDataColumn;
-import org.strasa.web.browsestudy.view.model.StudySearchFilterModel;
-import org.strasa.web.browsestudy.view.model.StudySearchResultModel;
-import org.strasa.web.browsestudy.view.model.StudySummaryModel;
 import org.strasa.web.crossstudyquery.view.model.CrossStudyQueryFilterModel;
 import org.strasa.web.crossstudyquery.view.model.CrossStudyQueryOperator;
 
