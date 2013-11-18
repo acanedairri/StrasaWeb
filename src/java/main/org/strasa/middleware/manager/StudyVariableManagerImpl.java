@@ -57,7 +57,7 @@ public class StudyVariableManagerImpl {
 		
 		try{
 			StudyVariableExample example = new StudyVariableExample();
-			example.createCriteria().andVariablecodeLike("%" + sort + "%");
+			example.createCriteria().andVariablecodeLike( sort + "%");
 			return getMapper().selectByExample(example);
 		}
 		finally{

@@ -522,6 +522,8 @@ public class UploadData extends ProcessTabViewModel {
 
 	@Override
 	public boolean validateTab() {
+		Runtimer timer = new Runtimer();
+		timer.start();
 		boolean isRawData =  studyType.equalsIgnoreCase("rawdata");
 		System.out.println("StudyType: " + studyType + " + " + isRawData);
 		if (txtProgram == null || txtProject == null || txtStudyName == null
@@ -574,43 +576,41 @@ public class UploadData extends ProcessTabViewModel {
 				txtProgram, userId).getId());
 		study.setProjectid(new ProjectManagerImpl().getProjectByName(
 				txtProject, userId).getId());
+		study.setStartyear(String.valueOf(startYear));
+		study.setEndyear(String.valueOf(String.valueOf(endYear)));
 
 		if (uploadTo.equals("database")) {
-			try {
+
 				
-					studyRawData.addStudyRawDataByRawCsvList(study,
-							new CSVReader(new FileReader(tempFile)).readAll());
-					GermplasmManagerImpl germplasmManager = new GermplasmManagerImpl();
-					StudyGermplasmManagerImpl studyGermplasmManager = new StudyGermplasmManagerImpl();
 
-					StudyRawDataManagerImpl studyRawDataManagerImpl = new StudyRawDataManagerImpl(isRawData);
-					ArrayList<StudyRawDataByDataColumn> list = (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl
-							.getStudyRawDataColumn(study.getId(), "GName");
-					for (StudyRawDataByDataColumn s : list) {
-						// System.out.println(s.getStudyid()+
-						// " "+s.getDatacolumn()+
-						// " "+ s.getDatavalue());
-
-						if (!germplasmManager.isGermplasmExisting(s
-								.getDatavalue())) {
-							StudyGermplasm studyGermplasmData = new StudyGermplasm();
-							studyGermplasmData.setGermplasmname(s
-									.getDatavalue());
-							studyGermplasmData.setStudyid(study.getId());
-							studyGermplasmManager
-									.addStudyGermplasm(studyGermplasmData);
-						}
+				studyRawData.addStudyRawData(study,columnList.toArray(new String[columnList.size()]),dataList);
+//					studyRawData.addStudyRawDataByRawCsvList(study,
+//							new CSVReader(new FileReader(tempFile)).readAll());
+//					GermplasmManagerImpl germplasmManager = new GermplasmManagerImpl();
+//					StudyGermplasmManagerImpl studyGermplasmManager = new StudyGermplasmManagerImpl();
+//
+//					StudyRawDataManagerImpl studyRawDataManagerImpl = new StudyRawDataManagerImpl(isRawData);
+//					ArrayList<StudyRawDataByDataColumn> list = (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl
+//							.getStudyRawDataColumn(study.getId(), "GName");
+//					for (StudyRawDataByDataColumn s : list) {
+//						// System.out.println(s.getStudyid()+
+//						// " "+s.getDatacolumn()+
+//						// " "+ s.getDatavalue());
+//
+//						if (!germplasmManager.isGermplasmExisting(s
+//								.getDatavalue())) {
+//							StudyGermplasm studyGermplasmData = new StudyGermplasm();
+//							studyGermplasmData.setGermplasmname(s
+//									.getDatavalue());
+//							studyGermplasmData.setStudyid(study.getId());
+//							studyGermplasmManager
+//									.addStudyGermplasm(studyGermplasmData);
+//						}
 
 
 				 
-				}
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				
+		
 		}
 		else{
 			fileMan.createNewFileFromUpload(1, study.getId(), dataFileName, tempFile, (isRaw) ? "rd":"dd");
@@ -621,6 +621,7 @@ public class UploadData extends ProcessTabViewModel {
 		}
 		this.setStudyID(study.getId());
 		this.isRaw = isRawData;
+		System.out.println("Timer ends in: " + timer.end());
 		
 		return true;
 
@@ -676,6 +677,21 @@ public class UploadData extends ProcessTabViewModel {
 		genotypeFileList.remove(index);
 	}
 
+	
+	public class Runtimer {
+		long startTime = System.nanoTime();
+		
+		public long start(){
+			startTime = System.nanoTime();
+			return startTime;
+		}
+		public double end() {
+			long endTime = System.nanoTime();
+			return (endTime - startTime) / 1000000000.0;
+		}
+		
+		
+	}
 	public class GenotypeFileModel {
 
 		private String name;

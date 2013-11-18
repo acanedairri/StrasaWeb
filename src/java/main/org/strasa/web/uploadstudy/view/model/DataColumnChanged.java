@@ -42,11 +42,11 @@ public class DataColumnChanged {
 	        System.out.print(filter);
 	}
 	@Command
-	public void updatefilter(){
+	public void updatefilter(@BindingParam("filterValue") String filterValue){
 		
 		   StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
 		   varList.clear();
-	        varList.addAll(studyVarMan.getVariables(filter));
+	        varList.addAll(studyVarMan.getVariables(filterValue));
 	        System.out.print(filter);
 	}
 

@@ -196,6 +196,42 @@ public class StudyRawDataManagerImpl {
 		}
 
 	}
+	
+	public void addStudyRawData(Study study,
+			String[] header,List<String[]> rawCSVData) {
+
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession(ExecutorType.BATCH);
+		StudyRawDataBatch studyRawBatch = session.getMapper(StudyRawDataBatch.class);
+		try {
+			addStudy(study);
+			List<StudyRawData> lstData = new ArrayList<StudyRawData>();
+			System.out.println("StudyID: " + study.getId());
+			for (int i = 0; i < rawCSVData.size(); i++) {
+				String[] row = rawCSVData.get(i);
+				for (int j = 0; j < header.length; j++) {
+
+					if (row.length == header.length) {
+						StudyRawData record = new StudyRawData();
+
+						record.setDatacolumn(header[j]);
+						record.setDatarow(i);
+						record.setDatavalue(row[j]);
+						record.setStudyid(study.getId());
+//						studyDataMapper.insert(record);
+						lstData.add(record);
+					}
+				}
+			}
+			if(isRaw) studyRawBatch.insertBatchRaw(lstData);
+			else studyRawBatch.insertBatchDerived(lstData);
+			session.commit();
+
+		} finally {
+			session.close();
+		}
+
+	}
 
 	public boolean hasSiteColumnData(int studyid) {
 
@@ -204,12 +240,10 @@ public class StudyRawDataManagerImpl {
 		StudyRawDataByDataColumnMapper studySiteByStudyMapper = getStudyRawMapperByColumn(session);
 			
 		StudyRawDataByDataColumnExample example = new StudyRawDataByDataColumnExample();
-		example.setDistinct(true);
 		example.createCriteria().andStudyidEqualTo(studyid)
 				.andDatacolumnEqualTo("Site");
-		studySiteByStudyMapper.selectByExample(example);
-
-		return false;
+		
+		return (studySiteByStudyMapper.countByExample(example) > 0);
 	}
 
 	public boolean hasLocationColumnData(int studyid) {
@@ -217,13 +251,12 @@ public class StudyRawDataManagerImpl {
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
 				.openSession();
 		StudyRawDataByDataColumnMapper studySiteByStudyMapper = getStudyRawMapperByColumn(session);
+			
 		StudyRawDataByDataColumnExample example = new StudyRawDataByDataColumnExample();
-		example.setDistinct(true);
 		example.createCriteria().andStudyidEqualTo(studyid)
 				.andDatacolumnEqualTo("Location");
-		studySiteByStudyMapper.selectByExample(example);
-
-		return false;
+		
+		return (studySiteByStudyMapper.countByExample(example) > 0);
 	}
 
 	public List<StudyRawDataByDataColumn> getStudyRawDataColumn(int studyid,

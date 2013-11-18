@@ -4,7 +4,7 @@
            <listbox 
             model="@load(vm.varList)" selectedItem="@bind(vm.selectedVar)" height = "100%" vflex="1">
          <auxhead>
-                <auxheader colspan="3" class="topic">Filter: <textbox value="@bind(vm.filter)" onChange="@command('updatefilter')" onOK="@command('updatefilter')"></textbox></auxheader>
+                <auxheader colspan="3" class="topic">Filter: <textbox value="@bind(vm.filter)" onChange="@command('updatefilter',filterValue=event.value)" onChanging="@command('updatefilter', filterValue=event.value)" instant="true" onOK="@command('updatefilter')"></textbox></auxheader>
             </auxhead>
             <listhead>
                 <listheader label="Variable" width="80px" align="center" />
