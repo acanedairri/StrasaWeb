@@ -352,7 +352,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 					record.setStudyid((int)studyID);
 			}
 		studyGermplasmMan.addStudyGermplasm(lstStudyGerm,lstCharacteristics);
-		
+		germplasmManagerImpl.addGermplasm(germplasmManagerImpl.convertStudyToGermplasm(lstStudyGerm));
 			
 		return true;
 		
