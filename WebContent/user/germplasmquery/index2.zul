@@ -1,0 +1,57 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+	<vbox>
+		<hbox apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.Index2')">
+			<label value="Search Germplasm By" />
+			<combobox id="cmbSearchKey" autodrop="true"
+				selectedIndex="@bind(vm.searchKey)"
+				onChange="@command('SetSearchUI')">
+				<comboitem label="Name" />
+				<comboitem label="Key Characteristics" />
+				<comboitem label="Type" />
+			</combobox>
+			<textbox id='txtNameSearch' width="150px"
+				value="@bind(vm.nameSearch)" visible="true" />
+
+			<combobox id="cmbKeyChar" visible="false"
+				onChange="@command('getKeyCharacteristicOptionsList')">
+				<comboitem label="Abiotic" />
+				<comboitem label="Biotic" />
+				<comboitem label="Grain Quality" />
+				<comboitem label="Major Genes" />
+			</combobox>
+
+			<!-- 
+				<combobox id="cmbKeyCharValue" visible="false"
+				model="@load(vm.keyCharacteristicOption)"
+				selectedItem="@bind(vm.keyCharactericticValue)">
+				<template name="model">
+				<comboitem value="${each}"
+				label="${each}" />
+				</template>
+				</combobox>  
+
+			-->
+
+			<chosenbox hflex="1" width="250px" id="cmbKeyCharValue"
+				visible="false" model="@load(vm.keyCharacteristicOption)" />
+				
+			<combobox id="cmbGermplasmType" visible="false"
+				model="@load(vm.germplasmType)"
+				selectedIndex="@bind(vm.germplasmTypeId)">
+				<template name="model">
+					<comboitem value="@load(each.id)"
+						label="@load(each.germplasmtype)" />
+				</template>
+			</combobox>
+
+
+			<button label="Search" />
+		</hbox>
+
+
+	</vbox>
+
+</zk>
