@@ -565,7 +565,6 @@ public class UploadData extends ProcessTabViewModel {
 
 		UserFileManager fileMan = new UserFileManager();
 		StudyRawDataManagerImpl studyRawData = new StudyRawDataManagerImpl(isRawData);
-		StudyDerivedDataManagerImpl studyDerivedDataMan = new StudyDerivedDataManagerImpl();
 		if (study == null) {
 			study = new Study();
 		}

@@ -14,7 +14,7 @@
 </insert>
 <insert id="insertBatchDerived" parameterType="java.util.List">
 
-   INSERT INTO studyrawdata (id,studyid,datarow,datacolumn,datavalue)
+   INSERT INTO studyderiveddata (id,studyid,datarow,datacolumn,datavalue)
         VALUES
         <foreach collection="list" item="item" open="(" separator="),(" close=")">
            #{item.id},#{item.studyid},#{item.datarow},#{item.datacolumn},#{item.datavalue}
