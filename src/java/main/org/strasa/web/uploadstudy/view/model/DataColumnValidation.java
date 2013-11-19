@@ -5,7 +5,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -98,6 +100,14 @@ public class DataColumnValidation {
 				return;
 			}
 			newHeader[i] = varData.get(i).getNewVariable();
+		}
+		HashSet noDupSet = new HashSet();
+		noDupSet.addAll(Arrays.asList(newHeader));
+		if(noDupSet.size() != newHeader.length){
+			Messagebox.show("Error: Column duplication detected. Columns should be unique", "Upload Error",
+					Messagebox.OK, Messagebox.ERROR);
+
+			return ;
 		}
 		FileWriter mFileWriter;
 		try {

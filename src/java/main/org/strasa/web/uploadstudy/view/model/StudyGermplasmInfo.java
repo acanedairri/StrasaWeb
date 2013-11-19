@@ -156,8 +156,8 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 //			if(newData.getRemarks() == null  && !r.getRemarks().equals("")) newData.setBreeder(r.getRemarks());
 //			if(newData.getSelectionhistory() == null  && !r.getSelectionhistory().equals("")) newData.setSelectionhistory(r.getSelectionhistory());
 //			}
-		if(newData.getGid() == 0) newData.setGid(null);
-		if(newData.getOthername().isEmpty() || newData.getOthername().trim().equals("")) newData.setOthername(null);
+		if(newData.getGid() != null) if(newData.getGid() == 0) newData.setGid(null);
+		if(newData.getOthername() != null) if(newData.getOthername().isEmpty() || newData.getOthername().trim().equals("")) newData.setOthername(null);
 		lstStudyGermplasm.add(newData);
 		
 	}

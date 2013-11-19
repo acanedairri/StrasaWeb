@@ -6,30 +6,25 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.input.ReaderInputStream;
 import org.strasa.middleware.filesystem.manager.UserFileManager;
-import org.strasa.middleware.manager.GermplasmManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
-import org.strasa.middleware.manager.StudyDerivedDataManagerImpl;
-import org.strasa.middleware.manager.StudyGermplasmManagerImpl;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.manager.StudyTypeManagerImpl;
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.Study;
-import org.strasa.middleware.model.StudyGermplasm;
-import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudyType;
 import org.strasa.web.common.api.Encryptions;
 import org.strasa.web.common.api.ProcessTabViewModel;
@@ -526,6 +521,16 @@ public class UploadData extends ProcessTabViewModel {
 		timer.start();
 		boolean isRawData =  studyType.equalsIgnoreCase("rawdata");
 		System.out.println("StudyType: " + studyType + " + " + isRawData);
+		
+		HashSet noDupSet = new HashSet();
+		noDupSet.addAll(columnList);
+		if(noDupSet.size() != columnList.size()){
+			Messagebox.show("Error: Column duplication detected. Columns should be unique", "Upload Error",
+					Messagebox.OK, Messagebox.ERROR);
+
+			// TODO: must have message DIalog
+			return false;
+		}
 		if (txtProgram == null || txtProject == null || txtStudyName == null
 				|| txtStudyType == null) {
 			Messagebox.show("Error: All fields are required", "Upload Error",

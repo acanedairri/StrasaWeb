@@ -1,199 +1,230 @@
 <zk>
-		<div width="100%" apply="org.zkoss.bind.BindComposer"
+	<div width="100%" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudyGermplasmInfo')">
 
 
-			<hlayout spacing="50px">
-				<vlayout width="100%">
-					<grid height="100%" width="100%"
-						model="@load(vm.lstStudyGermplasm)" vflex="1"
-						hflex="1">
-						<columns>
-							<column label="GID" width="5.69%" />
-							<column label="GName" width="7.69%" />
-							<column label="OtherName" width="7.69%" />
-							<column label="Breeder" width="7.69%" />
-							<column label="GermplasmType" width="7.69%" />
-							<column label="IR Number" width="7.69%" />
-							<column label="IR Cross" width="7.69%" />
-							<column label="Parentage" width="7.69%" />
-							<column label="Female Parent" width="7.69%" />
-							<column label="Male Parent" width="7.69%" />
-							<column label="Selection History"
-								width="7.69%" />
-							<column label="Source" width="7.69%" />
-							<column label="Characteristic"
-								width="9.69%" />
-						</columns>
-						<template name="model">
-							<row>
-								<label value="@bind(each.gid)"
-									if="${each.gid !=null}" />
-								<textbox value="@bind(each.gid)"
-									unless="${each.gid!=null}" />
-								<label value="@bind(each.germplasmname)"
-									if="${each.germplasmname !=null}" />
-								<textbox
-									value="@bind(each.germplasmname) @validator(vm.formValidator.textValidator)" constraint="no empty"
-									unless="${each.germplasmname!=null}" />
-								<label value="@bind(each.othername)"
-									if="${each.othername !=null}" />
-								<textbox value="@bind(each.othername)"
-									unless="${each.othername!=null}" />
-								<textbox value="@bind(each.breeder)" />
-								<combobox
-									model="@load(vm.lstGermplasmType)"
-									selectedIndex="@bind(each.germplasmtypeid)" width="99%">
-									<template name="model">
-										<comboitem
-											value="@load(each.germplasmtype)"
-											label="@load(each.germplasmtype)" />
-									</template>
-								</combobox>
-								<textbox value="@bind(each.irnumber)" />
-								<textbox value="@bind(each.ircross)" />
-								<textbox value="@bind(each.parentage)" />
-								<textbox
-									value="@bind(each.femaleparent)" />
-								<textbox value="@bind(each.maleparent)" />
-								<textbox
-									value="@bind(each.selectionhistory)" />
-								<textbox
-									value="@bind(each.source)" />
-								<vbox width="65%">
-									<bandbox id = "${each.id}"  readonly="true" mold="rounded" 
-										width="65%" value="Select..." onBlur ='@command("updateCharacteristicInfo", model= each)'>
-										<bandpopup >
-											<vbox>
+		<hlayout spacing="50px">
+			<vlayout width="100%">
+				<grid height="100%" width="100%"
+					model="@load(vm.lstStudyGermplasm)" vflex="1" hflex="1">
+					<columns>
+						<column label="GID" width="5.69%" />
+						<column label="GName" width="7.69%" />
+						<column label="OtherName" width="7.69%" />
+						<column label="Breeder" width="7.69%" />
+						<column label="GermplasmType" width="7.69%" />
+						<column label="IR Number" width="7.69%" />
+						<column label="IR Cross" width="7.69%" />
+						<column label="Parentage" width="7.69%" />
+						<column label="Female Parent" width="7.69%" />
+						<column label="Male Parent" width="7.69%" />
+						<column label="Selection History" width="7.69%" />
+						<column label="Source" width="7.69%" />
+						<column label="Characteristic" width="9.69%" />
+					</columns>
+					<template name="model">
+						<row>
+							<label value="@bind(each.gid)"
+								if="${each.gid !=null}" />
+							<textbox value="@bind(each.gid)"
+								unless="${each.gid!=null}" />
 
-												<tabbox>
+							<label value="@bind(each.germplasmname)"
+								if="${each.germplasmname !=null}" />
+							<textbox
+								value="@bind(each.germplasmname) @validator(vm.formValidator.textValidator)"
+								constraint="no empty" unless="${each.germplasmname!=null}" />
 
-													<tabs>
-														<tab
-															label="Abiotic Stress" />
-														<tab
-															label="Biotic Stress" />
-														<tab
-															label="Grain Quality" />
-														<tab
-															label="Major Genes" />
+							<label value="@bind(each.othername)"
+								if="${each.othername !=null}" />
+							<textbox value="@bind(each.othername)"
+								unless="${each.othername!=null}" />
 
-													</tabs>
-													<tabpanels>
-														<tabpanel>
-															<listbox
-																model="@load(each.keyAbiotic)" width="200px">
-																<listhead>
-																	<listheader
-																		label="Name" />
-																	<listheader
-																		label="Value" />
-																</listhead>
-																<template
-																	name="model">
-																	<listitem>
-																		<listcell
-																			label="@load(each.name)" />
-																		<listcell>
-																			<checkbox
-																				checked="@bind(each.value)">
-																			</checkbox>
-																		</listcell>
-																	</listitem>
+							<label value="@bind(each.breeder)"
+								if="${each.breeder !=null}" />
+							<textbox value="@bind(each.breeder)" unless="${each.breeder !=null}"/>
 
-																</template>
-															</listbox>
-														</tabpanel>
-														<tabpanel>
-															<listbox
-																model="@load(each.keyBiotic)" width="200px">
-																<listhead>
-																	<listheader
-																		label="Name" />
-																	<listheader
-																		label="Value" />
-																</listhead>
-																<template
-																	name="model">
-																	<listitem>
-																		<listcell
-																			label="@load(each.name)" />
-																		<listcell>
-																			<checkbox
-																					checked="@bind(each.value)">
-																			</checkbox>
-																		</listcell>
-																	</listitem>
+							
+							<combobox model="@load(vm.lstGermplasmType)" readonly="${each.germplasmtypeid != null}" disabled="${each.germplasmtypeid != null}"
+								selectedIndex="@bind(each.germplasmtypeid)" width="99%">
+								<template name="model">
+									<comboitem
+										value="@load(each.germplasmtype)"
+										label="@load(each.germplasmtype)" />
+								</template>
+							</combobox>
 
-																</template>
-															</listbox>
-														</tabpanel>
-														<tabpanel>
-															<listbox
-																model="@load(each.keyGrainQuality)" width="200px">
-																<listhead>
-																	<listheader
-																		label="Name" />
-																	<listheader
-																		label="Value" />
-																</listhead>
-																<template
-																	name="model">
-																	<listitem>
-																		<listcell
-																			label="@load(each.name)" />
-																		<listcell>
-																			<checkbox
-																					checked="@bind(each.value)">
-																			</checkbox>
-																		</listcell>
-																	</listitem>
+							<label value="@bind(each.irnumber)"
+								if="${each.irnumber !=null}" />
+							<textbox value="@bind(each.irnumber)" unless="${each.irnumber !=null}"/>
 
-																</template>
-															</listbox>
-														</tabpanel>
-														<tabpanel>
-															<listbox
-																model="@load(each.keyMajorGenes)" width="200px">
-																<listhead>
-																	<listheader
-																		label="Name" />
-																	<listheader
-																		label="Value" />
-																</listhead>
-																<template
-																	name="model">
-																	<listitem>
-																		<listcell
-																			label="@load(each.name)" />
-																		<listcell>
-																			<checkbox
-																					checked="@bind(each.value)">
-																			</checkbox>
-																		</listcell>
-																	</listitem>
+							<label value="@bind(each.ircross)"
+								if="${each.ircross !=null}" />
+							<textbox value="@bind(each.ircross)" unless="${each.ircross !=null}"/>
 
-																</template>
-															</listbox>
-														</tabpanel>
-													</tabpanels>
-												</tabbox>
-											</vbox>
-										</bandpopup>
-									</bandbox>
-								<label value = "@bind(each.characteristic)" multiline=""></label>
-								</vbox>
-							</row>
-						</template>
-					</grid>
+							<label value="@bind(each.parentage)"
+								if="${each.parentage !=null}" />
+							<textbox value="@bind(each.parentage)" unless="${each.parentage !=null}"/>
 
-				</vlayout>
+							<label value="@bind(each.femaleparent)"
+								if="${each.femaleparent !=null}" />
+							<textbox value="@bind(each.femaleparent)" unless="${each.femaleparent !=null}"/>
 
-			</hlayout>
-	
-	<button label="NEXT"
-			onClick="@global-command('nextTab',model=vm)">
-		</button>
+							<label value="@bind(each.maleparent)"
+								if="${each.maleparent !=null}" />
+							<textbox value="@bind(each.maleparent)" unless="${each.maleparent !=null}"/>
+
+							<label value="@bind(each.selectionhistory)"
+								if="${each.selectionhistory !=null}" />
+							<textbox
+								value="@bind(each.selectionhistory)" unless="${each.selectionhistory !=null}"/>
+
+							<label value="@bind(each.source)"
+								if="${each.source !=null}" />
+							<textbox value="@bind(each.source)" unless="${each.source !=null}"/>
+
+
+
+							<vbox width="65%">
+								<bandbox id="${forEachStatus.index}"
+									readonly="true" mold="rounded" width="65%" value="Select..."
+									onBlur='@command("updateCharacteristicInfo", model= each)'>
+									<bandpopup>
+										<vbox>
+
+											<tabbox>
+
+												<tabs>
+													<tab
+														label="Abiotic Stress" />
+													<tab
+														label="Biotic Stress" />
+													<tab
+														label="Grain Quality" />
+													<tab
+														label="Major Genes" />
+
+												</tabs>
+												<tabpanels>
+													<tabpanel>
+														<listbox
+															model="@load(each.keyAbiotic)" width="200px">
+															<listhead>
+																<listheader
+																	label="Name" />
+																<listheader
+																	label="Value" />
+															</listhead>
+															<template
+																name="model">
+																<listitem>
+																	<listcell
+																		label="@load(each.name)" />
+																	<listcell>
+																		<checkbox
+																			checked="@bind(each.value)">
+																		</checkbox>
+																	</listcell>
+																</listitem>
+
+															</template>
+														</listbox>
+													</tabpanel>
+													<tabpanel>
+														<listbox
+															model="@load(each.keyBiotic)" width="200px">
+															<listhead>
+																<listheader
+																	label="Name" />
+																<listheader
+																	label="Value" />
+															</listhead>
+															<template
+																name="model">
+																<listitem>
+																	<listcell
+																		label="@load(each.name)" />
+																	<listcell>
+																		<checkbox
+																			checked="@bind(each.value)">
+																		</checkbox>
+																	</listcell>
+																</listitem>
+
+															</template>
+														</listbox>
+													</tabpanel>
+													<tabpanel>
+														<listbox
+															model="@load(each.keyGrainQuality)" width="200px">
+															<listhead>
+																<listheader
+																	label="Name" />
+																<listheader
+																	label="Value" />
+															</listhead>
+															<template
+																name="model">
+																<listitem>
+																	<listcell
+																		label="@load(each.name)" />
+																	<listcell>
+																		<checkbox
+																			checked="@bind(each.value)">
+																		</checkbox>
+																	</listcell>
+																</listitem>
+
+															</template>
+														</listbox>
+													</tabpanel>
+													<tabpanel>
+														<listbox
+															model="@load(each.keyMajorGenes)" width="200px">
+															<listhead>
+																<listheader
+																	label="Name" />
+																<listheader
+																	label="Value" />
+															</listhead>
+															<template
+																name="model">
+																<listitem>
+																	<listcell
+																		label="@load(each.name)" />
+																	<listcell>
+																		<checkbox
+																			checked="@bind(each.value)">
+																		</checkbox>
+																	</listcell>
+																</listitem>
+
+															</template>
+														</listbox>
+													</tabpanel>
+												</tabpanels>
+											</tabbox>
+										</vbox>
+									</bandpopup>
+								</bandbox>
+								<label
+									value="@bind(each.characteristic)" multiline="">
+								</label>
+							</vbox>
+						</row>
+					</template>
+				</grid>
+
+			</vlayout>
+
+		</hlayout>
+<hlayout style="float:right;">
+
+			<button label="Next"
+				onClick="@global-command('nextTab',model=vm)" sclass="btn-plain">
+			</button>
+
+		</hlayout>
 
 	</div>
 </zk>
