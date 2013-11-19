@@ -42,7 +42,6 @@ public class SiteInformation extends ProcessTabViewModel {
 	private StudyAgronomy selectedAgroInfo = new StudyAgronomy();
 	private StudyDesign selectedDesignInfo = new StudyDesign();
 	private PlantingType selectedSitePlantingType; // .getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
-	private int selectedID = 0;
 	private int sampleID;
 	private boolean isRaw = false;
 	protected boolean goToNextPage = true;
@@ -131,25 +130,25 @@ public class SiteInformation extends ProcessTabViewModel {
 
 	@NotifyChange("*")
 	@Command("updateDesignInfo")
-	public void updateDesignInfo(@BindingParam("id") Integer id) {
-		System.out.println(id);
-		selectedAgroInfo = sites.get(id).selectedAgroInfo;
-		selectedDesignInfo = sites.get(id).selectedDesignInfo;
-		selectedSitePlantingType =plantingtypeMan.getPlantingTypeById(id);
-		selectedID = id;
+	public void updateDesignInfo(@BindingParam("studysiteid") Integer studysiteid) {
+		System.out.println(studysiteid);
+		selectedDesignInfo = studyDesignMan.getStudyDesign(studysiteid);
+		selectedAgroInfo =  studyAgroMan.getStudyAgronomy(studysiteid);
+		selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(studysiteid);
+//		
+//		siteInfo.selectedDesignInfo = studyDesignMan.getStudyDesign(siteD.getId());
+//		siteInfo.selectedAgroInfo = studyAgroMan.getStudyAgronomy(siteD.getId());
+//		siteInfo.selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(siteInfo.getSelectedAgroInfo().getPlantingtypeid());
+//		selectedAgroInfo =  agroInfo.get(studysiteid);
+//		selectedDesignInfo = designInfo.get(studysiteid);
+//		selectedSitePlantingType =plantingtypeMan.getPlantingTypeById(studysiteid);
 	}
 	
-
-	@Command("updateSelectedSitePlantingType")
-	public void updateSelectedSitePlantingType() {
-		selectedAgroInfo.setPlantingtypeid(selectedSitePlantingType.getId());
-	}
-
 	@Init
 	public void init() {
 		sites =  new ArrayList<StudySiteInfoModel>();
 		
-		studySiteMan = new StudySiteManagerImpl(true);
+		studySiteMan = new StudySiteManagerImpl(false);
 		studyAgroMan = new StudyAgronomyManagerImpl();
 		studyDesignMan = new StudyDesignManagerImpl();
 		ecotypeMan = new EcotypeManagerImpl();
@@ -157,17 +156,16 @@ public class SiteInformation extends ProcessTabViewModel {
 		
 		ecotypes = ecotypeMan.getAllEcotypes();
 		plantingtypes = plantingtypeMan.getAllPlantingTypes();
+		designInfo=studyDesignMan.getAllStudyDesign();
+		agroInfo=studyAgroMan.getAllStudyAgronomy();
 		
 		List<StudySite> subsites = studySiteMan.getAllStudySites(1);
 		for(StudySite siteD : subsites){
+			System.out.println(Integer.toString(siteD.getId()));
 			StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteD);
-			siteInfo.selectedAgroInfo = studyAgroMan.getStudyAgronomy(siteD.getId());
 			siteInfo.selectedDesignInfo = studyDesignMan.getStudyDesign(siteD.getId());
-			if(siteInfo.selectedDesignInfo == null) siteInfo.selectedDesignInfo = new StudyDesign();
-			if(siteInfo.selectedAgroInfo != null) siteInfo.selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(siteInfo.getSelectedAgroInfo().getPlantingtypeid());
-			else{
-				siteInfo.selectedSitePlantingType = new PlantingType();
-			}
+			siteInfo.selectedAgroInfo = studyAgroMan.getStudyAgronomy(siteD.getId());
+			siteInfo.selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(siteInfo.getSelectedAgroInfo().getPlantingtypeid());
 			sites.add(siteInfo);
 		}
 	

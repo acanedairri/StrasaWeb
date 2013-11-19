@@ -4,7 +4,7 @@
 		<tabbox id="tabBox" hflex="1" vflex="1">
 			<tabs id="tabs">
 				<tab label="Search Study" />
-<!-- 				<tab label="OYT-5WH-2012"/> -->
+				<tab label="OYT-5WH-2012"/>
 			</tabs>
 			<tabpanels id="tabPanels">
 				<tabpanel>
@@ -23,10 +23,10 @@
 						</vbox>
 					</hbox>
 				</tabpanel>
-<!-- 				<tabpanel> -->
-<!-- 				<include id="studyInformationPanel" -->
-<!-- 								src="/user/browsestudy/studyinformation.zul" mode="defer" progressing="true" /> -->
-<!-- 				</tabpanel> -->
+				<tabpanel>
+				<include id="studyInformationPanel"
+								src="/user/browsestudy/studyinformation.zul" mode="defer" progressing="true" />
+				</tabpanel>
 			</tabpanels>
 		</tabbox>
 	</window>

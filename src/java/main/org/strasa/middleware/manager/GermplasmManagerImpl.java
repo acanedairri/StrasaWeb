@@ -3,6 +3,7 @@ package org.strasa.middleware.manager;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.GermplasmMapper;
@@ -56,7 +57,7 @@ public class GermplasmManagerImpl {
 				List<Germplasm> subd = mapper.selectByExample(example);
 				if(subd.isEmpty()) newData.setId(null);
 				else newData.setId(subd.get(0).getId());
-				
+				returnVal.add(newData);
 			}
 		}
 		finally{
@@ -82,6 +83,26 @@ public class GermplasmManagerImpl {
 			session.close();
 		}
 		return record.getId();
+	}
+	public void addGermplasm(List<Germplasm> lstRecord){
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession(ExecutorType.BATCH);
+		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
+		try{
+			for(Germplasm record : lstRecord){
+				
+				if(record.getId()==null)
+					mapper.insert(record);
+				else{
+					mapper.updateByPrimaryKey(record);
+					
+				}
+			}
+			session.commit();
+		}
+		finally{
+			session.close();
+		}
+		return;
 	}
 
 		

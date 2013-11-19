@@ -1,0 +1,23 @@
+<zk>
+	<style>
+		.heavy { font-weight: bold; font-size: 11px; } .heavier {
+		font-weight: bold; font-size: 12px; } .searchLabel {font-size:
+		13px; }
+	</style>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.GenotypicData')">
+				<grid height="350px" model="@load(vm.genotypicData)"
+					emptyMessage="No genotypic data found." oddRowSclass="empty" >
+					<columns>
+						<column />
+					</columns>
+					<template name="model">
+						<row>
+							<toolbarbutton label="@load(each.sitename)"
+								width="99%"
+								onClick="@command('updateDesignInfo', studysiteid=each.id)"/>
+						</row>
+					</template>
+				</grid>
+	</window>
+</zk>
