@@ -25,7 +25,7 @@
 				</tabpanel>
 				<tabpanel>
 				<include id="studyInformationPanel"
-								src="/user/browsestudy/studyinformation.zul" mode="defer" progressing="true" />
+								src="/user/browsestudy/studyinformation.zul"/>
 				</tabpanel>
 			</tabpanels>
 		</tabbox>
