@@ -15,7 +15,7 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 
-public class DerivedData {
+public class RawData {
 
 	private int pageSize = 10;
 	private int activePage = 0;
@@ -25,7 +25,7 @@ public class DerivedData {
 	
 	private BrowseStudyManagerImpl browseStudyManagerImpl;
 	
-	public DerivedData() {
+	public RawData() {
 		// TODO Auto-generated constructor stub
 
 
@@ -98,7 +98,7 @@ public class DerivedData {
 		browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
 		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyRawData(1);
 		System.out.println("Size:"+toreturn.size());
-		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(1,"dd"); // rd as raw data, dd as derived data
+		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(1,"rd"); // rd as raw data, dd as derived data
 		for (StudyDataColumn d: columns) {
 			columnList.add(d.getColumnheader());
 			System.out.print(d.getColumnheader()+ "\t");

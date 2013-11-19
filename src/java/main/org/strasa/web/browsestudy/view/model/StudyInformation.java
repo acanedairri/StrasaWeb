@@ -19,10 +19,10 @@ public class StudyInformation {
 	ProjectManagerImpl projectMan = new ProjectManagerImpl();
 	StudyTypeManagerImpl studyTypeMan= new StudyTypeManagerImpl();
 
-	private Study selectedStudy = null;
-	private Program selectedProgram = null;
-	private Project selectedProject = null;
-	private StudyType selectedStudyType = null;
+	private Study selectedStudy = new Study();
+	private Program selectedProgram = new Program();
+	private Project selectedProject = new Project();
+	private StudyType selectedStudyType = new StudyType();
 
 	@NotifyChange("*")
 	@GlobalCommand
@@ -51,31 +51,17 @@ public class StudyInformation {
 		return selectedStudy;
 	}
 
-	public void setSelectedStudy(Study selectedStudy) {
-		this.selectedStudy = selectedStudy;
-	}
 
 	public Program getSelectedProgram() {
 		return selectedProgram;
-	}
-
-	public void setSelectedProgram(Program selectedProgram) {
-		this.selectedProgram = selectedProgram;
 	}
 
 	public Project getSelectedProject() {
 		return selectedProject;
 	}
 
-	public void setSelectedProject(Project selectedProject) {
-		this.selectedProject = selectedProject;
-	}
-
 	public StudyType getSelectedStudyType() {
 		return selectedStudyType;
 	}
 
-	public void setSelectedStudyType(StudyType selectedStudyType) {
-		this.selectedStudyType = selectedStudyType;
-	}
 }

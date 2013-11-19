@@ -1,6 +1,6 @@
 <zk>
 	<window apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.DerivedData')">
+		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.RawData')">
 		<grid model="@bind(vm.dataList)" height="360px" vflex="true"
 			emptyMessage="No data loaded...">
 			<columns children="@load(vm.columnList)">
