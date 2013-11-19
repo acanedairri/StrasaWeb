@@ -89,7 +89,6 @@ public class DerivedData {
 			pageData.add(dataList.get(i));
 			System.out.println(Arrays.toString(dataList.get(i)));
 		}
-
 		return pageData;
 	}
 	
