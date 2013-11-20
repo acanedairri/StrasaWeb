@@ -124,7 +124,12 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 //		
 //		this.isRaw = true;
 //		mockStudyId = 45;
-		
+
+		studyLocationManager = new StudyLocationManagerImpl(isRaw);
+		List<Country> lCountries = getCountryList();
+		for(Country data : lCountries){
+			cmbCountry.add(data.getIsoabbr());
+		}
 		StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
 		if(!rawMan.hasLocationColumnData(studyId)){
 			lstLocations.add(new Location());
@@ -134,7 +139,6 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 		}
 		
 		
-		studyLocationManager = new StudyLocationManagerImpl(isRaw);
 		List<List<Location>> locationInit = studyLocationManager.initializeStudyLocations(studyId);
 		lstLocations.addAll(locationInit.get(0));
 		lstUnknownLocations.addAll(locationInit.get(1));
@@ -154,10 +158,7 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 		
 		
 		
-		List<Country> lCountries = getCountryList();
-		for(Country data : lCountries){
-			cmbCountry.add(data.getIsoabbr());
-		}
+		
 	
 
 		

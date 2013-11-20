@@ -10,9 +10,6 @@ public class Encryptions {
 		passwordEncryptor.setAlgorithm("SHA-1");
 		passwordEncryptor.setPlainDigest(true);
 		String encryptedPassword = passwordEncryptor.encryptPassword(strInput);
-		System.out.println("Sample: " + passwordEncryptor.encryptPassword("SAMPLE"));
-
-		System.out.println("Sample: " + passwordEncryptor.encryptPassword("SAMPLE"));
 		return  encryptedPassword;
    }
 
