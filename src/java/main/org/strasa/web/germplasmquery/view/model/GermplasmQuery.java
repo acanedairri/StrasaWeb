@@ -27,7 +27,7 @@ import org.zkoss.zul.Textbox;
 
 
 
-public class Index2 {
+public class GermplasmQuery {
 
 	private String nameSearch;
 	private String searchKey;
