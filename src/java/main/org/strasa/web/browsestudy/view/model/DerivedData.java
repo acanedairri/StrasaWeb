@@ -72,7 +72,7 @@ public class DerivedData {
 	@Init
 	public void init() {
 		browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
-		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyRawData(1);
+		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(1,"dd");
 		System.out.println("Size:"+toreturn.size());
 		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(1,"dd"); // rd as raw data, dd as derived data
 		for (StudyDataColumn d: columns) {

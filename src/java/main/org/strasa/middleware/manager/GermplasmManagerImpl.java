@@ -29,6 +29,40 @@ public class GermplasmManagerImpl {
 				session.close();
 		}
 	}
+	
+	
+	public Germplasm getGermplasmById(int id){
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
+		try{
+			return mapper.selectByPrimaryKey(id);
+		}
+		finally{
+				session.close();
+		}
+		
+	}
+	
+	public List<Germplasm> getGermplasmListByName(String value){
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
+		
+		try{
+			GermplasmExample example = new GermplasmExample();
+			if(value.contains("%")){
+				example.createCriteria().andGermplasmnameLike(value);
+			}else{
+				example.createCriteria().andGermplasmnameEqualTo(value);
+			}
+			if(mapper.selectByExample(example).isEmpty()) return null;
+			return mapper.selectByExample(example);
+			
+		}
+		finally{
+				session.close();
+		}
+	}
+	
 	public List<Germplasm> convertStudyToGermplasm(List<StudyGermplasm> studyGerm){
 		
 		ArrayList<Germplasm> returnVal = new ArrayList<Germplasm>();

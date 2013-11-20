@@ -1,9 +1,15 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
-<zk>
 
-	<vbox>
-		<hbox apply="org.zkoss.bind.BindComposer"
-			viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.Index2')">
+<zk>
+	<style>
+		.heavy { font-weight: bold; font-size: 12px; } .heavier {
+		font-weight: bold; font-size: 12px;text-align:left} }
+		.searchLabel {font-size: 13px; }
+	</style>
+
+	<vbox apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.Index2')">
+		<hbox width="100%">
 			<label value="Search Germplasm By" />
 			<combobox id="cmbSearchKey" autodrop="true"
 				selectedIndex="@bind(vm.searchKey)"
@@ -32,12 +38,12 @@
 				label="${each}" />
 				</template>
 				</combobox>  
-
+				
 			-->
 
 			<chosenbox hflex="1" width="250px" id="cmbKeyCharValue"
 				visible="false" model="@load(vm.keyCharacteristicOption)" />
-				
+
 			<combobox id="cmbGermplasmType" visible="false"
 				model="@load(vm.germplasmType)"
 				selectedIndex="@bind(vm.germplasmTypeId)">
@@ -48,9 +54,153 @@
 			</combobox>
 
 
-			<button label="Search" />
+			<button label="Search"
+				onClick="@command('SearchGermplasm')" />
 		</hbox>
 
+		<groupbox mold="3d" width="100%">
+			<caption label="Search Result" />
+			<grid height="200px" model="@load(vm.germplasmList)"
+				emptyMessage="No Record Found">
+
+				<columns>
+					<column label="Germplasm Name" width="150px" />
+					<column label="Other Name" />
+
+				</columns>
+				<template name="model">
+					<row
+						onClick="@command('DisplayGermplasmInfo', germplasmId=each.id,gname=each.germplasmname)">
+						<label value="@load(each.germplasmname)" />
+						<label value="@load(each.othername)" />
+
+					</row>
+				</template>
+			</grid>
+		</groupbox>
+
+
+		<groupbox id="GermplasmDetailId" mold="3d" width="100%"
+			visible="false">
+			<caption label="Germplasm Information" />
+			<grid oddRowSclass="empty">
+				<columns width="200px">
+					<column label="" width="200px" />
+					<column label="" />
+				</columns>
+				<rows>
+					<row>
+						<label value="GID:" sclass="heavy" />
+						<label sclass="searchLabel"
+							value="@load(vm.germplasm.gid)" />
+					</row>
+					<row>
+						<label value="Germplasm Name:" sclass="heavy" />
+						<label sclass="searchLabel"
+							value="@load(vm.germplasm.germplasmname)" />
+					</row>
+					<row>
+						<label value="Other Name:" sclass="heavy" />
+						<label sclass="searchLabel"
+							value="@load(vm.germplasm.othername)" />
+					</row>
+					<row>
+						<label value="Breeder:" sclass="heavy" />
+						<label sclass="searchLabel"
+							value="@load(vm.germplasm.breeder)" />
+					</row>
+					<row>
+						<label value="Germplasm Type" sclass="heavy" />
+						<label sclass="searchLabel"
+							value="@load(vm.germplasm.germplasmtypeid)" />
+					</row>
+					<row>
+						<label value="IR Number" sclass="heavy" />
+						<label sclass="searchLabel"
+							value="@load(vm.germplasm.irnumber)" />
+					</row>
+					<row>
+						<label value="IR Cross" sclass="heavy" />
+						<label sclass="searchLabel"
+							value="@load(vm.germplasm.ircross)" />
+					</row>
+					<row>
+						<label value="Parentage" sclass="heavy" />
+						<label sclass="searchLabel"
+							value="@load(vm.germplasm.parentage)" />
+					</row>
+					<row>
+						<label value="Male Parent" sclass="heavy" />
+						<label sclass="searchLabel"
+							value="@load(vm.germplasm.maleparent)" />
+					</row>
+					<row>
+						<label value="Female Parent" sclass="heavy" />
+						<label sclass="searchLabel"
+							value="@load(vm.germplasm.femaleparent)" />
+					</row>
+					<row>
+						<label value="Selection History" sclass="heavy" />
+						<label sclass="searchLabel"
+							value="@load(vm.germplasm.selectionhistory)" />
+					</row>
+					<row>
+						<label value="Source" sclass="heavy" />
+						<label sclass="searchLabel"
+							value="@load(vm.germplasm.source)" />
+					</row>
+					<row>
+						<label value="Abiotic Characteristics"
+							sclass="heavy" />
+						<label sclass="searchLabel"
+							value="@load(vm.abioticCharacteristics)" />
+					</row>
+					<row>
+						<label value="Biotic Characteristics"
+							sclass="heavy" />
+						<label sclass="searchLabel"
+							value="@load(vm.bioticCharacteristics)" />
+					</row>
+					<row>
+						<label value="Grain Quality Characteristics"
+							sclass="heavy" />
+						<label sclass="searchLabel"
+							value="@load(vm.grainQualityCharacteristics)" />
+					</row>
+					<row>
+						<label value="Major Characteristics"
+							sclass="heavy" />
+						<label sclass="searchLabel"
+							value="@load(vm.majorGenesCharacteristics)" />
+					</row>
+				</rows>
+			</grid>
+		</groupbox>
+
+		<groupbox id="StudyTestedId" mold="3d" width="100%" visible="false">
+			<caption label="Studies where this germplasm is tested" />
+			<grid height="200px" model="@load(vm.germplasmList)"
+				emptyMessage="No Record Found">
+
+				<columns>
+					<column label="Study Name" width="150px" />
+					<column label="Project" />
+					<column label="Program" />
+					<column label="Study Type" />
+					<column label="Start Year" />
+					<column label="End Year" />
+					<column label="Location" />
+
+				</columns>
+				<template name="model">
+					<row onClick="@command('DisplayGermplasmInfo', germplasmId=each.id,gname=each.germplasmname)">
+						<label value="test" />
+						<label value="test" />
+
+					</row>
+				</template>
+			</grid>
+		</groupbox>
 
 	</vbox>
 

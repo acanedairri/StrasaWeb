@@ -85,13 +85,13 @@ public class BrowseStudyManagerImpl {
 		
 	}
 	
-	public List<HashMap<String,String>> getStudyRawData(int studyId){
-		
+	public List<HashMap<String,String>> getStudyData(int studyId,String dataType){
+		List<HashMap<String,String>> toreturn;
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		try{
 			StudyDataColumnManagerImpl mgr= new StudyDataColumnManagerImpl();
 		
-			List<StudyDataColumn> studyDataColumn =mgr.getStudyDataColumnByStudyId(studyId,"rd");
+			List<StudyDataColumn> studyDataColumn =mgr.getStudyDataColumnByStudyId(studyId,dataType);
 			ArrayList<StudyDataColumnModel> dataColumns= new ArrayList<StudyDataColumnModel>();
 			
 			int count=1;
@@ -106,7 +106,11 @@ public class BrowseStudyManagerImpl {
 				count++;
 			}
 
-			List<HashMap<String,String>> toreturn= session.selectList("BrowseStudy.getStudyRawData",dataColumns);
+			if(dataType.equals("rd")){
+				toreturn= session.selectList("BrowseStudy.getStudyRawData",dataColumns);
+			}else{
+				toreturn= session.selectList("BrowseStudy.getStudyDerivedData",dataColumns);
+			}
 			
 			return toreturn;
 			
