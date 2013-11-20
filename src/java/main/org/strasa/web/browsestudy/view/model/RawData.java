@@ -96,7 +96,7 @@ public class RawData {
 	@Init
 	public void init() {
 		browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
-		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyRawData(1);
+		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(1,"rd");
 		System.out.println("Size:"+toreturn.size());
 		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(1,"rd"); // rd as raw data, dd as derived data
 		for (StudyDataColumn d: columns) {
