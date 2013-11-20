@@ -48,6 +48,16 @@ public class FormValidator {
 	    return false;
 	}
 	
+	public boolean isAllValid() {
+		return isAllValid;
+	}
+
+
+	public void setAllValid(boolean isAllValid) {
+		this.isAllValid = isAllValid;
+	}
+
+
 	public static ArrayList<String> getBlankVariables(Object obj, String[] excemptions) throws IllegalArgumentException, IllegalAccessException {
 	    ArrayList<String> returnVal = new ArrayList<String>();
 		ArrayList<String> arrExps = new ArrayList<String>();

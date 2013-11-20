@@ -1,11 +1,16 @@
 package org.strasa.web.uploadstudy.view.model;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.io.input.ReaderInputStream;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.manager.GermplasmManagerImpl;
@@ -25,19 +30,27 @@ import org.strasa.middleware.model.KeyGrainQuality;
 import org.strasa.middleware.model.KeyMajorGenes;
 import org.strasa.middleware.model.StudyGermplasm;
 import org.strasa.middleware.model.StudyGermplasmCharacteristics;
+import org.strasa.web.common.api.Encryptions;
 import org.strasa.web.common.api.FormValidator;
 import org.strasa.web.common.api.ProcessTabViewModel;
+import org.strasa.web.uploadstudy.view.model.UploadData.GenotypeFileModel;
 import org.strasa.web.uploadstudy.view.model.UploadData.Runtimer;
+import org.strasa.web.utilities.FileUtilities;
+import org.zkoss.bind.BindContext;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.ContextParam;
+import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zhtml.Messagebox;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.UploadEvent;
 
 public class StudyGermplasmInfo extends ProcessTabViewModel{
 
-	List<GermplasmDeepInfoModel> lstStudyGermplasm = new ArrayList<GermplasmDeepInfoModel>();
+	HashMap<String,GermplasmDeepInfoModel> lstStudyGermplasm = new HashMap<String,GermplasmDeepInfoModel>();
 
 	private long studyID;
 	private String[] arrGermplasmType;
@@ -78,14 +91,15 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 		this.arrGermplasmType = arrGermplasmType;
 	}
 
-	public List<GermplasmDeepInfoModel> getLstStudyGermplasm() {
+
+	
+	public HashMap<String, GermplasmDeepInfoModel> getLstStudyGermplasm() {
 		return lstStudyGermplasm;
 	}
-
-	public void setLstStudyGermplasm(List<GermplasmDeepInfoModel> lstStudyGermplasm) {
+	public void setLstStudyGermplasm(
+			HashMap<String, GermplasmDeepInfoModel> lstStudyGermplasm) {
 		this.lstStudyGermplasm = lstStudyGermplasm;
 	}
-	
 	@Init
 	public void init(@ExecutionArgParam("studyID") long studyID, @ExecutionArgParam("isRaw") boolean isRaw ) {
 		Runtimer timer = new Runtimer();
@@ -158,7 +172,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 //			}
 		if(newData.getGid() != null) if(newData.getGid() == 0) newData.setGid(null);
 		if(newData.getOthername() != null) if(newData.getOthername().isEmpty() || newData.getOthername().trim().equals("")) newData.setOthername(null);
-		lstStudyGermplasm.add(newData);
+		lstStudyGermplasm.put(newData.getGermplasmname(),newData);
 		
 	}
 	
@@ -220,6 +234,45 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 	}
 	timer.end();
 	}
+	
+	
+	@NotifyChange("genotypeFileList")
+	@Command("uploadGenotypeData")
+	public void uploadGenotypeData(
+			@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,
+			@ContextParam(ContextType.VIEW) Component view) {
+
+		UploadEvent event = (UploadEvent) ctx.getTriggerEvent();
+
+		// System.out.println(event.getMedia().getStringData());
+
+		String name = event.getMedia().getName();
+		if (!name.endsWith(".csv")) {
+			Messagebox.show("Error: File must be a text-based CSV  format",
+					"Upload Error", Messagebox.OK, Messagebox.ERROR);
+			return;
+		}
+
+		try {
+			String filename = name
+					+ Encryptions.encryptStringToNumber(name,
+							new Date().getTime());
+			File tempGenoFile = File.createTempFile(filename, ".tmp");
+			InputStream in = event.getMedia().isBinary() ? event.getMedia()
+					.getStreamData() : new ReaderInputStream(event.getMedia()
+					.getReaderData());
+			FileUtilities.uploadFile(tempGenoFile.getAbsolutePath(), in);
+			
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+	}
+	
+	
+	
 	@Command
 	@NotifyChange("*")
 	public void updateCharacteristicInfo(@BindingParam("model") GermplasmDeepInfoModel model ){
@@ -309,10 +362,10 @@ public class StudyGermplasmInfo extends ProcessTabViewModel{
 		StudyGermplasmManagerImpl studyGermplasmMan = new StudyGermplasmManagerImpl();
 		GermplasmManagerImpl germplasmManagerImpl  = new GermplasmManagerImpl();
 		List<StudyGermplasm> lstStudyGerm = new ArrayList<StudyGermplasm>();
-		lstStudyGerm.addAll(lstStudyGermplasm);
+		lstStudyGerm.addAll(lstStudyGermplasm.values());
 		
 		List<GermplasmCharacteristics> lstCharacteristics = new ArrayList<GermplasmCharacteristics>();
-		for(GermplasmDeepInfoModel record: lstStudyGermplasm){
+		for(GermplasmDeepInfoModel record: lstStudyGermplasm.values()){
 					for(CharacteristicModel model : record.keyAbiotic){
 						if(model.value){
 							GermplasmCharacteristics rec = new GermplasmCharacteristics();

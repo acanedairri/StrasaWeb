@@ -3,10 +3,18 @@
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudyGermplasmInfo')">
 
 
-		<hlayout spacing="50px">
+		<groupbox><hlayout spacing="50px">
 			<vlayout width="100%">
 				<grid height="100%" width="100%"
 					model="@load(vm.lstStudyGermplasm)" vflex="1" hflex="1">
+					<auxhead   width="100%">
+						<auxheader colspan="13" label="" width="100%">
+							<button id="uploadGenotype" upload="true"
+							label="Upload Germplasm Table" onUpload="@command('uploadGenotypeData')" />
+							
+						</auxheader>
+						
+					</auxhead>
 					<columns>
 						<column label="GID" width="5.69%" />
 						<column label="GName" width="7.69%" />
@@ -21,6 +29,7 @@
 						<column label="Selection History" width="7.69%" />
 						<column label="Source" width="7.69%" />
 						<column label="Characteristic" width="9.69%" />
+
 					</columns>
 					<template name="model">
 						<row>
@@ -42,10 +51,13 @@
 
 							<label value="@bind(each.breeder)"
 								if="${each.breeder !=null}" />
-							<textbox value="@bind(each.breeder)" unless="${each.breeder !=null}"/>
+							<textbox value="@bind(each.breeder)"
+								unless="${each.breeder !=null}" />
 
-							
-							<combobox model="@load(vm.lstGermplasmType)" readonly="${each.germplasmtypeid != null}" disabled="${each.germplasmtypeid != null}"
+
+							<combobox model="@load(vm.lstGermplasmType)"
+								readonly="${each.germplasmtypeid != null}"
+								disabled="${each.germplasmtypeid != null}"
 								selectedIndex="@bind(each.germplasmtypeid)" width="99%">
 								<template name="model">
 									<comboitem
@@ -56,32 +68,39 @@
 
 							<label value="@bind(each.irnumber)"
 								if="${each.irnumber !=null}" />
-							<textbox value="@bind(each.irnumber)" unless="${each.irnumber !=null}"/>
+							<textbox value="@bind(each.irnumber)"
+								unless="${each.irnumber !=null}" />
 
 							<label value="@bind(each.ircross)"
 								if="${each.ircross !=null}" />
-							<textbox value="@bind(each.ircross)" unless="${each.ircross !=null}"/>
+							<textbox value="@bind(each.ircross)"
+								unless="${each.ircross !=null}" />
 
 							<label value="@bind(each.parentage)"
 								if="${each.parentage !=null}" />
-							<textbox value="@bind(each.parentage)" unless="${each.parentage !=null}"/>
+							<textbox value="@bind(each.parentage)"
+								unless="${each.parentage !=null}" />
 
 							<label value="@bind(each.femaleparent)"
 								if="${each.femaleparent !=null}" />
-							<textbox value="@bind(each.femaleparent)" unless="${each.femaleparent !=null}"/>
+							<textbox value="@bind(each.femaleparent)"
+								unless="${each.femaleparent !=null}" />
 
 							<label value="@bind(each.maleparent)"
 								if="${each.maleparent !=null}" />
-							<textbox value="@bind(each.maleparent)" unless="${each.maleparent !=null}"/>
+							<textbox value="@bind(each.maleparent)"
+								unless="${each.maleparent !=null}" />
 
 							<label value="@bind(each.selectionhistory)"
 								if="${each.selectionhistory !=null}" />
 							<textbox
-								value="@bind(each.selectionhistory)" unless="${each.selectionhistory !=null}"/>
+								value="@bind(each.selectionhistory)"
+								unless="${each.selectionhistory !=null}" />
 
 							<label value="@bind(each.source)"
 								if="${each.source !=null}" />
-							<textbox value="@bind(each.source)" unless="${each.source !=null}"/>
+							<textbox value="@bind(each.source)"
+								unless="${each.source !=null}" />
 
 
 
@@ -213,11 +232,13 @@
 							</vbox>
 						</row>
 					</template>
+					
 				</grid>
 
 			</vlayout>
 
-		</hlayout>
+		</hlayout></groupbox>
+		
 <hlayout style="float:right;">
 
 			<button label="Next"

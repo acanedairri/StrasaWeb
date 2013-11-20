@@ -129,6 +129,7 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 		if(!rawMan.hasLocationColumnData(studyId)){
 			lstLocations.add(new Location());
 			noLocation = true;
+			formValidator.setAllValid(false);
 			return;
 		}
 		
