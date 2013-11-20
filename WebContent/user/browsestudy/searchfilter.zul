@@ -11,9 +11,9 @@
 					Data
 					<radiogroup onCreate="self.setSelectedIndex(2)"
 						selectedItem="@bind(vm.searchFilter.shared)">
-						<radio label="My Data" />
-						<radio label="Shared" />
-						<radio label="Both" />
+						<radio label="My Data" value="private" />
+						<radio label="Shared Data" value="public" />
+						<radio label="Both" value="" />
 					</radiogroup>
 				</row>
 				<row>

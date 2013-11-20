@@ -2,6 +2,7 @@ package org.strasa.web.uploadstudy.view.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.strasa.middleware.manager.EcotypeManagerImpl;
@@ -37,7 +38,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	private List<StudyDesign> designInfo;
 	private List<Ecotype> ecotypes;
 	private List<PlantingType> plantingtypes;
-
+	private boolean noSite = false;
 	private StudySite selectedSite;
 	private StudyAgronomy selectedAgroInfo = new StudyAgronomy();;
 	private StudyDesign selectedDesignInfo = new StudyDesign();; 
@@ -210,7 +211,21 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 	@Override
 	public boolean validateTab() {
+	
+		if(noSite && sites.get(0).getSitename() == null && sites.get(0).getSitename().isEmpty()){
+			Messagebox.show("Error: Site names must not be empty.", "Upload Error",
+					Messagebox.OK, Messagebox.ERROR);
 
+			// TODO: must have message DIalog
+			return false;
+		}
+		if(noSite && sites.get(0).getSitelocation() == null && sites.get(0).getSitelocation().isEmpty()){
+			Messagebox.show("Error: Locations must not be empty.", "Upload Error",
+					Messagebox.OK, Messagebox.ERROR);
+
+			// TODO: must have message DIalog
+			return false;
+		}
 		 System.out.println("LOOP : " + sites.size());
 		List<StudySite> lstSites = new ArrayList<StudySite>();
 		 List<StudyAgronomy> lstAgro = new ArrayList<StudyAgronomy>();
@@ -301,10 +316,13 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			siteInfo.selectedDesignInfo = new StudyDesign();
 			siteInfo.selectedSitePlantingType = new PlantingType();
 			siteInfo.selectedAgroInfo = new StudyAgronomy();
+			siteInfo.setYear(new StudyManagerImpl().getStudyById(sID).getStartyear());
 			sites.add(siteInfo);
 			ecotypes = ecotypeMan.getAllEcotypes();
 			plantingtypes = plantingtypeMan.getAllPlantingTypes();
 			selectedSite = sites.get(0);
+			
+			noSite = false;
 			return;
 		}
 		String studyStartYear = new StudyManagerImpl().getStudyById(sID).getStartyear();
@@ -386,6 +404,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			this.setYear(s.getYear());
 			
 		}
+		
 		public StudySiteInfoModel(){
 			
 		}

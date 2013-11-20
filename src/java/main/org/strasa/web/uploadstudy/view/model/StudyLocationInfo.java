@@ -28,6 +28,7 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 	private int studyId ;
 	private FormValidator formValidator = new FormValidator();
 	private boolean isRaw = false;
+	private boolean noLocation;
 	private List<Location> lstUnknownLocations = new ArrayList<Location>();
 	private List<Location> lstLocations = new ArrayList<Location>();
 	private ArrayList<String> cmbCountry = new ArrayList<String>();
@@ -116,6 +117,7 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 		System.out.println("_______________________________________________________________");
 		System.out.println("Raw: " + isRaw);
 		System.out.println("StudyID: " + studyID);
+		
 		this.isRaw = isRaw;
 		studyId = (int) studyID;
 //	public void init(){
@@ -123,14 +125,22 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 //		this.isRaw = true;
 //		mockStudyId = 45;
 		
-		 studyLocationManager = new StudyLocationManagerImpl(isRaw);
+		StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
+		if(!rawMan.hasLocationColumnData(studyId)){
+			lstLocations.add(new Location());
+			noLocation = true;
+			return;
+		}
+		
+		
+		studyLocationManager = new StudyLocationManagerImpl(isRaw);
 		List<List<Location>> locationInit = studyLocationManager.initializeStudyLocations(studyId);
 		lstLocations.addAll(locationInit.get(0));
 		lstUnknownLocations.addAll(locationInit.get(1));
 		Map<String,ArrayList<String>> constructedRow = new HashMap<String,ArrayList<String>>();
 		System.out.println("KnownLocationSize: " + lstLocations.size());
 		System.out.println("UnknownLocationSize:" + lstUnknownLocations.size());
-		StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
+	
 		 HashMap<String,Location> lstRawLoc = rawMan.getStudyLocationInfoToMap(studyId);
 		
 		for(int i = 0 ; i < lstUnknownLocations.size(); i++){
@@ -147,10 +157,7 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 		for(Country data : lCountries){
 			cmbCountry.add(data.getIsoabbr());
 		}
-		System.out.println("ConSize: " + cmbCountry.size());
-		if(lstLocations.isEmpty()){
-			lstLocations.add(new Location());
-		}
+	
 
 		
 	}

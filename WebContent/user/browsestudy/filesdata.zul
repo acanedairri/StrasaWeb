@@ -14,9 +14,9 @@
 <!-- 		} -->
 	</style>
 	<window apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.GenotypicData')">
-		<grid height="350px" model="@load(vm.genotypicFiles)"
-			emptyMessage="No genotypic data found." oddRowSclass="empty">
+		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.FilesData')">
+		<grid height="350px" model="@load(vm.files)"
+			emptyMessage="No files were found." oddRowSclass="empty">
 			<columns>
 				<column />
 			</columns>
@@ -24,7 +24,7 @@
 				<row>
 					<toolbarbutton label="@load(each.filename)"
 						width="99%" />
-					<!-- 								onClick="@command('updateDesignInfo', studysiteid=each.id)"/> -->
+					<!--onClick="@command('updateDesignInfo', studysiteid=each.id)"/> -->
 				</row>
 			</template>
 		</grid>

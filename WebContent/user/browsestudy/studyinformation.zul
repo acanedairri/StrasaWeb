@@ -25,35 +25,35 @@
 											sclass="heavier" />
 									</cell>
 									<label sclass="searchLabel"
-										value="@bind(vm.selectedProgram.name)" />
+										value="@load(vm.selectedProgram.name)" />
 								</row>
 								<row>
 									<label value="" />
 									<label value="Objective"
 										sclass="heavy" />
 									<label sclass="searchLabel"
-										value="@bind(vm.selectedProgram.objective)" />
+										value="@load(vm.selectedProgram.objective)" />
 								</row>
 								<row>
 									<label value="" />
 									<label value="Coordinator"
 										sclass="heavy" />
 									<label sclass="searchLabel"
-										value="@bind(vm.selectedProgram.coordinator)" />
+										value="@load(vm.selectedProgram.coordinator)" />
 								</row>
 								<row>
 									<label value="" />
 									<label value="Leading Institute"
 										sclass="heavy" />
 									<label sclass="searchLabel"
-										value="@bind(vm.selectedProgram.leadinginstitute)" />
+										value="@load(vm.selectedProgram.leadinginstitute)" />
 								</row>
 								<row>
 									<label value="" />
 									<label value="Collaborator"
 										sclass="heavy" />
 									<label sclass="searchLabel"
-										value="@bind(vm.selectedProgram.collaborator)" />
+										value="@load(vm.selectedProgram.collaborator)" />
 								</row>
 								<row>
 									<cell colspan="2">
@@ -61,41 +61,41 @@
 											sclass="heavier" />
 									</cell>
 									<label sclass="searchLabel"
-										value="@bind(vm.selectedProject.name)" />
+										value="@load(vm.selectedProject.name)" />
 								</row>
 								<row>
 									<label value="" />
 									<label value="Objective"
 										sclass="heavy" />
 									<label sclass="searchLabel"
-										value="@bind(vm.selectedProject.objective)" />
+										value="@load(vm.selectedProject.objective)" />
 								</row>
 								<row>
 									<label value="" />
 									<label value="PI" sclass="heavy" />
 									<label sclass="searchLabel"
-										value="@bind(vm.selectedProject.pi)" />
+										value="@load(vm.selectedProject.pi)" />
 								</row>
 								<row>
 									<label value="" />
 									<label value="Leading Institute"
 										sclass="heavy" />
 									<label sclass="searchLabel"
-										value="@bind(vm.selectedProject.leadinginstitute)" />
+										value="@load(vm.selectedProject.leadinginstitute)" />
 								</row>
 								<row>
 									<label value="" />
 									<label value="Collaborators"
 										sclass="heavy" />
 									<label sclass="searchLabel"
-										value="@bind(vm.selectedProject.collaborators)" />
+										value="@load(vm.selectedProject.collaborators)" />
 								</row>
 								<row>
 									<label value="" />
 									<label value="Funding"
 										sclass="heavy" />
 									<label sclass="searchLabel"
-										value="@bind(vm.selectedProject.fundingagency)" />
+										value="@load(vm.selectedProject.fundingagency)" />
 								</row>
 
 								<row>
@@ -104,7 +104,7 @@
 											sclass="heavier" />
 									</cell>
 									<label sclass="searchLabel"
-										value="@bind(vm.selectedStudy.name)" />
+										value="@load(vm.selectedStudy.name)" />
 								</row>
 								<row>
 									<cell colspan="2">
@@ -112,7 +112,7 @@
 											sclass="heavier" />
 									</cell>
 									<label sclass="searchLabel"
-										value="@bind(vm.selectedStudy.description)" />
+										value="@load(vm.selectedStudy.description)" />
 								</row>
 								<row>
 									<cell colspan="2">
@@ -120,7 +120,7 @@
 											sclass="heavier" />
 									</cell>
 									<label sclass="searchLabel"
-										value="@bind(vm.selectedStudyType.studytype)" />
+										value="@load(vm.selectedStudyType.studytype)" />
 								</row>
 								<row>
 									<cell colspan="2">
@@ -128,7 +128,7 @@
 											sclass="heavier" />
 									</cell>
 									<label sclass="searchLabel"
-										value="@bind(vm.selectedStudy.startyear)" />
+										value="@load(vm.selectedStudy.startyear)" />
 								</row>
 								<row>
 									<cell colspan="2">
@@ -136,18 +136,18 @@
 											sclass="heavier" />
 									</cell>
 									<label sclass="searchLabel"
-										value="@bind(vm.selectedStudy.endyear)" />
+										value="@load(vm.selectedStudy.endyear)" />
 								</row>
 							</rows>
 						</grid>
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Site Information" />
-						<include src="/user/browsestudy/siteinfo.zul" mode="defer" />
+						<include src="/user/browsestudy/siteinfo.zul" />
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Study Location" />
-										<include src="/user/browsestudy/locationinfo.zul" mode="defer" />
+										<include src="/user/browsestudy/locationinfo.zul" />
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Germplasm Information" />
@@ -155,19 +155,19 @@
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Derived data" />
-						<!-- 				<include src="/user/browsestudy/siteinformation.zul" mode="defer" /> -->
+						<include src="/user/browsestudy/deriveddata.zul" mode="defer" />
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Raw data" />
-						<!-- 				<include src="/user/browsestudy/siteinformation.zul" mode="defer" /> -->
+						<include src="/user/browsestudy/rawdata.zul" />
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Genotypic data" />
-						<!-- 				<include src="/user/browsestudy/siteinformation.zul" mode="defer" /> -->
+						<include src="/user/browsestudy/genotypicdata.zul" mode="defer" />
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Files" />
-						<!-- 				<include src="/user/browsestudy/siteinformation.zul" mode="defer" /> -->
+						<include src="/user/browsestudy/filesdata.zul" mode="defer" />
 					</groupbox>
 				</vlayout>
 			</panelchildren>
