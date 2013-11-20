@@ -11,18 +11,21 @@
 		distinct
 		t1.shared as shared,
 		t1.id as id,
-		t1.programid as programid,
+		t1.programid as
+		programid,
 		t2.name as
 		programname,
 		t1.projectid as projectid,
-		t3.name as projectname,
+		t3.name as
+		projectname,
 		t1.name
 		as studyname,
 		t1.studytypeid as studytypeid,
 		t4.studytype as
 		studytypename,
 		t1.startyear as startyear,
-		t1.endyear as endyear,
+		t1.endyear as
+		endyear,
 		t5.locationid as locationid,
 		t6.locationname as locationname,
 		t6.country as country
@@ -81,52 +84,46 @@
 
 	</select>
 
+
+
 	<select id="getStudyRawData" resultType="hashmap" parameterType="StudyDataColumnModel">
 		select
 		<foreach item="item" index="index" collection="list">
-
 			<if test="item.order != item.count">
-				(Select t2.datavalue from
-				studyrawdata as t2 where t2.datacolumn=#{item.columnheader} and
-				t2.datarow=t1.datarow and t2.studyid=#{item.studyid}) as
-				#{item.columnheader},
+				MAX(CASE datacolumn WHEN #{item.columnheader} THEN
+				datavalue ELSE '' END) AS #{item.columnheader},
 			</if>
 
 			<if test="item.order == item.count">
-				(Select t2.datavalue from
-				studyrawdata as t2 where t2.datacolumn=#{item.columnheader} and
-				t2.datarow=t1.datarow and t2.studyid=#{item.studyid}) as
-				#{item.columnheader},
-				t1.studyid from studyrawdata as t1 where
-				t1.datacolumn='GName' and t1.studyid=#{item.studyid}
+				MAX(CASE datacolumn WHEN #{item.columnheader} THEN
+				datavalue ELSE '' END) AS #{item.columnheader}
+				from studyrawdata as
+				t1 where t1.studyid=#{item.studyid}
+				group by t1.datarow
 			</if>
 
 		</foreach>
-
 	</select>
 
-	<select id="getStudyDerivedData" resultType="hashmap" parameterType="StudyDataColumnModel">
+	<select id="getStudyDerivedData" resultType="hashmap"
+		parameterType="StudyDataColumnModel">
 		select
 		<foreach item="item" index="index" collection="list">
-
 			<if test="item.order != item.count">
-				(Select t2.datavalue from
-				studyrawdata as t2 where t2.datacolumn=#{item.columnheader} and
-				t2.datarow=t1.datarow and t2.studyid=#{item.studyid}) as
-				#{item.columnheader},
+				MAX(CASE datacolumn WHEN #{item.columnheader} THEN
+				datavalue ELSE '' END) AS #{item.columnheader},
 			</if>
 
 			<if test="item.order == item.count">
-				(Select t2.datavalue from
-				studyrawdata as t2 where t2.datacolumn=#{item.columnheader} and
-				t2.datarow=t1.datarow and t2.studyid=#{item.studyid}) as
-				#{item.columnheader},
-				t1.studyid from studyderiveddata as t1 where
-				t1.datacolumn='GName' and t1.studyid=#{item.studyid}
+				MAX(CASE datacolumn WHEN #{item.columnheader} THEN
+				datavalue ELSE '' END) AS #{item.columnheader}
+				from studyderiveddata
+				as
+				t1 where t1.studyid=#{item.studyid}
+				group by t1.datarow
 			</if>
 
 		</foreach>
-
 	</select>
 
 </mapper>
