@@ -62,6 +62,20 @@ public class StudyFileManagerImpl {
 		}
 	}
 	
+	public List<StudyFile> getFileByStudyIdAndDataType(int studyid, String datatype){
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		StudyFileMapper mapper = session.getMapper(StudyFileMapper.class);
+		try{
+			StudyFileExample example = new StudyFileExample();
+			example.createCriteria().andTypeofdataEqualTo(datatype);
+			example.createCriteria().andStudyidEqualTo(studyid);
+			return mapper.selectByExample(example);
+		}
+		finally{
+			session.close();
+		}
+	}
+	
 	public List<StudyFile> getFileByFileName(String filename){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudyFileMapper mapper = session.getMapper(StudyFileMapper.class);

@@ -155,7 +155,7 @@
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Derived data" />
-<!-- 										<include src="/user/browsestudy/siteinformation.zul" mode="defer" /> -->
+						<include src="/user/browsestudy/deriveddata.zul" mode="defer" />
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Raw data" />
@@ -163,11 +163,11 @@
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Genotypic data" />
-						<!-- 				<include src="/user/browsestudy/siteinformation.zul" mode="defer" /> -->
+						<include src="/user/browsestudy/genotypicdata.zul" mode="defer" />
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Files" />
-						<!-- 				<include src="/user/browsestudy/siteinformation.zul" mode="defer" /> -->
+						<include src="/user/browsestudy/filesdata.zul" mode="defer" />
 					</groupbox>
 				</vlayout>
 			</panelchildren>

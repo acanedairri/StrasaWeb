@@ -6,27 +6,27 @@ import org.strasa.middleware.manager.StudyFileManagerImpl;
 import org.strasa.middleware.model.StudyFile;
 import org.zkoss.bind.annotation.Init;
 
-public class GenotypicData {
+public class FilesData {
 	private StudyFileManagerImpl studyFileMan;
 
-	private  List<StudyFile> genotypicFiles;
+	private  List<StudyFile> files;
 	
-	public GenotypicData() {
+	public FilesData() {
 		// TODO Auto-generated constructor stub
 	}
 
 	@Init
 	public void init() {
 		studyFileMan = new StudyFileManagerImpl();
-		
-		setGenotypicFiles(studyFileMan.getFileByStudyIdAndDataType(1, "gd"));
+
+		setFiles(studyFileMan.getFileByStudyIdAndDataType(1, "fd"));
 	}
 
-	public List<StudyFile> getGenotypicFiles() {
-		return genotypicFiles;
+	public List<StudyFile> getFiles() {
+		return files;
 	}
 
-	public void setGenotypicFiles(List<StudyFile> genotypicFiles) {
-		this.genotypicFiles = genotypicFiles;
+	public void setFiles(List<StudyFile> files) {
+		this.files = files;
 	}
 }
