@@ -155,7 +155,7 @@
 										visible="@load(vm.variableDataVisible)"
 										value="@load(vm.dataFileName)" style="font-size:14pt;" />
 									<button label="Remove"
-										onClick="@command('removeUpload')"
+										onClick="@command('removeUpload')  @global-command('disableTabs')"
 										visible="@load(vm.variableDataVisible)" />
 									<button label="Modify Header"
 										onClick="@command('modifyDataHeader')"

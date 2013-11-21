@@ -19,12 +19,14 @@ import org.apache.commons.io.input.ReaderInputStream;
 import org.strasa.middleware.filesystem.manager.UserFileManager;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
+import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.manager.StudyTypeManagerImpl;
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.Study;
+import org.strasa.middleware.model.StudyDataColumn;
 import org.strasa.middleware.model.StudyType;
 import org.strasa.web.common.api.Encryptions;
 import org.strasa.web.common.api.ProcessTabViewModel;
@@ -70,6 +72,7 @@ public class UploadData extends ProcessTabViewModel {
 	private File tempFile;
 	private String uploadTo = "database";
 	private String studyType = "rawdata";
+	private boolean isNewDataSet = true;
 
 	public ArrayList<GenotypeFileModel> getGenotypeFileList() {
 		return genotypeFileList;
@@ -457,6 +460,7 @@ public class UploadData extends ProcessTabViewModel {
 	public void removeUpload() {
 		isVariableDataVisible = false;
 		dataFileName = "";
+		isNewDataSet = true;
 		varData.clear();
 	}
 
@@ -585,10 +589,10 @@ public class UploadData extends ProcessTabViewModel {
 
 		if (uploadTo.equals("database")) {
 
-				
-
+				if(isNewDataSet)
 				studyRawData.addStudyRawData(study,columnList.toArray(new String[columnList.size()]),dataList);
-
+				
+				new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), columnList.toArray(new String[columnList.size()]), (isRaw) ? "rd":"dd");
 
 				 
 				

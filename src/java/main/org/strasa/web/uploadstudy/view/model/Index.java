@@ -69,6 +69,17 @@ public class Index {
 //	      Selectors.wireEventListeners(view, this);
 	    }
 	
+	 @NotifyChange("*")
+	 @GlobalCommand("disableTabs")
+	 public void disableTabs(){
+		 tabDisabled[0] = false;
+		 tabDisabled[1] = true;
+		 tabDisabled[2] = true;
+		 tabDisabled[3] = true;
+		 tabDisabled[4] = true;
+		 System.out.println("Disabled Tabs Called");
+	 }
+	  
 	@Command("showzulfile")
 	public void showzulfile(@BindingParam("zulFileName") String zulFileName,
 			@BindingParam("target") Tabpanel panel) {
