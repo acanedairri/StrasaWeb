@@ -92,8 +92,11 @@ public class Index {
 		if(selectedIndex == 0){
 			isRaw = uploadData.isRaw;
 			studyID = uploadData.getStudyID();
-			System.out.println("IsRaw: " + isRaw );
+			System.out.println("IsRaw: " + uploadData.uploadToFolder );
 
+		}
+		if(uploadData.uploadToFolder){
+			selectedIndex = 3;
 		}
 
 //		System.out.println("Sample: " + uploadData.getTxtProject());
@@ -102,21 +105,23 @@ public class Index {
 		
 
 		tabDisabled[selectedIndex + 1] = false;
-		
+		if(uploadData.uploadToFolder){
+			selectedIndex = 3;
+		}
 		Tab[] tabs = {tab1,tab2,tab3,tab4,tab5};
 		
 		Events.sendEvent("onSelect",tabs[selectedIndex + 1],tabs[selectedIndex + 1]);
-//		switch(selectedIndex + 1){
-//		case 1:
-//			Events.sendEvent("onSelect",tab1,tab1);
-//		case 2:
-//			Events.sendEvent("onSelect",tab2,tab2);
-//		case 3: 	
-//			Events.sendEvent("onSelect",tab3,tab3);
-//		case 4:
-//			Events.sendEvent("onSelect",tab4,tab4);
-//		}
-			selectedIndex++;
+		System.out.println("INDEX: " + selectedIndex);
+		if(uploadData.uploadToFolder){
+			tabDisabled[4] = false;
+			System.out.println("FINISH LOADED: ");
+			Events.sendEvent("onSelect",tab5,tab5);
+
+			Events.sendEvent("onSelect",tab5,tab5);
+
+			Events.sendEvent("onSelect",tab5,tab5);
+		}
+		selectedIndex++;
 	
 	}
 	@NotifyChange("*")

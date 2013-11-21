@@ -11,7 +11,7 @@ public class ProcessTabViewModel {
 	public boolean isRaw = true;
 	private long studyID;
 	private Component mainView;
-
+	public boolean uploadToFolder = false;
 	
 	
 	public void initSpecial(){

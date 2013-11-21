@@ -176,7 +176,7 @@ public class StudyRawDataManagerImpl {
 						StudyRawData record = new StudyRawData();
 
 						record.setDatacolumn(header[j]);
-						record.setDatarow(i);
+						record.setDatarow(i + 1);
 						record.setDatavalue(row[j]);
 						record.setStudyid(study.getId());
 //						studyDataMapper.insert(record);
