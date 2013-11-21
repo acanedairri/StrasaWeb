@@ -73,6 +73,21 @@ public class TestBrowseStudyManagerImpl {
 		}
 
 	}
+	
+	@Test
+	public void testGetStudyWithGemrplasmTested() throws Exception {
+		final BrowseStudyManagerImpl browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
+
+		String gname="IR1";
+
+		List<StudySearchResultModel> toreturn= browseStudyManagerImpl.getStudyWithGemrplasmTested(gname);
+		System.out.println("Size:"+toreturn.size());
+
+		for(StudySearchResultModel rec:toreturn){
+			System.out.println(rec.toString() +"\n");
+		}
+
+	}
 
 	@Test
 	public void testGetStudyData() throws Exception {

@@ -5,170 +5,6 @@
 
 <mapper namespace="CrossStudyStudyQuery">
 
-
-	<select id="getStudyRawData" resultType="hashmap" parameterType="StudyDataColumnModel">
-		select
-		<foreach item="item" index="index" collection="list">
-
-			<if test="item.order != item.count">
-				(Select t2.datavalue from
-				studyrawdata as t2 where
-				t2.datacolumn=#{item.columnheader} and
-				t2.datarow=t1.datarow and
-				t2.studyid=#{item.studyid}) as
-				#{item.columnheader},
-			</if>
-
-			<if test="item.order == item.count">
-				(Select t2.datavalue from
-				studyrawdata as t2 where
-				t2.datacolumn=#{item.columnheader} and
-				t2.datarow=t1.datarow and
-				t2.studyid=#{item.studyid}) as
-				#{item.columnheader},
-				t1.studyid from
-				studyrawdata as t1 where
-				t1.datacolumn='GName' and
-				t1.studyid=#{item.studyid}
-			</if>
-
-		</foreach>
-
-	</select>
-
-	<select id="getCrossStudyQueryResultTest" resultType="hashmap"
-		parameterType="CrossStudyQueryFilterModel">
-
-		select t1.studyid as studyid,datarow as datarow,tblStudy.name as
-		studyname,datavalue as GName,
-
-		<foreach item="item" index="index" collection="list">
-			<if test="item.columnAs =='field' and item.orderCriteria == 'last'">
-				(Select t2.datavalue from studyrawdata as t2 where
-				t2.datacolumn=#{item.variable} and t2.datarow=t1.datarow and
-				t2.studyid=t1.studyid) as #{item.variable}
-
-
-			</if>
-
-			<if test="item.columnAs =='field' and item.orderCriteria != 'last'">
-				(Select t2.datavalue from studyrawdata as t2 where
-				t2.datacolumn=#{item.variable} and t2.datarow=t1.datarow and
-				t2.studyid=t1.studyid) as #{item.variable} ,
-			</if>
-
-
-		</foreach>
-
-		from studyrawdata as t1
-		left join study as tblStudy on
-		t1.studyid=tblStudy.id where
-		t1.datacolumn='GName'
-
-		and
-
-		<foreach item="item" index="index" collection="list">
-			<if test="item.columnAs =='filter' and item.orderCriteria == 'last'">
-
-				<if test="item.dataType == 'Number'">
-					(Select t2.datavalue from studyrawdata
-					as t2 where
-					t2.datacolumn=#{item.variable} and t2.datarow=t1.datarow
-					and
-					t2.studyid=t1.studyid)
-
-					<if test="item.operator == 'greaterthan'">
-						&gt; #{item.valueDouble}
-					</if>
-
-					<if test="item.operator == 'lessthan'">
-						&lt; #{item.valueDouble}
-					</if>
-					<if test="item.operator == 'greaterthanequal'">
-						&gt;= #{item.valueDouble}
-					</if>
-					<if test="item.operator == 'lessthanequal'">
-						&lt;= #{item.valueDouble}
-					</if>
-				</if>
-
-				<if test="item.dataType == 'String'">
-					<if test="item.operator == 'equalto'">
-						(Select t2.datavalue from studyrawdata as t2 where
-						t2.datacolumn=#{item.variable}
-						and t2.datarow=t1.datarow and
-						t2.studyid=t1.studyid) =
-						#{item.valueString}
-
-					</if>
-
-					<if test="item.operator == 'like'">
-						(Select t2.datavalue from studyrawdata as t2 where
-						t2.datacolumn=#{item.variable}
-						and t2.datarow=t1.datarow and
-						t2.studyid=t1.studyid) like
-						#{item.valueString}
-					</if>
-
-				</if>
-
-			</if>
-
-			<if test="item.columnAs =='filter' and item.orderCriteria != 'last'">
-				<if test="item.dataType == 'Number'">
-					(Select t2.datavalue from studyrawdata as t2 where
-					t2.datacolumn=#{item.variable}
-					and t2.datarow=t1.datarow and
-					t2.studyid=t1.studyid)
-					<if test="item.operator == 'greaterthan'">
-						&gt; #{item.valueDouble} and
-					</if>
-
-					<if test="item.operator == 'lessthan'">
-						&lt; #{item.valueDouble} and
-					</if>
-
-					<if test="item.operator == 'greaterthanequal'">
-						&gt;= #{item.valueDouble} and
-					</if>
-
-					<if test="item.operator == 'lessthanequal'">
-						&lt;= #{item.valueDouble} and
-					</if>
-
-				</if>
-
-				<if test="item.dataType == 'String'">
-
-					<if test="item.operator == 'equalto'">
-						(Select t2.datavalue from studyrawdata as t2 where
-						t2.datacolumn=#{item.variable}
-						and t2.datarow=t1.datarow and
-						t2.studyid=t1.studyid) =
-						#{item.valueString} and
-
-
-					</if>
-
-					<if test="item.operator == 'like'">
-						(Select t2.datavalue from studyrawdata as t2 where
-						t2.datacolumn=#{item.variable}
-						and t2.datarow=t1.datarow and
-						t2.studyid=t1.studyid) like
-						#{item.valueString} and
-					</if>
-				</if>
-			</if>
-
-
-
-		</foreach>
-		order by t1.datarow,t1.datavalue
-
-
-	</select>
-
-
 	<select id="getCrossStudyQueryResult" resultType="hashmap"
 		parameterType="CrossStudyQueryFilterModel">
 
@@ -178,13 +14,15 @@
 		<foreach item="item" index="index" collection="list">
 			<if test="item.columnAs =='field' and item.orderCriteria == 'last'">
 
-				MAX(CASE datacolumn WHEN #{item.variable} THEN datavalue ELSE '' END) AS
+				MAX(CASE datacolumn WHEN #{item.variable} THEN datavalue
+				ELSE '' END) AS
 				#{item.variable}
 
 			</if>
 
 			<if test="item.columnAs =='field' and item.orderCriteria != 'last'">
-				MAX(CASE datacolumn WHEN #{item.variable} THEN datavalue ELSE '' END) AS
+				MAX(CASE datacolumn WHEN #{item.variable} THEN datavalue
+				ELSE '' END) AS
 				#{item.variable},
 			</if>
 
@@ -192,7 +30,8 @@
 		</foreach>
 
 		from studyrawdata as t1
-		left join study as t2 on t1.studyid=t2.id group by t1.datarow having
+		left join study as t2 on t1.studyid=t2.id group
+		by t1.datarow having
 
 		<foreach item="item" index="index" collection="list">
 			<if test="item.columnAs =='filter' and item.orderCriteria == 'last'">
@@ -219,11 +58,13 @@
 
 				<if test="item.dataType == 'String'">
 					<if test="item.operator == 'equalto'">
-						MAX(CASE datacolumn WHEN #{item.variable} THEN datavalue ELSE '' END) =
+						MAX(CASE datacolumn WHEN #{item.variable} THEN
+						datavalue ELSE '' END) =
 						#{item.valueString}
 					</if>
 					<if test="item.operator == 'like'">
-						MAX(CASE datacolumn WHEN #{item.variable} THEN datavalue ELSE '' END) like
+						MAX(CASE datacolumn WHEN #{item.variable} THEN
+						datavalue ELSE '' END) like
 						#{item.valueString}
 					</if>
 				</if>
@@ -254,12 +95,14 @@
 				<if test="item.dataType == 'String'">
 
 					<if test="item.operator == 'equalto'">
-						MAX(CASE datacolumn WHEN #{item.variable} THEN datavalue ELSE '' END)) =
+						MAX(CASE datacolumn WHEN #{item.variable} THEN
+						datavalue ELSE '' END)) =
 						#{item.valueString} and
 					</if>
 
 					<if test="item.operator == 'like'">
-						MAX(CASE datacolumn WHEN #{item.variable} THEN datavalue ELSE '' END) like
+						MAX(CASE datacolumn WHEN #{item.variable} THEN
+						datavalue ELSE '' END) like
 						#{item.valueString} and
 					</if>
 				</if>

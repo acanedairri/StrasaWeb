@@ -120,6 +120,21 @@ public class BrowseStudyManagerImpl {
 		
 		
 	}
+	
+	public List<StudySearchResultModel> getStudyWithGemrplasmTested(String gname) {
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		try{
+			
+			List<StudySearchResultModel> toreturn= session.selectList("BrowseStudy.getStudyWithGemrplasmTested",gname);
+			
+			return toreturn;
+			
+		}finally{
+			session.close();
+		}
+		
+		
+	}
 
 
 }

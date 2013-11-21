@@ -24,7 +24,7 @@ public class SidebarPageConfigAjaxBasedImpl implements SidebarPageConfig{
 		pageMap.put("upload_study",new SidebarPage("upload_data","Upload New Study","/images/upload.png","/user/uploadstudy/index.zul"));
 		pageMap.put("fn2",new SidebarPage("fn2","Upload Data to Exsisting Study","/images/fn.png","/user/home.zul"));
 		pageMap.put("browse_study",new SidebarPage("browse_study","Browse Study","/images/fn.png","/user/browsestudy/index.zul"));
-		pageMap.put("fn4",new SidebarPage("browse_germplasm","Browse Germplasm","/images/fn.png","/user/home.zul"));
+		pageMap.put("browse_germplasm",new SidebarPage("browse_germplasm","Browse Germplasm","/images/fn.png","/user/germplasmquery/germplasmquery.zul"));
 		pageMap.put("crossquery",new SidebarPage("cross_study_query","Cross Study Query","/images/fn.png","/user/home.zul"));
 		pageMap.put("analysis",new SidebarPage("analysis","Analysis","/images/fn.png","/user/home.zul"));
 	}

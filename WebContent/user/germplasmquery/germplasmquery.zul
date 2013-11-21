@@ -8,7 +8,7 @@
 	</style>
 
 	<vbox apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.Index2')">
+		viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.GermplasmQuery')">
 		<hbox width="100%">
 			<label value="Search Germplasm By" />
 			<combobox id="cmbSearchKey" autodrop="true"
@@ -41,7 +41,7 @@
 				
 			-->
 
-			<chosenbox hflex="1" width="250px" id="cmbKeyCharValue"
+			<chosenbox  width="250px" id="cmbKeyCharValue"
 				visible="false" model="@load(vm.keyCharacteristicOption)" />
 
 			<combobox id="cmbGermplasmType" visible="false"
@@ -58,7 +58,7 @@
 				onClick="@command('SearchGermplasm')" />
 		</hbox>
 
-		<groupbox mold="3d" width="100%">
+		<groupbox mold="3d" width="98%">
 			<caption label="Search Result" />
 			<grid height="200px" model="@load(vm.germplasmList)"
 				emptyMessage="No Record Found">
@@ -80,7 +80,7 @@
 		</groupbox>
 
 
-		<groupbox id="GermplasmDetailId" mold="3d" width="100%"
+		<groupbox id="GermplasmDetailId" mold="3d" width="98%"
 			visible="false">
 			<caption label="Germplasm Information" />
 			<grid oddRowSclass="empty">
@@ -177,9 +177,9 @@
 			</grid>
 		</groupbox>
 
-		<groupbox id="StudyTestedId" mold="3d" width="100%" visible="false">
+		<groupbox id="StudyTestedId" mold="3d" width="98%" visible="false">
 			<caption label="Studies where this germplasm is tested" />
-			<grid height="200px" model="@load(vm.germplasmList)"
+			<grid height="200px" model="@load(vm.studyTested)"
 				emptyMessage="No Record Found">
 
 				<columns>
@@ -189,14 +189,16 @@
 					<column label="Study Type" />
 					<column label="Start Year" />
 					<column label="End Year" />
-					<column label="Location" />
 
 				</columns>
 				<template name="model">
 					<row onClick="@command('DisplayGermplasmInfo', germplasmId=each.id,gname=each.germplasmname)">
-						<label value="test" />
-						<label value="test" />
-
+						<label value="@load(each.studyname)" />
+						<label value="@load(each.programname)" />
+						<label value="@load(each.projectname)" />
+						<label value="@load(each.studytypename)" />
+						<label value="@load(each.startyear)" />
+						<label value="@load(each.endyear)" />
 					</row>
 				</template>
 			</grid>

@@ -3,6 +3,7 @@ package org.strasa.web.germplasmquery.view.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.strasa.middleware.manager.BrowseStudyManagerImpl;
 import org.strasa.middleware.manager.GermplasmCharacteristicMananagerImpl;
 import org.strasa.middleware.manager.GermplasmManagerImpl;
 import org.strasa.middleware.manager.GermplasmTypeManagerImpl;
@@ -13,6 +14,7 @@ import org.strasa.middleware.model.KeyAbiotic;
 import org.strasa.middleware.model.KeyBiotic;
 import org.strasa.middleware.model.KeyGrainQuality;
 import org.strasa.middleware.model.KeyMajorGenes;
+import org.strasa.web.browsestudy.view.model.StudySearchResultModel;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
@@ -41,6 +43,7 @@ public class GermplasmQuery {
 	private String bioticCharacteristics;
 	private String grainQualityCharacteristics;
 	private String majorGenesCharacteristics;
+	private List<StudySearchResultModel> studyTested;
 
 
 
@@ -154,6 +157,18 @@ public class GermplasmQuery {
 		this.majorGenesCharacteristics = majoyGenesCharacteristics;
 	}
 
+	
+	
+
+	public List<StudySearchResultModel> getStudyTested() {
+		return studyTested;
+	}
+
+
+	public void setStudyTested(List<StudySearchResultModel> studyTested) {
+		this.studyTested = studyTested;
+	}
+
 
 	@Command
 	public void SetSearchUI(@ContextParam(ContextType.COMPONENT) Component component,
@@ -239,7 +254,16 @@ public class GermplasmQuery {
 		germplasm=getGermplasmDetailInformation(id);
 		abioticCharacteristics=getGermplasmCharacteristics("Abiotic",gname);
 		bioticCharacteristics=getGermplasmCharacteristics("Biotic",gname);
+		
+		studyTested=getStudyTested(gname);
 	}
+
+	private List<StudySearchResultModel> getStudyTested(String gname) {
+		BrowseStudyManagerImpl browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
+		return browseStudyManagerImpl.getStudyWithGemrplasmTested(gname);
+		
+	}
+
 
 	private String getGermplasmCharacteristics(String keyChar, String gname) {
 		String toreturn = "";
