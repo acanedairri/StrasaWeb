@@ -26,7 +26,7 @@ import org.zkoss.zhtml.Messagebox;
 
 public class LocationInfo{
     
-	private int studyId=1;
+	private int studyId;
 	private List<Location> lstLocations = new ArrayList<Location>();
 	private StudyLocationManagerImpl studyLocationManager;
 	private LocationManagerImpl locationManager;
@@ -45,7 +45,9 @@ public class LocationInfo{
 	}
 
 	@Init
-	public void init() {
+	public void init(@ExecutionArgParam("studyid") Integer studyId){
+		this.setStudyId(studyId);
+		
 		studyLocationManager = new StudyLocationManagerImpl(false);
 		locationManager = new LocationManagerImpl();
 		List<StudyLocation> studyLocations = new ArrayList<StudyLocation>();
@@ -55,5 +57,13 @@ public class LocationInfo{
 			Location l = locationManager.getLocationById(s.getLocationid());
 			lstLocations.add(l);
 		}
+	}
+
+	public int getStudyId() {
+		return studyId;
+	}
+
+	public void setStudyId(int studyId) {
+		this.studyId = studyId;
 	}
 }

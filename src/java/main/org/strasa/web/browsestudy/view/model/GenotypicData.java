@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.strasa.middleware.manager.StudyFileManagerImpl;
 import org.strasa.middleware.model.StudyFile;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.Init;
 
 public class GenotypicData {
@@ -16,10 +17,11 @@ public class GenotypicData {
 	}
 
 	@Init
-	public void init() {
+	public void init(@ExecutionArgParam("studyid") Integer studyId){
+		
 		studyFileMan = new StudyFileManagerImpl();
 		
-		setGenotypicFiles(studyFileMan.getFileByStudyIdAndDataType(1, "gd"));
+		setGenotypicFiles(studyFileMan.getFileByStudyIdAndDataType(studyId, "gd"));
 	}
 
 	public List<StudyFile> getGenotypicFiles() {

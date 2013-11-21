@@ -11,6 +11,7 @@ import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
 import org.strasa.middleware.model.StudyDataColumn;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
@@ -19,22 +20,22 @@ public class RawData {
 
 	private int pageSize = 10;
 	private int activePage = 0;
-	
+
 	private List<String> columnList= new ArrayList<String>();
 	private List<String[]> dataList = new ArrayList<String[]>();
-	
+
 	private BrowseStudyManagerImpl browseStudyManagerImpl;
-	
+
 	public RawData() {
 		// TODO Auto-generated constructor stub
 
 
 	}
-	
+
 	public int getTotalSize() {
 		return dataList.size();
 	}
-	
+
 	public int getPageSize() {
 		return pageSize;
 	}
@@ -43,7 +44,7 @@ public class RawData {
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 	}
-	
+
 	@NotifyChange("*")
 	public int getActivePage() {
 		return activePage;
@@ -62,7 +63,7 @@ public class RawData {
 		this.columnList = columnList;
 	}
 
-	
+
 	public ArrayList<ArrayList<String>> getCsvData() {
 		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
 		if (dataList.isEmpty())
@@ -92,13 +93,13 @@ public class RawData {
 
 		return pageData;
 	}
-	
+
 	@Init
-	public void init() {
+	public void init(@ExecutionArgParam("studyid") Integer studyId){
 		browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
-		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(1,"rd");
+		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(studyId,"rd");
 		System.out.println("Size:"+toreturn.size());
-		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(1,"rd"); // rd as raw data, dd as derived data
+		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyId,"rd"); // rd as raw data, dd as derived data
 		for (StudyDataColumn d: columns) {
 			columnList.add(d.getColumnheader());
 			System.out.print(d.getColumnheader()+ "\t");
@@ -114,6 +115,6 @@ public class RawData {
 			System.out.println("\n ");
 			dataList.add(newRow.toArray(new String[newRow.size()]));
 		}
-		
+
 	}
 }

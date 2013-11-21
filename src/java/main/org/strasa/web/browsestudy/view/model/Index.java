@@ -34,10 +34,12 @@ public class Index {
 		Tabpanel newPanel = new Tabpanel();
 		
 		//initialize view after view construction.
-		Include pageDefineStudySite = new Include();
-		pageDefineStudySite.setSrc("/user/browsestudy/studyinformation.zul");
-		pageDefineStudySite.setParent(newPanel);
+		Include studyInformationPage = new Include();
+		studyInformationPage.setSrc("/user/browsestudy/studyinformation.zul");
+		studyInformationPage.setParent(newPanel);
 		
+//		studyInformationPage.setAttribute("studyId", studyId);
+		studyInformationPage.setDynamicProperty("studyId", studyId);
 		tabPanels.appendChild(newPanel);
 		tabs.appendChild(newTab);
 

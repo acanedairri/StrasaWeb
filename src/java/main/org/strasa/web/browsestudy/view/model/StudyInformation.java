@@ -9,7 +9,9 @@ import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyType;
 import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
+import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 
 
@@ -24,9 +26,13 @@ public class StudyInformation {
 	private Project selectedProject = new Project();
 	private StudyType selectedStudyType = new StudyType();
 
-	@NotifyChange("*")
-	@GlobalCommand
-	public void openStudyData(@BindingParam("studyId")Integer studyId){
+	private Integer studyId;
+
+
+	@Init
+	public void init(@ExecutionArgParam("studyId") Integer studyId){
+		this.setStudyId(studyId);
+
 		System.out.println("studyId"+ Integer.toString(studyId));
 		selectedStudy = studyMan.getStudyById(studyId);
 		try{
@@ -47,6 +53,7 @@ public class StudyInformation {
 
 	}
 
+
 	public Study getSelectedStudy() {
 		return selectedStudy;
 	}
@@ -63,5 +70,14 @@ public class StudyInformation {
 	public StudyType getSelectedStudyType() {
 		return selectedStudyType;
 	}
+
+	public Integer getStudyId() {
+		return studyId;
+	}
+
+	public void setStudyId(Integer studyId) {
+		this.studyId = studyId;
+	}
+
 
 }

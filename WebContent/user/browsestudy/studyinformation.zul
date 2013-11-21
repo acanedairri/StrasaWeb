@@ -143,11 +143,13 @@
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Site Information" />
-						<include src="/user/browsestudy/siteinfo.zul" />
+						<include studyid="${arg.studyId}"
+							src="/user/browsestudy/siteinfo.zul" />
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Study Location" />
-										<include src="/user/browsestudy/locationinfo.zul" />
+						<include studyid="${arg.studyId}"
+							src="/user/browsestudy/locationinfo.zul" />
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Germplasm Information" />
@@ -155,19 +157,23 @@
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Derived data" />
-						<include src="/user/browsestudy/deriveddata.zul" mode="defer" />
+						<include studyid="${arg.studyId}"
+							src="/user/browsestudy/deriveddata.zul" mode="defer" />
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Raw data" />
-						<include src="/user/browsestudy/rawdata.zul" />
+						<include studyid="${arg.studyId}"
+							src="/user/browsestudy/rawdata.zul" />
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Genotypic data" />
-						<include src="/user/browsestudy/genotypicdata.zul" mode="defer" />
+						<include studyid="${arg.studyId}"
+							src="/user/browsestudy/genotypicdata.zul" mode="defer" />
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Files" />
-						<include src="/user/browsestudy/filesdata.zul" mode="defer" />
+						<include studyid="${arg.studyId}"
+							src="/user/browsestudy/filesdata.zul" mode="defer" />
 					</groupbox>
 				</vlayout>
 			</panelchildren>

@@ -12,9 +12,12 @@ import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.manager.StudySiteManagerImpl;
 import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.PlantingType;
+import org.strasa.middleware.model.Program;
+import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.StudyAgronomy;
 import org.strasa.middleware.model.StudyDesign;
 import org.strasa.middleware.model.StudySite;
+import org.strasa.middleware.model.StudyType;
 import org.strasa.web.common.api.ProcessTabViewModel;
 import org.strasa.web.uploadstudy.view.model.StudySiteInfo.StudySiteInfoModel;
 import org.zkoss.bind.annotation.BindingParam;
@@ -42,12 +45,12 @@ public class SiteInformation extends ProcessTabViewModel {
 	private StudyAgronomy selectedAgroInfo = new StudyAgronomy();
 	private StudyDesign selectedDesignInfo = new StudyDesign();
 	private PlantingType selectedSitePlantingType; // .getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
-	private int sampleID;
+	private Integer studyId;
 	private boolean isRaw = false;
 	protected boolean goToNextPage = true;
 	private int selectedPlantingIndex=0;
 
-	
+
 	public StudyAgronomy getSelectedAgroInfo() {
 		return selectedAgroInfo;
 	}
@@ -80,18 +83,10 @@ public class SiteInformation extends ProcessTabViewModel {
 		this.designInfo = designInfo;
 	}
 
-	public double getSampleID() {
-		return sampleID;
-	}
-
-	public void setSampleID(int sampleID) {
-		this.sampleID = sampleID;
-	}
-
 	public List<Ecotype> getEcotypes() {
 		return ecotypes;
 	}
-	
+
 	public void setEcotypes(List<Ecotype> ecotypes) {
 		this.ecotypes = ecotypes;
 	}
@@ -135,45 +130,48 @@ public class SiteInformation extends ProcessTabViewModel {
 		selectedDesignInfo = studyDesignMan.getStudyDesign(studysiteid);
 		selectedAgroInfo =  studyAgroMan.getStudyAgronomy(studysiteid);
 		selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(studysiteid);
-//		
-//		siteInfo.selectedDesignInfo = studyDesignMan.getStudyDesign(siteD.getId());
-//		siteInfo.selectedAgroInfo = studyAgroMan.getStudyAgronomy(siteD.getId());
-//		siteInfo.selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(siteInfo.getSelectedAgroInfo().getPlantingtypeid());
-//		selectedAgroInfo =  agroInfo.get(studysiteid);
-//		selectedDesignInfo = designInfo.get(studysiteid);
-//		selectedSitePlantingType =plantingtypeMan.getPlantingTypeById(studysiteid);
+		//		
+		//		siteInfo.selectedDesignInfo = studyDesignMan.getStudyDesign(siteD.getId());
+		//		siteInfo.selectedAgroInfo = studyAgroMan.getStudyAgronomy(siteD.getId());
+		//		siteInfo.selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(siteInfo.getSelectedAgroInfo().getPlantingtypeid());
+		//		selectedAgroInfo =  agroInfo.get(studysiteid);
+		//		selectedDesignInfo = designInfo.get(studysiteid);
+		//		selectedSitePlantingType =plantingtypeMan.getPlantingTypeById(studysiteid);
 	}
-	
+
 	@Init
-	public void init() {
+	public void init(@ExecutionArgParam("studyid") Integer studyId){
+		this.setStudyID(studyId);
+
 		sites =  new ArrayList<StudySiteInfoModel>();
-		
+
 		studySiteMan = new StudySiteManagerImpl(false);
 		studyAgroMan = new StudyAgronomyManagerImpl();
 		studyDesignMan = new StudyDesignManagerImpl();
 		ecotypeMan = new EcotypeManagerImpl();
 		plantingtypeMan = new PlantingTypeManagerImpl();
-		
+
 		ecotypes = ecotypeMan.getAllEcotypes();
 		plantingtypes = plantingtypeMan.getAllPlantingTypes();
 		designInfo=studyDesignMan.getAllStudyDesign();
 		agroInfo=studyAgroMan.getAllStudyAgronomy();
-		
-		List<StudySite> subsites = studySiteMan.getAllStudySites(1);
-		for(StudySite siteD : subsites){
-			System.out.println(Integer.toString(siteD.getId()));
-			StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteD);
-			siteInfo.selectedDesignInfo = studyDesignMan.getStudyDesign(siteD.getId());
-			siteInfo.selectedAgroInfo = studyAgroMan.getStudyAgronomy(siteD.getId());
-			siteInfo.selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(siteInfo.getSelectedAgroInfo().getPlantingtypeid());
-			sites.add(siteInfo);
+
+		List<StudySite> subsites = studySiteMan.getAllStudySites(studyId);
+		if(subsites.size()>0){
+			for(StudySite siteD : subsites){
+				System.out.println(Integer.toString(siteD.getId()));
+				StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteD);
+				siteInfo.selectedDesignInfo = studyDesignMan.getStudyDesign(siteD.getId());
+				siteInfo.selectedAgroInfo = studyAgroMan.getStudyAgronomy(siteD.getId());
+				siteInfo.selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(siteInfo.getSelectedAgroInfo().getPlantingtypeid());
+				sites.add(siteInfo);
+			}
+
+			selectedSite = sites.get(0);
+			updateDesignInfo(0);
 		}
-	
-		selectedSite = sites.get(0);
-		
-		updateDesignInfo(0);
 	}
-	
+
 	public PlantingType getSelectedSitePlantingType() {
 		return selectedSitePlantingType;
 	}
@@ -183,13 +181,23 @@ public class SiteInformation extends ProcessTabViewModel {
 	}
 
 
-	
+
+	public Integer getStudyId() {
+		return studyId;
+	}
+
+	public void setStudyId(Integer studyId) {
+		this.studyId = studyId;
+	}
+
+
+
 	public class StudySiteInfoModel extends StudySite{
 		private Ecotype ecotype = new Ecotype();
 		private StudyAgronomy selectedAgroInfo = new StudyAgronomy();
 		private StudyDesign selectedDesignInfo = new StudyDesign();
 		private PlantingType selectedSitePlantingType = new PlantingType();
-		
+
 		public StudySiteInfoModel(StudySite s){
 			this.setEcotypeid(s.getEcotypeid());
 			this.setEcotype(getEcotypeById(s.getEcotypeid()));
@@ -202,7 +210,7 @@ public class SiteInformation extends ProcessTabViewModel {
 			this.setStudyid(s.getStudyid());
 			this.setYear(s.getYear());
 			this.setId(s.getId());
-			
+
 		}
 		public StudyAgronomy getSelectedAgroInfo() {
 			return selectedAgroInfo;
@@ -235,7 +243,7 @@ public class SiteInformation extends ProcessTabViewModel {
 		public Ecotype getEcotypeById(int id) {
 			return ecotypes.get(id);
 		}
-		
+
 	}
 
 }
