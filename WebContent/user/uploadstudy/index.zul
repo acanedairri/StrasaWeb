@@ -27,7 +27,7 @@
 					onSelect="@command('showzulfile', zulFileName='/user/uploadstudy/studygermplasminfo.zul', target=self.linkedPanel)" />
 				<tab label="Finish" id="tab5"
 					disabled="@load(vm.tabDisabled[self.index])" 
-						onSelect="@command('showzulfile', zulFileName='/user/uploadstudy/studystudyuploadfinish.zul', target=self.linkedPanel)" />
+						 	onSelect="@command('showzulfile', zulFileName='/user/uploadstudy/studyuploadfinish.zul', target=self.linkedPanel)"/>
 			</tabs>
 			<tabpanels>
 				<tabpanel>
@@ -38,18 +38,8 @@
 				<tabpanel></tabpanel>
 				<tabpanel></tabpanel>
 				<tabpanel>
-					<borderlayout>
-						<center title="">
-							<hbox width="100%" height="100%"
-								pack="center" align="center">
-								<vbox>
-									<label
-										value="Study Upload has been completed."
-										style="font-size:24pt" />
-								</vbox>
-							</hbox>
-						</center>
-					</borderlayout>
+					<include mode="defer"
+						src="/user/uploadstudy/studyuploadfinish.zul" />
 				</tabpanel>
 			</tabpanels>
 		</tabbox>

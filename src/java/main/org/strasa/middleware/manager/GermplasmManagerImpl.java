@@ -1,6 +1,7 @@
 package org.strasa.middleware.manager;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.ibatis.session.ExecutorType;
@@ -10,6 +11,7 @@ import org.strasa.middleware.mapper.GermplasmMapper;
 import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.GermplasmExample;
 import org.strasa.middleware.model.StudyGermplasm;
+import org.strasa.web.uploadstudy.view.model.StudyGermplasmInfo.GermplasmDeepInfoModel;
 
 public class GermplasmManagerImpl {
 
@@ -63,16 +65,24 @@ public class GermplasmManagerImpl {
 		}
 	}
 	
-	public List<Germplasm> convertStudyToGermplasm(List<StudyGermplasm> studyGerm){
+	public List<Germplasm> convertStudyToGermplasm(Collection<GermplasmDeepInfoModel> collection){
 		
 		ArrayList<Germplasm> returnVal = new ArrayList<Germplasm>();
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 		
 		try{
-			for(StudyGermplasm data: studyGerm){
+			for(GermplasmDeepInfoModel data: collection){
 				Germplasm newData = new Germplasm();
-				newData.setBreeder(data.getBreeder());
+				
+				if(data.getCurrBreader() != null){
+				if(data.isInGenotype ){
+				newData.setBreeder(data.getBreeder() + ", " +data.getCurrBreader());
+				}
+				else{
+					newData.setBreeder(data.getCurrBreader());
+				}
+				}
 				newData.setFemaleparent(data.getFemaleparent());
 				newData.setGermplasmname(data.getGermplasmname());
 				newData.setGermplasmtypeid(data.getGermplasmtypeid());

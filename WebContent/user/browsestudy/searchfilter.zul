@@ -10,7 +10,7 @@
 				<row>
 					Data
 					<radiogroup onCreate="self.setSelectedIndex(2)"
-						selectedItem="@bind(vm.searchFilter.shared)">
+						selectedItem="@bind(vm.searchFilter.shared)" onChange="@command('updateSearchFilterValidation', validateObject=vm.searchFilter.shared)">
 						<radio label="My Data" value="private" />
 						<radio label="Shared Data" value="public" />
 						<radio label="Both" value="" />
@@ -19,13 +19,13 @@
 				<row>
 					Study Name
 					<textbox width="99%"
-						value="@bind(vm.searchFilter.studyname)" />
+						value="@bind(vm.searchFilter.studyname)" onChange="@command('updateSearchFilterValidation', validateObject=vm.searchFilter.studyname)"/>
 				</row>
 				<row>
 					Program
 					<combobox model="@load(vm.programList)"
 						readonly="true" selectedIndex="@bind(vm.searchFilter.programid)"
-						width="99%">
+						width="99%" onChange="@command('updateSearchFilterValidation', validateObject=vm.searchFilter.programid)">
 						<template name="model">
 							<comboitem value="@load(each.id)"
 								label="@load(each.name)" />
@@ -36,7 +36,7 @@
 					Project
 					<combobox model="@load(vm.projectList)"
 						readonly="true" width="99%"
-						selectedIndex="@bind(vm.searchFilter.projectid)">
+						selectedIndex="@bind(vm.searchFilter.projectid)" onChange="@command('updateSearchFilterValidation', validateObject=vm.searchFilter.projectid)">
 						<template name="model">
 							<comboitem value="@load(each.id)"
 								label="@load(each.name)" />
@@ -47,7 +47,7 @@
 					StudyType
 					<combobox model="@load(vm.studyTypeList)"
 						readonly="true" width="99%"
-						selectedIndex="@bind(vm.searchFilter.studytypeid)">
+						selectedIndex="@bind(vm.searchFilter.studytypeid)" onChange="@command('updateSearchFilterValidation', validateObject=vm.searchFilter.studytypeid)">
 						<template name="model">
 							<comboitem value="@load(each.id)"
 								label="@load(each.studytype)" />
@@ -57,18 +57,18 @@
 				<row>
 					Start Year
 					<intbox value="@bind(vm.searchFilter.startyear)"
-						hflex="1" />
+						hflex="1" onChange="@command('updateSearchFilterValidation', validateObject=vm.searchFilter.startyear)"/>
 				</row>
 				<row>
 					End Year
 					<intbox value="@bind(vm.searchFilter.endyear)"
-						hflex="1" />
+						hflex="1" onChange="@command('updateSearchFilterValidation', validateObject=vm.searchFilter.endyear)"/>
 				</row>
 				<row>
 					Country
 					<combobox model="@load(vm.countryList)"
 						readonly="true" width="99%"
-						value="@bind(vm.searchFilter.country)">
+						value="@bind(vm.searchFilter.country)" onChange="@command('updateSearchFilterValidation', validateObject=vm.searchFilter.country)">
 						<template name="model">
 							<comboitem value="@load(each.isoabbr)"
 								label="@load(each.isoabbr)" />
@@ -79,7 +79,7 @@
 					Location
 					<combobox model="@load(vm.locationList)"
 						readonly="true" width="99%"
-						selectedIndex="@bind(vm.searchFilter.locationid)">
+						selectedIndex="@bind(vm.searchFilter.locationid)" onChange="@command('updateSearchFilterValidation', validateObject=vm.searchFilter.locationid)">
 						<template name="model">
 							<comboitem value="@load(each.id)"
 								label="@load(each.locationname)" />
@@ -89,6 +89,6 @@
 			</rows>
 		</grid>
 		<button label="Search"
-			onClick=" @global-command('updateSearchFilterResult', searchFilter=vm.searchFilter)" />
+			onClick=" @global-command('updateSearchFilterResult', searchFilter=vm.searchFilter, searchValidation=vm.validation)" />
 	</window>
 </zk>

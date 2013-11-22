@@ -348,6 +348,8 @@ public class StudySiteInfo extends ProcessTabViewModel {
 				StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteData);
 				siteInfo.selectedDesignInfo = studyDesignMan.getStudyDesign(siteData.getId());
 				siteInfo.selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(siteInfo.getSelectedAgroInfo().getPlantingtypeid());
+				//TODO: SOMETHING FISHY
+				System.out.println(siteInfo + " " + " " + siteInfo.selectedAgroInfo + " " + studyAgroMan + " " + siteInfo.getId());
 				siteInfo.selectedAgroInfo = studyAgroMan.getStudyAgronomy(siteInfo.getId());
 				sites.add(siteInfo);
 			}

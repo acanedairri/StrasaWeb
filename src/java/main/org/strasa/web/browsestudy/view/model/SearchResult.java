@@ -16,6 +16,7 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zul.Messagebox;
 
 public class SearchResult {
 	private BrowseStudyManagerImpl browseStudyManagerImpl= new BrowseStudyManagerImpl();
@@ -24,17 +25,19 @@ public class SearchResult {
 
 	@NotifyChange("*")
 	@GlobalCommand
-	public void updateSearchFilterResult(@BindingParam("searchFilter")StudySearchFilterModel searchFilter){
-
+	public void updateSearchFilterResult(@BindingParam("searchFilter")StudySearchFilterModel searchFilter, @BindingParam("searchValidation")boolean searchValidation){
+		if(searchValidation){
 		searchFilter.shared = checkIfEmpty(searchFilter.shared);
 		searchFilter.studyname = checkIfEmpty(searchFilter.studyname);
 		searchFilter.country = checkIfEmpty(searchFilter.country);
 		
 		searchResult = browseStudyManagerImpl.getStudySearchResult(searchFilter);
 		System.out.println("Size:"+searchResult.size());
-
+		}else{
+			 Messagebox.show("Please filter your search.", "Search Filter too broad", Messagebox.OK, Messagebox.EXCLAMATION);
+		}
 	}
-	
+
 	@NotifyChange("*")
 	@GlobalCommand
 	public void updateSummaryResult(@BindingParam("summaryFilter")StudySummaryModel summary){

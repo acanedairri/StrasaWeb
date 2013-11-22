@@ -2,6 +2,7 @@ package org.strasa.middleware.manager;
 
 import java.util.List;
 
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyDataColumnMapper;
@@ -25,6 +26,28 @@ public class StudyDataColumnManagerImpl {
 			}
 			return mapper.selectByExample(example);
 
+		}finally{
+			session.close();
+		}
+
+	}
+	
+	public void addStudyDataColumn(int studyId,String[] columns, String datatype){
+		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession(ExecutorType.BATCH);
+		StudyDataColumnMapper mapper = session.getMapper(StudyDataColumnMapper.class);
+
+		try{
+			
+			for(String col : columns){
+				StudyDataColumn newCol = new StudyDataColumn();
+				newCol.setStudyid(studyId);
+				newCol.setColumnheader(col);
+				newCol.setDatatype(datatype);
+				mapper.insert(newCol);
+			}
+			session.commit();
+			
+		
 		}finally{
 			session.close();
 		}

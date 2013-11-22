@@ -70,6 +70,7 @@ public class StudyGermplasmManagerImpl {
 				.openSession(ExecutorType.BATCH);
 		StudyGermplasmMapper mapper = session
 				.getMapper(StudyGermplasmMapper.class);
+
 		try {
 			for (StudyGermplasm record : lstRecord) {
 				if (record.getId() == null) {
@@ -77,6 +78,7 @@ public class StudyGermplasmManagerImpl {
 				} else {
 					mapper.updateByPrimaryKey(record);
 				}
+			
 			}
 			session.commit();
 		} finally {
@@ -91,12 +93,14 @@ public class StudyGermplasmManagerImpl {
 		StudyGermplasmMapper mapper = session
 				.getMapper(StudyGermplasmMapper.class);
 		try {
+			System.out.println("Inserting StudyGermplasms");
 			for (StudyGermplasm record : lstRecord) {
 				if (record.getId() == null) {
 					mapper.insert(record);
 				} else {
 					mapper.updateByPrimaryKey(record);
 				}
+				System.out.println("SID: " + record.getId());
 			}
 			GermplasmCharacteristicsMapper charmapper = session
 					.getMapper(GermplasmCharacteristicsMapper.class);

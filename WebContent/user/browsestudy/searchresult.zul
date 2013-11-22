@@ -1,6 +1,6 @@
 <zk>
 
-	<window apply="org.zkoss.bind.BindComposer"
+	<window id="searchResultWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchResult')">
 
 		<grid height="350px" model="@load(vm.searchResult)" emptyMessage="No study site found.">
@@ -19,7 +19,7 @@
 			</columns>
 			<template name="model">
 				<row>
-					<toolbarbutton label="@load(each.studyname)" width="99%" onClick="@global-command('openStudyData', studyId=each.id)" />
+					<toolbarbutton label="@load(each.studyname)" width="99%" onClick="@global-command('openNewSearchInfoTab', studyId=each.id, studyName=each.studyname)" />
 					<label value="@load(each.programname)" width="99%" />
 					<label value="@load(each.projectname)" width="99%" />
 					<label value="@load(each.studytypename)" width="99%" />

@@ -12,6 +12,7 @@ import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
 import org.strasa.middleware.model.StudyDataColumn;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
@@ -94,9 +95,10 @@ public class DerivedData {
 	}
 	
 	@Init
-	public void init() {
+	public void init(@ExecutionArgParam("studyid") Integer studyId){
+		
 		browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
-		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(1,"rd");
+		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(studyId,"rd");
 		System.out.println("Size:"+toreturn.size());
 		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(1,"dd"); // rd as raw data, dd as derived data
 		for (StudyDataColumn d: columns) {

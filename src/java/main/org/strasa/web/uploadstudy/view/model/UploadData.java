@@ -19,12 +19,14 @@ import org.apache.commons.io.input.ReaderInputStream;
 import org.strasa.middleware.filesystem.manager.UserFileManager;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
+import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.manager.StudyTypeManagerImpl;
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.Study;
+import org.strasa.middleware.model.StudyDataColumn;
 import org.strasa.middleware.model.StudyType;
 import org.strasa.web.common.api.Encryptions;
 import org.strasa.web.common.api.ProcessTabViewModel;
@@ -70,6 +72,7 @@ public class UploadData extends ProcessTabViewModel {
 	private File tempFile;
 	private String uploadTo = "database";
 	private String studyType = "rawdata";
+	private boolean isNewDataSet = true;
 
 	public ArrayList<GenotypeFileModel> getGenotypeFileList() {
 		return genotypeFileList;
@@ -457,6 +460,7 @@ public class UploadData extends ProcessTabViewModel {
 	public void removeUpload() {
 		isVariableDataVisible = false;
 		dataFileName = "";
+		isNewDataSet = true;
 		varData.clear();
 	}
 
@@ -585,39 +589,19 @@ public class UploadData extends ProcessTabViewModel {
 
 		if (uploadTo.equals("database")) {
 
-				
-
+				if(isNewDataSet)
 				studyRawData.addStudyRawData(study,columnList.toArray(new String[columnList.size()]),dataList);
-//					studyRawData.addStudyRawDataByRawCsvList(study,
-//							new CSVReader(new FileReader(tempFile)).readAll());
-//					GermplasmManagerImpl germplasmManager = new GermplasmManagerImpl();
-//					StudyGermplasmManagerImpl studyGermplasmManager = new StudyGermplasmManagerImpl();
-//
-//					StudyRawDataManagerImpl studyRawDataManagerImpl = new StudyRawDataManagerImpl(isRawData);
-//					ArrayList<StudyRawDataByDataColumn> list = (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl
-//							.getStudyRawDataColumn(study.getId(), "GName");
-//					for (StudyRawDataByDataColumn s : list) {
-//						// System.out.println(s.getStudyid()+
-//						// " "+s.getDatacolumn()+
-//						// " "+ s.getDatavalue());
-//
-//						if (!germplasmManager.isGermplasmExisting(s
-//								.getDatavalue())) {
-//							StudyGermplasm studyGermplasmData = new StudyGermplasm();
-//							studyGermplasmData.setGermplasmname(s
-//									.getDatavalue());
-//							studyGermplasmData.setStudyid(study.getId());
-//							studyGermplasmManager
-//									.addStudyGermplasm(studyGermplasmData);
-//						}
-
+				
+				new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), columnList.toArray(new String[columnList.size()]), (isRaw) ? "rd":"dd");
 
 				 
 				
 		
 		}
 		else{
+			studyRawData.addStudy(study);
 			fileMan.createNewFileFromUpload(1, study.getId(), dataFileName, tempFile, (isRaw) ? "rd":"dd");
+			this.uploadToFolder = true;
 	 
 		}
 		for(GenotypeFileModel genoFile : genotypeFileList){

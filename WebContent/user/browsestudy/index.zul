@@ -1,13 +1,29 @@
 <zk>
-	<window width="100%" height="100%" title="Browse Study"
-		 apply="org.strasa.web.browsestudy.view.model.Index">
+	<style>
+		.z-toolbarbutton-cnt { color: #000080;
+		text-decoration:underline; font-size: 12px; font-weight: bold;
+
+		}
+		<!-- 		.z-toolbarbutton-over .z-toolbarbutton-cnt { -->
+		<!-- 		background-image:none; background-color: #cff791; -->
+
+		<!-- 		} -->
+		<!-- 		.z-toolbarbutton-select .z-toolbarbutton-cnt { -->
+		<!-- 		background-image:none; background-color: red; -->
+
+		<!-- 		} -->
+	</style>
+	<window id="mainBrowseWindow" title="Browse Study"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Index')"
+		width="100%" height="100%">
+
 		<tabbox id="tabBox" hflex="1" vflex="1">
 			<tabs id="tabs">
 				<tab label="Search Study" />
-				<tab label="OYT-5WH-2012"/>
 			</tabs>
 			<tabpanels id="tabPanels">
-				<tabpanel>
+				<tabpanel id="tabPanel1">
 					<hbox spacing="0" widths="35%,65%" height="100%"
 						hflex="1" vflex="1">
 						<include id="searchFilterPanel"
@@ -15,17 +31,15 @@
 						<splitter id="s2" collapse="before" />
 						<vbox spacing="0" width="100%" heights="35%,65%"
 							hflex="1" vflex="1">
-							<include id="summaryPanel" src="/user/browsestudy/summary.zul"
-								mode="defer" progressing="true" />
+							<include id="summaryPanel"
+								src="/user/browsestudy/summary.zul" mode="defer"
+								progressing="true" />
 							<splitter id="s1" collapse="before" />
 							<include id="searchResultPanel"
-								src="/user/browsestudy/searchresult.zul" mode="defer" progressing="true" />
+								src="/user/browsestudy/searchresult.zul" mode="defer"
+								progressing="true" />
 						</vbox>
 					</hbox>
-				</tabpanel>
-				<tabpanel>
-				<include id="studyInformationPanel"
-								src="/user/browsestudy/studyinformation.zul"/>
 				</tabpanel>
 			</tabpanels>
 		</tabbox>
