@@ -12,6 +12,7 @@ import org.strasa.middleware.manager.StudyDesignManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.manager.StudySiteManagerImpl;
+import org.strasa.middleware.mapper.StudySiteSqlProvider;
 import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.PlantingType;
 import org.strasa.middleware.model.StudyAgronomy;
@@ -25,6 +26,8 @@ import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zhtml.Messagebox;
+
+import com.mysql.jdbc.StringUtils;
 
 public class StudySiteInfo extends ProcessTabViewModel {
 	private StudySiteManagerImpl studySiteMan;
@@ -212,20 +215,22 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	@Override
 	public boolean validateTab() {
 	
-		if(noSite && sites.get(0).getSitename() == null && sites.get(0).getSitename().isEmpty()){
-			Messagebox.show("Error: Site names must not be empty.", "Upload Error",
-					Messagebox.OK, Messagebox.ERROR);
+		
 
-			// TODO: must have message DIalog
-			return false;
+		for(StudySiteInfoModel site: sites){
+			if(StringUtils.isNullOrEmpty(site.getSitename()) || StringUtils.isEmptyOrWhitespaceOnly(site.getSitename())){
+				Messagebox.show("Error: Site names must not be empty.", "Upload Error",
+						Messagebox.OK, Messagebox.ERROR);
+				return false;
+			}
+			if(StringUtils.isNullOrEmpty(site.getSitelocation()) || StringUtils.isEmptyOrWhitespaceOnly(site.getSitelocation())){
+				Messagebox.show("Error: Locations must not be empty.", "Upload Error",
+						Messagebox.OK, Messagebox.ERROR);
+				return false;
+			}
 		}
-		if(noSite && sites.get(0).getSitelocation() == null && sites.get(0).getSitelocation().isEmpty()){
-			Messagebox.show("Error: Locations must not be empty.", "Upload Error",
-					Messagebox.OK, Messagebox.ERROR);
-
-			// TODO: must have message DIalog
-			return false;
-		}
+		
+	
 		 System.out.println("LOOP : " + sites.size());
 		List<StudySite> lstSites = new ArrayList<StudySite>();
 		 List<StudyAgronomy> lstAgro = new ArrayList<StudyAgronomy>();
@@ -295,20 +300,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		plantingtypeMan = new PlantingTypeManagerImpl();
 		sites = new ArrayList<StudySiteInfoModel>();
 		
-//		List<StudySite> subsites = studySiteMan.initializeStudySites(sID);
-//		for(StudySite siteD : subsites){
-//			
-//			StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteD);
-//			siteInfo.selectedAgroInfo = studyAgroMan.getStudyAgronomy(siteD.getId());
-//			siteInfo.selectedDesignInfo = studyDesignMan.getStudyDesign(siteD.getId());
-//			if(siteInfo.selectedDesignInfo == null) siteInfo.selectedDesignInfo = new StudyDesign();
-//			if(siteInfo.selectedAgroInfo != null) siteInfo.selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(siteInfo.getSelectedAgroInfo().getPlantingtypeid());
-//			else{
-//				siteInfo.selectedSitePlantingType = new PlantingType();
-//			}
-//			sites.add(siteInfo);
-//			
-//		}
+
 
 		StudyRawDataManagerImpl studyRawMan = new StudyRawDataManagerImpl(isRaw);
 		if(!studyRawMan.hasSiteColumnData(sID)){
@@ -317,7 +309,10 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			siteInfo.selectedSitePlantingType = new PlantingType();
 			siteInfo.selectedAgroInfo = new StudyAgronomy();
 			siteInfo.setYear(new StudyManagerImpl().getStudyById(sID).getStartyear());
+			siteInfo.setSeason("NO SEASON");
+			
 			sites.add(siteInfo);
+			
 			ecotypes = ecotypeMan.getAllEcotypes();
 			plantingtypes = plantingtypeMan.getAllPlantingTypes();
 			selectedSite = sites.get(0);
@@ -361,15 +356,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		plantingtypes = plantingtypeMan.getAllPlantingTypes();
 		selectedSite = sites.get(0);
 		
-//		  HashMap<String, StudySite> lstRawData = studyRawMan.getStudySiteInfoToMap(sID);
-//		
-//		for(int i = 0; i < sites.size(); i++){
-//			if(lstRawData.containsKey(sites.get(i).getSitename())) {
-//				sites.get(i).setSitename(lstRawData.get(sites.get(i).getSitename()).getSitename());
-//				sites.get(i).setSitelocation(lstRawData.get(sites.get(i).getSitename()).getSitelocation());
-//			}
-//		}
-		
+
 		updateDesignInfo(0);
 		
 		

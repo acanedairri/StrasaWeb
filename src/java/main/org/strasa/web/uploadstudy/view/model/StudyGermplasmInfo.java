@@ -35,6 +35,7 @@ import org.strasa.middleware.model.StudyGermplasm;
 import org.strasa.web.common.api.Encryptions;
 import org.strasa.web.common.api.FormValidator;
 import org.strasa.web.common.api.ProcessTabViewModel;
+import org.strasa.web.uploadstudy.view.pojos.GermplasmExt;
 import org.strasa.web.utilities.FileUtilities;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.annotation.BindingParam;
@@ -218,11 +219,12 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 					.getStreamData() : new ReaderInputStream(event.getMedia()
 					.getReaderData());
 			FileUtilities.uploadFile(tempGenoFile.getAbsolutePath(), in);
-			List<StudyGermplasm> lstGermplasm = CSVToBean(tempGenoFile);
-			for (StudyGermplasm germData : lstGermplasm) {
+			List<GermplasmExt> lstGermplasm = CSVToBean(tempGenoFile);
+			for (GermplasmExt germData : lstGermplasm) {
 				if (lstStudyGermplasm.containsKey(germData.getGermplasmname())) {
 					if (!lstStudyGermplasm.get(germData.getGermplasmname()).isInGenotype) {
-						lstStudyGermplasm.get(germData).setValues(germData);
+						System.out.println("GermData; " + germData);
+						lstStudyGermplasm.get(germData.getGermplasmname()).setValues(germData);
 					}
 				} else {
 					GermplasmDeepInfoModel newData = new GermplasmDeepInfoModel();
@@ -237,9 +239,9 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 	}
 
-	public List<StudyGermplasm> CSVToBean(File file)
+	public List<GermplasmExt> CSVToBean(File file)
 			throws FileNotFoundException {
-		CsvToBean<StudyGermplasm> bean = new CsvToBean<StudyGermplasm>();
+		CsvToBean<GermplasmExt> bean = new CsvToBean<GermplasmExt>();
 
 		Map<String, String> columnMapping = new HashMap<String, String>();
 		columnMapping.put("GID", "gid");
@@ -248,14 +250,15 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		columnMapping.put("Breeder", "breeder");
 		columnMapping.put("IR Number", "irnumber");
 		columnMapping.put("IR Cross", "ircross");
+		columnMapping.put("GermplasmType", "germplasmtype");
 		columnMapping.put("Parentage", "parentage");
 		columnMapping.put("Female Parent", "femaleparent");
 		columnMapping.put("Male Parent", "maleparent");
-		columnMapping.put("Selection History", "Selection History");
+		columnMapping.put("Selection History", "selectionhistory");
 		columnMapping.put("Source", "source");
 
-		HeaderColumnNameTranslateMappingStrategy<StudyGermplasm> strategy = new HeaderColumnNameTranslateMappingStrategy<StudyGermplasm>();
-		strategy.setType(StudyGermplasm.class);
+		HeaderColumnNameTranslateMappingStrategy<GermplasmExt> strategy = new HeaderColumnNameTranslateMappingStrategy<GermplasmExt>();
+		strategy.setType(GermplasmExt.class);
 		strategy.setColumnMapping(columnMapping);
 
 		CSVReader reader = new CSVReader(new FileReader(file));
@@ -441,6 +444,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		
 	}
 
+	
 	public class GermplasmDeepInfoModel extends StudyGermplasm {
 
 		private List<CharacteristicModel> keyBiotic = new ArrayList<CharacteristicModel>();
@@ -497,7 +501,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 		public void setValues(StudyGermplasm data) {
 			if (!StringUtils.isNullOrEmpty(data.getBreeder()))
-				setBreeder(data.getBreeder());
+				setCurrBreader(data.getBreeder());
 			if (!StringUtils.isNullOrEmpty(data.getFemaleparent()))
 				setFemaleparent(data.getFemaleparent());
 			if (!StringUtils.isNullOrEmpty(data.getGermplasmname()))
@@ -538,6 +542,28 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 			setSelectionhistory(data.getSelectionhistory());
 			setSource(data.getSource());
 		}
+		public void setValues(GermplasmExt data) {
+			setCurrBreader(data.getBreeder());
+			setFemaleparent(data.getFemaleparent());
+			setGermplasmname(data.getGermplasmname());
+			setGermplasmtypeid(data.getGermplasmtypeid());
+			setGid(data.getGid());
+		
+			for(int i = 0; i < lstGermplasmType.size(); i++){
+			if(data.getGermplasmtype().equals(lstGermplasmType.get(i).getGermplasmtype())){
+				setGermplasmtypeid(lstGermplasmType.get(i).getId());
+			}
+			}
+			setIrcross(data.getIrcross());
+			setIrnumber(data.getIrnumber());
+			setMaleparent(data.getMaleparent());
+			setOthername(data.getOthername());
+			setParentage(data.getParentage());
+			setRemarks(data.getRemarks());
+			setSelectionhistory(data.getSelectionhistory());
+			setSource(data.getSource());
+		}
+
 
 		
 		public String getCharacteristic() {

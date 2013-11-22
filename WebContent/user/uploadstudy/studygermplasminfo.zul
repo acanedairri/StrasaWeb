@@ -6,7 +6,7 @@
 		<groupbox>
 			<hlayout spacing="50px">
 				<vlayout width="100%">
-					<grid height="100%" width="100%"
+					<grid height="100%" 
 						model="@load(vm.lstStudyGermplasm)" vflex="1" hflex="1">
 						<auxhead width="100%">
 							<auxheader colspan="13" label=""

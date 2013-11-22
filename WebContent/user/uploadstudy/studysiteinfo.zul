@@ -18,7 +18,6 @@
 						<row>
 							<textbox value="@bind(each.sitename)"
 								width="99%" if="${each.sitename==null}" />
-							
 							<toolbarbutton label="@load(each.sitename)"
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
@@ -29,7 +28,7 @@
 							<toolbarbutton label="@bind(each.sitelocation)"
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-								unless="{$each.sitename==null}" />	
+								unless="${each.sitelocation==null}" />	
 								
 							<textbox value="@bind(each.year)"
 								width="99%" if="{$each.year==null}" />
