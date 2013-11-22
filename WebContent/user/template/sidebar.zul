@@ -1,12 +1,61 @@
-<grid hflex="1" vflex="1" sclass="sidebar" 
-	id="fnList" 
+<tabbox id="tb" width="100%" height="380px" mold="accordion"
 	apply="org.strasa.web.page.navigation.user.SidebarAjaxbasedController">
-	<columns>
-		<column width="36px"/>
-		<column/>
-	</columns>
-	<rows/>
-</grid>
+	<tabs>
+		<tab label="Upload Data" image="/images/upload.png" />
+		<tab label="Browse" />
+		<tab label="Analysis" />
+		<tab label="Maintenance" image="/images/settings.png" />
+	</tabs>
+	<tabpanels>
+		<tabpanel>
+			<grid hflex="1" vflex="1" sclass="sidebar"
+				id="fnListUpload">
+				<columns>
+					<column width="36px" />
+					<column />
+				</columns>
+				<rows />
+			</grid>
+
+		</tabpanel>
+		<tabpanel>
+			<grid hflex="1" vflex="1" sclass="sidebar"
+				id="fnListBrowse">
+				<columns>
+					<column width="36px" />
+					<column />
+				</columns>
+				<rows />
+			</grid>
+
+		</tabpanel>
+		<tabpanel>
+			<grid hflex="1" vflex="1" sclass="sidebar"
+				id="fnAnalysis">
+				<columns>
+					<column width="36px" />
+					<column />
+				</columns>
+				<rows />
+			</grid>
+
+		</tabpanel>
+		<tabpanel>
+			<grid hflex="1" vflex="1" sclass="sidebar"
+				id="fnMaintenance">
+				<columns>
+					<column width="36px" />
+					<column />
+				</columns>
+				<rows />
+			</grid>
+
+		</tabpanel>
+		<tabpanel>
+
+		</tabpanel>
+	</tabpanels>
+</tabbox>
 
 
 

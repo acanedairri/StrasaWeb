@@ -20,13 +20,19 @@ public class SidebarPageConfigAjaxBasedImpl implements SidebarPageConfig{
 	
 	HashMap<String,SidebarPage> pageMap = new LinkedHashMap<String,SidebarPage>();
 	public SidebarPageConfigAjaxBasedImpl(){		
-		
-		pageMap.put("upload_study",new SidebarPage("upload_data","Upload New Study","/images/upload.png","/user/uploadstudy/index.zul"));
-		pageMap.put("fn2",new SidebarPage("fn2","Upload Data to Exsisting Study","/images/fn.png","/user/home.zul"));
-		pageMap.put("browse_study",new SidebarPage("browse_study","Browse Study","/images/fn.png","/user/browsestudy/index.zul"));
-		pageMap.put("browse_germplasm",new SidebarPage("browse_germplasm","Browse Germplasm","/images/fn.png","/user/germplasmquery/germplasmquery.zul"));
-		pageMap.put("crossquery",new SidebarPage("cross_study_query","Cross Study Query","/images/fn.png","/user/home.zul"));
-		pageMap.put("analysis",new SidebarPage("analysis","Analysis","/images/fn.png","/user/home.zul"));
+		pageMap.put("upload_menu1",new SidebarPage("upload_menu1","New Study","/images/fn.png","/user/uploadstudy/index.zul"));
+		pageMap.put("upload_menu2",new SidebarPage("upload_menu2","Existing Study","/images/fn.png","/user/home.zul"));
+		pageMap.put("upload_menu3",new SidebarPage("upload_menu2","Germplasm Data","/images/fn.png","/user/home.zul"));
+		pageMap.put("upload_menu4",new SidebarPage("upload_menu4","Genotyping Data","/images/fn.png","/user/home.zul"));
+		pageMap.put("browse_menu1",new SidebarPage("browse_menu1","Studies","/images/fn.png","/user/browsestudy/index.zul"));
+		pageMap.put("browse_menu2",new SidebarPage("browse_menu2","Germplasm","/images/fn.png","/user/germplasmquery/germplasmquery.zul"));
+		pageMap.put("browse_menu3",new SidebarPage("browse_menu3","Cross Study Query","/images/fn.png","/user/browsestudy/index.zul"));
+		pageMap.put("analysis_menu1",new SidebarPage("analysis_menu1","Phenotypic Analysis","/images/fn.png","/user/home.zul"));
+		pageMap.put("maintenance_menu1",new SidebarPage("maintenance_menu1","Uploaded Studies","/images/fn.png","/user/home.zul"));
+		pageMap.put("maintenance_menu2",new SidebarPage("maintenance_menu2","Program","/images/fn.png","/user/home.zul"));
+		pageMap.put("maintenance_menu3",new SidebarPage("maintenance_menu3","Project","/images/fn.png","/user/home.zul"));
+		pageMap.put("maintenance_menu4",new SidebarPage("maintenance_menu4","Update Profile","/images/fn.png","/user/home.zul"));
+
 	}
 	
 	public List<SidebarPage> getPages(){

@@ -5,7 +5,7 @@
 		Created by dennis
 
 Copyright (C) 2012 Potix Corporation. All Rights Reserved.
-*/
+ */
 package org.strasa.web.page.navigation.user;
 
 import org.strasa.web.page.util.navigation.SidebarPage;
@@ -30,37 +30,59 @@ public class SidebarAjaxbasedController extends SelectorComposer<Component>{
 
 	private static final long serialVersionUID = 1L;
 	@Wire
-	Grid fnList;
-	
+	Grid fnListUpload;
+	@Wire
+	Grid fnListBrowse;
+	@Wire
+	Grid fnAnalysis;
+	@Wire
+	Grid fnMaintenance;
+
 	//wire service
 	SidebarPageConfig pageConfig = new SidebarPageConfigAjaxBasedImpl();
-	
+
 	@Override
 	public void doAfterCompose(Component comp) throws Exception{
 		super.doAfterCompose(comp);
-		
+
 		//to initial view after view constructed.
-		Rows rows = fnList.getRows();
-		
+		Rows rowsUpload = fnListUpload.getRows();
+		Rows rowsBrowse= fnListBrowse.getRows();
+		Rows rowsAnalysis = fnAnalysis.getRows();
+		Rows rowsMaintenance= fnMaintenance.getRows();
+
 		for(SidebarPage page:pageConfig.getPages()){
-			Row row = constructSidebarRow(page.getName(),page.getLabel(),page.getIconUri(),page.getUri());
-			rows.appendChild(row);
+			Row row;
+			
+			if(page.getName().contains("upload")){
+				 row= constructSidebarRow("upload",page.getLabel(),page.getLabel(),page.getIconUri(),page.getUri());
+				rowsUpload.appendChild(row);
+			}else if (page.getName().contains("browse")){
+				row = constructSidebarRow("browse",page.getName(),page.getLabel(),page.getIconUri(),page.getUri());
+				rowsBrowse.appendChild(row);
+			}else if (page.getName().contains("analysis")){
+				row = constructSidebarRow("analysis",page.getName(),page.getLabel(),page.getIconUri(),page.getUri());
+				rowsAnalysis.appendChild(row);
+			}else if (page.getName().contains("maintenance")){
+				row = constructSidebarRow("maintenance",page.getName(),page.getLabel(),page.getIconUri(),page.getUri());
+				rowsMaintenance.appendChild(row);
+			}
 		}		
 	}
 
-	private Row constructSidebarRow(final String name,String label, String imageSrc, final String locationUri) {
-		
+	private Row constructSidebarRow(final String menuCategory,final String name,String label, String imageSrc, final String locationUri) {
+
 		//construct component and hierarchy
 		Row row = new Row();
 		Image image = new Image(imageSrc);
 		Label lab = new Label(label);
-		
+
 		row.appendChild(image);
 		row.appendChild(lab);
-		
+
 		//set style attribute
 		row.setSclass("sidebar-fn");
-		
+
 		//new and register listener for events
 		EventListener<Event> onActionListener = new SerializableEventListener<Event>(){
 			private static final long serialVersionUID = 1L;
@@ -72,14 +94,23 @@ public class SidebarAjaxbasedController extends SelectorComposer<Component>{
 					Executions.getCurrent().sendRedirect(locationUri);
 				}else{
 					//use iterable to find the first include only
-					Include include = (Include)Selectors.iterable(fnList.getPage(), "#mainInclude").iterator().next();
+					Include include = null;
+					if(menuCategory.equals("upload")){
+						include= (Include)Selectors.iterable(fnListUpload.getPage(), "#mainInclude").iterator().next();
+					}else if(menuCategory.equals("browse")){
+						include= (Include)Selectors.iterable(fnListBrowse.getPage(), "#mainInclude").iterator().next();
+					}else if(menuCategory.equals("analysis")){
+						include= (Include)Selectors.iterable(fnAnalysis.getPage(), "#mainInclude").iterator().next();
+					}else if(menuCategory.equals("maintenance")){
+						include= (Include)Selectors.iterable(fnMaintenance.getPage(), "#mainInclude").iterator().next();
+					}
 
 					include.setSrc(locationUri);
-					
+
 					//advance bookmark control, 
 					//bookmark with a prefix
 					if(name!=null){
-						getPage().getDesktop().setBookmark("p_"+name);
+						getPage().getDesktop().setBookmark(name);
 					}
 				}
 			}
@@ -88,5 +119,5 @@ public class SidebarAjaxbasedController extends SelectorComposer<Component>{
 
 		return row;
 	}
-	
+
 }
