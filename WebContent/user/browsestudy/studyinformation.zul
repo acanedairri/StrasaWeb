@@ -153,12 +153,13 @@
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Germplasm Information" />
-						<!-- 				<include src="/user/browsestudy/siteinformation.zul" mode="defer" /> -->
+						<include studyid="${arg.studyId}"
+							src="/user/browsestudy/germplasminfo.zul" mode="defer" />
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Derived data" />
 						<include studyid="${arg.studyId}"
-							src="/user/browsestudy/deriveddata.zul"/>
+							src="/user/browsestudy/deriveddata.zul" />
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Raw data" />
@@ -173,7 +174,7 @@
 					<groupbox mold="3d" width="100%">
 						<caption label="Files" />
 						<include studyid="${arg.studyId}"
-							src="/user/browsestudy/filesdata.zul"/>
+							src="/user/browsestudy/filesdata.zul" />
 					</groupbox>
 				</vlayout>
 			</panelchildren>
