@@ -15,24 +15,24 @@ import org.strasa.web.uploadstudy.view.model.StudyGermplasmInfo.GermplasmDeepInf
 
 public class GermplasmManagerImpl {
 
-	
+
 	public Germplasm getGermplasmByName(String value){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
-		
+
 		try{
 			GermplasmExample example = new GermplasmExample();
 			example.createCriteria().andGermplasmnameEqualTo(value);
 			if(mapper.selectByExample(example).isEmpty()) return null;
 			return mapper.selectByExample(example).get(0);
-			
+
 		}
 		finally{
-				session.close();
+			session.close();
 		}
 	}
-	
-	
+
+
 	public Germplasm getGermplasmById(int id){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
@@ -40,15 +40,15 @@ public class GermplasmManagerImpl {
 			return mapper.selectByPrimaryKey(id);
 		}
 		finally{
-				session.close();
+			session.close();
 		}
-		
+
 	}
-	
+
 	public List<Germplasm> getGermplasmListByName(String value){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
-		
+
 		try{
 			GermplasmExample example = new GermplasmExample();
 			if(value.contains("%")){
@@ -58,30 +58,45 @@ public class GermplasmManagerImpl {
 			}
 			if(mapper.selectByExample(example).isEmpty()) return null;
 			return mapper.selectByExample(example);
-			
+
 		}
 		finally{
-				session.close();
+			session.close();
 		}
 	}
-	
+
+	public List<Germplasm> getGermplasmListByType(int id){
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
+
+		try{
+			GermplasmExample example = new GermplasmExample();
+			example.createCriteria().andGermplasmtypeidEqualTo(id);
+			if(mapper.selectByExample(example).isEmpty()) return null;
+			return mapper.selectByExample(example);
+		}
+		finally{
+			session.close();
+		}
+	}
+
 	public List<Germplasm> convertStudyToGermplasm(Collection<GermplasmDeepInfoModel> collection){
-		
+
 		ArrayList<Germplasm> returnVal = new ArrayList<Germplasm>();
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
-		
+
 		try{
 			for(GermplasmDeepInfoModel data: collection){
 				Germplasm newData = new Germplasm();
-				
+
 				if(data.getCurrBreader() != null){
-				if(data.isInGenotype ){
-				newData.setBreeder(data.getBreeder() + ", " +data.getCurrBreader());
-				}
-				else{
-					newData.setBreeder(data.getCurrBreader());
-				}
+					if(data.isInGenotype ){
+						newData.setBreeder(data.getBreeder() + ", " +data.getCurrBreader());
+					}
+					else{
+						newData.setBreeder(data.getCurrBreader());
+					}
 				}
 				newData.setFemaleparent(data.getFemaleparent());
 				newData.setGermplasmname(data.getGermplasmname());
@@ -108,13 +123,13 @@ public class GermplasmManagerImpl {
 			session.close();
 		}
 		return returnVal;
-		
+
 	}
 	public boolean isGermplasmExisting(String value){
 		if(this.getGermplasmByName(value) == null) return false;
 		return true;
 	}
-	
+
 
 	public int addGermplasm(Germplasm record){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
@@ -133,12 +148,12 @@ public class GermplasmManagerImpl {
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 		try{
 			for(Germplasm record : lstRecord){
-				
+
 				if(record.getId()==null)
 					mapper.insert(record);
 				else{
 					mapper.updateByPrimaryKey(record);
-					
+
 				}
 			}
 			session.commit();
@@ -149,5 +164,5 @@ public class GermplasmManagerImpl {
 		return;
 	}
 
-		
+
 }

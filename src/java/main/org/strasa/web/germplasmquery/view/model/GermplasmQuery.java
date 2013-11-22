@@ -1,6 +1,7 @@
 package org.strasa.web.germplasmquery.view.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.strasa.middleware.manager.BrowseStudyManagerImpl;
@@ -44,6 +45,7 @@ public class GermplasmQuery {
 	private String grainQualityCharacteristics;
 	private String majorGenesCharacteristics;
 	private List<StudySearchResultModel> studyTested;
+	private HashMap<String,Integer> germplasmTypeKey = new HashMap<String,Integer>();
 
 
 
@@ -51,6 +53,7 @@ public class GermplasmQuery {
 	public void setInitialData(){
 		this.germplasmList=getGermplasmByName("");
 		this.germplasm=getGermplasmDetailInformation(-1);
+		this.germplasmType=getGermplasmTypeList();
 	}
 
 
@@ -69,8 +72,6 @@ public class GermplasmQuery {
 
 
 	public List<GermplasmType> getGermplasmType() {
-		GermplasmTypeManagerImpl mgr= new GermplasmTypeManagerImpl();
-		germplasmType=mgr.getAllGermplasmType();
 		return germplasmType;
 	}
 	public void setGermplasmType(List<GermplasmType> germplasmType) {
@@ -199,6 +200,12 @@ public class GermplasmQuery {
 		return (List<Germplasm>) mgr.getGermplasmListByName(name);
 
 	}
+	
+	private List<Germplasm> getGermplasmByType(int id) {
+		// TODO Auto-generated method stub
+		GermplasmManagerImpl mgr= new GermplasmManagerImpl();
+		return (List<Germplasm>) mgr.getGermplasmListByType(id);
+	}
 
 
 	@NotifyChange("*")
@@ -209,9 +216,18 @@ public class GermplasmQuery {
 		if(cmbSearchKey.getValue().equals("Name")){
 			Textbox txt=(Textbox) component.getFellow("txtNameSearch");
 			this.germplasmList=getGermplasmByName(txt.getValue());
+		}if(cmbSearchKey.getValue().equals("Key")){
+//			Textbox txt=(Textbox) component.getFellow("txtNameSearch");
+//			this.germplasmList=getGermplasmByName(txt.getValue());
+			
+		}else{
+			Combobox cmbGermplasmType= (Combobox) component.getFellow("cmbGermplasmType");
+			int germplasmTypeId=germplasmTypeKey.get(cmbGermplasmType.getValue());
+			this.germplasmList=getGermplasmByType(germplasmTypeId);
 		}
 
 	}
+
 
 
 
@@ -333,5 +349,13 @@ public class GermplasmQuery {
 		return g;
 	}
 
+	private List<GermplasmType> getGermplasmTypeList() {
+		GermplasmTypeManagerImpl mgr= new GermplasmTypeManagerImpl();
+		germplasmType=mgr.getAllGermplasmType();
+		for(GermplasmType type:germplasmType){
+			germplasmTypeKey.put(type.getGermplasmtype(), type.getId());
+		}
+		return germplasmType;
+	}
 
 }
