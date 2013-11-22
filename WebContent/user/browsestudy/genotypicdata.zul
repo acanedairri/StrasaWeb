@@ -10,7 +10,7 @@
 				<row>
 					<toolbarbutton label="@load(each.filename)"
 						width="99%" />
-					<!-- 								onClick="@command('updateDesignInfo', studysiteid=each.id)"/> -->
+					<!-- onClick="@command('updateDesignInfo', studysiteid=each.id)"/> -->
 				</row>
 			</template>
 		</grid>

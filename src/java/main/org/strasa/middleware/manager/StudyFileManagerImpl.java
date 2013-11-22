@@ -67,8 +67,7 @@ public class StudyFileManagerImpl {
 		StudyFileMapper mapper = session.getMapper(StudyFileMapper.class);
 		try{
 			StudyFileExample example = new StudyFileExample();
-			example.createCriteria().andTypeofdataEqualTo(datatype);
-			example.createCriteria().andStudyidEqualTo(studyid);
+			example.createCriteria().andStudyidEqualTo(studyid).andTypeofdataEqualTo(datatype);
 			return mapper.selectByExample(example);
 		}
 		finally{
