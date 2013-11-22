@@ -98,9 +98,9 @@ public class DerivedData {
 	public void init(@ExecutionArgParam("studyid") Integer studyId){
 		
 		browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
-		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(studyId,"rd");
+		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(studyId,"dd");
 		System.out.println("Size:"+toreturn.size());
-		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(1,"dd"); // rd as raw data, dd as derived data
+		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyId,"dd"); // rd as raw data, dd as derived data
 		for (StudyDataColumn d: columns) {
 			columnList.add(d.getColumnheader());
 			System.out.print(d.getColumnheader()+ "\t");

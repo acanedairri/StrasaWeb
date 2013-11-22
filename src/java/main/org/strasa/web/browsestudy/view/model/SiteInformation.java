@@ -157,7 +157,7 @@ public class SiteInformation extends ProcessTabViewModel {
 		agroInfo=studyAgroMan.getAllStudyAgronomy();
 
 		List<StudySite> subsites = studySiteMan.getAllStudySites(studyId);
-		if(subsites.size()>0){
+		if(!subsites.isEmpty()){
 			for(StudySite siteD : subsites){
 				System.out.println(Integer.toString(siteD.getId()));
 				StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteD);
@@ -166,7 +166,6 @@ public class SiteInformation extends ProcessTabViewModel {
 				siteInfo.selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(siteInfo.getSelectedAgroInfo().getPlantingtypeid());
 				sites.add(siteInfo);
 			}
-
 			selectedSite = sites.get(0);
 			updateDesignInfo(0);
 		}
@@ -200,7 +199,13 @@ public class SiteInformation extends ProcessTabViewModel {
 
 		public StudySiteInfoModel(StudySite s){
 			this.setEcotypeid(s.getEcotypeid());
+			try{
 			this.setEcotype(getEcotypeById(s.getEcotypeid()));
+			}catch(NullPointerException npe){
+				Ecotype e = new Ecotype();
+				e.setEcotype("");
+				this.setEcotype(e);
+			}
 			this.setSeason(s.getSeason());
 			this.setSitelocation(s.getSitelocation());
 			this.setSitename(s.getSitename());

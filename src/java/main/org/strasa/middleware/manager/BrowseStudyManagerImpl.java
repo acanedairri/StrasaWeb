@@ -56,7 +56,7 @@ public class BrowseStudyManagerImpl {
 				rec.setStudyTypeIdLab(5);
 				List<StudySummaryModel> labStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdLab());
 				rec.setCountLab(labStudyType.get(0).getCountStudyTypeId());
-				
+
 				System.out.println("rec:"+rec.toString());
 				s.add(rec);
 
@@ -68,32 +68,32 @@ public class BrowseStudyManagerImpl {
 		}
 
 	}
-	
-	
+
+
 	public List<StudySearchResultModel> getStudySearchResult(StudySearchFilterModel filter) {
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		try{
-			
+
 			List<StudySearchResultModel> toreturn= session.selectList("BrowseStudy.getStudySearchResult",filter);
-			
+
 			return toreturn;
-			
+
 		}finally{
 			session.close();
 		}
-		
-		
+
+
 	}
-	
+
 	public List<HashMap<String,String>> getStudyData(int studyId,String dataType){
-		List<HashMap<String,String>> toreturn;
+		List<HashMap<String,String>> toreturn = new ArrayList<HashMap<String,String>>();
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		try{
 			StudyDataColumnManagerImpl mgr= new StudyDataColumnManagerImpl();
-		
+
 			List<StudyDataColumn> studyDataColumn =mgr.getStudyDataColumnByStudyId(studyId,dataType);
 			ArrayList<StudyDataColumnModel> dataColumns= new ArrayList<StudyDataColumnModel>();
-			
+
 			int count=1;
 			int columnCount=studyDataColumn.size();
 			for(StudyDataColumn s: studyDataColumn){
@@ -106,34 +106,35 @@ public class BrowseStudyManagerImpl {
 				count++;
 			}
 
-			if(dataType.equals("rd")){
-				toreturn= session.selectList("BrowseStudy.getStudyRawData",dataColumns);
-			}else{
-				toreturn= session.selectList("BrowseStudy.getStudyDerivedData",dataColumns);
+			if(!studyDataColumn.isEmpty()){
+				if(dataType.equals("rd")){
+					toreturn= session.selectList("BrowseStudy.getStudyRawData",dataColumns);
+				}else{
+					toreturn= session.selectList("BrowseStudy.getStudyDerivedData",dataColumns);
+				}
 			}
-			
 			return toreturn;
-			
+
 		}finally{
 			session.close();
 		}
-		
-		
+
+
 	}
-	
+
 	public List<StudySearchResultModel> getStudyWithGemrplasmTested(String gname) {
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		try{
-			
+
 			List<StudySearchResultModel> toreturn= session.selectList("BrowseStudy.getStudyWithGemrplasmTested",gname);
-			
+
 			return toreturn;
-			
+
 		}finally{
 			session.close();
 		}
-		
-		
+
+
 	}
 
 
