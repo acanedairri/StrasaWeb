@@ -2,8 +2,8 @@
 	apply="org.strasa.web.page.navigation.user.SidebarAjaxbasedController">
 	<tabs>
 		<tab label="Upload Data" image="/images/upload.png" />
-		<tab label="Browse" />
-		<tab label="Analysis" />
+		<tab label="Browse" image="/images/browse.png"/>
+		<tab label="Analysis" image="/images/analysis.png" />
 		<tab label="Maintenance" image="/images/settings.png" />
 	</tabs>
 	<tabpanels>
