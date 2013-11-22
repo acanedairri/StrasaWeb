@@ -216,11 +216,10 @@ public class GermplasmQuery {
 		if(cmbSearchKey.getValue().equals("Name")){
 			Textbox txt=(Textbox) component.getFellow("txtNameSearch");
 			this.germplasmList=getGermplasmByName(txt.getValue());
-		}if(cmbSearchKey.getValue().equals("Key")){
+		}else if(cmbSearchKey.getValue().contains("Key")){
 //			Textbox txt=(Textbox) component.getFellow("txtNameSearch");
 //			this.germplasmList=getGermplasmByName(txt.getValue());
-			
-		}else{
+		}else if(cmbSearchKey.getValue().equals("Type")){
 			Combobox cmbGermplasmType= (Combobox) component.getFellow("cmbGermplasmType");
 			int germplasmTypeId=germplasmTypeKey.get(cmbGermplasmType.getValue());
 			this.germplasmList=getGermplasmByType(germplasmTypeId);
