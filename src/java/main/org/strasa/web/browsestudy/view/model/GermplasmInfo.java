@@ -41,7 +41,7 @@ public class GermplasmInfo {
 	private List<String> keyCharacteristicOption;
 	private int germplasmTypeId;
 	private String keyCharactericticValue;
-	private List<StudyGermplasm> germplasmList;
+	private List<StudyGermplasm> germplasmList = new ArrayList<StudyGermplasm>();
 	private Germplasm germplasm;
 	private String abioticCharacteristics;
 	private String bioticCharacteristics;
@@ -205,7 +205,13 @@ public class GermplasmInfo {
 	private  List<StudyGermplasm> getGermplasmById(Integer studyId){
 
 		StudyGermplasmManagerImpl mgr= new StudyGermplasmManagerImpl();
-		return (List<StudyGermplasm>) mgr.getStudyGermplasmByStudyId(studyId);
+		List<StudyGermplasm> list;
+		try{
+		list = mgr.getStudyGermplasmByStudyId(studyId);
+		}catch (NullPointerException npe){
+			list  = new ArrayList<StudyGermplasm>();
+		}
+		return list;
 
 	}
 	
