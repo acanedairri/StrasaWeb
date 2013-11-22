@@ -14,14 +14,14 @@
 					align="center" />
 			</auxhead>
 			<columns>
-				<column label="Program Name" />
-				<column label="Project" />
-				<column label="Study" />
-				<column label="PBT" />
-				<column label="On Farm" />
-				<column label="Experiment Station" />
-				<column label="Glass House" />
-				<column label="Lab" />
+				<column label="Program Name" width="100px" />
+				<column label="Project"  width="100px" />
+				<column label="Study"  width="100px"/>
+				<column label="PBT" width="100px"/>
+				<column label="On Farm"  width="100px"/>
+				<column label="Experiment Station"  width="100px"/>
+				<column label="Glass House"  width="100px"/>
+				<column label="Lab"  width="100px"/>
 			</columns>
 			<template name="model">
 				<row>
