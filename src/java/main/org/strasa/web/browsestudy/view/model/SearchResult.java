@@ -25,17 +25,40 @@ public class SearchResult {
 
 	@NotifyChange("*")
 	@GlobalCommand
-	public void updateSearchFilterResult(@BindingParam("searchFilter")StudySearchFilterModel searchFilter, @BindingParam("searchValidation")boolean searchValidation){
-		if(searchValidation){
-		searchFilter.shared = checkIfEmpty(searchFilter.shared);
-		searchFilter.studyname = checkIfEmpty(searchFilter.studyname);
-		searchFilter.country = checkIfEmpty(searchFilter.country);
-		
-		searchResult = browseStudyManagerImpl.getStudySearchResult(searchFilter);
-		System.out.println("Size:"+searchResult.size());
+	public void updateSearchFilterResult(@BindingParam("searchFilter")StudySearchFilterModel searchFilter){
+		if(validateSerach(searchFilter)){
+			searchFilter.shared = checkIfEmpty(searchFilter.shared);
+			searchFilter.studyname = checkIfEmpty(searchFilter.studyname);
+			searchFilter.country = checkIfEmpty(searchFilter.country);
+			searchFilter.endyear = checkIfEmpty(searchFilter.endyear);
+			searchFilter.startyear =  checkIfEmpty(searchFilter.startyear);
+
+			searchResult = browseStudyManagerImpl.getStudySearchResult(searchFilter);
+			System.out.println("Size:"+searchResult.size());
 		}else{
-			 Messagebox.show("Please filter your search.", "Search Filter too broad", Messagebox.OK, Messagebox.EXCLAMATION);
+			Messagebox.show("Please filter your search.", "Search Filter too broad", Messagebox.OK, Messagebox.EXCLAMATION);
 		}
+	}
+
+	private boolean validateSerach(StudySearchFilterModel searchFilter) {
+		// TODO Auto-generated method stub
+		if( searchFilter.getLocationid()!=0 || searchFilter.getProgramid()!=0 || searchFilter.getProjectid()!=0 || searchFilter.getStudytypeid()!=0) return true;
+		if(validateString(searchFilter.getStudyname())) return true;
+		if(validateString(searchFilter.getCountry())) return true;
+		if(validateString(searchFilter.getEndyear())) return true;
+		if(validateString(searchFilter.getShared())) return true;
+		if(validateString(searchFilter.getStartyear())) return true;
+
+		return false;
+	}
+
+	private boolean validateString(String str) {
+		// TODO Auto-generated method stub
+		try{
+			if(!str.equals("")) return true;
+		}catch(NullPointerException npe) {
+		}
+		return false;
 	}
 
 	@NotifyChange("*")
@@ -44,7 +67,7 @@ public class SearchResult {
 		StudySearchFilterModel searchFilter = new StudySearchFilterModel();
 		searchFilter.setProgramid(summary.getProgramId());
 		searchFilter.setProjectid(summary.getProjectId());
-		
+
 		searchResult = browseStudyManagerImpl.getStudySearchResult(searchFilter);
 		System.out.println("Size:"+searchResult.size());
 
@@ -65,9 +88,9 @@ public class SearchResult {
 		try{
 			if(string.isEmpty()) return null;
 		}catch(NullPointerException npe){
-//			System.out.println("Caught Null Pointer Exception at SearchResult.java under user browse study");
+			//			System.out.println("Caught Null Pointer Exception at SearchResult.java under user browse study");
 		}
-		
+
 		return string;
 	}
 

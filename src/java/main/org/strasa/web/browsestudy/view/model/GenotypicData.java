@@ -18,9 +18,8 @@ public class GenotypicData {
 
 	@Init
 	public void init(@ExecutionArgParam("studyid") Integer studyId){
-		
 		studyFileMan = new StudyFileManagerImpl();
-		
+		System.out.println("StudyId"+Integer.toString(studyId));
 		setGenotypicFiles(studyFileMan.getFileByStudyIdAndDataType(studyId, "gd"));
 	}
 
