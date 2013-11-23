@@ -6,11 +6,11 @@
 				<grid height="350px" model="@load(vm.sites)"
 					emptyMessage="No study site found.">
 					<columns>
-						<column label="Site Name" />
-						<column label="Site Location" />
-						<column label="Year" width ="80px"/>
-						<column label="Season" width ="80px"/>
-						<column label="Ecotype" />
+						<column label="Site Name" style = "background-color:#FA807A;" />
+						<column label="Site Location" style = "background-color:#FA807A;"/>
+						<column label="Year" width ="80px" style = "background-color:#FA807A;"/>
+						<column label="Season" width ="80px" style = "background-color:#FA807A;"/>
+						<column label="Ecotype" style = "background-color:#FA807A;"/>
 						<column label="Soil Type" />
 						<column label="Soil PH" />
 					</columns>
@@ -71,12 +71,12 @@
 								<column />
 							</columns>
 							<rows>
-								<row>
+								<row style="background-color:#FA807A;">
 									Planting Type:
 									<hlayout>
 										<combobox
 											model="@load(vm.plantingtypes)" readonly="true"
-											selectedIndex="@bind(vm.selectedPlantingIndex)"
+											selectedItem="@bind(vm.selectedSitePlantingType)"
 											width="99%">
 											<template name="model">
 												<comboitem
@@ -85,15 +85,25 @@
 										</combobox>
 									</hlayout>
 								</row>
-								<row>
-									Sowing Date:
+								<row style="background-color:#FA807A;">
+									<label value = "@load(vm.labelDate)"></label>
 									<datebox
-										value="@bind(vm.selectedAgroInfo.sowingdate)" width="99%" />
+										value="@bind(vm.selectedAgroInfo.sowingdate)" width="99%" format="MM/dd/yyyy" />
 								</row>
-								<row>
+								<row style="background-color:#FA807A;">
 									Harvest Date:
 									<datebox
-										value="@bind(vm.selectedAgroInfo.harvestdate)" width="99%" />
+										value="@bind(vm.selectedAgroInfo.harvestdate)" width="99%"  format="MM/dd/yyyy"/>
+								</row>
+								<row>
+									Fertilization:
+									<textbox
+										value="@bind(vm.selectedAgroInfo.fertilization)" width="99%" />
+								</row>
+								<row>
+									Density:
+									<textbox
+										value="@bind(vm.selectedAgroInfo.density)" width="99%" />
 								</row>
 							</rows>
 
@@ -107,29 +117,20 @@
 								<column />
 							</columns>
 							<rows>
-								<row>
-									Fertilization:
-									<textbox
-										value="@bind(vm.selectedAgroInfo.fertilization)" width="99%" />
-								</row>
-								<row>
-									Density:
-									<textbox
-										value="@bind(vm.selectedAgroInfo.density)" width="99%" />
-								</row>
-								<row>
+								
+								<row style="background-color:#FA807A;">
 									Treatment Structure:
 									<textbox
 										value="@bind(vm.selectedDesignInfo.treatmentstructure)"
 										width="99%" />
 								</row>
-								<row>
+								<row style="background-color:#FA807A;">
 									Design Structure:
 									<textbox
 										value="@bind(vm.selectedDesignInfo.designstructure)"
 										width="99%" />
 								</row>
-								<row>
+								<row style="background-color:#FA807A;">
 									Plot Size:
 									<textbox
 										value="@bind(vm.selectedDesignInfo.plotsize)" width="99%" />

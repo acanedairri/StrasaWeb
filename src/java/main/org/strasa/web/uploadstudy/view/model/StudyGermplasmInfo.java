@@ -491,10 +491,12 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		}
 		
 		public boolean validate(){
+//			if(true) return true;
 			if(StringUtils.isNullOrEmpty(getGermplasmname())) return false;
 			if(StringUtils.isNullOrEmpty(currBreeder)) return false;
 			if(StringUtils.isNullOrEmpty(getFemaleparent())) return false;
 			if(StringUtils.isNullOrEmpty(getMaleparent())) return false;
+			
 			if(getGermplasmtypeid() == null ) return false;
 			return true;
 		}

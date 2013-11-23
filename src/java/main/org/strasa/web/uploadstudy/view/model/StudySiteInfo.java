@@ -45,19 +45,22 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	private StudySite selectedSite;
 	private StudyAgronomy selectedAgroInfo = new StudyAgronomy();;
 	private StudyDesign selectedDesignInfo = new StudyDesign();; 
-	private PlantingType selectedSitePlantingType; // .getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
+	private PlantingType selectedSitePlantingType = new PlantingType(); // .getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
 	private int selectedID = 0;
 	private int sID;
 	private boolean isRaw = false;
 	protected boolean goToNextPage = true;
 	private int selectedPlantingIndex =0;
 	private boolean applyToAll = false;
+	private String labelDate;
+	
 	public boolean isApplyToAll() {
 		return applyToAll;
 	}
-
+	@NotifyChange("*")
 	public void setApplyToAll(boolean applyToAll) {
 		this.applyToAll = applyToAll;
+		if(!applyToAll) updateDesignInfo(selectedID);
 	}
 
 	public int getSelectedPlantingIndex() {
@@ -80,10 +83,14 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	public PlantingType getSelectedSitePlantingType() {
 		return selectedSitePlantingType;
 	}
-
+	@NotifyChange("labelDate")
 	public void setSelectedSitePlantingType(
 			PlantingType selectedSitePlantingType) {
 		this.selectedSitePlantingType = selectedSitePlantingType;
+		this.sites.get(selectedID).selectedSitePlantingType = selectedSitePlantingType;
+		if(selectedSitePlantingType.getPlanting().equals("Transplanting")) labelDate = "Transplanting Date";
+		else if(selectedSitePlantingType.getId() == -1) labelDate = "Transplanting/Sowing Date";
+		else labelDate = "Sowing Date";
 		System.out.print("OTU");
 	}
 
@@ -169,16 +176,25 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 
 
+	public String getLabelDate() {
+		return labelDate;
+	}
+
+	public void setLabelDate(String labelDate) {
+		this.labelDate = labelDate;
+	}
+
 	@NotifyChange("*")
 	@Command("updateDesignInfo")
 	public void updateDesignInfo(@BindingParam("id") Integer id) {
 
-		
+		selectedID = id;
+		if(applyToAll) return;
 		sites.get(selectedID).selectedPlantingIndex = selectedPlantingIndex;
 		selectedAgroInfo = sites.get(id).getSelectedAgroInfo();
 		selectedDesignInfo = sites.get(id).getSelectedDesignInfo();
-			selectedPlantingIndex = sites.get(id).selectedPlantingIndex;
-		selectedID = id;
+	    selectedSitePlantingType = sites.get(id).getSelectedSitePlantingType();
+		
 		
 		
 //		setSelectedAgroInfo(getAgroInfoBySiteID(id));
@@ -186,6 +202,10 @@ public class StudySiteInfo extends ProcessTabViewModel {
 //		selectedSitePlantingType = plantingtypes.get(selectedAgroInfo
 //				.getPlantingtypeid() - 1); // .getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
 		System.out.println("selected row id: " + Integer.toString(id));
+		
+		if(selectedSitePlantingType.getPlanting().equals("Transplanting")) labelDate = "Transplanting Date";
+		else if(selectedSitePlantingType.getId() == -1) labelDate = "Transplanting/Sowing Date";
+		else labelDate = "Sowing Date";
 
 	}
 
@@ -218,16 +238,57 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		
 
 		for(StudySiteInfoModel site: sites){
-			if(StringUtils.isNullOrEmpty(site.getSitename()) || StringUtils.isEmptyOrWhitespaceOnly(site.getSitename())){
-				Messagebox.show("Error: Site names must not be empty.", "Upload Error",
+			if(!applyToAll){
+			if(!StringUtils.isNullOrEmpty(site.validateAll())){
+				Messagebox.show(site.validateAll(), "Upload Error",
 						Messagebox.OK, Messagebox.ERROR);
 				return false;
 			}
-			if(StringUtils.isNullOrEmpty(site.getSitelocation()) || StringUtils.isEmptyOrWhitespaceOnly(site.getSitelocation())){
-				Messagebox.show("Error: Locations must not be empty.", "Upload Error",
-						Messagebox.OK, Messagebox.ERROR);
-				return false;
 			}
+			else{
+				if(!StringUtils.isNullOrEmpty(site.validateColumnOnly())){
+					Messagebox.show(site.validateAll(), "Upload Error",
+							Messagebox.OK, Messagebox.ERROR);
+					return false;
+				}
+				if(selectedSitePlantingType.getId() == -1){
+					Messagebox.show("Planting type must not be empty!", "Upload Error",
+							Messagebox.OK, Messagebox.ERROR);
+				}
+				if(selectedAgroInfo.getHarvestdate() == null){
+					Messagebox.show("Harvest date must not be empty!", "Upload Error",
+							Messagebox.OK, Messagebox.ERROR);
+					return false;
+				}
+				if(selectedAgroInfo.getSowingdate() == null){
+					Messagebox.show("Sowing date type must not be empty!", "Upload Error",
+							Messagebox.OK, Messagebox.ERROR);
+					return false;
+				}
+				if(StringUtils.isNullOrEmpty(selectedDesignInfo.getTreatmentstructure())){
+					Messagebox.show("Treatment Structure must not be empty!", "Upload Error",
+							Messagebox.OK, Messagebox.ERROR);
+					return false;
+				}
+				if(StringUtils.isNullOrEmpty(selectedDesignInfo.getDesignstructure())){
+					Messagebox.show("Design Structure must not be empty!", "Upload Error",
+							Messagebox.OK, Messagebox.ERROR);
+					return false;
+				}
+				if(StringUtils.isNullOrEmpty(selectedDesignInfo.getPlotsize())){
+					Messagebox.show("Plot size must not be empty!", "Upload Error",
+							Messagebox.OK, Messagebox.ERROR);
+					return false;
+				}
+				
+				if(selectedAgroInfo.getSowingdate().compareTo(selectedAgroInfo.getHarvestdate()) > 0){
+					Messagebox.show("Havest date must be greater than Transplanting/Sowing date!", "Upload Error",
+							Messagebox.OK, Messagebox.ERROR);
+					return false;
+				}
+				
+			}
+		
 		}
 		
 	
@@ -243,13 +304,16 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		 }
 		 for(StudySiteInfoModel data : sites){
 			 data.setStudyid(sID);
+			 if(applyToAll) data.selectedAgroInfo.setPlantingtypeid(selectedSitePlantingType.getId());
+			 else data.selectedAgroInfo.setPlantingtypeid(data.selectedSitePlantingType.getId());
+				
 			 if(data.getId() == null){
 				 
 				 StudySite siteData = data;
-				 
 				 siteMan.addStudySite(siteData);
 				 
 				 if(applyToAll){
+					
 					 selectedAgroInfo.setStudysiteid(data.getId());
 					 selectedDesignInfo.setStudysiteid(data.getId());
 					 studyAgroMan.addStudyAgronomy(selectedAgroInfo);
@@ -259,6 +323,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 				 data.selectedAgroInfo.setStudysiteid(data.getId());
 				 data.selectedDesignInfo.setStudysiteid(data.getId());
 				 studyAgroMan.addStudyAgronomy(data.selectedAgroInfo);
+				 
 				 studyDesignMan.addStudyDesign(data.selectedDesignInfo);
 				 }
 			 }
@@ -277,6 +342,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 					 studyDesignMan.updateStudyDesign(data.selectedDesignInfo);
 					 	 
 				 }
+				 
 			 }
 			 
 		 }
@@ -300,6 +366,10 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		plantingtypeMan = new PlantingTypeManagerImpl();
 		sites = new ArrayList<StudySiteInfoModel>();
 		
+		PlantingType blankPlantingType = new PlantingType();
+		blankPlantingType.setId(-1);
+		blankPlantingType.setPlanting("");
+		selectedSitePlantingType = blankPlantingType;
 
 
 		StudyRawDataManagerImpl studyRawMan = new StudyRawDataManagerImpl(isRaw);
@@ -333,8 +403,9 @@ public class StudySiteInfo extends ProcessTabViewModel {
 					}
 						
 					siteInfo.selectedDesignInfo = new StudyDesign();
-					siteInfo.selectedSitePlantingType = new PlantingType();
+					siteInfo.selectedSitePlantingType =blankPlantingType;
 					siteInfo.selectedAgroInfo = new StudyAgronomy();
+					System.out.println("NO PLANTING TYPE");
 					sites.add(siteInfo);
 				}
 		}
@@ -343,6 +414,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 				StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteData);
 				siteInfo.selectedDesignInfo = studyDesignMan.getStudyDesign(siteData.getId());
 				siteInfo.selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(siteInfo.getSelectedAgroInfo().getPlantingtypeid());
+				System.out.println(siteInfo.selectedSitePlantingType.toString());
 				//TODO: SOMETHING FISHY
 				System.out.println(siteInfo + " " + " " + siteInfo.selectedAgroInfo + " " + studyAgroMan + " " + siteInfo.getId());
 				siteInfo.selectedAgroInfo = studyAgroMan.getStudyAgronomy(siteInfo.getId());
@@ -353,7 +425,9 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		
 		
 		ecotypes = ecotypeMan.getAllEcotypes();
+		
 		plantingtypes = plantingtypeMan.getAllPlantingTypes();
+		plantingtypes.add(0, blankPlantingType);
 		selectedSite = sites.get(0);
 		
 
@@ -381,6 +455,71 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		private StudyDesign selectedDesignInfo = new StudyDesign();
 		private PlantingType selectedSitePlantingType = new PlantingType();
 		private int selectedPlantingIndex;
+		
+		public String validateAll(){
+			if(StringUtils.isNullOrEmpty(this.getSitename())){
+				return "Error: Site Name  must not be empty! " ;
+			}
+			if(StringUtils.isNullOrEmpty(this.getSitelocation())){
+				return "Error: Location in " + this.getSitename() + " must not be empty! ";
+			}
+			if(StringUtils.isNullOrEmpty(this.getYear())){
+				return "Error: Year in " + this.getSitename() + " must not be empty! ";
+			}
+			if(StringUtils.isNullOrEmpty(this.getSeason())){
+				return "Error: Season in " + this.getSitename() + " must not be empty! ";
+			}
+			
+			if(selectedSitePlantingType.getId() == -1){
+				return "Error: Planting Type in " + this.getSitename() + " must not be empty! ";
+			}
+			if(selectedAgroInfo.getHarvestdate() == null){
+				return "Error: Harvest Date Type in " + this.getSitename() + " must not be empty! ";
+			}
+			if(selectedAgroInfo.getSowingdate() == null){
+				return "Error: Sowing Date Type in " + this.getSitename() + " must not be empty! ";
+			}
+		
+			if(StringUtils.isNullOrEmpty(selectedDesignInfo.getTreatmentstructure())){
+				
+				return "Treatment Structure in " + this.getSitename() + "must not be empty!";
+			}
+			if(StringUtils.isNullOrEmpty(selectedDesignInfo.getDesignstructure())){
+				return "Design Structure in " + this.getSitename() + "must not be empty!";
+			}
+			if(StringUtils.isNullOrEmpty(selectedDesignInfo.getPlotsize())){
+				return "Plot size in " + this.getSitename() + "must not be empty!";
+
+			}
+			if(this.selectedAgroInfo.getSowingdate().compareTo(this.selectedAgroInfo.getHarvestdate()) > 0){
+				
+				return "Error: Havest date must be greater than Transplanting/Sowing date in " + this.getSitename();
+			}
+			return null;
+			
+		}
+		
+		
+		public String validateColumnOnly(){
+			if(StringUtils.isNullOrEmpty(this.getSitename())){
+				return "Error: Site Name  must not be empty! " ;
+			}
+			if(StringUtils.isNullOrEmpty(this.getSitelocation())){
+				return "Error: Location in " + this.getSitename() + " must not be empty! ";
+			}
+			if(StringUtils.isNullOrEmpty(this.getYear())){
+				return "Error: Year in " + this.getSitename() + " must not be empty! ";
+			}
+			if(StringUtils.isNullOrEmpty(this.getSeason())){
+				return "Error: Season in " + this.getSitename() + " must not be empty! ";
+			}
+			
+		
+		
+			return null;
+			
+		}
+	
 		public StudySiteInfoModel(StudySite s){
 			this.setEcotypeid(s.getEcotypeid());
 			this.setSeason(s.getSeason());
