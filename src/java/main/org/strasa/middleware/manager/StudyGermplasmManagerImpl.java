@@ -166,12 +166,12 @@ public class StudyGermplasmManagerImpl {
 					
 					mapper.insert(newRec);
 				
-				for (StudyGermplasmCharacteristics records : record.getCharacteristicValues()){
-					
-					records.setStudygermplasmid(newRec.getId());
-					charmapper.insert(records);
-				}
-				System.out.println("SID: " + record.getId());
+//				for (StudyGermplasmCharacteristics records : record.getCharacteristicValues()){
+//					
+//					records.setStudygermplasmid(newRec.getId());
+//					charmapper.insert(records);
+//				}
+//				System.out.println("SID: " + record.getId());
 			}
 	
 
