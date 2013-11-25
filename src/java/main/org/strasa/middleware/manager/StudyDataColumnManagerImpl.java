@@ -32,12 +32,15 @@ public class StudyDataColumnManagerImpl {
 
 	}
 	
-	public void addStudyDataColumn(int studyId,String[] columns, String datatype){
+	public void addStudyDataColumn(int studyId,String[] columns, boolean isRaw){
 		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession(ExecutorType.BATCH);
 		StudyDataColumnMapper mapper = session.getMapper(StudyDataColumnMapper.class);
-
+		String datatype;
+		datatype = "dd";
+		if(isRaw) datatype = "rd";
+		
 		try{
-			
+			System.out.println("DataType: " +datatype);
 			for(String col : columns){
 				StudyDataColumn newCol = new StudyDataColumn();
 				newCol.setStudyid(studyId);

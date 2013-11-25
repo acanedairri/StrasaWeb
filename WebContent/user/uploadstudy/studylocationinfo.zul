@@ -7,13 +7,13 @@
 			<grid id="step4" height="350px"
 				model="@load(vm.lstLocations)">
 				<columns hflex="1">
-					<column label="Location" />
+					<column label="Location" style="background-color:#FA807A;"/>
 					<column label="Country" />
 					<column label="Province" />
 					<column label="Region" />
-					<column label="Altitude" />
-					<column label="Latitude" />
-					<column label="Weather Station" />
+					<column label="Altitude" style="background-color:#FA807A;"/>
+					<column label="Latitude" style="background-color:#FA807A;"/>
+					<column label="Weather Station" style="background-color:#FA807A;"/>
 				</columns>
 				<template name="model">
 					<row>
