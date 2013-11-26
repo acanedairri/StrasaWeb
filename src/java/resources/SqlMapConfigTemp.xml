@@ -5,16 +5,18 @@
 
 <configuration>
 
-<typeAliases>
+	<typeAliases>
 		<typeAlias alias="StudySearchResultModel"
 			type="org.strasa.web.browsestudy.view.model.StudySearchResultModel" />
 		<typeAlias alias="StudySearchFilterModel"
 			type="org.strasa.web.browsestudy.view.model.StudySearchFilterModel" />
 		<typeAlias alias="StudyDataColumnModel"
 			type="org.strasa.web.browsestudy.view.model.StudyDataColumnModel" />
-			
 		<typeAlias alias="CrossStudyQueryFilterModel"
 			type="org.strasa.web.crossstudyquery.view.model.CrossStudyQueryFilterModel" />
+		<typeAlias alias="GermplasmModel"
+			type="org.strasa.middleware.model.Germplasm" />
+			
 	</typeAliases>
 
 
@@ -33,7 +35,11 @@
 
 	<mappers>
 		<mapper resource="org/strasa/middleware/mapper/xml/BrowseStudyMapper.xml" />
+		<mapper resource="org/strasa/middleware/mapper/xml/BrowseGermplasmMapper.xml" />
+		<mapper resource="org/strasa/middleware/mapper/xml/CrossStudyQueryMapper.xml" />
+		<mapper resource="org/strasa/middleware/mapper/xml/StudyRawDataBatch.xml" />
 	</mappers>
+
 
 
 </configuration>
