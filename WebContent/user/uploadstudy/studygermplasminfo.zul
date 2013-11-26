@@ -4,6 +4,7 @@
 
 
 		<groupbox>
+			<button id="uploadGenotype" upload="true" label="Upload Germplasm Table" onUpload="@command('uploadGenotypeData')" /><separator></separator>
 			<hlayout spacing="50px">
 				<vlayout width="100%">
 					<groupbox mold="3d" height="50%">
@@ -13,9 +14,7 @@
 							<auxhead width="100%">
 								<auxheader colspan="13" label=""
 									width="100%">
-									<button id="uploadGenotype"
-										upload="true" label="Upload Germplasm Table"
-										onUpload="@command('uploadGenotypeData')" />
+									
 
 								</auxheader>
 
@@ -155,9 +154,6 @@
 							<auxhead width="100%">
 								<auxheader colspan="13" label=""
 									width="100%">
-									<button id="unknownGenotypes"
-										upload="true" label="Upload Germplasm Table"
-										onUpload="@command('uploadGenotypeData')" />
 
 								</auxheader>
 
@@ -426,6 +422,8 @@
 			<button label="Next"
 				onClick="@global-command('nextTab',model=vm)" sclass="btn-plain">
 			</button>
+			
+			
 
 		</hlayout>
 

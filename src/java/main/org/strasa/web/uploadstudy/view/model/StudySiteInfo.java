@@ -373,23 +373,23 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 
 		StudyRawDataManagerImpl studyRawMan = new StudyRawDataManagerImpl(isRaw);
-		if(!studyRawMan.hasSiteColumnData(sID)){
-			StudySiteInfoModel siteInfo = new StudySiteInfoModel();
-			siteInfo.selectedDesignInfo = new StudyDesign();
-			siteInfo.selectedSitePlantingType = new PlantingType();
-			siteInfo.selectedAgroInfo = new StudyAgronomy();
-			siteInfo.setYear(new StudyManagerImpl().getStudyById(sID).getStartyear());
-			siteInfo.setSeason("NO SEASON");
-			
-			sites.add(siteInfo);
-			
-			ecotypes = ecotypeMan.getAllEcotypes();
-			plantingtypes = plantingtypeMan.getAllPlantingTypes();
-			selectedSite = sites.get(0);
-			
-			noSite = false;
-			return;
-		}
+//		if(!studyRawMan.hasSiteColumnData(sID)){
+//			StudySiteInfoModel siteInfo = new StudySiteInfoModel();
+//			siteInfo.selectedDesignInfo = new StudyDesign();
+//			siteInfo.selectedSitePlantingType = new PlantingType();
+//			siteInfo.selectedAgroInfo = new StudyAgronomy();
+//			siteInfo.setYear(new StudyManagerImpl().getStudyById(sID).getStartyear());
+//			siteInfo.setSeason("NO SEASON");
+//			
+//			sites.add(siteInfo);
+//			
+//			ecotypes = ecotypeMan.getAllEcotypes();
+//			plantingtypes = plantingtypeMan.getAllPlantingTypes();
+//			selectedSite = sites.get(0);
+//			
+//			noSite = false;
+//			return;
+//		}
 		String studyStartYear = new StudyManagerImpl().getStudyById(sID).getStartyear();
 		
 		List<StudySite> subsites = studySiteMan.getAllStudySites(sID);
@@ -397,9 +397,10 @@ public class StudySiteInfo extends ProcessTabViewModel {
 				List<StudySite> lstSiteRaw = studyRawMan.getStudySiteInfo(sID);
 				for(StudySite siteData : lstSiteRaw){
 					StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteData);
-					if(siteInfo.getYear().isEmpty() || siteInfo.getYear().equals("") || siteInfo.getYear() == null) {
+					if(StringUtils.isNullOrEmpty(siteInfo.getYear())) {
 				
 						siteInfo.setYear(studyStartYear);
+						siteInfo.isYearAuto = true;
 					}
 						
 					siteInfo.selectedDesignInfo = new StudyDesign();
@@ -455,7 +456,17 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		private StudyDesign selectedDesignInfo = new StudyDesign();
 		private PlantingType selectedSitePlantingType = new PlantingType();
 		private int selectedPlantingIndex;
-		
+		private boolean isYearAuto = false;
+		public boolean isYearAuto() {
+			return isYearAuto;
+		}
+
+
+		public void setYearAuto(boolean isYearAuto) {
+			this.isYearAuto = isYearAuto;
+		}
+
+
 		public String validateAll(){
 			if(StringUtils.isNullOrEmpty(this.getSitename())){
 				return "Error: Site Name  must not be empty! " ;

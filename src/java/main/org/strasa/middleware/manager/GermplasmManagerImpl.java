@@ -9,11 +9,10 @@ import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.GermplasmCharacteristicsMapper;
 import org.strasa.middleware.mapper.GermplasmMapper;
-import org.strasa.middleware.mapper.StudyGermplasmCharacteristicsMapper;
+import org.strasa.middleware.mapper.other.GermplasmBreederMapper;
 import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.GermplasmCharacteristics;
 import org.strasa.middleware.model.GermplasmExample;
-import org.strasa.middleware.model.StudyGermplasm;
 import org.strasa.web.uploadstudy.view.model.StudyGermplasmInfo.GermplasmDeepInfoModel;
 
 public class GermplasmManagerImpl {
@@ -96,19 +95,12 @@ public class GermplasmManagerImpl {
 			for (GermplasmDeepInfoModel data : collection) {
 				Germplasm newData = new Germplasm();
 
-				if (data.getCurrBreader() != null) {
-					if (data.isInGenotype) {
-						newData.setBreeder(data.getBreeder() + ", "
-								+ data.getCurrBreader());
-					} else {
-						newData.setBreeder(data.getCurrBreader());
-					}
-				}
+				
 				newData.setFemaleparent(data.getFemaleparent());
 				newData.setGermplasmname(data.getGermplasmname());
 				newData.setGermplasmtypeid(data.getGermplasmtypeid());
 				newData.setGid(data.getGid());
-				newData.setId(data.getId());
+				newData.setId(data.getPreservedGermplasmID());
 				newData.setIrcross(data.getIrcross());
 				newData.setIrnumber(data.getIrnumber());
 				newData.setMaleparent(data.getMaleparent());
@@ -133,6 +125,7 @@ public class GermplasmManagerImpl {
 		return returnVal;
 
 	}
+	
 
 	public boolean isGermplasmExisting(String value) {
 		if (this.getGermplasmByName(value) == null)
@@ -168,6 +161,29 @@ public class GermplasmManagerImpl {
 				}
 			}
 			session.commit();
+		} finally {
+			session.close();
+		}
+		return;
+	}
+	
+	
+	public void updateBreeders(List<GermplasmDeepInfoModel> lstRecord) {
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession(ExecutorType.BATCH);
+		GermplasmBreederMapper mapper = session.getMapper(GermplasmBreederMapper.class);
+		try {
+			for (GermplasmDeepInfoModel record : lstRecord) {
+
+				Germplasm newRec = record.toGermplasm();
+		
+				mapper.Update(newRec);
+				
+			}
+			session.commit();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} finally {
 			session.close();
 		}

@@ -17,32 +17,20 @@
 					<template name="model">
 						<row>
 							<textbox value="@bind(each.sitename)"
-								width="99%" if="${each.sitename==null}" />
-							<toolbarbutton label="@load(each.sitename)"
-								width="99%"
-								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-								unless="${each.sitename==null}" />
+								width="99%"  />
+						
 								
 							<textbox value="@bind(each.sitelocation)"
-								width="99%" if="${each.sitelocation==null}" />
-							<toolbarbutton label="@bind(each.sitelocation)"
-								width="99%"
-								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-								unless="${each.sitelocation==null}" />	
+								width="99%" />
+						
 								
 							<textbox value="@bind(each.year)"
-								width="99%" if="{$each.year==null}" />
-							<toolbarbutton label="@bind(each.year)"
-								width="99%"
-								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-								unless="{$each.year==null}" />
+								width="99%"  />
+							
 
 							<textbox value="@bind(each.season)"
-								width="99%" if="{$each.sitename==null}" />
-							<toolbarbutton label="@load(each.season)"
-								width="99%"
-								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-								unless="{$each.sitename==null}" />
+								width="99%" />
+							
 
 							
 							<combobox model="@load(vm.ecotypes)"

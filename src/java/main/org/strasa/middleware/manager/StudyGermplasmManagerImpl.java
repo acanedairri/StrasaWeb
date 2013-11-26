@@ -163,7 +163,7 @@ public class StudyGermplasmManagerImpl {
 			for (GermplasmDeepInfoModel record : lstRecord) {
 				StudyGermplasm newRec = record;
 				
-					
+					newRec.setBreeder(record.getCurrBreader());
 					mapper.insert(newRec);
 				
 //				for (StudyGermplasmCharacteristics records : record.getCharacteristicValues()){
