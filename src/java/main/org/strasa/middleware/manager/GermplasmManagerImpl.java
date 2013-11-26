@@ -65,20 +65,6 @@ public class GermplasmManagerImpl {
 		}
 	}
 
-	public List<Germplasm> getGermplasmListByType(int id){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
-
-		try{
-			GermplasmExample example = new GermplasmExample();
-			example.createCriteria().andGermplasmtypeidEqualTo(id);
-			if(mapper.selectByExample(example).isEmpty()) return null;
-			return mapper.selectByExample(example);
-		}
-		finally{
-			session.close();
-		}
-	}
 
 	public List<Germplasm> convertStudyToGermplasm(Collection<GermplasmDeepInfoModel> collection){
 

@@ -1,9 +1,11 @@
 package org.strasa.web.germplasmquery.view.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.strasa.middleware.manager.BrowseGermplasmManagerImpl;
 import org.strasa.middleware.manager.BrowseStudyManagerImpl;
 import org.strasa.middleware.manager.GermplasmCharacteristicMananagerImpl;
 import org.strasa.middleware.manager.GermplasmManagerImpl;
@@ -46,6 +48,7 @@ public class GermplasmQuery {
 	private String majorGenesCharacteristics;
 	private List<StudySearchResultModel> studyTested;
 	private HashMap<String,Integer> germplasmTypeKey = new HashMap<String,Integer>();
+	private ArrayList<String> keyCharValueList= new ArrayList<String>();
 
 
 
@@ -158,8 +161,8 @@ public class GermplasmQuery {
 		this.majorGenesCharacteristics = majoyGenesCharacteristics;
 	}
 
-	
-	
+
+
 
 	public List<StudySearchResultModel> getStudyTested() {
 		return studyTested;
@@ -200,11 +203,17 @@ public class GermplasmQuery {
 		return (List<Germplasm>) mgr.getGermplasmListByName(name);
 
 	}
-	
+
 	private List<Germplasm> getGermplasmByType(int id) {
 		// TODO Auto-generated method stub
-		GermplasmManagerImpl mgr= new GermplasmManagerImpl();
+		BrowseGermplasmManagerImpl mgr= new BrowseGermplasmManagerImpl();
 		return (List<Germplasm>) mgr.getGermplasmListByType(id);
+	}
+
+	private List<Germplasm> getGermplasmByKeyCharacteristics(ArrayList<String> keyCharList ) {
+		// TODO Auto-generated method stub
+		BrowseGermplasmManagerImpl mgr= new BrowseGermplasmManagerImpl();
+		return  mgr.getGermplasmKeyCharacteristicsAbiotic(keyCharList);
 	}
 
 
@@ -217,8 +226,14 @@ public class GermplasmQuery {
 			Textbox txt=(Textbox) component.getFellow("txtNameSearch");
 			this.germplasmList=getGermplasmByName(txt.getValue());
 		}else if(cmbSearchKey.getValue().contains("Key")){
-//			Textbox txt=(Textbox) component.getFellow("txtNameSearch");
-//			this.germplasmList=getGermplasmByName(txt.getValue());
+			Chosenbox keyValues= (Chosenbox) component.getFellow("cmbKeyCharValue");
+			Object[] keyCharList = keyValues.getSelectedObjects().toArray();
+			ArrayList<String> list= new ArrayList<String>();
+			for(Object s: keyCharList){
+				list.add(s.toString());
+			}
+			this.germplasmList=getGermplasmByKeyCharacteristics(list);
+
 		}else if(cmbSearchKey.getValue().equals("Type")){
 			Combobox cmbGermplasmType= (Combobox) component.getFellow("cmbGermplasmType");
 			int germplasmTypeId=germplasmTypeKey.get(cmbGermplasmType.getValue());
@@ -227,6 +242,13 @@ public class GermplasmQuery {
 
 	}
 
+	@Command("AddNewKeyCharacteristics")
+	public void AddNewKeyCharacteristics(@BindingParam("keyCharValue") String keyCharValue) {
+		//		Chosenbox keyValues= (Chosenbox) component.getFellow("cmbKeyCharValue");
+		keyCharValueList.addAll(keyCharValueList);
+		System.out.println(keyCharValue);
+
+	}
 
 
 
@@ -258,25 +280,25 @@ public class GermplasmQuery {
 	@Command
 	public void DisplayGermplasmInfo(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view,@BindingParam("germplasmId")Integer id,@BindingParam("gname")String gname){
-//		System.out.println(id + " "+gname);
+		//		System.out.println(id + " "+gname);
 		Groupbox groupBoxInfo= (Groupbox) component.getFellow("GermplasmDetailId");
 		groupBoxInfo.setVisible(true);
-		
+
 		Groupbox groupBoxStudyTested= (Groupbox) component.getFellow("StudyTestedId");
 		groupBoxStudyTested.setVisible(true);
-		
-		
+
+
 		germplasm=getGermplasmDetailInformation(id);
 		abioticCharacteristics=getGermplasmCharacteristics("Abiotic",gname);
 		bioticCharacteristics=getGermplasmCharacteristics("Biotic",gname);
-		
+
 		studyTested=getStudyTested(gname);
 	}
 
 	private List<StudySearchResultModel> getStudyTested(String gname) {
-		BrowseStudyManagerImpl browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
+		BrowseGermplasmManagerImpl browseStudyManagerImpl= new BrowseGermplasmManagerImpl(); 
 		return browseStudyManagerImpl.getStudyWithGemrplasmTested(gname);
-		
+
 	}
 
 

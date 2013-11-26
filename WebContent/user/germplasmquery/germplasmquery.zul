@@ -194,8 +194,8 @@
 
 					<columns>
 						<column label="Study Name" width="150px" />
-						<column label="Project" />
 						<column label="Program" />
+						<column label="Project" />
 						<column label="Study Type" />
 						<column label="Start Year" />
 						<column label="End Year" />
