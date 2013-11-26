@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Test;
 import org.strasa.middleware.manager.BrowseStudyManagerImpl;
 import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
+import org.strasa.middleware.manager.StudyFileManagerImpl;
 import org.strasa.middleware.model.StudyDataColumn;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
@@ -20,11 +21,14 @@ public class RawData {
 
 	private int pageSize = 10;
 	private int activePage = 0;
-
+	private String filePath;
+	private String dataType="rd";
+	
 	private List<String> columnList= new ArrayList<String>();
 	private List<String[]> dataList = new ArrayList<String[]>();
 
 	private BrowseStudyManagerImpl browseStudyManagerImpl;
+	private StudyFileManagerImpl studyFileMan;
 
 	public RawData() {
 		// TODO Auto-generated constructor stub
@@ -96,10 +100,12 @@ public class RawData {
 
 	@Init
 	public void init(@ExecutionArgParam("studyid") Integer studyId){
+		studyFileMan = new StudyFileManagerImpl();
 		browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
-		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(studyId,"rd");
+		
+		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(studyId,dataType);
 		System.out.println("Size:"+toreturn.size());
-		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyId,"rd"); // rd as raw data, dd as derived data
+		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyId,dataType); // rd as raw data, dd as derived data
 		for (StudyDataColumn d: columns) {
 			columnList.add(d.getColumnheader());
 			System.out.print(d.getColumnheader()+ "\t");
@@ -115,6 +121,28 @@ public class RawData {
 			System.out.println("\n ");
 			dataList.add(newRow.toArray(new String[newRow.size()]));
 		}
+		
+		try {
+			setFilePath(studyFileMan.getFileByStudyIdAndDataType(studyId, dataType).get(0).getFilepath());
+		}catch (IndexOutOfBoundsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+
+	public String getDataType() {
+		return dataType;
+	}
+
+	public void setDataType(String dataType) {
+		this.dataType = dataType;
 	}
 }
