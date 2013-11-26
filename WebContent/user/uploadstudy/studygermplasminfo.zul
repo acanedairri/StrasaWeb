@@ -44,7 +44,7 @@
 								<row>
 									<label value="@bind(each.gid)"
 										if="${each.gid !=null}" />
-									<textbox value="@bind(each.gid)"
+									<intbox value="@bind(each.gid)"
 										unless="${each.gid!=null}" />
 
 									<label
@@ -183,7 +183,7 @@
 								<row>
 									<label value="@bind(each.gid)"
 										if="${each.gid !=null}" />
-									<textbox value="@bind(each.gid)"
+									<intbox value="@bind(each.gid)"
 										unless="${each.gid!=null}" />
 
 									<label
