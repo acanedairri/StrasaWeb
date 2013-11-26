@@ -154,7 +154,7 @@
 					<groupbox mold="3d" width="100%">
 						<caption label="Germplasm Information" />
 						<include studyid="${arg.studyId}"
-							src="/user/browsestudy/germplasminfo.zul" mode="defer" />
+							src="/user/browsestudy/germplasminfo.zul"/>
 					</groupbox>
 					<groupbox mold="3d" width="100%">
 						<caption label="Derived data" />

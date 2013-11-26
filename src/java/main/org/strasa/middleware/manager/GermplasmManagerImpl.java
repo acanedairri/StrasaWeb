@@ -67,6 +67,7 @@ public class GermplasmManagerImpl {
 		}
 	}
 
+
 	public List<Germplasm> getGermplasmListByType(int id) {
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
 				.openSession();
@@ -82,6 +83,7 @@ public class GermplasmManagerImpl {
 			session.close();
 		}
 	}
+
 
 	public List<Germplasm> convertStudyToGermplasm(
 			Collection<GermplasmDeepInfoModel> collection) {

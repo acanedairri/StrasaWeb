@@ -30,19 +30,18 @@ public class Index {
 		
 		Tab newTab = new Tab();
 		newTab.setLabel(studyName);
-
+		newTab.setClosable(true);
+		
 		Tabpanel newPanel = new Tabpanel();
 		
 		//initialize view after view construction.
 		Include studyInformationPage = new Include();
 		studyInformationPage.setSrc("/user/browsestudy/studyinformation.zul");
 		studyInformationPage.setParent(newPanel);
-		
-//		studyInformationPage.setAttribute("studyId", studyId);
 		studyInformationPage.setDynamicProperty("studyId", studyId);
+
 		tabPanels.appendChild(newPanel);
 		tabs.appendChild(newTab);
-
 		tabBox.setSelectedPanel(newPanel);
 	}
 

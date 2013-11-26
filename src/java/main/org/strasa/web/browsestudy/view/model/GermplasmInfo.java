@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.strasa.middleware.manager.BrowseGermplasmManagerImpl;
 import org.strasa.middleware.manager.BrowseStudyManagerImpl;
 import org.strasa.middleware.manager.GermplasmCharacteristicMananagerImpl;
 import org.strasa.middleware.manager.GermplasmManagerImpl;
@@ -217,7 +218,7 @@ public class GermplasmInfo {
 	
 	private List<Germplasm> getGermplasmByType(int id) {
 		// TODO Auto-generated method stub
-		GermplasmManagerImpl mgr= new GermplasmManagerImpl();
+		BrowseGermplasmManagerImpl mgr= new BrowseGermplasmManagerImpl();
 		return (List<Germplasm>) mgr.getGermplasmListByType(id);
 	}
 
@@ -267,8 +268,8 @@ public class GermplasmInfo {
 	}
 
 	private List<StudySearchResultModel> getStudyTested(String gname) {
-		BrowseStudyManagerImpl browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
-		return browseStudyManagerImpl.getStudyWithGemrplasmTested(gname);
+		BrowseGermplasmManagerImpl browseGermplasmManagerImpl= new BrowseGermplasmManagerImpl(); 
+		return browseGermplasmManagerImpl.getStudyWithGemrplasmTested(gname);
 		
 	}
 

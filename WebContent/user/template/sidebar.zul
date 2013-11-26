@@ -8,7 +8,7 @@
 	</tabs>
 	<tabpanels>
 		<tabpanel>
-			<grid hflex="1" vflex="1" sclass="sidebar"
+			<grid hflex="1" vflex="1" sclass="sidebar" oddRowSclass="empty"
 				id="fnListUpload">
 				<columns>
 					<column width="36px" />
@@ -19,7 +19,7 @@
 
 		</tabpanel>
 		<tabpanel>
-			<grid hflex="1" vflex="1" sclass="sidebar"
+			<grid hflex="1" vflex="1" sclass="sidebar" oddRowSclass="empty"
 				id="fnListBrowse">
 				<columns>
 					<column width="36px" />
@@ -30,7 +30,7 @@
 
 		</tabpanel>
 		<tabpanel>
-			<grid hflex="1" vflex="1" sclass="sidebar"
+			<grid hflex="1" vflex="1" sclass="sidebar" oddRowSclass="empty"
 				id="fnAnalysis">
 				<columns>
 					<column width="36px" />
@@ -41,7 +41,7 @@
 
 		</tabpanel>
 		<tabpanel>
-			<grid hflex="1" vflex="1" sclass="sidebar"
+			<grid hflex="1" vflex="1" sclass="sidebar" oddRowSclass="empty"
 				id="fnMaintenance">
 				<columns>
 					<column width="36px" />

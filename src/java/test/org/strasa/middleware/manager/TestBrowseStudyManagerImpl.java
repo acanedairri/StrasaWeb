@@ -76,7 +76,7 @@ public class TestBrowseStudyManagerImpl {
 	
 	@Test
 	public void testGetStudyWithGemrplasmTested() throws Exception {
-		final BrowseStudyManagerImpl browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
+		final BrowseGermplasmManagerImpl browseStudyManagerImpl= new BrowseGermplasmManagerImpl(); 
 
 		String gname="IR1";
 
