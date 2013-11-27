@@ -24,6 +24,8 @@ public class FilesData {
 
 	private  List<StudyFile> files = new  ArrayList<StudyFile>() ;
 	
+	private String dataType="fd"; // genotypic data
+	
 	public FilesData() {
 		// TODO Auto-generated constructor stub
 	}
@@ -42,7 +44,7 @@ public class FilesData {
 		
 		studyFileMan = new StudyFileManagerImpl();
 
-		setFiles(studyFileMan.getFileByStudyIdAndDataType(studyId, "fd"));
+		setFiles(studyFileMan.getFileByStudyIdAndDataType(studyId, dataType));
 	}
 	
 	@GlobalCommand
@@ -69,5 +71,15 @@ public class FilesData {
 		else extractedFileName=(file.getName().split(".txt")[0])+".txt";
 
 		return extractedFileName;
+	}
+
+
+	public String getDataType() {
+		return dataType;
+	}
+
+
+	public void setDataType(String dataType) {
+		this.dataType = dataType;
 	}
 }

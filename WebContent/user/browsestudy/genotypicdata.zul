@@ -9,8 +9,7 @@
 			<template name="model">
 				<row>
 					<toolbarbutton label="@load(each.filename)"
-						width="99%" />
-					<!-- onClick="@command('updateDesignInfo', studysiteid=each.id)"/> -->
+						width="99%" onClick="@global-command('downloadFile', filePath=each.filepath, dataType=vm.dataType)"/>
 				</row>
 			</template>
 		</grid>
