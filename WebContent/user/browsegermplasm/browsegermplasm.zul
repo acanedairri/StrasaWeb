@@ -6,8 +6,9 @@
 		font-weight: bold; font-size: 12px; } .searchLabel {font-size:
 		13px; }
 	</style>
-	
-	<window width="98%" height="98%" title="Browse Germplasm" contentStyle="overflow:auto" >
+
+	<window width="98%" height="98%" title="Browse Germplasm"
+		contentStyle="overflow:auto">
 		<html>
 			<br></br>
 		</html>
@@ -207,8 +208,7 @@
 
 					</columns>
 					<template name="model">
-						<row
-							onClick="@command('DisplayGermplasmInfo', germplasmId=each.id,gname=each.germplasmname)">
+						<row onClick="info.doPopup()">
 							<label value="@load(each.studyname)" />
 							<label value="@load(each.programname)" />
 							<label value="@load(each.projectname)" />
@@ -223,5 +223,13 @@
 			</groupbox>
 
 		</vbox>
+
+		<window id="studyWindow" visible="false" width="120px"
+			border="normal" position="parent">
+			Here is more information
+		</window>
+
 	</window>
+
+
 </zk>
