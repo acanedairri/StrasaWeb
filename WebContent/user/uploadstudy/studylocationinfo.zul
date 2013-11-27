@@ -17,8 +17,8 @@
 				</columns>
 				<template name="model">
 					<row>
-						<label value="@bind(each.locationname)" if="${each.id !=null}"/>
-						<textbox value="@bind(each.locationname) @validator(vm.formValidator.textValidator)" unless="${each.id !=null}" width = "100%"  />
+						<label value="@bind(each.locationname)" if="${each.locationname !=null}"/>
+						<textbox value="@bind(each.locationname) @validator(vm.formValidator.textValidator)" unless="${each.locationname !=null}" width = "100%"  />
 											
 						<label value="@bind(each.country)" if="${each.id  != null}"/>
 						<combobox

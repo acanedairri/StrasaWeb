@@ -123,11 +123,7 @@
 									<textbox
 										value="@bind(vm.selectedDesignInfo.plotsize)" width="99%" />
 								</row>
-								<row style="background-color:#FA807A;">
-									Plot Size:
-									<textbox
-										value="@bind(vm.selectedDesignInfo.plotsize)" width="99%" />
-								</row>
+							
 								<row>
 									Design Factor 1:
 									<textbox

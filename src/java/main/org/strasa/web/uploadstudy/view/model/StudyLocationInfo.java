@@ -1,6 +1,5 @@
 package org.strasa.web.uploadstudy.view.model;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,12 +8,12 @@ import java.util.Map;
 import org.strasa.middleware.manager.CountryManagerImpl;
 import org.strasa.middleware.manager.StudyLocationManagerImpl;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
+import org.strasa.middleware.manager.StudySiteManagerImpl;
 import org.strasa.middleware.model.Country;
 import org.strasa.middleware.model.Location;
-import org.strasa.middleware.model.custom.RawLocationModel;
+import org.strasa.middleware.model.StudySite;
 import org.strasa.web.common.api.FormValidator;
 import org.strasa.web.common.api.ProcessTabViewModel;
-import org.zkoss.bind.Validator;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ExecutionArgParam;
@@ -140,12 +139,7 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 			cmbCountry.add(data.getIsoabbr());
 		}
 		StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
-		if (!rawMan.hasLocationColumnData(studyId)) {
-			lstLocations.add(new Location());
-			noLocation = true;
-			formValidator.setAllValid(false);
-			return;
-		}
+	
 
 		List<List<Location>> locationInit = studyLocationManager
 				.initializeStudyLocations(studyId);
@@ -157,7 +151,8 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 
 		HashMap<String, Location> lstRawLoc = rawMan
 				.getStudyLocationInfoToMap(studyId);
-
+		StudySiteManagerImpl siteMan = new StudySiteManagerImpl(isRaw);
+		List<StudySite> lstStudySite = siteMan.getAllStudySites(studyId);
 		for (int i = 0; i < lstUnknownLocations.size(); i++) {
 			if (lstRawLoc.containsKey(lstUnknownLocations.get(i)
 					.getLocationname())) {
@@ -167,6 +162,16 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 
 			}
 		}
+		for(StudySite site : lstStudySite){
+			if(!lstRawLoc.containsKey(site.getSitelocation())){
+				Location newLoc = new Location();
+				newLoc.setLocationname(site.getSitelocation());
+				System.out.println("Added new Location from site");
+				lstLocations.add(newLoc);
+			}
+		}
+		
+		
 
 	}
 

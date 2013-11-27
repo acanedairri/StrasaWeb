@@ -166,7 +166,9 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		lstAbiotics = keyMan.getAllAbiotic();
 		lstGrainQualities = keyMan.getAllGrainQuality();
 		lstAllMajorGenes = keyMan.getAllMajorGenes();
-
+		GermplasmTypeManagerImpl germMan = new GermplasmTypeManagerImpl();
+		
+		lstGermplasmType = germMan.getAllGermplasmType();
 		this.studyID = studyID;
 		StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
 		List<StudyGermplasm> lst = rawMan.getStudyGermplasmInfo((int) studyID);
@@ -191,6 +193,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 				newData.isInGenotype = true;
 				newData.setGermplasmType(getGermplasmType(germData.getGermplasmtypeid()));
 				newData.setBreeders();
+				newData.setGermplasmType(getGermplasmType(germData.getGermplasmtypeid()));
 				GermplasmCharacteristicsExample charEx = new GermplasmCharacteristicsExample();
 				charEx.createCriteria().andGermplasmnameEqualTo(
 						newData.getGermplasmname());
@@ -223,8 +226,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 				}
 		}
 
-		GermplasmTypeManagerImpl germMan = new GermplasmTypeManagerImpl();
-		lstGermplasmType = germMan.getAllGermplasmType();
+		
 		GermplasmCharacteristicMananagerImpl studyCharMan = new GermplasmCharacteristicMananagerImpl();
 
 		// List<GermplasmCharacteristics> arrCharList =
@@ -533,6 +535,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		}
 
 		public void setGermplasmType(String germplasmType) {
+			
 			this.germplasmType = germplasmType;
 		}
 		private String abiotic,biotic,grainquality,majorgenes;
@@ -898,7 +901,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 		public void setBreeders() {
 			preservedBreeder = getBreeder();
-			System.out.println("Prese:" + preservedBreeder);
+		
 			if (getBreeder() != null) {
 				String[] arrBreeders = getBreeder().split(", ");
 				if (arrBreeders.length < 2) {

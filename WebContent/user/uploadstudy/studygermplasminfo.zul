@@ -24,43 +24,43 @@
 								</auxheader>
 
 							</auxhead>
-							<columns>
+							<columns menupopup="auto" columnsgroup="false">
 								<column label="GID" width="5.69%" />
-								<column label="GName" width="7.69%" />
-								<column label="OtherName" width="7.69%" />
-								<column label="Breeder" width="7.69%" />
+								<column label="GName" width="7.69%" sort="auto(germplasmname)" />
+								<column label="OtherName" width="7.69%"  />
+								<column label="Breeder" width="7.69%"  />
 								<column label="GermplasmType"
 									width="7.69%" />
 								<column label="IR Number" width="7.69%" />
-								<column label="IR Cross" width="7.69%" />
+								<column label="IR Cross" width="7.69%"  />
 								<column label="Parentage" width="7.69%" />
 								<column label="Female Parent"
-									width="7.69%" />
+									width="7.69%"  />
 								<column label="Male Parent"
-									width="7.69%" />
+									width="7.69%"  />
 								<column label="Selection History"
-									width="7.69%" />
-								<column label="Source" width="7.69%" />
+									width="7.69%" sort="auto"/>
+								<column label="Source" width="7.69%"  />
 								<column label="Characteristic"
-									width="9.69%" />
+									width="9.69%"  />
 
 							</columns>
 							<template name="model">
 								<row style="@load(each.styleBG)">
 									<intbox value="@bind(each.gid)"
-										unless="${each.gid!=null}" />
+										 />
 									<label
 										value="@bind(each.germplasmname)"
-										if="${each.germplasmname !=null}" />
+										 />
 									<textbox
 										value="@bind(each.othername)"
-										unless="${each.othername!=null}" />
+										 />
 									<textbox
 										value="@bind(each.currBreader)" constraint="no empty" />
 									<combobox
 										model="@load(vm.lstGermplasmType)"
 										readonly="${each.germplasmtypeid != null}"
-										disabled="${each.germplasmtypeid != null}"
+									
 										selectedIndex="@bind(each.germplasmtypeid)" width="99%">
 										<template name="model">
 											<comboitem
@@ -70,23 +70,23 @@
 									</combobox>
 
 									<textbox
-										value="@bind(each.irnumber)" unless="${each.irnumber !=null}" />
+										value="@bind(each.irnumber)"  />
 									<textbox value="@bind(each.ircross)"
-										unless="${each.ircross !=null}" />
+										 />
 									<textbox
 										value="@bind(each.parentage)"
-										unless="${each.parentage !=null}" />
+										 />
 									<textbox
 										value="@bind(each.femaleparent)"
-										unless="${each.femaleparent !=null}" constraint="no empty" />
+										 constraint="no empty" />
 									<textbox
 										value="@bind(each.maleparent)"
-										unless="${each.maleparent !=null}" constraint="no empty" />
+										 constraint="no empty" />
 									<textbox
 										value="@bind(each.selectionhistory)"
-										unless="${each.selectionhistory !=null}" />
+										/>
 									<textbox value="@bind(each.source)"
-										unless="${each.source !=null}" />
+										 />
 									<vbox width="65%">
 										<bandbox
 											id="bms_${forEachStatus.index}" readonly="true"
@@ -232,30 +232,29 @@
 								</auxheader>
 
 							</auxhead>
-							<columns>
-								<column label="GID" width="5.69%" />
-								<column label="GName" width="7.69%" />
-								<column label="OtherName" width="7.69%" />
-								<column label="Breeder" width="7.69%" />
+							<columns menupopup="auto" columnsgroup="false">
+								<column label="GID" width="5.69%" sort="auto(gid)" />
+								<column label="GName" width="7.69%" sort="auto(germplasmname)" />
+								<column label="OtherName" width="7.69%" sort="auto(othername)" />
+								<column label="Breeder" width="7.69%" sort="auto(breeder)" />
 								<column label="GermplasmType"
-									width="7.69%" />
-								<column label="IR Number" width="7.69%" />
-								<column label="IR Cross" width="7.69%" />
-								<column label="Parentage" width="7.69%" />
-								<column label="Female Parent"
-									width="7.69%" />
+									width="7.69%"  sort="auto(germplasmType)"/>
+								<column label="IR Number" width="7.69%" sort="auto(irnumber)" />
+								<column label="IR Cross" width="7.69%" sort="auto(ircross)" />
+								<column label="Parentage" width="7.69%" sort="auto(parentage)" />
+								<column label="Female Parent" width="7.69%" sort="auto(femaleparent)" />
 								<column label="Male Parent"
-									width="7.69%" />
+									width="7.69%" sort="auto(maleparent)" />
 								<column label="Selection History"
-									width="7.69%" />
-								<column label="Source" width="7.69%" />
-								<column label="Biotic" width="9.69%" />
+									width="7.69%" sort="auto(selectionhistory)" />
+								<column label="Source" width="7.69%" sort="auto(source)" />
+								<column label="Biotic" width="9.69%" sort="auto(biotic)" />
 							
-								<column label="Abiotic" width="9.69%" />
+								<column label="Abiotic" width="9.69%" sort="auto(abiotic)" />
 								<column label="Grain Quality"
-									width="9.69%" />
+									width="9.69%" sort="auto(grainquality)" />
 								<column label="Major Genes"
-									width="9.69%" />
+									width="9.69%" sort="auto(majorgenes)" />
 							</columns>
 							<template name="model">
 								<row style="@load(each.styleBG)">
@@ -288,13 +287,8 @@
 										</popup>
 									</vlayout>
 
-									<label
-										value="@bind(each.germplasmType)" />
-
-
-
-
-									<label value="@bind(each.irnumber)" />
+									<label value="@bind(each.germplasmType)" />
+										<label value="@bind(each.irnumber)" />
 
 									<label value="@bind(each.ircross)" />
 
