@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.GermplasmCharacteristicsMapper;
 import org.strasa.middleware.mapper.StudyGermplasmMapper;
+import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.GermplasmCharacteristics;
 import org.strasa.middleware.model.GermplasmCharacteristicsExample;
 import org.strasa.middleware.model.GermplasmExample;
@@ -29,16 +30,20 @@ public class GermplasmCharacteristicMananagerImpl {
 		}
 	}
 
-	public List<GermplasmCharacteristics> getGermplasmCharacteristicByKeyandGname(String keyChar,String gname){
-		
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession(ExecutorType.BATCH);
-		GermplasmCharacteristicsMapper mapper = session.getMapper(GermplasmCharacteristicsMapper.class);
+	public List<GermplasmCharacteristics> getGermplasmCharacteristicByKeyandGname(String attribute,String gname){
+
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		try{
-			GermplasmCharacteristicsExample example = new GermplasmCharacteristicsExample();
-			example.createCriteria().andGermplasmnameEqualTo(gname).andAttributeEqualTo(keyChar);
-			return mapper.selectByExample(example);
-		}
-		finally{
+			List<GermplasmCharacteristics> toreturn = null;
+				GermplasmCharacteristics  param= new GermplasmCharacteristics();
+				param.setGermplasmname(gname);
+				param.setAttribute(attribute);
+		
+				toreturn= session.selectList("BrowseGermplasm.getGermplasmKeyCharacteristicsByGermplasmName",param);
+			
+			return toreturn;
+
+		}finally{
 			session.close();
 		}
 

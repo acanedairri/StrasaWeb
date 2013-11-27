@@ -12,7 +12,7 @@
 			<br></br>
 		</html>
 		<vbox apply="org.zkoss.bind.BindComposer"
-			viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.GermplasmQuery')"
+			viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.BrowseGermplasm')"
 			spacing="10px">
 
 			<hbox width="99%">
@@ -64,14 +64,16 @@
 					onClick="@command('SearchGermplasm')" />
 			</hbox>
 
-			<groupbox mold="3d" width="99%">
-				<caption label="Search Result" />
+			<groupbox mold="3d" width="98%">
+				<caption label="@load(vm.searchResultLabel)" />
 				<grid height="200px" model="@load(vm.germplasmList)"
 					emptyMessage="No Record Found">
 
 					<columns>
 						<column label="Germplasm Name" width="150px" />
 						<column label="Other Name" />
+						<column label="Breeder" />
+						<column label="Germplasm Type" />
 
 					</columns>
 					<template name="model">
@@ -79,14 +81,15 @@
 							onClick="@command('DisplayGermplasmInfo', germplasmId=each.id,gname=each.germplasmname)">
 							<label value="@load(each.germplasmname)" />
 							<label value="@load(each.othername)" />
-
+							<label value="@load(each.breeder)" />
+							<label value="@load(each.remarks)" />
 						</row>
 					</template>
 				</grid>
 			</groupbox>
 
 
-			<groupbox id="GermplasmDetailId" mold="3d" width="99%"
+			<groupbox id="GermplasmDetailId" mold="3d" width="98%"
 				visible="false">
 				<caption label="Germplasm Information" />
 				<grid oddRowSclass="empty">
@@ -186,7 +189,7 @@
 				</grid>
 			</groupbox>
 
-			<groupbox id="StudyTestedId" mold="3d" width="99%"
+			<groupbox id="StudyTestedId" mold="3d" width="98%"
 				visible="false">
 				<caption label="Studies where this germplasm is tested" />
 				<grid height="200px" model="@load(vm.studyTested)"
