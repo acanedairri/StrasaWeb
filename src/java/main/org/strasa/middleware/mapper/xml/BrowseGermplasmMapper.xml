@@ -6,18 +6,165 @@
 <mapper namespace="BrowseGermplasm">
 	<select id="getGermplasmByKeyCharacteristicsAbiotic" resultType="GermplasmModel"
 		parameterType="int">
-		select distinct t1.germplasmname as germplasmname
-		,t1.breeder as breeder
-		from germplasm as t1 left join germplasmcharacteristics as t2 on
-		t1.germplasmname=t2.germplasmname where t2.attribute='Abiotic' and
-		t2.value in 
-		<foreach item="item" index="index" collection="list"
-     		 open="(" separator="," close=")">
-        #{item}
-  </foreach>
+		select distinct t1.id,t1.gid,t1.germplasmname as germplasmname
+		,t1.breeder as
+		breeder
+		,t1.othername as othername
+		,t3.germplasmtype as
+		remarks
+		from
+		germplasm as t1 left join
+		germplasmcharacteristics as t2 on
+		t1.germplasmname=t2.germplasmname
+		left join germplasmtype as t3 on
+		t1.germplasmtypeid=t3.id
+		where t2.attribute='Abiotic' and
+		t2.value in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
 
 	</select>
 
+	<select id="getGermplasmByKeyCharacteristicsBiotic" resultType="GermplasmModel"
+		parameterType="int">
+		select distinct t1.id,t1.gid,t1.germplasmname as germplasmname
+		,t1.breeder as
+		breeder
+		,t1.othername as othername
+		,t3.germplasmtype as
+		remarks
+		from
+		germplasm as t1 left join
+		germplasmcharacteristics as t2 on
+		t1.germplasmname=t2.germplasmname
+		left join germplasmtype as t3 on
+		t1.germplasmtypeid=t3.id
+		where t2.attribute='Biotic' and
+		t2.value in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+
+	</select>
+
+	<select id="getGermplasmByKeyCharacteristicsGrainQuality"
+		resultType="GermplasmModel" parameterType="int">
+		select distinct t1.id,t1.gid,t1.germplasmname as germplasmname
+		,t1.breeder as
+		breeder
+		,t1.othername as othername
+		,t3.germplasmtype as
+		remarks
+		from
+		germplasm as t1 left join
+		germplasmcharacteristics as t2 on
+		t1.germplasmname=t2.germplasmname
+		left join germplasmtype as t3 on
+		t1.germplasmtypeid=t3.id
+		where t2.attribute='Grain Quality' and
+		t2.value in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+
+	</select>
+
+	<select id="getGermplasmByNameEqual" resultType="GermplasmModel"
+		parameterType="int">
+		select distinct t1.id,t1.gid,t1.germplasmname as
+		germplasmname
+		,t1.breeder as
+		breeder
+		,t1.othername as othername
+		,t3.germplasmtype as
+		remarks
+		from
+		germplasm as t1 left join
+		germplasmcharacteristics as t2 on
+		t1.germplasmname=t2.germplasmname
+		left join germplasmtype as t3 on
+		t1.germplasmtypeid=t3.id
+		where
+		t1.germplasmname=#{gname}
+
+	</select>
+
+	<select id="getGermplasmByNameLike" resultType="GermplasmModel"
+		parameterType="int">
+		select distinct t1.id,t1.gid,t1.germplasmname as
+		germplasmname
+		,t1.breeder as
+		breeder
+		,t1.othername as othername
+		,t3.germplasmtype as
+		remarks
+		from
+		germplasm as t1 left join
+		germplasmcharacteristics as t2 on
+		t1.germplasmname=t2.germplasmname
+		left join germplasmtype as t3 on
+		t1.germplasmtypeid=t3.id
+		where
+		t1.germplasmname like #{gname}
+
+	</select>
+
+	<select id="getGermplasmByType" resultType="GermplasmModel"
+		parameterType="int">
+		select distinct t1.id,t1.gid,t1.germplasmname as
+		germplasmname
+		,t1.breeder as
+		breeder
+		,t1.othername as othername
+		,t3.germplasmtype as
+		remarks
+		from
+		germplasm as t1 left join
+		germplasmcharacteristics as t2 on
+		t1.germplasmname=t2.germplasmname
+		left join germplasmtype as t3 on
+		t1.germplasmtypeid=t3.id
+		where
+		t1.germplasmtypeid= #{id}
+
+	</select>
+
+	<select id="getGermplasmByKeyCharacteristicsMajorGenes"
+		resultType="GermplasmModel" parameterType="int">
+		select distinct t1.id,t1.gid,t1.germplasmname as germplasmname
+		,t1.breeder as
+		breeder
+		,t1.othername as othername
+		,t3.germplasmtype as
+		remarks
+		from
+		germplasm as t1 left join
+		germplasmcharacteristics as t2 on
+		t1.germplasmname=t2.germplasmname
+		left join germplasmtype as t3 on
+		t1.germplasmtypeid=t3.id
+		where t2.attribute='Major Genes' and
+		t2.value
+		in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+
+	</select>
+
+
+	<select id="getGermplasmKeyCharacteristicsByGermplasmName"
+		resultType="GermplasmCharacteristics" parameterType="GermplasmCharacteristics">
+		select distinct
+		germplasmname,attribute,value from germplasmcharacteristics where
+		attribute=#{attribute} and germplasmname=#{germplasmname}
+
+	</select>
 
 	<select id="getStudyWithGemrplasmTested" resultType="StudySearchResultModel"
 		parameterType="int">

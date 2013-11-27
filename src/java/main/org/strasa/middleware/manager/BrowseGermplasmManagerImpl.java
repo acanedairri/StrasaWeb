@@ -12,6 +12,10 @@ import org.strasa.web.browsestudy.view.model.StudySearchResultModel;
 
 public class BrowseGermplasmManagerImpl {
 
+	private final static String ABIOTIC="Abiotic";
+	private final static String BIOTIC="Biotic";
+	private final static String GRAIN_QUALITY="Grain Quality";
+	private final static String MAJOR_GENES="Major Genes";
 
 	public List<StudySearchResultModel> getStudyWithGemrplasmTested(String gname) {
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
@@ -28,12 +32,19 @@ public class BrowseGermplasmManagerImpl {
 	}
 	
 	
-	public List<Germplasm> getGermplasmKeyCharacteristicsAbiotic(ArrayList<String> keyCharList) {
+	public List<Germplasm> getGermplasmKeyCharacteristicsAbiotic(ArrayList<String> keyCharList, String keyChar) {
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		try{
-
-			List<Germplasm> toreturn= session.selectList("BrowseGermplasm.getGermplasmByKeyCharacteristicsAbiotic",keyCharList);
-
+			List<Germplasm> toreturn = null;
+			if(keyChar.equals(ABIOTIC)){
+				toreturn= session.selectList("BrowseGermplasm.getGermplasmByKeyCharacteristicsAbiotic",keyCharList);
+			}else if(keyChar.equals(BIOTIC)){
+				toreturn= session.selectList("BrowseGermplasm.getGermplasmByKeyCharacteristicsBiotic",keyCharList);
+			}else if(keyChar.equals(GRAIN_QUALITY)){
+				toreturn= session.selectList("BrowseGermplasm.getGermplasmByKeyCharacteristicsGrainQuality",keyCharList);
+			}else{
+				toreturn= session.selectList("BrowseGermplasm.getGermplasmByKeyCharacteristicsMajorGenes",keyCharList);
+			}
 			return toreturn;
 
 		}finally{
@@ -41,6 +52,42 @@ public class BrowseGermplasmManagerImpl {
 		}
 
 	}
+	
+	
+	public List<Germplasm> getGermplasmByNameEqual(String gname) {
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		try{
+			List<Germplasm> toreturn = null;
+				toreturn= session.selectList("BrowseGermplasm.getGermplasmByNameEqual",gname);
+			return toreturn;
+		}finally{
+			session.close();
+		}
+	}
+	
+	public List<Germplasm> getGermplasmByNameLike(String gname) {
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		try{
+			List<Germplasm> toreturn = null;
+				toreturn= session.selectList("BrowseGermplasm.getGermplasmByNameLike",gname);
+			return toreturn;
+		}finally{
+			session.close();
+		}
+	}
+	
+	
+	public List<Germplasm> getGermplasmByType(int typeid) {
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		try{
+			List<Germplasm> toreturn = null;
+				toreturn= session.selectList("BrowseGermplasm.getGermplasmByType",typeid);
+			return toreturn;
+		}finally{
+			session.close();
+		}
+	}
+
 
 
 	public List<Germplasm> getGermplasmListByType(int id){

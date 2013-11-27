@@ -28,17 +28,18 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zkmax.zul.Chosenbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 
 
 
-public class GermplasmQuery {
+public class BrowseGermplasm {
 
 	private String nameSearch;
 	private String searchKey;
 	private List<GermplasmType> germplasmType;
 	private List<String> keyCharacteristicOption;
-	private int germplasmTypeId;
+	private int germplasmTypeId=0;
 	private String keyCharactericticValue;
 	private List<Germplasm> germplasmList;
 	private Germplasm germplasm;
@@ -49,8 +50,11 @@ public class GermplasmQuery {
 	private List<StudySearchResultModel> studyTested;
 	private HashMap<String,Integer> germplasmTypeKey = new HashMap<String,Integer>();
 	private ArrayList<String> keyCharValueList= new ArrayList<String>();
-
-
+	private final static String ABIOTIC="Abiotic";
+	private final static String BIOTIC="Biotic";
+	private final static String GRAIN_QUALITY="Grain Quality";
+	private final static String MAJOR_GENES="Major Genes";
+	private String searchResultLabel="Search Result";
 
 	@Init
 	public void setInitialData(){
@@ -174,6 +178,18 @@ public class GermplasmQuery {
 	}
 
 
+
+
+	public String getSearchResultLabel() {
+		return searchResultLabel;
+	}
+
+
+	public void setSearchResultLabel(String searchResultLabel) {
+		this.searchResultLabel = searchResultLabel;
+	}
+
+
 	@Command
 	public void SetSearchUI(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view) {
@@ -199,21 +215,24 @@ public class GermplasmQuery {
 
 	private  List<Germplasm> getGermplasmByName(String name){
 
-		GermplasmManagerImpl mgr= new GermplasmManagerImpl();
-		return (List<Germplasm>) mgr.getGermplasmListByName(name);
-
+		BrowseGermplasmManagerImpl mgr= new BrowseGermplasmManagerImpl();
+		if(name.contains("%") || name.contains("?") ){
+			return (List<Germplasm>) mgr.getGermplasmByNameLike(name);
+		}else{
+			return (List<Germplasm>) mgr.getGermplasmByNameEqual(name);
+		}
 	}
 
-	private List<Germplasm> getGermplasmByType(int id) {
+	private List<Germplasm> getGermplasmByType(int typeid) {
 		// TODO Auto-generated method stub
 		BrowseGermplasmManagerImpl mgr= new BrowseGermplasmManagerImpl();
-		return (List<Germplasm>) mgr.getGermplasmListByType(id);
+		return (List<Germplasm>) mgr.getGermplasmByType(typeid);
 	}
 
-	private List<Germplasm> getGermplasmByKeyCharacteristics(ArrayList<String> keyCharList ) {
+	private List<Germplasm> getGermplasmByKeyCharacteristics(ArrayList<String> keyCharList, String KeyChar ) {
 		// TODO Auto-generated method stub
 		BrowseGermplasmManagerImpl mgr= new BrowseGermplasmManagerImpl();
-		return  mgr.getGermplasmKeyCharacteristicsAbiotic(keyCharList);
+		return  mgr.getGermplasmKeyCharacteristicsAbiotic(keyCharList,KeyChar);
 	}
 
 
@@ -224,21 +243,36 @@ public class GermplasmQuery {
 		Combobox cmbSearchKey= (Combobox) component.getFellow("cmbSearchKey");
 		if(cmbSearchKey.getValue().equals("Name")){
 			Textbox txt=(Textbox) component.getFellow("txtNameSearch");
-			this.germplasmList=getGermplasmByName(txt.getValue());
+			if(txt.getValue().length() > 0){
+				this.germplasmList=getGermplasmByName(txt.getValue());
+			}else{
+				Messagebox.show("Please enter germplasm name to search" ,"Warning",null,null,null,null); 
+			}
 		}else if(cmbSearchKey.getValue().contains("Key")){
 			Chosenbox keyValues= (Chosenbox) component.getFellow("cmbKeyCharValue");
+			Combobox cmbKeyChar= (Combobox) component.getFellow("cmbKeyChar");
 			Object[] keyCharList = keyValues.getSelectedObjects().toArray();
-			ArrayList<String> list= new ArrayList<String>();
-			for(Object s: keyCharList){
-				list.add(s.toString());
+			if(keyCharList.length > 0){
+				ArrayList<String> list= new ArrayList<String>();
+				for(Object s: keyCharList){
+					list.add(s.toString());
+				}
+				this.germplasmList=getGermplasmByKeyCharacteristics(list,cmbKeyChar.getValue());
+			}else{
+				Messagebox.show("Please select values" ,"Warning",null,null,null,null); 
 			}
-			this.germplasmList=getGermplasmByKeyCharacteristics(list);
 
 		}else if(cmbSearchKey.getValue().equals("Type")){
 			Combobox cmbGermplasmType= (Combobox) component.getFellow("cmbGermplasmType");
-			int germplasmTypeId=germplasmTypeKey.get(cmbGermplasmType.getValue());
-			this.germplasmList=getGermplasmByType(germplasmTypeId);
+			if(cmbGermplasmType.getValue().toString().length() > 0 ){
+				int germplasmTypeId=germplasmTypeKey.get(cmbGermplasmType.getValue());
+				this.germplasmList=getGermplasmByType(germplasmTypeId);
+			}else{
+				Messagebox.show("Please select type ","Warning",null,null,null,null); 
+			}
 		}
+
+		searchResultLabel="Search Result:  "+this.germplasmList.size()+"  row(s) returned";
 
 	}
 
@@ -289,8 +323,10 @@ public class GermplasmQuery {
 
 
 		germplasm=getGermplasmDetailInformation(id);
-		abioticCharacteristics=getGermplasmCharacteristics("Abiotic",gname);
-		bioticCharacteristics=getGermplasmCharacteristics("Biotic",gname);
+		abioticCharacteristics=getGermplasmCharacteristics(ABIOTIC,gname);
+		bioticCharacteristics=getGermplasmCharacteristics(BIOTIC,gname);
+		grainQualityCharacteristics=getGermplasmCharacteristics(GRAIN_QUALITY,gname);
+		majorGenesCharacteristics=getGermplasmCharacteristics(MAJOR_GENES,gname);
 
 		studyTested=getStudyTested(gname);
 	}
