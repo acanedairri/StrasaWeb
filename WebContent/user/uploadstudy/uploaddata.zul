@@ -13,17 +13,18 @@
 					<grid>
 						<columns>
 							<column label="" width="120px" />
-							<column label="" width="220px" />
+							<column label="" width="350px" />
 							<column label="" />
 						</columns>
 						<rows>
 							<row>
 								<label class="name" value="Program:" />
 								<bandbox id="bdProgram" mold="rounded"
-									autodrop="true" value="@bind(vm.txtProgram)" readonly="true">
+									autodrop="true" value="@bind(vm.txtProgram.name)"
+									readonly="true" width="330px">
 									<bandpopup>
 										<listbox height="250px"
-											width="450px" mold="paging" autopaging="true"
+											width="650px" mold="paging" autopaging="true"
 											model="@load(vm.programList)"
 											selectedItem="@bind(vm.txtProgram)"
 											onSelect="bdProgram.value=self.selectedItem.label;bdProgram.close();">
@@ -31,8 +32,15 @@
 												<listheader
 													label="Select Program" />
 											</listhead>
-											<listitem label="${each}"
-												forEach="${languages}" />
+											<template name="model"
+												var="item" status="s">
+												<listitem>
+
+													<listcell
+														label="@bind(item.name)" />
+												</listitem>
+											</template>
+
 										</listbox>
 									</bandpopup>
 								</bandbox>
@@ -41,8 +49,8 @@
 							</row>
 							<row>
 								<label class="name" value="Project:" />
-								<bandbox id="bdProject" mold="rounded"
-									autodrop="true" value="@bind(vm.txtProject)" readonly="true">
+								<bandbox id="bdProject" mold="rounded" width="330px"
+									autodrop="true" value="@bind(vm.txtProject.name)" readonly="true">
 									<bandpopup>
 										<listbox height="250px"
 											width="450px" mold="paging" autopaging="true"
@@ -53,9 +61,15 @@
 												<listheader
 													label="Select Project" />
 											</listhead>
-											<listitem label="${each}"
-												forEach="${languages}" />
-										</listbox>
+											<template name="model"
+												var="item" status="s">
+												<listitem>
+
+													<listcell
+														label="@bind(item.name)" />
+												</listitem>
+											</template>
+											</listbox>
 									</bandpopup>
 								</bandbox>
 								<button label="Add"
@@ -107,7 +121,7 @@
 
 			<groupbox id="gb" mold="3d" width="100%">
 				<caption label="Upload Option" />
-				<hlayout spacing="30px" height = "120px">
+				<hlayout spacing="30px" height="120px">
 
 					<vlayout width="300px">
 						<groupbox width="99%">
@@ -199,11 +213,12 @@
 					</vlayout>
 				</hlayout>
 			</groupbox>
-			<groupbox id="grpUploadGenotypeData" width="100%" mold="3d">
+			<groupbox id="grpUploadGenotypeData" width="100%"
+				mold="3d">
 				<caption label="Select Genotype Data" />
 				<label value=""></label>
 				<hlayout spacing="30px">
-					<vlayout  width="240px" >
+					<vlayout width="240px">
 						<grid width="99%"
 							model="@bind(vm.genotypeFileList)" height="160px" vflex="true"
 							emptyMessage="No genotype file uploaded...">
@@ -221,7 +236,8 @@
 							</template>
 						</grid>
 						<button id="uploadGenotype" upload="true"
-							label="Attach Genotype file..." onUpload="@command('uploadGenotypeData')" />
+							label="Attach Genotype file..."
+							onUpload="@command('uploadGenotypeData')" />
 
 					</vlayout>
 

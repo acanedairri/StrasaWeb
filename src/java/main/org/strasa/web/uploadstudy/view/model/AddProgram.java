@@ -21,6 +21,7 @@ public class AddProgram {
 	private Program programModel = new Program();
 	private Component mainView;
 	private Binder parBinder;
+	private int userID = 1;
 	public Program getProgramModel() {
 		return programModel;
 	}
@@ -40,7 +41,10 @@ public class AddProgram {
 	@Command("add")
 	public void add(){
 		ProgramManagerImpl programMan = new ProgramManagerImpl();
-		
+		if(programMan.isProgramExist(programModel.getName(), userID)){
+			Messagebox.show("Program already exist! Choose a different name.", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
+			return;
+		}
 		try {
 			if(new FormValidator().getBlankVariables(programModel, new String[]{"userid","id"}).isEmpty() == false){
 
@@ -52,7 +56,7 @@ public class AddProgram {
 			e.printStackTrace();
 		}
 		//TODO IMPORTANT!!! Must change this to real UserID
-		programModel.setUserid(1);
+		programModel.setUserid(userID);
 		programMan.addProgram(programModel);
 		
 		//TODO Validate!!
@@ -65,10 +69,14 @@ public class AddProgram {
 			return;
 		
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("selected",programModel.getName());
+		params.put("selected",programModel);
 
 		// this.parBinder.postCommand("change", params);
 		bind.postCommand("refreshProgramList", params);
+		mainView.detach();
+	}
+	@Command
+	public void cancel(){
 		mainView.detach();
 	}
 	

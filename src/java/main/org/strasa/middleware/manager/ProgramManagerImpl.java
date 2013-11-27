@@ -23,6 +23,19 @@ public class ProgramManagerImpl {
 		}
 		
 	}
+	public boolean isProgramExist(String name, int userId){
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory().openSession();
+		ProgramMapper ProgramMapper = session.getMapper(ProgramMapper.class);
+		
+		try{
+			ProgramExample example= new ProgramExample();
+			example.createCriteria().andUseridEqualTo(userId).andNameEqualTo(name);
+			
+			return (ProgramMapper.countByExample(example) != 0);
+		}finally{
+			session.close();
+		}
+	}
 	public Program getProgramByName(String name, int userId){
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory().openSession();
 		ProgramMapper ProgramMapper = session.getMapper(ProgramMapper.class);

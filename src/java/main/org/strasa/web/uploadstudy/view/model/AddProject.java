@@ -22,7 +22,8 @@ public class AddProject {
 	private Binder parBinder;
 	private FormValidator formValidator;
 	private Project projectModel = new Project();
-	
+	public int programID;
+	private Integer userID = 1;
 
 	public Project getProjectModel() {
 		return projectModel;
@@ -58,18 +59,25 @@ public class AddProject {
 	}
 
 	@Init
-	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar) {
+	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar, @ExecutionArgParam("programID") int pID ) {
 
 	        mainView = view;
 	        parBinder = (Binder) view.getParent().getAttribute("binder");
-	        
+	        programID = pID;
 	}
 	
 	@Command("add")
 	public void add(){
 		
+		ProjectManagerImpl projectMan = new ProjectManagerImpl();
+		if(projectMan.isProjectExist(projectModel.getName(), userID,programID)){
+			Messagebox.show("Project name already exist! Choose a different name.", "Validation Error", Messagebox.OK, Messagebox.EXCLAMATION);
+			return;
+		}
+		
+		
 		try {
-			if(!formValidator.getBlankVariables(projectModel,new String[]{"id","userid"}).isEmpty()){
+			if(!formValidator.getBlankVariables(projectModel,new String[]{"id","userid","programid"}).isEmpty()){
 				Messagebox.show("All fields are requied.", "Validation Error", Messagebox.OK, Messagebox.EXCLAMATION);
 				return;
 			}
@@ -80,11 +88,12 @@ public class AddProject {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ProjectManagerImpl projectMan = new ProjectManagerImpl();
-
+		
 		//TODO IMPORTANT!!! Must change this to real UserID
-		projectModel.setUserid(1);
+		projectModel.setUserid(userID );
+		projectModel.setProgramid(programID);
 		projectMan.addProject(projectModel);
+		
 		
 		//TODO Validate!!
 		Messagebox.show("Program successfully added to database!", "Add", Messagebox.OK, Messagebox.INFORMATION);
@@ -96,10 +105,14 @@ public class AddProject {
 			return;
 		
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("selected",projectModel.getName());
+		params.put("selected",projectModel);
 
 		// this.parBinder.postCommand("change", params);
-		bind.postCommand("refreshProjectList", params);
+		bind.postCommand("changeProjectList", params);
+		mainView.detach();
+	}
+	@Command
+	public void cancel(){
 		mainView.detach();
 	}
 	

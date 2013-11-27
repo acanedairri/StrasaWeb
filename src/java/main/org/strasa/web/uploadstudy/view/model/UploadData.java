@@ -20,13 +20,13 @@ import org.strasa.middleware.filesystem.manager.UserFileManager;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
+import org.strasa.middleware.manager.StudyManager;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.manager.StudyTypeManagerImpl;
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.Study;
-import org.strasa.middleware.model.StudyDataColumn;
 import org.strasa.middleware.model.StudyType;
 import org.strasa.web.common.api.Encryptions;
 import org.strasa.web.common.api.ProcessTabViewModel;
@@ -54,14 +54,28 @@ public class UploadData extends ProcessTabViewModel {
 	private List<String> columnList = new ArrayList<String>();
 	public String dataFileName;
 	private List<String[]> dataList = new ArrayList<String[]>();
-	private ArrayList<String> programList = new ArrayList<String>();
-	private ArrayList<String> projectList = new ArrayList<String>();
+	private ArrayList<Program> programList = new ArrayList<Program>();
+	private ArrayList<Project> projectList = new ArrayList<Project>();
 	private ArrayList<String> studyTypeList = new ArrayList<String>();
-
+	public int userID = 1;
 	private ArrayList<String> dataTypeList = new ArrayList<String>();
 	private ArrayList<GenotypeFileModel> genotypeFileList = new ArrayList<UploadData.GenotypeFileModel>();
-	private String txtProgram = new String();
-	private String txtProject = new String();
+	private Program txtProgram = new Program();
+	private Project txtProject = new Project();
+
+	
+	public Program getTxtProgram() {
+		return txtProgram;
+	}
+	@NotifyChange("projectList")
+	public void setTxtProgram(Program txtProgram) {
+		refreshProjectList(txtProgram);
+		this.txtProgram = txtProgram;
+	}
+
+	public void setTxtProject(Project txtProject) {
+		this.txtProject = txtProject;
+	}
 
 	private String txtStudyName = new String();
 	private String txtStudyType = new String();
@@ -141,11 +155,13 @@ public class UploadData extends ProcessTabViewModel {
 	public List<UploadCSVDataVariableModel> varData = new ArrayList<UploadCSVDataVariableModel>();
 	private int userId = 1;
 
-	public ArrayList<String> getProgramList() {
+
+
+	public ArrayList<Program> getProgramList() {
 		return programList;
 	}
 
-	public void setProgramList(ArrayList<String> programList) {
+	public void setProgramList(ArrayList<Program> programList) {
 		this.programList = programList;
 	}
 
@@ -165,11 +181,13 @@ public class UploadData extends ProcessTabViewModel {
 		this.studyType = studyType;
 	}
 
-	public ArrayList<String> getProjectList() {
+	
+
+	public ArrayList<Project> getProjectList() {
 		return projectList;
 	}
 
-	public void setProjectList(ArrayList<String> projectList) {
+	public void setProjectList(ArrayList<Project> projectList) {
 		this.projectList = projectList;
 	}
 
@@ -196,20 +214,9 @@ public class UploadData extends ProcessTabViewModel {
 		this.studyTypeList = studyTypeList;
 	}
 
-	public String getTxtProgram() {
-		return txtProgram;
-	}
 
-	public void setTxtProgram(String txtProgram) {
-		this.txtProgram = txtProgram;
-	}
-
-	public String getTxtProject() {
+	public Project getTxtProject() {
 		return txtProject;
-	}
-
-	public void setTxtProject(String txtProject) {
-		this.txtProject = txtProject;
 	}
 
 	public String getTxtStudyName() {
@@ -404,10 +411,19 @@ public class UploadData extends ProcessTabViewModel {
 
 	@Command("addProject")
 	public void addProject() {
+		
+		if(txtProgram == null){
+			Messagebox.show("Error: Please specify/select a program first.", "Upload Error",
+					Messagebox.OK, Messagebox.ERROR);
+					return;
+		}
 		Map<String, Object> params = new HashMap<String, Object>();
+		
 
+		
 		params.put("oldVar", null);
 		params.put("parent", getMainView());
+		params.put("programID", txtProgram.getId());
 
 		Window popup = (Window) Executions.createComponents(
 				AddProject.ZUL_PATH, getMainView(), params);
@@ -491,31 +507,40 @@ public class UploadData extends ProcessTabViewModel {
 
 	@NotifyChange("*")
 	@Command("refreshProgramList")
-	public void refreshProgramList(@BindingParam("selected") String selected) {
+	public void refreshProgramList(@BindingParam("selected") Program selected) {
 
 		ProgramManagerImpl programMan = new ProgramManagerImpl();
 		programList.clear();
-		for (Program data : programMan.getProgramByUserId(1)) {
-			programList.add(data.getName());
-
-		}
+		programList.addAll(programMan.getProgramByUserId(userID));
 		System.out.print(selected);
 		txtProgram = selected;
 
 	}
 
-	@NotifyChange("*")
+	@NotifyChange({"txtProject","projectList"})
+	@Command("changeProjectList")
+	public void changeProjectList(@BindingParam("selected") Project selected){
+		refreshProjectList(txtProgram);
+		txtProject = selected;
+	
+	}
+	
+	@NotifyChange("projectList")
 	@Command("refreshProjectList")
-	public void refreshProjectList(@BindingParam("selected") String selected) {
-
+	public void refreshProjectList(@BindingParam("selected") Program selected) {
+		
+		txtProject = null;
+		if(selected == null) {
+			projectList.clear();
+			return;
+		
+		}
+		
 		ProjectManagerImpl programMan = new ProjectManagerImpl();
 		projectList.clear();
-		for (Project data : programMan.getProjectByUserId(1)) {
-			projectList.add(data.getName());
+		projectList.addAll(programMan.getProjectList(userID, selected));
+		
 
-		}
-		System.out.print(selected);
-		txtProject = selected;
 
 	}
 
@@ -525,7 +550,7 @@ public class UploadData extends ProcessTabViewModel {
 		timer.start();
 		boolean isRawData =  studyType.equalsIgnoreCase("rawdata");
 		System.out.println("StudyType: " + studyType + " + " + isRawData);
-		
+		StudyManager studyMan = new StudyManager();
 		HashSet noDupSet = new HashSet();
 		noDupSet.addAll(columnList);
 		if(noDupSet.size() != columnList.size()){
@@ -544,7 +569,7 @@ public class UploadData extends ProcessTabViewModel {
 			return false;
 		}
 
-		if (txtProgram.isEmpty() || txtProject.isEmpty()
+		if (txtProgram == null || txtProject == null
 				|| txtStudyName.isEmpty() || txtStudyType.isEmpty()
 				) {
 			Messagebox.show("Error: All fields are required", "Upload Error",
@@ -574,19 +599,25 @@ public class UploadData extends ProcessTabViewModel {
 
 		UserFileManager fileMan = new UserFileManager();
 		StudyRawDataManagerImpl studyRawData = new StudyRawDataManagerImpl(isRawData);
+		
+		
 		if (study == null) {
 			study = new Study();
 		}
 		study.setName(txtStudyName);
 		study.setStudytypeid(new StudyTypeManagerImpl().getStudyTypeByName(
 				txtStudyType).getId());
-		study.setProgramid(new ProgramManagerImpl().getProgramByName(
-				txtProgram, userId).getId());
-		study.setProjectid(new ProjectManagerImpl().getProjectByName(
-				txtProject, userId).getId());
+		study.setProgramid(txtProgram.getId());
+		study.setProjectid(txtProject.getId());
 		study.setStartyear(String.valueOf(startYear));
 		study.setEndyear(String.valueOf(String.valueOf(endYear)));
-
+		study.setUserid(userID);
+		if(study.getId() == null && new StudyManager().isProjectExist(study, userID)){
+			Messagebox.show("Error: Study name already exist! Please choose a different name.",
+					"Upload Error", Messagebox.OK, Messagebox.ERROR);
+		
+			return false;
+		}
 		if (uploadTo.equals("database")) {
 
 				if(isNewDataSet)
