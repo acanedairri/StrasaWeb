@@ -19,6 +19,7 @@ import org.strasa.middleware.model.StudyAgronomy;
 import org.strasa.middleware.model.StudyDesign;
 import org.strasa.middleware.model.StudySite;
 import org.strasa.web.common.api.ProcessTabViewModel;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ExecutionArgParam;
@@ -184,18 +185,19 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		this.labelDate = labelDate;
 	}
 
-	@NotifyChange("*")
+	
 	@Command("updateDesignInfo")
 	public void updateDesignInfo(@BindingParam("id") Integer id) {
-
+		
+//		if(selectedID == id && selectedID != 0) return;
 		selectedID = id;
+		
 		if(applyToAll) return;
 		sites.get(selectedID).selectedPlantingIndex = selectedPlantingIndex;
 		selectedAgroInfo = sites.get(id).getSelectedAgroInfo();
 		selectedDesignInfo = sites.get(id).getSelectedDesignInfo();
 	    selectedSitePlantingType = sites.get(id).getSelectedSitePlantingType();
-		
-		
+
 		
 //		setSelectedAgroInfo(getAgroInfoBySiteID(id));
 //		setSelectedDesignInfo(getDesignInfoBySiteID(id));
@@ -207,6 +209,10 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		else if(selectedSitePlantingType.getId() == -1) labelDate = "Transplanting/Sowing Date";
 		else labelDate = "Sowing Date";
 
+		BindUtils.postNotifyChange(null, null, StudySiteInfo.this, "selectedAgroInfo");
+		BindUtils.postNotifyChange(null, null, StudySiteInfo.this, "selectedDesignInfo");
+		BindUtils.postNotifyChange(null, null, StudySiteInfo.this, "selectedSitePlantingType");
+		BindUtils.postNotifyChange(null, null, StudySiteInfo.this, "labelDate");
 	}
 
 	@Command("updateSelectedSitePlantingType")
@@ -479,6 +485,10 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			}
 			if(StringUtils.isNullOrEmpty(this.getSeason())){
 				return "Error: Season in " + this.getSitename() + " must not be empty! ";
+			}
+			System.out.println("EcotypeID: " + this.getEcotypeid() );
+			if(this.getEcotypeid() == null){
+				return "Error: Eco System in " + this.getSitename() + " must not be empty! ";
 			}
 			
 			if(selectedSitePlantingType.getId() == -1){

@@ -274,15 +274,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 			List<GermplasmExt> lstGermplasm = CSVToBean(tempGenoFile);
 			for (GermplasmExt germData : lstGermplasm) {
 				if (!StringUtils.isNullOrEmpty(germData.getGermplasmname())) {
-					if (lstKnownGermplasm.containsKey(germData
-							.getGermplasmname())) {
-
-						System.out.println("germData Female: "
-								+ germData.getFemaleparent());
-						lstKnownGermplasm.get(germData.getGermplasmname())
-								.setValuesInNullProperties(germData);
-
-					} else if (lstStudyGermplasm.containsKey(germData
+					if (lstStudyGermplasm.containsKey(germData
 							.getGermplasmname())) {
 						lstStudyGermplasm.get(germData.getGermplasmname())
 								.setValuesExt(germData);
@@ -543,7 +535,47 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		public void setGermplasmType(String germplasmType) {
 			this.germplasmType = germplasmType;
 		}
+		private String abiotic,biotic,grainquality,majorgenes;
 
+		public String getAbiotic() {
+
+			if(!charMap.containsKey("Abiotic")) return null;
+			return org.apache.commons.lang3.StringUtils.join(charMap.get("Abiotic"),", ");
+			
+		}
+
+		public void setAbiotic(String abiotic) {
+			this.abiotic = abiotic;
+		}
+
+		public String getBiotic() {
+			if(!charMap.containsKey("Biotic")) return null;
+			return org.apache.commons.lang3.StringUtils.join(charMap.get("Biotic"),", ");
+			
+		}
+
+		public void setBiotic(String biotic) {
+			this.biotic = biotic;
+		}
+
+		public String getGrainquality() {
+			if(!charMap.containsKey("Grain Quality")) return null;
+			return org.apache.commons.lang3.StringUtils.join(charMap.get("Grain Quality"),", ");
+		}
+
+		public void setGrainquality(String grainquality) {
+			this.grainquality = grainquality;
+		}
+
+		public String getMajorgenes() {
+			if(!charMap.containsKey("Major Genes")) return null;
+			return org.apache.commons.lang3.StringUtils.join(charMap.get("Major Genes"),", ");
+			
+		}
+
+		public void setMajorgenes(String majorgenes) {
+			this.majorgenes = majorgenes;
+		}
 		private List<CharacteristicModel> keyBiotic = new ArrayList<CharacteristicModel>();
 		private List<CharacteristicModel> keyAbiotic = new ArrayList<CharacteristicModel>();
 		private List<CharacteristicModel> keyGrainQuality = new ArrayList<CharacteristicModel>();
@@ -566,6 +598,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		private String preservedBreeder;
 		private double masterID = Math.random();
 		private int preservedGermplasmID;
+		private HashMap<String, ArrayList<String>> charMap;
 
 		public double getMasterID() {
 			return masterID;
@@ -697,11 +730,12 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 			if (StringUtils.isNullOrEmpty(getSource()))
 				setSource(germData.getSource());
 		}
-
+		
+	
 		public void setCharacteristicValues(
 				List<GermplasmCharacteristics> lstChar) {
 
-			HashMap<String, ArrayList<String>> charMap = new HashMap<String, ArrayList<String>>();
+			 charMap = new HashMap<String, ArrayList<String>>();
 
 			for (GermplasmCharacteristics charRecord : lstChar) {
 				if (charMap.containsKey(charRecord.getAttribute())) {
@@ -926,13 +960,14 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 		public void processOthers() {
 			List<CharacteristicModel> lstBioticKey = new ArrayList<CharacteristicModel>();
+			
 			for (KeyBiotic data : lstBiotics) {
 				CharacteristicModel newData = new CharacteristicModel();
 				newData.setName(data.getValue());
 				newData.setValue(false);
 				newData.primaryid = pkey;
 				lstBioticKey.add(newData);
-
+				
 			}
 			List<CharacteristicModel> lstAbioticKey = new ArrayList<CharacteristicModel>();
 			for (KeyAbiotic data : lstAbiotics) {

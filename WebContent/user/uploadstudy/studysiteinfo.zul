@@ -10,41 +10,41 @@
 						<column label="Site Location" style = "background-color:#FA807A;"/>
 						<column label="Year" width ="80px" style = "background-color:#FA807A;"/>
 						<column label="Season" width ="80px" style = "background-color:#FA807A;"/>
-						<column label="Ecotype" style = "background-color:#FA807A;"/>
+						<column label="Eco System" style = "background-color:#FA807A;"/>
 						<column label="Soil Type" />
 						<column label="Soil PH" />
 					</columns>
 					<template name="model">
 						<row>
 							<textbox value="@bind(each.sitename)"
-								width="99%"  />
+								width="99%"  onClick="@command('updateDesignInfo', id=forEachStatus.index)"/>
 						
 								
 							<textbox value="@bind(each.sitelocation)"
-								width="99%" />
+								width="99%" onClick="@command('updateDesignInfo', id=forEachStatus.index)"/>
 						
 								
 							<textbox value="@bind(each.year)"
-								width="99%"  />
+								width="99%"  onClick="@command('updateDesignInfo', id=forEachStatus.index)"/>
 							
 
 							<textbox value="@bind(each.season)"
-								width="99%" />
+								width="99%" onClick="@command('updateDesignInfo', id=forEachStatus.index)"/>
 							
 
 							
 							<combobox model="@load(vm.ecotypes)"
 								readonly="true" width="99%"
-								selectedIndex="@bind(each.ecotypeid)">
+								selectedIndex="@bind(each.ecotypeid)" onClick="@command('updateDesignInfo', id=forEachStatus.index)">
 								<template name="model">
 									<comboitem value="@load(each.id)"
 										label="@load(each.ecotype)" />
 								</template>
 							</combobox>
 							<textbox value="@bind(each.soiltype)"
-								width="99%" />
+								width="99%"  onClick="@command('updateDesignInfo', id=forEachStatus.index)"/>
 							<textbox value="@bind(each.soilph)"
-								width="99%" />
+								width="99%"  onClick="@command('updateDesignInfo', id=forEachStatus.index)"/>
 						</row>
 					</template>
 				</grid>
@@ -123,6 +123,32 @@
 									<textbox
 										value="@bind(vm.selectedDesignInfo.plotsize)" width="99%" />
 								</row>
+								<row style="background-color:#FA807A;">
+									Plot Size:
+									<textbox
+										value="@bind(vm.selectedDesignInfo.plotsize)" width="99%" />
+								</row>
+								<row>
+									Design Factor 1:
+									<textbox
+										value="@bind(vm.selectedDesignInfo.designfactor1)" width="99%" />
+								</row>
+								<row>
+									Design Factor 2:
+									<textbox
+										value="@bind(vm.selectedDesignInfo.designfactor2)" width="99%" />
+								</row>
+								<row>
+									Design Factor 3:
+									<textbox
+										value="@bind(vm.selectedDesignInfo.designfactor3)" width="99%" />
+								</row>
+								<row>
+									Design Factor 4:
+									<textbox
+										value="@bind(vm.selectedDesignInfo.designfactor4)" width="99%" />
+								</row>
+								
 							</rows>
 						</grid>
 					</groupbox>

@@ -23,9 +23,11 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zhtml.Messagebox;
 
-public class StudyLocationInfo extends ProcessTabViewModel{
-    
-	private int studyId ;
+import com.mysql.jdbc.StringUtils;
+
+public class StudyLocationInfo extends ProcessTabViewModel {
+
+	private int studyId;
 	private FormValidator formValidator = new FormValidator();
 	private boolean isRaw = false;
 	private boolean noLocation;
@@ -34,66 +36,73 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 	private ArrayList<String> cmbCountry = new ArrayList<String>();
 
 	private StudyLocationManagerImpl studyLocationManager;
-	
 
 	public ArrayList<String> getCmbCountry() {
 		return cmbCountry;
 	}
 
-
 	public void setCmbCountry(ArrayList<String> cmbCountry) {
 		this.cmbCountry = cmbCountry;
 	}
 
-
-	public List<Country> getCountryList(){
+	public List<Country> getCountryList() {
 		return new CountryManagerImpl().getAllCountry();
 	}
 
 	private double sampleID;
+
 	@GlobalCommand
 	@NotifyChange("sampleID")
-	public void testGlobalCom(@BindingParam("studyID")double newVal){
+	public void testGlobalCom(@BindingParam("studyID") double newVal) {
 		sampleID = newVal;
 	}
-
 
 	public List<Location> getLstUnknownLocations() {
 		return lstUnknownLocations;
 	}
 
-
 	public void setLstUnknownLocations(List<Location> lstUnknownLocations) {
 		this.lstUnknownLocations = lstUnknownLocations;
 	}
-
-
-
-
 
 	public List<Location> getLstLocations() {
 		return lstLocations;
 	}
 
-
 	public void setLstLocations(List<Location> lstLocations) {
 		this.lstLocations = lstLocations;
 	}
 
-
 	public boolean validateTab() {
-//		for(Location loc:lstLocations){
-//			if(loc.getLocationname().isEmpty()){
-//				Messagebox.show("Location must not be empty", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
-//				return false;
-//			}
-//		}
-		
-		if(!formValidator.isAllValidated()){
-			Messagebox.show("Location must not be empty", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
-			return false;
+		for (Location loc : lstLocations) {
+			if (StringUtils.isNullOrEmpty(loc.getLocationname())) {
+				Messagebox.show("Location must not be empty", "OK",
+						Messagebox.OK, Messagebox.EXCLAMATION);
+				return false;
+			}
+			if (loc.getId() == null) {
+				if (StringUtils.isNullOrEmpty(loc.getAltitude())) {
+					Messagebox.show("Altitude in " + loc.getLocationname() +" must not be empty", "OK",
+							Messagebox.OK, Messagebox.EXCLAMATION);
+					return false;
+				}
+				if (StringUtils.isNullOrEmpty(loc.getLatitude())) {
+					Messagebox.show("Latitude in " + loc.getLocationname() +" must not be empty", "OK",
+							Messagebox.OK, Messagebox.EXCLAMATION);
+					return false;
+				}
+				if (StringUtils.isNullOrEmpty(loc.getWeatherstation())) {
+					Messagebox.show("Weather Station in " + loc.getLocationname() +" must not be empty", "OK",
+							Messagebox.OK, Messagebox.EXCLAMATION);
+					return false;
+				}
+			
+				
+			}
 		}
-		studyLocationManager.updateStudyLocation(lstLocations,studyId);
+
+	
+		studyLocationManager.updateStudyLocation(lstLocations, studyId);
 		return true;
 	}
 
@@ -101,83 +110,79 @@ public class StudyLocationInfo extends ProcessTabViewModel{
 		return formValidator;
 	}
 
-
 	public void setFormValidator(FormValidator formValidator) {
 		this.formValidator = formValidator;
 	}
 
-
 	@Init
-	public void init(@ExecutionArgParam("studyID") double studyID,@ExecutionArgParam("isRaw") boolean isRaw) {
-		
-	
-		
-		System.out.println("_______________________________________________________________");
-		System.out.println("Staring debugging :" + StudyLocationInfo.class.getName());
-		System.out.println("_______________________________________________________________");
+	public void init(@ExecutionArgParam("studyID") double studyID,
+			@ExecutionArgParam("isRaw") boolean isRaw) {
+
+		System.out
+				.println("_______________________________________________________________");
+		System.out.println("Staring debugging :"
+				+ StudyLocationInfo.class.getName());
+		System.out
+				.println("_______________________________________________________________");
 		System.out.println("Raw: " + isRaw);
 		System.out.println("StudyID: " + studyID);
-		
+
 		this.isRaw = isRaw;
 		studyId = (int) studyID;
-//	public void init(){
-//		
-//		this.isRaw = true;
-//		mockStudyId = 45;
+		// public void init(){
+		//
+		// this.isRaw = true;
+		// mockStudyId = 45;
 
 		studyLocationManager = new StudyLocationManagerImpl(isRaw);
 		List<Country> lCountries = getCountryList();
-		for(Country data : lCountries){
+		for (Country data : lCountries) {
 			cmbCountry.add(data.getIsoabbr());
 		}
 		StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
-		if(!rawMan.hasLocationColumnData(studyId)){
+		if (!rawMan.hasLocationColumnData(studyId)) {
 			lstLocations.add(new Location());
 			noLocation = true;
 			formValidator.setAllValid(false);
 			return;
 		}
-		
-		
-		List<List<Location>> locationInit = studyLocationManager.initializeStudyLocations(studyId);
+
+		List<List<Location>> locationInit = studyLocationManager
+				.initializeStudyLocations(studyId);
 		lstLocations.addAll(locationInit.get(0));
 		lstUnknownLocations.addAll(locationInit.get(1));
-		Map<String,ArrayList<String>> constructedRow = new HashMap<String,ArrayList<String>>();
+		Map<String, ArrayList<String>> constructedRow = new HashMap<String, ArrayList<String>>();
 		System.out.println("KnownLocationSize: " + lstLocations.size());
 		System.out.println("UnknownLocationSize:" + lstUnknownLocations.size());
-	
-		 HashMap<String,Location> lstRawLoc = rawMan.getStudyLocationInfoToMap(studyId);
-		
-		for(int i = 0 ; i < lstUnknownLocations.size(); i++){
-			if(lstRawLoc.containsKey(lstUnknownLocations.get(i).getLocationname())){
-				
-					lstLocations.add(lstRawLoc.get(lstUnknownLocations.get(i).getLocationname()));
-				
+
+		HashMap<String, Location> lstRawLoc = rawMan
+				.getStudyLocationInfoToMap(studyId);
+
+		for (int i = 0; i < lstUnknownLocations.size(); i++) {
+			if (lstRawLoc.containsKey(lstUnknownLocations.get(i)
+					.getLocationname())) {
+
+				lstLocations.add(lstRawLoc.get(lstUnknownLocations.get(i)
+						.getLocationname()));
+
 			}
 		}
-		
-		
-		
-		
-	
 
-		
 	}
-	
-	
+
 	public double getSampleID() {
 		return sampleID;
 	}
+
 	public void setSampleID(double sampleID) {
 		this.sampleID = sampleID;
 	}
-	
-	
+
 	@Command("saveLocationInfo")
-	public void saveLocationInfo(){
-//		selectedSite=
-//		studyLocationManager.updateStudyLocation(locations);
-		
+	public void saveLocationInfo() {
+		// selectedSite=
+		// studyLocationManager.updateStudyLocation(locations);
+
 		Messagebox.show("Changes saved.");
 	}
 }
