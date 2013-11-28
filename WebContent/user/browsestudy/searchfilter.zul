@@ -1,8 +1,8 @@
 <zk>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchFilter')">
-		<grid sizedByContent="true">
-			<columns width="200px">
+		<grid  width="100%">
+			<columns width="100%">
 				<column label="" />
 				<column label="" />
 			</columns>
@@ -88,7 +88,11 @@
 				</row>
 			</rows>
 		</grid>
-		<button label="Search"
-			onClick=" @global-command('updateSearchFilterResult', searchFilter=vm.searchFilter)" />
+		<button label="Reset"
+			onClick=" @command('reset')" />
+			
+	<div style="float:right;" > 	<button label="Search"
+			onClick=" @global-command('updateSearchFilterResult', searchFilter=vm.searchFilter)" /> </div>
+		
 	</window>
 </zk>

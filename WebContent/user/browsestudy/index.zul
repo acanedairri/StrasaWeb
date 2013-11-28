@@ -24,7 +24,7 @@
 			</tabs>
 			<tabpanels id="tabPanels">
 				<tabpanel id="tabPanel1">
-					<hbox spacing="0" widths="35%,65%" height="100%"
+					<hbox spacing="0" widths="25%,65%" height="100%"
 						hflex="1" vflex="1">
 						<include id="searchFilterPanel"
 							src="/user/browsestudy/searchfilter.zul" mode="defer" />
