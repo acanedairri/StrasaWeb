@@ -25,11 +25,14 @@ import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zkmax.zul.Chosenbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Include;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
+import org.zkoss.zul.Window;
 
 
 
@@ -330,6 +333,29 @@ public class BrowseGermplasm {
 
 		studyTested=getStudyTested(gname);
 	}
+
+
+	@NotifyChange("*")
+	@Command
+	public void DisplayStudyDetail(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view,@BindingParam("studyid")Integer studyid,@BindingParam("studyname")String studyname){
+
+			
+		Window studyDetailWindow = (Window)Executions.getCurrent().createComponents(
+				"/user/browsegermplasm/studydetails.zul", null, null);
+		studyDetailWindow.doModal();
+		studyDetailWindow.setTitle(studyname);
+		
+		Include studyInformationPage = new Include();
+		studyInformationPage.setSrc("/user/browsestudy/studyinformation.zul");
+		studyInformationPage.setParent(studyDetailWindow);
+		studyInformationPage.setDynamicProperty("studyId", studyid);
+		
+
+
+
+	}
+
 
 	private List<StudySearchResultModel> getStudyTested(String gname) {
 		BrowseGermplasmManagerImpl browseStudyManagerImpl= new BrowseGermplasmManagerImpl(); 

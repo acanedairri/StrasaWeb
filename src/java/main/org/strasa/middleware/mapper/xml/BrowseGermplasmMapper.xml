@@ -168,9 +168,9 @@
 
 	<select id="getStudyWithGemrplasmTested" resultType="StudySearchResultModel"
 		parameterType="int">
-		select distinct t1.studyid,t2.name as studyname,
-		t3.name
-		as programname,
+		select distinct t1.studyid as id,
+		t2.name as studyname,
+		t3.name as programname,
 		t4.name as projectname,
 		t5.studytype as studytype,
 		t2.startyear as startyear,
