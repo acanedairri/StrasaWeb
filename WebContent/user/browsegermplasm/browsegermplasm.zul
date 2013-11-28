@@ -194,9 +194,9 @@
 				visible="false">
 				<caption label="Studies where this germplasm is tested" />
 				<grid height="200px" model="@load(vm.studyTested)"
-					emptyMessage="No Record Found">
+					emptyMessage="No Record Found" sizedByContent="true">
 
-					<columns>
+					<columns sizable="true">
 						<column label="Study Name" width="150px" />
 						<column label="Program" />
 						<column label="Project" />
