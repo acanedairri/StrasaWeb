@@ -6,177 +6,183 @@
 	</style>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.StudyInformation')">
-		<panel height="600px">
+		<panel width="100%" height="80%">
 			<panelchildren style="overflow: auto">
-				<vlayout>
-					<groupbox mold="3d" width="100%">
-						<caption label="Study Detail" />
-						<grid oddRowSclass="empty" sizedByContent="true" 
-							emptyMessage="Search and select a study.">
-							<columns width="200px">
-								<column label="" width="2%" />
-								<column label="" width="15%" />
-								<column label="" />
-							</columns>
-							<rows>
-								<row>
-									<cell colspan="2">
-										<label value="Program Name"
-											sclass="heavier" />
-									</cell>
-									<label sclass="searchLabel"
-										value="@load(vm.selectedProgram.name)" />
-								</row>
-								<row>
-									<label value="" />
-									<label value="Objective"
-										sclass="heavy" />
-									<label sclass="searchLabel"
-										value="@load(vm.selectedProgram.objective)" />
-								</row>
-								<row>
-									<label value="" />
-									<label value="Coordinator"
-										sclass="heavy" />
-									<label sclass="searchLabel"
-										value="@load(vm.selectedProgram.coordinator)" />
-								</row>
-								<row>
-									<label value="" />
-									<label value="Leading Institute"
-										sclass="heavy" />
-									<label sclass="searchLabel"
-										value="@load(vm.selectedProgram.leadinginstitute)" />
-								</row>
-								<row>
-									<label value="" />
-									<label value="Collaborator"
-										sclass="heavy" />
-									<label sclass="searchLabel"
-										value="@load(vm.selectedProgram.collaborator)" />
-								</row>
-								<row>
-									<cell colspan="2">
-										<label value="Project"
-											sclass="heavier" />
-									</cell>
-									<label sclass="searchLabel"
-										value="@load(vm.selectedProject.name)" />
-								</row>
-								<row>
-									<label value="" />
-									<label value="Objective"
-										sclass="heavy" />
-									<label sclass="searchLabel"
-										value="@load(vm.selectedProject.objective)" />
-								</row>
-								<row>
-									<label value="" />
-									<label value="PI" sclass="heavy" />
-									<label sclass="searchLabel"
-										value="@load(vm.selectedProject.pi)" />
-								</row>
-								<row>
-									<label value="" />
-									<label value="Leading Institute"
-										sclass="heavy" />
-									<label sclass="searchLabel"
-										value="@load(vm.selectedProject.leadinginstitute)" />
-								</row>
-								<row>
-									<label value="" />
-									<label value="Collaborators"
-										sclass="heavy" />
-									<label sclass="searchLabel"
-										value="@load(vm.selectedProject.collaborators)" />
-								</row>
-								<row>
-									<label value="" />
-									<label value="Funding"
-										sclass="heavy" />
-									<label sclass="searchLabel"
-										value="@load(vm.selectedProject.fundingagency)" />
-								</row>
+				<tabbox id="tb" mold="accordion" height="80%">
+					<tabs>
+						<tab label="Study Detail" />
+						<tab label="Site Information" />
+						<tab label="Location Information" />
+						<tab label="Germplasm Information" />
+						<tab label="Derived Data" />
+						<tab label="Raw Data" />
+						<tab label="Genotypic Data" />
+						<tab label="Files Data" />
+					</tabs>
+					<tabpanels width="100%">
+						<tabpanel style="overflow: auto">
+							<grid oddRowSclass="empty"
+								sizedByContent="true"
+								emptyMessage="Search and select a study.">
+								<columns width="200px">
+									<column label="" width="2%" />
+									<column label="" width="15%" />
+									<column label="" />
+								</columns>
+								<rows>
+									<row>
+										<cell colspan="2">
+											<label value="Program Name"
+												sclass="heavier" />
+										</cell>
+										<label sclass="searchLabel"
+											value="@load(vm.selectedProgram.name)" />
+									</row>
+									<row>
+										<label value="" />
+										<label value="Objective"
+											sclass="heavy" />
+										<label sclass="searchLabel"
+											value="@load(vm.selectedProgram.objective)" />
+									</row>
+									<row>
+										<label value="" />
+										<label value="Coordinator"
+											sclass="heavy" />
+										<label sclass="searchLabel"
+											value="@load(vm.selectedProgram.coordinator)" />
+									</row>
+									<row>
+										<label value="" />
+										<label value="Leading Institute"
+											sclass="heavy" />
+										<label sclass="searchLabel"
+											value="@load(vm.selectedProgram.leadinginstitute)" />
+									</row>
+									<row>
+										<label value="" />
+										<label value="Collaborator"
+											sclass="heavy" />
+										<label sclass="searchLabel"
+											value="@load(vm.selectedProgram.collaborator)" />
+									</row>
+									<row>
+										<cell colspan="2">
+											<label value="Project"
+												sclass="heavier" />
+										</cell>
+										<label sclass="searchLabel"
+											value="@load(vm.selectedProject.name)" />
+									</row>
+									<row>
+										<label value="" />
+										<label value="Objective"
+											sclass="heavy" />
+										<label sclass="searchLabel"
+											value="@load(vm.selectedProject.objective)" />
+									</row>
+									<row>
+										<label value="" />
+										<label value="PI"
+											sclass="heavy" />
+										<label sclass="searchLabel"
+											value="@load(vm.selectedProject.pi)" />
+									</row>
+									<row>
+										<label value="" />
+										<label value="Leading Institute"
+											sclass="heavy" />
+										<label sclass="searchLabel"
+											value="@load(vm.selectedProject.leadinginstitute)" />
+									</row>
+									<row>
+										<label value="" />
+										<label value="Collaborators"
+											sclass="heavy" />
+										<label sclass="searchLabel"
+											value="@load(vm.selectedProject.collaborators)" />
+									</row>
+									<row>
+										<label value="" />
+										<label value="Funding"
+											sclass="heavy" />
+										<label sclass="searchLabel"
+											value="@load(vm.selectedProject.fundingagency)" />
+									</row>
 
-								<row>
-									<cell colspan="2">
-										<label value="Study Name"
-											sclass="heavier" />
-									</cell>
-									<label sclass="searchLabel"
-										value="@load(vm.selectedStudy.name)" />
-								</row>
-								<row>
-									<cell colspan="2">
-										<label value="Description"
-											sclass="heavier" />
-									</cell>
-									<label sclass="searchLabel"
-										value="@load(vm.selectedStudy.description)" />
-								</row>
-								<row>
-									<cell colspan="2">
-										<label value="Study Type"
-											sclass="heavier" />
-									</cell>
-									<label sclass="searchLabel"
-										value="@load(vm.selectedStudyType.studytype)" />
-								</row>
-								<row>
-									<cell colspan="2">
-										<label value="Start Year"
-											sclass="heavier" />
-									</cell>
-									<label sclass="searchLabel"
-										value="@load(vm.selectedStudy.startyear)" />
-								</row>
-								<row>
-									<cell colspan="2">
-										<label value="End Year"
-											sclass="heavier" />
-									</cell>
-									<label sclass="searchLabel"
-										value="@load(vm.selectedStudy.endyear)" />
-								</row>
-							</rows>
-						</grid>
-					</groupbox>
-					<groupbox mold="3d" width="100%">
-						<caption label="Site Information" />
-						<include studyid="${arg.studyId}"
-							src="/user/browsestudy/siteinfo.zul" />
-					</groupbox>
-					<groupbox mold="3d" width="100%">
-						<caption label="Study Location" />
-						<include studyid="${arg.studyId}"
-							src="/user/browsestudy/locationinfo.zul" />
-					</groupbox>
-					<groupbox mold="3d" width="100%">
-						<caption label="Germplasm Information" />
-						<include studyid="${arg.studyId}"
-							src="/user/browsestudy/germplasminfo.zul"/>
-					</groupbox>
-					<groupbox mold="3d" width="100%">
-						<caption label="Derived data" />
-						<include studyid="${arg.studyId}"
-							src="/user/browsestudy/deriveddata.zul" />
-					</groupbox>
-					<groupbox mold="3d" width="100%">
-						<caption label="Raw data" />
-						<include studyid="${arg.studyId}"
-							src="/user/browsestudy/rawdata.zul" />
-					</groupbox>
-					<groupbox mold="3d" width="100%">
-						<caption label="Genotypic data" />
-						<include studyid="${arg.studyId}"
-							src="/user/browsestudy/genotypicdata.zul" />
-					</groupbox>
-					<groupbox mold="3d" width="100%">
-						<caption label="Files" />
-						<include studyid="${arg.studyId}"
-							src="/user/browsestudy/filesdata.zul" />
-					</groupbox>
-				</vlayout>
+									<row>
+										<cell colspan="2">
+											<label value="Study Name"
+												sclass="heavier" />
+										</cell>
+										<label sclass="searchLabel"
+											value="@load(vm.selectedStudy.name)" />
+									</row>
+									<row>
+										<cell colspan="2">
+											<label value="Description"
+												sclass="heavier" />
+										</cell>
+										<label sclass="searchLabel"
+											value="@load(vm.selectedStudy.description)" />
+									</row>
+									<row>
+										<cell colspan="2">
+											<label value="Study Type"
+												sclass="heavier" />
+										</cell>
+										<label sclass="searchLabel"
+											value="@load(vm.selectedStudyType.studytype)" />
+									</row>
+									<row>
+										<cell colspan="2">
+											<label value="Start Year"
+												sclass="heavier" />
+										</cell>
+										<label sclass="searchLabel"
+											value="@load(vm.selectedStudy.startyear)" />
+									</row>
+									<row>
+										<cell colspan="2">
+											<label value="End Year"
+												sclass="heavier" />
+										</cell>
+										<label sclass="searchLabel"
+											value="@load(vm.selectedStudy.endyear)" />
+									</row>
+								</rows>
+							</grid>
+						</tabpanel>
+						<tabpanel style="overflow: auto">
+							<include studyid="${arg.studyId}"
+								src="/user/browsestudy/siteinfo.zul" />
+						</tabpanel>
+						<tabpanel style="overflow: auto">
+							<include studyid="${arg.studyId}"
+								src="/user/browsestudy/locationinfo.zul" />
+						</tabpanel>
+						<tabpanel style="overflow: auto">
+							<include studyid="${arg.studyId}"
+								src="/user/browsestudy/germplasminfo.zul" />
+						</tabpanel>
+						<tabpanel style="overflow: auto">
+							<include studyid="${arg.studyId}"
+								src="/user/browsestudy/deriveddata.zul" />
+						</tabpanel>
+						<tabpanel style="overflow: auto">
+							<include studyid="${arg.studyId}"
+								src="/user/browsestudy/rawdata.zul" />
+						</tabpanel>
+						<tabpanel style="overflow: auto">
+							<include studyid="${arg.studyId}"
+								src="/user/browsestudy/genotypicdata.zul" />
+						</tabpanel>
+						<tabpanel style="overflow: auto">
+							<include studyid="${arg.studyId}"
+								src="/user/browsestudy/filesdata.zul" />
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
 			</panelchildren>
 		</panel>
 	</window>
