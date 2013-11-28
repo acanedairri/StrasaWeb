@@ -1,5 +1,8 @@
 package org.strasa.web.browsestudy.view.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
@@ -9,10 +12,13 @@ import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyType;
 import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zul.Tabpanel;
 
 
 public class StudyInformation {
@@ -25,10 +31,21 @@ public class StudyInformation {
 	private Program selectedProgram = new Program();
 	private Project selectedProject = new Project();
 	private StudyType selectedStudyType = new StudyType();
+	private boolean isRaw = false;
 
 	private Integer studyId;
 
-
+	@Command("showzulfile")
+	public void showzulfile(@BindingParam("zulFileName") String zulFileName,
+			@BindingParam("target") Tabpanel panel) {
+		if (panel != null && panel.getChildren().isEmpty()) {
+			 Map arg = new HashMap();
+		        arg.put("studyid", studyId);
+			Executions.createComponents(zulFileName, panel, arg);
+			
+		}
+	}
+	
 	@Init
 	public void init(@ExecutionArgParam("studyId") Integer studyId){
 		this.setStudyId(studyId);

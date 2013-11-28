@@ -11,13 +11,20 @@
 				<tabbox id="tb" mold="accordion" height="80%">
 					<tabs>
 						<tab label="Study Detail" />
-						<tab label="Site Information" />
-						<tab label="Location Information" />
-						<tab label="Germplasm Information" />
-						<tab label="Derived Data" />
-						<tab label="Raw Data" />
-						<tab label="Genotypic Data" />
-						<tab label="Files Data" />
+						<tab label="Site Information"
+						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/siteinfo.zul', target=self.linkedPanel)"/>
+						<tab label="Location Information" 
+						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/locationinfo.zul', target=self.linkedPanel)"/>
+						<tab label="Germplasm Information"
+						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/germplasminfo.zul', target=self.linkedPanel)"/>
+						<tab label="Derived Data" 
+						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/deriveddata.zul', target=self.linkedPanel)"/>
+						<tab label="Raw Data" 
+						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/rawdata.zul', target=self.linkedPanel)"/>
+						<tab label="Genotypic Data" 
+						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/genotypicdata.zul', target=self.linkedPanel)"/>
+						<tab label="Files Data" 
+						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/filesdata.zul', target=self.linkedPanel)"/>
 					</tabs>
 					<tabpanels width="100%">
 						<tabpanel style="overflow: auto">
@@ -154,32 +161,32 @@
 							</grid>
 						</tabpanel>
 						<tabpanel style="overflow: auto">
-							<include studyid="${arg.studyId}"
-								src="/user/browsestudy/siteinfo.zul" />
+<!-- 							<include studyid="${arg.studyId}" -->
+<!-- 								src="/user/browsestudy/siteinfo.zul" /> -->
 						</tabpanel>
 						<tabpanel style="overflow: auto">
-							<include studyid="${arg.studyId}"
-								src="/user/browsestudy/locationinfo.zul" />
+<!-- 							<include studyid="${arg.studyId}" -->
+<!-- 								src="/user/browsestudy/locationinfo.zul" /> -->
 						</tabpanel>
 						<tabpanel style="overflow: auto">
-							<include studyid="${arg.studyId}"
-								src="/user/browsestudy/germplasminfo.zul" />
+<!-- 							<include studyid="${arg.studyId}" -->
+<!-- 								src="/user/browsestudy/germplasminfo.zul" /> -->
 						</tabpanel>
 						<tabpanel style="overflow: auto">
-							<include studyid="${arg.studyId}"
-								src="/user/browsestudy/deriveddata.zul" />
+<!-- 							<include studyid="${arg.studyId}" -->
+<!-- 								src="/user/browsestudy/deriveddata.zul" /> -->
 						</tabpanel>
 						<tabpanel style="overflow: auto">
-							<include studyid="${arg.studyId}"
-								src="/user/browsestudy/rawdata.zul" />
+<!-- 							<include studyid="${arg.studyId}" -->
+<!-- 								src="/user/browsestudy/rawdata.zul" /> -->
 						</tabpanel>
 						<tabpanel style="overflow: auto">
-							<include studyid="${arg.studyId}"
-								src="/user/browsestudy/genotypicdata.zul" />
+<!-- 							<include studyid="${arg.studyId}" -->
+<!-- 								src="/user/browsestudy/genotypicdata.zul" /> -->
 						</tabpanel>
 						<tabpanel style="overflow: auto">
-							<include studyid="${arg.studyId}"
-								src="/user/browsestudy/filesdata.zul" />
+<!-- 							<include studyid="${arg.studyId}" -->
+<!-- 								src="/user/browsestudy/filesdata.zul" /> -->
 						</tabpanel>
 					</tabpanels>
 				</tabbox>
