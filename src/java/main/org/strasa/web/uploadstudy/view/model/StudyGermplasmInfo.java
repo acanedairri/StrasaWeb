@@ -280,12 +280,6 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 							.getGermplasmname())) {
 						lstStudyGermplasm.get(germData.getGermplasmname())
 								.setValuesExt(germData);
-					} else {
-						GermplasmDeepInfoModel newData = new GermplasmDeepInfoModel(
-								(int) studyID);
-						newData.setValuesExt(germData);
-						lstStudyGermplasm.put(germData.getGermplasmname(),
-								newData);
 					}
 				}
 			}
