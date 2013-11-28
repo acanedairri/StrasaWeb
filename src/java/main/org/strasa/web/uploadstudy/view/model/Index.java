@@ -14,6 +14,7 @@ import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -163,6 +164,10 @@ public class Index {
 			Events.sendEvent("onSelect",tab5,tab5);
 
 			Events.sendEvent("onSelect",tab5,tab5);
+			tab5.setDisabled(false);
+			tab5.setSelected(true);
+			Events.sendEvent(new Event("onSelect", tab5, null));
+			return;
 		}
 		selectedIndex++;
 	
