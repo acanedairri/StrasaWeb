@@ -1,14 +1,14 @@
 <zk>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.RawData')">
-		<grid model="@bind(vm.dataList)" height="360px" vflex="true"
+		<grid model="@bind(vm.dataList)" sizedByContent="true" height="360px" vflex="true"
 			emptyMessage="No data loaded...">
 			<columns children="@load(vm.columnList)">
 				<template name="children">
 					<column hflex="1" label="@load(each)" />
 				</template>
 			</columns>
-			<rows children="@bind(vm.csvData)">
+			<rows children="@bind(vm.rawData)">
 				<template name="children" var="data">
 					<row>
 						<label forEach="${data}" value="${each}" />
@@ -17,7 +17,7 @@
 			</rows>
 		</grid>
 		<paging pageSize="@load(vm.pageSize)"
-			totalSize="@load(vm.totalSize)" activePage="@bind(vm.activePage)" unless="${vm.csvData==null}" />
-			<div style="float:right;" > <button label="Download raw data" unless="${vm.filePath==null}" onClick="@global-command('downloadFile', filePath=vm.filePath, dataType=vm.dataType)"/> </div>
+			totalSize="@load(vm.totalSize)" activePage="@bind(vm.activePage)" unless="${vm.rawData==null}" />
+			<div style="float:right;" > <button label="export raw data as CSV" unless="${vm.rawData==null}" onClick="@global-command('exportData', columns=vm.columnList, rows=vm.dataList, studyName=vm.studyName, dataType=vm.dataType)"/> </div>
 	</window>
 </zk>

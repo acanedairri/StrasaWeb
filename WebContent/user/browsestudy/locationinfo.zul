@@ -1,7 +1,7 @@
 <zk>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.LocationInfo')">
-			<grid height="150px"
+			<grid height="150px" sizedByContent="true"
 				model="@load(vm.lstLocations)">
 				<columns hflex="1">
 					<column label="Location" />

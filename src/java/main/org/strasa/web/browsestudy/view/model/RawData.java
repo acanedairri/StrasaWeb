@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.strasa.middleware.manager.BrowseStudyManagerImpl;
 import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
 import org.strasa.middleware.manager.StudyFileManagerImpl;
+import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.model.StudyDataColumn;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
@@ -23,12 +24,13 @@ public class RawData {
 	private int activePage = 0;
 	private String filePath;
 	private String dataType="rd";
+	private String studyName;
 	
 	private List<String> columnList= new ArrayList<String>();
 	private List<String[]> dataList = new ArrayList<String[]>();
 
 	private BrowseStudyManagerImpl browseStudyManagerImpl;
-	private StudyFileManagerImpl studyFileMan;
+	private StudyManagerImpl studyMan;
 
 	public RawData() {
 		// TODO Auto-generated constructor stub
@@ -68,10 +70,10 @@ public class RawData {
 	}
 
 
-	public ArrayList<ArrayList<String>> getCsvData() {
+	public ArrayList<ArrayList<String>> getRawData() {
 		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
 		if (dataList.isEmpty())
-			return result;
+			return null;
 		for (int i = activePage * pageSize; i < activePage * pageSize
 				+ pageSize
 				&& i < dataList.size(); i++) {
@@ -100,7 +102,7 @@ public class RawData {
 
 	@Init
 	public void init(@ExecutionArgParam("studyid") Integer studyId){
-		studyFileMan = new StudyFileManagerImpl();
+		studyMan=new StudyManagerImpl();
 		browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
 		
 		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(studyId,dataType);
@@ -120,14 +122,11 @@ public class RawData {
 			}
 			System.out.println("\n ");
 			dataList.add(newRow.toArray(new String[newRow.size()]));
+			
 		}
 		
-		try {
-			setFilePath(studyFileMan.getFileByStudyIdAndDataType(studyId, dataType).get(0).getFilepath());
-		}catch (IndexOutOfBoundsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		setStudyName(studyMan.getStudyById(studyId).getName());
 	}
 
 	public String getFilePath() {
@@ -144,5 +143,13 @@ public class RawData {
 
 	public void setDataType(String dataType) {
 		this.dataType = dataType;
+	}
+
+	public String getStudyName() {
+		return studyName;
+	}
+
+	public void setStudyName(String studyName) {
+		this.studyName = studyName;
 	}
 }

@@ -65,11 +65,12 @@ public class FilesData {
 
 	@GlobalCommand
 	public void exportData(@BindingParam("columns")List<String> columns, @BindingParam("rows")List<String[]> rows, @BindingParam("studyName") String studyName, @BindingParam("dataType") String dataType){
-
-		rows.add(0,columns.toArray(new String[columns.size()]));
+		List<String[]> grid = new ArrayList<String[]>();
+		grid.addAll(rows);
+		grid.add(0,columns.toArray(new String[columns.size()]));
 		StringBuffer sb = new StringBuffer();
 
-		for (String[] row : rows) {
+		for (String[] row : grid) {
 			int ctr=0;
 			for (String s : row) {
 				ctr++;

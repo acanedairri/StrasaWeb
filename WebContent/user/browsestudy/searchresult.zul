@@ -3,7 +3,7 @@
 	<window id="searchResultWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchResult')">
 
-		<grid height="350px" model="@load(vm.searchResult)" emptyMessage="No study site found.">
+		<grid height="350px" model="@load(vm.searchResult)" sizedByContent="true" emptyMessage="No study site found.">
 			<auxhead>
 				<auxheader label="Search Result" colspan="8"  align="center"/>
 			</auxhead>

@@ -70,10 +70,10 @@ public class DerivedData {
 	}
 
 	
-	public ArrayList<ArrayList<String>> getCsvData() {
+	public ArrayList<ArrayList<String>> getDerivedData() {
 		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
 		if (dataList.isEmpty())
-			return result;
+			return null;
 		for (int i = activePage * pageSize; i < activePage * pageSize
 				+ pageSize
 				&& i < dataList.size(); i++) {
@@ -101,7 +101,7 @@ public class DerivedData {
 	
 	@Init
 	public void init(@ExecutionArgParam("studyid") Integer studyId){
-		setStudyMan(new StudyManagerImpl());
+		studyMan=new StudyManagerImpl();
 		browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
 		
 		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(studyId,dataType);
@@ -157,12 +157,5 @@ public class DerivedData {
 		this.studyName = studyName;
 	}
 
-	public StudyManagerImpl getStudyMan() {
-		return studyMan;
-	}
-
-	public void setStudyMan(StudyManagerImpl studyMan) {
-		this.studyMan = studyMan;
-	}
 }
 

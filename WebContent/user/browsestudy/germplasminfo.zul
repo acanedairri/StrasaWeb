@@ -6,7 +6,7 @@
 	</style>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.GermplasmInfo')">
-		<grid height="200px" model="@load(vm.germplasmList)"
+		<grid height="200px" model="@load(vm.germplasmList)" sizedByContent="true"
 			emptyMessage="No Record Found">
 
 			<columns>

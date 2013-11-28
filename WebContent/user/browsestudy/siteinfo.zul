@@ -8,7 +8,7 @@
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SiteInformation')">
 		<columnlayout>
 			<columnchildren width="65%">
-				<grid height="350px" model="@load(vm.sites)"
+				<grid height="350px" model="@load(vm.sites)" sizedByContent="true"
 					emptyMessage="No study site found.">
 					<columns>
 						<column label="Site Name" />
@@ -38,7 +38,7 @@
 				<vlayout>
 					<groupbox width="99%">
 						<caption label="Agronomy" />
-						<grid vflex="1">
+						<grid vflex="1" sizedByContent="true">
 							<columns>
 								<column />
 								<column />
@@ -65,7 +65,7 @@
 					</groupbox>
 					<groupbox width="99%">
 						<caption label="Design Information" />
-						<grid vflex="1">
+						<grid vflex="1" sizedByContent="true">
 							<columns>
 								<column />
 								<column />

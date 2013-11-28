@@ -1,7 +1,7 @@
 <zk>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchFilter')">
-		<grid>
+		<grid sizedByContent="true">
 			<columns width="200px">
 				<column label="" />
 				<column label="" />
