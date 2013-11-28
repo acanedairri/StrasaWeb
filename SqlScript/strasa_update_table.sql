@@ -32,7 +32,7 @@ CREATE TABLE `germplasm` (
   `source` varchar(50) DEFAULT NULL,
   `remarks` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=512 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=401 DEFAULT CHARSET=latin1;
 
 /*Table structure for table `germplasmcharacteristics` */
 
@@ -44,7 +44,7 @@ CREATE TABLE `germplasmcharacteristics` (
   `attribute` varchar(30) DEFAULT NULL,
   `value` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5628 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4612 DEFAULT CHARSET=latin1;
 
 /*Table structure for table `location` */
 
@@ -75,7 +75,7 @@ CREATE TABLE `program` (
   `leadinginstitute` varchar(200) DEFAULT NULL,
   `collaborator` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 /*Table structure for table `project` */
 
@@ -93,6 +93,23 @@ CREATE TABLE `project` (
   `fundingagency` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+
+/*Table structure for table `studyvariable` */
+
+DROP TABLE IF EXISTS `studyvariable`;
+
+CREATE TABLE `studyvariable` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `variablecode` varchar(50) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `property` varchar(100) DEFAULT NULL,
+  `method` varchar(100) DEFAULT NULL,
+  `scale` int(100) DEFAULT NULL,
+  `applytofilter` enum('Yes','No') DEFAULT 'No',
+  `defaultcolumn` enum('Yes','No') DEFAULT 'No',
+  `datatype` enum('N','C') DEFAULT 'C',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1283 DEFAULT CHARSET=latin1;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
