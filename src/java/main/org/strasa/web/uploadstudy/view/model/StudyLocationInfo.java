@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.strasa.middleware.manager.CountryManagerImpl;
+import org.strasa.middleware.manager.LocationManagerImpl;
 import org.strasa.middleware.manager.StudyLocationManagerImpl;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.manager.StudySiteManagerImpl;
@@ -162,11 +163,16 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 
 			}
 		}
+		LocationManagerImpl locMan  = new LocationManagerImpl(); 
 		for(StudySite site : lstStudySite){
 			if(!lstRawLoc.containsKey(site.getSitelocation())){
 				Location newLoc = new Location();
 				newLoc.setLocationname(site.getSitelocation());
+
+				if(locMan.getLocationByLocationName(newLoc.getLocationname()) != null)
+					newLoc = locMan.getLocationByLocationName(site.getSitelocation());
 				System.out.println("Added new Location from site");
+				
 				lstLocations.add(newLoc);
 			}
 		}

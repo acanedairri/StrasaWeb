@@ -465,6 +465,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		private StudyDesign selectedDesignInfo = new StudyDesign();
 		private PlantingType selectedSitePlantingType = new PlantingType();
 		private int selectedPlantingIndex;
+		private Ecotype selectedEcotype;
 		private boolean isYearAuto = false;
 		public boolean isYearAuto() {
 			return isYearAuto;
@@ -473,6 +474,19 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 		public void setYearAuto(boolean isYearAuto) {
 			this.isYearAuto = isYearAuto;
+		}
+
+		
+		
+
+		public Ecotype getSelectedEcotype() {
+			return selectedEcotype;
+		}
+
+
+		public void setSelectedEcotype(Ecotype selectedEcotype) {
+			this.selectedEcotype = selectedEcotype;
+			this.setEcotypeid(selectedEcotype.getId());
 		}
 
 
