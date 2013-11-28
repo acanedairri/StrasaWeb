@@ -4,7 +4,7 @@
 		<grid height="350px" model="@load(vm.genotypicFiles)" sizedByContent="true"
 			emptyMessage="No genotypic data found." oddRowSclass="empty">
 			<columns>
-				<column />
+				<column hflex="1"/>
 			</columns>
 			<template name="model">
 				<row>
