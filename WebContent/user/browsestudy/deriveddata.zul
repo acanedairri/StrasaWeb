@@ -18,6 +18,6 @@
 		</grid>
 		<paging pageSize="@load(vm.pageSize)"
 			totalSize="@load(vm.totalSize)" activePage="@bind(vm.activePage)" unless="${vm.csvData==null}"/>
-			<div style="float:right;" > <button label="Download derived data" unless="${vm.filePath==null}" onClick="@global-command('downloadFile', filePath=vm.filePath, dataType=vm.dataType)"/> </div>
+			<div style="float:right;" > <button label="export derived data as CSV" unless="${vm.csvData==null}" onClick="@global-command('exportData', columns=vm.columnList, rows=vm.dataList, studyName=vm.studyName, dataType=vm.dataType)"/> </div>
 	</window>
 </zk>

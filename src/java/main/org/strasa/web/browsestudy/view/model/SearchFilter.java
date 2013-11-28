@@ -1,5 +1,6 @@
 package org.strasa.web.browsestudy.view.model;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.strasa.middleware.manager.BrowseStudyManagerImpl;
@@ -7,18 +8,23 @@ import org.strasa.middleware.manager.CountryManagerImpl;
 import org.strasa.middleware.manager.LocationManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
+import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
+import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudyTypeManagerImpl;
 import org.strasa.middleware.model.Country;
 import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
+import org.strasa.middleware.model.StudyDataColumn;
 import org.strasa.middleware.model.StudyType;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
+import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.Selectors;
@@ -26,18 +32,18 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Textbox;
 
 public class SearchFilter {
-	private ProgramManagerImpl programMan = new ProgramManagerImpl();
-	private ProjectManagerImpl projectMan = new ProjectManagerImpl();
-	private StudyTypeManagerImpl studyTypeMan = new StudyTypeManagerImpl();
-	private CountryManagerImpl countryMan = new CountryManagerImpl();
-	private LocationManagerImpl locationMan = new LocationManagerImpl();
+	private ProgramManagerImpl programMan;
+	private ProjectManagerImpl projectMan;
+	private StudyTypeManagerImpl studyTypeMan;
+	private CountryManagerImpl countryMan;
+	private LocationManagerImpl locationMan;
 
-	private StudySearchFilterModel searchFilter = new StudySearchFilterModel();
-	private List<Program> programList = programMan.getAllProgram();
-	private List<Project> projectList = projectMan.getAllProject();
-	private List<StudyType> studyTypeList = studyTypeMan.getAllStudyType();
-	private List<Country> countryList = countryMan.getAllCountry();
-	private List<Location> locationList = locationMan.getAllLocations();
+	private StudySearchFilterModel searchFilter = null;
+	private List<Program> programList= null;
+	private List<Project> projectList= null;
+	private List<StudyType> studyTypeList= null;
+	private List<Country> countryList= null;
+	private List<Location> locationList= null;
 
 	private boolean validation = false;
 	private int validationCount = 0;
@@ -94,6 +100,22 @@ public class SearchFilter {
 
 	public void setLocationList(List<Location> locationList) {
 		this.locationList = locationList;
+	}
+
+	@Init
+	public void init(){
+		programMan = new ProgramManagerImpl();
+		projectMan = new ProjectManagerImpl();
+		studyTypeMan = new StudyTypeManagerImpl();
+		countryMan = new CountryManagerImpl();
+		locationMan = new LocationManagerImpl();
+		searchFilter = new StudySearchFilterModel();
+		
+		programList = programMan.getAllProgram();
+		projectList = projectMan.getAllProject();
+		studyTypeList = studyTypeMan.getAllStudyType();
+		countryList = countryMan.getAllCountry();
+		locationList = locationMan.getAllLocations();
 	}
 
 	@Command
