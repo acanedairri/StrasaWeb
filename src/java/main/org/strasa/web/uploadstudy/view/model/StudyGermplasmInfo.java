@@ -471,14 +471,15 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		GermplasmManagerImpl germplasmManagerImpl = new GermplasmManagerImpl();
 		// List<StudyGermplasm> lstStudyGerm =
 		// convertDeepInfoToModel(lstStudyGermplasm.values());
-
+		GermplasmCharacteristicMananagerImpl germCharMan = new GermplasmCharacteristicMananagerImpl();
 		List<GermplasmDeepInfoModel> lstStudyGermpl = new ArrayList<GermplasmDeepInfoModel>();
 		lstStudyGermpl.addAll(lstKnownGermplasm.values());
 		lstStudyGermpl.addAll(lstStudyGermplasm.values());
 
 		studyGermplasmMan.addStudyGermplasmBatch(lstStudyGermpl);
 		germplasmManagerImpl.addGermplasm(germplasmManagerImpl
-				.convertStudyToGermplasm(lstStudyGermpl));
+				.convertStudyToGermplasm(lstStudyGermplasm.values()));
+		germCharMan.addCharacteristicBatch(lstStudyGermplasm.values());
 		germplasmManagerImpl.updateBreeders(lstStudyGermpl);
 
 		return true;

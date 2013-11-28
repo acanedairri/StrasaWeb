@@ -1,5 +1,6 @@
 package org.strasa.web.uploadstudy.view.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +32,20 @@ public class Index {
 	Tab tab4;
 	@Wire("#tab5")
 	Tab tab5;
+	
+	
+	@Wire("#tabpanel1")
+	Tabpanel tabpanel1;
+	@Wire("#tabpanel2")
+	Tabpanel tabpanel2;
+	@Wire("#tabpanel3")
+	Tabpanel tabpanel3;
+	@Wire("#tabpanel4")
+	Tabpanel tabpanel4;
+	@Wire("#tabpanel5")
+	Tabpanel tabpanel5;
+	
+	ArrayList<Tabpanel> arrTabPanels = new ArrayList<Tabpanel>();
 	private UploadData uploadData;
 	private int selectedIndex = 1;
 	private boolean[] tabDisabled = {false,true,true,true,true};
@@ -67,6 +82,16 @@ public class Index {
 			Events.sendEvent("onSelect",tab1,tab1);
 	        //wire event listener
 //	      Selectors.wireEventListeners(view, this);
+			
+			arrTabPanels.add(tabpanel1);
+
+			arrTabPanels.add(tabpanel2);
+
+			arrTabPanels.add(tabpanel3);
+
+			arrTabPanels.add(tabpanel4);
+
+			arrTabPanels.add(tabpanel5);
 	    }
 	
 	 @NotifyChange("*")
@@ -109,6 +134,13 @@ public class Index {
 		if(uploadData.uploadToFolder){
 			selectedIndex = 3;
 		}
+		
+		if(selectedIndex + 1 < arrTabPanels.size())
+		{
+			
+			arrTabPanels.get(selectedIndex+1).getChildren().clear();
+		}
+		
 
 //		System.out.println("Sample: " + uploadData.getTxtProject());
 

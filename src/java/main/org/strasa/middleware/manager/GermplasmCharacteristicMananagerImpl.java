@@ -1,5 +1,6 @@
 package org.strasa.middleware.manager;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.ibatis.session.ExecutorType;
@@ -11,6 +12,7 @@ import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.GermplasmCharacteristics;
 import org.strasa.middleware.model.GermplasmCharacteristicsExample;
 import org.strasa.middleware.model.GermplasmExample;
+import org.strasa.web.uploadstudy.view.model.StudyGermplasmInfo.GermplasmDeepInfoModel;
 
 public class GermplasmCharacteristicMananagerImpl {
 
@@ -21,6 +23,23 @@ public class GermplasmCharacteristicMananagerImpl {
 		try{
 			for(GermplasmCharacteristics record : lstCharRecord){
 				mapper.insert(record);
+			}
+
+			session.commit();
+		}
+		finally{
+			session.close();
+		}
+	}
+	
+	public void addCharacteristicBatch(Collection<GermplasmDeepInfoModel> collection){
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession(ExecutorType.BATCH);
+		GermplasmCharacteristicsMapper mapper = session.getMapper(GermplasmCharacteristicsMapper.class);
+		try{
+			for(GermplasmDeepInfoModel recData : collection){
+			for(GermplasmCharacteristics record : recData.getCharacteristicValues()){
+				mapper.insert(record);
+			}
 			}
 
 			session.commit();

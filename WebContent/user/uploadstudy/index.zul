@@ -30,14 +30,14 @@
 						 	onSelect="@command('showzulfile', zulFileName='/user/uploadstudy/studyuploadfinish.zul', target=self.linkedPanel)"/>
 			</tabs>
 			<tabpanels>
-				<tabpanel>
+				<tabpanel id = "tabpanel1">
 					<include mode="defer"
 						src="/user/uploadstudy/uploaddata.zul" />
 				</tabpanel>
-				<tabpanel></tabpanel>
-				<tabpanel></tabpanel>
-				<tabpanel></tabpanel>
-				<tabpanel>
+				<tabpanel id = "tabpanel2"></tabpanel>
+				<tabpanel id = "tabpanel3"></tabpanel>
+				<tabpanel id = "tabpanel4"></tabpanel>
+				<tabpanel id = "tabpanel5">
 					<include mode="defer"
 						src="/user/uploadstudy/studyuploadfinish.zul" />
 				</tabpanel>

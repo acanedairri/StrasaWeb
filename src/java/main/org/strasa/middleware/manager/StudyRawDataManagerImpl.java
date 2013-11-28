@@ -215,7 +215,7 @@ public class StudyRawDataManagerImpl {
 			addStudy(study);
 			List<StudyRawData> lstData = new ArrayList<StudyRawData>();
 
-			System.out.println("StudyID: " + study.getId());
+			System.out.println("StudyIDDDDDDDDDDDDDDDDDDDDDDDD: " + study.getId());
 			for (int i = 1; i < rawCSVData.size(); i++) {
 				String[] row = rawCSVData.get(i);
 				for (int j = 0; j < header.length; j++) {
@@ -227,6 +227,7 @@ public class StudyRawDataManagerImpl {
 						record.setDatarow(i + 1);
 						record.setDatavalue(row[j]);
 						record.setStudyid(study.getId());
+						record.setDatarow(record.getDatarow() + 1);
 						// studyDataMapper.insert(record);
 						lstData.add(record);
 						// rawMapper.insert(record);
@@ -257,7 +258,7 @@ public class StudyRawDataManagerImpl {
 		try {
 			addStudy(study);
 			List<StudyRawData> lstData = new ArrayList<StudyRawData>();
-			System.out.println("StudyID: " + study.getId());
+			System.out.println("StudyID______________________: " + study.getId());
 			for (int i = 0; i < rawCSVData.size(); i++) {
 				String[] row = rawCSVData.get(i);
 				for (int j = 0; j < header.length; j++) {
@@ -266,7 +267,7 @@ public class StudyRawDataManagerImpl {
 						StudyRawData record = new StudyRawData();
 
 						record.setDatacolumn(header[j]);
-						record.setDatarow(i);
+						record.setDatarow(i + 1);
 						record.setDatavalue(row[j]);
 						record.setStudyid(study.getId());
 						// studyDataMapper.insert(record);

@@ -54,6 +54,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	private int selectedPlantingIndex =0;
 	private boolean applyToAll = false;
 	private String labelDate;
+	private boolean hasBeenProcessed = false;
 	
 	public boolean isApplyToAll() {
 		return applyToAll;
@@ -303,6 +304,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		 List<StudyAgronomy> lstAgro = new ArrayList<StudyAgronomy>();
 		 List<StudyDesign> designInfo = new ArrayList<StudyDesign>();
 		 StudySiteManagerImpl siteMan = new StudySiteManagerImpl(isRaw);
+		 if(hasBeenProcessed) siteMan.removeSiteByStudyId(sID);
 		 if(applyToAll){
 			 
 		 selectedAgroInfo = sites.get(selectedID).selectedAgroInfo;
@@ -357,7 +359,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		
 		
 		
-		
+//		hasBeenProcessed = false;
 		return goToNextPage;
 	}
 
@@ -408,6 +410,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 						siteInfo.setYear(studyStartYear);
 						siteInfo.isYearAuto = true;
 					}
+					
 						
 					siteInfo.selectedDesignInfo = new StudyDesign();
 					siteInfo.selectedSitePlantingType =blankPlantingType;
@@ -543,6 +546,10 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	
 		public StudySiteInfoModel(StudySite s){
 			this.setEcotypeid(s.getEcotypeid());
+			if(StringUtils.isNullOrEmpty(s.getSeason())) {
+			System.out.println("Season is now null!");
+				s.setSeason("");
+			}
 			this.setSeason(s.getSeason());
 			this.setSitelocation(s.getSitelocation());
 			this.setSitename(s.getSitename());

@@ -32,7 +32,7 @@ public interface StudyRawDataBatch {
 			+ " MAX(CASE datacolumn WHEN 'Site' THEN datavalue ELSE '' END) AS sitename, "
 			+ " MAX(CASE datacolumn WHEN 'Location' THEN datavalue ELSE '' END) AS sitelocation, "
 			+ " MAX(CASE datacolumn WHEN 'Year' THEN datavalue ELSE '' END) AS year, "
-			+ " MAX(CASE datacolumn WHEN 'Season' THEN datavalue ELSE '' END) AS season "
+			+ " MAX(CASE datacolumn WHEN 'Season' THEN datavalue ELSE NULL END) AS season "
 			+ " FROM ${param2} WHERE studyid = #{param1} GROUP BY datarow";
 
 	String MQL_Germplasm = "SELECT DISTINCT " +

@@ -33,6 +33,24 @@ public class StudySiteManagerImpl {
 		}
 
 	}
+	
+	public void removeSiteByStudyId(int studyID){
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudySiteMapper studySiteMapper = session
+				.getMapper(StudySiteMapper.class);
+
+		try {
+			StudySiteExample example = new StudySiteExample();
+			example.createCriteria().andStudyidEqualTo(studyID);
+			studySiteMapper.deleteByExample(example);
+			session.commit();
+		}
+		finally{
+			session.close();
+			
+		}
+	}
 
 	public void addStudySite(ArrayList<StudySite> records) {
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()

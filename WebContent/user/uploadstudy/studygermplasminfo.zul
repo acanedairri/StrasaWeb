@@ -230,7 +230,11 @@
 
 
 								</auxheader>
+								<auxheader colspan="3" label="Characteristic"
+									width="100%">
 
+		
+								</auxheader>
 							</auxhead>
 							<columns menupopup="auto" columnsgroup="false">
 								<column label="GID" width="5.69%" sort="auto(gid)" />
