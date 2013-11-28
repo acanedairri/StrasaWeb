@@ -525,6 +525,17 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 		public int rowIndex;
 		private String germplasmType;
+		private GermplasmType selectedGermplasmType;
+		
+		public GermplasmType getSelectedGermplasmType() {
+			return selectedGermplasmType;
+		}
+
+		public void setSelectedGermplasmType(GermplasmType selectedGermplasmType) {
+			this.selectedGermplasmType = selectedGermplasmType;
+			this.setGermplasmtypeid(selectedGermplasmType.getId());
+		}
+
 		public String getGermplasmType() {
 			return germplasmType;
 		}
@@ -792,7 +803,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 			for (int i = 0; i < lstGermplasmType.size(); i++) {
 				if (data.getGermplasmtype().equals(
 						lstGermplasmType.get(i).getGermplasmtype())) {
-					setGermplasmtypeid(lstGermplasmType.get(i).getId());
+					setSelectedGermplasmType(lstGermplasmType.get(i));
 				}
 			}
 			setIrcross(data.getIrcross());

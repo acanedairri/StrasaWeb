@@ -16,7 +16,7 @@
 					<groupbox mold="3d" height="50%">
 						<caption label="List of unknown Germplasm"></caption>
 						<grid id="tblStudyGerm" height="100%"
-							model="@load(vm.lstStudyGermplasm)" vflex="1" hflex="1">
+							model="@load(vm.lstStudyGermplasm)" vflex="1" hflex="1" sizedByContent="true">
 							<auxhead width="100%">
 								<auxheader colspan="13" label=""
 									width="100%">
@@ -25,24 +25,19 @@
 
 							</auxhead>
 							<columns menupopup="auto" columnsgroup="false">
-								<column label="GID" width="5.69%" />
-								<column label="GName" width="7.69%" sort="auto(germplasmname)" />
-								<column label="OtherName" width="7.69%"  />
-								<column label="Breeder" width="7.69%"  />
-								<column label="GermplasmType"
-									width="7.69%" />
-								<column label="IR Number" width="7.69%" />
-								<column label="IR Cross" width="7.69%"  />
-								<column label="Parentage" width="7.69%" />
-								<column label="Female Parent"
-									width="7.69%"  />
-								<column label="Male Parent"
-									width="7.69%"  />
-								<column label="Selection History"
-									width="7.69%" sort="auto"/>
-								<column label="Source" width="7.69%"  />
-								<column label="Characteristic"
-									width="9.69%"  />
+								<column label="GID"  />
+								<column label="GName"  sort="auto(germplasmname)" />
+								<column label="OtherName"  />
+								<column label="Breeder"   style="background-color:#FA807A;"/>
+								<column label="GermplasmType"  style="background-color:#FA807A;"/>
+								<column label="IR Number" />
+								<column label="IR Cross" />
+								<column label="Parentage" />
+								<column label="Female Parent"  style="background-color:#FA807A;"/>
+								<column label="Male Parent"  style="background-color:#FA807A;"/>
+								<column label="Selection History" />
+								<column label="Source"   />
+								<column label="Characteristic"  />
 
 							</columns>
 							<template name="model">
@@ -61,7 +56,7 @@
 										model="@load(vm.lstGermplasmType)"
 										readonly="${each.germplasmtypeid != null}"
 									
-										selectedIndex="@bind(each.germplasmtypeid)" width="99%">
+										selectedItem="@bind(each.selectedGermplasmType)" width="99%">
 										<template name="model">
 											<comboitem
 												value="@load(each.germplasmtype)"
@@ -222,10 +217,10 @@
 					</groupbox>
 					<groupbox mold="3d" height="50%">
 						<caption label="List of known Germplasm"></caption>
-						<grid id="tblKnownGerm" height="100%"
+						<grid id="tblKnownGerm" height="100%" sizedByContent="true"
 							model="@load(vm.lstKnownGermplasm)" vflex="1" hflex="1">
 							<auxhead width="100%">
-								<auxheader colspan="13" label=""
+								<auxheader colspan="12" label=""
 									width="100%">
 
 
@@ -237,28 +232,22 @@
 								</auxheader>
 							</auxhead>
 							<columns menupopup="auto" columnsgroup="false">
-								<column label="GID" width="5.69%" sort="auto(gid)" />
-								<column label="GName" width="7.69%" sort="auto(germplasmname)" />
-								<column label="OtherName" width="7.69%" sort="auto(othername)" />
-								<column label="Breeder" width="7.69%" sort="auto(breeder)" />
-								<column label="GermplasmType"
-									width="7.69%"  sort="auto(germplasmType)"/>
-								<column label="IR Number" width="7.69%" sort="auto(irnumber)" />
-								<column label="IR Cross" width="7.69%" sort="auto(ircross)" />
-								<column label="Parentage" width="7.69%" sort="auto(parentage)" />
-								<column label="Female Parent" width="7.69%" sort="auto(femaleparent)" />
-								<column label="Male Parent"
-									width="7.69%" sort="auto(maleparent)" />
-								<column label="Selection History"
-									width="7.69%" sort="auto(selectionhistory)" />
-								<column label="Source" width="7.69%" sort="auto(source)" />
-								<column label="Biotic" width="9.69%" sort="auto(biotic)" />
-							
-								<column label="Abiotic" width="9.69%" sort="auto(abiotic)" />
-								<column label="Grain Quality"
-									width="9.69%" sort="auto(grainquality)" />
-								<column label="Major Genes"
-									width="9.69%" sort="auto(majorgenes)" />
+								<column label="GID" sort="auto(gid)" />
+								<column label="GName" sort="auto(germplasmname)" />
+								<column label="OtherName" sort="auto(othername)" />
+								<column label="Breeder" sort="auto(breeder)" />
+								<column label="GermplasmType" sort="auto(germplasmType)"/>
+								<column label="IR Number" sort="auto(irnumber)" />
+								<column label="IR Cross" sort="auto(ircross)" />
+								<column label="Parentage" sort="auto(parentage)" />
+								<column label="Female Parent" sort="auto(femaleparent)" />
+								<column label="Male Parent" sort="auto(maleparent)" />
+								<column label="Selection History" sort="auto(selectionhistory)" />
+								<column label="Source" sort="auto(source)" />
+								<column label="Biotic" sort="auto(biotic)" />
+								<column label="Abiotic" sort="auto(abiotic)" />
+								<column label="Grain Quality" sort="auto(grainquality)" />
+								<column label="Major Genes" sort="auto(majorgenes)" />
 							</columns>
 							<template name="model">
 								<row style="@load(each.styleBG)">
@@ -292,24 +281,13 @@
 									</vlayout>
 
 									<label value="@bind(each.germplasmType)" />
-										<label value="@bind(each.irnumber)" />
-
+									<label value="@bind(each.irnumber)" />
 									<label value="@bind(each.ircross)" />
-
-									<label
-										value="@bind(each.parentage)" />
-
-									<label
-										value="@bind(each.femaleparent)" />
-
-									<label
-										value="@bind(each.maleparent)" />
-
-									<label
-										value="@bind(each.selectionhistory)" />
-
+									<label value="@bind(each.parentage)" />
+									<label value="@bind(each.femaleparent)" />
+									<label value="@bind(each.maleparent)" />
+									<label value="@bind(each.selectionhistory)" />
 									<label value="@bind(each.source)" />
-		
 									<label value="@bind(each.biotic)" />
 									<label value="@bind(each.abiotic)" />
 									<label value="@bind(each.grainquality)" />
