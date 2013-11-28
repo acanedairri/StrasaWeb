@@ -46,7 +46,7 @@ public class SearchFilter {
 	private List<Location> locationList= null;
 
 	private boolean validation = false;
-	private int validationCount = 0;
+//	private int validationCount = 0;
 
 	public StudySearchFilterModel getSearchFilter() {
 		return searchFilter;
@@ -118,24 +118,30 @@ public class SearchFilter {
 		locationList = locationMan.getAllLocations();
 	}
 
+//	@Command
+//	public void updateSearchFilterValidation(@BindingParam("validateObject")Object validateObject){
+//		try{
+//			System.out.print("Object value is "+validateObject.toString());
+//			if(validateObject.toString().equals("")) validationCount--; //may natanggalan ng filter
+//			else if(validateObject.toString().equals("0"))validationCount--;
+//			else validationCount++; //may nagkaroon ng value
+//		}catch(NullPointerException npe){
+//			validationCount--; // object was set to Null
+//		}
+//
+//		if(validationCount>0) validation=true; //meaning may atleast one na filter
+//		else validation=false; //lahat ng filter ay empty
+//
+//		System.out.print(Integer.toString(validationCount)+ "number of Filters\n");
+//	}
+
+	@NotifyChange("searchFilter")
 	@Command
-	public void updateSearchFilterValidation(@BindingParam("validateObject")Object validateObject){
-		try{
-			System.out.print("Object value is "+validateObject.toString());
-			if(validateObject.toString().equals("")) validationCount--; //may natanggalan ng filter
-			else if(validateObject.toString().equals("0"))validationCount--;
-			else validationCount++; //may nagkaroon ng value
-		}catch(NullPointerException npe){
-			validationCount--; // object was set to Null
-		}
-
-		if(validationCount>0) validation=true; //meaning may atleast one na filter
-		else validation=false; //lahat ng filter ay empty
-
-		System.out.print(Integer.toString(validationCount)+ "number of Filters\n");
+	public void reset(){
+		searchFilter = new StudySearchFilterModel();
+		searchFilter.shared="";
 	}
-
-
+	
 	public boolean isValidation() {
 		return validation;
 	}
