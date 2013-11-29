@@ -43,9 +43,21 @@ public class FilesData {
 	public void init(@ExecutionArgParam("studyid") Integer studyId){
 
 		studyFileMan = new StudyFileManagerImpl();
-
-		setFiles(studyFileMan.getFileByStudyIdAndDataType(studyId, dataType));
+		List<StudyFile> newFiles = studyFileMan.getFileByStudyIdAndDataType(studyId, "dd");
+		add(files,newFiles);
+		newFiles = studyFileMan.getFileByStudyIdAndDataType(studyId, "rd");
+		add(files,newFiles);
+//		newFiles = studyFileMan.getFileByStudyIdAndDataType(studyId, "fd");
+//		add(files,newFiles);
 	}
+
+	private void add(List<StudyFile> files2, List<StudyFile> newFiles) {
+		// TODO Auto-generated method stub
+		for(StudyFile sf : newFiles){
+			files2.add(sf);
+		}
+	}
+
 
 	@GlobalCommand
 	public void downloadFile(@BindingParam("filePath")String filePath,@BindingParam("dataType") String dataType){
