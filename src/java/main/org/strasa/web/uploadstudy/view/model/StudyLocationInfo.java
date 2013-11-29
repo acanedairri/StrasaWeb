@@ -174,6 +174,7 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 				System.out.println("Added new Location from site");
 				
 				lstLocations.add(newLoc);
+				lstRawLoc.put(newLoc.getLocationname(), newLoc);
 			}
 		}
 		

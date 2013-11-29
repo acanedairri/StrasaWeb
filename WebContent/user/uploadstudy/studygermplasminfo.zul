@@ -26,7 +26,7 @@
 							</auxhead>
 							<columns menupopup="auto" columnsgroup="false">
 								<column label="GID"  />
-								<column label="GName"  sort="auto(germplasmname)" />
+								<column label="GName"  sort="auto(germplasmname)" style="background-color:#FA807A;"/>
 								<column label="OtherName"  />
 								<column label="Breeder"   style="background-color:#FA807A;"/>
 								<column label="GermplasmType"  style="background-color:#FA807A;"/>
