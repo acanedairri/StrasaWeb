@@ -6,19 +6,40 @@
 	</style>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.GermplasmInfo')">
-		<grid height="200px" model="@load(vm.germplasmList)" sizedByContent="true"
-			emptyMessage="No Record Found">
+		<grid height="100%" model="@load(vm.germplasmList)"
+			sizedByContent="true" emptyMessage="No Record Found">
 
 			<columns>
-				<column label="Germplasm Name" width="150px" />
-				<column label="Other Name" />
+				<column label="GID " />
+				<column label="GName " sort="auto(germplasmname)" />
+				<column label="OtherName " />
+				<column label="Breeder "/>
+				<column label="GermplasmType "/>
+				<column label="IR Number " />
+				<column label="IR Cross " />
+				<column label="Parentage " />
+				<column label="Female Parent "/>
+				<column label="Male Parent "/>
+				<column label="Selection History " />
+				<column label="Source " />
+<!-- 				<column label="Characteristic " /> -->
 
 			</columns>
 			<template name="model">
-				<row
-					onClick="@command('DisplayGermplasmInfo', germplasmId=each.id,gname=each.germplasmname)">
+				<row>
+					<label value="@load(each.gid)" />
 					<label value="@load(each.germplasmname)" />
 					<label value="@load(each.othername)" />
+					<label value="@load(each.breeder)" />
+					<label value="@load(each.type.germplasmtype)" />
+					<label value="@load(each.irnumber)" />
+					<label value="@load(each.ircross)" />
+					<label value="@load(each.parentage)" />
+					<label value="@load(each.femaleparent)" />
+					<label value="@load(each.maleparent)" />
+					<label value="@load(each.selectionhistory)" />
+					<label value="@load(each.source)" />
+<!-- 					<label value="@load(each.characteristics)" /> -->
 
 				</row>
 			</template>

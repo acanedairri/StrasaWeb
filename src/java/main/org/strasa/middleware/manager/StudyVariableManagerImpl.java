@@ -67,6 +67,20 @@ public class StudyVariableManagerImpl {
 	}
 	
 	
+	public List<StudyVariable> getVariablesLike(String sort){
+		
+		try{
+			StudyVariableExample example = new StudyVariableExample();
+			example.createCriteria().andVariablecodeLike( sort + "%");
+			return getMapper().selectByExample(example);
+		}
+		finally{
+			session.close();
+		}
+		
+	}
+	
+	
 	public StudyVariable getVariableByName(String var){
 		try{
 		StudyVariableExample query = new StudyVariableExample();

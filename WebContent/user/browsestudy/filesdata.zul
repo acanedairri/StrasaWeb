@@ -16,9 +16,9 @@
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.FilesData')">
 		<grid height="350px" model="@load(vm.files)" sizedByContent="true"
-			emptyMessage="No files were found." oddRowSclass="empty">
+			emptyMessage="No files were found." oddRowSclass="empty" >
 			<columns>
-				<column />
+				<column hflex="1"/>
 			</columns>
 			<template name="model">
 				<row>

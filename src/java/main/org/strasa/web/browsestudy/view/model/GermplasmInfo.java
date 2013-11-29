@@ -10,6 +10,7 @@ import org.strasa.middleware.manager.GermplasmCharacteristicMananagerImpl;
 import org.strasa.middleware.manager.GermplasmManagerImpl;
 import org.strasa.middleware.manager.GermplasmTypeManagerImpl;
 import org.strasa.middleware.manager.StudyGermplasmManagerImpl;
+import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.GermplasmCharacteristics;
 import org.strasa.middleware.model.GermplasmType;
@@ -17,7 +18,11 @@ import org.strasa.middleware.model.KeyAbiotic;
 import org.strasa.middleware.model.KeyBiotic;
 import org.strasa.middleware.model.KeyGrainQuality;
 import org.strasa.middleware.model.KeyMajorGenes;
+import org.strasa.middleware.model.PlantingType;
+import org.strasa.middleware.model.StudyAgronomy;
+import org.strasa.middleware.model.StudyDesign;
 import org.strasa.middleware.model.StudyGermplasm;
+import org.strasa.middleware.model.StudySite;
 import org.strasa.web.browsestudy.view.model.StudySearchResultModel;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -42,7 +47,7 @@ public class GermplasmInfo {
 	private List<String> keyCharacteristicOption;
 	private int germplasmTypeId;
 	private String keyCharactericticValue;
-	private List<StudyGermplasm> germplasmList = new ArrayList<StudyGermplasm>();
+	private List<GermplasmInfoModel> germplasmList = new ArrayList<GermplasmInfoModel>();
 	private Germplasm germplasm;
 	private String abioticCharacteristics;
 	private String bioticCharacteristics;
@@ -55,9 +60,10 @@ public class GermplasmInfo {
 
 	@Init
 	public void init(@ExecutionArgParam("studyid") Integer studyId){
-		this.germplasmList=getGermplasmById(studyId);
+		for(StudyGermplasm sg :getGermplasmById(studyId)){
+			germplasmList.add(new GermplasmInfoModel(sg));
+		}
 	}
-
 
 	public String getNameSearch() {
 		return nameSearch;
@@ -99,15 +105,16 @@ public class GermplasmInfo {
 	public String getKeyCharactericticValue() {
 		return keyCharactericticValue;
 	}
+	
 	public void setKeyCharactericticValue(String keyCharactericticValue) {
 		this.keyCharactericticValue = keyCharactericticValue;
 	}
 
 
-	public List<StudyGermplasm> getGermplasmList() {
+	public List<GermplasmInfoModel> getGermplasmList() {
 		return germplasmList;
 	}
-	public void setGermplasmList(List<StudyGermplasm> germplasmList) {
+	public void setGermplasmList(List<GermplasmInfoModel> germplasmList) {
 		this.germplasmList = germplasmList;
 	}
 
@@ -351,4 +358,46 @@ public class GermplasmInfo {
 		return germplasmType;
 	}
 
+	public class GermplasmInfoModel extends StudyGermplasm{
+		private GermplasmType type;
+		private String characteristics;
+		
+		private StringBuilder sb = new StringBuilder();
+		public GermplasmInfoModel(StudyGermplasm s){
+			this.setGid(s.getGid());
+			this.setGermplasmname(s.getGermplasmname());
+			this.setOthername(s.getOthername());
+			this.setBreeder(s.getBreeder());
+			this.setIrnumber(s.getIrnumber());
+			this.setIrcross(s.getIrcross());
+			this.setParentage(s.getParentage());
+			this.setFemaleparent(s.getFemaleparent());
+			this.setMaleparent(s.getMaleparent());
+			this.setSelectionhistory(s.getSelectionhistory());
+			this.setSource(s.getSource());
+			setType(getGermplasmTypeList().get(s.getGermplasmtypeid()));
+			sb.append(" ");
+//			sb.append(getGermplasmCharacteristics("Biotic", getGermplasmname()));
+//			sb.append(getGermplasmCharacteristics("Abiotic", getGermplasmname()));
+//			sb.append(getGermplasmCharacteristics("Grain", getGermplasmname()));
+			
+			setCharacteristics(sb.toString());
+		}
+
+		public GermplasmType getType() {
+			return type;
+		}
+
+		public void setType(GermplasmType type) {
+			this.type = type;
+		}
+
+		public String getCharacteristics() {
+			return characteristics;
+		}
+
+		public void setCharacteristics(String characteristics) {
+			this.characteristics = characteristics;
+		}
+	}
 }

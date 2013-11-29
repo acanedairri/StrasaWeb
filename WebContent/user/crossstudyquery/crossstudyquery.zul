@@ -1,0 +1,104 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="css/main.css"?>
+<zk>
+	<style>
+		.heavy { font-weight: bold; font-size: 12px; } .heavier {
+		font-weight: bold; font-size: 12px; } .searchLabel {font-size:
+		13px; }
+	</style>
+
+	<window width="98%" height="98%" title="Cross Study Query"
+		id="BrowseGermplasmWindowId" contentStyle="overflow:auto">
+		<html>
+			<br></br>
+		</html>
+		<vbox apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.strasa.web.crossstudyquery.view.model.CrossStudyQuery')"
+			spacing="10px">
+
+			<hbox width="98%">
+				<label value="Select Variable" />
+
+				<bandbox id="bd" autodrop="true" width="200px" vflex="1">
+					<bandpopup width="620px" height="330px">
+						<vbox>
+							<hbox>
+								Search
+								<textbox id='variableValue' onChange="@command('changeFilter',variable=event.value)"/>
+							</hbox>
+							<listbox id="variableListItem" sizedByContent="true" rows="10"  width="600px" height="300px"
+								onSelect="bd.value=self.selectedItem.label;bd.close();"
+								model="@load(vm.variablelist)">
+								<listhead sizable="true">
+									<listheader label="Variable" width="100px"  sort="auto"/>
+									<listheader label="Description" width="200px"/>
+									<listheader label="Property" />
+									<listheader label="Scale" />
+									<listheader label="Method" />
+								</listhead>
+								<template name="model">
+									<listitem>
+
+										<listcell
+											label="${each.variablecode}" />
+										<listcell
+											label="${each.description}" />
+										<listcell
+											label="${each.property}" />
+										<listcell
+											label="${each.scale}" />
+										<listcell
+											label="${each.method}" />
+
+									</listitem>
+								</template>
+
+							</listbox>
+						</vbox>
+					</bandpopup>
+				</bandbox>
+
+
+				<label value="Operator" />
+				<combobox id="cmbOperator" visible="true">
+					<comboitem label="Equal" />
+					<comboitem label="Not Equal" />
+					<comboitem label="Greater Than" />
+					<comboitem label="Greater Than Equal" />
+				</combobox>
+				<label value="Value" />
+				<textbox id='txtVaribleValue' width="150px"
+					value="@bind(vm.variableValue)" visible="true" />
+
+			</hbox>
+
+			<groupbox mold="3d" width="98%">
+				<caption label="Criteria" />
+				<grid height="200px"
+					model="@load(vm.crossStudyFilterModelList)"
+					emptyMessage="No Record Found">
+
+					<columns>
+						<column label="Variable" width="150px" />
+						<column label="Operator" />
+						<column label="Value" />
+						<column label="Action" />
+
+					</columns>
+					<template name="model">
+						<row>
+							<label value="@load(each.variable)" />
+							<label value="@load(each.operator)" />
+							<label value="@load(each.value)" />
+							<label value="Delete" />
+						</row>
+					</template>
+				</grid>
+			</groupbox>
+
+		</vbox>
+
+	</window>
+
+
+</zk>

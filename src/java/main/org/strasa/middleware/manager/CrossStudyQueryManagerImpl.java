@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
+import org.strasa.middleware.model.StudyVariable;
 import org.strasa.web.crossstudyquery.view.model.CrossStudyQueryFilterModel;
 
 public class CrossStudyQueryManagerImpl {
@@ -25,7 +26,15 @@ public class CrossStudyQueryManagerImpl {
 		
 		
 	}
-
 	
+	public List<StudyVariable> getStudyVariable(){
+			StudyVariableManagerImpl mgr= new StudyVariableManagerImpl();
+			return mgr.getVariables();
+	}
+
+	public List<StudyVariable> getStudyVariableLike(String variable){
+		StudyVariableManagerImpl mgr= new StudyVariableManagerImpl();
+		return mgr.getVariablesLike(variable);
+}
 
 }
