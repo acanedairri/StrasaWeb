@@ -1,5 +1,6 @@
 package org.strasa.web.browsestudy.view.model;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,12 +12,16 @@ import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
 import org.strasa.middleware.manager.StudyFileManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.model.StudyDataColumn;
+import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.ExecutionArgParam;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zul.Filedownload;
 
 public class RawData {
 
@@ -129,6 +134,40 @@ public class RawData {
 		setStudyName(studyMan.getStudyById(studyId).getName());
 	}
 
+
+	@Command
+	public void exportRawData(@BindingParam("columns")List<String> columns, @BindingParam("rows")List<String[]> rows, @BindingParam("studyName") String studyName, @BindingParam("dataType") String dataType){
+//		List<String[]> grid = new ArrayList<String[]>();
+//		grid.addAll(rows);
+//		grid.add(0,columns.toArray(new String[columns.size()]));
+		
+		List<String[]> grid = rows;
+		
+		StringBuffer sb = new StringBuffer();
+
+		System.out.println("creating File...");
+			int ctr=0;
+			for (String s : columns) {
+				ctr++;
+				sb.append(s);
+				if(ctr!=columns.size()) sb.append(",");
+			}
+			sb.append("\n");
+	
+		for (String[] row : grid) {
+			ctr=0;
+			for (String s : row) {
+				ctr++;
+				sb.append(s);
+				if(ctr!=row.length) sb.append(",");
+			}
+			sb.append("\n");
+		}
+		
+		System.out.println("downloading File...");
+		   Filedownload.save(sb.toString().getBytes(), "text/plain", studyName+"_rawData.csv");
+	}
+	
 	public String getFilePath() {
 		return filePath;
 	}

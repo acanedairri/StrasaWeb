@@ -13,6 +13,8 @@ import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
 import org.strasa.middleware.manager.StudyFileManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.model.StudyDataColumn;
+import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.ExecutionArgParam;
@@ -133,6 +135,37 @@ public class DerivedData {
 		setStudyName(studyMan.getStudyById(studyId).getName());
 	}
 
+	@Command
+	public void exportDerivedData(@BindingParam("columns")List<String> columns, @BindingParam("rows")List<String[]> rows, @BindingParam("studyName") String studyName, @BindingParam("dataType") String dataType){
+//		List<String[]> grid = new ArrayList<String[]>();
+//		grid.addAll(rows);
+//		grid.add(0,columns.toArray(new String[columns.size()]));
+		
+		List<String[]> grid = rows;
+		
+		StringBuffer sb = new StringBuffer();
+
+		System.out.println("creating File...");
+			int ctr=0;
+			for (String s : columns) {
+				ctr++;
+				sb.append(s);
+				if(ctr!=columns.size()) sb.append(",");
+			}
+			sb.append("\n");
+	
+		for (String[] row : grid) {
+			ctr=0;
+			for (String s : row) {
+				ctr++;
+				sb.append(s);
+				if(ctr!=row.length) sb.append(",");
+			}
+			sb.append("\n");
+		}
+		System.out.println("downloading File...");
+		   Filedownload.save(sb.toString().getBytes(), "text/plain", studyName+"_derivedData.csv");
+	}
 	public String getFilePath() {
 		return filePath;
 	}

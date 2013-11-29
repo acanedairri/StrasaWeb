@@ -22,7 +22,7 @@
 				<column label="Male Parent "/>
 				<column label="Selection History " />
 				<column label="Source " />
-				<column label="Characteristic " />
+<!-- 				<column label="Characteristic " /> -->
 
 			</columns>
 			<template name="model">
@@ -39,7 +39,7 @@
 					<label value="@load(each.maleparent)" />
 					<label value="@load(each.selectionhistory)" />
 					<label value="@load(each.source)" />
-					<label value="@load(each.characteristics)" />
+<!-- 					<label value="@load(each.characteristics)" /> -->
 
 				</row>
 			</template>

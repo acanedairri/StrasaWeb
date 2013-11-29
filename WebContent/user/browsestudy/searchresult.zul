@@ -2,33 +2,44 @@
 
 	<window id="searchResultWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchResult')">
-
-		<grid height="350px" model="@load(vm.searchResult)" sizedByContent="true" emptyMessage="No study site found.">
-			<auxhead>
-				<auxheader label="Search Result" colspan="8"  align="center"/>
-			</auxhead>
-			<columns>
-				<column label="Study Name" />
-				<column label="Program" />
-				<column label="Project" />
-				<column label="Study Type" />
-				<column label="Country" />
-				<column label="Location" />
-				<column label="Start Year" />
-				<column label="End Year" />
-			</columns>
-			<template name="model">
-				<row>
-					<toolbarbutton label="@load(each.studyname)" width="99%" onClick="@global-command('openNewSearchInfoTab', studyId=each.id, studyName=each.studyname)" />
-					<label value="@load(each.programname)" width="99%" />
-					<label value="@load(each.projectname)" width="99%" />
-					<label value="@load(each.studytypename)" width="99%" />
-					<label value="@load(each.country)" width="99%" />
-					<label value="@load(each.locationname)" width="99%" />
-					<label value="@load(each.startyear)" width="99%" />
-					<label value="@load(each.endyear)" width="99%" />
-				</row>
-			</template>
-		</grid>
+		<groupbox mold="3d" width="98%">
+			<caption label="@load(vm.searchResultLabel)" />
+			<grid height="350px" model="@load(vm.searchResult)"
+				sizedByContent="true" emptyMessage="No study site found." style="overflow: auto">
+				<auxhead>
+					<auxheader label="Search Result" colspan="8"
+						align="center" />
+				</auxhead>
+				<columns>
+					<column label="Study Name" />
+					<column label="Program" />
+					<column label="Project" />
+					<column label="Study Type" />
+					<column label="Country" />
+					<column label="Location" />
+					<column label="Start Year" />
+					<column label="End Year" />
+				</columns>
+				<template name="model">
+					<row>
+						<toolbarbutton label="@load(each.studyname)"
+							width="99%"
+							onClick="@global-command('openNewSearchInfoTab', studyId=each.id, studyName=each.studyname)" />
+						<label value="@load(each.programname)"
+							width="99%" />
+						<label value="@load(each.projectname)"
+							width="99%" />
+						<label value="@load(each.studytypename)"
+							width="99%" />
+						<label value="@load(each.country)" width="99%" />
+						<label value="@load(each.locationname)"
+							width="99%" />
+						<label value="@load(each.startyear)"
+							width="99%" />
+						<label value="@load(each.endyear)" width="99%" />
+					</row>
+				</template>
+			</grid>
+		</groupbox>
 	</window>
 </zk>

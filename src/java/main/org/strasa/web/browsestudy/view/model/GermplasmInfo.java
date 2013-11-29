@@ -376,9 +376,10 @@ public class GermplasmInfo {
 			this.setSelectionhistory(s.getSelectionhistory());
 			this.setSource(s.getSource());
 			setType(getGermplasmTypeList().get(s.getGermplasmtypeid()));
-			sb.append(getGermplasmCharacteristics("Biotic", getGermplasmname()));
-			sb.append(getGermplasmCharacteristics("Abiotic", getGermplasmname()));
-			sb.append(getGermplasmCharacteristics("Grain", getGermplasmname()));
+			sb.append(" ");
+//			sb.append(getGermplasmCharacteristics("Biotic", getGermplasmname()));
+//			sb.append(getGermplasmCharacteristics("Abiotic", getGermplasmname()));
+//			sb.append(getGermplasmCharacteristics("Grain", getGermplasmname()));
 			
 			setCharacteristics(sb.toString());
 		}

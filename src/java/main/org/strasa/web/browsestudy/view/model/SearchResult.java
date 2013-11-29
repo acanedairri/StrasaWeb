@@ -1,5 +1,6 @@
 package org.strasa.web.browsestudy.view.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.strasa.middleware.manager.BrowseStudyManagerImpl;
@@ -21,8 +22,10 @@ import org.zkoss.zul.Messagebox;
 public class SearchResult {
 	private BrowseStudyManagerImpl browseStudyManagerImpl= new BrowseStudyManagerImpl();
 
-	private List<StudySearchResultModel> searchResult = null;
+	private List<StudySearchResultModel> searchResult = new ArrayList<StudySearchResultModel>();
 
+	private String searchResultLabel;
+	
 	@NotifyChange("*")
 	@GlobalCommand
 	public void updateSearchFilterResult(@BindingParam("searchFilter")StudySearchFilterModel searchFilter){
@@ -34,6 +37,7 @@ public class SearchResult {
 			searchFilter.startyear =  checkIfEmpty(searchFilter.startyear);
 
 			searchResult = browseStudyManagerImpl.getStudySearchResult(searchFilter);
+			setSearchResultLabel("Search Result:  "+ searchResult.size()+"  row(s) returned");
 			System.out.println("Size:"+searchResult.size());
 		}else{
 			Messagebox.show("Please filter your search.", "Search Filter too broad", Messagebox.OK, Messagebox.EXCLAMATION);
@@ -70,6 +74,7 @@ public class SearchResult {
 
 		searchResult = browseStudyManagerImpl.getStudySearchResult(searchFilter);
 		System.out.println("Size:"+searchResult.size());
+		setSearchResultLabel("Search Result:  "+ searchResult.size()+"  row(s) returned");
 
 	}
 	@NotifyChange("*")
@@ -81,6 +86,7 @@ public class SearchResult {
 		searchFilter.setStudytypeid(studyTypeId);
 		searchResult = browseStudyManagerImpl.getStudySearchResult(searchFilter);
 		System.out.println("Result "+summary.toString());
+		setSearchResultLabel("Search Result:  "+ searchResult.size()+"  row(s) returned");
 
 	}
 	private String checkIfEmpty(String string) {
@@ -108,5 +114,13 @@ public class SearchResult {
 
 	public void setBrowseStudyManagerImpl(BrowseStudyManagerImpl browseStudyManagerImpl) {
 		this.browseStudyManagerImpl = browseStudyManagerImpl;
+	}
+
+	public String getSearchResultLabel() {
+		return searchResultLabel;
+	}
+
+	public void setSearchResultLabel(String searchResultLabel) {
+		this.searchResultLabel = searchResultLabel;
 	}
 }

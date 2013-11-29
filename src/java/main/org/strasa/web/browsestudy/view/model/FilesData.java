@@ -77,11 +77,16 @@ public class FilesData {
 
 	@GlobalCommand
 	public void exportData(@BindingParam("columns")List<String> columns, @BindingParam("rows")List<String[]> rows, @BindingParam("studyName") String studyName, @BindingParam("dataType") String dataType){
-		List<String[]> grid = new ArrayList<String[]>();
-		grid.addAll(rows);
+//		List<String[]> grid = new ArrayList<String[]>();
+//		grid.addAll(rows);
+//		grid.add(0,columns.toArray(new String[columns.size()]));
+		
+		List<String[]> grid = rows;
 		grid.add(0,columns.toArray(new String[columns.size()]));
+		
 		StringBuffer sb = new StringBuffer();
 
+		System.out.println("creating File...");
 		for (String[] row : grid) {
 			int ctr=0;
 			for (String s : row) {
@@ -91,7 +96,7 @@ public class FilesData {
 			}
 			sb.append("\n");
 		}
-
+		System.out.println("downloading File...");
 		if(dataType.equals("rd"))    Filedownload.save(sb.toString().getBytes(), "text/plain", studyName+"_rawData.csv");
 		else  Filedownload.save(sb.toString().getBytes(), "text/plain", studyName+"_derivedData.csv");
 	}
