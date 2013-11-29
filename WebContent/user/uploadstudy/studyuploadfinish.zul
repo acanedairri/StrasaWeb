@@ -1,4 +1,16 @@
 <zk>
-					<label  value="Study Upload has been completed."  style="font-size:24pt"/>
+
 	
+
+
+	<div>
+		<vlayout>
+			<label value="Study Upload has been completed."
+				style="font-size:16pt" />
+			<hlayout>
+				<button label="Upload new Study" onClick=""></button>
+				<button label="Upload new data" onClick=""></button>
+			</hlayout>
+		</vlayout>
+	</div>
 </zk>

@@ -5,7 +5,7 @@
 
 		<groupbox>
 			<button id="uploadGenotype" upload="true"
-				label="Upload Germplasm Table"
+				label="Import Germplasm Table"
 				onUpload="@command('uploadGenotypeData')" />
 			<separator></separator>
 			<hlayout spacing="50px">
