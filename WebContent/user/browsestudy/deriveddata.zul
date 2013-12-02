@@ -3,7 +3,7 @@
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.DerivedData')">
 		<grid model="@bind(vm.dataList)" sizedByContent="true" height="360px"
 			emptyMessage="No data loaded..." >
-			<columns children="@load(vm.columnList)">
+			<columns children="@load(vm.columnList)" sizable="true">
 				<template name="children">
 					<column hflex="1" label="@load(each)" />
 				</template>

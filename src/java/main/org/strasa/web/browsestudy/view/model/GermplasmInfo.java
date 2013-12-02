@@ -288,7 +288,7 @@ public class GermplasmInfo {
 
 		if(germplasmCharateristics.size() > 0){
 			for(GermplasmCharacteristics key:germplasmCharateristics){
-				toreturn+=key.getValue()+" ,";
+				toreturn+=key.getKeyvalue()+" ,";
 			}
 			return toreturn.substring(0,toreturn.length()-1);
 		}
