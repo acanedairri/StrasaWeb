@@ -749,12 +749,12 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 			for (GermplasmCharacteristics charRecord : lstChar) {
 				if (charMap.containsKey(charRecord.getAttribute())) {
 					charMap.get(charRecord.getAttribute()).add(
-							charRecord.getValue());
+							charRecord.getKeyvalue());
 				} else {
 					charMap.put(charRecord.getAttribute(),
 							new ArrayList<String>());
 					charMap.get(charRecord.getAttribute()).add(
-							charRecord.getValue());
+							charRecord.getKeyvalue());
 				}
 			}
 			for (Entry<String, ArrayList<String>> entry : charMap.entrySet()) {
@@ -825,7 +825,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 					rec.setAttribute("Abiotic");
 					rec.setGermplasmname(this.getGermplasmname());
-					rec.setValue(model.name);
+					rec.setKeyvalue(model.name);
 					lstCharacteristics.add(rec);
 				}
 			}
@@ -835,7 +835,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 					rec.setAttribute("Biotic");
 					rec.setGermplasmname(this.getGermplasmname());
-					rec.setValue(model.name);
+					rec.setKeyvalue(model.name);
 					lstCharacteristics.add(rec);
 				}
 			}
@@ -845,7 +845,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 					rec.setAttribute("Grain Quality");
 					rec.setGermplasmname(this.getGermplasmname());
-					rec.setValue(model.name);
+					rec.setKeyvalue(model.name);
 					lstCharacteristics.add(rec);
 				}
 			}
@@ -855,7 +855,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 					rec.setAttribute("Major Genes");
 					rec.setGermplasmname(this.getGermplasmname());
-					rec.setValue(model.name);
+					rec.setKeyvalue(model.name);
 					lstCharacteristics.add(rec);
 				}
 			}

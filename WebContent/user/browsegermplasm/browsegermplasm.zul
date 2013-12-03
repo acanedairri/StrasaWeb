@@ -4,7 +4,18 @@
 	<style>
 		.heavy { font-weight: bold; font-size: 12px; } .heavier {
 		font-weight: bold; font-size: 12px; } .searchLabel {font-size:
-		13px; }
+		13px; } .z-toolbarbutton-cnt { color: #000080;
+		text-decoration:underline; font-size: 12px; font-weight: bold;
+
+		}
+		<!-- 		.z-toolbarbutton-over .z-toolbarbutton-cnt { -->
+		<!-- 		background-image:none; background-color: #cff791; -->
+
+		<!-- 		} -->
+		<!-- 		.z-toolbarbutton-select .z-toolbarbutton-cnt { -->
+		<!-- 		background-image:none; background-color: red; -->
+
+		<!-- 		} -->
 	</style>
 
 	<window width="98%" height="98%" title="Browse Germplasm"
@@ -59,6 +70,108 @@
 					</template>
 				</combobox>
 
+				<vbox>
+
+					<tabbox height="200px" id="keyCharacteristicsOptions" visible="false" width="4alex00px">
+						<tabs>
+							<tab label="Abiotic Stress" />
+							<tab label="Biotic Stress" />
+							<tab label="Grain Quality" />
+							<tab label="Major Genes" />
+						</tabs>
+						<tabpanels>
+							<tabpanel height="300px">
+								<listbox model="@load(vm.keyAbioticList)"
+									width="200px" vflex="1" sizedByContent="true">
+									<listhead>
+										<listheader label="Select" />
+										<listheader label="Characteristics" />
+										
+									</listhead>
+									<template name="model">
+										<listitem>
+											
+											<listcell>
+												<checkbox
+													checked="@bind(each.value)">
+												</checkbox>
+											</listcell>
+											<listcell
+												label="@load(each.name)" />
+										</listitem>
+
+									</template>
+								</listbox>
+							</tabpanel>
+							<tabpanel>
+								<listbox model="@load(vm.keyBioticList)"  vflex="1" sizedByContent="true"
+									width="200px">
+									<listhead>
+										<listheader label="Select" />
+										<listheader label="Characteristics" />
+									</listhead>
+									<template name="model">
+										<listitem>
+											
+											<listcell>
+												<checkbox
+													checked="@bind(each.value)">
+												</checkbox>
+											</listcell>
+											<listcell
+												label="@load(each.name)" />
+										</listitem>
+
+									</template>
+								</listbox>
+							</tabpanel>
+							<tabpanel>
+								<listbox
+									model="@load(vm.keyGrainQualityList)" width="200px"  vflex="1" sizedByContent="true">
+									<listhead>
+										<listheader label="Select" />
+										<listheader label="Characteristic" />
+									</listhead>
+									<template name="model">
+										<listitem>
+											<listcell>
+												<checkbox
+													checked="@bind(each.value)">
+												</checkbox>
+											</listcell>
+											<listcell
+												label="@load(each.name)" />
+										</listitem>
+										
+
+									</template>
+								</listbox>
+							</tabpanel>
+							<tabpanel>
+								<listbox  vflex="1"
+									model="@load(vm.keyMajorGenesList)" width="200px" sizedByContent="true">
+									<listhead>
+										<listheader label="Select" />
+										<listheader label="Characteristics" />
+									</listhead>
+									<template name="model">
+										<listitem>
+											<listcell>
+												<checkbox
+													checked="@bind(each.value)">
+												</checkbox>
+											</listcell>
+											<listcell
+												label="@load(each.name)" />
+										</listitem>
+
+									</template>
+								</listbox>
+							</tabpanel>
+						</tabpanels>
+					</tabbox>
+				</vbox>
+
 
 
 				<button label="Search"
@@ -80,7 +193,9 @@
 					<template name="model">
 						<row
 							onClick="@command('DisplayGermplasmInfo', germplasmId=each.id,gname=each.germplasmname)">
-							<label value="@load(each.germplasmname)" />
+							<toolbarbutton
+								label="@load(each.germplasmname)" width="99%"
+								onClick="@command('DisplayGermplasmInfo', germplasmId=each.id,gname=each.germplasmname)" />
 							<label value="@load(each.othername)" />
 							<label value="@load(each.breeder)" />
 							<label value="@load(each.remarks)" />
@@ -210,7 +325,9 @@
 					<template name="model">
 						<row
 							onClick="@command('DisplayStudyDetail', studyid=1,studyname=each.studyname)">
-							<label value="@load(each.studyname)" />
+							<toolbarbutton label="@load(each.studyname)"
+								width="99%"
+								onClick="@command('DisplayStudyDetail', studyid=1,studyname=each.studyname)" />
 							<label value="@load(each.programname)" />
 							<label value="@load(each.projectname)" />
 							<label value="@load(each.studytypename)" />

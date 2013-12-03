@@ -1,15 +1,14 @@
 package org.strasa.web.germplasmquery.view.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import org.strasa.middleware.manager.BrowseGermplasmManagerImpl;
-import org.strasa.middleware.manager.BrowseStudyManagerImpl;
 import org.strasa.middleware.manager.GermplasmCharacteristicMananagerImpl;
 import org.strasa.middleware.manager.GermplasmManagerImpl;
 import org.strasa.middleware.manager.GermplasmTypeManagerImpl;
+import org.strasa.middleware.manager.KeyCharacteristicManagerImpl;
 import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.GermplasmCharacteristics;
 import org.strasa.middleware.model.GermplasmType;
@@ -58,12 +57,18 @@ public class BrowseGermplasm {
 	private final static String GRAIN_QUALITY="Grain Quality";
 	private final static String MAJOR_GENES="Major Genes";
 	private String searchResultLabel="Search Result";
+	private List<CharacteristicModel> keyAbioticList;
+	private List<CharacteristicModel> keyBioticList;
+	private List<CharacteristicModel> keyGrainQualityList;
+	private List<CharacteristicModel> keyMajorGenesList;
+	private List<String> listKeyCharFilter= new ArrayList<String>();
 
 	@Init
 	public void setInitialData(){
 		this.germplasmList=getGermplasmByName("");
 		this.germplasm=getGermplasmDetailInformation(-1);
 		this.germplasmType=getGermplasmTypeList();
+		populateKeyCharacteristics();
 	}
 
 
@@ -193,6 +198,51 @@ public class BrowseGermplasm {
 	}
 
 
+
+
+
+
+	public List<CharacteristicModel> getKeyAbioticList() {
+		return keyAbioticList;
+	}
+
+
+	public void setKeyAbioticList(List<CharacteristicModel> keyAbioticList) {
+		this.keyAbioticList = keyAbioticList;
+	}
+
+
+	public List<CharacteristicModel> getKeyBioticList() {
+		return keyBioticList;
+	}
+
+
+	public void setKeyBioticList(List<CharacteristicModel> keyBioticList) {
+		this.keyBioticList = keyBioticList;
+	}
+
+
+	public List<CharacteristicModel> getKeyGrainQualityList() {
+		return keyGrainQualityList;
+	}
+
+
+	public void setKeyGrainQualityList(List<CharacteristicModel> keyGrainQualityList) {
+		this.keyGrainQualityList = keyGrainQualityList;
+	}
+
+
+	public List<CharacteristicModel> getKeyMajorGenesList() {
+		return keyMajorGenesList;
+	}
+
+
+	public void setKeyMajorGenesList(List<CharacteristicModel> keyMajorGenesList) {
+		this.keyMajorGenesList = keyMajorGenesList;
+	}
+
+
+	@NotifyChange("keyAbioticList,keyBioticList,keyGrainQualityList,keyMajorGenesList")
 	@Command
 	public void SetSearchUI(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view) {
@@ -203,18 +253,72 @@ public class BrowseGermplasm {
 			component.getFellow("cmbKeyChar").setVisible(false);
 			component.getFellow("cmbKeyCharValue").setVisible(false);
 			component.getFellow("cmbGermplasmType").setVisible(false);
+			component.getFellow("keyCharacteristicsOptions").setVisible(false);
 		}else if(cmbSearchKey.getValue().contains("Key")){
 			component.getFellow("txtNameSearch").setVisible(false);
-			component.getFellow("cmbKeyChar").setVisible(true);
-			component.getFellow("cmbKeyCharValue").setVisible(true);
+			component.getFellow("cmbKeyChar").setVisible(false);
+			component.getFellow("cmbKeyCharValue").setVisible(false);
 			component.getFellow("cmbGermplasmType").setVisible(false);
+			component.getFellow("keyCharacteristicsOptions").setVisible(true);
+
 		}else{
 			component.getFellow("txtNameSearch").setVisible(false);
 			component.getFellow("cmbKeyChar").setVisible(false);
 			component.getFellow("cmbKeyCharValue").setVisible(false);
 			component.getFellow("cmbGermplasmType").setVisible(true);
+			component.getFellow("keyCharacteristicsOptions").setVisible(false);
 		}
 	}
+
+	private void populateKeyCharacteristics() {
+		KeyCharacteristicManagerImpl keyMan = new KeyCharacteristicManagerImpl();
+		List<KeyBiotic> keyBiotic = keyMan.getAllBiotic();
+		List<KeyAbiotic> keyAbiotic= keyMan.getAllAbiotic();
+		List<KeyGrainQuality> keyGrainQuality = keyMan.getAllGrainQuality();
+		List<KeyMajorGenes> keyMajorGenes = keyMan.getAllMajorGenes();
+
+		keyAbioticList = new ArrayList<CharacteristicModel>();
+		keyBioticList=new ArrayList<CharacteristicModel>();;
+		keyGrainQualityList=new ArrayList<CharacteristicModel>();;
+		keyMajorGenesList=new ArrayList<CharacteristicModel>();;
+		
+		for (KeyBiotic m : keyBiotic) {
+			CharacteristicModel charKey= new CharacteristicModel();
+			charKey.setName(m.getValue());
+			charKey.setPrimaryid(m.getId());
+			charKey.setValue(false);
+			keyBioticList.add(charKey);
+		}
+
+		for (KeyAbiotic m : keyAbiotic) {
+			CharacteristicModel charKey= new CharacteristicModel();
+			charKey.setName(m.getValue());
+			charKey.setPrimaryid(m.getId());
+			charKey.setValue(false);
+			keyAbioticList.add(charKey);
+		}
+		
+		for (KeyGrainQuality m : keyGrainQuality) {
+			CharacteristicModel charKey= new CharacteristicModel();
+			charKey.setName(m.getValue());
+			charKey.setPrimaryid(m.getId());
+			charKey.setValue(false);
+			keyGrainQualityList.add(charKey);
+		}
+		
+		for (KeyMajorGenes m : keyMajorGenes) {
+			CharacteristicModel charKey= new CharacteristicModel();
+			charKey.setName(m.getValue());
+			charKey.setPrimaryid(m.getId());
+			charKey.setValue(false);
+			keyMajorGenesList.add(charKey);
+		}
+
+	}
+
+
+
+
 
 	private  List<Germplasm> getGermplasmByName(String name){
 
@@ -253,16 +357,21 @@ public class BrowseGermplasm {
 			}
 		}else if(cmbSearchKey.getValue().contains("Key")){
 			Chosenbox keyValues= (Chosenbox) component.getFellow("cmbKeyCharValue");
-			Combobox cmbKeyChar= (Combobox) component.getFellow("cmbKeyChar");
-			Object[] keyCharList = keyValues.getSelectedObjects().toArray();
-			if(keyCharList.length > 0){
-				ArrayList<String> list= new ArrayList<String>();
-				for(Object s: keyCharList){
-					list.add(s.toString());
-				}
-				this.germplasmList=getGermplasmByKeyCharacteristics(list,cmbKeyChar.getValue());
-			}else{
-				Messagebox.show("Please select values" ,"Warning",null,null,null,null); 
+//			Combobox cmbKeyChar= (Combobox) component.getFellow("cmbKeyChar");
+//			Object[] keyCharList = keyValues.getSelectedObjects().toArray();
+//			if(keyCharList.length > 0){
+//				ArrayList<String> list= new ArrayList<String>();
+//				for(Object s: keyCharList){
+//					list.add(s.toString());
+//				}
+//				this.germplasmList=getGermplasmByKeyCharacteristics(list,cmbKeyChar.getValue());
+//			}else{
+//				Messagebox.show("Please select values" ,"Warning",null,null,null,null); 
+//			}
+			
+			getKeyCharacteristicsSelected();
+			for(String s:listKeyCharFilter){
+				System.out.println(s);
 			}
 
 		}else if(cmbSearchKey.getValue().equals("Type")){
@@ -276,8 +385,44 @@ public class BrowseGermplasm {
 		}
 
 		searchResultLabel="Search Result:  "+this.germplasmList.size()+"  row(s) returned";
+		if(this.germplasmList.size()==1){
+			DisplayGermplasmInfo(component, view, this.germplasmList.get(0).getId(), this.germplasmList.get(0).getGermplasmname());
+		}else{
+			DisplayGermplasmInfo(component, view, -1, "");
+			Groupbox groupBoxInfo= (Groupbox) component.getFellow("GermplasmDetailId");
+			groupBoxInfo.setVisible(false);
+
+			Groupbox groupBoxStudyTested= (Groupbox) component.getFellow("StudyTestedId");
+			groupBoxStudyTested.setVisible(false);
+		}
 
 	}
+
+	private void getKeyCharacteristicsSelected() {
+		
+		for(CharacteristicModel keyValue:keyAbioticList){
+			if(keyValue.isValue()){
+				listKeyCharFilter.add(keyValue.name);
+			}
+		}
+		for(CharacteristicModel keyValue:keyBioticList){
+			if(keyValue.isValue()){
+				listKeyCharFilter.add(keyValue.name);
+			}
+		}
+		for(CharacteristicModel keyValue:keyGrainQualityList){
+			if(keyValue.isValue()){
+				listKeyCharFilter.add(keyValue.name);
+			}
+		}
+		for(CharacteristicModel keyValue:keyMajorGenesList){
+			if(keyValue.isValue()){
+				listKeyCharFilter.add(keyValue.name);
+			}
+		}
+		
+	}
+
 
 	@Command("AddNewKeyCharacteristics")
 	public void AddNewKeyCharacteristics(@BindingParam("keyCharValue") String keyCharValue) {
@@ -289,7 +434,7 @@ public class BrowseGermplasm {
 
 
 
-	@NotifyChange("*")
+	@NotifyChange("germplasmList,studyTested")
 	@Command
 	public void getKeyCharacteristicOptionsList(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view) {
@@ -335,22 +480,24 @@ public class BrowseGermplasm {
 	}
 
 
+
+
 	@NotifyChange("*")
 	@Command
 	public void DisplayStudyDetail(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view,@BindingParam("studyid")Integer studyid,@BindingParam("studyname")String studyname){
 
-			
+
 		Window studyDetailWindow = (Window)Executions.getCurrent().createComponents(
 				"/user/browsegermplasm/studydetails.zul", null, null);
 		studyDetailWindow.doModal();
 		studyDetailWindow.setTitle(studyname);
-		
+
 		Include studyInformationPage = new Include();
 		studyInformationPage.setSrc("/user/browsestudy/studyinformation.zul");
 		studyInformationPage.setParent(studyDetailWindow);
 		studyInformationPage.setDynamicProperty("studyId", studyid);
-		
+
 
 
 
@@ -371,7 +518,7 @@ public class BrowseGermplasm {
 
 		if(germplasmCharateristics.size() > 0){
 			for(GermplasmCharacteristics key:germplasmCharateristics){
-				toreturn+=key.getValue()+" ,";
+				toreturn+=key.getKeyvalue()+" ,";
 			}
 			return toreturn.substring(0,toreturn.length()-1);
 		}
@@ -440,5 +587,38 @@ public class BrowseGermplasm {
 		}
 		return germplasmType;
 	}
+	
+	public class CharacteristicModel {
+		private String name;
+		private boolean value;
+		private int primaryid;
+
+		public int getPrimaryid() {
+			return primaryid;
+		}
+
+		public void setPrimaryid(int primaryid) {
+			this.primaryid = primaryid;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public boolean isValue() {
+			return value;
+		}
+
+		public void setValue(boolean value) {
+			this.value = value;
+
+		}
+
+	}
+
 
 }

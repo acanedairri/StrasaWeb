@@ -19,7 +19,7 @@
 		left join germplasmtype as t3 on
 		t1.germplasmtypeid=t3.id
 		where t2.attribute='Abiotic' and
-		t2.value in
+		t2.keyvalue in
 		<foreach item="item" index="index" collection="list" open="("
 			separator="," close=")">
 			#{item}
@@ -42,7 +42,7 @@
 		left join germplasmtype as t3 on
 		t1.germplasmtypeid=t3.id
 		where t2.attribute='Biotic' and
-		t2.value in
+		t2.keyvalue in
 		<foreach item="item" index="index" collection="list" open="("
 			separator="," close=")">
 			#{item}
@@ -65,7 +65,7 @@
 		left join germplasmtype as t3 on
 		t1.germplasmtypeid=t3.id
 		where t2.attribute='Grain Quality' and
-		t2.value in
+		t2.keyvalue in
 		<foreach item="item" index="index" collection="list" open="("
 			separator="," close=")">
 			#{item}
@@ -148,7 +148,7 @@
 		left join germplasmtype as t3 on
 		t1.germplasmtypeid=t3.id
 		where t2.attribute='Major Genes' and
-		t2.value
+		t2.keyvalue
 		in
 		<foreach item="item" index="index" collection="list" open="("
 			separator="," close=")">
@@ -161,7 +161,7 @@
 	<select id="getGermplasmKeyCharacteristicsByGermplasmName"
 		resultType="GermplasmCharacteristics" parameterType="GermplasmCharacteristics">
 		select distinct
-		germplasmname,attribute,value from germplasmcharacteristics where
+		germplasmname,attribute,keyvalue from germplasmcharacteristics where
 		attribute=#{attribute} and germplasmname=#{germplasmname}
 
 	</select>
