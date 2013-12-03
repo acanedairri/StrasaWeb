@@ -3,8 +3,8 @@
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudySiteInfo')">
 		<columnlayout>
 			<columnchildren width="65%">
-				<grid height="350px" model="@load(vm.sites)"
-					emptyMessage="No study site found.">
+				<grid id="mainGrid" height="350px"
+					model="@load(vm.sites)" emptyMessage="No study site found.">
 					<columns>
 						<column label="Site Name"
 							style="background-color:#FA807A;" />
@@ -34,10 +34,54 @@
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
 								if="${each.sitelocation.isEmpty()}" />
-							<toolbarbutton
-								label="@bind(each.sitelocation)" width="99%"
-								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-								unless="${each.sitelocation.isEmpty()}" />
+							<bandbox  value="@bind(each.selectedLocation)" onChange="@command('doLocationSearch',id=forEachStatus.index)" instant="true" autodrop="true" onOpen="@command('autoFillBandbox', id=forEachStatus.index)"  onClick="@command('openBandbox', id=forEachStatus.index)">
+								<bandpopup>
+									<vbox  width="40%">
+									
+										<grid  
+											model="@load(each.filteredLocations)" emptyMessage="No location is available. Please add your location." sizedByContent="true" hflex="true">
+											<columns>
+												<column
+													label="Location" />
+												<column label="Country" />
+												<column
+													label="Province" />
+												<column label="Region" />
+												<column
+													label="Altitude" />
+												<column
+													label="Latitude" />
+												<column
+													label="Weather Station" />
+											</columns>
+											<template name="model">
+												<row>
+													<label
+														value="@bind(each.locationname)" />
+													<label
+														value="@bind(each.country)" />
+
+													<label
+														value="@bind(each.province)" />
+
+													<label
+														value="@bind(each.region)" />
+
+													<label
+														value="@bind(each.altitude)" />
+
+													<label
+														value="@bind(each.latitude)" />
+
+													<label
+														value="@bind(each.weatherstation)" />
+
+												</row>
+											</template>
+										</grid>
+									</vbox>
+								</bandpopup>
+							</bandbox>
 
 							<textbox value="@bind(each.year)"
 								width="99%"
@@ -52,8 +96,8 @@
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
 								if="${each.season.isEmpty()}" />
-							<toolbarbutton
-								label="@bind(each.season)" width="99%"
+							<toolbarbutton label="@bind(each.season)"
+								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
 								unless="${each.season.isEmpty()}" />
 
