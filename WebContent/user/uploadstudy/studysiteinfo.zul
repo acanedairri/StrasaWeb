@@ -30,16 +30,21 @@
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
 								unless="${each.sitename.isEmpty()}" />
 
-							<textbox value="@bind(each.sitelocation)"
-								width="99%"
-								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-								if="${each.sitelocation.isEmpty()}" />
-							<bandbox  value="@bind(each.selectedLocation)" onChange="@command('doLocationSearch',id=forEachStatus.index)" instant="true" autodrop="true" onOpen="@command('autoFillBandbox', id=forEachStatus.index)"  onClick="@command('openBandbox', id=forEachStatus.index)">
+
+							<bandbox
+								value="@bind(each.selectedLocation.locationname)"
+								onChange="@command('doLocationSearch',id=forEachStatus.index)"
+								instant="true" autodrop="true"
+								onOpen="@command('autoFillBandbox', id=forEachStatus.index) "
+								onClick="@command('openBandbox', id=forEachStatus.index)">
 								<bandpopup>
-									<vbox  width="40%">
-									
-										<grid  
-											model="@load(each.filteredLocations)" emptyMessage="No location is available. Please add your location." sizedByContent="true" hflex="true">
+									<vbox width="40%">
+										<button label="Add Location"
+											onClick="@command('addLocation')" />
+										<grid
+											model="@load(each.filteredLocations)"
+											emptyMessage="No location is available. Please add your location."
+											sizedByContent="true" hflex="true">
 											<columns>
 												<column
 													label="Location" />
@@ -56,8 +61,9 @@
 											</columns>
 											<template name="model">
 												<row>
-													<label
-														value="@bind(each.locationname)" />
+													<toolbarbutton
+														label="@load(each.locationname)" width="99%"
+														onClick="@command('setLocationRow', id = each.id)" />
 													<label
 														value="@bind(each.country)" />
 

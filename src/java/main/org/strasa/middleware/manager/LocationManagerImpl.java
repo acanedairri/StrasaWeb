@@ -51,6 +51,18 @@ public class LocationManagerImpl {
 		}
 
 	}
+	public void addLocation(Location locationModel) {
+		// TODO Auto-generated method stub
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		LocationMapper locationMapper = session.getMapper(LocationMapper.class);
+		try{
+			locationMapper.insert(locationModel);
+		}
+		finally{
+			session.commit();
+			session.close();
+		}
+	}
 
 }
 

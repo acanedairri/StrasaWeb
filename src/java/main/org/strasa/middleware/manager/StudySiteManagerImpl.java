@@ -5,10 +5,20 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
+import org.strasa.middleware.mapper.LocationMapper;
+import org.strasa.middleware.mapper.PlantingTypeMapper;
+import org.strasa.middleware.mapper.StudyAgronomyMapper;
+import org.strasa.middleware.mapper.StudyDesignMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
+import org.strasa.middleware.model.PlantingTypeExample;
+import org.strasa.middleware.model.StudyAgronomyExample;
+import org.strasa.middleware.model.StudyDesignExample;
+import org.strasa.middleware.model.StudyDesignExample.Criteria;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudySite;
 import org.strasa.middleware.model.StudySiteExample;
+import org.strasa.web.uploadstudy.view.pojos.StudySiteInfoModel;
+
 
 public class StudySiteManagerImpl {
 
@@ -163,6 +173,52 @@ public class StudySiteManagerImpl {
 
 	}
 
+	public boolean isSiteRecordExist(int studyID){
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudySiteMapper siteMapper = session.getMapper(StudySiteMapper.class);
+		StudySiteExample ex = new StudySiteExample();
+		ex.createCriteria().andStudyidEqualTo(studyID);
+		System.out.println("Count: " + siteMapper.countByExample(ex) );
+		return (siteMapper.countByExample(ex) > 0);
+	}
+	public ArrayList<StudySiteInfoModel> getStudySiteByStudyId(int studyID){
+		ArrayList<StudySiteInfoModel> returnVal = new ArrayList<StudySiteInfoModel>();
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudySiteMapper siteMapper = session.getMapper(StudySiteMapper.class);
+		StudyAgronomyMapper agroMapper = session.getMapper(StudyAgronomyMapper.class);
+		StudyDesignMapper designMapper = session.getMapper(StudyDesignMapper.class);
+		PlantingTypeMapper plantMapper = session.getMapper(PlantingTypeMapper.class);
+		LocationMapper locationMapper = session.getMapper(LocationMapper.class);
+		StudySiteExample ex = new StudySiteExample();
+		ex.createCriteria().andStudyidEqualTo(studyID);
+		List<StudySite> lstSites = siteMapper.selectByExample(ex);
+		for(StudySite site : lstSites){
+			StudySiteInfoModel newData = new StudySiteInfoModel(site);
+			
+			//Site
+			
+			
+			//Design
+			 StudyDesignExample desEx = new StudyDesignExample();
+			desEx.createCriteria().andStudysiteidEqualTo(site.getId());
+			newData.selectedDesignInfo = designMapper.selectByExample(desEx).get(0);
+			//Agro
+			StudyAgronomyExample agroEx = new StudyAgronomyExample();
+			agroEx.createCriteria().andStudysiteidEqualTo(site.getId());
+			newData.selectedAgroInfo = agroMapper.selectByExample(agroEx).get(0);
+			//PlantingType
+			newData.selectedSitePlantingType =plantMapper.selectByPrimaryKey(newData.selectedAgroInfo.getPlantingtypeid());
+			//Location
+			newData.selectedLocation = locationMapper.selectByPrimaryKey(site.getLocationid());
+			returnVal.add(newData);
+			
+		}
+		
+		return returnVal;
+		
+	}
 	public ArrayList<StudyRawDataByDataColumn> getStudySiteByStudy(int studyId)
 			throws Exception {
 		StudyRawDataManagerImpl studyRawDataManagerImpl = new StudyRawDataManagerImpl(

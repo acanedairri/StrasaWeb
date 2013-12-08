@@ -1,0 +1,69 @@
+<zk>
+	<window title="Add Location" border="normal" closable="true"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.AddLocation')"
+		width="35%">
+
+
+		<grid vflex="1">
+			<columns>
+				<column label="Type" width="150px" />
+				<column label="Content" />
+			</columns>
+			<rows>
+				<row>
+					<label value="Location Name" width="150px" />
+					<textbox value='@bind(vm.locationModel.locationname)'
+						constraint="no empty" width="150px" />
+				</row>
+				<row>
+					<label value="Country" width="150px" />
+					<combobox model="@load(vm.cmbCountry)"
+						selectedItem="@bind(vm.locationModel.country)" width="99%"
+						unless="${each.id !=null}">
+						<template name="model" var="p1">
+							<comboitem value="@load(p1)"
+								label="@load(p1)" />
+						</template>
+					</combobox>
+				</row>
+				<row>
+					<label value="Province" width="150px" />
+					<textbox value='@bind(vm.locationModel.province)'
+						constraint="no empty" width="150px" />
+				</row>
+				<row>
+					<label value="Region" width="150px" />
+					<textbox
+						value='@bind(vm.locationModel.region)'
+						constraint="no empty" width="150px" />
+				</row>
+				<row>
+					<label value="Altitude" width="150px" />
+					<textbox value='@bind(vm.locationModel.altitude)'
+						constraint="no empty" width="150px" />
+				</row>
+				<row>
+					<label value="Latitude" width="150px" />
+					<textbox value='@bind(vm.locationModel.latitude)'
+						constraint="no empty" width="150px" />
+				</row>
+				<row>
+					<label value="Weather Station" width="150px" />
+					<textbox value='@bind(vm.locationModel.weatherstation)'
+						constraint="no empty" width="150px" />
+				</row>
+
+
+				<row>
+					<button label="Save" onClick="@command('add')"></button>
+					<button label="Cancel"
+						onClick="@command('cancel')">
+					</button>
+				</row>
+			</rows>
+		</grid>
+
+
+	</window>
+</zk>
