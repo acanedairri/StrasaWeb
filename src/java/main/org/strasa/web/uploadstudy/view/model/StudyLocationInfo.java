@@ -114,9 +114,15 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 		this.formValidator = formValidator;
 	}
 
+	public void initValues(ProcessTabViewModel uploadModel){
+		((ProcessTabViewModel)this).isRaw = uploadModel.isRaw;
+		((ProcessTabViewModel)this).uploadToFolder = uploadModel.uploadToFolder;
+		((ProcessTabViewModel)this).setStudyID(uploadModel.getStudyID());
+		
+		
+	}
 	@Init
-	public void init(@ExecutionArgParam("studyID") double studyID,
-			@ExecutionArgParam("isRaw") boolean isRaw) {
+	public void init(@ExecutionArgParam("uploadModel") ProcessTabViewModel uploadModel) {
 
 		System.out
 				.println("_______________________________________________________________");
