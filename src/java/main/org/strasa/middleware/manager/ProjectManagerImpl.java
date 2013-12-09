@@ -1,6 +1,7 @@
 package org.strasa.middleware.manager;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -117,6 +118,21 @@ public class ProjectManagerImpl {
 			example.createCriteria().andUseridEqualTo(userID).andProgramidEqualTo(programID).andNameEqualTo(name);
 			
 			return (projectMapper.countByExample(example) != 0 );
+		}finally{
+			session.close();
+		}
+	}
+
+
+	public List<Project>  getProjectByProgramId(Integer programId) {
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		ProjectMapper projectMapper = session.getMapper(ProjectMapper.class);
+		
+		try{
+			ProjectExample example= new ProjectExample();
+			example.createCriteria().andProgramidEqualTo(programId);
+			
+			return projectMapper.selectByExample(example);
 		}finally{
 			session.close();
 		}

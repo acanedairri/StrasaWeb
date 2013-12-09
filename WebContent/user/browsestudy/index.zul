@@ -24,22 +24,28 @@
 			</tabs>
 			<tabpanels id="tabPanels">
 				<tabpanel id="tabPanel1">
-					<hbox spacing="0" widths="25%,65%" height="100%"
-						hflex="1" vflex="1">
-						<include id="searchFilterPanel"
-							src="/user/browsestudy/searchfilter.zul" mode="defer" />
-						<splitter id="s2" collapse="before" />
-						<vbox spacing="0" width="100%" heights="35%,65%"
-							hflex="1" vflex="1">
-							<include id="summaryPanel"
-								src="/user/browsestudy/summary.zul" mode="defer"
-								progressing="true" />
-							<splitter id="s1" collapse="before" />
-							<include id="searchResultPanel"
-								src="/user/browsestudy/searchresult.zul" mode="defer"
-								progressing="true" />
-						</vbox>
-					</hbox>
+					<vbox spacing="0" width="100%" heights="5%, 30%,65%">
+						<toolbar id="tb" sclass="vista" height="30px"
+							align="start">
+							Search by study name:
+							<textbox />
+							<toolbarbutton
+								image="/images/browse_small.png" />
+							<label value="more advanced search"
+								tooltip="advancedSearch" />
+						</toolbar>
+						<popup id="advancedSearch" width="300px">
+							<include id="searchFilterPanel"
+								src="/user/browsestudy/searchfilter.zul" />
+						</popup>
+						<include id="summaryPanel"
+							src="/user/browsestudy/summary.zul" mode="defer"
+							progressing="true" />
+						<splitter id="s1" collapse="before" />
+						<include id="searchResultPanel"
+							src="/user/browsestudy/searchresult.zul" mode="defer"
+							progressing="true" />
+					</vbox>
 				</tabpanel>
 			</tabpanels>
 		</tabbox>

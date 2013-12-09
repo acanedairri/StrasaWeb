@@ -142,6 +142,16 @@ public class SearchFilter {
 		searchFilter.shared="";
 	}
 	
+	@NotifyChange("projectList")
+	@Command
+	public void updateLists(@BindingParam("programId") Integer programId){
+		setProjectList(projectMan.getProjectByProgramId(programId));
+//		setcountryList(countryMan.getCountryByProgramId(programId));
+//		countryList = countryMan.getAllCountry();
+//		locationList = locationMan.getAllLocations();
+	}
+	
+	
 	public boolean isValidation() {
 		return validation;
 	}
