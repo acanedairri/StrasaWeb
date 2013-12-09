@@ -20,8 +20,11 @@ import org.strasa.middleware.filesystem.manager.UserFileManager;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
+import org.strasa.middleware.manager.StudyGermplasmManagerImpl;
+import org.strasa.middleware.manager.StudyLocationManagerImpl;
 import org.strasa.middleware.manager.StudyManager;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
+import org.strasa.middleware.manager.StudySiteManagerImpl;
 import org.strasa.middleware.manager.StudyTypeManagerImpl;
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.Program;
@@ -34,23 +37,36 @@ import org.strasa.web.uploadstudy.view.pojos.UploadCSVDataVariableModel;
 import org.strasa.web.utilities.FileUtilities;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
+import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.UploadEvent;
+import org.zkoss.zk.ui.select.Selectors;
+import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Tabpanel;
 import org.zkoss.zul.Window;
 
 import au.com.bytecode.opencsv.CSVReader;
 
 public class UploadData extends ProcessTabViewModel {
 
+	//Wired Components
+	
+	@Wire("#gbUploadData")
+	Groupbox gbUploadData;
+	
 	private List<String> columnList = new ArrayList<String>();
 	public String dataFileName;
 	private List<String[]> dataList = new ArrayList<String[]>();
@@ -62,8 +78,14 @@ public class UploadData extends ProcessTabViewModel {
 	private ArrayList<GenotypeFileModel> genotypeFileList = new ArrayList<UploadData.GenotypeFileModel>();
 	private Program txtProgram = new Program();
 	private Project txtProject = new Project();
-
+	private boolean isDataUploaded = false;
 	
+	public boolean isDataUploaded() {
+		return isDataUploaded;
+	}
+	public void setDataUploaded(boolean isDataUploaded) {
+		this.isDataUploaded = isDataUploaded;
+	}
 	public Program getTxtProgram() {
 		return txtProgram;
 	}
@@ -409,6 +431,16 @@ public class UploadData extends ProcessTabViewModel {
 		popup.doModal();
 	}
 
+	@Command("showzulfile")
+	public void showzulfile(@BindingParam("zulFileName") String zulFileName,
+			@BindingParam("target") Tabpanel panel) {
+		if (panel != null && panel.getChildren().isEmpty()) {
+			 Map arg = new HashMap();
+		        arg.put("studyid", this.studyID);
+			Executions.createComponents(zulFileName, panel, arg);
+			
+		}
+	}
 	@Command("addProject")
 	public void addProject() {
 		
@@ -431,13 +463,20 @@ public class UploadData extends ProcessTabViewModel {
 		popup.doModal();
 	}
 
+	  @AfterCompose
+	    public void afterCompose(@ContextParam(ContextType.VIEW) Component view){
+	        Selectors.wireComponents(view, this, false);
+	  }
+	
 	@GlobalCommand
 	public void testGlobalCom(@BindingParam("newVal") double newVal) {
 		System.out.println("globalCom: " + newVal);
 	}
 
 	@Init
-	public void init(@ContextParam(ContextType.VIEW) Component view) {
+	public void init(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("uploadModel") ProcessTabViewModel uploadModel) {
+
+	    this.initValues(UploadData.this,uploadModel);
 		setMainView(view);
 
 		refreshProgramList(null);
@@ -474,10 +513,50 @@ public class UploadData extends ProcessTabViewModel {
 	@NotifyChange("*")
 	@Command("removeUpload")
 	public void removeUpload() {
+		Messagebox.show("Are you sure you want to delete the previous uploaded data? WARNING! This cannot be undone.", "Delete all data?", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener(){
+	            public void onEvent(Event e){
+	                if("onOK".equals(e.getName())){
+	            		isVariableDataVisible = false;
+	            		dataFileName = "";
+	            		isNewDataSet = true;
+	            		varData.clear();
+	            		 isDataUploaded = false;
+	            		 BindUtils.postGlobalCommand(null, null, "disableTabs", null);
+	            		 BindUtils.postNotifyChange(null, null, UploadData.this, "*");
+	            		 new StudyRawDataManagerImpl( studyType.equalsIgnoreCase("rawdata")).deleteByStudyId( study.getId());;
+	            		 new StudySiteManagerImpl( studyType.equalsIgnoreCase("rawdata")).removeSiteByStudyId(study.getId());
+	            		 new StudyLocationManagerImpl( studyType.equalsIgnoreCase("rawdata")).removeLocationByStudyId(study.getId());
+	            		 new StudyGermplasmManagerImpl().removeGermplasmByStudyId(study.getId());
+	            		 
+	                }else if("onCancel".equals(e.getName())){
+	                 
+	                }
+	                 
+	                /* Event Name Mapping list
+	                Messagebox.YES = "onYes";
+	                Messagebox.NO  = "onNo";
+	                Messagebox.RETRY = "onRetry";
+	                Messagebox.ABORT = "onAbort";
+	                Messagebox.IGNORE = "onIgnore";
+	                Messagebox.CANCEL = "onCancel";
+	                Messagebox.OK = "onOK";
+	                */
+	            }
+	        });
+
+	}
+	public void deleteAll(){
 		isVariableDataVisible = false;
 		dataFileName = "";
 		isNewDataSet = true;
 		varData.clear();
+		 isDataUploaded = false;
+		 BindUtils.postGlobalCommand(null, null, "disableTabs", null);
+		 new StudyRawDataManagerImpl( studyType.equalsIgnoreCase("rawdata")).deleteByStudyId( study.getId());;
+		 new StudySiteManagerImpl( studyType.equalsIgnoreCase("rawdata")).removeSiteByStudyId(study.getId());
+		 new StudyLocationManagerImpl( studyType.equalsIgnoreCase("rawdata")).removeLocationByStudyId(study.getId());
+		 new StudyGermplasmManagerImpl().removeGermplasmByStudyId(study.getId());
+		 
 	}
 
 	@NotifyChange("*")
@@ -494,7 +573,7 @@ public class UploadData extends ProcessTabViewModel {
 			rawData.remove(0);
 			dataList = new ArrayList<String[]>(rawData);
 			System.out.println(Arrays.toString(dataList.get(0)));
-
+			gbUploadData.invalidate();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -625,7 +704,8 @@ public class UploadData extends ProcessTabViewModel {
 				
 				new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), columnList.toArray(new String[columnList.size()]), isRawData);
 
-				 
+				isDataUploaded = true;
+				BindUtils.postNotifyChange(null, null, this, "*");
 				
 		
 		}

@@ -32,8 +32,7 @@
 			</tabs>
 			<tabpanels>
 				<tabpanel id = "tabpanel1">
-					<include mode="defer"
-						src="/user/uploadstudy/uploaddata.zul" />
+					
 				</tabpanel>
 				<tabpanel id = "tabpanel2"></tabpanel>
 				<tabpanel id = "tabpanel3"></tabpanel>

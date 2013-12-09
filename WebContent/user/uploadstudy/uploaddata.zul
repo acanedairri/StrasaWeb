@@ -118,21 +118,42 @@
 
 				</vlayout>
 			</groupbox>
+		<groupbox id="gbData" mold ="3d" width ="100%" >
+		<caption label="Uploaded Data" />
+		<panel width="100%" height="100%">
+			<panelchildren style="overflow: auto">
+				<tabbox id="tb" mold="accordion" height="100%">
+					<tabs>
+						<tab label="Derived Data" 
+						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/deriveddata.zul', target=self.linkedPanel)"/>
+						<tab label="Raw Data" 
+						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/rawdata.zul', target=self.linkedPanel)"/>
+					</tabs>
+					<tabpanels width="100%">
+					
+						<tabpanel style="overflow: auto">
+						</tabpanel>
+						<tabpanel style="overflow: auto">
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</panelchildren>
+		</panel>
+		</groupbox>
+			<groupbox id="gbUploadData" mold="3d" width="100%">
+				<caption label="Upload Data" />
+				<hlayout spacing="30px" height="" width="" vflex="true" hflex="true">
 
-			<groupbox id="gb" mold="3d" width="100%">
-				<caption label="Upload Option" />
-				<hlayout spacing="30px" height="120px">
-
-					<vlayout width="300px">
+					<vlayout width="100%" hflex="true" vflex="true">
 						<groupbox width="99%">
 							<caption label="Type of Data" />
 							<radiogroup
 								selectedItem="@bind(vm.studyType)">
 								<hlayout width="100%">
 									<radio label="Raw Data"
-										value="rawdata" selected="true" />
+										value="rawdata" selected="true"  disabled="@load(vm.dataUploaded)"/>
 									<radio label="Derived"
-										value="derived" />
+										value="derived"  disabled="@load(vm.dataUploaded)"/>
 								</hlayout>
 							</radiogroup>
 						</groupbox>
@@ -143,18 +164,14 @@
 								selectedItem="@bind(vm.uploadTo)">
 								<hlayout width="100%">
 									<radio label="Database"
-										value="database" selected="true" />
+										value="database" selected="true" disabled="@load(vm.dataUploaded)"/>
 									<radio label="Folder"
-										value="folder" />
+										value="folder" disabled="@load(vm.dataUploaded)"/>
 								</hlayout>
 							</radiogroup>
 						</groupbox>
 
-					</vlayout>
-
-				</hlayout>
-			</groupbox>
-			<groupbox id="grpUpload" mold="3d" width="100%">
+					<groupbox id="grpUpload" mold="3d" width="100%">
 				<caption label="Select Data" />
 				<label value=""></label>
 				<hlayout spacing="50px">
@@ -163,56 +180,47 @@
 
 							<vlayout width="100%" spacing="10px">
 								<hlayout>
-									<button id="uploadCSV" upload="true"
-										label="Browse" onUpload="@command('uploadCSV')" />
-									<label id="lblMsgUpload"
-										visible="@load(vm.variableDataVisible)"
-										value="@load(vm.dataFileName)" style="font-size:14pt;" />
-									<button label="Remove"
-										onClick="@command('removeUpload')  @global-command('disableTabs')"
-										visible="@load(vm.variableDataVisible)" />
-									<button label="Modify Header"
-										onClick="@command('modifyDataHeader')"
-										visible="@load(vm.variableDataVisible)" />
+									<button id="uploadCSV" upload="true" label="Browse" onUpload="@command('uploadCSV')" />
+									<label id="lblMsgUpload" visible="@load(vm.variableDataVisible)" value="@load(vm.dataFileName)" style="font-size:14pt;" />
+									<button label="Remove" onClick="@command('removeUpload') " visible="@load(vm.variableDataVisible)" />
+									<button label="Modify Header" onClick="@command('modifyDataHeader')" visible="@load(vm.variableDataVisible)" />
 								</hlayout>
 							</vlayout>
 						</radiogroup>
 					</vlayout>
 
 				</hlayout>
-			</groupbox>
-
-
-
-			<groupbox id="grpVariableData" mold="3d" width="100%"
-				height="450px" visible="@bind(vm.variableDataVisible)">
+			</groupbox><groupbox id="grpVariableData" mold="3d" width="100%" height="450px" visible="@bind(vm.variableDataVisible)">
 				<caption label="CSV Data Preview" />
 				<hlayout spacing="50px">
 					<vlayout>
-						<grid model="@bind(vm.dataList)" height="360px"
-							vflex="true" emptyMessage="No data loaded...">
+						<grid model="@bind(vm.dataList)" height="360px" vflex="true" emptyMessage="No data loaded...">
 							<columns children="@load(vm.columnList)">
 								<template name="children">
-									<column hflex="1"
-										label="@load(each)" />
+									<column hflex="1" label="@load(each)" />
 								</template>
 							</columns>
 							<rows children="@bind(vm.csvData)">
 								<template name="children" var="data">
 									<row>
-										<label forEach="${data}"
-											value="${each}" />
+										<label forEach="${data}" value="${each}" />
 									</row>
 								</template>
 							</rows>
 						</grid>
-						<paging pageSize="@load(vm.pageSize)"
-							totalSize="@load(vm.totalSize)"
-							activePage="@bind(vm.activePage)" />
+						<paging pageSize="@load(vm.pageSize)" totalSize="@load(vm.totalSize)" activePage="@bind(vm.activePage)" />
 
 					</vlayout>
 				</hlayout>
+			</groupbox></vlayout>
+
+				</hlayout>
 			</groupbox>
+			
+
+
+
+			
 			<groupbox id="grpUploadGenotypeData" width="100%"
 				mold="3d">
 				<caption label="Select Genotype Data" />

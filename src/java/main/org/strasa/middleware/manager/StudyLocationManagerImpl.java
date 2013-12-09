@@ -244,4 +244,23 @@ public class StudyLocationManagerImpl {
         
 	}
 
+	public void removeLocationByStudyId(Integer id) {
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudyLocationMapper studySiteMapper = session
+				.getMapper(StudyLocationMapper.class);
+
+		try {
+			StudyLocationExample example = new StudyLocationExample();
+			example.createCriteria().andStudyidEqualTo(id);
+			studySiteMapper.deleteByExample(example);
+			session.commit();
+		}
+		finally{
+			session.close();
+			
+		}
+		
+	}
+
 }

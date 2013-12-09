@@ -81,7 +81,7 @@ public class Index {
 	  @AfterCompose
 	    public void afterCompose(@ContextParam(ContextType.VIEW) Component view){
 	        Selectors.wireComponents(view, this, false);
-			Events.sendEvent("onSelect",tab1,tab1);
+	
 	        //wire event listener
 //	      Selectors.wireEventListeners(view, this);
 			
@@ -94,6 +94,12 @@ public class Index {
 			arrTabPanels.add(tabpanel4);
 
 			arrTabPanels.add(tabpanel5);
+			Events.sendEvent("onSelect",tab1,tab1);
+			
+			//editing mode
+			uploadModel = new ProcessTabViewModel();
+			uploadModel.setStudyID(3);
+			uploadModel.setUpdateMode(true);
 	    }
 	
 	 @NotifyChange("*")

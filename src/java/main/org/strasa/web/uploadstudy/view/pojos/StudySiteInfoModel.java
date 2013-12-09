@@ -243,8 +243,7 @@ public class StudySiteInfoModel extends StudySite {
 		public void setSelectedSitePlantingType(
 				PlantingType selectedSitePlantingType) {
 			this.selectedSitePlantingType = selectedSitePlantingType;
-
-			System.out.println(selectedSitePlantingType.getPlanting());
+			this.selectedAgroInfo.setPlantingtypeid(selectedSitePlantingType.getId());
 		}
 
 	}

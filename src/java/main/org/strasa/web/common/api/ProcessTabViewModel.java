@@ -12,11 +12,35 @@ public class ProcessTabViewModel {
 	public int studyID;
 	private Component mainView;
 	public boolean uploadToFolder = false;
-	public int dataset = 0;
+	public int dataset = 1;
+	public boolean isUpdateMode = false;
 	
 	public boolean isRaw() {
 		return isRaw;
 	}
+	
+	
+	public void initValues(ProcessTabViewModel currModel,ProcessTabViewModel uploadModel){
+		if(uploadModel == null){
+			return;
+		}
+		currModel.isRaw = uploadModel.isRaw;
+		currModel.uploadToFolder = uploadModel.uploadToFolder;
+		currModel.setStudyID(uploadModel.getStudyID());
+		currModel.setUpdateMode(uploadModel.isUpdateMode);
+		
+		
+	}
+
+	public boolean isUpdateMode() {
+		return isUpdateMode;
+	}
+
+
+	public void setUpdateMode(boolean isUpdateMode) {
+		this.isUpdateMode = isUpdateMode;
+	}
+
 
 	public void setRaw(boolean isRaw) {
 		this.isRaw = isRaw;

@@ -196,4 +196,22 @@ public class StudyGermplasmManagerImpl {
 		// return record.getId();
 	}
 
+	public void removeGermplasmByStudyId(Integer id) {
+		
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
+				.openSession();
+		StudyGermplasmMapper mapper = session
+				.getMapper(StudyGermplasmMapper.class);
+		StudyGermplasmExample ex = new StudyGermplasmExample();
+		try {
+			ex.createCriteria().andStudyidEqualTo(id);
+			mapper.deleteByExample(ex);
+			session.commit();
+		} finally {
+			session.close();
+		}
+		// TODO Auto-generated method stub
+		
+	}
+
 }

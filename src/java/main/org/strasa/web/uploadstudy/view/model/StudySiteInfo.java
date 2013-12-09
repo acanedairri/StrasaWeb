@@ -140,7 +140,9 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	public void setSelectedSitePlantingType(
 			PlantingType selectedSitePlantingType) {
 		this.selectedSitePlantingType = selectedSitePlantingType;
+		this.selectedAgroInfo.setPlantingtypeid(selectedSitePlantingType.getId());
 		this.sites.get(selectedID).selectedSitePlantingType = selectedSitePlantingType;
+		
 		if (selectedSitePlantingType.getPlanting().equals("Transplanting"))
 			labelDate = "Transplanting Date";
 		else if (selectedSitePlantingType.getId() == -1)
@@ -408,6 +410,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 					selectedAgroInfo.setStudysiteid(data.getId());
 					selectedDesignInfo.setStudysiteid(data.getId());
+					
 					studyAgroMan.addStudyAgronomy(selectedAgroInfo);
 					studyDesignMan.addStudyDesign(selectedDesignInfo);
 				} else {

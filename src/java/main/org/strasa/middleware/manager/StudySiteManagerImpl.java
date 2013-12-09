@@ -11,6 +11,7 @@ import org.strasa.middleware.mapper.StudyAgronomyMapper;
 import org.strasa.middleware.mapper.StudyDesignMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.model.PlantingTypeExample;
+import org.strasa.middleware.model.StudyAgronomy;
 import org.strasa.middleware.model.StudyAgronomyExample;
 import org.strasa.middleware.model.StudyDesignExample;
 import org.strasa.middleware.model.StudyDesignExample.Criteria;
@@ -50,9 +51,28 @@ public class StudySiteManagerImpl {
 		StudySiteMapper studySiteMapper = session
 				.getMapper(StudySiteMapper.class);
 
+		StudyAgronomyMapper agroMapper = session.getMapper(StudyAgronomyMapper.class);
+		StudyDesignMapper designMapper = session.getMapper(StudyDesignMapper.class);
+		PlantingTypeMapper plantMapper = session.getMapper(PlantingTypeMapper.class);
+		
 		try {
+			
 			StudySiteExample example = new StudySiteExample();
 			example.createCriteria().andStudyidEqualTo(studyID);
+			List<StudySite> lstSite = studySiteMapper.selectByExample(example);
+			for(StudySite site: lstSite){
+				StudyAgronomyExample agEx = new StudyAgronomyExample();
+				agEx.createCriteria().andStudysiteidEqualTo(site.getId());
+				List<StudyAgronomy> lstAgronomies = agroMapper.selectByExample(agEx);
+			
+				agroMapper.deleteByExample(agEx);
+				StudyDesignExample designEx = new StudyDesignExample();
+				designEx.createCriteria().andStudysiteidEqualTo(site.getId());
+				designMapper.deleteByExample(designEx);
+			}
+			
+			
+			
 			studySiteMapper.deleteByExample(example);
 			session.commit();
 		}
