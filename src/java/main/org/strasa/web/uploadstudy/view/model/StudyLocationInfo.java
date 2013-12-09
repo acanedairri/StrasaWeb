@@ -27,9 +27,9 @@ import com.mysql.jdbc.StringUtils;
 
 public class StudyLocationInfo extends ProcessTabViewModel {
 
-	private int studyId;
+
 	private FormValidator formValidator = new FormValidator();
-	private boolean isRaw = false;
+
 	private boolean noLocation;
 	private List<Location> lstUnknownLocations = new ArrayList<Location>();
 	private List<Location> lstLocations = new ArrayList<Location>();
@@ -102,7 +102,7 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 		}
 
 	
-		studyLocationManager.updateStudyLocation(lstLocations, studyId);
+		studyLocationManager.updateStudyLocation(lstLocations, studyID);
 		return true;
 	}
 
@@ -124,6 +124,7 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 	@Init
 	public void init(@ExecutionArgParam("uploadModel") ProcessTabViewModel uploadModel) {
 
+		initValues(uploadModel);
 		System.out
 				.println("_______________________________________________________________");
 		System.out.println("Staring debugging :"
@@ -133,12 +134,7 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 		System.out.println("Raw: " + isRaw);
 		System.out.println("StudyID: " + studyID);
 
-		this.isRaw = isRaw;
-		studyId = (int) studyID;
-		// public void init(){
-		//
-		// this.isRaw = true;
-		// mockStudyId = 45;
+
 
 		studyLocationManager = new StudyLocationManagerImpl(isRaw);
 		List<Country> lCountries = getCountryList();
@@ -146,7 +142,7 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 			cmbCountry.add(data.getIsoabbr());
 		}
 		
-		lstLocations.addAll(studyLocationManager.getLocationsFromStudySite(studyId));
+		lstLocations.addAll(studyLocationManager.getLocationsFromStudySite(studyID));
 		
 
 	}
