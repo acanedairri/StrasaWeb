@@ -621,7 +621,7 @@ public class UploadData extends ProcessTabViewModel {
 		if (uploadTo.equals("database")) {
 
 				if(isNewDataSet)
-				studyRawData.addStudyRawData(study,columnList.toArray(new String[columnList.size()]),dataList);
+				studyRawData.addStudyRawData(study,columnList.toArray(new String[columnList.size()]),dataList,this.dataset);
 				
 				new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), columnList.toArray(new String[columnList.size()]), isRawData);
 

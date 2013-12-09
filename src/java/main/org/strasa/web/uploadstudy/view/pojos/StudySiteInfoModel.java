@@ -59,6 +59,8 @@ public class StudySiteInfoModel extends StudySite {
 
 		public void setSelectedLocation(Location selectedLocation) {
 			this.selectedLocation = selectedLocation;
+			this.setSitelocation(selectedLocation.getLocationname());
+			this.setLocationid(selectedLocation.getId());
 		}
 
 		public boolean isYearAuto() {
@@ -108,9 +110,13 @@ public class StudySiteInfoModel extends StudySite {
 			if (StringUtils.isNullOrEmpty(this.getSitename())) {
 				return "Error: Site Name  must not be empty! ";
 			}
-			if (StringUtils.isNullOrEmpty(this.getSitelocation())) {
+			if (StringUtils.isNullOrEmpty(this.selectedLocation.getLocationname())) {
 				return "Error: Location in " + this.getSitename()
 						+ " must not be empty! ";
+			}
+			if (this.selectedLocation.getId() == null) {
+				return "Error: Location in " + this.getSitename()
+						+ " does not exist in the database. Please add your location first or select any existing location.";
 			}
 			if (StringUtils.isNullOrEmpty(this.getYear())) {
 				return "Error: Year in " + this.getSitename()

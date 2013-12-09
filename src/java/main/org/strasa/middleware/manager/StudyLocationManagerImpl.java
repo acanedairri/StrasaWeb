@@ -1,17 +1,22 @@
 package org.strasa.middleware.manager;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.LocationMapper;
 import org.strasa.middleware.mapper.StudyLocationMapper;
+import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.LocationExample;
 import org.strasa.middleware.model.StudyLocation;
 import org.strasa.middleware.model.StudyLocationExample;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
+import org.strasa.middleware.model.StudySite;
+import org.strasa.middleware.model.StudySiteExample;
 
 public class StudyLocationManagerImpl {
 	
@@ -32,6 +37,36 @@ public class StudyLocationManagerImpl {
 			session.close();
 		}
 
+	}
+	public List<Location> getLocationsFromStudySite(Integer studyID){
+		
+		List<Location> lstLocations = new ArrayList<Location>();
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		LocationMapper studyLocationMapper = session.getMapper(LocationMapper.class);
+		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
+		Set uniqueEntries = new HashSet(); 
+		try{
+			StudySiteExample siteEx = new StudySiteExample();
+			siteEx.createCriteria().andStudyidEqualTo(studyID);
+			List<StudySite> lstSites = studySiteMapper.selectByExample(siteEx);
+			
+			for(StudySite site : lstSites){
+				Location locData = studyLocationMapper.selectByPrimaryKey(site.getLocationid());
+				if(uniqueEntries.add(site.getId())) {
+					
+					lstLocations.add(locData);
+				}
+				
+			}
+			
+			
+			return lstLocations;
+			}
+		finally{
+			session.close();
+		}
+		
+		
 	}
 
 

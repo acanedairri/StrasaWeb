@@ -81,7 +81,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 	
 	HashMap<String, GermplasmDeepInfoModel> lstStudyGermplasm = new HashMap<String, GermplasmDeepInfoModel>();
 
-	private long studyID;
+
 	private String[] arrGermplasmType;
 	private List<GermplasmType> lstGermplasmType = new ArrayList<GermplasmType>();
 	private FormValidator formValidator = new FormValidator();
@@ -149,15 +149,22 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		this.lstStudyGermplasm = lstStudyGermplasm;
 	}
 
+	public void initValues(ProcessTabViewModel uploadModel){
+		((ProcessTabViewModel)this).isRaw = uploadModel.isRaw;
+		((ProcessTabViewModel)this).uploadToFolder = uploadModel.uploadToFolder;
+		((ProcessTabViewModel)this).setStudyID(uploadModel.getStudyID());
+		
+		
+	}
 	@Init
-	public void init(@ExecutionArgParam("studyID") long studyID,
-			@ExecutionArgParam("isRaw") boolean isRaw) {
+	public void init(@ExecutionArgParam("uploadModel") ProcessTabViewModel uploadModel) {
+
+	    initValues(uploadModel);
 //		 @Init
 //		 public void init() {
 //		 int studyID = 121;  //small
 //		 int studyID = 132; // large
 //		 boolean isRaw = true;
-		System.out.println("Geno Passed: " + studyID + " IsRaw: " + isRaw);
 
 		Runtimer timer = new Runtimer();
 		timer.start();
@@ -169,9 +176,9 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		GermplasmTypeManagerImpl germMan = new GermplasmTypeManagerImpl();
 		
 		lstGermplasmType = germMan.getAllGermplasmType();
-		this.studyID = studyID;
+		
 		StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
-		List<StudyGermplasm> lst = rawMan.getStudyGermplasmInfo((int) studyID);
+		List<StudyGermplasm> lst = rawMan.getStudyGermplasmInfo( studyID, dataset);
 
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
 				.openSession();

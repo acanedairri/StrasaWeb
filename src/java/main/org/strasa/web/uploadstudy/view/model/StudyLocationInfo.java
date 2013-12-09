@@ -139,45 +139,8 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 		for (Country data : lCountries) {
 			cmbCountry.add(data.getIsoabbr());
 		}
-		StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
-	
-
-		List<List<Location>> locationInit = studyLocationManager
-				.initializeStudyLocations(studyId);
-		lstLocations.addAll(locationInit.get(0));
-		lstUnknownLocations.addAll(locationInit.get(1));
-		Map<String, ArrayList<String>> constructedRow = new HashMap<String, ArrayList<String>>();
-		System.out.println("KnownLocationSize: " + lstLocations.size());
-		System.out.println("UnknownLocationSize:" + lstUnknownLocations.size());
-
-		HashMap<String, Location> lstRawLoc = rawMan
-				.getStudyLocationInfoToMap(studyId);
-		StudySiteManagerImpl siteMan = new StudySiteManagerImpl(isRaw);
-		List<StudySite> lstStudySite = siteMan.getAllStudySites(studyId);
-		for (int i = 0; i < lstUnknownLocations.size(); i++) {
-			if (lstRawLoc.containsKey(lstUnknownLocations.get(i)
-					.getLocationname())) {
-
-				lstLocations.add(lstRawLoc.get(lstUnknownLocations.get(i)
-						.getLocationname()));
-
-			}
-		}
-		LocationManagerImpl locMan  = new LocationManagerImpl(); 
-		for(StudySite site : lstStudySite){
-			if(!lstRawLoc.containsKey(site.getSitelocation())){
-				Location newLoc = new Location();
-				newLoc.setLocationname(site.getSitelocation());
-
-				if(locMan.getLocationByLocationName(newLoc.getLocationname()) != null)
-					newLoc = locMan.getLocationByLocationName(site.getSitelocation());
-				System.out.println("Added new Location from site");
-				
-				lstLocations.add(newLoc);
-				lstRawLoc.put(newLoc.getLocationname(), newLoc);
-			}
-		}
 		
+		lstLocations.addAll(studyLocationManager.getLocationsFromStudySite(studyId));
 		
 
 	}

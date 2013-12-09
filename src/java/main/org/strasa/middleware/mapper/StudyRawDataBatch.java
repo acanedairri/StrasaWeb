@@ -14,7 +14,7 @@ import org.strasa.middleware.model.StudySite;
 public interface StudyRawDataBatch {
 	String MQL_LOCATION="SELECT DISTINCT "
 			+ "datavalue AS locationname "
-			+ " FROM ${param2} WHERE studyid = #{param1} AND datacolumn = 'Location' GROUP BY datarow";
+			+ " FROM ${param2} WHERE studyid = #{param1} AND dataset = #{param3}  AND datacolumn = 'Location' GROUP BY datarow";
 
 //	String MQL_LOCATION="SELECT DISTINCT "
 //			+ "MAX(CASE datacolumn WHEN 'Location' THEN datavalue ELSE '' END) AS locationname, "
@@ -24,7 +24,7 @@ public interface StudyRawDataBatch {
 //			+ "MAX(CASE datacolumn WHEN 'Altitude' THEN datavalue ELSE '' END) AS altitude, "
 //			+ "MAX(CASE datacolumn WHEN 'Latitude' THEN datavalue ELSE '' END) AS latitude, "
 //			+ "MAX(CASE datacolumn WHEN 'Weather Station' THEN datavalue ELSE '' END) AS weatherstation"
-//			+ " FROM ${param2} WHERE studyid = #{param1} GROUP BY datarow";
+//			+ " FROM ${param2} WHERE studyid = #{param1} AND dataset = #{param2} GROUP BY datarow";
 	
 	
 	
@@ -33,11 +33,11 @@ public interface StudyRawDataBatch {
 			+ " MAX(CASE datacolumn WHEN 'Location' THEN datavalue ELSE '' END) AS sitelocation, "
 			+ " MAX(CASE datacolumn WHEN 'Year' THEN datavalue ELSE '' END) AS year, "
 			+ " MAX(CASE datacolumn WHEN 'Season' THEN datavalue ELSE NULL END) AS season "
-			+ " FROM ${param2} WHERE studyid = #{param1} GROUP BY datarow";
+			+ " FROM ${param2} WHERE studyid = #{param1} AND dataset = #{param3}  GROUP BY datarow";
 
 	String MQL_Germplasm = "SELECT DISTINCT " +
 		    " datavalue AS germplasmname " 
-		    + " FROM ${param2} WHERE studyid = #{param1,jdbcType=INTEGER} AND datacolumn = 'GName' GROUP BY datarow";	
+		    + " FROM ${param2} WHERE studyid = #{param1,jdbcType=INTEGER} AND dataset = #{param3} AND datacolumn = 'GName' GROUP BY datarow";	
 	
 	
 	
@@ -59,9 +59,9 @@ public interface StudyRawDataBatch {
  public void insertBatchRaw(List<StudyRawData> datalist);
  public void insertBatchDerived(List<StudyRawData> datalist);
  @Select(MQL_LOCATION)
- public List<Location> getRawLocation(int studyid, String tname);
+ public List<Location> getRawLocation(int studyid, String tname, int dataset);
  @Select(MQL_SITE)
- public List<StudySite> getRawSite(int studyid, String tname);
+ public List<StudySite> getRawSite(int studyid, String tname, int dataset);
 	@Results({
 		@Result(column = "gid", property = "gid", jdbcType = JdbcType.INTEGER),
 		@Result(column = "germplasmname", property = "germplasmname", jdbcType = JdbcType.VARCHAR),
@@ -77,7 +77,7 @@ public interface StudyRawDataBatch {
 		@Result(column = "source", property = "source", jdbcType = JdbcType.VARCHAR),
 		@Result(column = "remarks", property = "remarks", jdbcType = JdbcType.VARCHAR) })
  @Select(MQL_Germplasm)
- public List<StudyGermplasm> getRawGermplasm(int studyid, String tname);
+ public List<StudyGermplasm> getRawGermplasm(int studyid, String tname, int dataset);
  
  
  

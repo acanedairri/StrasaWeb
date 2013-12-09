@@ -77,17 +77,17 @@ public class StudyRawDataManagerImpl {
 		return record.getId();
 	}
 
-	public List<Location> getStudyLocationInfo(int studyid) {
+	public List<Location> getStudyLocationInfo(int studyid, int dataset) {
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
 				.openSession();
 		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
 		List<Location> lstData = mapper.getRawLocation(studyid,
-				getStudyRawTable());
+				getStudyRawTable(), dataset);
 		return lstData;
 	}
 
-	public HashMap<String, Location> getStudyLocationInfoToMap(int studyid) {
-		List<Location> lstRaw = getStudyLocationInfo(studyid);
+	public HashMap<String, Location> getStudyLocationInfoToMap(int studyid, int dataset) {
+		List<Location> lstRaw = getStudyLocationInfo(studyid, dataset);
 		HashMap<String, Location> returnVal = new HashMap<String, Location>();
 		for (Location data : lstRaw) {
 			returnVal.put(data.getLocationname(), data);
@@ -95,26 +95,26 @@ public class StudyRawDataManagerImpl {
 		return returnVal;
 	}
 
-	public List<StudySite> getStudySiteInfo(int studyid) {
+	public List<StudySite> getStudySiteInfo(int studyid, int dataset) {
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
 				.openSession();
 		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
 		List<StudySite> lstData = mapper
-				.getRawSite(studyid, getStudyRawTable());
+				.getRawSite(studyid, getStudyRawTable(), dataset);
 		return lstData;
 	}
 
-	public List<StudyGermplasm> getStudyGermplasmInfo(int studyid) {
+	public List<StudyGermplasm> getStudyGermplasmInfo(int studyid, int dataset) {
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
 				.openSession();
 		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
 		List<StudyGermplasm> lstData = mapper.getRawGermplasm(studyid,
-				getStudyRawTable());
+				getStudyRawTable(),  dataset);
 		return lstData;
 	}
 
-	public HashMap<String, StudySite> getStudySiteInfoToMap(int studyid) {
-		List<StudySite> lstRaw = getStudySiteInfo(studyid);
+	public HashMap<String, StudySite> getStudySiteInfoToMap(int studyid, int dataset) {
+		List<StudySite> lstRaw = getStudySiteInfo(studyid, dataset);
 		HashMap<String, StudySite> returnVal = new HashMap<String, StudySite>();
 		for (StudySite data : lstRaw) {
 			returnVal.put(data.getSitename(), data);
@@ -123,8 +123,8 @@ public class StudyRawDataManagerImpl {
 	}
 
 	public HashMap<String, StudyGermplasm> getStudyGermplasmInfoToMap(
-			int studyid) {
-		List<StudyGermplasm> lstRaw = getStudyGermplasmInfo(studyid);
+			int studyid, int dataset) {
+		List<StudyGermplasm> lstRaw = getStudyGermplasmInfo(studyid, dataset);
 		HashMap<String, StudyGermplasm> returnVal = new HashMap<String, StudyGermplasm>();
 		for (StudyGermplasm data : lstRaw) {
 			returnVal.put(data.getGermplasmname(), data);
@@ -249,7 +249,7 @@ public class StudyRawDataManagerImpl {
 	}
 
 	public void addStudyRawData(Study study, String[] header,
-			List<String[]> rawCSVData) {
+			List<String[]> rawCSVData, int dataset) {
 
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
 				.openSession(ExecutorType.BATCH);
@@ -270,6 +270,7 @@ public class StudyRawDataManagerImpl {
 						record.setDatarow(i + 1);
 						record.setDatavalue(row[j]);
 						record.setStudyid(study.getId());
+						record.setDataset(dataset);
 						// studyDataMapper.insert(record);
 						lstData.add(record);
 					}

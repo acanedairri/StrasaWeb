@@ -28,6 +28,7 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zhtml.Messagebox;
@@ -60,8 +61,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	private StudyDesign selectedDesignInfo = new StudyDesign();;
 	private PlantingType selectedSitePlantingType = new PlantingType(); // .getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
 	private int selectedID = 0;
-	private int sID;
-	private boolean isRaw = false;
+
 	protected boolean goToNextPage = true;
 	private int selectedPlantingIndex = 0;
 	private boolean applyToAll = false;
@@ -182,13 +182,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		this.designInfo = designInfo;
 	}
 
-	public double getSampleID() {
-		return sID;
-	}
 
-	public void setSampleID(int sampleID) {
-		this.sID = sampleID;
-	}
 
 	public List<Ecotype> getEcotypes() {
 		return ecotypes;
@@ -389,14 +383,14 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		List<StudyDesign> designInfo = new ArrayList<StudyDesign>();
 		StudySiteManagerImpl siteMan = new StudySiteManagerImpl(isRaw);
 		if (hasBeenProcessed)
-			siteMan.removeSiteByStudyId(sID);
+			siteMan.removeSiteByStudyId(this.getStudyID());
 		if (applyToAll) {
 
 			selectedAgroInfo = sites.get(selectedID).selectedAgroInfo;
 			selectedDesignInfo = sites.get(selectedID).selectedDesignInfo;
 		}
 		for (StudySiteInfoModel data : sites) {
-			data.setStudyid(sID);
+			data.setStudyid(this.getStudyID());
 			if (applyToAll)
 				data.selectedAgroInfo
 						.setPlantingtypeid(selectedSitePlantingType.getId());
@@ -449,7 +443,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	public void setLocationRow(@BindingParam("id") int lstId){
 	
 		System.out.println("selectedRow: " + selectedID);
-		sites.get(selectedID).selectedLocation = getLocationById(lstId);
+		sites.get(selectedID).setSelectedLocation(getLocationById(lstId));
 		BindUtils.postNotifyChange(null, null, this.sites.get(selectedID),
 				"*");
 		toggleBandBox(false, selectedID);
@@ -484,14 +478,24 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		}
 	}
 	
+	Location getLocationById(Integer locationID){
+		return new LocationManagerImpl().getLocationById(locationID);
+	}
+	Location getLocationByName(String locationName){
+		return new LocationManagerImpl().getLocationByLocationName(locationName);
+	}
 	
+	public void initValues(ProcessTabViewModel uploadModel){
+		((ProcessTabViewModel)this).isRaw = uploadModel.isRaw;
+		((ProcessTabViewModel)this).uploadToFolder = uploadModel.uploadToFolder;
+		((ProcessTabViewModel)this).setStudyID(uploadModel.getStudyID());
+		
+		
+	}
 	@Init
-//	public void init(@ExecutionArgParam("studyID") long studyID,
-//			@ExecutionArgParam("isRaw") boolean isRaw) {
+	public void init(@ExecutionArgParam("uploadModel") ProcessTabViewModel uploadModel) {
 
-	public void init(){
-	sID = 51;
-		this.isRaw = true;
+	    initValues(uploadModel);
 		studySiteMan = new StudySiteManagerImpl(isRaw);
 		studyAgroMan = new StudyAgronomyManagerImpl();
 		studyDesignMan = new StudyDesignManagerImpl();
@@ -508,17 +512,17 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		
 		StudyRawDataManagerImpl studyRawMan = new StudyRawDataManagerImpl(isRaw);
 
-		String studyStartYear = new StudyManagerImpl().getStudyById(sID)
+		String studyStartYear = new StudyManagerImpl().getStudyById(this.getStudyID())
 				.getStartyear();
 		
 		
 
-		if(studySiteMan.isSiteRecordExist(sID)){
-			sites.addAll(studySiteMan.getStudySiteByStudyId(sID));
+		if(studySiteMan.isSiteRecordExist(this.getStudyID())){
+			sites.addAll(studySiteMan.getStudySiteByStudyId(this.getStudyID()));
 			System.out.println("Site exist");
 		}
 		else{
-			List<StudySite> lstSiteRaw = studyRawMan.getStudySiteInfo(sID);
+			List<StudySite> lstSiteRaw = studyRawMan.getStudySiteInfo(this.getStudyID(), dataset);
 			for (StudySite siteData : lstSiteRaw) {
 				StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteData);
 				if (StringUtils.isNullOrEmpty(siteInfo.getYear())) {
@@ -528,8 +532,11 @@ public class StudySiteInfo extends ProcessTabViewModel {
 				}
 				if(!StringUtils.isNullOrEmpty(siteInfo.getSitelocation())){
 					Location newLoc = new Location();
+					Location exLoc = getLocationByName(siteInfo.getSitelocation());
+					
 					newLoc.setLocationname(siteInfo.getSitelocation());
-					siteInfo.setSelectedLocation(newLoc);
+					if(exLoc == null) siteInfo.setSelectedLocation(newLoc);
+					else siteInfo.setSelectedLocation(exLoc);
 				}
 
 				siteInfo.selectedDesignInfo = new StudyDesign();

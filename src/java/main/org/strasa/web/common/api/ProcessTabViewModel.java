@@ -9,11 +9,35 @@ import org.zkoss.zk.ui.Component;
 
 public class ProcessTabViewModel {
 	public boolean isRaw = true;
-	private long studyID;
+	public int studyID;
 	private Component mainView;
 	public boolean uploadToFolder = false;
+	public int dataset = 0;
 	
-	
+	public boolean isRaw() {
+		return isRaw;
+	}
+
+	public void setRaw(boolean isRaw) {
+		this.isRaw = isRaw;
+	}
+
+	public boolean isUploadToFolder() {
+		return uploadToFolder;
+	}
+
+	public void setUploadToFolder(boolean uploadToFolder) {
+		this.uploadToFolder = uploadToFolder;
+	}
+
+	public int getDataset() {
+		return dataset;
+	}
+
+	public void setDataset(int dataset) {
+		this.dataset = dataset;
+	}
+
 	public void initSpecial(){
 		
 	}
@@ -30,11 +54,11 @@ public class ProcessTabViewModel {
 		return false;
 	}
 
-	public long getStudyID() {
+	public int getStudyID() {
 		return studyID;
 	}
 
-	public void setStudyID(long studyID) {
+	public void setStudyID(int studyID) {
 		this.studyID = studyID;
 	}
 }

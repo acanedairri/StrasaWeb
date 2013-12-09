@@ -52,6 +52,7 @@ public class Index {
 	private boolean[] tabDisabled = {false,true,true,true,true};
 	private long studyID = 7;
 	private boolean isRaw;
+	private ProcessTabViewModel uploadModel;
 	
 	public int getSelectedIndex() {
 		return selectedIndex;
@@ -112,8 +113,8 @@ public class Index {
 		System.out.println(zulFileName);
 		if (panel != null && panel.getChildren().isEmpty()) {
 			 Map arg = new HashMap();
-		        arg.put("studyID", studyID);
-		        arg.put("isRaw", isRaw);
+		        arg.put("uploadModel", uploadModel);
+		       
 			Executions.createComponents(zulFileName, panel, arg);
 			
 		}
@@ -129,6 +130,7 @@ public class Index {
 		if(selectedIndex == 0){
 			isRaw = uploadData.isRaw;
 			studyID = uploadData.getStudyID();
+			uploadModel = uploadData;
 			System.out.println("IsRaw: " + uploadData.uploadToFolder );
 
 		}
