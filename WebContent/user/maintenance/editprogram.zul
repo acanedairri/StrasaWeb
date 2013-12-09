@@ -1,0 +1,30 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditProgram')">
+		<grid hflex="1" vflex="1" model="@load(vm.programList)"
+			sizedByContent="true">
+			<columns width="200px">
+				<column label="Project Name" />
+				<column label="Collaborator" />
+				<column label="Coordinator" />
+				<column label="Leading Institute" />
+				<column label="Action" />
+			</columns>
+			<template name="model">
+				<row>
+					<label value="@load(each.name)" />
+					<label value="@load(each.objective)" />
+					<label value="@load(each.collaborator)" />
+					<label value="@load(each.coordinator)" />
+					<label value="@load(each.leadinginstitute)" />
+					<cell>
+						<toolbarbutton label="edit" />
+						|
+						<toolbarbutton label="delete" />
+					</cell>
+				</row>
+			</template>
+		</grid>
+		<button label="Add New" onClick="@command('addProgram', target=self.getTarget())" />
+	</window>
+</zk>

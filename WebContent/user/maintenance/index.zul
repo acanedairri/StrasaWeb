@@ -1,0 +1,71 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.Index')">
+		<panel width="100%" height="100%">
+			<panelchildren style="overflow: auto">
+				<tabbox id="tb" mold="accordion" height="100%">
+					<tabs>
+						<tab label="Study" />
+						<tab label="Project"
+							onSelect="@command('showzulfile', zulFileName='/user/browsestudy/siteinfo.zul', target=self.linkedPanel)" />
+						<tab label="Program"
+							onSelect="@command('showzulfile', zulFileName='/user/browsestudy/locationinfo.zul', target=self.linkedPanel)" />
+						<tab label="UserProfile"
+							onSelect="@command('showzulfile', zulFileName='/user/browsestudy/germplasminfo.zul', target=self.linkedPanel)" />
+					</tabs>
+					<tabpanels width="100%">
+						<tabpanel style="overflow: auto">
+							<grid hflex="1" vflex="1"
+								model="@load(vm.editStudyList)" sizedByContent="true">
+								<columns width="200px">
+									<column label="Program Name" />
+									<column label="Project Name" />
+									<column label="Study Name" />
+									<column label="Actions" />
+									<column label="Created" />
+									<column label="Last Modified" />
+								</columns>
+								<template name="model">
+									<row>
+										<label
+											value="@load(each.program.name)" />
+										<label
+											value="@load(each.project.name)" />
+										<label
+											value="@load(each.study.name)" />
+										<cell>
+											<checkbox
+												label="@load(each.privacy ?'Shared':'Not Shared')"
+												checked="@bind(each.privacy)" />
+											<!-- 												onCheck='@command("onChecked", study=each.study)' /> -->
+											|
+											<toolbarbutton label="edit" />
+											|
+											<toolbarbutton
+												label="delete"
+												onClick="@command('deleteStudy', studyId=each.study.id, index=each.index)" />
+										</cell>
+										<label value="date created" />
+										<label value="date modified" />
+									</row>
+								</template>
+							</grid>
+						</tabpanel>
+						<tabpanel style="overflow: auto">
+							<include studyid="${arg.studyId}"
+								src="/user/maintenance/editproject.zul" />
+						</tabpanel>
+						<tabpanel style="overflow: auto">
+							<include studyid="${arg.studyId}"
+								src="/user/maintenance/editprogram.zul" />
+						</tabpanel>
+						<tabpanel style="overflow: auto">
+							<include studyid="${arg.studyId}"
+								src="/user/maintenance/edituser.zul" />
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</panelchildren>
+		</panel>
+	</window>
+</zk>

@@ -6,9 +6,9 @@
 	</style>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.StudyInformation')">
-		<panel width="100%" height="80%">
+		<panel width="100%" height="100%">
 			<panelchildren style="overflow: auto">
-				<tabbox id="tb" mold="accordion" height="80%">
+				<tabbox id="tb" mold="accordion" height="100%">
 					<tabs>
 						<tab label="Study Detail" />
 						<tab label="Site Information"

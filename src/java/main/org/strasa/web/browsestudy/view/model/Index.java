@@ -1,21 +1,19 @@
 package org.strasa.web.browsestudy.view.model;
 
-import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.select.Selectors;
-import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Include;
-import org.zkoss.zul.Label;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tabpanel;
 import org.zkoss.zul.Tabpanels;
 import org.zkoss.zul.Tabs;
+import org.zkoss.zul.Window;
 
 public class Index {	
 
@@ -43,6 +41,17 @@ public class Index {
 		tabPanels.appendChild(newPanel);
 		tabs.appendChild(newTab);
 		tabBox.setSelectedPanel(newPanel);
+	}
+	
+	@NotifyChange
+	@Command
+	public void openSearchFilterWindow(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view){
+		
+		//initialize view after view construction.
+		Include studyInformationPage = (Include) component.getFellow("searchFilterPanel");
+		Window win = (Window) studyInformationPage.getChildren().get(0);
+		win.doOverlapped();
 	}
 
 }
