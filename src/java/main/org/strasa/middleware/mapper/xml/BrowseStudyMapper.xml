@@ -45,7 +45,7 @@
 				AND t1.shared=#{shared}
 			</if>
 			<if test="studyname != null">
-				AND t1.name=#{studyname}
+				AND t1.name LIKE #{studyname}
 			</if>
 
 			<if test="studytypeid != 0">
