@@ -1,32 +1,25 @@
 package org.strasa.web.browsestudy.view.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.strasa.middleware.manager.EcotypeManagerImpl;
 import org.strasa.middleware.manager.PlantingTypeManagerImpl;
 import org.strasa.middleware.manager.StudyAgronomyManagerImpl;
 import org.strasa.middleware.manager.StudyDesignManagerImpl;
-import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.manager.StudySiteManagerImpl;
 import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.PlantingType;
-import org.strasa.middleware.model.Program;
-import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.StudyAgronomy;
 import org.strasa.middleware.model.StudyDesign;
 import org.strasa.middleware.model.StudySite;
-import org.strasa.middleware.model.StudyType;
 import org.strasa.web.common.api.ProcessTabViewModel;
-import org.strasa.web.uploadstudy.view.model.StudySiteInfo.StudySiteInfoModel;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ExecutionArgParam;
-import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
-import org.zkoss.zhtml.Messagebox;
+//import org.strasa.web.uploadstudy.view.model.StudySiteInfo.StudySiteInfoModel;
 
 public class SiteInformation extends ProcessTabViewModel {
 	private StudySiteManagerImpl studySiteMan;

@@ -65,7 +65,7 @@ public class TestStudyRawDataManagerImpl {
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
 				.openSession();
 		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
-		 List<StudySite> lstData = mapper.getRawSite(129, "studyrawdata");
+		 List<StudySite> lstData = mapper.getRawSite(129, "studyrawdata",1);
 		 System.out.println(lstData.size());
 		 for(StudySite loc : lstData){
 			 System.out.println(loc.toString());
@@ -78,7 +78,7 @@ public class TestStudyRawDataManagerImpl {
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
 				.openSession();
 		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
-		 List<StudyGermplasm> lstData = mapper.getRawGermplasm(60, "studyrawdata");
+		 List<StudyGermplasm> lstData = mapper.getRawGermplasm(60, "studyrawdata",1);
 		 System.out.println(lstData.size());
 		 for(StudyGermplasm loc : lstData){
 			 System.out.println(loc.toString());
@@ -90,7 +90,7 @@ public class TestStudyRawDataManagerImpl {
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
 				.openSession();
 		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
-		 List<StudySite> lstData = mapper.getRawSite(60, "studyrawdata");
+		 List<StudySite> lstData = mapper.getRawSite(60, "studyrawdata",1);
 		 System.out.println(lstData.size());
 		 for(StudySite loc : lstData){
 			 System.out.println(loc.toString());
@@ -120,7 +120,7 @@ public class TestStudyRawDataManagerImpl {
 		study.setDescription("Sample");
 		study.setName("SampleAgain");
 		study.setUserid(1);
-		studyRawDataManagerImpl.addStudyRawDataByRawCsvList(study, csvMaster.readAll());
+		studyRawDataManagerImpl.addStudyRawDataByRawCsvList(study, csvMaster.readAll(),1);
 	}
 	
 

@@ -9,6 +9,7 @@ import org.strasa.middleware.mapper.GermplasmMapper;
 import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.GermplasmExample;
 import org.strasa.web.browsestudy.view.model.StudySearchResultModel;
+import org.strasa.web.germplasmquery.view.model.KeyCharacteristicQueryModel;
 
 public class BrowseGermplasmManagerImpl {
 
@@ -88,6 +89,25 @@ public class BrowseGermplasmManagerImpl {
 		}
 	}
 
+	
+	public List<Germplasm> getGermplasmKeyCharacteristics(KeyCharacteristicQueryModel keyQueryCriteria) {
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		try{
+			List<Germplasm> toreturn = null;
+			List<Germplasm> germplasm = null;
+			germplasm= session.selectList("BrowseGermplasm.getGermplasmByKeyCharacteristics",keyQueryCriteria);
+			
+			List<String> germplasmList= new ArrayList<String>();
+			for(Germplasm g: germplasm){
+				germplasmList.add(g.getGermplasmname());
+			}
+				
+			toreturn= session.selectList("BrowseGermplasm.getGermplasmByKeyCharacteristicsQuery",germplasmList);
+			return toreturn;
+		}finally{
+			session.close();
+		}
+	}
 
 
 	public List<Germplasm> getGermplasmListByType(int id){

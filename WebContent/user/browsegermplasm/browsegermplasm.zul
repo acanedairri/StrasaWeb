@@ -72,7 +72,7 @@
 
 				<vbox>
 
-					<tabbox height="200px" id="keyCharacteristicsOptions" visible="false" width="4alex00px">
+					<tabbox height="200px" id="keyCharacteristicsOptions" visible="false" width="400px">
 						<tabs>
 							<tab label="Abiotic Stress" />
 							<tab label="Biotic Stress" />

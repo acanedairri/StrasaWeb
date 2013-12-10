@@ -19,19 +19,20 @@
 			<hbox width="98%">
 				<label value="Select Variable" />
 
-				<bandbox id="bd" autodrop="true" width="200px" vflex="1">
-					<bandpopup width="620px" height="330px">
+				<bandbox id="studyVariable" instant="true"
+					autodrop="true" width="200px" vflex="1"
+					onChange="@command('changeFilter')">
+					<bandpopup width="700px" height="330px">
 						<vbox>
-							<hbox>
-								Search
-								<textbox id='variableValue' onChange="@command('changeFilter',variable=event.value)"/>
-							</hbox>
-							<listbox id="variableListItem" sizedByContent="true" rows="10"  width="600px" height="300px"
-								onSelect="bd.value=self.selectedItem.label;bd.close();"
+							<listbox id="variableListItem"
+								sizedByContent="true" rows="10" width="700px" height="330px"
+								onSelect="studyVariable.value=self.selectedItem.label;studyVariable.close();"
 								model="@load(vm.variablelist)">
 								<listhead sizable="true">
-									<listheader label="Variable" width="100px"  sort="auto"/>
-									<listheader label="Description" width="200px"/>
+									<listheader label="Variable"
+										width="100px" sort="auto" />
+									<listheader label="Description"
+										width="200px" />
 									<listheader label="Property" />
 									<listheader label="Scale" />
 									<listheader label="Method" />
@@ -45,8 +46,7 @@
 											label="${each.description}" />
 										<listcell
 											label="${each.property}" />
-										<listcell
-											label="${each.scale}" />
+										<listcell label="${each.scale}" />
 										<listcell
 											label="${each.method}" />
 
@@ -60,7 +60,8 @@
 
 
 				<label value="Operator" />
-				<combobox id="cmbOperator" visible="true">
+				<combobox id="cmbOperator" visible="true"
+					value="@bind(vm.operator)">
 					<comboitem label="Equal" />
 					<comboitem label="Not Equal" />
 					<comboitem label="Greater Than" />
@@ -69,6 +70,9 @@
 				<label value="Value" />
 				<textbox id='txtVaribleValue' width="150px"
 					value="@bind(vm.variableValue)" visible="true" />
+
+				<button label="Add Criteria"
+					onClick="@command('AddCriteria')" />
 
 			</hbox>
 
@@ -85,18 +89,24 @@
 						<column label="Action" />
 
 					</columns>
-					<template name="model">
+					<template name="model" status="s">
 						<row>
 							<label value="@load(each.variable)" />
 							<label value="@load(each.operator)" />
-							<label value="@load(each.value)" />
-							<label value="Delete" />
+							<label value="@load(each.valueString)" />
+							<button label="Delete" onClick="@command('DeleteCriteria',rowIndex=s.index)" />
 						</row>
 					</template>
 				</grid>
 			</groupbox>
+			
+			<hbox>
+			<button label="Query" onClick="@command('RunQuery')" />
+			<button label="Reset" onClick="@command('reset')" />
+		</hbox>
 
 		</vbox>
+		
 
 	</window>
 

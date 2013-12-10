@@ -62,35 +62,34 @@ public class TestCrossStudyQueryManagerImpl {
 		CrossStudyQueryFilterModel f4a= new CrossStudyQueryFilterModel();
 		f4a.setVariable("PH");
 		f4a.setColumnAs("field");
-		
-		CrossStudyQueryFilterModel f4b= new CrossStudyQueryFilterModel();
-		f4b.setVariable("Site");
-		f4b.setColumnAs("field");
-
-
-		CrossStudyQueryFilterModel f5a= new CrossStudyQueryFilterModel();
-		f5a.setVariable("Yld");
-		f5a.setColumnAs("field");
-		f5a.setOrderCriteria("last");
+		f4a.setOrderCriteria("last");
+//		
+//		CrossStudyQueryFilterModel f4b= new CrossStudyQueryFilterModel();
+//		f4b.setVariable("Site");
+//		f4b.setColumnAs("field");
+//
+//
+//		CrossStudyQueryFilterModel f5a= new CrossStudyQueryFilterModel();
+//		f5a.setVariable("Yld");
+//		f5a.setColumnAs("field");
+//		f5a.setOrderCriteria("last");
 
 
 		// Filters
 		CrossStudyQueryFilterModel f5= new CrossStudyQueryFilterModel();
-		f5.setVariable("Yld");
-		f5.setValueDouble(1);
+		f5.setVariable("PH");
+		f5.setValueDouble(70);
 		f5.setDataType("Number");
 		f5.setColumnAs("filter");
-		f5.setOrderCriteria("last");
 		f5.setOperator(CrossStudyQueryOperator.GREATER_THAN_EQUAL);
 
 		CrossStudyQueryFilterModel f6= new CrossStudyQueryFilterModel();
-		f6.setVariable("Site");
-//		f6.setValueDouble(7.5);
-		f6.setValueString("IRRI");
-		f6.setDataType("String");
+		f6.setVariable("YLD");
+		f6.setValueDouble(5);
+		f6.setDataType("Number");
 		f6.setColumnAs("filter");
 		f6.setOrderCriteria("last");
-		f6.setOperator(CrossStudyQueryOperator.EQUAL_TO);
+		f6.setOperator(CrossStudyQueryOperator.GREATER_THAN);
 
 
 		filters.add(f1);
@@ -98,10 +97,10 @@ public class TestCrossStudyQueryManagerImpl {
 		filters.add(f3);
 		filters.add(f4);
 		filters.add(f4a);
-		filters.add(f4b);
-		filters.add(f5a);
+//		filters.add(f4b);
+//		filters.add(f5a);
 		filters.add(f5);
-//		filters.add(f6);
+		filters.add(f6);
 		
 
 
