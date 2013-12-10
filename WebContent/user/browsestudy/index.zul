@@ -28,9 +28,9 @@
 						<toolbar id="tb" sclass="vista" height="30px"
 							align="start">
 							Search by study name:
-							<textbox />
+							<textbox id="studyNameBox"/>
 							<toolbarbutton
-								image="/images/browse_small.png" />
+								image="/images/browse_small.png" onClick="@global-command('searchByStudyName', studyName=studyNameBox.value)"/>
 							<label value="more advanced search"
 								tooltip="advancedSearch" />
 						</toolbar>

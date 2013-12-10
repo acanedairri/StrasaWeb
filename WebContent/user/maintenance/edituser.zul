@@ -13,7 +13,7 @@
 			<rows>
 
 				<row>
-					UserName
+					Username
 					<hlayout>
 						<textbox value="@bind(fx.username)"
 							width="150px" tabindex="7" />

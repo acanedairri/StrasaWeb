@@ -30,7 +30,7 @@ import org.zkoss.zul.Window;
 
 public class EditProject {
 	ProjectManagerImpl projectMan;
-
+	Integer userId=1;
 	List<Project> projectList;
 	public List<Project> getProjectList() {
 		return projectList;
@@ -40,7 +40,7 @@ public class EditProject {
 	}
 	@Init
 	public void init(){
-		Integer userId=1;
+		
 
 		projectMan = new ProjectManagerImpl();
 		//		projectList = new ArrayList<Project>();
@@ -53,7 +53,8 @@ public class EditProject {
 	//	public void addUser(@BindingParam("user") User user){
 	//		UserManagerImpl userManagerImp =  new UserManagerImpl();
 	//		userManagerImp.updateUser(user);
-	//	public class 
+	//	public class
+	@NotifyChange("*")
 	@Command("addProject")
 	public void addProject(@BindingParam("target") Tabpanel panel) {
 
@@ -64,8 +65,16 @@ public class EditProject {
 		params.put("parent", panel);
 
 		Window popup = (Window) Executions.createComponents(
-				AddProject.ZUL_PATH, panel, params);
+				 "/user/maintenance/addnewproject.zul", panel, params);
 
 		popup.doModal();
+		
+	}
+	
+	@NotifyChange("projectList")
+	@Command("refreshProjectList")
+	public void refreshProjectList(@BindingParam("selected") Project selected) {
+		projectList.clear();
+		projectList.addAll(projectMan.getProjectByUserId(userId));
 	}
 }

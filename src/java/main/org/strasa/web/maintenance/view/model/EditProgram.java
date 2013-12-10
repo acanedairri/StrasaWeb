@@ -58,7 +58,8 @@ public class EditProgram {
 	//	public void addUser(@BindingParam("user") User user){
 	//		UserManagerImpl userManagerImp =  new UserManagerImpl();
 	//		userManagerImp.updateUser(user);
-	//	public class 
+	//	public class
+	@NotifyChange("*")
 	@Command("addProgram")
 	public void addProgram(@BindingParam("target") Tabpanel panel) {
 
@@ -67,19 +68,10 @@ public class EditProgram {
 		params.put("oldVar", null);
 
 		Window popup = (Window) Executions.createComponents(
-				AddProgram.ZUL_PATH, panel, params);
+				 "/user/maintenance/addnewprogram.zul", panel, params);
 
 		popup.doModal();
+		setProgramList(programMan.getProgramByUserId(userId));
 	}
-//	
-//
-//	@NotifyChange("*")
-//	@Command("refreshProgramList")
-//	public void refreshProgramList() {
-//
-//		ProgramManagerImpl programMan = new ProgramManagerImpl();
-//		programList.clear();
-//		programList.addAll(programMan.getProgramByUserId(userId));
-//
-//	}
+	
 }

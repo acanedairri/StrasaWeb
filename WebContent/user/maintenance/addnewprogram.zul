@@ -1,0 +1,42 @@
+<zk>
+  <window title="Add Program" border="normal" closable="true"  apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.AddNewProgram')" width = "35%">
+ 
+
+<grid vflex="1">
+	<columns>
+		<column label="Type" width="150px" />
+		<column label="Content" />
+	</columns>
+	<rows>
+		<row>
+			<label value="Name" width="150px" />
+			<textbox value='@bind(vm.programModel.name)' constraint="no empty" width="150px" />
+		</row>
+		<row>
+			<label value="Objective" width="150px" />
+			<textbox value='@bind(vm.programModel.objective)' constraint="no empty" width="150px" />
+		</row>
+		<row>
+			<label value="Coordinator" width="150px" />
+			<textbox value='@bind(vm.programModel.coordinator)' constraint="no empty" width="150px" />
+		</row>
+		<row>
+			<label value="Leading Institute" width="150px" />
+			<textbox value='@bind(vm.programModel.leadinginstitute)' constraint="no empty" width="150px" />
+		</row>
+		<row>
+			<label value="Collaborator" width="150px" />
+			<textbox value='@bind(vm.programModel.collaborator)' constraint="no empty" width="150px" />
+		</row>
+	
+	
+		<row>
+			<button label="Save Program" onClick="@command('add')"></button><button label="Cancel" onClick="@command('cancel')"></button>
+		</row>
+	</rows>
+</grid>
+
+
+    </window>
+</zk>

@@ -41,24 +41,29 @@ public class EditUploadedStudies {
 		studyMan = new StudyManagerImpl();
 		programMan = new ProgramManagerImpl();
 		projectMan = new ProjectManagerImpl();
-
-		List<Study> studies = new ArrayList<Study>();
 		setEditStudyList(new ArrayList<EditStudyModel>());
 
-		System.out.println("studyId"+ Integer.toString(studyId));
+		populateEditStudyList();
+	}
+
+	private void populateEditStudyList() {
+		// TODO Auto-generated method stub
+		setEditStudyList(new ArrayList<EditStudyModel>());
+		List<Study> studies = new ArrayList<Study>();
 		studies = studyMan.getStudiesByUserID(1);
 		int ctr=0;
 		for(Study s: studies){
 			EditStudyModel e = new EditStudyModel();
 			e.setIndex(ctr);
 			e.setStudy(s);
-			e.setPrivacy(true);
+			e.setPrivacy(false);
 			e.setProgram(programMan.getProgramById(s.getProgramid()));
 			e.setProject(projectMan.getProjectById(s.getProjectid()));
 			
 			editStudyList.add(e);
 			ctr++;
 		}
+		
 	}
 
 	public List<EditStudyModel> getEditStudyList() {
@@ -84,8 +89,7 @@ public class EditUploadedStudies {
 	@Command("deleteStudy")
 	public void deleteStudy(@BindingParam("studyId") Integer studyId, @BindingParam("index") Integer index){
 		studyMan.deleteStudyById(studyId);
-		editStudyList.remove(index);
+		populateEditStudyList();
 	}
-	//	public class 
 
 }

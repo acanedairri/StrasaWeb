@@ -8,6 +8,7 @@ import org.strasa.middleware.manager.CountryManagerImpl;
 import org.strasa.middleware.manager.LocationManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
+import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudyTypeManagerImpl;
 import org.strasa.middleware.model.Country;
 import org.strasa.middleware.model.Program;
@@ -21,10 +22,24 @@ import org.zkoss.zul.Messagebox;
 
 public class SearchResult {
 	private BrowseStudyManagerImpl browseStudyManagerImpl= new BrowseStudyManagerImpl();
+	private StudyManagerImpl studyMan= new StudyManagerImpl();
 
 	private List<StudySearchResultModel> searchResult = new ArrayList<StudySearchResultModel>();
 
 	private String searchResultLabel;
+	
+	
+	@NotifyChange("*")
+	@GlobalCommand
+	public void searchByStudyName(@BindingParam("studyName") String studyName){
+		if(validateString(studyName)){
+			StudySearchFilterModel searchFilter = new StudySearchFilterModel();
+			searchFilter.setStudyname(studyName);
+			searchResult = browseStudyManagerImpl.getStudySearchResult(searchFilter);
+		}else{
+			
+		}
+	}
 	
 	@NotifyChange("*")
 	@GlobalCommand
