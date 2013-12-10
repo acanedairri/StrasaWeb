@@ -54,6 +54,10 @@
 					<if test="item.operator == 'lessthanequal'">
 						&lt;= #{item.valueDouble}
 					</if>
+					<if test="item.operator == 'equalto'">
+						= #{item.valueDouble}
+					</if>
+
 				</if>
 
 				<if test="item.dataType == 'String'">

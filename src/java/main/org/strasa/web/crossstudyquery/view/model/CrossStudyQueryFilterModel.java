@@ -2,6 +2,7 @@ package org.strasa.web.crossstudyquery.view.model;
 
 public class CrossStudyQueryFilterModel {
 
+	String columnHeader;
 	String variable;
 	String operator;
 	String valueString;
@@ -54,6 +55,14 @@ public class CrossStudyQueryFilterModel {
 	public void setColumnAs(String columnAs) {
 		this.columnAs = columnAs;
 	}
+	public String getColumnHeader() {
+		return columnHeader;
+	}
+	public void setColumnHeader(String columnHeader) {
+		this.columnHeader = columnHeader;
+	}
+	
+	
 
 	
 

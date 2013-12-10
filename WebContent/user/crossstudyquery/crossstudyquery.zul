@@ -62,10 +62,14 @@
 				<label value="Operator" />
 				<combobox id="cmbOperator" visible="true"
 					value="@bind(vm.operator)">
+
 					<comboitem label="Equal" />
 					<comboitem label="Not Equal" />
+					<comboitem label="Like" />
 					<comboitem label="Greater Than" />
 					<comboitem label="Greater Than Equal" />
+					<comboitem label="Less Than" />
+					<comboitem label="Less Than Equal" />
 				</combobox>
 				<label value="Value" />
 				<textbox id='txtVaribleValue' width="150px"
@@ -94,19 +98,48 @@
 							<label value="@load(each.variable)" />
 							<label value="@load(each.operator)" />
 							<label value="@load(each.valueString)" />
-							<button label="Delete" onClick="@command('DeleteCriteria',rowIndex=s.index)" />
+							<button label="Delete"
+								onClick="@command('DeleteCriteria',rowIndex=s.index)" />
 						</row>
 					</template>
 				</grid>
 			</groupbox>
-			
-			<hbox>
-			<button label="Query" onClick="@command('RunQuery')" />
-			<button label="Reset" onClick="@command('reset')" />
-		</hbox>
 
+			<hbox>
+				<button label="Query" onClick="@command('RunQuery')" />
+				<button label="Reset" onClick="@command('reset')" />
+			</hbox>
+
+			<groupbox id="crossResultId" mold="3d" width="98%"
+				visible="true">
+				<caption label="@load(vm.searchResultLabel)" />
+				<grid  model="@bind(vm.dataList)"
+					sizedByContent="true" height="360px"
+					emptyMessage="No data loaded...">
+					<columns children="@load(vm.columnList)">
+						<template name="children">
+							<column hflex="1" label="@load(each)" />
+						</template>
+					</columns>
+					<rows children="@bind(vm.rawData)">
+						<template name="children" var="data">
+							<row>
+								<label forEach="${data}"
+									value="${each}" />
+							</row>
+						</template>
+					</rows>
+				</grid>
+				<paging pageSize="@load(vm.pageSize)"
+					totalSize="@load(vm.totalSize)" activePage="@bind(vm.activePage)"
+					unless="${vm.rawData==null}" />
+				<div style="float:right;">
+					<button label="Export to CSV"
+						unless="${vm.rawData==null}"
+						onClick="@command('exportRawData', columns=vm.columnList, rows=vm.dataList, studyName=vm.studyName, dataType=vm.dataType)" />
+				</div>
+			</groupbox>
 		</vbox>
-		
 
 	</window>
 

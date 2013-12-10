@@ -1,6 +1,8 @@
 package org.strasa.web.crossstudyquery.view.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.strasa.middleware.manager.CrossStudyQueryManagerImpl;
@@ -14,7 +16,10 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Grid;
+import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Messagebox;
 
 public class CrossStudyQuery extends StudyVariable{
 
@@ -24,6 +29,11 @@ public class CrossStudyQuery extends StudyVariable{
 	String studyVariable=null;
 	String operator;
 	private CrossStudyQueryManagerImpl mgr;
+	private int pageSize = 5;
+	private int activePage = 0;
+	private List<String> columnList= new ArrayList<String>();
+	private List<String[]> dataList = new ArrayList<String[]>();
+	private String searchResultLabel;
 
 
 	public List<StudyVariable> getVariablelist() {
@@ -66,6 +76,38 @@ public class CrossStudyQuery extends StudyVariable{
 		this.operator = operator;
 	}
 
+
+
+	public int getPageSize() {
+		return pageSize;
+	}
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+	public int getActivePage() {
+		return activePage;
+	}
+	public void setActivePage(int activePage) {
+		this.activePage = activePage;
+	}
+	public List<String> getColumnList() {
+		return columnList;
+	}
+	public void setColumnList(List<String> columnList) {
+		this.columnList = columnList;
+	}
+	public void setDataList(List<String[]> dataList) {
+		this.dataList = dataList;
+	}
+	
+	
+	public String getSearchResultLabel() {
+		return searchResultLabel;
+	}
+	public void setSearchResultLabel(String searchResultLabel) {
+		this.searchResultLabel = searchResultLabel;
+	}
+	
 	@Init
 	public void init(){
 		mgr= new CrossStudyQueryManagerImpl();
@@ -102,8 +144,13 @@ public class CrossStudyQuery extends StudyVariable{
 
 	@Command
 	@NotifyChange({"crossStudyFilterModelList"})
-	public void reset(){
+	public void reset(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view){
 		this.crossStudyFilterModelList= new ArrayList<CrossStudyQueryFilterModel>();
+		columnList = new ArrayList<String>();
+		dataList = new ArrayList<String[]>();
+		Groupbox gridResult = (Groupbox) component.getFellow("crossResultId");
+		gridResult.setVisible(false);
 	}
 
 	@Command
@@ -114,65 +161,187 @@ public class CrossStudyQuery extends StudyVariable{
 
 
 	@Command
-	public void RunQuery(){
+	@NotifyChange({"*"})
+	public void RunQuery(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view){
 
-		final CrossStudyQueryManagerImpl crossStudyQueryManagerImpl= new CrossStudyQueryManagerImpl(); 
+		if(crossStudyFilterModelList.isEmpty()){
+			Messagebox.show("Please specify a criteria" ,"Warning",null,null,null,null); 
+		}else{
 
-		ArrayList<CrossStudyQueryFilterModel> filters = new ArrayList<CrossStudyQueryFilterModel>();
+			Groupbox gridResult = (Groupbox) component.getFellow("crossResultId");
+			gridResult.setVisible(true);
 
-		// Field
+			dataList = new ArrayList<String[]>();
+			columnList = new ArrayList<String>();
 
-		CrossStudyQueryFilterModel fieldStudyId= new CrossStudyQueryFilterModel();
-		fieldStudyId.setVariable("studyid");
-		fieldStudyId.setColumnAs("field");
-		filters.add(fieldStudyId);
+			final CrossStudyQueryManagerImpl crossStudyQueryManagerImpl= new CrossStudyQueryManagerImpl(); 
 
+			ArrayList<CrossStudyQueryFilterModel> filters = new ArrayList<CrossStudyQueryFilterModel>();
 
-		CrossStudyQueryFilterModel fieldDataRow= new CrossStudyQueryFilterModel();
-		fieldDataRow.setVariable("datarow");
-		fieldDataRow.setColumnAs("field");
-		filters.add(fieldDataRow);
+			// Field
 
-		CrossStudyQueryFilterModel fieldStudyName= new CrossStudyQueryFilterModel();
-		fieldStudyName.setVariable("studyname");
-		fieldStudyName.setColumnAs("field");
-		filters.add(fieldStudyName);
+//			CrossStudyQueryFilterModel fieldStudyId= new CrossStudyQueryFilterModel();
+//			fieldStudyId.setVariable("STUDY ID");
+//			fieldStudyId.setColumnAs("field");
+//			filters.add(fieldStudyId);
+//
+//
+//			CrossStudyQueryFilterModel fieldDataRow= new CrossStudyQueryFilterModel();
+//			fieldDataRow.setVariable("datarow");
+//			fieldDataRow.setColumnAs("field");
+//			filters.add(fieldDataRow);
 
-		CrossStudyQueryFilterModel fieldGName= new CrossStudyQueryFilterModel();
-		fieldGName.setVariable("GName");
-		fieldDataRow.setColumnAs("field");
-		filters.add(fieldGName);
+			CrossStudyQueryFilterModel fieldStudyName= new CrossStudyQueryFilterModel();
+			fieldStudyName.setColumnHeader("Study Name");
+			fieldStudyName.setVariable("studyname");
+			fieldStudyName.setColumnAs("field");
+			filters.add(fieldStudyName);
 
-		//Get Other Field
-		int sizeFieldSelected=crossStudyFilterModelList.size();
-		int counter=1;
-		for(CrossStudyQueryFilterModel f:crossStudyFilterModelList){
-			CrossStudyQueryFilterModel field= new CrossStudyQueryFilterModel();
-			field.setVariable(f.getVariable());
-			field.setColumnAs("field");
-			if(counter==sizeFieldSelected){
-				field.setOrderCriteria("last");
+			CrossStudyQueryFilterModel fieldGName= new CrossStudyQueryFilterModel();
+			fieldGName.setColumnHeader("Germplasm");
+			fieldGName.setVariable("GName");
+			fieldGName.setColumnAs("field");
+			filters.add(fieldGName);
+
+			//Get Other Field
+			int sizeFieldSelected=crossStudyFilterModelList.size();
+			int counter=1;
+
+			for(CrossStudyQueryFilterModel f:crossStudyFilterModelList){
+				CrossStudyQueryFilterModel field= new CrossStudyQueryFilterModel();
+				field.setColumnHeader(f.getVariable());
+				field.setVariable(f.getVariable());
+				field.setColumnAs("field");
+				if(counter==sizeFieldSelected){
+					field.setOrderCriteria("last");
+				}
+				counter++;
+				filters.add(field);
 			}
-			counter++;
-			filters.add(field);
+
+
+
+			System.out.println("FILTER");
+			counter=1;
+			for(CrossStudyQueryFilterModel f:crossStudyFilterModelList){
+				CrossStudyQueryFilterModel field= new CrossStudyQueryFilterModel();
+				field.setVariable(f.getVariable());
+				field.setColumnHeader(f.getVariable());
+				field.setColumnAs("field");
+
+				String valueString=f.getValueString();
+
+				if(isNumeric(valueString)){
+					field.setValueDouble(Double.valueOf(valueString));
+					field.setDataType("Number");
+				}else{
+					field.setValueDouble(Double.valueOf(valueString));
+					field.setDataType("String");
+				}
+
+				field.setColumnAs("filter");
+
+				if(f.getOperator().equals("Equal")){
+					field.setOperator(CrossStudyQueryOperator.EQUAL_TO);
+				}else if(f.getOperator().equals("Not Equal")){
+					field.setOperator(CrossStudyQueryOperator.NOT_EQUAL_TO);
+				}else if(f.getOperator().equals("Greater Than")){
+					field.setOperator(CrossStudyQueryOperator.GREATER_THAN);
+				}else if(f.getOperator().equals("Greater Than Equal")){
+					field.setOperator(CrossStudyQueryOperator.GREATER_THAN_EQUAL);
+				}else if(f.getOperator().equals("Less Than")){
+					field.setOperator(CrossStudyQueryOperator.LESS_THAN);
+				}else if(f.getOperator().equals("Less Than Equal")){
+					field.setOperator(CrossStudyQueryOperator.LESS_THAN_EQUAL);
+				}
+
+
+				if(counter==sizeFieldSelected){
+					field.setOrderCriteria("last");
+				}
+				counter++;
+				filters.add(field);
+			}
+
+
+			//		for(CrossStudyQueryFilterModel f:filters){
+			//
+			//			System.out.println(f.getVariable());
+			//			System.out.println(f.getColumnAs());
+			//			System.out.println(f.getDataType());
+			//			System.out.println(f.getValueDouble());
+			//			System.out.println(f.getValueString());
+			//			System.out.println(f.getOperator());
+			//			System.out.println(f.getOrderCriteria());
+			//			System.out.println("-------------------");
+			//
+			//		}
+
+
+			List<HashMap<String,String>> toreturn = crossStudyQueryManagerImpl.getCrossStudyQueryResult(filters);
+			System.out.println("Size:"+toreturn.size());
+			this.searchResultLabel="Cross Study Query Result(s): "+toreturn.size()+"  row(s) returned";
+
+			//Column Header
+			for (CrossStudyQueryFilterModel d: filters) {
+				if(d.getColumnAs().equals("field")){
+					System.out.print(d.getVariable()+ "\t");
+					columnList.add(d.getColumnHeader());
+				}
+			}
+			System.out.println("\n ");
+			for( HashMap<String,String> rec:toreturn){
+				ArrayList<String> newRow = new ArrayList<String>();
+				for (CrossStudyQueryFilterModel d: filters) {
+					if(d.getColumnAs().equals("field")){
+						String value= String.valueOf(rec.get(d.getVariable()));
+						System.out.print(value + "\t");
+						newRow.add(value);
+					}
+				}
+				dataList.add(newRow.toArray(new String[newRow.size()]));
+				System.out.println("\n ");
+
+			}
+
 		}
 
+	}
 
-		for(CrossStudyQueryFilterModel f:filters){
+	public static boolean isNumeric(String str)
+	{
+		return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
+	}
 
-			System.out.println(f.getVariable());
-			System.out.println(f.getOperator());
-			System.out.println(f.orderCriteria);
-			System.out.println(f.columnAs);
-			System.out.println(f.valueDouble);
-			System.out.println(f.valueString);
-			System.out.println(f.valueString);
-			System.out.println("-------------------");
+	public ArrayList<ArrayList<String>> getRawData() {
+		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
+		if (dataList.isEmpty())
+			return null;
+		for (int i = activePage * pageSize; i < activePage * pageSize
+				+ pageSize
+				&& i < dataList.size(); i++) {
+			ArrayList<String> row = new ArrayList<String>();
+			row.addAll(Arrays.asList(dataList.get(i)));
+			result.add(row);
+			row.add(0, "  ");
+			System.out.println(Arrays.toString(dataList.get(i)) + "ROW: "
+					+ row.get(0));
+		}
+		return result;
+	}
 
+	public List<String[]> getDataList() {
+		if (true)
+			return dataList;
+		ArrayList<String[]> pageData = new ArrayList<String[]>();
+		for (int i = activePage * pageSize; i < activePage * pageSize
+				+ pageSize; i++) {
+			pageData.add(dataList.get(i));
+			System.out.println(Arrays.toString(dataList.get(i)));
 		}
 
-
-
+		return pageData;
 	}
 
 }
