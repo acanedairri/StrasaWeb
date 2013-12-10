@@ -46,8 +46,23 @@ public class StudySiteInfoModel extends StudySite {
 		public boolean isYearAuto = false;
 		public Location selectedLocation = new Location();
 		public Binder binder;
-
-	
+		public boolean isUpdateMode;
+		
+		public boolean isUpdateMode() {
+			return isUpdateMode;
+		}
+		
+		public boolean isYearEditable(){
+			if(isUpdateMode) return isUpdateMode;
+			return (isYearAuto);
+		}
+		public boolean isSeasonEditable(){
+			if(isUpdateMode) return isUpdateMode;
+			return (this.getSeason().isEmpty());
+		}
+		public void setUpdateMode(boolean isUpdateMode) {
+			this.isUpdateMode = isUpdateMode;
+		}
 		public Location getSelectedLocation() {
 			return selectedLocation;
 		}
@@ -64,14 +79,16 @@ public class StudySiteInfoModel extends StudySite {
 		}
 
 		public boolean isYearAuto() {
-			return isYearAuto;
+		
+			if(isUpdateMode) return isUpdateMode;
+			return (isYearAuto);
 		}
 
 		public void updateFilteredLocations(){
 	
 		}
 		public ListModelList<Location> getFilteredLocations() {
-			System.out.println("Hello");
+
 			ListModelList<Location> returnVal = new ListModelList<Location>();
 			if (StringUtils.isNullOrEmpty(selectedLocation.getLocationname())){
 		
@@ -98,6 +115,7 @@ public class StudySiteInfoModel extends StudySite {
 		}
 
 		public Ecotype getSelectedEcotype() {
+			System.out.println("ss");
 			return selectedEcotype;
 		}
 
@@ -198,6 +216,7 @@ public class StudySiteInfoModel extends StudySite {
 				System.out.println("Season is now null!");
 				s.setSeason("");
 			}
+			this.setId(s.getId());
 			this.setSeason(s.getSeason());
 			this.setSitelocation(s.getSitelocation());
 			this.setSitename(s.getSitename());
@@ -206,6 +225,8 @@ public class StudySiteInfoModel extends StudySite {
 			this.setSoiltype(s.getSoiltype());
 			this.setStudyid(s.getStudyid());
 			this.setYear(s.getYear());
+			this.setLocationid(s.getLocationid());
+			this.setSelectedLocation(new LocationManagerImpl().getLocationById(s.getLocationid()));
 
 		}
 

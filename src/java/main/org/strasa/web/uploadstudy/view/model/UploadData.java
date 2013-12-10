@@ -23,6 +23,7 @@ import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
 import org.strasa.middleware.manager.StudyGermplasmManagerImpl;
 import org.strasa.middleware.manager.StudyLocationManagerImpl;
 import org.strasa.middleware.manager.StudyManager;
+import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.manager.StudySiteManagerImpl;
 import org.strasa.middleware.manager.StudyTypeManagerImpl;
@@ -89,10 +90,11 @@ public class UploadData extends ProcessTabViewModel {
 	public Program getTxtProgram() {
 		return txtProgram;
 	}
-	@NotifyChange("projectList")
+	@NotifyChange({"projectList","txtProject"})
 	public void setTxtProgram(Program txtProgram) {
 		refreshProjectList(txtProgram);
 		this.txtProgram = txtProgram;
+		txtProject = null;
 	}
 
 	public void setTxtProject(Project txtProject) {
@@ -399,9 +401,12 @@ public class UploadData extends ProcessTabViewModel {
 		dataFileName = name;
 		if (!isHeaderValid)
 			openCSVHeaderValidator(tempFile.getAbsolutePath(), false);
-		else
+		else{
 			refreshCsv();
+			if(this.isUpdateMode)isNewDataSet = true;
 
+		}
+			
 	}
 
 	public void uploadFile(String path, String name, String data) {
@@ -473,15 +478,29 @@ public class UploadData extends ProcessTabViewModel {
 		System.out.println("globalCom: " + newVal);
 	}
 
+
 	@Init
 	public void init(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("uploadModel") ProcessTabViewModel uploadModel) {
 
-	    this.initValues(UploadData.this,uploadModel);
+	    this.initValues(uploadModel);
+	  
 		setMainView(view);
-
+		System.out.println("SID: " + this.studyID);
 		refreshProgramList(null);
 		refreshProjectList(null);
 		System.out.println("LOADED");
+		  if(uploadModel != null){
+		    	StudyManagerImpl studyMan = new StudyManagerImpl();
+		    	study =studyMan.getStudyById(uploadModel.getStudyID());
+		    	this.txtStudyName = study.getName();
+		    	this.txtStudyType = new StudyTypeManagerImpl().getStudyTypeById(study.getStudytypeid()).getStudytype();
+		    	this.txtProgram = new ProgramManagerImpl().getProgramById(study.getProgramid());
+		    	this.txtProject = new ProjectManagerImpl().getProjectById(study.getProjectid());
+		    	this.startYear = Integer.parseInt(study.getStartyear());
+		    	this.endYear = Integer.parseInt(study.getEndyear());
+		    	isNewDataSet = false;
+		    	
+		    }
 	}
 
 	public void openCSVHeaderValidator(String CSVPath, boolean showAll) {
@@ -619,7 +638,7 @@ public class UploadData extends ProcessTabViewModel {
 		projectList.clear();
 		projectList.addAll(programMan.getProjectList(userID, selected));
 		
-
+		
 
 	}
 
@@ -643,6 +662,12 @@ public class UploadData extends ProcessTabViewModel {
 				|| txtStudyType == null) {
 			Messagebox.show("Error: All fields are required", "Upload Error",
 					Messagebox.OK, Messagebox.ERROR);
+			System.out.println("1 + " +txtProgram);
+			System.out.println("2 + " +txtProject);
+			System.out.println("3 + " +txtStudyName);
+			System.out.println("4 + " +txtStudyType);
+			
+			
 
 			// TODO: must have message DIalog
 			return false;
@@ -651,17 +676,19 @@ public class UploadData extends ProcessTabViewModel {
 		if (txtProgram == null || txtProject == null
 				|| txtStudyName.isEmpty() || txtStudyType.isEmpty()
 				) {
-			Messagebox.show("Error: All fields are required", "Upload Error",
+			Messagebox.show("Error: All fields are requiredx", "Upload Error",
 					Messagebox.OK, Messagebox.ERROR);
 
 			// TODO: must have message DIalog
 			return false;
 		}
-		if (tempFile == null || !isVariableDataVisible) {
+		if (tempFile == null || !isVariableDataVisible ) {
+			if(!isUpdateMode()){
 			Messagebox.show("Error: You must upload a data first",
 					"Upload Error", Messagebox.OK, Messagebox.ERROR);
 
 			return false;
+			}
 		}
 		if(startYear < Calendar.getInstance().get(Calendar.YEAR)){
 			Messagebox.show("Error: Invalid start year. Year must be greater or equal than the present year(" + Calendar.getInstance().get(Calendar.YEAR) +  " )",
@@ -700,7 +727,13 @@ public class UploadData extends ProcessTabViewModel {
 		if (uploadTo.equals("database")) {
 
 				if(isNewDataSet)
-				studyRawData.addStudyRawData(study,columnList.toArray(new String[columnList.size()]),dataList,this.dataset);
+				{
+					System.out.println("DATA UPLOADING! ");
+					
+					studyRawData.addStudyRawData(study,columnList.toArray(new String[columnList.size()]),dataList,this.dataset,isRawData);
+				}
+
+				studyRawData.addStudy(study);
 				
 				new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), columnList.toArray(new String[columnList.size()]), isRawData);
 

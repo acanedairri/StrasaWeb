@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
+import org.strasa.middleware.mapper.EcotypeMapper;
 import org.strasa.middleware.mapper.LocationMapper;
 import org.strasa.middleware.mapper.PlantingTypeMapper;
 import org.strasa.middleware.mapper.StudyAgronomyMapper;
@@ -211,6 +212,7 @@ public class StudySiteManagerImpl {
 		StudyDesignMapper designMapper = session.getMapper(StudyDesignMapper.class);
 		PlantingTypeMapper plantMapper = session.getMapper(PlantingTypeMapper.class);
 		LocationMapper locationMapper = session.getMapper(LocationMapper.class);
+		EcotypeMapper ecoMapper = session.getMapper(EcotypeMapper.class);
 		StudySiteExample ex = new StudySiteExample();
 		ex.createCriteria().andStudyidEqualTo(studyID);
 		List<StudySite> lstSites = siteMapper.selectByExample(ex);
@@ -228,10 +230,12 @@ public class StudySiteManagerImpl {
 			StudyAgronomyExample agroEx = new StudyAgronomyExample();
 			agroEx.createCriteria().andStudysiteidEqualTo(site.getId());
 			newData.selectedAgroInfo = agroMapper.selectByExample(agroEx).get(0);
+			
 			//PlantingType
 			newData.selectedSitePlantingType =plantMapper.selectByPrimaryKey(newData.selectedAgroInfo.getPlantingtypeid());
-			//Location
-			newData.selectedLocation = locationMapper.selectByPrimaryKey(site.getLocationid());
+	
+			//Ecotype
+			newData.selectedEcotype =  ecoMapper.selectByPrimaryKey(newData.getEcotypeid());
 			returnVal.add(newData);
 			
 		}

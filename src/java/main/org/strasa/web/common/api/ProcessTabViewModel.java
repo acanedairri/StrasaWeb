@@ -20,14 +20,15 @@ public class ProcessTabViewModel {
 	}
 	
 	
-	public void initValues(ProcessTabViewModel currModel,ProcessTabViewModel uploadModel){
+	public void initValues(ProcessTabViewModel uploadModel){
 		if(uploadModel == null){
+			System.out.println("NULL");
 			return;
 		}
-		currModel.isRaw = uploadModel.isRaw;
-		currModel.uploadToFolder = uploadModel.uploadToFolder;
-		currModel.setStudyID(uploadModel.getStudyID());
-		currModel.setUpdateMode(uploadModel.isUpdateMode);
+		isRaw = uploadModel.isRaw;
+		uploadToFolder = uploadModel.uploadToFolder;
+	setStudyID(uploadModel.getStudyID());
+		setUpdateMode(uploadModel.isUpdateMode);
 		
 		
 	}

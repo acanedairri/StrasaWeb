@@ -249,7 +249,7 @@ public class StudyRawDataManagerImpl {
 	}
 
 	public void addStudyRawData(Study study, String[] header,
-			List<String[]> rawCSVData, int dataset) {
+			List<String[]> rawCSVData, int dataset, boolean isRawData) {
 
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
 				.openSession(ExecutorType.BATCH);
@@ -276,7 +276,7 @@ public class StudyRawDataManagerImpl {
 					}
 				}
 			}
-			if (isRaw)
+			if (isRawData)
 				studyRawBatch.insertBatchRaw(lstData);
 			else
 				studyRawBatch.insertBatchDerived(lstData);

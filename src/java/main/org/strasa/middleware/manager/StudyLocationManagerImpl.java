@@ -45,6 +45,7 @@ public class StudyLocationManagerImpl {
 		LocationMapper studyLocationMapper = session.getMapper(LocationMapper.class);
 		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
 		Set uniqueEntries = new HashSet(); 
+		Set uniqueEntriesLoc = new HashSet(); 
 		try{
 			StudySiteExample siteEx = new StudySiteExample();
 			siteEx.createCriteria().andStudyidEqualTo(studyID);
@@ -52,7 +53,7 @@ public class StudyLocationManagerImpl {
 			
 			for(StudySite site : lstSites){
 				Location locData = studyLocationMapper.selectByPrimaryKey(site.getLocationid());
-				if(uniqueEntries.add(site.getId())) {
+				if(uniqueEntries.add(site.getId()) && uniqueEntriesLoc.add(locData.getId())) {
 					
 					lstLocations.add(locData);
 				}

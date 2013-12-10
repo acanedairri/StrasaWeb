@@ -11,6 +11,7 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.GlobalCommand;
+import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -78,9 +79,22 @@ public class Index {
 		this.tabDisabled = tabDisabled;
 	}
 
+	@Init
+	public void init(){
+		//editing mode
+		uploadModel = new ProcessTabViewModel();
+		uploadModel.setStudyID(9);
+		uploadModel.setUpdateMode(true);
+		 tabDisabled[0] = false;
+		 tabDisabled[1] = false;
+		 tabDisabled[2] = false;
+		 tabDisabled[3] = false;
+		 tabDisabled[4] = false;
+	}
 	  @AfterCompose
 	    public void afterCompose(@ContextParam(ContextType.VIEW) Component view){
-	        Selectors.wireComponents(view, this, false);
+	        
+		  Selectors.wireComponents(view, this, false);
 	
 	        //wire event listener
 //	      Selectors.wireEventListeners(view, this);
@@ -96,10 +110,7 @@ public class Index {
 			arrTabPanels.add(tabpanel5);
 			Events.sendEvent("onSelect",tab1,tab1);
 			
-			//editing mode
-			uploadModel = new ProcessTabViewModel();
-			uploadModel.setStudyID(3);
-			uploadModel.setUpdateMode(true);
+		
 	    }
 	
 	 @NotifyChange("*")

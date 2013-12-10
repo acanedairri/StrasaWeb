@@ -249,6 +249,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
+		BindUtils.postNotifyChange(null, null, this, "*");
 	}
 
 	public String getLabelDate() {
@@ -402,7 +403,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 								.getId());
 
 			if (data.getId() == null) {
-
+				System.out.println("ADD MODE");
 				StudySite siteData = data;
 				siteMan.addStudySite(siteData);
 
@@ -421,8 +422,9 @@ public class StudySiteInfo extends ProcessTabViewModel {
 					studyDesignMan.addStudyDesign(data.selectedDesignInfo);
 				}
 			} else {
+				
 				siteMan.updateStudySite(data);
-
+				System.out.println("EDIT MODE");
 				if (applyToAll) {
 					selectedAgroInfo.setStudysiteid(data.getId());
 					selectedDesignInfo.setStudysiteid(data.getId());
@@ -472,8 +474,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			if(!sites.get(lstId).getFilteredLocations().isEmpty() && sites.get(lstId).getFilteredLocations().getSize() != lstLocations.getSize()){
 				sites.get(lstId).selectedLocation = sites.get(lstId).getFilteredLocations().get(0);
 
-				BindUtils.postNotifyChange(null, null, this.sites.get(lstId),
-						"*");
+			
 			}
 		}
 		else{
@@ -511,6 +512,11 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		blankPlantingType.setPlanting("");
 		selectedSitePlantingType = blankPlantingType;
 
+		ecotypes = ecotypeMan.getAllEcotypes();
+
+		plantingtypes = plantingtypeMan.getAllPlantingTypes();
+		plantingtypes.add(0, blankPlantingType);
+		
 		lstLocations.addAll(new LocationManagerImpl().getAllLocations());
 		
 		StudyRawDataManagerImpl studyRawMan = new StudyRawDataManagerImpl(isRaw);
@@ -523,6 +529,18 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		if(studySiteMan.isSiteRecordExist(this.getStudyID())){
 			sites.addAll(studySiteMan.getStudySiteByStudyId(this.getStudyID()));
 			System.out.println("Site exist");
+			
+			for(StudySiteInfoModel site: sites){
+				for(Ecotype eco : ecotypes){
+					if(eco.getId() == site.getEcotypeid()) site.selectedEcotype = eco;
+				}
+				for(PlantingType plant : plantingtypes){
+					if(plant.getId() == site.selectedAgroInfo.getPlantingtypeid()) site.selectedSitePlantingType = plant;
+				}
+				
+				site.isUpdateMode = true;
+			}
+			
 		}
 		else{
 			List<StudySite> lstSiteRaw = studyRawMan.getStudySiteInfo(this.getStudyID(), dataset);
@@ -552,17 +570,16 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		}
 		
 		
-
-		ecotypes = ecotypeMan.getAllEcotypes();
-
-		plantingtypes = plantingtypeMan.getAllPlantingTypes();
-		plantingtypes.add(0, blankPlantingType);
+		System.out.println("Sys: " + sites.get(0).selectedEcotype.getEcotype());
+        
 		selectedSite = sites.get(0);
 
 		updateDesignInfo(0);
 
 	}
 
+	
+	
 	@Command
 	@NotifyChange("*")
 	public void applyToAll() {

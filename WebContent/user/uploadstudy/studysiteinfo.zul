@@ -92,20 +92,13 @@
 							<textbox value="@bind(each.year)"
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-								if="{$each.isYearAuto==true}" />
-							<toolbarbutton label="@bind(each.year)"
-								width="99%"
-								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-								unless="{$each.isYearAuto==true}" />
-
+								inplace="@bind(each.updateMode)" />
+							
 							<textbox value="@bind(each.season)"
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-								if="${each.season.isEmpty()}" />
-							<toolbarbutton label="@bind(each.season)"
-								width="99%"
-								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-								unless="${each.season.isEmpty()}" />
+											inplace="@bind(each.seasonEditable)" />
+					
 
 
 
@@ -252,7 +245,7 @@
 		<separator spacing="20px" />
 		<hlayout style="float:right;">
 
-			<button label="Next"
+			<button label="Save"
 				onClick="@global-command('nextTab',model=vm)" sclass="btn-plain">
 			</button>
 

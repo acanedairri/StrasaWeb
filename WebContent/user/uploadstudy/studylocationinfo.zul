@@ -48,7 +48,7 @@
 				
 		<hlayout style="float:right;">
 	 
-		<button label="Next" 
+		<button label="Save" 
 			onClick="@global-command('nextTab',model=vm)" sclass="btn-plain">
 		</button>
 	

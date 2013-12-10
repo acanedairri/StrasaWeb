@@ -4,7 +4,7 @@
 
 
 		<groupbox>
-			<button id="uploadGenotype" upload="true"
+			<button id="uploadGenotypeData" upload="true"
 				label="Import Germplasm Table"
 				onUpload="@command('uploadGenotypeData')" />
 			<separator></separator>
@@ -306,7 +306,7 @@
 
 		<hlayout style="float:right;">
 
-			<button label="Next" onClick="@command('validateList')"
+			<button label="Save" onClick="@command('validateList')"
 				sclass="btn-plain">
 			</button>
 
