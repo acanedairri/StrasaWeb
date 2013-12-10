@@ -1,6 +1,6 @@
 <?page title="Registration" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<window border="normal" width="800px"
+	<window width="800px"
 		position="center" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditUser')"
 		validationMessages="@id('vmsgs')"
@@ -73,6 +73,9 @@
 						<label class="error"
 							value="@load(vmsgs['email'])" />
 					</cell>
+				</row>
+				<row>
+				<button label="Save" onClick="@command('add')"></button>
 				</row>
 			</rows>
 		</grid>

@@ -34,7 +34,7 @@ public class AddProgram {
 	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar) {
 
 	        mainView = view;
-	        parBinder = (Binder) view.getParent().getAttribute("binder");
+	        parBinder = ctx.getBinder();
 	        
 	}
 	

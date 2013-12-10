@@ -7,14 +7,14 @@ import org.strasa.middleware.model.Study;
 public class EditStudyModel {
 
 	int index;
-	boolean privacy;
+	boolean shared;
 	
 	public boolean isPrivacy() {
-		return privacy;
+		return shared;
 	}
 
 	public void setPrivacy(boolean privacy) {
-		this.privacy = privacy;
+		this.shared = privacy;
 	}
 
 	public int getIndex() {
