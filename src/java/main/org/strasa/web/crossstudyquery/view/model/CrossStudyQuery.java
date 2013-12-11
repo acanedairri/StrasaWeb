@@ -2,6 +2,7 @@ package org.strasa.web.crossstudyquery.view.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,7 +22,7 @@ import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Messagebox;
 
-public class CrossStudyQuery extends StudyVariable{
+public class CrossStudyQuery extends StudyVariable {
 
 	List<StudyVariable> variablelist;
 	ArrayList<CrossStudyQueryFilterModel> crossStudyFilterModelList = new ArrayList<CrossStudyQueryFilterModel>();
@@ -34,6 +35,7 @@ public class CrossStudyQuery extends StudyVariable{
 	private List<String> columnList= new ArrayList<String>();
 	private List<String[]> dataList = new ArrayList<String[]>();
 	private String searchResultLabel;
+	private ArrayList<AcrossStudyData> newDataRow= new ArrayList<AcrossStudyData>();
 
 
 	public List<StudyVariable> getVariablelist() {
@@ -99,8 +101,8 @@ public class CrossStudyQuery extends StudyVariable{
 	public void setDataList(List<String[]> dataList) {
 		this.dataList = dataList;
 	}
-	
-	
+
+
 	public String getSearchResultLabel() {
 		return searchResultLabel;
 	}
@@ -108,6 +110,15 @@ public class CrossStudyQuery extends StudyVariable{
 		this.searchResultLabel = searchResultLabel;
 	}
 	
+	
+	
+
+	public ArrayList<AcrossStudyData> getNewDataRow() {
+		return newDataRow;
+	}
+	public void setNewDataRow(ArrayList<AcrossStudyData> newDataRow) {
+		this.newDataRow = newDataRow;
+	}
 	@Init
 	public void init(){
 		mgr= new CrossStudyQueryManagerImpl();
@@ -174,6 +185,8 @@ public class CrossStudyQuery extends StudyVariable{
 
 			dataList = new ArrayList<String[]>();
 			columnList = new ArrayList<String>();
+			newDataRow= new ArrayList<AcrossStudyData>();
+			
 
 			final CrossStudyQueryManagerImpl crossStudyQueryManagerImpl= new CrossStudyQueryManagerImpl(); 
 
@@ -181,16 +194,16 @@ public class CrossStudyQuery extends StudyVariable{
 
 			// Field
 
-//			CrossStudyQueryFilterModel fieldStudyId= new CrossStudyQueryFilterModel();
-//			fieldStudyId.setVariable("STUDY ID");
-//			fieldStudyId.setColumnAs("field");
-//			filters.add(fieldStudyId);
-//
-//
-//			CrossStudyQueryFilterModel fieldDataRow= new CrossStudyQueryFilterModel();
-//			fieldDataRow.setVariable("datarow");
-//			fieldDataRow.setColumnAs("field");
-//			filters.add(fieldDataRow);
+			//			CrossStudyQueryFilterModel fieldStudyId= new CrossStudyQueryFilterModel();
+			//			fieldStudyId.setVariable("STUDY ID");
+			//			fieldStudyId.setColumnAs("field");
+			//			filters.add(fieldStudyId);
+			//
+			//
+			//			CrossStudyQueryFilterModel fieldDataRow= new CrossStudyQueryFilterModel();
+			//			fieldDataRow.setVariable("datarow");
+			//			fieldDataRow.setColumnAs("field");
+			//			filters.add(fieldDataRow);
 
 			CrossStudyQueryFilterModel fieldStudyName= new CrossStudyQueryFilterModel();
 			fieldStudyName.setColumnHeader("Study Name");
@@ -206,20 +219,41 @@ public class CrossStudyQuery extends StudyVariable{
 
 			//Get Other Field
 			int sizeFieldSelected=crossStudyFilterModelList.size();
-			int counter=1;
 
+			List<String> s= new ArrayList<String>();
 			for(CrossStudyQueryFilterModel f:crossStudyFilterModelList){
+				s.add(f.getVariable());
+			}
+			Collections.sort(s);
+			int counter=1;
+			ArrayList<String> newField=removeDuplicateField(s);
+
+			for(String fieldLabel:newField){
 				CrossStudyQueryFilterModel field= new CrossStudyQueryFilterModel();
-				field.setColumnHeader(f.getVariable());
-				field.setVariable(f.getVariable());
+				field.setColumnHeader(fieldLabel);
+				field.setVariable(fieldLabel);
 				field.setColumnAs("field");
-				if(counter==sizeFieldSelected){
+
+				if(counter==newField.size()){
 					field.setOrderCriteria("last");
 				}
 				counter++;
 				filters.add(field);
 			}
 
+
+			for(CrossStudyQueryFilterModel f:filters){
+
+				System.out.println(f.getVariable());
+				System.out.println(f.getColumnAs());
+				System.out.println(f.getDataType());
+				System.out.println(f.getValueDouble());
+				System.out.println(f.getValueString());
+				System.out.println(f.getOperator());
+				System.out.println(f.getOrderCriteria());
+				System.out.println("-------------------");
+
+			}
 
 
 			System.out.println("FILTER");
@@ -236,7 +270,7 @@ public class CrossStudyQuery extends StudyVariable{
 					field.setValueDouble(Double.valueOf(valueString));
 					field.setDataType("Number");
 				}else{
-					field.setValueDouble(Double.valueOf(valueString));
+					field.setValueString(valueString);
 					field.setDataType("String");
 				}
 
@@ -265,19 +299,6 @@ public class CrossStudyQuery extends StudyVariable{
 			}
 
 
-			//		for(CrossStudyQueryFilterModel f:filters){
-			//
-			//			System.out.println(f.getVariable());
-			//			System.out.println(f.getColumnAs());
-			//			System.out.println(f.getDataType());
-			//			System.out.println(f.getValueDouble());
-			//			System.out.println(f.getValueString());
-			//			System.out.println(f.getOperator());
-			//			System.out.println(f.getOrderCriteria());
-			//			System.out.println("-------------------");
-			//
-			//		}
-
 
 			List<HashMap<String,String>> toreturn = crossStudyQueryManagerImpl.getCrossStudyQueryResult(filters);
 			System.out.println("Size:"+toreturn.size());
@@ -286,29 +307,60 @@ public class CrossStudyQuery extends StudyVariable{
 			//Column Header
 			for (CrossStudyQueryFilterModel d: filters) {
 				if(d.getColumnAs().equals("field")){
-					System.out.print(d.getVariable()+ "\t");
+					//					System.out.print(d.getVariable()+ "\t");
 					columnList.add(d.getColumnHeader());
 				}
 			}
 			System.out.println("\n ");
 			for( HashMap<String,String> rec:toreturn){
 				ArrayList<String> newRow = new ArrayList<String>();
+				AcrossStudyData dataRow= new AcrossStudyData();
+				ArrayList<String> otherDataList = new ArrayList<String>();
 				for (CrossStudyQueryFilterModel d: filters) {
 					if(d.getColumnAs().equals("field")){
 						String value= String.valueOf(rec.get(d.getVariable()));
-						System.out.print(value + "\t");
+						if(d.getVariable().equals("studyname")){
+							dataRow.setStudyname(value);
+						}else if(d.getVariable().equals("GName")){
+							dataRow.setGname(value);
+						}else{
+							otherDataList.add(value);
+						}
+						
+						System.out.print("Value "+value + "\t");
 						newRow.add(value);
 					}
 				}
+				dataRow.setOtherdata(otherDataList);
+				newDataRow.add(dataRow);
+				System.out.print("\n");
 				dataList.add(newRow.toArray(new String[newRow.size()]));
-				System.out.println("\n ");
+				//				System.out.println("\n ");
 
 			}
-
+			
+			for(AcrossStudyData d: newDataRow){
+	
+				System.out.println(d.getGname()+ " "+d.getStudyname());
+			}
+			
 		}
 
 	}
 
+	private ArrayList<String> removeDuplicateField(List<String> s) {
+		String oldString="";
+		ArrayList<String> toreturn= new ArrayList<String>();
+		for(String fieldLabel:s){
+			CrossStudyQueryFilterModel field= new CrossStudyQueryFilterModel();
+			if(!oldString.equals(fieldLabel)){
+				toreturn.add(fieldLabel);
+			}
+			oldString=fieldLabel;
+		}
+		return toreturn;
+
+	}
 	public static boolean isNumeric(String str)
 	{
 		return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
@@ -344,4 +396,6 @@ public class CrossStudyQuery extends StudyVariable{
 		return pageData;
 	}
 
+	
+	
 }

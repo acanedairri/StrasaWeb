@@ -4,7 +4,18 @@
 	<style>
 		.heavy { font-weight: bold; font-size: 12px; } .heavier {
 		font-weight: bold; font-size: 12px; } .searchLabel {font-size:
-		13px; }
+		13px; } .z-toolbarbutton-cnt { color: #000080;
+		text-decoration:underline; font-size: 12px; font-weight: bold;
+
+		}
+		<!-- 		.z-toolbarbutton-over .z-toolbarbutton-cnt { -->
+		<!-- 		background-image:none; background-color: #cff791; -->
+
+		<!-- 		} -->
+		<!-- 		.z-toolbarbutton-select .z-toolbarbutton-cnt { -->
+		<!-- 		background-image:none; background-color: red; -->
+
+		<!-- 		} -->
 	</style>
 
 	<window width="98%" height="98%" title="Cross Study Query"
@@ -113,7 +124,7 @@
 			<groupbox id="crossResultId" mold="3d" width="98%"
 				visible="true">
 				<caption label="@load(vm.searchResultLabel)" />
-				<grid  model="@bind(vm.dataList)"
+				<grid  model="@load(vm.newDataRow)" rowRenderer="org.strasa.web.crossstudyquery.view.model.CrossRowRenderer"
 					sizedByContent="true" height="360px"
 					emptyMessage="No data loaded...">
 					<columns children="@load(vm.columnList)">
@@ -121,14 +132,16 @@
 							<column hflex="1" label="@load(each)" />
 						</template>
 					</columns>
+					<!--  
 					<rows children="@bind(vm.rawData)">
 						<template name="children" var="data">
-							<row>
-								<label forEach="${data}"
-									value="${each}" />
+							<row >
+								<label forEach="#{data}" value="${each}" />
 							</row>
 						</template>
 					</rows>
+					-->
+					<rows/>
 				</grid>
 				<paging pageSize="@load(vm.pageSize)"
 					totalSize="@load(vm.totalSize)" activePage="@bind(vm.activePage)"
