@@ -18,8 +18,7 @@
 		<!-- 		} -->
 	</style>
 
-	<window width="98%" height="98%" title="Cross Study Query"
-		id="BrowseGermplasmWindowId" contentStyle="overflow:auto">
+	<window   width="98%" height="98%" title="Cross Study Query" contentStyle="overflow:auto">
 		<html>
 			<br></br>
 		</html>
@@ -117,31 +116,38 @@
 			</groupbox>
 
 			<hbox>
-				<button label="Query" onClick="@command('RunQuery')" />
+				<button label="Query" onClick="@command('RunQuery')"
+					image="/images/query.png" />
 				<button label="Reset" onClick="@command('reset')" />
 			</hbox>
 
 			<groupbox id="crossResultId" mold="3d" width="98%"
 				visible="true">
 				<caption label="@load(vm.searchResultLabel)" />
-				<grid  model="@load(vm.newDataRow)" rowRenderer="org.strasa.web.crossstudyquery.view.model.CrossRowRenderer"
+				<grid model="@load(vm.newDataRow)"
+					rowRenderer="org.strasa.web.crossstudyquery.view.model.AcrossStudyRowRenderer"
 					sizedByContent="true" height="360px"
 					emptyMessage="No data loaded...">
 					<columns children="@load(vm.columnList)">
 						<template name="children">
-							<column hflex="1" label="@load(each)" />
+
+							<column id="${each}" hflex="1"
+								label="@load(each)"
+								onClick="@global-command('ShowVariateDescription',variable=each)"
+								image="/images/help-icon.png" />
+					
 						</template>
 					</columns>
 					<!--  
-					<rows children="@bind(vm.rawData)">
+						<rows children="@bind(vm.rawData)">
 						<template name="children" var="data">
-							<row >
-								<label forEach="#{data}" value="${each}" />
-							</row>
+						<row >
+						<label forEach="#{data}" value="${each}" />
+						</row>
 						</template>
-					</rows>
+						</rows>
 					-->
-					<rows/>
+					<rows />
 				</grid>
 				<paging pageSize="@load(vm.pageSize)"
 					totalSize="@load(vm.totalSize)" activePage="@bind(vm.activePage)"
@@ -153,6 +159,8 @@
 				</div>
 			</groupbox>
 		</vbox>
+
+
 
 	</window>
 

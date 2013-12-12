@@ -12,15 +12,17 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zul.Bandbox;
-import org.zkoss.zul.Combobox;
-import org.zkoss.zul.Grid;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Popup;
+import org.zkoss.zul.Window;
 
 public class CrossStudyQuery extends StudyVariable {
 
@@ -36,6 +38,7 @@ public class CrossStudyQuery extends StudyVariable {
 	private List<String[]> dataList = new ArrayList<String[]>();
 	private String searchResultLabel;
 	private ArrayList<AcrossStudyData> newDataRow= new ArrayList<AcrossStudyData>();
+	private StudyVariable variableInfo= new StudyVariable();
 
 
 	public List<StudyVariable> getVariablelist() {
@@ -110,14 +113,23 @@ public class CrossStudyQuery extends StudyVariable {
 		this.searchResultLabel = searchResultLabel;
 	}
 	
-	
-	
 
 	public ArrayList<AcrossStudyData> getNewDataRow() {
 		return newDataRow;
 	}
 	public void setNewDataRow(ArrayList<AcrossStudyData> newDataRow) {
 		this.newDataRow = newDataRow;
+	}
+	
+
+	public void setVariablelist(List<StudyVariable> variablelist) {
+		this.variablelist = variablelist;
+	}
+	public StudyVariable getVariableInfo() {
+		return variableInfo;
+	}
+	public void setVariableInfo(StudyVariable variableInfo) {
+		this.variableInfo = variableInfo;
 	}
 	@Init
 	public void init(){
@@ -169,7 +181,28 @@ public class CrossStudyQuery extends StudyVariable {
 	public void DeleteCriteria(@BindingParam("rowIndex") int index){
 		this.crossStudyFilterModelList.remove(index);
 	}
+	
+	
+	@GlobalCommand
+	@NotifyChange({"variableInfo"})
+	public void ShowVariateDescription(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view,@BindingParam("variable") String variable){
+		System.out.println(variable);
+		StudyVariable newVariableInfo= new StudyVariable();
+		newVariableInfo.setDescription("ablasdfsadf");
+		newVariableInfo.setProperty("ablasdfsadf");
 
+		Popup popVariableDescription= new Popup();
+		popVariableDescription.setWidth("250px");
+		popVariableDescription.setParent(view.getParent());
+		HashMap<String, String> params = new HashMap<String,String>();
+		params.put("description",newVariableInfo.getDescription());
+		Executions.createComponents("/user/crossstudyquery/variabledetail.zul",popVariableDescription, params);
+
+		popVariableDescription.open(view.getFellow(variable),"after_start");
+		
+		
+	}
 
 	@Command
 	@NotifyChange({"*"})

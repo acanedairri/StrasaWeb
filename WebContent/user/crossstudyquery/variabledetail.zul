@@ -1,0 +1,15 @@
+<zk>
+<vlayout width="300px">
+    <label value="Variable Information" style="font-size: 12px; font-weight: bold;" />
+    <grid>
+        <rows>
+            <row>
+                Description:
+                <label value="${arg.description}" />
+            </row>
+            
+            
+        </rows>
+    </grid>
+</vlayout>
+</zk>

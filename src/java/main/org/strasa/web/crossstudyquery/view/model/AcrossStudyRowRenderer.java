@@ -11,7 +11,7 @@ import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.Window;
 
-public class  CrossRowRenderer implements RowRenderer<AcrossStudyData>{
+public class  AcrossStudyRowRenderer implements RowRenderer<AcrossStudyData>{
 
 	@Override
 	public void render(Row row, final AcrossStudyData data, int index) throws Exception {
