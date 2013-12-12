@@ -13,7 +13,7 @@
 
 				<tab label="Study Information" id="tab1"
 					disabled="@load(vm.tabDisabled[self.index])"
-					onSelect="@command('showzulfile', zulFileName='/user/uploadstudy/uploaddata.zul', target=self.linkedPanel)" />
+					onSelect="@command('showzulfile', zulFileName='/user/uploadstudy/modifydata.zul', target=self.linkedPanel)" />
 
 				<tab label="Study Site" id="tab2"
 					disabled="@bind(vm.tabDisabled[self.index])"

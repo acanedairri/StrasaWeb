@@ -29,8 +29,7 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 
 
 	private FormValidator formValidator = new FormValidator();
-
-	private boolean noLocation;
+		private boolean noLocation;
 	private List<Location> lstUnknownLocations = new ArrayList<Location>();
 	private List<Location> lstLocations = new ArrayList<Location>();
 	private ArrayList<String> cmbCountry = new ArrayList<String>();
@@ -39,6 +38,16 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 
 	public ArrayList<String> getCmbCountry() {
 		return cmbCountry;
+	}
+	
+	public String editable(int userid){
+		System.out.println("functon called: " + this.userID);
+		if(userid == this.userID) {
+			System.out.println("functon called: " + userid + " returning true");
+			
+			return "false";
+		}
+		else return "true";
 	}
 
 	public void setCmbCountry(ArrayList<String> cmbCountry) {
@@ -114,17 +123,11 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 		this.formValidator = formValidator;
 	}
 
-	public void initValues(ProcessTabViewModel uploadModel){
-		((ProcessTabViewModel)this).isRaw = uploadModel.isRaw;
-		((ProcessTabViewModel)this).uploadToFolder = uploadModel.uploadToFolder;
-		((ProcessTabViewModel)this).setStudyID(uploadModel.getStudyID());
-		
-		
-	}
+
 	@Init
 	public void init(@ExecutionArgParam("uploadModel") ProcessTabViewModel uploadModel) {
 
-		initValues(uploadModel);
+		this.initValues(uploadModel);
 		System.out
 				.println("_______________________________________________________________");
 		System.out.println("Staring debugging :"

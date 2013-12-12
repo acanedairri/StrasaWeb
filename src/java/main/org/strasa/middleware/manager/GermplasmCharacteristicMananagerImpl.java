@@ -35,8 +35,13 @@ public class GermplasmCharacteristicMananagerImpl {
 	public void addCharacteristicBatch(Collection<GermplasmDeepInfoModel> collection){
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession(ExecutorType.BATCH);
 		GermplasmCharacteristicsMapper mapper = session.getMapper(GermplasmCharacteristicsMapper.class);
+		
 		try{
+			
 			for(GermplasmDeepInfoModel recData : collection){
+				GermplasmCharacteristicsExample ex = new GermplasmCharacteristicsExample();
+				ex.createCriteria().andGermplasmnameEqualTo(recData.getGermplasmname());
+				mapper.deleteByExample(ex);
 			for(GermplasmCharacteristics record : recData.getCharacteristicValues()){
 				mapper.insert(record);
 			}

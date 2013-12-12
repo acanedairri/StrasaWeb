@@ -31,6 +31,26 @@ public class StudyDataColumnManagerImpl {
 		}
 
 	}
+	public void removeStudyDataColumnByStudyId(int studyId, String datatype){
+		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		StudyDataColumnMapper mapper = session.getMapper(StudyDataColumnMapper.class);
+
+		try{
+
+			StudyDataColumnExample example = new StudyDataColumnExample();
+			if(datatype.equals("rd")){
+				example.createCriteria().andStudyidEqualTo(studyId).andDatatypeEqualTo("rd");
+			}else{
+				example.createCriteria().andStudyidEqualTo(studyId).andDatatypeEqualTo("dd");
+			}
+			mapper.deleteByExample(example);
+			
+
+		}finally{
+			session.commit();
+			session.close();
+		}
+	}
 	
 	public void addStudyDataColumn(int studyId,String[] columns, boolean isRaw){
 		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession(ExecutorType.BATCH);

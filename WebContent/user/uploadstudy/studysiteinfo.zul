@@ -21,14 +21,63 @@
 					</columns>
 					<template name="model">
 						<row>
+
+							<bandbox value="@bind(each.sitename)"
+								onChange="@command('doSiteSearch',id=forEachStatus.index)"
+								instant="true" autodrop="true"
+								onClick="@command('openSiteBandbox', id=forEachStatus.index)">
+								<bandpopup>
+									<vbox width="40%">
+
+										<grid
+											model="@load(vm.previousSites)"
+											emptyMessage="No previous site available."
+											sizedByContent="true" hflex="true">
+											<column label="Site Name"
+												 />
+											<column
+												label="Site Location"  />
+											<column label="Year"
+												width="80px"  />
+											<column label="Season"
+												width="80px"  />
+											<column label="Eco System"
+												 />
+											<column label="Soil Type" />
+											<column label="Soil PH" />
+											<template name="model">
+												<row>
+													<toolbarbutton
+														label="@load(each.sitename)" width="99%"
+														onClick="@command('setSiteRow', id = each)" />
+													<label
+														value="@bind(each.sitelocation)" />
+
+													<label
+														value="@bind(each.year)" />
+
+													<label
+														value="@bind(each.selectedEcotype.ecotype)" />
+
+													<label
+														value="@bind(each.soiltype)" />
+
+													<label
+														value="@bind(each.soilph)" />
+
+
+												</row>
+											</template>
+										</grid>
+									</vbox>
+								</bandpopup>
+							</bandbox>
+
 							<textbox value="@bind(each.sitename)"
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
 								if="${each.sitename.isEmpty()}" />
-							<toolbarbutton label="@load(each.sitename)"
-								width="99%"
-								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-								unless="${each.sitename.isEmpty()}" />
+
 
 
 							<bandbox
@@ -93,12 +142,12 @@
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
 								inplace="@bind(each.updateMode)" />
-							
+
 							<textbox value="@bind(each.season)"
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-											inplace="@bind(each.seasonEditable)" />
-					
+								inplace="@bind(each.seasonEditable)" />
+
 
 
 

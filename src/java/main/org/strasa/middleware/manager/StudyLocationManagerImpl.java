@@ -120,11 +120,16 @@ public class StudyLocationManagerImpl {
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
 		LocationMapper locationMapper = session.getMapper(LocationMapper.class);
-
+		StudyLocationExample ex = new StudyLocationExample();
+		ex.createCriteria().andStudyidEqualTo(studyid);
+		studyLocationMapper.deleteByExample(ex);
 		try{
 			for(Location record:lstKnowLocations){
 				if(record.getId() == null){
 					locationMapper.insert(record);
+				}
+				else{
+					locationMapper.updateByPrimaryKey(record);
 				}
 				StudyLocation newData = new StudyLocation();
 				newData.setLocationid(record.getId());

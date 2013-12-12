@@ -119,6 +119,9 @@ public class GermplasmManagerImpl {
 					newData.setId(null);
 				else
 					newData.setId(subd.get(0).getId());
+				if(data.isAppend) newData.setId(null);
+				
+				newData.setUserid(data.getUserID());
 				returnVal.add(newData);
 			}
 		} finally {

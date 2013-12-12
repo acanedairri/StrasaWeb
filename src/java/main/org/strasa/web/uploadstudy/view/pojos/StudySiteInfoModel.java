@@ -51,6 +51,10 @@ public class StudySiteInfoModel extends StudySite {
 		public boolean isUpdateMode() {
 			return isUpdateMode;
 		}
+		public boolean isSiteEditable(){
+			if(isUpdateMode) return isUpdateMode;
+			return (this.getSitename().isEmpty());
+		}
 		
 		public boolean isYearEditable(){
 			if(isUpdateMode) return isUpdateMode;
@@ -226,7 +230,7 @@ public class StudySiteInfoModel extends StudySite {
 			this.setStudyid(s.getStudyid());
 			this.setYear(s.getYear());
 			this.setLocationid(s.getLocationid());
-			this.setSelectedLocation(new LocationManagerImpl().getLocationById(s.getLocationid()));
+			if(s.getLocationid() != null) this.setSelectedLocation(new LocationManagerImpl().getLocationById(s.getLocationid()));
 
 		}
 

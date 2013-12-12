@@ -148,7 +148,8 @@ public class Index {
 			isRaw = uploadData.isRaw;
 			studyID = uploadData.getStudyID();
 			uploadModel = uploadData;
-			System.out.println("IsRaw: " + uploadData.uploadToFolder );
+			System.out.println("IsRaw: " + uploadData.isDataReUploaded + " ");
+			
 
 		}
 		if(uploadData.uploadToFolder){

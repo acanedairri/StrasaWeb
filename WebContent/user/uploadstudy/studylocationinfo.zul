@@ -17,29 +17,23 @@
 				</columns>
 				<template name="model">
 					<row>
-						<label value="@bind(each.locationname)" if="${each.locationname !=null}"/>
-						<textbox value="@bind(each.locationname) @validator(vm.formValidator.textValidator)" unless="${each.locationname !=null}" width = "100%"  />
+						<textbox value="@bind(each.locationname) @validator(vm.formValidator.textValidator)" inplace="true" disabled="@load(vm.editable(each.userid))" width = "100%"  style="color: #000000 !important;"/>
 											
-						<label value="@bind(each.country)" if="${each.id  != null}"/>
+
 						<combobox
 									model="@load(vm.cmbCountry)"
-									selectedItem="@bind(each.country)" width="99%" unless="${each.id !=null}">
+									selectedItem="@bind(each.country)" width="99%"  inplace="true" disabled="@load(vm.editable(each.userid))" style="color: #000000 !important;">
 									<template name="model" var="p1">
 										<comboitem
 											value="@load(p1)"
 											label="@load(p1)" />
 									</template>
 								</combobox>
-						<label value="@bind(each.province)" if="${each.id !=null}"/>
-						<textbox value="@bind(each.province)" unless="${each.id !=null}" width = "100%"/>
-						<label value="@bind(each.region)" if="${each.id !=null}" />
-						<textbox value="@bind(each.region)" unless="${each.id !=null}" width = "100%"/>
-						<label value="@bind(each.altitude)" if="${each.id !=null}"/>
-						<textbox value="@bind(each.altitude)" unless="${each.id !=null}" width = "100%"/>
-						<label value="@bind(each.latitude)" if="${each.id !=null}"/>
-						<textbox value="@bind(each.latitude)" unless="${each.id !=null}" width = "100%"/>
-						<label value="@bind(each.weatherstation)" if="${each.id !=null}"/>
-						<textbox value="@bind(each.weatherstation)" unless="${each.id !=null}" width = "100%"/>
+						<textbox value="@bind(each.province)"  inplace="true" disabled="@load(vm.editable(each.userid))" width = "100%"  style="color: #000000 !important;"/>
+						<textbox value="@bind(each.region)"    inplace="true" disabled="@load(vm.editable(each.userid))" width = "100%"  style="color: #000000 !important;"/>
+						<textbox value="@bind(each.altitude)"  inplace="true" disabled="@load(vm.editable(each.userid))" width = "100%"  style="color: #000000 !important;"/>
+						<textbox value="@bind(each.latitude)"  inplace="true" disabled="@load(vm.editable(each.userid))" width = "100%"  style="color: #000000 !important;"/>
+						<textbox value="@bind(each.weatherstation)" inplace="true" disabled="@load(vm.editable(each.userid))" width = "100%"  style="color: #000000 !important;"/>
 					</row>
 				</template>
 			</grid>

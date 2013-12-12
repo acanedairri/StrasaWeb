@@ -14,12 +14,34 @@ public class ProcessTabViewModel {
 	public boolean uploadToFolder = false;
 	public int dataset = 1;
 	public boolean isUpdateMode = false;
-	
+	public int userID = 1;
 	public boolean isRaw() {
 		return isRaw;
 	}
 	
+	public boolean isDataReUploaded = false;
 	
+	
+	public boolean isDataReUploaded() {
+		return isDataReUploaded;
+	}
+
+
+	public void setDataReUploaded(boolean isDataReUploaded) {
+		this.isDataReUploaded = isDataReUploaded;
+	}
+
+
+	public int getUserID() {
+		return userID;
+	}
+
+
+	public void setUserID(int userID) {
+		this.userID = userID;
+	}
+
+
 	public void initValues(ProcessTabViewModel uploadModel){
 		if(uploadModel == null){
 			System.out.println("NULL");
@@ -27,8 +49,10 @@ public class ProcessTabViewModel {
 		}
 		isRaw = uploadModel.isRaw;
 		uploadToFolder = uploadModel.uploadToFolder;
-	setStudyID(uploadModel.getStudyID());
+	    setStudyID(uploadModel.getStudyID());
 		setUpdateMode(uploadModel.isUpdateMode);
+		this.userID = uploadModel.userID;
+		this.isDataReUploaded = uploadModel.isDataReUploaded;
 		
 		
 	}

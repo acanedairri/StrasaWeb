@@ -3,7 +3,7 @@
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudyGermplasmInfo')">
 
 
-		<groupbox>
+		<groupbox id="gbUnknownGermplasm">
 			<button id="uploadGenotypeData" upload="true"
 				label="Import Germplasm Table"
 				onUpload="@command('uploadGenotypeData')" />
@@ -16,7 +16,8 @@
 					<groupbox mold="3d" height="50%">
 						<caption label="List of unknown Germplasm"></caption>
 						<grid id="tblStudyGerm" height="100%"
-							model="@load(vm.lstStudyGermplasm)" vflex="1" hflex="1" sizedByContent="true">
+							model="@load(vm.lstStudyGermplasm)" vflex="1" hflex="1"
+							sizedByContent="true">
 							<auxhead width="100%">
 								<auxheader colspan="13" label=""
 									width="100%">
@@ -24,39 +25,42 @@
 								</auxheader>
 
 							</auxhead>
-							<columns menupopup="auto" columnsgroup="false">
-								<column label="GID"  />
-								<column label="GName"  sort="auto(germplasmname)" style="background-color:#FA807A;"/>
-								<column label="OtherName"  />
-								<column label="Breeder"   style="background-color:#FA807A;"/>
-								<column label="GermplasmType"  style="background-color:#FA807A;"/>
+							<columns menupopup="auto"
+								columnsgroup="false">
+								<column label="GID" />
+								<column label="GName"
+									sort="auto(germplasmname)" style="background-color:#FA807A;" />
+								<column label="OtherName" />
+								<column label="Breeder"
+									style="background-color:#FA807A;" />
+								<column label="GermplasmType"
+									style="background-color:#FA807A;" />
 								<column label="IR Number" />
 								<column label="IR Cross" />
 								<column label="Parentage" />
-								<column label="Female Parent"  style="background-color:#FA807A;"/>
-								<column label="Male Parent"  style="background-color:#FA807A;"/>
+								<column label="Female Parent"
+									style="background-color:#FA807A;" />
+								<column label="Male Parent"
+									style="background-color:#FA807A;" />
 								<column label="Selection History" />
-								<column label="Source"   />
-								<column label="Characteristic"  />
+								<column label="Source" />
+								<column label="Characteristic" />
 
 							</columns>
 							<template name="model">
 								<row style="@load(each.styleBG)">
-									<intbox value="@bind(each.gid)"
-										 />
+									<intbox value="@bind(each.gid)" />
 									<label
-										value="@bind(each.germplasmname)"
-										 />
+										value="@bind(each.germplasmname)" />
 									<textbox
-										value="@bind(each.othername)"
-										 />
+										value="@bind(each.othername)" />
 									<textbox
 										value="@bind(each.currBreader)" constraint="no empty" />
 									<combobox
 										model="@load(vm.lstGermplasmType)"
 										readonly="${each.germplasmtypeid != null}"
-									
-										selectedItem="@bind(each.selectedGermplasmType)" width="99%">
+										selectedItem="@bind(each.selectedGermplasmType)"
+										width="99%">
 										<template name="model">
 											<comboitem
 												value="@load(each.germplasmtype)"
@@ -65,23 +69,18 @@
 									</combobox>
 
 									<textbox
-										value="@bind(each.irnumber)"  />
-									<textbox value="@bind(each.ircross)"
-										 />
+										value="@bind(each.irnumber)" />
 									<textbox
-										value="@bind(each.parentage)"
-										 />
+										value="@bind(each.ircross)" />
 									<textbox
-										value="@bind(each.femaleparent)"
-										 constraint="no empty" />
+										value="@bind(each.parentage)" />
 									<textbox
-										value="@bind(each.maleparent)"
-										 constraint="no empty" />
+										value="@bind(each.femaleparent)" constraint="no empty" />
 									<textbox
-										value="@bind(each.selectionhistory)"
-										/>
-									<textbox value="@bind(each.source)"
-										 />
+										value="@bind(each.maleparent)" constraint="no empty" />
+									<textbox
+										value="@bind(each.selectionhistory)" />
+									<textbox value="@bind(each.source)" />
 									<vbox width="65%">
 										<bandbox
 											id="bms_${forEachStatus.index}" readonly="true"
@@ -205,9 +204,7 @@
 												</vbox>
 											</bandpopup>
 										</bandbox>
-										<label
-											value="@bind(each.characteristic)" multiline="true">
-										</label>
+									
 									</vbox>
 								</row>
 							</template>
@@ -215,46 +212,75 @@
 						</grid>
 
 					</groupbox>
-					<groupbox mold="3d" height="50%">
+					<groupbox id="gbKnownGermplasm" mold="3d" height="50%">
 						<caption label="List of known Germplasm"></caption>
-						<grid id="tblKnownGerm" height="100%" sizedByContent="true"
-							model="@load(vm.lstKnownGermplasm)" vflex="1" hflex="1">
+						<grid id="tblKnownGerm" height="100%"
+							sizedByContent="true" model="@load(vm.lstKnownGermplasm)"
+							vflex="1" hflex="1">
 							<auxhead width="100%">
 								<auxheader colspan="12" label=""
 									width="100%">
 
 
 								</auxheader>
-								<auxheader colspan="3" label="Characteristic"
-									width="100%">
+								<auxheader colspan="3"
+									label="Characteristic" width="100%">
 
-		
+
 								</auxheader>
 							</auxhead>
-							<columns menupopup="auto" columnsgroup="false">
+							<columns menupopup="auto"
+								columnsgroup="false">
 								<column label="GID" sort="auto(gid)" />
-								<column label="GName" sort="auto(germplasmname)" />
-								<column label="OtherName" sort="auto(othername)" />
-								<column label="Breeder" sort="auto(breeder)" />
-								<column label="GermplasmType" sort="auto(germplasmType)"/>
-								<column label="IR Number" sort="auto(irnumber)" />
-								<column label="IR Cross" sort="auto(ircross)" />
-								<column label="Parentage" sort="auto(parentage)" />
-								<column label="Female Parent" sort="auto(femaleparent)" />
-								<column label="Male Parent" sort="auto(maleparent)" />
-								<column label="Selection History" sort="auto(selectionhistory)" />
-								<column label="Source" sort="auto(source)" />
-								<column label="Biotic" sort="auto(biotic)" />
-								<column label="Abiotic" sort="auto(abiotic)" />
-								<column label="Grain Quality" sort="auto(grainquality)" />
-								<column label="Major Genes" sort="auto(majorgenes)" />
+								<column label="GName"
+									sort="auto(germplasmname)" />
+								<column label="OtherName"
+									sort="auto(othername)" />
+								<column label="Breeder"
+									sort="auto(breeder)" />
+								<column label="GermplasmType"
+									sort="auto(germplasmType)" />
+								<column label="IR Number"
+									sort="auto(irnumber)" />
+								<column label="IR Cross"
+									sort="auto(ircross)" />
+								<column label="Parentage"
+									sort="auto(parentage)" />
+								<column label="Female Parent"
+									sort="auto(femaleparent)" />
+								<column label="Male Parent"
+									sort="auto(maleparent)" />
+								<column label="Selection History"
+									sort="auto(selectionhistory)" />
+								<column label="Source"
+									sort="auto(source)" />
+								<column label="Biotic"
+									sort="auto(biotic)" />
+								<column label="Abiotic"
+									sort="auto(abiotic)" />
+								<column label="Grain Quality"
+									sort="auto(grainquality)" />
+								<column label="Major Genes"
+									sort="auto(majorgenes)" />
+								<column label="Actions"
+									visible="@bind(vm.updateMode)" />
 							</columns>
 							<template name="model">
 								<row style="@load(each.styleBG)">
 									<label value="@bind(each.gid)" />
 
-									<label
-										value="@bind(each.germplasmname)" />
+									<combobox
+										model="@load(vm.getGermplasmByName(each.germplasmname))"
+										readonly="true"
+										selectedItem="@bind(each.selectedData)"
+										width="99%" onSelect="@command('changeGermplasmInfo', index = event.target.selectedItem.value)">
+										<template name="model" var = "item">
+											<comboitem
+												value="@load(item)"
+												label="@load(item.comboItemName)" />
+										</template>
+									</combobox>
+
 
 									<label
 										value="@bind(each.othername)" />
@@ -280,19 +306,28 @@
 										</popup>
 									</vlayout>
 
-									<label value="@bind(each.germplasmType)" />
+									<label
+										value="@bind(each.germplasmType)" />
 									<label value="@bind(each.irnumber)" />
 									<label value="@bind(each.ircross)" />
-									<label value="@bind(each.parentage)" />
-									<label value="@bind(each.femaleparent)" />
-									<label value="@bind(each.maleparent)" />
-									<label value="@bind(each.selectionhistory)" />
+									<label
+										value="@bind(each.parentage)" />
+									<label
+										value="@bind(each.femaleparent)" />
+									<label
+										value="@bind(each.maleparent)" />
+									<label
+										value="@bind(each.selectionhistory)" />
 									<label value="@bind(each.source)" />
 									<label value="@bind(each.biotic)" />
 									<label value="@bind(each.abiotic)" />
-									<label value="@bind(each.grainquality)" />
-									<label value="@bind(each.majorgenes)" />
-									
+									<label
+										value="@bind(each.grainquality)" />
+									<label
+										value="@bind(each.majorgenes)" />
+									<button
+										image="/widgets/grid/inline_row_editing/img/pencil-small.png"
+										onClick="@command('modifyGermplasm', gname=each.germplasmname)" />
 
 								</row>
 							</template>

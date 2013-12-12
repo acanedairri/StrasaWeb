@@ -106,7 +106,7 @@ public class AddLocation {
 			e.printStackTrace();
 		}
 		
-
+		locationModel.setUserid(userID);
 		locationMan.addLocation(locationModel);
 		
 		
