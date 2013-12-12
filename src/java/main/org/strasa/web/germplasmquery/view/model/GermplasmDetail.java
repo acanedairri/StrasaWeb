@@ -1,16 +1,14 @@
-package org.strasa.web.browsestudy.view.model;
+package org.strasa.web.germplasmquery.view.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.strasa.middleware.manager.BrowseGermplasmManagerImpl;
-import org.strasa.middleware.manager.BrowseStudyManagerImpl;
 import org.strasa.middleware.manager.GermplasmCharacteristicMananagerImpl;
 import org.strasa.middleware.manager.GermplasmManagerImpl;
 import org.strasa.middleware.manager.GermplasmTypeManagerImpl;
-import org.strasa.middleware.manager.StudyGermplasmManagerImpl;
-import org.strasa.middleware.model.Ecotype;
+import org.strasa.middleware.manager.KeyCharacteristicManagerImpl;
 import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.GermplasmCharacteristics;
 import org.strasa.middleware.model.GermplasmType;
@@ -18,17 +16,13 @@ import org.strasa.middleware.model.KeyAbiotic;
 import org.strasa.middleware.model.KeyBiotic;
 import org.strasa.middleware.model.KeyGrainQuality;
 import org.strasa.middleware.model.KeyMajorGenes;
-import org.strasa.middleware.model.PlantingType;
-import org.strasa.middleware.model.StudyAgronomy;
-import org.strasa.middleware.model.StudyDesign;
-import org.strasa.middleware.model.StudyGermplasm;
-import org.strasa.middleware.model.StudySite;
 import org.strasa.web.browsestudy.view.model.StudySearchResultModel;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.ExecutionArgParam;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
@@ -37,20 +31,21 @@ import org.zkoss.zkmax.zul.Chosenbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Include;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 
 
-public class GermplasmInfo {
+public class GermplasmDetail {
 
 	private String nameSearch;
 	private String searchKey;
 	private List<GermplasmType> germplasmType;
 	private List<String> keyCharacteristicOption;
-	private int germplasmTypeId;
+	private int germplasmTypeId=0;
 	private String keyCharactericticValue;
-	private List<GermplasmInfoModel> germplasmList = new ArrayList<GermplasmInfoModel>();
+	private List<Germplasm> germplasmList;
 	private Germplasm germplasm;
 	private String abioticCharacteristics;
 	private String bioticCharacteristics;
@@ -58,15 +53,25 @@ public class GermplasmInfo {
 	private String majorGenesCharacteristics;
 	private List<StudySearchResultModel> studyTested;
 	private HashMap<String,Integer> germplasmTypeKey = new HashMap<String,Integer>();
+	private ArrayList<String> keyCharValueList= new ArrayList<String>();
+	private final static String ABIOTIC="Abiotic";
+	private final static String BIOTIC="Biotic";
+	private final static String GRAIN_QUALITY="Grain Quality";
+	private final static String MAJOR_GENES="Major Genes";
+	private String searchResultLabel="Search Result";
+	private List<CharacteristicModel> keyAbioticList;
+	private List<CharacteristicModel> keyBioticList;
+	private List<CharacteristicModel> keyGrainQualityList;
+	private List<CharacteristicModel> keyMajorGenesList;
+	private List<String> listKeyCharFilter= new ArrayList<String>();
+//
+//	@Init
+//	public void setInitialData(){
+//		this.germplasmList=getGermplasmByName("");
+//		this.germplasm=getGermplasmDetailInformation(-1);
+//		this.germplasmType=getGermplasmTypeList();
+//	}
 
-
-
-	@Init
-	public void init(@ExecutionArgParam("studyid") Integer studyId){
-		for(StudyGermplasm sg :getGermplasmById(studyId)){
-			germplasmList.add(new GermplasmInfoModel(sg));
-		}
-	}
 
 	public String getNameSearch() {
 		return nameSearch;
@@ -108,16 +113,15 @@ public class GermplasmInfo {
 	public String getKeyCharactericticValue() {
 		return keyCharactericticValue;
 	}
-	
 	public void setKeyCharactericticValue(String keyCharactericticValue) {
 		this.keyCharactericticValue = keyCharactericticValue;
 	}
 
 
-	public List<GermplasmInfoModel> getGermplasmList() {
+	public List<Germplasm> getGermplasmList() {
 		return germplasmList;
 	}
-	public void setGermplasmList(List<GermplasmInfoModel> germplasmList) {
+	public void setGermplasmList(List<Germplasm> germplasmList) {
 		this.germplasmList = germplasmList;
 	}
 
@@ -170,8 +174,8 @@ public class GermplasmInfo {
 		this.majorGenesCharacteristics = majoyGenesCharacteristics;
 	}
 
-	
-	
+
+
 
 	public List<StudySearchResultModel> getStudyTested() {
 		return studyTested;
@@ -182,73 +186,165 @@ public class GermplasmInfo {
 		this.studyTested = studyTested;
 	}
 
-	@NotifyChange("*")
-	@Command
-	public void DisplayGermplasmDetail(@BindingParam("gname")String gname){
-		Window studyDetailWindow = (Window)Executions.getCurrent().createComponents(
-				"/user/browsegermplasm/germplasmdetail.zul", null, null);
-		studyDetailWindow.doModal();
-		studyDetailWindow.setId("germplasmDetailWindow");
-		studyDetailWindow.setTitle(gname);
-		studyDetailWindow.setClosable(true);
 
-//		Include studyInformationPage = new Include();
-//		studyInformationPage.setSrc("/user/browsgermplasmygermplasmdetail.zul");
-//		studyInformationPage.setParent(studyDetailWindow);
-//		studyInformationPage.setDynamicProperty("gname", gname);
-	}
-	@Command
-	public void SetSearchUI(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view) {
 
-		Combobox cmbSearchKey= (Combobox) component.getFellow("cmbSearchKey");
-		if(cmbSearchKey.getValue().equals("Name")){
-			component.getFellow("txtNameSearch").setVisible(true);
-			component.getFellow("cmbKeyChar").setVisible(false);
-			component.getFellow("cmbKeyCharValue").setVisible(false);
-			component.getFellow("cmbGermplasmType").setVisible(false);
-		}else if(cmbSearchKey.getValue().contains("Key")){
-			component.getFellow("txtNameSearch").setVisible(false);
-			component.getFellow("cmbKeyChar").setVisible(true);
-			component.getFellow("cmbKeyCharValue").setVisible(true);
-			component.getFellow("cmbGermplasmType").setVisible(false);
-		}else{
-			component.getFellow("txtNameSearch").setVisible(false);
-			component.getFellow("cmbKeyChar").setVisible(false);
-			component.getFellow("cmbKeyCharValue").setVisible(false);
-			component.getFellow("cmbGermplasmType").setVisible(true);
-		}
+
+	public String getSearchResultLabel() {
+		return searchResultLabel;
 	}
+
+
+	public void setSearchResultLabel(String searchResultLabel) {
+		this.searchResultLabel = searchResultLabel;
+	}
+
+
+
+
+
+
+	public List<CharacteristicModel> getKeyAbioticList() {
+		return keyAbioticList;
+	}
+
+
+	public void setKeyAbioticList(List<CharacteristicModel> keyAbioticList) {
+		this.keyAbioticList = keyAbioticList;
+	}
+
+
+	public List<CharacteristicModel> getKeyBioticList() {
+		return keyBioticList;
+	}
+
+
+	public void setKeyBioticList(List<CharacteristicModel> keyBioticList) {
+		this.keyBioticList = keyBioticList;
+	}
+
+
+	public List<CharacteristicModel> getKeyGrainQualityList() {
+		return keyGrainQualityList;
+	}
+
+
+	public void setKeyGrainQualityList(List<CharacteristicModel> keyGrainQualityList) {
+		this.keyGrainQualityList = keyGrainQualityList;
+	}
+
+
+	public List<CharacteristicModel> getKeyMajorGenesList() {
+		return keyMajorGenesList;
+	}
+
+
+	public void setKeyMajorGenesList(List<CharacteristicModel> keyMajorGenesList) {
+		this.keyMajorGenesList = keyMajorGenesList;
+	}
+
+
+
+
+
 
 	private  List<Germplasm> getGermplasmByName(String name){
 
-		GermplasmManagerImpl mgr= new GermplasmManagerImpl();
-		return (List<Germplasm>) mgr.getGermplasmListByName(name);
-
-	}
-	
-	private  List<StudyGermplasm> getGermplasmById(Integer studyId){
-
-		StudyGermplasmManagerImpl mgr= new StudyGermplasmManagerImpl();
-		List<StudyGermplasm> list;
-		try{
-		list = mgr.getStudyGermplasmByStudyId(studyId);
-		}catch (NullPointerException npe){
-			list  = new ArrayList<StudyGermplasm>();
+		BrowseGermplasmManagerImpl mgr= new BrowseGermplasmManagerImpl();
+		if(name.contains("%") || name.contains("?") ){
+			return (List<Germplasm>) mgr.getGermplasmByNameLike(name);
+		}else{
+			return (List<Germplasm>) mgr.getGermplasmByNameEqual(name);
 		}
-		return list;
-
 	}
-	
-	private List<Germplasm> getGermplasmByType(int id) {
+
+	private List<Germplasm> getGermplasmByType(int typeid) {
 		// TODO Auto-generated method stub
 		BrowseGermplasmManagerImpl mgr= new BrowseGermplasmManagerImpl();
-		return (List<Germplasm>) mgr.getGermplasmListByType(id);
+		return (List<Germplasm>) mgr.getGermplasmByType(typeid);
+	}
+
+	private List<Germplasm> getGermplasmByKeyCharacteristics(ArrayList<String> keyCharList, String KeyChar ) {
+		// TODO Auto-generated method stub
+		BrowseGermplasmManagerImpl mgr= new BrowseGermplasmManagerImpl();
+		return  mgr.getGermplasmKeyCharacteristicsAbiotic(keyCharList,KeyChar);
+	}
+
+
+	@Init
+	public void Init(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("germplasmName")String name){
+		String gname= ((Window) view.getFellow("germplasmDetailWindow")).getTitle();
+		this.germplasmList=getGermplasmByName(gname);
+		searchResultLabel="Search Result:  "+this.germplasmList.size()+"  row(s) returned";
+		DisplayGermplasmInfo(this.germplasmList.get(0).getId(), this.germplasmList.get(0).getGermplasmname());
+		System.out.println("gname"+ gname);
+
+	}
+
+	private List<Germplasm> getGermplasmByKeyCharacteristics() {
+		final BrowseGermplasmManagerImpl browseStudyManagerImpl= new BrowseGermplasmManagerImpl(); 
+
+
+		KeyCharacteristicQueryModel keyCriteria= new KeyCharacteristicQueryModel();
+		List<String> keyValues=new ArrayList<String>();
+
+		for(String s:listKeyCharFilter){
+			keyValues.add(s);
+		}
+
+		int size=keyValues.size();
+
+		keyCriteria.setCountKeyCriteria(keyValues.size());
+		keyCriteria.setKeyValues(keyValues);
+
+		List<Germplasm> toreturn= browseStudyManagerImpl.getGermplasmKeyCharacteristics(keyCriteria);
+		System.out.println("Size:"+toreturn.size());
+
+		return toreturn;
+	}
+
+
+	private ArrayList<String> getKeyCharacteristicsSelected() {
+
+		ArrayList<String> toreturn=new ArrayList<String>();
+
+		for(CharacteristicModel keyValue:keyAbioticList){
+			if(keyValue.isValue()){
+				toreturn.add(keyValue.name);
+			}
+		}
+		for(CharacteristicModel keyValue:keyBioticList){
+			if(keyValue.isValue()){
+				toreturn.add(keyValue.name);
+			}
+		}
+		for(CharacteristicModel keyValue:keyGrainQualityList){
+			if(keyValue.isValue()){
+				toreturn.add(keyValue.name);
+			}
+		}
+		for(CharacteristicModel keyValue:keyMajorGenesList){
+			if(keyValue.isValue()){
+				toreturn.add(keyValue.name);
+			}
+		}
+
+		return toreturn;
+
+	}
+
+
+	@Command("AddNewKeyCharacteristics")
+	public void AddNewKeyCharacteristics(@BindingParam("keyCharValue") String keyCharValue) {
+		//		Chosenbox keyValues= (Chosenbox) component.getFellow("cmbKeyCharValue");
+		keyCharValueList.addAll(keyCharValueList);
+		System.out.println(keyCharValue);
+
 	}
 
 
 
-	@NotifyChange("*")
+	@NotifyChange("germplasmList,studyTested")
 	@Command
 	public void getKeyCharacteristicOptionsList(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view) {
@@ -274,27 +370,45 @@ public class GermplasmInfo {
 
 	@NotifyChange("*")
 	@Command
-	public void DisplayGermplasmInfo(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view,@BindingParam("germplasmId")Integer id,@BindingParam("gname")String gname){
-//		System.out.println(id + " "+gname);
-		Groupbox groupBoxInfo= (Groupbox) component.getFellow("GermplasmDetailId");
-		groupBoxInfo.setVisible(true);
-		
-		Groupbox groupBoxStudyTested= (Groupbox) component.getFellow("StudyTestedId");
-		groupBoxStudyTested.setVisible(true);
-		
-		
+	public void DisplayGermplasmInfo(Integer id, String gname){
+
 		germplasm=getGermplasmDetailInformation(id);
-		abioticCharacteristics=getGermplasmCharacteristics("Abiotic",gname);
-		bioticCharacteristics=getGermplasmCharacteristics("Biotic",gname);
-		
+		abioticCharacteristics=getGermplasmCharacteristics(ABIOTIC,gname);
+		bioticCharacteristics=getGermplasmCharacteristics(BIOTIC,gname);
+		grainQualityCharacteristics=getGermplasmCharacteristics(GRAIN_QUALITY,gname);
+		majorGenesCharacteristics=getGermplasmCharacteristics(MAJOR_GENES,gname);
+
 		studyTested=getStudyTested(gname);
 	}
 
+
+
+	@NotifyChange("*")
+	@Command
+	public void DisplayStudyDetail(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view,@BindingParam("studyid")Integer studyid,@BindingParam("studyname")String studyname){
+
+
+		Window studyDetailWindow = (Window)Executions.getCurrent().createComponents(
+				"/user/browsegermplasm/studydetails.zul", null, null);
+		studyDetailWindow.doModal();
+		studyDetailWindow.setTitle(studyname);
+
+		Include studyInformationPage = new Include();
+		studyInformationPage.setSrc("/user/browsestudy/studyinformation.zul");
+		studyInformationPage.setParent(studyDetailWindow);
+		studyInformationPage.setDynamicProperty("studyId", studyid);
+
+
+
+
+	}
+
+
 	private List<StudySearchResultModel> getStudyTested(String gname) {
-		BrowseGermplasmManagerImpl browseGermplasmManagerImpl= new BrowseGermplasmManagerImpl(); 
-		return browseGermplasmManagerImpl.getStudyWithGemrplasmTested(gname);
-		
+		BrowseGermplasmManagerImpl browseStudyManagerImpl= new BrowseGermplasmManagerImpl(); 
+		return browseStudyManagerImpl.getStudyWithGemrplasmTested(gname);
+
 	}
 
 
@@ -375,46 +489,37 @@ public class GermplasmInfo {
 		return germplasmType;
 	}
 
-	public class GermplasmInfoModel extends StudyGermplasm{
-		private GermplasmType type;
-		private String characteristics;
-		
-		private StringBuilder sb = new StringBuilder();
-		public GermplasmInfoModel(StudyGermplasm s){
-			this.setGid(s.getGid());
-			this.setGermplasmname(s.getGermplasmname());
-			this.setOthername(s.getOthername());
-			this.setBreeder(s.getBreeder());
-			this.setIrnumber(s.getIrnumber());
-			this.setIrcross(s.getIrcross());
-			this.setParentage(s.getParentage());
-			this.setFemaleparent(s.getFemaleparent());
-			this.setMaleparent(s.getMaleparent());
-			this.setSelectionhistory(s.getSelectionhistory());
-			this.setSource(s.getSource());
-			setType(getGermplasmTypeList().get(s.getGermplasmtypeid()));
-			sb.append(" ");
-//			sb.append(getGermplasmCharacteristics("Biotic", getGermplasmname()));
-//			sb.append(getGermplasmCharacteristics("Abiotic", getGermplasmname()));
-//			sb.append(getGermplasmCharacteristics("Grain", getGermplasmname()));
-			
-			setCharacteristics(sb.toString());
+	public class CharacteristicModel {
+		private String name;
+		private boolean value;
+		private int primaryid;
+
+		public int getPrimaryid() {
+			return primaryid;
 		}
 
-		public GermplasmType getType() {
-			return type;
+		public void setPrimaryid(int primaryid) {
+			this.primaryid = primaryid;
 		}
 
-		public void setType(GermplasmType type) {
-			this.type = type;
+		public String getName() {
+			return name;
 		}
 
-		public String getCharacteristics() {
-			return characteristics;
+		public void setName(String name) {
+			this.name = name;
 		}
 
-		public void setCharacteristics(String characteristics) {
-			this.characteristics = characteristics;
+		public boolean isValue() {
+			return value;
 		}
+
+		public void setValue(boolean value) {
+			this.value = value;
+
+		}
+
 	}
+
+
 }

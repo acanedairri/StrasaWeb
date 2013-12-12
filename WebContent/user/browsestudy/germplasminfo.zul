@@ -28,7 +28,7 @@
 			<template name="model">
 				<row>
 					<label value="@load(each.gid)" />
-					<label value="@load(each.germplasmname)" />
+					<toolbarbutton label="@load(each.germplasmname)" onClick=" @command('DisplayGermplasmDetail', gname=each.germplasmname)" />
 					<label value="@load(each.othername)" />
 					<label value="@load(each.breeder)" />
 					<label value="@load(each.type.germplasmtype)" />
