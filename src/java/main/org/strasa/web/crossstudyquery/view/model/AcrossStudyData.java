@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 public class AcrossStudyData {
 	
+	int studyId;
 	String studyname;
 	String gname;
+	
 	ArrayList<String>otherdata;
 	public String getStudyname() {
 		return studyname;
@@ -24,6 +26,12 @@ public class AcrossStudyData {
 	}
 	public void setOtherdata(ArrayList<String> otherdata) {
 		this.otherdata = otherdata;
+	}
+	public int getStudyId() {
+		return studyId;
+	}
+	public void setStudyId(int studyId) {
+		this.studyId = studyId;
 	}
 
 	

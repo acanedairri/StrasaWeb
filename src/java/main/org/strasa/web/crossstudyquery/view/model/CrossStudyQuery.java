@@ -205,6 +205,12 @@ public class CrossStudyQuery extends StudyVariable {
 			//			fieldDataRow.setColumnAs("field");
 			//			filters.add(fieldDataRow);
 
+			CrossStudyQueryFilterModel fieldStudyId= new CrossStudyQueryFilterModel();
+			fieldStudyId.setColumnHeader("Study id");
+			fieldStudyId.setVariable("studyid");
+			fieldStudyId.setColumnAs("field");
+			filters.add(fieldStudyId);
+			
 			CrossStudyQueryFilterModel fieldStudyName= new CrossStudyQueryFilterModel();
 			fieldStudyName.setColumnHeader("Study Name");
 			fieldStudyName.setVariable("studyname");
@@ -308,7 +314,9 @@ public class CrossStudyQuery extends StudyVariable {
 			for (CrossStudyQueryFilterModel d: filters) {
 				if(d.getColumnAs().equals("field")){
 					//					System.out.print(d.getVariable()+ "\t");
-					columnList.add(d.getColumnHeader());
+					if(!d.getVariable().equals("studyid")){
+						columnList.add(d.getColumnHeader());
+					}
 				}
 			}
 			System.out.println("\n ");
@@ -323,6 +331,8 @@ public class CrossStudyQuery extends StudyVariable {
 							dataRow.setStudyname(value);
 						}else if(d.getVariable().equals("GName")){
 							dataRow.setGname(value);
+						}else if(d.getVariable().equals("studyid")){
+							dataRow.setStudyId(Integer.valueOf(value));
 						}else{
 							otherDataList.add(value);
 						}

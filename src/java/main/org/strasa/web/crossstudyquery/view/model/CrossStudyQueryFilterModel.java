@@ -2,6 +2,7 @@ package org.strasa.web.crossstudyquery.view.model;
 
 public class CrossStudyQueryFilterModel {
 
+
 	String columnHeader;
 	String variable;
 	String operator;
@@ -10,7 +11,6 @@ public class CrossStudyQueryFilterModel {
 	String dataType;
 	String orderCriteria;
 	String columnAs;
-	
 	
 	
 	public String getVariable() {
