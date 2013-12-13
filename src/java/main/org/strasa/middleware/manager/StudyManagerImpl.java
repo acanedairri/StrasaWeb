@@ -43,6 +43,23 @@ public class StudyManagerImpl {
 		StudyMapper mapper = session.getMapper(StudyMapper.class);
 		try{
 			mapper.deleteByPrimaryKey(studyId);
+			session.commit();
+		}
+		finally{
+			session.close();
+		}
+	}
+	
+
+	public void updateStudyById(Study record) {
+		// TODO Auto-generated method stub
+		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		StudyMapper mapper = session.getMapper(StudyMapper.class);
+		try{
+			System.out.println(record.getShared());
+			mapper.updateByPrimaryKey(record);
+			session.commit();
+//			mapper.updateByExample(record, example);
 		}
 		finally{
 			session.close();
