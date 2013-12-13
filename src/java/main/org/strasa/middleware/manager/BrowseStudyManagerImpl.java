@@ -102,6 +102,7 @@ public class BrowseStudyManagerImpl {
 				m.setStudyid(s.getStudyid());
 				m.setOrder(count);
 				m.setCount(columnCount);
+				m.setDataset(s.getDataset());
 				dataColumns.add(m);
 				count++;
 			}

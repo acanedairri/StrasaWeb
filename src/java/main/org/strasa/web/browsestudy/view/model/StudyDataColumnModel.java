@@ -6,6 +6,7 @@ public class StudyDataColumnModel{
 	int order;
 	int count;
 	int studyid;
+	int dataset;
 	String columnheader;
 	public int getOrder() {
 		return order;
@@ -30,6 +31,14 @@ public class StudyDataColumnModel{
 	}
 	public void setColumnheader(String columnheader) {
 		this.columnheader = columnheader;
+	}
+	
+	
+	public int getDataset() {
+		return dataset;
+	}
+	public void setDataset(int dataset) {
+		this.dataset = dataset;
 	}
 	@Override
 	public String toString() {

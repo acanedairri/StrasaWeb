@@ -98,7 +98,7 @@
 				MAX(CASE datacolumn WHEN #{item.columnheader} THEN
 				datavalue ELSE '' END) AS #{item.columnheader}
 				from studyrawdata as
-				t1 where t1.studyid=#{item.studyid}
+				t1 where t1.studyid=#{item.studyid} and t1.dataset=#{item.dataset}
 				group by t1.datarow
 			</if>
 
@@ -119,7 +119,7 @@
 				datavalue ELSE '' END) AS #{item.columnheader}
 				from studyderiveddata
 				as
-				t1 where t1.studyid=#{item.studyid}
+				t1 where t1.studyid=#{item.studyid} and t1.dataset=#{item.dataset}
 				group by t1.datarow
 			</if>
 
