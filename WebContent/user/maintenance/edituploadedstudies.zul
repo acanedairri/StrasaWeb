@@ -35,9 +35,9 @@
 											value="@load(each.study.name)" />
 										<cell>
 											<checkbox
-												label="@load(each.privacy ?'Shared':'Not Shared')"
-												checked="@bind(each.privacy)" />
-											<!-- 												onCheck='@command("onChecked", study=each.study)' /> -->
+												label="@load(each.study.shared ?'Shared':'Not Shared')"
+												checked="@bind(each.study.shared)"
+												onCheck='@command("changeStudyPrivacy", study=each.study)' />
 											|
 											<toolbarbutton label="edit" />
 											|

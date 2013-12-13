@@ -58,21 +58,21 @@ public class AddProject {
 		this.parBinder = parBinder;
 	}
 
-//	@Init
-//	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar, @ExecutionArgParam("programID") int pID ) {
-//
-//	        mainView = view;
-//	        parBinder = (Binder) view.getParent().getAttribute("binder");
-//	        programID = pID;
-//	}
-	
 	@Init
 	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar, @ExecutionArgParam("programID") int pID ) {
 
 	        mainView = view;
-	        parBinder = ctx.getBinder();
+	        parBinder = (Binder) view.getParent().getAttribute("binder");
 	        programID = pID;
 	}
+	
+//	@Init
+//	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar, @ExecutionArgParam("programID") int pID ) {
+//
+//	        mainView = view;
+//	        parBinder = ctx.getBinder();
+//	        programID = pID;
+//	}
 	
 	@Command("add")
 	public void add(){

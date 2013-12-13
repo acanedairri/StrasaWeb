@@ -21,6 +21,7 @@ import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zhtml.Messagebox;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zul.Tabpanel;
 
@@ -92,4 +93,13 @@ public class EditUploadedStudies {
 		populateEditStudyList();
 	}
 
+	@NotifyChange("*")
+	@Command("changeStudyPrivacy")
+	public void onCheck(@BindingParam("study") Study study){
+//		System.out.println("id: "+Integer.toString(study.getId()));
+//		if(study.getShared()) study.setShared(1);
+		System.out.println("shared:" +study.getShared());
+		studyMan.updateStudyById(study);
+		Messagebox.show("Changes saved.");
+	}
 }

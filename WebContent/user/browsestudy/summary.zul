@@ -3,7 +3,7 @@
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Summary')">
 		
-		<grid  model="@load(vm.summary)" hflex="1" vflex="1" sizedByContent="true">
+		<grid  model="@load(vm.summary)" hflex="1" vflex="1" sizedByContent="true" Style="overflow:auto">
 			<auxhead>
 				<auxheader label="Summary" colspan="8"  align="center"/>
 			</auxhead>

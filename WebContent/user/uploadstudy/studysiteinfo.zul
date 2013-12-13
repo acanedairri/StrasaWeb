@@ -27,7 +27,7 @@
 							<textbox value="@bind(each.sitename)"
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-								if="${each.sitename.isEmpty()}" />
+								 />
 
 
 

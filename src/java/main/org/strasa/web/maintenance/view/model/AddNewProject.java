@@ -79,7 +79,7 @@ public class AddNewProject{
 	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar, @ExecutionArgParam("programID") int pID ) {
 
 		setMainView(view);
-		parBinder = (Binder) view.getAttribute("Binder");
+		parBinder = (Binder) view.getParent().getAttribute("binder");
 		programID = pID;
 	}
 
@@ -116,8 +116,6 @@ public class AddNewProject{
 		Messagebox.show("Program successfully added to database!", "Add", Messagebox.OK, Messagebox.INFORMATION);
 		//	System.out.println("SavePath: "+CsvPath);
 
-		mainView.detach();
-		
 		Binder bind = parBinder;
 		if (bind == null)
 			return;
@@ -127,6 +125,8 @@ public class AddNewProject{
 
 		// this.parBinder.postCommand("change", params);
 		bind.postCommand("refreshProjectList", params);
+		mainView.detach();
+		
 	}
 	@Command
 	public void cancel(){
