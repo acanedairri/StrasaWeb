@@ -85,13 +85,13 @@ public class BrowseStudyManagerImpl {
 
 	}
 
-	public List<HashMap<String,String>> getStudyData(int studyId,String dataType){
+	public List<HashMap<String,String>> getStudyData(int studyId,String dataType, int dataset){
 		List<HashMap<String,String>> toreturn = new ArrayList<HashMap<String,String>>();
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
 		try{
 			StudyDataColumnManagerImpl mgr= new StudyDataColumnManagerImpl();
 
-			List<StudyDataColumn> studyDataColumn =mgr.getStudyDataColumnByStudyId(studyId,dataType);
+			List<StudyDataColumn> studyDataColumn =mgr.getStudyDataColumnByStudyId(studyId,dataType,dataset);
 			ArrayList<StudyDataColumnModel> dataColumns= new ArrayList<StudyDataColumnModel>();
 
 			int count=1;
@@ -106,6 +106,8 @@ public class BrowseStudyManagerImpl {
 				dataColumns.add(m);
 				count++;
 			}
+			
+			System.out.println(studyDataColumn.toString());
 
 			if(!studyDataColumn.isEmpty()){
 				if(dataType.equals("rd")){

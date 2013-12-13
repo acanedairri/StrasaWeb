@@ -615,7 +615,7 @@ public class UploadData extends ProcessTabViewModel {
 									new StudyRawDataManagerImpl(studyType
 											.equalsIgnoreCase("rawdata"))
 											.deleteByStudyId(study.getId());
-									new StudyDataColumnManagerImpl().removeStudyDataColumnByStudyId(UploadData.this.studyID, "rd");
+									new StudyDataColumnManagerImpl().removeStudyDataColumnByStudyId(UploadData.this.studyID, "rd",dataset);
 							
 									UploadData.this.isDataReUploaded = true;
 

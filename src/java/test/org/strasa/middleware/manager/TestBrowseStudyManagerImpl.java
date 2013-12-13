@@ -93,15 +93,16 @@ public class TestBrowseStudyManagerImpl {
 	public void testGetStudyData() throws Exception {
 		
 		int studyid=1;
-		String dataType="rd";
+		String dataType="dd";
+		int dataset=1;
 
 		final BrowseStudyManagerImpl browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
 
-		browseStudyManagerImpl.getStudyData(studyid,dataType);
+//		browseStudyManagerImpl.getStudyData(studyid,dataType,dataset);
 
-		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(studyid,dataType);
+		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(studyid,dataType,dataset);
 		System.out.println("Size:"+toreturn.size());
-		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyid,dataType); // rd as raw data, dd as derived data
+		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyid,dataType,dataset); // rd as raw data, dd as derived data
 		//Column Header
 		for (StudyDataColumn d: columns) {
 			System.out.print(d.getColumnheader()+ "\t");

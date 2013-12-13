@@ -103,12 +103,14 @@ public class DerivedData {
 	
 	@Init
 	public void init(@ExecutionArgParam("studyid") Integer studyId){
+		
+		int dataset=1; // changes dataset value
 		studyMan=new StudyManagerImpl();
 		browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
 		
-		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(studyId,dataType);
+		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(studyId,dataType,dataset);
 		System.out.println("Size:"+toreturn.size());
-		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyId,dataType); // rd as raw data, dd as derived data
+		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyId,dataType,dataset); // rd as raw data, dd as derived data
 		for (StudyDataColumn d: columns) {
 			columnList.add(d.getColumnheader());
 			System.out.print(d.getColumnheader()+ "\t");

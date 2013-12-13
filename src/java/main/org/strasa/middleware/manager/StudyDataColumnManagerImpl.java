@@ -12,7 +12,7 @@ import org.strasa.middleware.model.StudyDataColumnExample;
 public class StudyDataColumnManagerImpl {
 
 
-	public List<StudyDataColumn> getStudyDataColumnByStudyId(int studyId,String datatype){
+	public List<StudyDataColumn> getStudyDataColumnByStudyId(int studyId,String datatype,int dataset){
 		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
 		StudyDataColumnMapper mapper = session.getMapper(StudyDataColumnMapper.class);
 
@@ -20,9 +20,9 @@ public class StudyDataColumnManagerImpl {
 
 			StudyDataColumnExample example = new StudyDataColumnExample();
 			if(datatype.equals("rd")){
-				example.createCriteria().andStudyidEqualTo(studyId).andDatatypeEqualTo("rd");
+				example.createCriteria().andStudyidEqualTo(studyId).andDatatypeEqualTo("rd").andDatasetEqualTo(dataset);
 			}else{
-				example.createCriteria().andStudyidEqualTo(studyId).andDatatypeEqualTo("dd");
+				example.createCriteria().andStudyidEqualTo(studyId).andDatatypeEqualTo("dd").andDatasetEqualTo(dataset);
 			}
 			return mapper.selectByExample(example);
 
@@ -31,7 +31,7 @@ public class StudyDataColumnManagerImpl {
 		}
 
 	}
-	public void removeStudyDataColumnByStudyId(int studyId, String datatype){
+	public void removeStudyDataColumnByStudyId(int studyId, String datatype,int dataset){
 		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
 		StudyDataColumnMapper mapper = session.getMapper(StudyDataColumnMapper.class);
 
@@ -39,9 +39,9 @@ public class StudyDataColumnManagerImpl {
 
 			StudyDataColumnExample example = new StudyDataColumnExample();
 			if(datatype.equals("rd")){
-				example.createCriteria().andStudyidEqualTo(studyId).andDatatypeEqualTo("rd");
+				example.createCriteria().andStudyidEqualTo(studyId).andDatatypeEqualTo("rd").andDatasetEqualTo(dataset);
 			}else{
-				example.createCriteria().andStudyidEqualTo(studyId).andDatatypeEqualTo("dd");
+				example.createCriteria().andStudyidEqualTo(studyId).andDatatypeEqualTo("dd").andDatasetEqualTo(dataset);
 			}
 			mapper.deleteByExample(example);
 			
