@@ -22,12 +22,58 @@
 					<template name="model">
 						<row>
 
-						
+							<bandbox value="@bind(each.sitename)"
+								
+								instant="true" autodrop="true"
+									onClick="@command('openSiteBandbox', id=forEachStatus.index)">
+								<bandpopup>
+									<vbox width="40%">
 
-							<textbox value="@bind(each.sitename)"
-								width="99%"
-								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-								 />
+										<grid
+											model="@load(vm.previousSites)"
+											emptyMessage="No previous site available."
+											sizedByContent="true" hflex="true">
+											<columns>
+											<column label="Site Name"/>
+											<column
+												label="Site Location"  />
+											<column label="Year"
+												width="80px"  />
+											<column label="Season"
+												width="80px"  />
+											<column label="Eco System"
+												 />
+											<column label="Soil Type" />
+											<column label="Soil PH" />
+											</columns>
+											<template name="model">
+												<row>
+													<toolbarbutton
+														label="@load(each.sitename)" width="99%"
+														onClick="@command('setSiteRow', model = each)" />
+													<label
+														value="@bind(each.sitelocation)" 	onClick="@command('setSiteRow', model = each)" />
+
+													<label
+														value="@bind(each.year)" />
+
+													<label
+														value="@bind(each.selectedEcotype.ecotype)" 	onClick="@command('setSiteRow', model = each)" />
+
+													<label
+														value="@bind(each.soiltype)" 	onClick="@command('setSiteRow', model = each)" />
+
+													<label
+														value="@bind(each.soilph)" 	onClick="@command('setSiteRow', model = each)" />
+
+
+												</row>
+											</template>
+										</grid>
+									</vbox>
+								</bandpopup>
+							</bandbox>
+
 
 
 
