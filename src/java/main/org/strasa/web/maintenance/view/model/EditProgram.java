@@ -61,17 +61,23 @@ public class EditProgram {
 	//	public class
 	@NotifyChange("*")
 	@Command("addProgram")
-	public void addProgram(@BindingParam("target") Tabpanel panel) {
-
+	public void addProgram(@ContextParam(ContextType.COMPONENT) Component component) {
+		Window win = (Window) component.getFellow("editProgramWindow");
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		params.put("oldVar", null);
 
 		Window popup = (Window) Executions.createComponents(
-				 "/user/maintenance/addnewprogram.zul", panel, params);
+				 AddProgram.ZUL_PATH, win, params);
 
 		popup.doModal();
 		setProgramList(programMan.getProgramByUserId(userId));
 	}
 	
+	@NotifyChange("programList")
+	@Command("refreshProgramList")
+	public void refreshProgramList(@BindingParam("selected") Program selected) {
+		programList.clear();
+		programList.addAll(programMan.getProgramByUserId(userId));
+	}
 }

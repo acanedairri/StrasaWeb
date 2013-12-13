@@ -18,13 +18,17 @@ import org.strasa.middleware.model.User;
 import org.strasa.web.uploadstudy.view.model.AddProject;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.ContextParam;
+import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tabpanel;
+import org.zkoss.zul.Tabpanels;
 import org.zkoss.zul.Window;
 
 
@@ -56,16 +60,18 @@ public class EditProject {
 	//	public class
 	@NotifyChange("*")
 	@Command("addProject")
-	public void addProject(@BindingParam("target") Tabpanel panel) {
+	public void addProject(@ContextParam(ContextType.COMPONENT) Component component) {
 
+		Window win = (Window) component.getFellow("editProjectWindow");
+		
 		Map<String, Object> params = new HashMap<String, Object>();
-
+		
 		params.put("oldVar", null);
 		params.put("programID",1); //yah better change this! Make Dynamic
-		params.put("parent", panel);
+		params.put("parent", win);
 
-		Window popup = (Window) Executions.createComponents(
-				 "/user/maintenance/addnewproject.zul", panel, params);
+		Window popup = (Window) Executions.getCurrent().createComponents(
+				 AddProject.ZUL_PATH, win, params);
 
 		popup.doModal();
 		

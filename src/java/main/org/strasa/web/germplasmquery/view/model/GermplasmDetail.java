@@ -272,12 +272,12 @@ public class GermplasmDetail {
 
 	@Init
 	public void Init(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("germplasmName")String name){
-		String gname= ((Window) view.getFellow("germplasmDetailWindow")).getTitle();
-		this.germplasmList=getGermplasmByName(gname);
+			@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("germplasmName")String germplasmName){
+//		String gname= ((Window) view.getFellow("germplasmDetailWindow")).getTitle();
+		System.out.println("gname"+ germplasmName);
+		this.germplasmList=getGermplasmByName(germplasmName);
 		searchResultLabel="Search Result:  "+this.germplasmList.size()+"  row(s) returned";
 		DisplayGermplasmInfo(this.germplasmList.get(0).getId(), this.germplasmList.get(0).getGermplasmname());
-		System.out.println("gname"+ gname);
 
 	}
 

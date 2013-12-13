@@ -185,10 +185,12 @@ public class GermplasmInfo {
 	@NotifyChange("*")
 	@Command
 	public void DisplayGermplasmDetail(@BindingParam("gname")String gname){
+		HashMap map = new HashMap<String, String>();
+		map.put("germplasmName", gname);
 		Window studyDetailWindow = (Window)Executions.getCurrent().createComponents(
-				"/user/browsegermplasm/germplasmdetail.zul", null, null);
+				"/user/browsegermplasm/germplasmdetail.zul", null, map);
 		studyDetailWindow.doModal();
-		studyDetailWindow.setId("germplasmDetailWindow");
+//		studyDetailWindow.setId("germplasmDetailWindow");
 		studyDetailWindow.setTitle(gname);
 		studyDetailWindow.setClosable(true);
 
