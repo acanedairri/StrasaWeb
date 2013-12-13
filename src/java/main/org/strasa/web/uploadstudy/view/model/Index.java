@@ -83,13 +83,13 @@ public class Index {
 	public void init(){
 		//editing mode
 		uploadModel = new ProcessTabViewModel();
-		uploadModel.setStudyID(9);
-		uploadModel.setUpdateMode(true);
-		 tabDisabled[0] = false;
-		 tabDisabled[1] = false;
-		 tabDisabled[2] = false;
-		 tabDisabled[3] = false;
-		 tabDisabled[4] = false;
+//		uploadModel.setStudyID(9);
+//		uploadModel.setUpdateMode(true);
+//		 tabDisabled[0] = false;
+//		 tabDisabled[1] = false;
+//		 tabDisabled[2] = false;
+//		 tabDisabled[3] = false;
+//		 tabDisabled[4] = false;
 	}
 	  @AfterCompose
 	    public void afterCompose(@ContextParam(ContextType.VIEW) Component view){
