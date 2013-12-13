@@ -498,7 +498,7 @@ public class UploadData extends ProcessTabViewModel {
 		refreshProgramList(null);
 		refreshProjectList(null);
 		System.out.println("LOADED");
-		if (uploadModel != null) {
+		if (this.isUpdateMode) {
 			StudyManagerImpl studyMan = new StudyManagerImpl();
 			study = studyMan.getStudyById(uploadModel.getStudyID());
 			this.txtStudyName = study.getName();
