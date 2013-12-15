@@ -36,6 +36,7 @@ public class EditProject {
 	ProjectManagerImpl projectMan;
 	Integer userId=1;
 	List<Project> projectList;
+	private StudyManagerImpl studyMan;
 	public List<Project> getProjectList() {
 		return projectList;
 	}
@@ -45,19 +46,25 @@ public class EditProject {
 	@Init
 	public void init(){
 		
-
+		studyMan = new StudyManagerImpl();
 		projectMan = new ProjectManagerImpl();
 		//		projectList = new ArrayList<Project>();
 
 		projectList = projectMan.getProjectByUserId(userId);
 	}
-	//
-	//	@NotifyChange("*")
-	//	@Command("onChecked")
-	//	public void addUser(@BindingParam("user") User user){
-	//		UserManagerImpl userManagerImp =  new UserManagerImpl();
-	//		userManagerImp.updateUser(user);
-	//	public class
+	
+	@NotifyChange("projectList")
+	@Command("deleteProject")
+	public void deleteStudy(@BindingParam("projectId") Integer projectId, @BindingParam("index") Integer index){
+		
+		if(studyMan.getStudyByProgramId(projectId).isEmpty()){
+			projectMan.deleteProjectById(projectId);
+			Messagebox.show("Changes saved.");
+		}
+		else  Messagebox.show("Cannot delete a project with studies.", "Error", Messagebox.OK, Messagebox.ERROR); 
+//		populateEditStudyList();
+	}
+	
 	@NotifyChange("*")
 	@Command("addProject")
 	public void addProject(@ContextParam(ContextType.COMPONENT) Component component) {

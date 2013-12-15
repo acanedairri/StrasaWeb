@@ -35,6 +35,7 @@ import org.zkoss.zul.Window;
 
 public class EditProgram {
 	ProgramManagerImpl programMan;
+	StudyManagerImpl studyMan;
 
 	List<Program> programList;
 	
@@ -48,17 +49,25 @@ public class EditProgram {
 	@Init
 	public void init(@ContextParam(ContextType.VIEW) Component view){
 		programMan = new ProgramManagerImpl();
+		studyMan = new StudyManagerImpl();
 		//		programList = new ArrayList<program>();
 
 		programList = programMan.getProgramByUserId(userId);
 	}
-	//
-	//	@NotifyChange("*")
-	//	@Command("onChecked")
-	//	public void addUser(@BindingParam("user") User user){
-	//		UserManagerImpl userManagerImp =  new UserManagerImpl();
-	//		userManagerImp.updateUser(user);
-	//	public class
+
+
+	@NotifyChange("programList")
+	@Command("deleteProgram")
+	public void deleteStudy(@BindingParam("programId") Integer programId, @BindingParam("index") Integer index){
+		
+		if(studyMan.getStudyByProgramId(programId).isEmpty()){
+			programMan.deleteProgramById(programId);
+			Messagebox.show("Changes saved.");
+		}
+		else  Messagebox.show("Cannot delete a program with studies.", "Error", Messagebox.OK, Messagebox.ERROR); 
+//		populateEditStudyList();
+	}
+	
 	@NotifyChange("*")
 	@Command("addProgram")
 	public void addProgram(@ContextParam(ContextType.COMPONENT) Component component) {

@@ -6,8 +6,10 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
+import org.strasa.middleware.mapper.ProgramMapper;
 import org.strasa.middleware.mapper.ProjectMapper;
 import org.strasa.middleware.model.Program;
+import org.strasa.middleware.model.ProgramExample;
 import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.ProjectExample;
 
@@ -133,6 +135,22 @@ public class ProjectManagerImpl {
 			example.createCriteria().andProgramidEqualTo(programId);
 			
 			return projectMapper.selectByExample(example);
+		}finally{
+			session.close();
+		}
+	}
+
+
+	public List<Project> deleteProjectById(Integer projectId) {
+		// TODO Auto-generated method stub
+		SqlSession session = new ConnectionFactory().getSqlSessionFactory().openSession();
+		ProjectMapper mapper = session.getMapper(ProjectMapper.class);
+		
+		try{
+			ProjectExample example= new ProjectExample();
+			example.createCriteria().andUseridEqualTo(projectId);
+			
+			return mapper.selectByExample(example);
 		}finally{
 			session.close();
 		}

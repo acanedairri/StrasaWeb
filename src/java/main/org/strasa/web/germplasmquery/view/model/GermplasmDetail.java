@@ -276,7 +276,7 @@ public class GermplasmDetail {
 //		String gname= ((Window) view.getFellow("germplasmDetailWindow")).getTitle();
 		System.out.println("gname"+ germplasmName);
 		this.germplasmList=getGermplasmByName(germplasmName);
-		searchResultLabel="Search Result:  "+this.germplasmList.size()+"  row(s) returned";
+		this.searchResultLabel="Search Result:  "+this.germplasmList.size()+"  row(s) returned";
 		DisplayGermplasmInfo(this.germplasmList.get(0).getId(), this.germplasmList.get(0).getGermplasmname());
 
 	}
@@ -368,17 +368,17 @@ public class GermplasmDetail {
 
 	}
 
-	@NotifyChange("*")
+//	@NotifyChange("*")
 	@Command
 	public void DisplayGermplasmInfo(Integer id, String gname){
 
-		germplasm=getGermplasmDetailInformation(id);
-		abioticCharacteristics=getGermplasmCharacteristics(ABIOTIC,gname);
-		bioticCharacteristics=getGermplasmCharacteristics(BIOTIC,gname);
-		grainQualityCharacteristics=getGermplasmCharacteristics(GRAIN_QUALITY,gname);
-		majorGenesCharacteristics=getGermplasmCharacteristics(MAJOR_GENES,gname);
+		setGermplasm(getGermplasmDetailInformation(id));
+		setAbioticCharacteristics(getGermplasmCharacteristics(ABIOTIC,gname));
+		setBioticCharacteristics(getGermplasmCharacteristics(BIOTIC,gname));
+		setGrainQualityCharacteristics(getGermplasmCharacteristics(GRAIN_QUALITY,gname));
+		setMajorGenesCharacteristics(getGermplasmCharacteristics(MAJOR_GENES,gname));
 
-		studyTested=getStudyTested(gname);
+		setStudyTested(getStudyTested(gname));
 	}
 
 

@@ -5,8 +5,23 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.ProgramMapper;
+import org.strasa.middleware.mapper.StudyDataColumnMapper;
+import org.strasa.middleware.mapper.StudyDerivedDataMapper;
+import org.strasa.middleware.mapper.StudyFileMapper;
+import org.strasa.middleware.mapper.StudyGermplasmMapper;
+import org.strasa.middleware.mapper.StudyLocationMapper;
+import org.strasa.middleware.mapper.StudyMapper;
+import org.strasa.middleware.mapper.StudyRawDataMapper;
+import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.ProgramExample;
+import org.strasa.middleware.model.StudyDataColumnExample;
+import org.strasa.middleware.model.StudyDerivedDataExample;
+import org.strasa.middleware.model.StudyFileExample;
+import org.strasa.middleware.model.StudyGermplasmExample;
+import org.strasa.middleware.model.StudyLocationExample;
+import org.strasa.middleware.model.StudyRawDataExample;
+import org.strasa.middleware.model.StudySiteExample;
 
 public class ProgramManagerImpl {
 
@@ -98,6 +113,23 @@ public class ProgramManagerImpl {
 			
 			return ProgramMapper.selectByExample(example);
 		}finally{
+			session.close();
+		}
+	}
+	
+	public void deleteProgramById(Integer programId) {
+		// TODO Auto-generated method stub
+		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		
+		ProgramMapper mapper = session.getMapper(ProgramMapper.class);
+		 
+		
+		try{
+			mapper.deleteByPrimaryKey(programId);
+			
+			session.commit();
+		}
+		finally{
 			session.close();
 		}
 	}
