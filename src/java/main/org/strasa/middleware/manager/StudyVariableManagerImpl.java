@@ -90,7 +90,17 @@ public class StudyVariableManagerImpl {
 		finally{
 			session.close();
 		}
-		
+	}
+	
+	public StudyVariable getVariableInfoByName(String var){
+		try{
+		StudyVariableExample query = new StudyVariableExample();
+		query.createCriteria().andVariablecodeEqualTo(var);
+		return getMapper().selectByExample(query).get(0);
+		}
+		finally{
+			session.close();
+		}
 	}
 
 	private String buildRelevanceClause(String var){

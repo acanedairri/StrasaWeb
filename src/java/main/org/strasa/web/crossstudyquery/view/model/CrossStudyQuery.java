@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.strasa.middleware.manager.CrossStudyQueryManagerImpl;
+import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.StudyVariable;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -188,15 +189,19 @@ public class CrossStudyQuery extends StudyVariable {
 	public void ShowVariateDescription(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view,@BindingParam("variable") String variable){
 		System.out.println(variable);
-		StudyVariable newVariableInfo= new StudyVariable();
-		newVariableInfo.setDescription("ablasdfsadf");
-		newVariableInfo.setProperty("ablasdfsadf");
-
+		StudyVariableManagerImpl studyVariableMngr= new StudyVariableManagerImpl();
+		StudyVariable newVariableInfo= studyVariableMngr.getVariableInfoByName(variable);
+		
 		Popup popVariableDescription= new Popup();
-		popVariableDescription.setWidth("250px");
+		popVariableDescription.setWidth("355px");
+		popVariableDescription.setHflex("1");;
 		popVariableDescription.setParent(view.getParent());
 		HashMap<String, String> params = new HashMap<String,String>();
 		params.put("description",newVariableInfo.getDescription());
+		params.put("property",newVariableInfo.getProperty());
+		params.put("method",newVariableInfo.getMethod());
+		params.put("scale",newVariableInfo.getScale());
+		params.put("datatype",newVariableInfo.getDatatype());
 		Executions.createComponents("/user/crossstudyquery/variabledetail.zul",popVariableDescription, params);
 
 		popVariableDescription.open(view.getFellow(variable),"after_start");

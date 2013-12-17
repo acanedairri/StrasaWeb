@@ -29,7 +29,7 @@
 
 		</foreach>
 
-		from studyrawdata as t1
+		from studyderiveddata as t1
 		left join study as t2 on t1.studyid=t2.id group
 		by t1.datarow having
 

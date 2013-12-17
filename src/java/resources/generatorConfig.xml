@@ -3,8 +3,8 @@
 <generatorConfiguration>
 	<context id="context1">
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://localhost:13306/strasa" userId="root"
-			password="" />
+			connectionURL="jdbc:mysql://localhost:3306/strasa" userId="root"
+			password="root" />
 		<javaModelGenerator targetPackage="org.strasa.middleware.model"
 			targetProject="StrasaWeb/src/java/main" />
 			

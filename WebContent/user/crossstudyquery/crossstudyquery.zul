@@ -18,7 +18,8 @@
 		<!-- 		} -->
 	</style>
 
-	<window   width="98%" height="98%" title="Cross Study Query" contentStyle="overflow:auto">
+	<window width="98%" height="98%" title="Cross Study Query"
+		contentStyle="overflow:auto">
 		<html>
 			<br></br>
 		</html>
@@ -130,23 +131,28 @@
 					emptyMessage="No data loaded...">
 					<columns children="@load(vm.columnList)">
 						<template name="children">
+							<zk choose="">
+								<zk when="${each == 'Study Name'}">
+									<column id="${each}" hflex="1"
+										label="@load(each)"
+										/>
+								</zk>
+								<zk when="${each == 'Germplasm'}">
+									<column id="${each}" hflex="1"
+										label="@load(each)"
+										/>
+								</zk>
 
-							<column id="${each}" hflex="1"
-								label="@load(each)"
-								onClick="@global-command('ShowVariateDescription',variable=each)"
-								image="/images/help-icon.png" />
-					
+								<zk><!-- default -->
+									<column id="${each}" hflex="1"
+										label="@load(each)"
+										onClick="@global-command('ShowVariateDescription',variable=each)"
+										image="/images/help-icon.png" />
+								</zk>
+							</zk>
+
 						</template>
 					</columns>
-					<!--  
-						<rows children="@bind(vm.rawData)">
-						<template name="children" var="data">
-						<row >
-						<label forEach="#{data}" value="${each}" />
-						</row>
-						</template>
-						</rows>
-					-->
 					<rows />
 				</grid>
 				<paging pageSize="@load(vm.pageSize)"
