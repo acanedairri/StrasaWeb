@@ -22,6 +22,8 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabpanel;
 
+import com.mysql.jdbc.StringUtils;
+
 public class Index {
 
 	@Wire("#tab1")
@@ -83,13 +85,18 @@ public class Index {
 	public void init(){
 		//editing mode
 		uploadModel = new ProcessTabViewModel();
-		uploadModel.setStudyID(9);
+	
+
+		if(!StringUtils.isNullOrEmpty(Executions.getCurrent().getParameter("studyid")))
+		{
+		uploadModel.setStudyID(Integer.parseInt(Executions.getCurrent().getParameter("studyid")));
 		uploadModel.setUpdateMode(true);
 		 tabDisabled[0] = false;
 		 tabDisabled[1] = false;
 		 tabDisabled[2] = false;
 		 tabDisabled[3] = false;
 		 tabDisabled[4] = false;
+		}
 	}
 	  @AfterCompose
 	    public void afterCompose(@ContextParam(ContextType.VIEW) Component view){

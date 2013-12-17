@@ -817,7 +817,7 @@ public class UploadData extends ProcessTabViewModel {
 
 			new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(),
 					columnList.toArray(new String[columnList.size()]),
-					isRawData);
+					isRawData,this.dataset);
 
 			isDataUploaded = true;
 			BindUtils.postNotifyChange(null, null, this, "*");

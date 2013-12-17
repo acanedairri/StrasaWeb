@@ -52,7 +52,7 @@ public class StudyDataColumnManagerImpl {
 		}
 	}
 	
-	public void addStudyDataColumn(int studyId,String[] columns, boolean isRaw){
+	public void addStudyDataColumn(int studyId,String[] columns, boolean isRaw, Integer dataset){
 		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession(ExecutorType.BATCH);
 		StudyDataColumnMapper mapper = session.getMapper(StudyDataColumnMapper.class);
 		String datatype;
@@ -66,6 +66,7 @@ public class StudyDataColumnManagerImpl {
 				newCol.setStudyid(studyId);
 				newCol.setColumnheader(col);
 				newCol.setDatatype(datatype);
+				newCol.setDataset(dataset);
 				mapper.insert(newCol);
 			}
 			session.commit();
