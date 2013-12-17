@@ -58,7 +58,7 @@ public class EditProgram {
 
 	@NotifyChange("programList")
 	@Command("deleteProgram")
-	public void deleteStudy(@BindingParam("programId") Integer programId, @BindingParam("index") Integer index){
+	public void deleteStudy(@BindingParam("programId") Integer programId){
 		
 		if(studyMan.getStudyByProgramId(programId).isEmpty()){
 			programMan.deleteProgramById(programId);

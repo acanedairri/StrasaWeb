@@ -88,7 +88,7 @@ public class EditUploadedStudies {
 	
 	@NotifyChange("editStudyList")
 	@Command("deleteStudy")
-	public void deleteStudy(@BindingParam("studyId") Integer studyId, @BindingParam("index") Integer index){
+	public void deleteStudy(@BindingParam("studyId") Integer studyId){
 		studyMan.deleteStudyById(studyId);
 		populateEditStudyList();
 	}

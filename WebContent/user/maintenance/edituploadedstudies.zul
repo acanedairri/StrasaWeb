@@ -43,7 +43,7 @@
 											|
 											<toolbarbutton
 												label="delete"
-												onClick="@command('deleteStudy', studyId=each, index=each.index)" />
+												onClick="@command('deleteStudy', studyId=each)" />
 										</cell>
 										<label value="date created" />
 										<label value="date modified" />

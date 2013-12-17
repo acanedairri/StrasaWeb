@@ -55,7 +55,7 @@ public class EditProject {
 	
 	@NotifyChange("projectList")
 	@Command("deleteProject")
-	public void deleteStudy(@BindingParam("projectId") Integer projectId, @BindingParam("index") Integer index){
+	public void deleteStudy(@BindingParam("projectId") Integer projectId){
 		
 		if(studyMan.getStudyByProgramId(projectId).isEmpty()){
 			projectMan.deleteProjectById(projectId);

@@ -23,7 +23,7 @@
 					<cell>
 						<toolbarbutton label="edit" />
 						|
-						<toolbarbutton label="delete" onClick="@command('deleteProject', projectId=each.id, index=each.index)"/>
+						<toolbarbutton label="delete" onClick="@command('deleteProject', projectId=each.id)"/>
 					</cell>
 				</row>
 			</template>
