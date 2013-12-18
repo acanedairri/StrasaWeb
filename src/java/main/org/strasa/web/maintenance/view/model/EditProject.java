@@ -59,6 +59,7 @@ public class EditProject {
 		
 		if(studyMan.getStudyByProgramId(projectId).isEmpty()){
 			projectMan.deleteProjectById(projectId);
+			setProjectList(projectMan.getProjectByUserId(userId));
 			Messagebox.show("Changes saved.");
 		}
 		else  Messagebox.show("Cannot delete a project with studies.", "Error", Messagebox.OK, Messagebox.ERROR); 

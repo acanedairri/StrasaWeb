@@ -141,16 +141,14 @@ public class ProjectManagerImpl {
 	}
 
 
-	public List<Project> deleteProjectById(Integer projectId) {
+	public void deleteProjectById(Integer projectId) {
 		// TODO Auto-generated method stub
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory().openSession();
 		ProjectMapper mapper = session.getMapper(ProjectMapper.class);
 		
 		try{
-			ProjectExample example= new ProjectExample();
-			example.createCriteria().andUseridEqualTo(projectId);
-			
-			return mapper.selectByExample(example);
+			mapper.deleteByPrimaryKey(projectId);
+			session.commit();
 		}finally{
 			session.close();
 		}

@@ -62,10 +62,10 @@ public class EditProgram {
 		
 		if(studyMan.getStudyByProgramId(programId).isEmpty()){
 			programMan.deleteProgramById(programId);
+			setProgramList(programMan.getProgramByUserId(userId));
 			Messagebox.show("Changes saved.");
 		}
 		else  Messagebox.show("Cannot delete a program with studies.", "Error", Messagebox.OK, Messagebox.ERROR); 
-//		populateEditStudyList();
 	}
 	
 	@NotifyChange("*")
