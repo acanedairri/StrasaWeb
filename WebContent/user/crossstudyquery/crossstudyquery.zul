@@ -18,7 +18,7 @@
 		<!-- 		} -->
 	</style>
 
-	<window width="98%" height="98%" title="Cross Study Query"
+	<window width="98%" height="98%" title="Across Study Query"
 		contentStyle="overflow:auto">
 		<html>
 			<br></br>
@@ -32,7 +32,7 @@
 
 				<bandbox id="studyVariable" instant="true"
 					autodrop="true" width="200px" vflex="1"
-					onChange="@command('changeFilter')">
+					 onChange="@command('changeFilter')">
 					<bandpopup width="700px" height="330px">
 						<vbox>
 							<listbox id="variableListItem"
@@ -69,22 +69,23 @@
 					</bandpopup>
 				</bandbox>
 
-
 				<label value="Operator" />
-				<combobox id="cmbOperator" visible="true"
-					value="@bind(vm.operator)">
-
-					<comboitem label="Equal" />
-					<comboitem label="Not Equal" />
-					<comboitem label="Like" />
-					<comboitem label="Greater Than" />
-					<comboitem label="Greater Than Equal" />
-					<comboitem label="Less Than" />
-					<comboitem label="Less Than Equal" />
+				
+				<combobox id="cmbOperator" visible="true" value="@bind(vm.operator)"
+					model="@load(vm.operators)" onOpen="@command('setOperator')" onSelect="@command('setVariableValueInput',operatorSelected=self.value)">
+					<template name="model">
+						<comboitem value="@load(each)"
+							label="@load(each)" />
+					</template>
 				</combobox>
+
 				<label value="Value" />
-				<textbox id='txtVaribleValue' width="150px"
+				<textbox id='txtVaribleValue' width="100px"
 					value="@bind(vm.variableValue)" visible="true" />
+				<textbox id='txtVaribleValue2' width="100px"
+					value="@bind(vm.variableValue2)" visible="false" />
+
+
 
 				<button label="Add Criteria"
 					onClick="@command('AddCriteria')" />
@@ -134,13 +135,11 @@
 							<zk choose="">
 								<zk when="${each == 'Study Name'}">
 									<column id="${each}" hflex="1"
-										label="@load(each)"
-										/>
+										label="@load(each)" />
 								</zk>
 								<zk when="${each == 'Germplasm'}">
 									<column id="${each}" hflex="1"
-										label="@load(each)"
-										/>
+										label="@load(each)" />
 								</zk>
 
 								<zk><!-- default -->

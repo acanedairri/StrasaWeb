@@ -23,6 +23,7 @@ import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Popup;
+import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 public class CrossStudyQuery extends StudyVariable {
@@ -30,6 +31,7 @@ public class CrossStudyQuery extends StudyVariable {
 	List<StudyVariable> variablelist;
 	ArrayList<CrossStudyQueryFilterModel> crossStudyFilterModelList = new ArrayList<CrossStudyQueryFilterModel>();
 	String variableValue;
+	String variableValue2;
 	String studyVariable=null;
 	String operator;
 	private CrossStudyQueryManagerImpl mgr;
@@ -41,10 +43,15 @@ public class CrossStudyQuery extends StudyVariable {
 	private ArrayList<AcrossStudyData> newDataRow= new ArrayList<AcrossStudyData>();
 	private StudyVariable variableInfo= new StudyVariable();
 
+	private List<String> operatorString=Arrays.asList(new String[]{"Equal","Like"});
+	private List<String> operatorNumber=Arrays.asList(new String[]{"Equal","Greater Than","Greater Than Equal","Less Than","Less Than Equal","Range"});
+	private List<String> operators;
+
 
 	public List<StudyVariable> getVariablelist() {
 		return variablelist;
 	}
+
 	public void setVariablelist(ListModelList<StudyVariable> variablelist) {
 		this.variablelist = variablelist;
 	}
@@ -113,7 +120,7 @@ public class CrossStudyQuery extends StudyVariable {
 	public void setSearchResultLabel(String searchResultLabel) {
 		this.searchResultLabel = searchResultLabel;
 	}
-	
+
 
 	public ArrayList<AcrossStudyData> getNewDataRow() {
 		return newDataRow;
@@ -121,7 +128,7 @@ public class CrossStudyQuery extends StudyVariable {
 	public void setNewDataRow(ArrayList<AcrossStudyData> newDataRow) {
 		this.newDataRow = newDataRow;
 	}
-	
+
 
 	public void setVariablelist(List<StudyVariable> variablelist) {
 		this.variablelist = variablelist;
@@ -132,6 +139,28 @@ public class CrossStudyQuery extends StudyVariable {
 	public void setVariableInfo(StudyVariable variableInfo) {
 		this.variableInfo = variableInfo;
 	}
+
+
+
+	public List<String> getOperators() {
+		return operators;
+	}
+
+	public void setOperators(List<String> operators) {
+		this.operators = operators;
+	}
+
+
+
+
+	public String getVariableValue2() {
+		return variableValue2;
+	}
+
+	public void setVariableValue2(String variableValue2) {
+		this.variableValue2 = variableValue2;
+	}
+
 	@Init
 	public void init(){
 		mgr= new CrossStudyQueryManagerImpl();
@@ -140,7 +169,7 @@ public class CrossStudyQuery extends StudyVariable {
 	}
 
 	@Command
-	@NotifyChange({"variablelist"})
+	@NotifyChange({"variablelist","operators"})
 	public void changeFilter(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view) {
 		Bandbox variableSelected= (Bandbox) component.getFellow("studyVariable");
@@ -153,16 +182,62 @@ public class CrossStudyQuery extends StudyVariable {
 
 
 	@Command
+	@NotifyChange({"operators"})
+	public void setOperator(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view) {
+		Bandbox variableSelected= (Bandbox) component.getFellow("studyVariable");
+		StudyVariableManagerImpl mgr= new StudyVariableManagerImpl();
+		StudyVariable sVariable=mgr.getVariableInfoByName(variableSelected.getValue());
+		if(sVariable.getDatatype().equals("C")){
+			this.operators=operatorString;
+		}else{
+			this.operators=operatorNumber;
+		}
+	}
+
+	@Command
+	public void setVariableValueInput(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view,@BindingParam("operatorSelected") String operatorSelected) {
+		Textbox txtVaribleValue2= (Textbox) component.getFellow("txtVaribleValue2");
+		if(operatorSelected.equals("Range")){
+			txtVaribleValue2.setVisible(true);
+		}else{
+			txtVaribleValue2.setVisible(false);
+		}
+
+	}
+
+
+	@Command
 	@NotifyChange({"crossStudyFilterModelList"})
 	public void AddCriteria(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view) {
 		Bandbox variableSelected= (Bandbox) component.getFellow("studyVariable");
 		CrossStudyQueryFilterModel criteria = new CrossStudyQueryFilterModel();
-		criteria.setVariable(variableSelected.getValue());
-		criteria.setOperator(operator);
-		criteria.setValueString(variableValue);
+		CrossStudyQueryFilterModel criteria2 = new CrossStudyQueryFilterModel();
+		if(operator.contains("Range")){
+			if(Double.valueOf(variableValue) < Double.valueOf(variableValue2)){
+				criteria.setVariable(variableSelected.getValue());
+				criteria.setOperator("Greater Than Equal");
+				criteria.setValueString(variableValue);
+				this.crossStudyFilterModelList.add(criteria);
+				criteria2.setVariable(variableSelected.getValue());
+				criteria2.setOperator("Less Than Equal");
+				criteria2.setValueString(variableValue2);
+				this.crossStudyFilterModelList.add(criteria2);
+			}else{
+				Messagebox.show("Invalid Ranges." ,"Warning",null,null,null,null); 
+			}
 
-		this.crossStudyFilterModelList.add(criteria);
+		}else{
+
+			criteria.setVariable(variableSelected.getValue());
+			criteria.setOperator(operator);
+			criteria.setValueString(variableValue);
+			this.crossStudyFilterModelList.add(criteria);
+		}
+
+
 
 	}
 
@@ -182,8 +257,8 @@ public class CrossStudyQuery extends StudyVariable {
 	public void DeleteCriteria(@BindingParam("rowIndex") int index){
 		this.crossStudyFilterModelList.remove(index);
 	}
-	
-	
+
+
 	@GlobalCommand
 	@NotifyChange({"variableInfo"})
 	public void ShowVariateDescription(@ContextParam(ContextType.COMPONENT) Component component,
@@ -191,7 +266,7 @@ public class CrossStudyQuery extends StudyVariable {
 		System.out.println(variable);
 		StudyVariableManagerImpl studyVariableMngr= new StudyVariableManagerImpl();
 		StudyVariable newVariableInfo= studyVariableMngr.getVariableInfoByName(variable);
-		
+
 		Popup popVariableDescription= new Popup();
 		popVariableDescription.setWidth("355px");
 		popVariableDescription.setHflex("1");;
@@ -205,8 +280,8 @@ public class CrossStudyQuery extends StudyVariable {
 		Executions.createComponents("/user/crossstudyquery/variabledetail.zul",popVariableDescription, params);
 
 		popVariableDescription.open(view.getFellow(variable),"after_start");
-		
-		
+
+
 	}
 
 	@Command
@@ -224,7 +299,7 @@ public class CrossStudyQuery extends StudyVariable {
 			dataList = new ArrayList<String[]>();
 			columnList = new ArrayList<String>();
 			newDataRow= new ArrayList<AcrossStudyData>();
-			
+
 
 			final CrossStudyQueryManagerImpl crossStudyQueryManagerImpl= new CrossStudyQueryManagerImpl(); 
 
@@ -248,7 +323,7 @@ public class CrossStudyQuery extends StudyVariable {
 			fieldStudyId.setVariable("studyid");
 			fieldStudyId.setColumnAs("field");
 			filters.add(fieldStudyId);
-			
+
 			CrossStudyQueryFilterModel fieldStudyName= new CrossStudyQueryFilterModel();
 			fieldStudyName.setColumnHeader("Study Name");
 			fieldStudyName.setVariable("studyname");
@@ -374,7 +449,7 @@ public class CrossStudyQuery extends StudyVariable {
 						}else{
 							otherDataList.add(value);
 						}
-						
+
 						System.out.print("Value "+value + "\t");
 						newRow.add(value);
 					}
@@ -386,12 +461,12 @@ public class CrossStudyQuery extends StudyVariable {
 				//				System.out.println("\n ");
 
 			}
-			
+
 			for(AcrossStudyData d: newDataRow){
-	
+
 				System.out.println(d.getGname()+ " "+d.getStudyname());
 			}
-			
+
 		}
 
 	}
@@ -444,6 +519,6 @@ public class CrossStudyQuery extends StudyVariable {
 		return pageData;
 	}
 
-	
-	
+
+
 }
