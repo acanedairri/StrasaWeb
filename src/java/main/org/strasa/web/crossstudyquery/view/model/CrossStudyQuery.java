@@ -46,6 +46,7 @@ public class CrossStudyQuery extends StudyVariable {
 	private List<String> operatorString=Arrays.asList(new String[]{"Equal","Like"});
 	private List<String> operatorNumber=Arrays.asList(new String[]{"Equal","Greater Than","Greater Than Equal","Less Than","Less Than Equal","Range"});
 	private List<String> operators;
+	private List<String> additionalColumns= new ArrayList<String>();
 
 
 	public List<StudyVariable> getVariablelist() {
@@ -161,6 +162,15 @@ public class CrossStudyQuery extends StudyVariable {
 		this.variableValue2 = variableValue2;
 	}
 
+
+	public List<String> getAdditionalColumns() {
+		return additionalColumns;
+	}
+
+	public void setAdditionalColumns(List<String> additionalColumns) {
+		this.additionalColumns = additionalColumns;
+	}
+
 	@Init
 	public void init(){
 		mgr= new CrossStudyQueryManagerImpl();
@@ -173,6 +183,18 @@ public class CrossStudyQuery extends StudyVariable {
 	public void changeFilter(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view) {
 		Bandbox variableSelected= (Bandbox) component.getFellow("studyVariable");
+		if(variableSelected.getValue().length() > 0){
+			this.variablelist= new ListModelList<StudyVariable>(mgr.getStudyVariableLike(variableSelected.getValue()));
+		}else{
+			this.variablelist= new ListModelList<StudyVariable>(mgr.getStudyVariable());
+		}
+	}
+
+	@Command
+	@NotifyChange({"variablelist"})
+	public void changeFilter2(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view) {
+		Bandbox variableSelected= (Bandbox) component.getFellow("studyVariable2");
 		if(variableSelected.getValue().length() > 0){
 			this.variablelist= new ListModelList<StudyVariable>(mgr.getStudyVariableLike(variableSelected.getValue()));
 		}else{
@@ -207,37 +229,55 @@ public class CrossStudyQuery extends StudyVariable {
 
 	}
 
+	@Command
+	@NotifyChange({"additionalColumns"})
+	public void AddColumn(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view) {
+
+		try{
+			Bandbox variableSelected= (Bandbox) component.getFellow("studyVariable2");
+			additionalColumns.add(variableSelected.getValue());
+		}catch(Exception e){
+			Messagebox.show("Invalid Values" ,"Warning",null,null,null,null); 
+		}
+	}
+
+
 
 	@Command
 	@NotifyChange({"crossStudyFilterModelList"})
 	public void AddCriteria(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view) {
-		Bandbox variableSelected= (Bandbox) component.getFellow("studyVariable");
-		CrossStudyQueryFilterModel criteria = new CrossStudyQueryFilterModel();
-		CrossStudyQueryFilterModel criteria2 = new CrossStudyQueryFilterModel();
-		if(operator.contains("Range")){
-			if(Double.valueOf(variableValue) < Double.valueOf(variableValue2)){
+
+		try{
+			Bandbox variableSelected= (Bandbox) component.getFellow("studyVariable");
+			CrossStudyQueryFilterModel criteria = new CrossStudyQueryFilterModel();
+			CrossStudyQueryFilterModel criteria2 = new CrossStudyQueryFilterModel();
+			if(operator.contains("Range")){
+				if(Double.valueOf(variableValue) < Double.valueOf(variableValue2)){
+					criteria.setVariable(variableSelected.getValue());
+					criteria.setOperator("Greater Than Equal");
+					criteria.setValueString(variableValue);
+					this.crossStudyFilterModelList.add(criteria);
+					criteria2.setVariable(variableSelected.getValue());
+					criteria2.setOperator("Less Than Equal");
+					criteria2.setValueString(variableValue2);
+					this.crossStudyFilterModelList.add(criteria2);
+				}else{
+					Messagebox.show("Invalid Ranges." ,"Warning",null,null,null,null); 
+				}
+
+			}else{
+
 				criteria.setVariable(variableSelected.getValue());
-				criteria.setOperator("Greater Than Equal");
+				criteria.setOperator(operator);
 				criteria.setValueString(variableValue);
 				this.crossStudyFilterModelList.add(criteria);
-				criteria2.setVariable(variableSelected.getValue());
-				criteria2.setOperator("Less Than Equal");
-				criteria2.setValueString(variableValue2);
-				this.crossStudyFilterModelList.add(criteria2);
-			}else{
-				Messagebox.show("Invalid Ranges." ,"Warning",null,null,null,null); 
 			}
 
-		}else{
-
-			criteria.setVariable(variableSelected.getValue());
-			criteria.setOperator(operator);
-			criteria.setValueString(variableValue);
-			this.crossStudyFilterModelList.add(criteria);
+		}catch(Exception e){
+			Messagebox.show("Invalid Values" ,"Warning",null,null,null,null); 
 		}
-
-
 
 	}
 
@@ -256,6 +296,12 @@ public class CrossStudyQuery extends StudyVariable {
 	@NotifyChange({"crossStudyFilterModelList"})
 	public void DeleteCriteria(@BindingParam("rowIndex") int index){
 		this.crossStudyFilterModelList.remove(index);
+	}
+
+	@Command
+	@NotifyChange({"additionalColumns"})
+	public void DeleteAdditionalColumn(@BindingParam("rowIndex") int index){
+		this.additionalColumns.remove(index);
 	}
 
 
@@ -477,7 +523,9 @@ public class CrossStudyQuery extends StudyVariable {
 		for(String fieldLabel:s){
 			CrossStudyQueryFilterModel field= new CrossStudyQueryFilterModel();
 			if(!oldString.equals(fieldLabel)){
-				toreturn.add(fieldLabel);
+				if(!fieldLabel.equals("GName")){
+					toreturn.add(fieldLabel);
+				}
 			}
 			oldString=fieldLabel;
 		}

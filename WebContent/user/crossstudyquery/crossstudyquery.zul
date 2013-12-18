@@ -32,7 +32,7 @@
 
 				<bandbox id="studyVariable" instant="true"
 					autodrop="true" width="200px" vflex="1"
-					 onChange="@command('changeFilter')">
+					onChange="@command('changeFilter')">
 					<bandpopup width="700px" height="330px">
 						<vbox>
 							<listbox id="variableListItem"
@@ -70,9 +70,11 @@
 				</bandbox>
 
 				<label value="Operator" />
-				
-				<combobox id="cmbOperator" visible="true" value="@bind(vm.operator)"
-					model="@load(vm.operators)" onOpen="@command('setOperator')" onSelect="@command('setVariableValueInput',operatorSelected=self.value)">
+
+				<combobox id="cmbOperator" visible="true"
+					value="@bind(vm.operator)" model="@load(vm.operators)"
+					onOpen="@command('setOperator')"
+					onSelect="@command('setVariableValueInput',operatorSelected=self.value)">
 					<template name="model">
 						<comboitem value="@load(each)"
 							label="@load(each)" />
@@ -94,34 +96,112 @@
 
 			<groupbox mold="3d" width="98%">
 				<caption label="Criteria" />
-				<grid height="200px"
-					model="@load(vm.crossStudyFilterModelList)"
-					emptyMessage="No Record Found">
+				<hbox>
+					<grid vflex="1" height="200px"
+						model="@load(vm.crossStudyFilterModelList)"
+						emptyMessage="No Record Found">
 
-					<columns>
-						<column label="Variable" width="150px" />
-						<column label="Operator" />
-						<column label="Value" />
-						<column label="Action" />
+						<columns>
+							<column label="Variable" width="150px" />
+							<column label="Operator" />
+							<column label="Value" />
+							<column label="Action" />
 
-					</columns>
-					<template name="model" status="s">
-						<row>
-							<label value="@load(each.variable)" />
-							<label value="@load(each.operator)" />
-							<label value="@load(each.valueString)" />
-							<button label="Delete"
-								onClick="@command('DeleteCriteria',rowIndex=s.index)" />
-						</row>
-					</template>
-				</grid>
+						</columns>
+						<template name="model" status="s">
+							<row>
+								<label value="@load(each.variable)" />
+								<label value="@load(each.operator)" />
+								<label value="@load(each.valueString)" />
+								<button label="Delete"
+									onClick="@command('DeleteCriteria',rowIndex=s.index)" />
+							</row>
+						</template>
+					</grid>
+					<vbox >
+						<groupbox mold="3d" width="98%"  height="200px">
+							<caption label="Set additional columns" />
+							<hbox>
+								<bandbox id="studyVariable2"
+									instant="true" autodrop="true" width="200px"
+									onChange="@command('changeFilter2')">
+									<bandpopup width="700px"
+										height="330px">
+										<vbox>
+											<listbox
+												id="variableListItem2" sizedByContent="true" rows="10"
+												width="700px" height="330px"
+												onSelect="studyVariable2.value=self.selectedItem.label;studyVariable2.close();"
+												model="@load(vm.variablelist)">
+												<listhead
+													sizable="true">
+													<listheader
+														label="Variable" width="100px" sort="auto" />
+													<listheader
+														label="Description" width="200px" />
+													<listheader
+														label="Property" />
+													<listheader
+														label="Scale" />
+													<listheader
+														label="Method" />
+												</listhead>
+												<template
+													name="model">
+													<listitem>
+
+														<listcell
+															label="${each.variablecode}" />
+														<listcell
+															label="${each.description}" />
+														<listcell
+															label="${each.property}" />
+														<listcell
+															label="${each.scale}" />
+														<listcell
+															label="${each.method}" />
+
+													</listitem>
+												</template>
+
+											</listbox>
+										</vbox>
+									</bandpopup>
+								</bandbox>
+								<button label="Add"
+									onClick="@command('AddColumn')" />
+							</hbox>
+
+							<grid model="@load(vm.additionalColumns)"
+								emptyMessage="No Record Found">
+
+								<columns>
+									<column label="Column"
+										width="150px" />
+									<column label="Action" />
+
+								</columns>
+								<template name="model" status="s">
+									<row>
+										<label value="@load(each)" />
+										<button label="Delete"
+											onClick="@command('DeleteAdditionalColumn',rowIndex=s.index)" />
+									</row>
+								</template>
+							</grid>
+						</groupbox>
+
+					</vbox>
+				</hbox>
+
+				<hbox>
+					<button label="Query" onClick="@command('RunQuery')"
+						image="/images/query.png" />
+					<button label="Reset" onClick="@command('reset')" />
+				</hbox>
 			</groupbox>
 
-			<hbox>
-				<button label="Query" onClick="@command('RunQuery')"
-					image="/images/query.png" />
-				<button label="Reset" onClick="@command('reset')" />
-			</hbox>
+
 
 			<groupbox id="crossResultId" mold="3d" width="98%"
 				visible="true">
@@ -141,6 +221,7 @@
 									<column id="${each}" hflex="1"
 										label="@load(each)" />
 								</zk>
+
 
 								<zk><!-- default -->
 									<column id="${each}" hflex="1"
