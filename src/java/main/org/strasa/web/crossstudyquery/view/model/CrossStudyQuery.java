@@ -19,6 +19,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zul.Bandbox;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Messagebox;
@@ -205,7 +206,7 @@ public class CrossStudyQuery extends StudyVariable {
 		}
 	}
 	public void resetVariableList() {
-			this.variablelist= new ListModelList<StudyVariable>(mgr.getStudyVariable());
+		this.variablelist= new ListModelList<StudyVariable>(mgr.getStudyVariable());
 	}
 
 
@@ -342,6 +343,10 @@ public class CrossStudyQuery extends StudyVariable {
 	@NotifyChange({"*"})
 	public void RunQuery(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
+
+		Groupbox groupBoxResult = (Groupbox) component.getFellow("crossResultId");
+		groupBoxResult.setVisible(true);
+		Button btnExport = (Button) component.getFellow("btnExportId");
 
 		if(crossStudyFilterModelList.isEmpty()){
 			Messagebox.show("Please specify a criteria" ,"Warning",null,null,null,null); 
@@ -487,50 +492,58 @@ public class CrossStudyQuery extends StudyVariable {
 			System.out.println("Size:"+toreturn.size());
 			this.searchResultLabel="Cross Study Query Result(s): "+toreturn.size()+"  row(s) returned";
 
-			//Column Header
-			for (CrossStudyQueryFilterModel d: filters) {
-				if(d.getColumnAs().equals("field")){
-					//					System.out.print(d.getVariable()+ "\t");
-					if(!d.getVariable().equals("studyid")){
-						columnList.add(d.getColumnHeader());
-					}
-				}
-			}
-			System.out.println("\n ");
-			for( HashMap<String,String> rec:toreturn){
-				ArrayList<String> newRow = new ArrayList<String>();
-				AcrossStudyData dataRow= new AcrossStudyData();
-				ArrayList<String> otherDataList = new ArrayList<String>();
+
+			if(toreturn.size() > 0){
+				
+				btnExport.setVisible(true);
+
+				//Column Header
 				for (CrossStudyQueryFilterModel d: filters) {
 					if(d.getColumnAs().equals("field")){
-						String value= String.valueOf(rec.get(d.getVariable()));
-						if(d.getVariable().equals("studyname")){
-							dataRow.setStudyname(value);
-						}else if(d.getVariable().equals("GName")){
-							dataRow.setGname(value);
-						}else if(d.getVariable().equals("studyid")){
-							dataRow.setStudyId(Integer.valueOf(value));
-						}else{
-							otherDataList.add(value);
+						//					System.out.print(d.getVariable()+ "\t");
+						if(!d.getVariable().equals("studyid")){
+							columnList.add(d.getColumnHeader());
 						}
-
-						System.out.print("Value "+value + "\t");
-						newRow.add(value);
 					}
 				}
-				dataRow.setOtherdata(otherDataList);
-				newDataRow.add(dataRow);
-				System.out.print("\n");
-				dataList.add(newRow.toArray(new String[newRow.size()]));
-				//				System.out.println("\n ");
+				System.out.println("\n ");
+				for( HashMap<String,String> rec:toreturn){
+					ArrayList<String> newRow = new ArrayList<String>();
+					AcrossStudyData dataRow= new AcrossStudyData();
+					ArrayList<String> otherDataList = new ArrayList<String>();
+					for (CrossStudyQueryFilterModel d: filters) {
+						if(d.getColumnAs().equals("field")){
+							String value= String.valueOf(rec.get(d.getVariable()));
+							if(d.getVariable().equals("studyname")){
+								dataRow.setStudyname(value);
+							}else if(d.getVariable().equals("GName")){
+								dataRow.setGname(value);
+							}else if(d.getVariable().equals("studyid")){
+								dataRow.setStudyId(Integer.valueOf(value));
+							}else{
+								otherDataList.add(value);
+							}
 
+							System.out.print("Value "+value + "\t");
+							newRow.add(value);
+						}
+					}
+					dataRow.setOtherdata(otherDataList);
+					newDataRow.add(dataRow);
+					System.out.print("\n");
+					dataList.add(newRow.toArray(new String[newRow.size()]));
+					//				System.out.println("\n ");
+
+				}
+
+				for(AcrossStudyData d: newDataRow){
+
+					System.out.println(d.getGname()+ " "+d.getStudyname());
+				}
+
+			}else{
+				btnExport.setVisible(false);
 			}
-
-			for(AcrossStudyData d: newDataRow){
-
-				System.out.println(d.getGname()+ " "+d.getStudyname());
-			}
-
 		}
 
 	}

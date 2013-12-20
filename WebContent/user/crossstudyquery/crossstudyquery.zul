@@ -206,8 +206,13 @@
 
 
 			<groupbox id="crossResultId" mold="3d" width="98%"
-				visible="true">
+				visible="false">
 				<caption label="@load(vm.searchResultLabel)" />
+				<div align="right">
+				<button id="btnExportId" label="Export to CSV" visible="false"
+					onClick="@command('ExportToCSV')" />
+				</div>
+				
 				<grid model="@load(vm.newDataRow)"
 					rowRenderer="org.strasa.web.crossstudyquery.view.model.AcrossStudyRowRenderer"
 					sizedByContent="true" height="360px"
