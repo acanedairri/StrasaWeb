@@ -185,20 +185,20 @@ public class GermplasmInfo {
 	@NotifyChange("*")
 	@Command
 	public void DisplayGermplasmDetail(@BindingParam("gname")String gname){
-		HashMap map = new HashMap<String, String>();
-		map.put("germplasmName", gname);
-		Window studyDetailWindow = (Window)Executions.getCurrent().createComponents(
-				"/user/browsegermplasm/germplasmdetail.zul", null, map);
-		studyDetailWindow.doModal();
-//		studyDetailWindow.setId("germplasmDetailWindow");
-		studyDetailWindow.setTitle(gname);
-		studyDetailWindow.setClosable(true);
 
-//		Include studyInformationPage = new Include();
-//		studyInformationPage.setSrc("/user/browsgermplasmygermplasmdetail.zul");
-//		studyInformationPage.setParent(studyDetailWindow);
-//		studyInformationPage.setDynamicProperty("gname", gname);
+		Window studyDetailWindow = (Window)Executions.getCurrent().createComponents(
+				"/user/browsegermplasm/studydetails.zul", null, null);
+		studyDetailWindow.doModal();
+		studyDetailWindow.setTitle(gname);
+
+		Include studyInformationPage = new Include();
+		studyInformationPage.setSrc("/user/browsegermplasm/germplasmdetail.zul");
+		studyInformationPage.setParent(studyDetailWindow);
+		studyInformationPage.setDynamicProperty("gname", gname);
+		
 	}
+	
+	
 	@Command
 	public void SetSearchUI(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view) {

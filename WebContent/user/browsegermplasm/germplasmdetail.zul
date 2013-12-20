@@ -1,5 +1,5 @@
 <zk>
-	<window width="98%" height="98%"
+	<window  apply="org.zkoss.bind.BindComposer" width="98%" height="98%"
 				viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.GermplasmDetail')">
 
 			<groupbox id="GermplasmDetailId" mold="3d" width="98%">

@@ -64,15 +64,25 @@ public class GermplasmDetail {
 	private List<CharacteristicModel> keyGrainQualityList;
 	private List<CharacteristicModel> keyMajorGenesList;
 	private List<String> listKeyCharFilter= new ArrayList<String>();
-//
-//	@Init
-//	public void setInitialData(){
-//		this.germplasmList=getGermplasmByName("");
-//		this.germplasm=getGermplasmDetailInformation(-1);
-//		this.germplasmType=getGermplasmTypeList();
-//	}
 
+	@Init
+	public void init(@ExecutionArgParam("gname")String germplasmName){
+		System.out.println("gname"+ germplasmName);
+		BrowseGermplasmManagerImpl mgr= new BrowseGermplasmManagerImpl();
+		setGermplasmList( mgr.getGermplasmByNameLike(germplasmName));
+		
+		GermplasmManagerImpl gMgr = new GermplasmManagerImpl();		
+		Germplasm g=gMgr.getGermplasmById(getGermplasmList().get(0).getId());
+		
+		setGermplasm(g);
+		setAbioticCharacteristics(getGermplasmCharacteristics(ABIOTIC,germplasmName));
+		setBioticCharacteristics(getGermplasmCharacteristics(BIOTIC,germplasmName));
+		setGrainQualityCharacteristics(getGermplasmCharacteristics(GRAIN_QUALITY,germplasmName));
+		setMajorGenesCharacteristics(getGermplasmCharacteristics(MAJOR_GENES,germplasmName));
 
+		setStudyTested(getStudyTested(germplasmName));
+	}
+	
 	public String getNameSearch() {
 		return nameSearch;
 	}
@@ -243,12 +253,7 @@ public class GermplasmDetail {
 	}
 
 
-
-
-
-
 	private  List<Germplasm> getGermplasmByName(String name){
-
 		BrowseGermplasmManagerImpl mgr= new BrowseGermplasmManagerImpl();
 		if(name.contains("%") || name.contains("?") ){
 			return (List<Germplasm>) mgr.getGermplasmByNameLike(name);
@@ -270,16 +275,7 @@ public class GermplasmDetail {
 	}
 
 
-	@Init
-	public void Init(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("germplasmName")String germplasmName){
-//		String gname= ((Window) view.getFellow("germplasmDetailWindow")).getTitle();
-		System.out.println("gname"+ germplasmName);
-		this.germplasmList=getGermplasmByName(germplasmName);
-		this.searchResultLabel="Search Result:  "+this.germplasmList.size()+"  row(s) returned";
-		DisplayGermplasmInfo(this.germplasmList.get(0).getId(), this.germplasmList.get(0).getGermplasmname());
-
-	}
+	
 
 	private List<Germplasm> getGermplasmByKeyCharacteristics() {
 		final BrowseGermplasmManagerImpl browseStudyManagerImpl= new BrowseGermplasmManagerImpl(); 
