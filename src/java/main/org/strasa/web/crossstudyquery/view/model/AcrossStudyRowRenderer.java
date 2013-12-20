@@ -44,6 +44,24 @@ public class  AcrossStudyRowRenderer implements RowRenderer<AcrossStudyData>{
 		Toolbarbutton gNameLink=  new Toolbarbutton();
 		gNameLink.setLabel(data.getGname());
 		row.appendChild(gNameLink);
+		gNameLink.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+			@Override
+			public void onEvent(Event arg0) throws Exception {
+				// TODO Auto-generated method stub
+
+				Window studyDetailWindow = (Window)Executions.getCurrent().createComponents(
+						"/user/browsegermplasm/germplasmwindow.zul", null, null);
+				studyDetailWindow.doModal();
+				studyDetailWindow.setTitle(data.getStudyname());
+
+				Include studyInformationPage = new Include();
+				studyInformationPage.setSrc("/user/browsegermplasm/germplasmdetail.zul");
+				studyInformationPage.setParent(studyDetailWindow);
+				studyInformationPage.setDynamicProperty("gname",data.getGname());
+			}
+
+		});
 
 		for(String s: data.getOtherdata()){
 			row.appendChild(new Label(s));

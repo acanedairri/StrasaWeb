@@ -171,6 +171,9 @@ public class CrossStudyQuery extends StudyVariable {
 		this.additionalColumns = additionalColumns;
 	}
 
+
+
+
 	@Init
 	public void init(){
 		mgr= new CrossStudyQueryManagerImpl();
@@ -201,6 +204,9 @@ public class CrossStudyQuery extends StudyVariable {
 			this.variablelist= new ListModelList<StudyVariable>(mgr.getStudyVariable());
 		}
 	}
+	public void resetVariableList() {
+			this.variablelist= new ListModelList<StudyVariable>(mgr.getStudyVariable());
+	}
 
 
 	@Command
@@ -230,13 +236,15 @@ public class CrossStudyQuery extends StudyVariable {
 	}
 
 	@Command
-	@NotifyChange({"additionalColumns"})
+	@NotifyChange({"additionalColumns","variablelist"})
 	public void AddColumn(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view) {
 
 		try{
 			Bandbox variableSelected= (Bandbox) component.getFellow("studyVariable2");
 			additionalColumns.add(variableSelected.getValue());
+			variableSelected.setText("");
+			resetVariableList();
 		}catch(Exception e){
 			Messagebox.show("Invalid Values" ,"Warning",null,null,null,null); 
 		}
@@ -388,6 +396,16 @@ public class CrossStudyQuery extends StudyVariable {
 			List<String> s= new ArrayList<String>();
 			for(CrossStudyQueryFilterModel f:crossStudyFilterModelList){
 				s.add(f.getVariable());
+			}
+			// new Field
+			if(additionalColumns.size() > 0){
+				List<String> s2= new ArrayList<String>();
+				for(String column:additionalColumns){
+					s2.add(column);
+				}
+				Collections.sort(s2);
+				ArrayList<String> newFieldAdded=removeDuplicateField(s);
+				s.addAll(s2);
 			}
 			Collections.sort(s);
 			int counter=1;

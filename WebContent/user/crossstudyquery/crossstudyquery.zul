@@ -95,11 +95,11 @@
 			</hbox>
 
 			<groupbox mold="3d" width="98%">
-				<caption label="Criteria" />
+				<caption label="Query Criteria" />
 				<hbox>
 					<grid vflex="1" height="200px"
 						model="@load(vm.crossStudyFilterModelList)"
-						emptyMessage="No Record Found">
+						emptyMessage="No criteria specified">
 
 						<columns>
 							<column label="Variable" width="150px" />
@@ -118,16 +118,19 @@
 							</row>
 						</template>
 					</grid>
-					<vbox >
-						<groupbox mold="3d" width="98%"  height="200px">
+					<vbox>
+						<groupbox mold="3d" width="98%"
+							height="200px">
 							<caption label="Set additional columns" />
 							<hbox>
+								<label value="Select" />
 								<bandbox id="studyVariable2"
 									instant="true" autodrop="true" width="200px"
 									onChange="@command('changeFilter2')">
 									<bandpopup width="700px"
 										height="330px">
 										<vbox>
+
 											<listbox
 												id="variableListItem2" sizedByContent="true" rows="10"
 												width="700px" height="330px"
@@ -173,7 +176,7 @@
 							</hbox>
 
 							<grid model="@load(vm.additionalColumns)"
-								emptyMessage="No Record Found">
+								emptyMessage="No added column">
 
 								<columns>
 									<column label="Column"
@@ -195,8 +198,7 @@
 				</hbox>
 
 				<hbox>
-					<button label="Query" onClick="@command('RunQuery')"
-						image="/images/query.png" />
+					<button label="Query" onClick="@command('RunQuery')"/>
 					<button label="Reset" onClick="@command('reset')" />
 				</hbox>
 			</groupbox>
