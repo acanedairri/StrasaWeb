@@ -13,7 +13,7 @@
 
 		<!-- 		} -->
 	</style>
-	<window id="mainBrowseWindow" title="Browse Study"
+	<window id="mainBrowseWindow"
 		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Index')"
 		width="100%" height="100%">
@@ -31,7 +31,7 @@
 							<textbox id="studyNameBox"/>
 							<toolbarbutton
 								image="/images/browse_small.png" onClick="@global-command('searchByStudyName', studyName=studyNameBox.value)"/>
-							<label value="more advanced search"
+							<toolbarbutton label="advanced search"
 								tooltip="advancedSearch" />
 						</toolbar>
 						<popup id="advancedSearch" width="300px">

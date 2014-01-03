@@ -12,6 +12,7 @@ import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudyTypeManagerImpl;
 import org.strasa.middleware.model.Country;
+import org.strasa.middleware.model.GermplasmType;
 import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
@@ -46,6 +47,7 @@ public class SearchFilter {
 	private List<Location> locationList= null;
 
 	private boolean validation = false;
+	private HashMap<String,Integer> programListKey = new HashMap<String,Integer>();
 //	private int validationCount = 0;
 
 	public StudySearchFilterModel getSearchFilter() {
@@ -112,6 +114,9 @@ public class SearchFilter {
 		searchFilter = new StudySearchFilterModel();
 		
 		programList = programMan.getAllProgram();
+		for(Program program:programList){
+			programListKey.put(program.getName(), program.getId());
+		}
 		projectList = projectMan.getAllProject();
 		studyTypeList = studyTypeMan.getAllStudyType();
 		countryList = countryMan.getAllCountry();
@@ -144,8 +149,16 @@ public class SearchFilter {
 	
 	@NotifyChange("projectList")
 	@Command
-	public void updateLists(@BindingParam("programId") Integer programId){
-		setProjectList(projectMan.getProjectByProgramId(programId));
+	public void updateLists(@BindingParam("programName") String programName){
+		System.out.println("programName: "+ programName);
+		try{
+		int progId = programListKey.get(programName);
+		setProjectList(projectMan.getProjectByProgramId(progId));
+		System.out.println("programId: "+ Integer.toString(progId));
+		}catch(RuntimeException re){
+			System.out.println("Nothings been chosen");
+			setProjectList(projectMan.getAllProject());
+		}
 //		setcountryList(countryMan.getCountryByProgramId(programId));
 //		countryList = countryMan.getAllCountry();
 //		locationList = locationMan.getAllLocations();
