@@ -30,6 +30,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Textbox;
 
 public class SearchFilter {
@@ -48,6 +49,7 @@ public class SearchFilter {
 
 	private boolean validation = false;
 	private HashMap<String,Integer> programListKey = new HashMap<String,Integer>();
+	private HashMap<String,Integer> projectListKey = new HashMap<String,Integer>();
 //	private int validationCount = 0;
 
 	public StudySearchFilterModel getSearchFilter() {
@@ -118,27 +120,13 @@ public class SearchFilter {
 			programListKey.put(program.getName(), program.getId());
 		}
 		projectList = projectMan.getAllProject();
+		for(Project proj:projectList){
+			programListKey.put(proj.getName(), proj.getId());
+		}
 		studyTypeList = studyTypeMan.getAllStudyType();
 		countryList = countryMan.getAllCountry();
 		locationList = locationMan.getAllLocations();
 	}
-
-//	@Command
-//	public void updateSearchFilterValidation(@BindingParam("validateObject")Object validateObject){
-//		try{
-//			System.out.print("Object value is "+validateObject.toString());
-//			if(validateObject.toString().equals("")) validationCount--; //may natanggalan ng filter
-//			else if(validateObject.toString().equals("0"))validationCount--;
-//			else validationCount++; //may nagkaroon ng value
-//		}catch(NullPointerException npe){
-//			validationCount--; // object was set to Null
-//		}
-//
-//		if(validationCount>0) validation=true; //meaning may atleast one na filter
-//		else validation=false; //lahat ng filter ay empty
-//
-//		System.out.print(Integer.toString(validationCount)+ "number of Filters\n");
-//	}
 
 	@NotifyChange("searchFilter")
 	@Command
@@ -149,22 +137,37 @@ public class SearchFilter {
 	
 	@NotifyChange("projectList")
 	@Command
-	public void updateLists(@BindingParam("programName") String programName){
+	public void updateLists(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view, @BindingParam("programName") String programName){
+		
+		Combobox projectComboBox = (Combobox) component.getFellow("projectComboBox");
 		System.out.println("programName: "+ programName);
 		try{
 		int progId = programListKey.get(programName);
 		setProjectList(projectMan.getProjectByProgramId(progId));
+		projectComboBox.setSelectedIndex(0);
+		searchFilter.setProjectid(0);
+		searchFilter.setProgramid(progId);
 		System.out.println("programId: "+ Integer.toString(progId));
 		}catch(RuntimeException re){
 			System.out.println("Nothings been chosen");
 			setProjectList(projectMan.getAllProject());
 		}
+		
 //		setcountryList(countryMan.getCountryByProgramId(programId));
 //		countryList = countryMan.getAllCountry();
 //		locationList = locationMan.getAllLocations();
 	}
 	
-	
+	@Command
+	public void updateProjectId( @BindingParam("projectName") String projectName){
+		try{
+		int projId = projectListKey.get(projectName);
+			searchFilter.setProjectid(projId);
+		}catch(RuntimeException re){
+			searchFilter.setProjectid(0);
+		}
+	}
 	public boolean isValidation() {
 		return validation;
 	}

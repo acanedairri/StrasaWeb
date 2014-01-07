@@ -12,6 +12,7 @@ import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
 import org.strasa.middleware.manager.StudyFileManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.model.StudyDataColumn;
+import org.strasa.web.utilities.FileUtilities;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
@@ -142,31 +143,7 @@ public class RawData {
 //		grid.addAll(rows);
 //		grid.add(0,columns.toArray(new String[columns.size()]));
 		
-		List<String[]> grid = rows;
-		
-		StringBuffer sb = new StringBuffer();
-
-		System.out.println("creating File...");
-			int ctr=0;
-			for (String s : columns) {
-				ctr++;
-				sb.append(s);
-				if(ctr!=columns.size()) sb.append(",");
-			}
-			sb.append("\n");
-	
-		for (String[] row : grid) {
-			ctr=0;
-			for (String s : row) {
-				ctr++;
-				sb.append(s);
-				if(ctr!=row.length) sb.append(",");
-			}
-			sb.append("\n");
-		}
-		
-		System.out.println("downloading File...");
-		   Filedownload.save(sb.toString().getBytes(), "text/plain", studyName+"_rawData.csv");
+		FileUtilities.exportData(columns, rows, studyName+"_rawData.csv");
 	}
 	
 	public String getFilePath() {
