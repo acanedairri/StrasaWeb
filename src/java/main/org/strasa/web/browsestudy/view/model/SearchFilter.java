@@ -50,7 +50,6 @@ public class SearchFilter {
 	private boolean validation = false;
 	private HashMap<String,Integer> programListKey = new HashMap<String,Integer>();
 	private HashMap<String,Integer> projectListKey = new HashMap<String,Integer>();
-//	private int validationCount = 0;
 
 	public StudySearchFilterModel getSearchFilter() {
 		return searchFilter;
@@ -119,10 +118,12 @@ public class SearchFilter {
 		for(Program program:programList){
 			programListKey.put(program.getName(), program.getId());
 		}
+		
 		projectList = projectMan.getAllProject();
 		for(Project proj:projectList){
 			programListKey.put(proj.getName(), proj.getId());
 		}
+		
 		studyTypeList = studyTypeMan.getAllStudyType();
 		countryList = countryMan.getAllCountry();
 		locationList = locationMan.getAllLocations();
@@ -159,6 +160,24 @@ public class SearchFilter {
 //		locationList = locationMan.getAllLocations();
 	}
 	
+	
+	@NotifyChange("locationList")
+	@Command
+	public void updateLocationList(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view, @BindingParam("countryName") String countryName){
+		
+		Combobox locationCombobox = (Combobox) component.getFellow("locationCombobox");
+		System.out.println("countryName: "+ countryName);
+		try{
+		setLocationList(locationMan.getLocationByCountryName(countryName));
+		locationCombobox.setSelectedIndex(0);
+		searchFilter.setLocationid(0);
+		}catch(RuntimeException re){
+			System.out.println("Nothings been chosen");
+			setLocationList(locationMan.getAllLocations());
+		}
+	}
+		
 	@Command
 	public void updateProjectId( @BindingParam("projectName") String projectName){
 		try{
