@@ -400,11 +400,11 @@ public class BrowseGermplasm {
 			DisplayGermplasmInfo(component, view, this.germplasmList.get(0).getId(), this.germplasmList.get(0).getGermplasmname());
 		}else{
 			DisplayGermplasmInfo(component, view, -1, "");
-			Groupbox groupBoxInfo= (Groupbox) component.getFellow("GermplasmDetailId");
-			groupBoxInfo.setVisible(false);
-
-			Groupbox groupBoxStudyTested= (Groupbox) component.getFellow("StudyTestedId");
-			groupBoxStudyTested.setVisible(false);
+//			Groupbox groupBoxInfo= (Groupbox) component.getFellow("GermplasmDetailId");
+//			groupBoxInfo.setVisible(false);
+//
+//			Groupbox groupBoxStudyTested= (Groupbox) component.getFellow("StudyTestedId");
+//			groupBoxStudyTested.setVisible(false);
 		}
 
 	}
