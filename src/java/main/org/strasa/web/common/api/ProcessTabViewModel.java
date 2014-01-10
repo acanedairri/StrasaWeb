@@ -37,6 +37,16 @@ public class ProcessTabViewModel {
 	}
 
 
+	@Override
+	public String toString() {
+		return "ProcessTabViewModel [isRaw=" + isRaw + ", studyID=" + studyID
+				+ ", mainView=" + mainView + ", uploadToFolder="
+				+ uploadToFolder + ", dataset=" + dataset + ", isUpdateMode="
+				+ isUpdateMode + ", userID=" + userID + ", isDataReUploaded="
+				+ isDataReUploaded + "]";
+	}
+
+
 	public void setUserID(int userID) {
 		this.userID = userID;
 	}
@@ -53,7 +63,7 @@ public class ProcessTabViewModel {
 		setUpdateMode(uploadModel.isUpdateMode);
 		this.userID = uploadModel.userID;
 		this.isDataReUploaded = uploadModel.isDataReUploaded;
-		
+		this.setDataset(uploadModel.getDataset());
 		
 	}
 

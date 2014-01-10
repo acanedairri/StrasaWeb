@@ -38,7 +38,7 @@ public class StudyLocationManagerImpl {
 		}
 
 	}
-	public List<Location> getLocationsFromStudySite(Integer studyID){
+	public List<Location> getLocationsFromStudySite(Integer studyID, Integer dataset){
 		
 		List<Location> lstLocations = new ArrayList<Location>();
 		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
@@ -48,7 +48,7 @@ public class StudyLocationManagerImpl {
 		Set uniqueEntriesLoc = new HashSet(); 
 		try{
 			StudySiteExample siteEx = new StudySiteExample();
-			siteEx.createCriteria().andStudyidEqualTo(studyID);
+			siteEx.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset);
 			List<StudySite> lstSites = studySiteMapper.selectByExample(siteEx);
 			
 			for(StudySite site : lstSites){

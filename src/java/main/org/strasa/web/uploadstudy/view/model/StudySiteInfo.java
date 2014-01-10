@@ -85,8 +85,9 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	@Command
 	public void newLocationModel(
 			@BindingParam("locationModel") Location newValue) {
-		sites.get(selectedID).selectedLocation = newValue;
+		sites.get(selectedID).setSelectedLocation(newValue);
 		
+		lstLocations.add(newValue);
 		BindUtils.postNotifyChange(null, null, this.sites.get(selectedID), "*");
 		
 	}
@@ -403,19 +404,28 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		}
 
 		System.out.println("LOOP : " + sites.size());
+
+		
+		
+		
 		List<StudySite> lstSites = new ArrayList<StudySite>();
 		List<StudyAgronomy> lstAgro = new ArrayList<StudyAgronomy>();
 		List<StudyDesign> designInfo = new ArrayList<StudyDesign>();
 		StudySiteManagerImpl siteMan = new StudySiteManagerImpl(isRaw);
-		if (hasBeenProcessed)
+		boolean renewData = false;
+	if(this.isDataReUploaded || hasBeenProcessed){
 			siteMan.removeSiteByStudyId(this.getStudyID());
+			renewData =true;
+		}
+	
 		if (applyToAll) {
 
 			selectedAgroInfo = sites.get(selectedID).selectedAgroInfo;
 			selectedDesignInfo = sites.get(selectedID).selectedDesignInfo;
 		}
-		for (StudySiteInfoModel data : sites) {
+		for (StudySiteInfoModel data : sites ) {
 			data.setStudyid(this.getStudyID());
+			data.setDataset(this.dataset);
 			if (applyToAll)
 				data.selectedAgroInfo
 						.setPlantingtypeid(selectedSitePlantingType.getId());
@@ -424,7 +434,8 @@ public class StudySiteInfo extends ProcessTabViewModel {
 						.setPlantingtypeid(data.selectedSitePlantingType
 								.getId());
 
-			if (data.getId() == null) {
+			if (data.getId() == null || renewData) {
+				
 				System.out.println("ADD MODE");
 				StudySite siteData = data;
 				siteMan.addStudySite(siteData);
@@ -558,7 +569,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 		if (studySiteMan.isSiteRecordExist(this.getStudyID())
 				&& !this.isDataReUploaded) {
-			sites.addAll(studySiteMan.getStudySiteByStudyId(this.getStudyID()));
+			sites.addAll(studySiteMan.getStudySiteByStudyId(this.getStudyID(),this.dataset));
 			System.out.println("Site exist");
 
 			for (StudySiteInfoModel site : sites) {
@@ -605,7 +616,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			}
 			if (this.isDataReUploaded) {
 				previousSites.addAll(studySiteMan.getStudySiteByStudyId(this
-						.getStudyID()));
+						.getStudyID(),this.dataset));
 				System.out.println("Previous Sites");
 
 				for (StudySiteInfoModel site : previousSites) {

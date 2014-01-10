@@ -22,4 +22,17 @@ public class StudyManager {
 		}
 		
 	}
+	public Study getStudyByStudyId(int studyID){
+		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		StudyMapper mapper = session.getMapper(StudyMapper.class);
+		StudyExample example = new StudyExample();
+		example.createCriteria().andIdEqualTo(studyID);
+		try{
+			return mapper.selectByPrimaryKey(studyID);
+		}
+		finally{
+			session.close();
+		}
+		
+	}
 }

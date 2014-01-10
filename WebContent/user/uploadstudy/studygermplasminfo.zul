@@ -29,19 +29,19 @@
 								columnsgroup="false">
 								<column label="GID" />
 								<column label="GName"
-									sort="auto(germplasmname)" style="background-color:#FA807A;" />
+									sort="auto(germplasmname)" style="background-color:#ffffb2;" />
 								<column label="OtherName" />
 								<column label="Breeder"
-									style="background-color:#FA807A;" />
+									style="background-color:#ffffb2;" />
 								<column label="GermplasmType"
-									style="background-color:#FA807A;" />
+									style="background-color:#ffffb2;" />
 								<column label="IR Number" />
 								<column label="IR Cross" />
 								<column label="Parentage" />
 								<column label="Female Parent"
-									style="background-color:#FA807A;" />
+									style="background-color:#ffffb2;" />
 								<column label="Male Parent"
-									style="background-color:#FA807A;" />
+									style="background-color:#ffffb2;" />
 								<column label="Selection History" />
 								<column label="Source" />
 								<column label="Characteristic" />
@@ -326,7 +326,7 @@
 									<label
 										value="@bind(each.majorgenes)" />
 									<button
-										image="/widgets/grid/inline_row_editing/img/pencil-small.png"
+										label = "Edit"
 										onClick="@command('modifyGermplasm', gname=each.germplasmname)" />
 
 								</row>

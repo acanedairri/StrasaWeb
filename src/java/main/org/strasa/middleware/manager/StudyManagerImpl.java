@@ -1,19 +1,18 @@
 package org.strasa.middleware.manager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyDataColumnMapper;
 import org.strasa.middleware.mapper.StudyDerivedDataMapper;
-import org.strasa.middleware.mapper.StudyDesignMapper;
 import org.strasa.middleware.mapper.StudyFileMapper;
 import org.strasa.middleware.mapper.StudyGermplasmMapper;
 import org.strasa.middleware.mapper.StudyLocationMapper;
 import org.strasa.middleware.mapper.StudyMapper;
 import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
-import org.strasa.middleware.model.ProjectExample;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyDataColumnExample;
 import org.strasa.middleware.model.StudyDerivedDataExample;
@@ -32,6 +31,66 @@ public class StudyManagerImpl {
 		StudyMapper mapper = session.getMapper(StudyMapper.class);
 		try{
 			return mapper.selectByPrimaryKey(studyid);
+		}
+		finally{
+			session.close();
+		}
+	}
+	public int getTotalDataSet(Integer studyID){
+		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		StudyMapper mapper = session.getMapper(StudyMapper.class);
+		try{
+			return mapper.selectByPrimaryKey(studyID).getDatasets();
+		}
+		finally{
+			session.close();
+		}
+	}
+	public ArrayList<Integer> getDataSets(Integer studyID){
+		ArrayList<Integer> returnVal = new ArrayList<Integer>();
+		
+		int totalDataSet = getTotalDataSet(studyID);
+		for(int i = 1; i <= totalDataSet; i++){
+			if(isDataSetExist(studyID, i)){
+				returnVal.add(i);
+			}
+		}
+		return returnVal;
+		
+	}
+	public boolean isDataSetExist(Integer studyID, Integer dataset){
+		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		StudyRawDataMapper mapperRaw = session.getMapper(StudyRawDataMapper.class);
+		StudyRawDataExample exampleRaw = new StudyRawDataExample();
+		exampleRaw.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset);
+		StudyDerivedDataMapper mapperDerived = session.getMapper(StudyDerivedDataMapper.class);
+		StudyDerivedDataExample exampleDerived = new StudyDerivedDataExample();
+		exampleDerived.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset);
+	
+		
+		boolean returnVal = false;
+		
+		try{
+		
+			if(mapperRaw.countByExample(exampleRaw) > 0) returnVal = true;
+			if(mapperDerived.countByExample(exampleDerived) > 0) returnVal = true;
+			
+			return returnVal;
+			
+		}
+		finally{
+			session.close();
+		}
+	}
+	public void updateDataSet(Integer studyID,int datasets){
+		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		StudyMapper mapper = session.getMapper(StudyMapper.class);
+		
+		try{
+			Study study = getStudyById(studyID);
+			study.setDatasets(datasets);
+			 mapper.updateByPrimaryKey(study);
+			 
 		}
 		finally{
 			session.close();

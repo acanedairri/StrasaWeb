@@ -209,6 +209,10 @@ public class StudySiteInfoModel extends StudySite {
 				return "Error: Season in " + this.getSitename()
 						+ " must not be empty! ";
 			}
+			if (this.selectedLocation.getId() == null) {
+				return "Error: Location in " + this.getSitename()
+						+ " does not exist in the database. Please add your location first or select any existing location.";
+			}
 
 			return null;
 

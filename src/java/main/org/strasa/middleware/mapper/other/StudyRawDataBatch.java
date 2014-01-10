@@ -1,4 +1,4 @@
-package org.strasa.middleware.mapper;
+package org.strasa.middleware.mapper.other;
 
 import java.util.List;
 

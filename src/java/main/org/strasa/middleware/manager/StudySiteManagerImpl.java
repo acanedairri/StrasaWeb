@@ -203,7 +203,7 @@ public class StudySiteManagerImpl {
 		System.out.println("Count: " + siteMapper.countByExample(ex) );
 		return (siteMapper.countByExample(ex) > 0);
 	}
-	public ArrayList<StudySiteInfoModel> getStudySiteByStudyId(int studyID){
+	public ArrayList<StudySiteInfoModel> getStudySiteByStudyId(int studyID, Integer dataset){
 		ArrayList<StudySiteInfoModel> returnVal = new ArrayList<StudySiteInfoModel>();
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
 				.openSession();
@@ -214,7 +214,7 @@ public class StudySiteManagerImpl {
 		LocationMapper locationMapper = session.getMapper(LocationMapper.class);
 		EcotypeMapper ecoMapper = session.getMapper(EcotypeMapper.class);
 		StudySiteExample ex = new StudySiteExample();
-		ex.createCriteria().andStudyidEqualTo(studyID);
+		ex.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset);
 		List<StudySite> lstSites = siteMapper.selectByExample(ex);
 		for(StudySite site : lstSites){
 			StudySiteInfoModel newData = new StudySiteInfoModel(site);

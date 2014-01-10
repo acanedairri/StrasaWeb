@@ -94,7 +94,7 @@ public class AddLocation {
 		
 		
 		try {
-			if(!formValidator.getBlankVariables(locationModel,new String[]{"id"}).isEmpty()){
+			if(!formValidator.getBlankVariables(locationModel,new String[]{"id","userid"}).isEmpty()){
 				Messagebox.show("All fields are requied.", "Validation Error", Messagebox.OK, Messagebox.EXCLAMATION);
 				return;
 			}
