@@ -26,10 +26,15 @@
 		<vbox apply="org.zkoss.bind.BindComposer"
 			viewModel="@id('vm') @init('org.strasa.web.crossstudyquery.view.model.CrossStudyQuery')"
 			spacing="10px">
-
+			<hbox width="98%">
+			Data
+			<radiogroup onCreate="self.setSelectedIndex(0)">
+				<radio label="Raw" value="rd" />
+				<radio label="Derived" value="dd" />
+			</radiogroup>
+			</hbox>
 			<hbox width="98%">
 				<label value="Select Variable" />
-
 				<bandbox id="studyVariable" instant="true"
 					autodrop="true" width="200px" vflex="1"
 					onChange="@command('changeFilter')">
@@ -198,7 +203,8 @@
 				</hbox>
 
 				<hbox>
-					<button label="Query" onClick="@command('RunQuery')"/>
+					<button label="Query"
+						onClick="@command('RunQuery')" />
 					<button label="Reset" onClick="@command('reset')" />
 				</hbox>
 			</groupbox>
@@ -208,11 +214,12 @@
 			<groupbox id="crossResultId" mold="3d" width="98%"
 				visible="false">
 				<caption label="@load(vm.searchResultLabel)" />
-				<div align="right">
-				<button id="btnExportId" label="Export to CSV" visible="false"
-					onClick="@command('ExportToCSV')" />
-				</div>
 				
+				<div align="right">
+					<button id="btnExportId" label="Export to CSV"
+						visible="false" onClick="@command('exportToCSV', columns=vm.columnList, rows=vm.newDataRow)" />
+				</div>
+
 				<grid model="@load(vm.newDataRow)"
 					rowRenderer="org.strasa.web.crossstudyquery.view.model.AcrossStudyRowRenderer"
 					sizedByContent="true" height="360px"

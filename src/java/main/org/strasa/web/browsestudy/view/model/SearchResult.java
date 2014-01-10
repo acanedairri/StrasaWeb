@@ -44,7 +44,7 @@ public class SearchResult {
 	@NotifyChange("*")
 	@GlobalCommand
 	public void updateSearchFilterResult(@BindingParam("searchFilter")StudySearchFilterModel searchFilter){
-		if(validateSerach(searchFilter)){
+		if(validateSearch(searchFilter)){
 			searchFilter.shared = checkIfEmpty(searchFilter.shared);
 			searchFilter.studyname = checkIfEmpty(searchFilter.studyname);
 			searchFilter.country = checkIfEmpty(searchFilter.country);
@@ -59,7 +59,7 @@ public class SearchResult {
 		}
 	}
 
-	private boolean validateSerach(StudySearchFilterModel searchFilter) {
+	private boolean validateSearch(StudySearchFilterModel searchFilter) {
 		// TODO Auto-generated method stub
 		if( searchFilter.getLocationid()!=0 || searchFilter.getProgramid()!=0 || searchFilter.getProjectid()!=0 || searchFilter.getStudytypeid()!=0) return true;
 		if(validateString(searchFilter.getStudyname())) return true;

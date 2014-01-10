@@ -58,6 +58,7 @@ public class GermplasmInfo {
 	private String majorGenesCharacteristics;
 	private List<StudySearchResultModel> studyTested;
 	private HashMap<String,Integer> germplasmTypeKey = new HashMap<String,Integer>();
+	private String searchResultLabel;
 
 
 
@@ -66,6 +67,8 @@ public class GermplasmInfo {
 		for(StudyGermplasm sg :getGermplasmById(studyId)){
 			germplasmList.add(new GermplasmInfoModel(sg));
 		}
+		
+		setSearchResultLabel("Search Result:  "+ germplasmList.size()+"  row(s) returned");
 	}
 
 	public String getNameSearch() {
@@ -180,6 +183,14 @@ public class GermplasmInfo {
 
 	public void setStudyTested(List<StudySearchResultModel> studyTested) {
 		this.studyTested = studyTested;
+	}
+	
+	public String getSearchResultLabel() {
+		return searchResultLabel;
+	}
+
+	public void setSearchResultLabel(String searchResultLabel) {
+		this.searchResultLabel = searchResultLabel;
 	}
 
 	@NotifyChange("*")

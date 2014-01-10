@@ -12,6 +12,7 @@ import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudyTypeManagerImpl;
 import org.strasa.middleware.model.Country;
+import org.strasa.middleware.model.GermplasmType;
 import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
@@ -29,6 +30,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Textbox;
 
 public class SearchFilter {
@@ -46,7 +48,8 @@ public class SearchFilter {
 	private List<Location> locationList= null;
 
 	private boolean validation = false;
-//	private int validationCount = 0;
+	private HashMap<String,Integer> programListKey = new HashMap<String,Integer>();
+	private HashMap<String,Integer> projectListKey = new HashMap<String,Integer>();
 
 	public StudySearchFilterModel getSearchFilter() {
 		return searchFilter;
@@ -112,28 +115,19 @@ public class SearchFilter {
 		searchFilter = new StudySearchFilterModel();
 		
 		programList = programMan.getAllProgram();
+		for(Program program:programList){
+			programListKey.put(program.getName(), program.getId());
+		}
+		
 		projectList = projectMan.getAllProject();
+		for(Project proj:projectList){
+			programListKey.put(proj.getName(), proj.getId());
+		}
+		
 		studyTypeList = studyTypeMan.getAllStudyType();
 		countryList = countryMan.getAllCountry();
 		locationList = locationMan.getAllLocations();
 	}
-
-//	@Command
-//	public void updateSearchFilterValidation(@BindingParam("validateObject")Object validateObject){
-//		try{
-//			System.out.print("Object value is "+validateObject.toString());
-//			if(validateObject.toString().equals("")) validationCount--; //may natanggalan ng filter
-//			else if(validateObject.toString().equals("0"))validationCount--;
-//			else validationCount++; //may nagkaroon ng value
-//		}catch(NullPointerException npe){
-//			validationCount--; // object was set to Null
-//		}
-//
-//		if(validationCount>0) validation=true; //meaning may atleast one na filter
-//		else validation=false; //lahat ng filter ay empty
-//
-//		System.out.print(Integer.toString(validationCount)+ "number of Filters\n");
-//	}
 
 	@NotifyChange("searchFilter")
 	@Command
@@ -144,14 +138,55 @@ public class SearchFilter {
 	
 	@NotifyChange("projectList")
 	@Command
-	public void updateLists(@BindingParam("programId") Integer programId){
-		setProjectList(projectMan.getProjectByProgramId(programId));
+	public void updateLists(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view, @BindingParam("programName") String programName){
+		
+		Combobox projectComboBox = (Combobox) component.getFellow("projectComboBox");
+		System.out.println("programName: "+ programName);
+		try{
+		int progId = programListKey.get(programName);
+		setProjectList(projectMan.getProjectByProgramId(progId));
+		projectComboBox.setSelectedIndex(0);
+		searchFilter.setProjectid(0);
+		searchFilter.setProgramid(progId);
+		System.out.println("programId: "+ Integer.toString(progId));
+		}catch(RuntimeException re){
+			System.out.println("Nothings been chosen");
+			setProjectList(projectMan.getAllProject());
+		}
+		
 //		setcountryList(countryMan.getCountryByProgramId(programId));
 //		countryList = countryMan.getAllCountry();
 //		locationList = locationMan.getAllLocations();
 	}
 	
 	
+	@NotifyChange("locationList")
+	@Command
+	public void updateLocationList(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view, @BindingParam("countryName") String countryName){
+		
+		Combobox locationCombobox = (Combobox) component.getFellow("locationCombobox");
+		System.out.println("countryName: "+ countryName);
+		try{
+		setLocationList(locationMan.getLocationByCountryName(countryName));
+		locationCombobox.setSelectedIndex(0);
+		searchFilter.setLocationid(0);
+		}catch(RuntimeException re){
+			System.out.println("Nothings been chosen");
+			setLocationList(locationMan.getAllLocations());
+		}
+	}
+		
+	@Command
+	public void updateProjectId( @BindingParam("projectName") String projectName){
+		try{
+		int projId = projectListKey.get(projectName);
+			searchFilter.setProjectid(projId);
+		}catch(RuntimeException re){
+			searchFilter.setProjectid(0);
+		}
+	}
 	public boolean isValidation() {
 		return validation;
 	}

@@ -25,11 +25,18 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zkmax.zul.Chosenbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Tab;
+import org.zkoss.zul.Tabbox;
+import org.zkoss.zul.Tabpanel;
+import org.zkoss.zul.Tabpanels;
+import org.zkoss.zul.Tabs;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
@@ -62,9 +69,11 @@ public class BrowseGermplasm {
 	private List<CharacteristicModel> keyGrainQualityList;
 	private List<CharacteristicModel> keyMajorGenesList;
 	private List<String> listKeyCharFilter= new ArrayList<String>();
+	private HashMap<Integer, Tab> activeGermplasmIds;
 
 	@Init
 	public void setInitialData(){
+		activeGermplasmIds = new HashMap<Integer, Tab>();
 		this.germplasmList=getGermplasmByName("");
 		this.germplasm=getGermplasmDetailInformation(-1);
 		this.germplasmType=getGermplasmTypeList();
@@ -391,11 +400,11 @@ public class BrowseGermplasm {
 			DisplayGermplasmInfo(component, view, this.germplasmList.get(0).getId(), this.germplasmList.get(0).getGermplasmname());
 		}else{
 			DisplayGermplasmInfo(component, view, -1, "");
-			Groupbox groupBoxInfo= (Groupbox) component.getFellow("GermplasmDetailId");
-			groupBoxInfo.setVisible(false);
-
-			Groupbox groupBoxStudyTested= (Groupbox) component.getFellow("StudyTestedId");
-			groupBoxStudyTested.setVisible(false);
+//			Groupbox groupBoxInfo= (Groupbox) component.getFellow("GermplasmDetailId");
+//			groupBoxInfo.setVisible(false);
+//
+//			Groupbox groupBoxStudyTested= (Groupbox) component.getFellow("StudyTestedId");
+//			groupBoxStudyTested.setVisible(false);
 		}
 
 	}
@@ -492,12 +501,11 @@ public class BrowseGermplasm {
 	public void DisplayGermplasmInfo(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view,@BindingParam("germplasmId")Integer id,@BindingParam("gname")String gname){
 		//		System.out.println(id + " "+gname);
-		Groupbox groupBoxInfo= (Groupbox) component.getFellow("GermplasmDetailId");
-		groupBoxInfo.setVisible(true);
-
-		Groupbox groupBoxStudyTested= (Groupbox) component.getFellow("StudyTestedId");
-		groupBoxStudyTested.setVisible(true);
-
+//		Groupbox groupBoxInfo= (Groupbox) component.getFellow("GermplasmDetailId");
+//		groupBoxInfo.setVisible(true);
+//
+//		Groupbox groupBoxStudyTested= (Groupbox) component.getFellow("StudyTestedId");
+//		groupBoxStudyTested.setVisible(true);
 
 		germplasm=getGermplasmDetailInformation(id);
 		abioticCharacteristics=getGermplasmCharacteristics(ABIOTIC,gname);
@@ -509,8 +517,52 @@ public class BrowseGermplasm {
 	}
 
 
+	@NotifyChange("*")
+	@Command
+	public void DisplayGermplasmDetail(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view,@BindingParam("germplasmId")Integer id,@BindingParam("gname")String gname){
+		
+		Tabpanels tabPanels = (Tabpanels) component.getFellow("tabPanels");
+		Tabs tabs = (Tabs) component.getFellow("tabs");
+		Tabbox tabBox = (Tabbox) component.getFellow("tabBox");
+		
+		if(!activeGermplasmIds.containsKey(id)){
+		final int gid=id;
+		Tab newTab = new Tab();
+		newTab.setLabel(gname);
+		newTab.setClosable(true);
+		newTab.addEventListener("onClose", new EventListener() {
+			@Override
+			public void onEvent(Event event) throws Exception {
+				activeGermplasmIds.remove(gid);
+			}
+		});
+		Tabpanel newPanel = new Tabpanel();
+		
+		//initialize view after view construction.
+		Include studyInformationPage = new Include();
+		studyInformationPage.setSrc("/user/browsegermplasm/germplasmdetail.zul");
+		studyInformationPage.setParent(newPanel);
+		studyInformationPage.setDynamicProperty("gname", gname);
 
-
+		tabPanels.appendChild(newPanel);
+		tabs.appendChild(newTab);
+		tabBox.setSelectedPanel(newPanel);
+		
+		newTab.setSelected(true);
+		activeGermplasmIds.put(id, newTab);
+		}
+		else{
+		Tab tab = activeGermplasmIds.get(id);
+		tab.setSelected(true);
+		}
+//		
+//		Include studyInformationPage = new Include();
+//		studyInformationPage.setSrc("/user/browsegermplasm/germplasmdetail.zul");
+//		studyInformationPage.setParent(studyDetailWindow);
+//		studyInformationPage.setDynamicProperty("gname", gname);
+		
+	}
 	@NotifyChange("*")
 	@Command
 	public void DisplayStudyDetail(@ContextParam(ContextType.COMPONENT) Component component,

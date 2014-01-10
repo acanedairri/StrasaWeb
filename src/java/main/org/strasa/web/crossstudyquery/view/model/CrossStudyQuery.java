@@ -9,6 +9,7 @@ import java.util.List;
 import org.strasa.middleware.manager.CrossStudyQueryManagerImpl;
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.StudyVariable;
+import org.strasa.web.utilities.FileUtilities;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
@@ -548,6 +549,17 @@ public class CrossStudyQuery extends StudyVariable {
 
 	}
 
+	@Command
+	public void exportToCSV(@BindingParam("columns")List<String> columns, @BindingParam("rows")List<String[]> rows){
+//		List<String[]> grid = new ArrayList<String[]>();
+//		grid.addAll(rows);
+//		grid.add(0,columns.toArray(new String[columns.size()]));
+		
+		String fileName = "accrossStudyQuery";
+		FileUtilities.exportData(columns, rows, fileName);
+		
+	}
+	
 	private ArrayList<String> removeDuplicateField(List<String> s) {
 		String oldString="";
 		ArrayList<String> toreturn= new ArrayList<String>();

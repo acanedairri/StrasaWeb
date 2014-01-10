@@ -2,10 +2,12 @@ package org.strasa.web.utilities;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
+
+import org.zkoss.zul.Filedownload;
 
 public class FileUtilities {
 
-	
 	public static void uploadFile(String filepath,
             InputStream file) {
     try {
@@ -24,5 +26,33 @@ public class FileUtilities {
             ex.printStackTrace();
         }
     }
+	
+	public static void exportData(List<String> columns, List<String[]> rows, String outputFileName){
+		List<String[]> grid = rows;
+		
+		StringBuffer sb = new StringBuffer();
+
+		System.out.println("creating File...");
+			int ctr=0;
+			for (String s : columns) {
+				ctr++;
+				sb.append(s);
+				if(ctr!=columns.size()) sb.append(",");
+			}
+			sb.append("\n");
+	
+		for (String[] row : grid) {
+			ctr=0;
+			for (String s : row) {
+				ctr++;
+				sb.append(s);
+				if(ctr!=row.length) sb.append(",");
+			}
+			sb.append("\n");
+		}
+		
+		System.out.println("downloading File...");
+		   Filedownload.save(sb.toString().getBytes(), "text/plain", outputFileName);
+	}
 
 }

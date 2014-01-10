@@ -2,10 +2,10 @@
 
 	<window id="searchResultWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchResult')">
-		<groupbox mold="3d" width="98%">
+		<groupbox mold="3d">
 			<caption label="@load(vm.searchResultLabel)" />
-			<grid height="350px" model="@load(vm.searchResult)"
-				sizedByContent="true" emptyMessage="No study site found." style="overflow: auto">
+			<grid model="@load(vm.searchResult)"
+				sizedByContent="true" emptyMessage="No study site found." >
 				<auxhead>
 					<auxheader label="Search Result" colspan="8"
 						align="center" />
