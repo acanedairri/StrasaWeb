@@ -106,10 +106,10 @@ public class RawData {
 	}
 
 	@Init
-	public void init(@ExecutionArgParam("studyid") Integer studyId){
+	public void init(@ExecutionArgParam("studyid") Integer studyId, @ExecutionArgParam("dataset") Integer dataset){
 		studyMan=new StudyManagerImpl();
 		browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
-		int dataset=1; // change this value as parameter
+		 // change this value as parameter
 		
 		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(studyId,dataType,dataset);
 		System.out.println("Size:"+toreturn.size());
