@@ -145,7 +145,7 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 			cmbCountry.add(data.getIsoabbr());
 		}
 		
-		lstLocations.addAll(studyLocationManager.getLocationsFromStudySite(studyID,this.dataset));
+		lstLocations.addAll(studyLocationManager.getLocationsFromStudySite(studyID,this.dataset.getId()));
 		
 
 	}

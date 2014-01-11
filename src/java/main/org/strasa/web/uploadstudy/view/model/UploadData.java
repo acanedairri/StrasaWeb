@@ -20,6 +20,7 @@ import org.strasa.middleware.filesystem.manager.UserFileManager;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
+import org.strasa.middleware.manager.StudyDataSetManagerImpl;
 import org.strasa.middleware.manager.StudyGermplasmManagerImpl;
 import org.strasa.middleware.manager.StudyLocationManagerImpl;
 import org.strasa.middleware.manager.StudyManager;
@@ -31,7 +32,6 @@ import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.Study;
-import org.strasa.middleware.model.StudyColumnHeader;
 import org.strasa.middleware.model.StudyType;
 import org.strasa.web.common.api.Encryptions;
 import org.strasa.web.common.api.ProcessTabViewModel;
@@ -79,6 +79,7 @@ public class UploadData extends ProcessTabViewModel {
 	private ArrayList<Project> projectList = new ArrayList<Project>();
 	private ArrayList<String> studyTypeList = new ArrayList<String>();
 	public int userID = 1;
+	
 	private ArrayList<String> dataTypeList = new ArrayList<String>();
 	private ArrayList<GenotypeFileModel> genotypeFileList = new ArrayList<UploadData.GenotypeFileModel>();
 	private Program txtProgram = new Program();
@@ -117,7 +118,7 @@ public class UploadData extends ProcessTabViewModel {
 	private File tempFile;
 	private String uploadTo = "database";
 	private String studyType = "rawdata";
-	private boolean isNewDataSet = true;
+	private boolean isNewDataset = true;
 
 	public ArrayList<GenotypeFileModel> getGenotypeFileList() {
 		return genotypeFileList;
@@ -406,7 +407,7 @@ public class UploadData extends ProcessTabViewModel {
 		else {
 			refreshCsv();
 			if (this.isUpdateMode)
-				isNewDataSet = true;
+				isNewDataset = true;
 
 		}
 
@@ -510,7 +511,7 @@ public class UploadData extends ProcessTabViewModel {
 					.getProjectid());
 			this.startYear = Integer.parseInt(study.getStartyear());
 			this.endYear = Integer.parseInt(study.getEndyear());
-			isNewDataSet = false;
+			isNewDataset = false;
 
 		}
 	}
@@ -553,7 +554,7 @@ public class UploadData extends ProcessTabViewModel {
 								if ("onOK".equals(e.getName())) {
 									isVariableDataVisible = false;
 									dataFileName = "";
-									isNewDataSet = true;
+									isNewDataset = true;
 									varData.clear();
 									isDataUploaded = false;
 									BindUtils.postGlobalCommand(null, null,
@@ -605,7 +606,7 @@ public class UploadData extends ProcessTabViewModel {
 								if ("onOK".equals(e.getName())) {
 									isVariableDataVisible = false;
 									dataFileName = "";
-									isNewDataSet = true;
+									isNewDataset = true;
 									varData.clear();
 									isDataUploaded = false;
 									BindUtils.postGlobalCommand(null, null,
@@ -615,7 +616,7 @@ public class UploadData extends ProcessTabViewModel {
 									new StudyRawDataManagerImpl(studyType
 											.equalsIgnoreCase("rawdata"))
 											.deleteByStudyId(study.getId());
-									new StudyDataColumnManagerImpl().removeStudyDataColumnByStudyId(UploadData.this.studyID, "rd",dataset);
+									new StudyDataColumnManagerImpl().removeStudyDataColumnByStudyId(UploadData.this.studyID, "rd",dataset.getId());
 							
 									UploadData.this.isDataReUploaded = true;
 
@@ -640,7 +641,7 @@ public class UploadData extends ProcessTabViewModel {
 	public void deleteAll() {
 		isVariableDataVisible = false;
 		dataFileName = "";
-		isNewDataSet = true;
+		isNewDataset = true;
 		varData.clear();
 		isDataUploaded = false;
 		BindUtils.postGlobalCommand(null, null, "disableTabs", null);
@@ -805,19 +806,21 @@ public class UploadData extends ProcessTabViewModel {
 		}
 		if (uploadTo.equals("database")) {
 
-			if (isNewDataSet) {
+			if (isNewDataset) {
 				System.out.println("DATA UPLOADING! ");
-
+				this.dataset.setStudyid(this.studyID);
+				new StudyDataSetManagerImpl().addDataSet(this.dataset);
 				studyRawData.addStudyRawData(study,
 						columnList.toArray(new String[columnList.size()]),
-						dataList, this.dataset, isRawData);
+						dataList, this.dataset.getId(), isRawData);
+				
 			}
 
 			studyRawData.addStudy(study);
 
 			new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(),
 					columnList.toArray(new String[columnList.size()]),
-					isRawData,this.dataset);
+					isRawData,this.dataset.getId());
 
 			isDataUploaded = true;
 			BindUtils.postNotifyChange(null, null, this, "*");

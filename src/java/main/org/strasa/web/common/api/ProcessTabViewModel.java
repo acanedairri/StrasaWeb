@@ -1,10 +1,6 @@
 package org.strasa.web.common.api;
 
-import org.zkoss.bind.annotation.BindingParam;
-import org.zkoss.bind.annotation.ContextParam;
-import org.zkoss.bind.annotation.ContextType;
-import org.zkoss.bind.annotation.ExecutionArgParam;
-import org.zkoss.bind.annotation.Init;
+import org.strasa.middleware.model.StudyDataSet;
 import org.zkoss.zk.ui.Component;
 
 public class ProcessTabViewModel {
@@ -12,7 +8,7 @@ public class ProcessTabViewModel {
 	public int studyID;
 	private Component mainView;
 	public boolean uploadToFolder = false;
-	public int dataset = 1;
+	public StudyDataSet dataset = new StudyDataSet();
 	public boolean isUpdateMode = false;
 	public int userID = 1;
 	public boolean isRaw() {
@@ -89,11 +85,11 @@ public class ProcessTabViewModel {
 		this.uploadToFolder = uploadToFolder;
 	}
 
-	public int getDataset() {
+	public StudyDataSet getDataset() {
 		return dataset;
 	}
 
-	public void setDataset(int dataset) {
+	public void setDataset(StudyDataSet dataset) {
 		this.dataset = dataset;
 	}
 

@@ -20,6 +20,7 @@ import org.strasa.middleware.filesystem.manager.UserFileManager;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
+import org.strasa.middleware.manager.StudyDataSetManagerImpl;
 import org.strasa.middleware.manager.StudyGermplasmManagerImpl;
 import org.strasa.middleware.manager.StudyLocationManagerImpl;
 import org.strasa.middleware.manager.StudyManager;
@@ -31,6 +32,7 @@ import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.Study;
+import org.strasa.middleware.model.StudyDataSet;
 import org.strasa.middleware.model.StudyType;
 import org.strasa.web.common.api.Encryptions;
 import org.strasa.web.common.api.ProcessTabViewModel;
@@ -480,7 +482,7 @@ public class RawDataView extends ProcessTabViewModel {
 		if (this.isUpdateMode) {
 			Map arg = new HashMap();
 			arg.put("studyid", this.studyID);
-			arg.put("dataset", this.dataset);
+			arg.put("dataset", this.dataset.getId());
 			Executions.createComponents("/user/browsestudy/rawdata.zul",
 					divRawData, arg);
 		}
@@ -622,7 +624,7 @@ public class RawDataView extends ProcessTabViewModel {
 									new StudyRawDataManagerImpl(studyType
 											.equalsIgnoreCase("rawdata"))
 											.deleteByStudyId(study.getId());
-									new StudyDataColumnManagerImpl().removeStudyDataColumnByStudyId(RawDataView.this.studyID, "rd",dataset);
+									new StudyDataColumnManagerImpl().removeStudyDataColumnByStudyId(RawDataView.this.studyID, "rd",dataset.getId());
 							
 									RawDataView.this.isDataReUploaded = true;
 
@@ -726,6 +728,7 @@ public class RawDataView extends ProcessTabViewModel {
 
 	@Override
 	public boolean validateTab() {
+		if(this.isUpdateMode) return true;
 		Runtimer timer = new Runtimer();
 		timer.start();
 		boolean isRawData = studyType.equalsIgnoreCase("rawdata");
@@ -741,6 +744,7 @@ public class RawDataView extends ProcessTabViewModel {
 			// TODO: must have message DIalog
 			return false;
 		}
+		
 
 		if (tempFile == null || !isVariableDataVisible) {
 			if (!isUpdateMode()) {
@@ -765,17 +769,20 @@ public class RawDataView extends ProcessTabViewModel {
 
 			if (isNewDataSet) {
 				System.out.println("DATA UPLOADING! ");
-
+				StudyDataSet newdataset = new StudyDataSet();
+				newdataset.setStudyid(this.studyID);
+				new StudyDataSetManagerImpl().addDataSet(newdataset);
 				studyRawData.addStudyRawData(study,
 						columnList.toArray(new String[columnList.size()]),
-						dataList, this.dataset, isRawData);
+						dataList, newdataset.getId(), isRawData);
+				this.dataset = newdataset;
 			}
-
+	
 			studyRawData.addStudy(study);
 
 			new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(),
 					columnList.toArray(new String[columnList.size()]),
-					isRawData,this.dataset);
+					isRawData,this.dataset.getId());
 
 			isDataUploaded = true;
 			BindUtils.postNotifyChange(null, null, this, "*");

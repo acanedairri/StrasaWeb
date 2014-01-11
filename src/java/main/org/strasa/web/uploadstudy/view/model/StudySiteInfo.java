@@ -425,7 +425,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		}
 		for (StudySiteInfoModel data : sites ) {
 			data.setStudyid(this.getStudyID());
-			data.setDataset(this.dataset);
+			data.setDataset(this.dataset.getId());
 			if (applyToAll)
 				data.selectedAgroInfo
 						.setPlantingtypeid(selectedSitePlantingType.getId());
@@ -569,7 +569,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 		if (studySiteMan.isSiteRecordExist(this.getStudyID())
 				&& !this.isDataReUploaded) {
-			sites.addAll(studySiteMan.getStudySiteByStudyId(this.getStudyID(),this.dataset));
+			sites.addAll(studySiteMan.getStudySiteByStudyId(this.getStudyID(),this.dataset.getId()));
 			System.out.println("Site exist");
 
 			for (StudySiteInfoModel site : sites) {
@@ -588,7 +588,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 		} else {
 			List<StudySite> lstSiteRaw = studyRawMan.getStudySiteInfo(
-					this.getStudyID(), dataset);
+					this.getStudyID(), dataset.getId());
 			for (StudySite siteData : lstSiteRaw) {
 				StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteData);
 				if (StringUtils.isNullOrEmpty(siteInfo.getYear())) {
@@ -616,7 +616,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			}
 			if (this.isDataReUploaded) {
 				previousSites.addAll(studySiteMan.getStudySiteByStudyId(this
-						.getStudyID(),this.dataset));
+						.getStudyID(),this.dataset.getId()));
 				System.out.println("Previous Sites");
 
 				for (StudySiteInfoModel site : previousSites) {

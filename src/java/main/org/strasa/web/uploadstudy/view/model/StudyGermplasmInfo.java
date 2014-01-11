@@ -208,7 +208,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 		StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
 		List<StudyGermplasm> lst = rawMan.getStudyGermplasmInfo(studyID,
-				dataset);
+				dataset.getId());
 
 		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
 				.openSession();

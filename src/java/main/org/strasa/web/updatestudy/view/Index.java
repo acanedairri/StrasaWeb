@@ -3,11 +3,13 @@ package org.strasa.web.updatestudy.view;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.strasa.middleware.filesystem.manager.UserFileManager;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
+import org.strasa.middleware.manager.StudyDataSetManagerImpl;
 import org.strasa.middleware.manager.StudyManager;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
@@ -15,6 +17,7 @@ import org.strasa.middleware.manager.StudyTypeManagerImpl;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.Study;
+import org.strasa.middleware.model.StudyDataSet;
 import org.strasa.web.common.api.ProcessTabViewModel;
 import org.strasa.web.uploadstudy.view.model.UploadData;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -47,7 +50,7 @@ public class Index {
 	private UploadData uploadData;
 	private int selectedIndex = 1;
 	private boolean[] tabDisabled = { false, true, true, true, true };
-	private int studyID = 7;
+
 	private boolean isRaw;
 	private ProcessTabViewModel uploadModel;
 	private int datasetCount;
@@ -216,7 +219,7 @@ public class Index {
 
 	@Command
 	public void addNewDataset(){
-		initializeDataSetTab(2, false);
+		initializeDataSetTab(new StudyDataSet(), false);
 	}
 	@Command
 	public void saveStudyInformation() {
@@ -322,16 +325,16 @@ public class Index {
 
 		// wire event listener
 		// Selectors.wireEventListeners(view, this);
-		StudyManagerImpl study = new StudyManagerImpl();
-		ArrayList<Integer> studyDataSets = study.getDataSets(this.studyID);
-		for(Integer datasetNum : studyDataSets){
-			System.out.println("Dataset__________: " + datasetNum);
+	
+		List<StudyDataSet> studyDataSets = new StudyDataSetManagerImpl().getDataSetsByStudyId(this.uploadModel.studyID);
+		for(StudyDataSet datasetNum : studyDataSets){
+		
 			initializeDataSetTab(datasetNum, true);	
 		}
 		
 	}
 
-	public void initializeDataSetTab(int dataset, boolean isUpdateMode) {
+	public void initializeDataSetTab(StudyDataSet dataset, boolean isUpdateMode) {
 		if(mainDataTab == null)System.out.println("TABBOX IS NULL!");
 		Tab newTab = new Tab("Dataset " + dataset);
 		newTab.setSelected(true);

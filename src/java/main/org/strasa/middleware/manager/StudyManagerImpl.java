@@ -36,28 +36,8 @@ public class StudyManagerImpl {
 			session.close();
 		}
 	}
-	public int getTotalDataSet(Integer studyID){
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
-		StudyMapper mapper = session.getMapper(StudyMapper.class);
-		try{
-			return mapper.selectByPrimaryKey(studyID).getDatasets();
-		}
-		finally{
-			session.close();
-		}
-	}
-	public ArrayList<Integer> getDataSets(Integer studyID){
-		ArrayList<Integer> returnVal = new ArrayList<Integer>();
-		
-		int totalDataSet = getTotalDataSet(studyID);
-		for(int i = 1; i <= totalDataSet; i++){
-			if(isDataSetExist(studyID, i)){
-				returnVal.add(i);
-			}
-		}
-		return returnVal;
-		
-	}
+
+
 	public boolean isDataSetExist(Integer studyID, Integer dataset){
 		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
 		StudyRawDataMapper mapperRaw = session.getMapper(StudyRawDataMapper.class);
@@ -77,20 +57,6 @@ public class StudyManagerImpl {
 			
 			return returnVal;
 			
-		}
-		finally{
-			session.close();
-		}
-	}
-	public void updateDataSet(Integer studyID,int datasets){
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
-		StudyMapper mapper = session.getMapper(StudyMapper.class);
-		
-		try{
-			Study study = getStudyById(studyID);
-			study.setDatasets(datasets);
-			 mapper.updateByPrimaryKey(study);
-			 
 		}
 		finally{
 			session.close();
