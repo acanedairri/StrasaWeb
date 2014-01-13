@@ -6,18 +6,20 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.PlantingTypeMapper;
-import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.model.PlantingType;
-import org.strasa.middleware.model.StudySite;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class PlantingTypeManagerImpl {
 
+	
+	@WireVariable
+	ConnectionFactory connectionFactory;
 	public PlantingTypeManagerImpl() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public List<PlantingType> getAllPlantingTypes(){
-		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		PlantingTypeMapper PlantingTypeMapper = session.getMapper(PlantingTypeMapper.class);
 		
 		try{
@@ -31,7 +33,7 @@ public class PlantingTypeManagerImpl {
 		
 	}
 	public PlantingType getPlantingTypeById(int id){
-		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		PlantingTypeMapper PlantingTypeMapper = session.getMapper(PlantingTypeMapper.class);
 		
 		try{
@@ -56,7 +58,7 @@ public class PlantingTypeManagerImpl {
 	}
 
 	public PlantingType getPlantingTypeById(Integer plantingtypeid) {
-		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		PlantingTypeMapper PlantingTypeMapper = session.getMapper(PlantingTypeMapper.class);
 		
 		try{

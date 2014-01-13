@@ -4,16 +4,17 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
-import org.strasa.middleware.mapper.ProjectMapper;
 import org.strasa.middleware.mapper.StudyTypeMapper;
 import org.strasa.middleware.model.StudyType;
 import org.strasa.middleware.model.StudyTypeExample;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class StudyTypeManagerImpl {
 
-	
+	@WireVariable
+	ConnectionFactory connectionFactory;
 	public List<StudyType> getAllStudyType(){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyTypeMapper mapper = session.getMapper(StudyTypeMapper.class);
 		
 		try{
@@ -27,7 +28,7 @@ public class StudyTypeManagerImpl {
 	}
 	
 	public StudyType getStudyTypeByName(String value){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyTypeMapper mapper = session.getMapper(StudyTypeMapper.class);
 		
 		try{
@@ -43,7 +44,7 @@ public class StudyTypeManagerImpl {
 
 	public StudyType getStudyTypeById(Integer studytypeid) {
 		// TODO Auto-generated method stub
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyTypeMapper mapper = session.getMapper(StudyTypeMapper.class);
 		
 		try{

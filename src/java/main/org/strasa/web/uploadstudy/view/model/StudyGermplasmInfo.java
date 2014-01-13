@@ -54,6 +54,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Groupbox;
@@ -67,6 +68,9 @@ import com.mysql.jdbc.StringUtils;
 
 public class StudyGermplasmInfo extends ProcessTabViewModel {
 
+	@WireVariable
+	ConnectionFactory connectionFactory;
+	
 	@Wire("#tblKnownGerm")
 	Grid tblKnownGerm;
 
@@ -210,8 +214,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		List<StudyGermplasm> lst = rawMan.getStudyGermplasmInfo(studyID,
 				dataset.getId());
 
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 		GermplasmCharacteristicsMapper charMapper = session
 				.getMapper(GermplasmCharacteristicsMapper.class);

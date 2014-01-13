@@ -7,18 +7,18 @@ import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.GermplasmCharacteristicsMapper;
-import org.strasa.middleware.mapper.StudyGermplasmMapper;
-import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.GermplasmCharacteristics;
 import org.strasa.middleware.model.GermplasmCharacteristicsExample;
-import org.strasa.middleware.model.GermplasmExample;
 import org.strasa.web.uploadstudy.view.model.StudyGermplasmInfo.GermplasmDeepInfoModel;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class GermplasmCharacteristicMananagerImpl {
-
+	
+	@WireVariable
+	ConnectionFactory connectionFactory;
 
 	public void addCharacteristict(List<GermplasmCharacteristics> lstCharRecord){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession(ExecutorType.BATCH);
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
 		GermplasmCharacteristicsMapper mapper = session.getMapper(GermplasmCharacteristicsMapper.class);
 		try{
 			for(GermplasmCharacteristics record : lstCharRecord){
@@ -33,7 +33,7 @@ public class GermplasmCharacteristicMananagerImpl {
 	}
 	
 	public void addCharacteristicBatch(Collection<GermplasmDeepInfoModel> collection){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession(ExecutorType.BATCH);
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
 		GermplasmCharacteristicsMapper mapper = session.getMapper(GermplasmCharacteristicsMapper.class);
 		
 		try{
@@ -56,7 +56,7 @@ public class GermplasmCharacteristicMananagerImpl {
 
 	public List<GermplasmCharacteristics> getGermplasmCharacteristicByKeyandGname(String attribute,String gname){
 
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		try{
 			List<GermplasmCharacteristics> toreturn = null;
 				GermplasmCharacteristics  param= new GermplasmCharacteristics();

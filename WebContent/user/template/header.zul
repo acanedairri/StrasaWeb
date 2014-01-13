@@ -2,5 +2,7 @@
 
 <div hflex="1" vflex="1">
 	<vbox align="center" width="800px">
+	<button label="Logout" unless="${empty execution.userPrincipal}"
+			href="/j_spring_security_logout" />
 	</vbox>
 </div>

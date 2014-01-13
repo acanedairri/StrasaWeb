@@ -17,8 +17,13 @@ import org.strasa.middleware.model.StudyLocationExample;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudySite;
 import org.strasa.middleware.model.StudySiteExample;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class StudyLocationManagerImpl {
+	
+
+	@WireVariable
+	ConnectionFactory connectionFactory;
 	
 	private boolean isRaw = true;
 	public StudyLocationManagerImpl (boolean isRaw){
@@ -26,7 +31,7 @@ public class StudyLocationManagerImpl {
 	}
 
 	public void addStudyLocation(StudyLocation record){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
 
 		try{
@@ -41,7 +46,7 @@ public class StudyLocationManagerImpl {
 	public List<Location> getLocationsFromStudySite(Integer studyID, Integer dataset){
 		
 		List<Location> lstLocations = new ArrayList<Location>();
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		LocationMapper studyLocationMapper = session.getMapper(LocationMapper.class);
 		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
 		Set uniqueEntries = new HashSet(); 
@@ -72,7 +77,7 @@ public class StudyLocationManagerImpl {
 
 
 	public void addStudyLocation(ArrayList<StudyLocation> records){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
 
 		try{
@@ -89,7 +94,7 @@ public class StudyLocationManagerImpl {
 
 
 	public boolean isStudyLocationExist(int studyid, int locationid){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
 
 		try{
@@ -103,7 +108,7 @@ public class StudyLocationManagerImpl {
 		}
 	}
 	public boolean LocationExist(Location location){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		LocationMapper studyLocationMapper = session.getMapper(LocationMapper.class);
 
 		try{
@@ -117,7 +122,7 @@ public class StudyLocationManagerImpl {
 		}
 	}
 	public void updateStudyLocation(List<Location> lstKnowLocations,int studyid){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
 		LocationMapper locationMapper = session.getMapper(LocationMapper.class);
 		StudyLocationExample ex = new StudyLocationExample();
@@ -147,7 +152,7 @@ public class StudyLocationManagerImpl {
 
 	public List<StudyLocation> getAllStudyLocations(int studyId) {
 		// TODO Auto-generated method stub
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
 		try{
 			List<StudyLocation> studyLocations = studyLocationMapper.selectByExample(null);
@@ -160,7 +165,7 @@ public class StudyLocationManagerImpl {
 	
 	public List<StudyLocation> getStudyLocationsById(int studyId) {
 		// TODO Auto-generated method stub
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
 		try{
 			StudyLocationExample example = new StudyLocationExample();
@@ -174,7 +179,7 @@ public class StudyLocationManagerImpl {
 	}
 	public List<StudyLocation> getUnknownStudyLocations(int studyId) {
 		// TODO Auto-generated method stub
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
 		try{
 			List<StudyLocation> studyLocations = studyLocationMapper.selectByExample(null);
@@ -251,8 +256,7 @@ public class StudyLocationManagerImpl {
 	}
 
 	public void removeLocationByStudyId(Integer id) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyLocationMapper studySiteMapper = session
 				.getMapper(StudyLocationMapper.class);
 

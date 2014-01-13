@@ -5,28 +5,17 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.ProgramMapper;
-import org.strasa.middleware.mapper.StudyDataColumnMapper;
-import org.strasa.middleware.mapper.StudyDerivedDataMapper;
-import org.strasa.middleware.mapper.StudyFileMapper;
-import org.strasa.middleware.mapper.StudyGermplasmMapper;
-import org.strasa.middleware.mapper.StudyLocationMapper;
-import org.strasa.middleware.mapper.StudyMapper;
-import org.strasa.middleware.mapper.StudyRawDataMapper;
-import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.ProgramExample;
-import org.strasa.middleware.model.StudyDataColumnExample;
-import org.strasa.middleware.model.StudyDerivedDataExample;
-import org.strasa.middleware.model.StudyFileExample;
-import org.strasa.middleware.model.StudyGermplasmExample;
-import org.strasa.middleware.model.StudyLocationExample;
-import org.strasa.middleware.model.StudyRawDataExample;
-import org.strasa.middleware.model.StudySiteExample;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class ProgramManagerImpl {
 
+	@WireVariable
+	ConnectionFactory connectionFactory;
+	
 	public void addProgram(Program record){
-		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ProgramMapper ProgramMapper = session.getMapper(ProgramMapper.class);
 		
 		try{
@@ -39,7 +28,7 @@ public class ProgramManagerImpl {
 		
 	}
 	public boolean isProgramExist(String name, int userId){
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ProgramMapper ProgramMapper = session.getMapper(ProgramMapper.class);
 		
 		try{
@@ -52,7 +41,7 @@ public class ProgramManagerImpl {
 		}
 	}
 	public Program getProgramByName(String name, int userId){
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ProgramMapper ProgramMapper = session.getMapper(ProgramMapper.class);
 		
 		try{
@@ -66,7 +55,7 @@ public class ProgramManagerImpl {
 	}
 	
 	public void updateProgram(Program record){
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ProgramMapper ProgramMapper = session.getMapper(ProgramMapper.class);
 		
 		try{
@@ -80,7 +69,7 @@ public class ProgramManagerImpl {
 	}
 	
 	public List<Program> getAllProgram(){
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ProgramMapper ProgramMapper = session.getMapper(ProgramMapper.class);
 		
 		try{
@@ -91,7 +80,7 @@ public class ProgramManagerImpl {
 	}
 	
 	public Program getProgramById(int id){
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ProgramMapper ProgramMapper = session.getMapper(ProgramMapper.class);
 		
 		try{
@@ -104,7 +93,7 @@ public class ProgramManagerImpl {
 		}
 	}
 	public List<Program> getProgramByUserId(int id){
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ProgramMapper ProgramMapper = session.getMapper(ProgramMapper.class);
 		
 		try{

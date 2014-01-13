@@ -6,17 +6,18 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyDesignMapper;
-import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.model.StudyDesign;
 import org.strasa.middleware.model.StudyDesignExample;
-import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudySite;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class StudyDesignManagerImpl {
 
+	@WireVariable
+	ConnectionFactory connectionFactory;
+	
 	public void addStudyDesign(StudyDesign record){
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyDesignMapper studyDesignMapper = session
 				.getMapper(StudyDesignMapper.class);
 
@@ -31,8 +32,7 @@ public class StudyDesignManagerImpl {
 	}
 
 	public void addStudyDesign(ArrayList<StudyDesign> records) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyDesignMapper studyDesignMapper = session
 				.getMapper(StudyDesignMapper.class);
 
@@ -49,7 +49,7 @@ public class StudyDesignManagerImpl {
 	}
 
 	public void updateStudyDesign(List<StudyDesign> designInfo){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyDesignMapper studyDesignMapper = session.getMapper(StudyDesignMapper.class);
 
 		try{
@@ -67,8 +67,7 @@ public class StudyDesignManagerImpl {
 
 	}
 	public void updateStudyDesign(StudyDesign record) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyDesignMapper studyDesignMapper = session
 				.getMapper(StudyDesignMapper.class);
 
@@ -86,8 +85,7 @@ public class StudyDesignManagerImpl {
 
 	public List<StudyDesign> getAllStudyDesign() {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyDesignMapper studyDesignMapper = session
 				.getMapper(StudyDesignMapper.class);
 		try {
@@ -101,8 +99,7 @@ public class StudyDesignManagerImpl {
 
 	public StudyDesign getStudyDesign(int studysiteid) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyDesignMapper studyDesignMapper = session
 				.getMapper(StudyDesignMapper.class);
 		try {

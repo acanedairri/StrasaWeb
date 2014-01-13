@@ -7,10 +7,12 @@ import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyVariableMapper;
 import org.strasa.middleware.model.StudyVariable;
 import org.strasa.middleware.model.StudyVariableExample;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class StudyVariableManagerImpl {
 	
-	
+	@WireVariable
+	ConnectionFactory connectionFactory;
 	
 	private SqlSession session;
 	
@@ -19,12 +21,12 @@ public class StudyVariableManagerImpl {
 		return getSqlSession().getMapper(StudyVariableMapper.class);
 	}
 	private SqlSession getSqlSession(){
-		session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		session = connectionFactory.sqlSessionFactory.openSession();
 		return session;
 
 	}
 	public StudyVariableManagerImpl(){
-		 session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		 session = connectionFactory.sqlSessionFactory.openSession();
 	}
 	
 	public boolean hasVariable(String variable){

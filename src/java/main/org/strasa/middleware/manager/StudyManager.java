@@ -5,12 +5,14 @@ import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyMapper;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyExample;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class StudyManager {
-
+	@WireVariable
+	ConnectionFactory connectionFactory;
 	
 	public boolean isProjectExist(Study study,int userID){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyMapper mapper = session.getMapper(StudyMapper.class);
 		StudyExample example = new StudyExample();
 		example.createCriteria().andNameEqualTo(study.getName()).andProgramidEqualTo(study.getProgramid()).andProjectidEqualTo(study.getProjectid()).andUseridEqualTo(userID);
@@ -23,7 +25,7 @@ public class StudyManager {
 		
 	}
 	public Study getStudyByStudyId(int studyID){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyMapper mapper = session.getMapper(StudyMapper.class);
 		StudyExample example = new StudyExample();
 		example.createCriteria().andIdEqualTo(studyID);

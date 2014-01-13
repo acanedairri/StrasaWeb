@@ -4,18 +4,21 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
-import org.strasa.middleware.mapper.UserMapper;
-import org.strasa.middleware.model.User;
-import org.strasa.middleware.model.UserExample;
+import org.strasa.middleware.mapper.DbUserMapper;
+import org.strasa.middleware.model.DbUser;
+import org.strasa.middleware.model.DbUserExample;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
+
 
 public class UserManagerImpl {
-
-	public void addUser(User record){
+	@WireVariable
+	ConnectionFactory connectionFactory;
+	public void addUser(DbUser record){
 		 
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		UserMapper userMapper = session.getMapper(UserMapper.class);
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		DbUserMapper DbUserMapper = session.getMapper(DbUserMapper.class);
 		try{
-			userMapper.insert(record);
+			DbUserMapper.insert(record);
 			session.commit();
 			
 		}finally{
@@ -24,12 +27,12 @@ public class UserManagerImpl {
 		
 	}
 	
-	public void updateUser(User record){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		UserMapper userMapper = session.getMapper(UserMapper.class);
+	public void updateUser(DbUser record){
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		DbUserMapper DbUserMapper = session.getMapper(DbUserMapper.class);
 		try{
 	
-			userMapper.updateByPrimaryKey(record);
+			DbUserMapper.updateByPrimaryKey(record);
 			session.commit();
 		}finally{
 			session.close();
@@ -38,11 +41,11 @@ public class UserManagerImpl {
 	}
 	
 	
-	public void deleteUser(User record){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		UserMapper userMapper = session.getMapper(UserMapper.class);
+	public void deleteUser(DbUser record){
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		DbUserMapper DbUserMapper = session.getMapper(DbUserMapper.class);
 		try{
-			userMapper.deleteByPrimaryKey(record.getId());
+			DbUserMapper.deleteByPrimaryKey(record.getId());
 			session.commit();
 		}finally{
 			session.close();
@@ -50,24 +53,24 @@ public class UserManagerImpl {
 		
 	}
 	
-	public List<User> getUser(String username, String password){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		UserMapper userMapper = session.getMapper(UserMapper.class);
+	public List<DbUser> getUser(String username, String password){
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		DbUserMapper DbUserMapper = session.getMapper(DbUserMapper.class);
 		try{
-			UserExample example = new UserExample();
+			DbUserExample example = new DbUserExample();
 			example.createCriteria().andUsernameEqualTo(username).andPasswordEqualTo(password);
-			return  userMapper.selectByExample(example);
+			return  DbUserMapper.selectByExample(example);
 			
 		}finally{
 			session.close();
 		}
 		
 	}
-	public User getUserById(int userID){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		UserMapper userMapper = session.getMapper(UserMapper.class);
+	public DbUser getUserById(int userID){
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		DbUserMapper DbUserMapper = session.getMapper(DbUserMapper.class);
 		try{
-			return  userMapper.selectByPrimaryKey(userID);
+			return  DbUserMapper.selectByPrimaryKey(userID);
 			
 		}finally{
 			session.close();
@@ -75,19 +78,40 @@ public class UserManagerImpl {
 		
 	}
 
-	public List<User> getAllRegisteredUser() {
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
-		UserMapper userMapper = session.getMapper(UserMapper.class);
+	public List<DbUser> getAllRegisteredUser() {
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		DbUserMapper DbUserMapper = session.getMapper(DbUserMapper.class);
 		try{
-			UserExample example = new UserExample();
+			DbUserExample example = new DbUserExample();
 			example.setOrderByClause("status");
-			return  userMapper.selectByExample(example);
+			return  DbUserMapper.selectByExample(example);
 			
 		}finally{
 			session.close();
 		}
 		
 	}
+	
+	public DbUser getUserByName(String name){
+
+		System.out.println("Testing");
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		try{
+			DbUserMapper dbUserMapper = session.getMapper(DbUserMapper.class);
+			DbUserExample example= new DbUserExample();
+			example.createCriteria().andUsernameEqualTo(name);
+
+			if (dbUserMapper.selectByExample(example).isEmpty())
+				return null;
+			return dbUserMapper.selectByExample(example).get(0);
+
+		}finally{
+			session.close();
+		}
+
+
+	}
+
 	
 
 }

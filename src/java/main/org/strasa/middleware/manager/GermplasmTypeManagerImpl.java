@@ -17,12 +17,14 @@ import org.strasa.middleware.model.KeyGrainQuality;
 import org.strasa.middleware.model.KeyMajorGenes;
 import org.strasa.middleware.model.StudyGermplasmCharacteristics;
 import org.strasa.middleware.model.StudyGermplasmCharacteristicsExample;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class GermplasmTypeManagerImpl {
 
+	@WireVariable
+	ConnectionFactory connectionFactory;
 	public List<GermplasmType> getAllGermplasmType() {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		GermplasmTypeMapper mapper = session.getMapper(GermplasmTypeMapper.class);
 
 		try {
@@ -36,8 +38,7 @@ public class GermplasmTypeManagerImpl {
 	public List<StudyGermplasmCharacteristics> getStudyGermplasmCharacteristics(int studyid,
 			String column) {
 
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyGermplasmCharacteristicsMapper StudyGermplasmCharacteristicsMapper = session
 				.getMapper(StudyGermplasmCharacteristicsMapper.class);
 
@@ -51,8 +52,7 @@ public class GermplasmTypeManagerImpl {
 	}
 	
 	public List<KeyAbiotic> getKeyAbioticOption(){
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		KeyAbioticMapper mapper = session.getMapper(KeyAbioticMapper.class);
 
 		try {
@@ -64,8 +64,7 @@ public class GermplasmTypeManagerImpl {
 	}
 	
 	public List<KeyBiotic> getKeyBioticOption(){
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		KeyBioticMapper mapper = session.getMapper(KeyBioticMapper.class);
 
 		try {
@@ -77,8 +76,7 @@ public class GermplasmTypeManagerImpl {
 	}
 	
 	public List<KeyMajorGenes> getKeyMajorGenesOption(){
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		KeyMajorGenesMapper mapper = session.getMapper(KeyMajorGenesMapper.class);
 
 		try {
@@ -90,8 +88,7 @@ public class GermplasmTypeManagerImpl {
 	}
 	
 	public List<KeyGrainQuality> getKeyGrainQualityOption(){
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		KeyGrainQualityMapper mapper = session.getMapper(KeyGrainQualityMapper.class);
 
 		try {

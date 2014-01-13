@@ -5,16 +5,16 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.CountryMapper;
-import org.strasa.middleware.mapper.ProgramMapper;
 import org.strasa.middleware.model.Country;
-import org.strasa.middleware.model.Program;
-import org.strasa.middleware.model.ProgramExample;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class CountryManagerImpl {
 
+	@WireVariable
+	ConnectionFactory connectionFactory;
 
 	public List<Country> getAllCountry(){
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		CountryMapper countryMapper = session.getMapper(CountryMapper.class);
 		
 		try{

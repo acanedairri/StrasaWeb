@@ -6,7 +6,11 @@ import java.io.Reader;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Service;
 import org.strasa.middleware.mapper.CountryMapper;
+import org.strasa.middleware.mapper.DbUserMapper;
 import org.strasa.middleware.mapper.EcotypeMapper;
 import org.strasa.middleware.mapper.ExtensionDataMapper;
 import org.strasa.middleware.mapper.GeorefMapper;
@@ -40,21 +44,19 @@ import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.mapper.StudyTypeMapper;
 import org.strasa.middleware.mapper.StudyVariableMapper;
 import org.strasa.middleware.mapper.UserDataFileMapper;
-import org.strasa.middleware.mapper.UserMapper;
 import org.strasa.middleware.mapper.other.GermplasmBreederMapper;
-import org.strasa.middleware.mapper.other.StudyRawDataBatch;
 import org.strasa.middleware.mapper.other.StudySummaryMapper;
 import org.strasa.middleware.model.StudyGermplasmCharacteristics;
 import org.strasa.middleware.model.StudySiteByStudy;
 
- 
+@Service("connectionFactory")
+@Scope(value="singleton",proxyMode=ScopedProxyMode.TARGET_CLASS)
 public class ConnectionFactory {
  
 
 
-    public  SqlSessionFactory sqlSessionFactory;
- 
-    
+    public static SqlSessionFactory sqlSessionFactory;
+
     public ConnectionFactory(){
     
             String resource = "SqlMapConfig.xml";
@@ -87,7 +89,7 @@ public class ConnectionFactory {
 		                sqlSessionFactory.getConfiguration().addMapper(StudyTypeMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(StudyVariableMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(StudyGermplasmMapper.class);
-		                sqlSessionFactory.getConfiguration().addMapper(UserMapper.class);
+		                sqlSessionFactory.getConfiguration().addMapper(DbUserMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(KeyBioticMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(KeyAbioticMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(KeyGrainQualityMapper.class);
@@ -115,10 +117,10 @@ public class ConnectionFactory {
            
     }
  
-    public  SqlSessionFactory getSqlSessionFactory() {
- 
-        return sqlSessionFactory;
-    }
+//    public  SqlSessionFactory getSqlSessionFactory() {
+// 
+//        return sqlSessionFactory;
+//    }
     /**
      * Returns a DataSource object.
      *

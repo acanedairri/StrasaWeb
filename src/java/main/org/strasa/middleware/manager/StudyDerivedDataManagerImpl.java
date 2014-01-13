@@ -7,23 +7,22 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
-import org.strasa.middleware.mapper.StudyDerivedDataByDataColumnMapper;
 import org.strasa.middleware.mapper.StudyDerivedDataMapper;
 import org.strasa.middleware.mapper.StudyMapper;
 import org.strasa.middleware.mapper.StudyRawDataByDataColumnMapper;
-import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyDerivedData;
-import org.strasa.middleware.model.StudyRawData;
-import org.strasa.middleware.model.StudyRawDataByDataColumn;
-import org.strasa.middleware.model.StudyRawDataByDataColumnExample;
 import org.strasa.middleware.model.StudyDerivedDataExample;
+import org.strasa.middleware.model.StudyRawDataByDataColumnExample;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class StudyDerivedDataManagerImpl {
 
+	@WireVariable
+	ConnectionFactory connectionFactory;
 
 	public int addStudy(Study record){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyMapper studyMapper = session.getMapper(StudyMapper.class);
 		try{
 			studyMapper.insert(record);
@@ -37,7 +36,7 @@ public class StudyDerivedDataManagerImpl {
 
 
 	public void addStudyDerivedData(Study study, List<StudyDerivedData> studyData){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyDerivedDataMapper studyDataMapper = session.getMapper(StudyDerivedDataMapper.class);
 		StudyMapper studyMapper = session.getMapper(StudyMapper.class);
 		try{
@@ -55,7 +54,7 @@ public class StudyDerivedDataManagerImpl {
 	}
 	public void addStudyDerivedDataByRawCsvList(Study study, List<String[]> rawCSVData){
 		String[] header = rawCSVData.get(0);
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyDerivedDataMapper studyDataMapper = session.getMapper(StudyDerivedDataMapper.class);
 		StudyMapper studyMapper = session.getMapper(StudyMapper.class);
 		try{
@@ -85,7 +84,7 @@ public class StudyDerivedDataManagerImpl {
 	
 	public boolean hasSiteColumnData(int studyid){
 		
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyRawDataByDataColumnMapper studySiteByStudyMapper = session.getMapper(StudyRawDataByDataColumnMapper.class);
 		StudyRawDataByDataColumnExample example= new StudyRawDataByDataColumnExample();
 		example.setDistinct(true);
@@ -98,7 +97,7 @@ public class StudyDerivedDataManagerImpl {
 	
 	public boolean hasLocationColumnData(int studyid){
 		
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyRawDataByDataColumnMapper studySiteByStudyMapper = session.getMapper(StudyRawDataByDataColumnMapper.class);
 		StudyRawDataByDataColumnExample example= new StudyRawDataByDataColumnExample();
 		example.setDistinct(true);
@@ -111,7 +110,7 @@ public class StudyDerivedDataManagerImpl {
 
 
 	public List<StudyDerivedData> getAllStudyRawData() {
-		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyDerivedDataMapper StudyDerivedDataMapper = session.getMapper(StudyDerivedDataMapper.class);
 		
 		try{
@@ -124,10 +123,8 @@ public class StudyDerivedDataManagerImpl {
 	
 	public ArrayList<ArrayList<String>> constructDataRaw(int studyid,
 			String[] columns, String baseColumn, boolean isDistinct) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
-		StudyDerivedDataMapper mapper = session
-				.getMapper(StudyDerivedDataMapper.class);
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		StudyDerivedDataMapper mapper = session.getMapper(StudyDerivedDataMapper.class);
 
 		StudyDerivedDataExample example = new StudyDerivedDataExample();
 		example.createCriteria().andStudyidEqualTo(studyid)

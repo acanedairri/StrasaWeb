@@ -14,12 +14,14 @@ import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.GermplasmCharacteristics;
 import org.strasa.middleware.model.GermplasmExample;
 import org.strasa.web.uploadstudy.view.model.StudyGermplasmInfo.GermplasmDeepInfoModel;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class GermplasmManagerImpl {
 
+	@WireVariable
+	ConnectionFactory connectionFactory;
 	public Germplasm getGermplasmByName(String value) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 
 		try {
@@ -35,8 +37,7 @@ public class GermplasmManagerImpl {
 	}
 
 	public Germplasm getGermplasmById(int id) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 		try {
 			return mapper.selectByPrimaryKey(id);
@@ -47,8 +48,7 @@ public class GermplasmManagerImpl {
 	}
 
 	public List<Germplasm> getGermplasmListByName(String value) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 
 		try {
@@ -69,8 +69,7 @@ public class GermplasmManagerImpl {
 
 
 	public List<Germplasm> getGermplasmListByType(int id) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 
 		try {
@@ -89,8 +88,7 @@ public class GermplasmManagerImpl {
 			Collection<GermplasmDeepInfoModel> collection) {
 
 		ArrayList<Germplasm> returnVal = new ArrayList<Germplasm>();
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 
 		try {
@@ -139,8 +137,7 @@ public class GermplasmManagerImpl {
 	}
 
 	public int addGermplasm(Germplasm record) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 		try {
 			mapper.insert(record);
@@ -152,8 +149,7 @@ public class GermplasmManagerImpl {
 	}
 
 	public void addGermplasm(List<Germplasm> lstRecord) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession(ExecutorType.BATCH);
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 		try {
 			for (Germplasm record : lstRecord) {
@@ -174,8 +170,7 @@ public class GermplasmManagerImpl {
 	
 	
 	public void updateBreeders(List<GermplasmDeepInfoModel> lstRecord) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession(ExecutorType.BATCH);
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
 		GermplasmBreederMapper mapper = session.getMapper(GermplasmBreederMapper.class);
 		try {
 			for (GermplasmDeepInfoModel record : lstRecord) {
@@ -196,8 +191,7 @@ public class GermplasmManagerImpl {
 	}
 
 	public void addGermplasmBatch(List<GermplasmDeepInfoModel> lstRecord) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession(ExecutorType.BATCH);
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 		GermplasmCharacteristicsMapper charmapper = session
 				.getMapper(GermplasmCharacteristicsMapper.class);

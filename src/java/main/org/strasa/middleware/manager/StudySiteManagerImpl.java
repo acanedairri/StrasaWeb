@@ -11,28 +11,28 @@ import org.strasa.middleware.mapper.PlantingTypeMapper;
 import org.strasa.middleware.mapper.StudyAgronomyMapper;
 import org.strasa.middleware.mapper.StudyDesignMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
-import org.strasa.middleware.model.PlantingTypeExample;
 import org.strasa.middleware.model.StudyAgronomy;
 import org.strasa.middleware.model.StudyAgronomyExample;
 import org.strasa.middleware.model.StudyDesignExample;
-import org.strasa.middleware.model.StudyDesignExample.Criteria;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudySite;
 import org.strasa.middleware.model.StudySiteExample;
 import org.strasa.web.uploadstudy.view.pojos.StudySiteInfoModel;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 
 public class StudySiteManagerImpl {
 
 	private boolean isRaw = true;
+	@WireVariable
+	ConnectionFactory connectionFactory;
 
 	public StudySiteManagerImpl(boolean isRaw) {
 		this.isRaw = isRaw;
 	}
 
 	public void addStudySite(StudySite record) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudySiteMapper studySiteMapper = session
 				.getMapper(StudySiteMapper.class);
 
@@ -47,8 +47,7 @@ public class StudySiteManagerImpl {
 	}
 	
 	public void removeSiteByStudyId(int studyID){
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudySiteMapper studySiteMapper = session
 				.getMapper(StudySiteMapper.class);
 
@@ -84,8 +83,7 @@ public class StudySiteManagerImpl {
 	}
 
 	public void addStudySite(ArrayList<StudySite> records) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudySiteMapper studySiteMapper = session
 				.getMapper(StudySiteMapper.class);
 
@@ -102,8 +100,7 @@ public class StudySiteManagerImpl {
 	}
 
 	public void updateStudySite(List<StudySite> sites) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudySiteMapper studySiteMapper = session
 				.getMapper(StudySiteMapper.class);
 
@@ -124,8 +121,7 @@ public class StudySiteManagerImpl {
 	}
 
 	public void updateStudySite(StudySite record) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudySiteMapper studySiteMapper = session
 				.getMapper(StudySiteMapper.class);
 
@@ -143,8 +139,7 @@ public class StudySiteManagerImpl {
 
 	public List<StudySite> getAllStudySites(int studyId) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudySiteMapper studySiteMapper = session
 				.getMapper(StudySiteMapper.class);
 		try {
@@ -195,8 +190,7 @@ public class StudySiteManagerImpl {
 	}
 
 	public boolean isSiteRecordExist(int studyID){
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudySiteMapper siteMapper = session.getMapper(StudySiteMapper.class);
 		StudySiteExample ex = new StudySiteExample();
 		ex.createCriteria().andStudyidEqualTo(studyID);
@@ -205,8 +199,7 @@ public class StudySiteManagerImpl {
 	}
 	public ArrayList<StudySiteInfoModel> getStudySiteByStudyId(int studyID, Integer dataset){
 		ArrayList<StudySiteInfoModel> returnVal = new ArrayList<StudySiteInfoModel>();
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudySiteMapper siteMapper = session.getMapper(StudySiteMapper.class);
 		StudyAgronomyMapper agroMapper = session.getMapper(StudyAgronomyMapper.class);
 		StudyDesignMapper designMapper = session.getMapper(StudyDesignMapper.class);

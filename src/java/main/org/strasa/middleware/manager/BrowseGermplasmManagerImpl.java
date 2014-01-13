@@ -10,6 +10,7 @@ import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.GermplasmExample;
 import org.strasa.web.browsestudy.view.model.StudySearchResultModel;
 import org.strasa.web.germplasmquery.view.model.KeyCharacteristicQueryModel;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class BrowseGermplasmManagerImpl {
 
@@ -17,9 +18,12 @@ public class BrowseGermplasmManagerImpl {
 	private final static String BIOTIC="Biotic";
 	private final static String GRAIN_QUALITY="Grain Quality";
 	private final static String MAJOR_GENES="Major Genes";
+	
+	@WireVariable
+	ConnectionFactory connectionFactory;
 
 	public List<StudySearchResultModel> getStudyWithGemrplasmTested(String gname) {
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		try{
 
 			List<StudySearchResultModel> toreturn= session.selectList("BrowseStudy.getStudyWithGemrplasmTested",gname);
@@ -34,7 +38,7 @@ public class BrowseGermplasmManagerImpl {
 	
 	
 	public List<Germplasm> getGermplasmKeyCharacteristicsAbiotic(ArrayList<String> keyCharList, String keyChar) {
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		try{
 			List<Germplasm> toreturn = null;
 			if(keyChar.equals(ABIOTIC)){
@@ -56,7 +60,7 @@ public class BrowseGermplasmManagerImpl {
 	
 	
 	public List<Germplasm> getGermplasmByNameEqual(String gname) {
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		try{
 			List<Germplasm> toreturn = null;
 				toreturn= session.selectList("BrowseGermplasm.getGermplasmByNameEqual",gname);
@@ -67,7 +71,7 @@ public class BrowseGermplasmManagerImpl {
 	}
 	
 	public List<Germplasm> getGermplasmByNameLike(String gname) {
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		try{
 			List<Germplasm> toreturn = null;
 				toreturn= session.selectList("BrowseGermplasm.getGermplasmByNameLike",gname);
@@ -79,7 +83,7 @@ public class BrowseGermplasmManagerImpl {
 	
 	
 	public List<Germplasm> getGermplasmByType(int typeid) {
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		try{
 			List<Germplasm> toreturn = null;
 				toreturn= session.selectList("BrowseGermplasm.getGermplasmByType",typeid);
@@ -91,7 +95,7 @@ public class BrowseGermplasmManagerImpl {
 
 	
 	public List<Germplasm> getGermplasmKeyCharacteristics(KeyCharacteristicQueryModel keyQueryCriteria) {
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		try{
 			List<Germplasm> toreturn = null;
 			List<Germplasm> germplasm = null;
@@ -111,7 +115,7 @@ public class BrowseGermplasmManagerImpl {
 
 
 	public List<Germplasm> getGermplasmListByType(int id){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 
 		try{

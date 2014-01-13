@@ -8,18 +8,19 @@ import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.GermplasmMapper;
 import org.strasa.middleware.mapper.StudyGermplasmCharacteristicsMapper;
-import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.GermplasmExample;
 import org.strasa.middleware.model.StudyGermplasmCharacteristics;
 import org.strasa.middleware.model.StudyGermplasmCharacteristicsExample;
-import org.strasa.middleware.model.StudySite;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class GermplasmQueryManagerImpl {
 
-	
+
+	@WireVariable
+	ConnectionFactory connectionFactory;
 	public Germplasm getGermplasmByName(String value){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 		
 		try{
@@ -35,7 +36,7 @@ public class GermplasmQueryManagerImpl {
 	}
 	
 	public Germplasm getGermplasmById(int value){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 		
 		try{
@@ -57,7 +58,7 @@ public class GermplasmQueryManagerImpl {
 	
 
 	public void addGermplasm(Germplasm record){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		GermplasmMapper germplasmmapper = session.getMapper(GermplasmMapper.class);
 		try{
 			germplasmmapper.insert(record);
@@ -70,7 +71,7 @@ public class GermplasmQueryManagerImpl {
 	
 	public List<Germplasm> getAllGermplasms(int germplasmname) {
 		// TODO Auto-generated method stub
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		GermplasmMapper germplasmQueryMapper = session.getMapper(GermplasmMapper.class);
 		try{
 			List<Germplasm> germplasms = germplasmQueryMapper.selectByExample(null);
@@ -129,8 +130,7 @@ public class GermplasmQueryManagerImpl {
 	public List<StudyGermplasmCharacteristics> getStudyGermplasmCharacteristics(int studyid,
 			String column) {
 
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyGermplasmCharacteristicsMapper StudyGermplasmCharacteristicsMapper = session
 				.getMapper(StudyGermplasmCharacteristicsMapper.class);
 

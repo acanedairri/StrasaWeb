@@ -51,7 +51,7 @@ public class AddProgram {
 				Messagebox.show("All fields are required", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
 				return;
 			}
-		} catch (IllegalArgumentException | IllegalAccessException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

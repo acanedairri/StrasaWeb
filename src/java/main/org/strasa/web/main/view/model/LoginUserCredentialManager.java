@@ -3,7 +3,7 @@ package org.strasa.web.main.view.model;
 import java.util.List;
 
 import org.strasa.middleware.manager.UserManagerImpl;
-import org.strasa.middleware.model.User;
+import org.strasa.middleware.model.DbUser;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 
@@ -18,7 +18,7 @@ public class LoginUserCredentialManager {
 	private static final String KEY_USER_MODEL = LoginUserCredentialManager.class
 			.getName()
 			+ "_MODEL";
-	private User user;
+	private DbUser user;
 
 	private LoginUserCredentialManager() {
 	}
@@ -38,7 +38,7 @@ public class LoginUserCredentialManager {
 
 	public synchronized void login(String username, String password) {
 		UserManagerImpl userManagerImpl= new UserManagerImpl();
-		List<User> tempUser = userManagerImpl.getUser(username, password);
+		List<DbUser> tempUser = userManagerImpl.getUser(username, password);
 	
 			if (tempUser != null && tempUser.get(0).getPassword().equals(password)) {
 				user = tempUser.get(0);
@@ -52,7 +52,7 @@ public class LoginUserCredentialManager {
 		this.user = null;
 	}
 
-	public synchronized User getUser() {
+	public synchronized DbUser getUser() {
 		return user;
 	}
 

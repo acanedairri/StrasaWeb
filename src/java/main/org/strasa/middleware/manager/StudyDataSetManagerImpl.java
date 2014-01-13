@@ -7,13 +7,15 @@ import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyDataSetMapper;
 import org.strasa.middleware.model.StudyDataSet;
 import org.strasa.middleware.model.StudyDataSetExample;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class StudyDataSetManagerImpl {
 
-	
+	@WireVariable
+	ConnectionFactory connectionFactory;
 	
 	public void addDataSet(StudyDataSet dataset){
-		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyDataSetMapper mapper = session.getMapper(StudyDataSetMapper.class);
 		
 		try{
@@ -26,7 +28,7 @@ public class StudyDataSetManagerImpl {
 		
 	}
 	public void updateDataSet(StudyDataSet dataset){
-		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyDataSetMapper mapper = session.getMapper(StudyDataSetMapper.class);
 		
 		try{
@@ -41,7 +43,7 @@ public class StudyDataSetManagerImpl {
 	
 	public List<StudyDataSet> getDataSetsByStudyId(Integer studyID){
 
-		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyDataSetMapper mapper = session.getMapper(StudyDataSetMapper.class);
 		
 		try{
@@ -58,7 +60,7 @@ public class StudyDataSetManagerImpl {
 	
 	public StudyDataSet getDataSet(Integer datasetID){
 
-		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyDataSetMapper mapper = session.getMapper(StudyDataSetMapper.class);
 		
 		try{

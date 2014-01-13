@@ -14,12 +14,16 @@ import org.strasa.middleware.model.StudyGermplasm;
 import org.strasa.middleware.model.StudyGermplasmCharacteristics;
 import org.strasa.middleware.model.StudyGermplasmExample;
 import org.strasa.web.uploadstudy.view.model.StudyGermplasmInfo.GermplasmDeepInfoModel;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
+
+
 
 public class StudyGermplasmManagerImpl {
 
+	@WireVariable
+	ConnectionFactory connectionFactory;
 	public StudyGermplasm getStudyGermplasmByName(String value) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyGermplasmMapper mapper = session
 				.getMapper(StudyGermplasmMapper.class);
 
@@ -34,8 +38,7 @@ public class StudyGermplasmManagerImpl {
 	}
 
 	public List<StudyGermplasm> getStudyGermplasmByStudyId(int studyID) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyGermplasmMapper mapper = session
 				.getMapper(StudyGermplasmMapper.class);
 
@@ -56,8 +59,7 @@ public class StudyGermplasmManagerImpl {
 	}
 
 	public int addStudyGermplasm(StudyGermplasm record) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyGermplasmMapper mapper = session
 				.getMapper(StudyGermplasmMapper.class);
 		try {
@@ -70,8 +72,7 @@ public class StudyGermplasmManagerImpl {
 	}
 
 	public void addStudyGermplasm(List<StudyGermplasm> lstRecord) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession(ExecutorType.BATCH);
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
 		StudyGermplasmMapper mapper = session
 				.getMapper(StudyGermplasmMapper.class);
 
@@ -92,8 +93,7 @@ public class StudyGermplasmManagerImpl {
 
 	public void addStudyGermplasm(List<StudyGermplasm> lstRecord,
 			List<GermplasmCharacteristics> lstCharRecord) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession(ExecutorType.BATCH);
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
 		StudyGermplasmMapper mapper = session
 				.getMapper(StudyGermplasmMapper.class);
 		try {
@@ -119,8 +119,7 @@ public class StudyGermplasmManagerImpl {
 	}
 	public void addStudyGermplasm(List<StudyGermplasm> lstRecord,
 			List<StudyGermplasmCharacteristics> lstCharRecord, int studyID) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession(ExecutorType.BATCH);
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
 		StudyGermplasmMapper mapper = session
 				.getMapper(StudyGermplasmMapper.class);
 		HashMap<String,Integer> studyidmap = new HashMap<String,Integer>();
@@ -151,8 +150,7 @@ public class StudyGermplasmManagerImpl {
 	}
 	
 	public void addStudyGermplasmBatch(List<GermplasmDeepInfoModel> lstRecord){
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyGermplasmMapper mapper = session
 				.getMapper(StudyGermplasmMapper.class);
 		StudyGermplasmCharacteristicsMapper charmapper = session
@@ -183,8 +181,7 @@ public class StudyGermplasmManagerImpl {
 	}
 
 	public void updateStudyGermplasm(StudyGermplasm record) {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyGermplasmMapper mapper = session
 				.getMapper(StudyGermplasmMapper.class);
 		try {
@@ -198,8 +195,7 @@ public class StudyGermplasmManagerImpl {
 
 	public void removeGermplasmByStudyId(Integer id) {
 		
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyGermplasmMapper mapper = session
 				.getMapper(StudyGermplasmMapper.class);
 		StudyGermplasmExample ex = new StudyGermplasmExample();

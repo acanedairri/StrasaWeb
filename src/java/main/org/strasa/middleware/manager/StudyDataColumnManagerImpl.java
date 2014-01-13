@@ -8,12 +8,15 @@ import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyDataColumnMapper;
 import org.strasa.middleware.model.StudyDataColumn;
 import org.strasa.middleware.model.StudyDataColumnExample;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class StudyDataColumnManagerImpl {
 
-
+	@WireVariable
+	ConnectionFactory connectionFactory;
+	
 	public List<StudyDataColumn> getStudyDataColumnByStudyId(int studyId,String datatype,int dataset){
-		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyDataColumnMapper mapper = session.getMapper(StudyDataColumnMapper.class);
 
 		try{
@@ -32,7 +35,7 @@ public class StudyDataColumnManagerImpl {
 
 	}
 	public void removeStudyDataColumnByStudyId(int studyId, String datatype,int dataset){
-		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyDataColumnMapper mapper = session.getMapper(StudyDataColumnMapper.class);
 
 		try{
@@ -53,7 +56,7 @@ public class StudyDataColumnManagerImpl {
 	}
 	
 	public void addStudyDataColumn(int studyId,String[] columns, boolean isRaw, Integer dataset){
-		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession(ExecutorType.BATCH);
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
 		StudyDataColumnMapper mapper = session.getMapper(StudyDataColumnMapper.class);
 		String datatype;
 		datatype = "dd";

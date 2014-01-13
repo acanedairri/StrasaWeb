@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.strasa.middleware.manager.CountryManagerImpl;
 import org.strasa.middleware.model.Country;
-import org.strasa.middleware.model.User;
+import org.strasa.middleware.model.DbUser;
 
 public class RegistrationModel  {
 
 	private RegistrationCapthaGenerator rsg = new RegistrationCapthaGenerator(4);
-	User user = new User();
+	DbUser user = new DbUser();
 	private String retypedPassword;
 	private String captcha = rsg.getRandomString();
 	private String captchaInput;
@@ -40,10 +40,10 @@ public class RegistrationModel  {
 	public void setCaptchaInput(String captchaInput) {
 		this.captchaInput = captchaInput;
 	}
-	public User getUser() {
+	public DbUser getUser() {
 		return user;
 	}
-	public void setUser(User user) {
+	public void setUser(DbUser user) {
 		this.user = user;
 	}
 	

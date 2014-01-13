@@ -12,12 +12,15 @@ import org.strasa.web.browsestudy.view.model.StudyDataColumnModel;
 import org.strasa.web.browsestudy.view.model.StudySearchFilterModel;
 import org.strasa.web.browsestudy.view.model.StudySearchResultModel;
 import org.strasa.web.browsestudy.view.model.StudySummaryModel;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class BrowseStudyManagerImpl {
 
-
+	@WireVariable
+	ConnectionFactory connectionFactory;
+	
 	public List<StudySummaryModel> getStudySummary() {
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudySummaryMapper mapper = session.getMapper(StudySummaryMapper.class);
 		List<StudySummaryModel> s= new ArrayList<StudySummaryModel>();
 		try{
@@ -71,7 +74,7 @@ public class BrowseStudyManagerImpl {
 
 
 	public List<StudySearchResultModel> getStudySearchResult(StudySearchFilterModel filter) {
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		try{
 
 			List<StudySearchResultModel> toreturn= session.selectList("BrowseStudy.getStudySearchResult",filter);
@@ -87,7 +90,7 @@ public class BrowseStudyManagerImpl {
 
 	public List<HashMap<String,String>> getStudyData(int studyId,String dataType, int dataset){
 		List<HashMap<String,String>> toreturn = new ArrayList<HashMap<String,String>>();
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		try{
 			StudyDataColumnManagerImpl mgr= new StudyDataColumnManagerImpl();
 

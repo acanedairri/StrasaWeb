@@ -7,12 +7,15 @@ import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.UserDataFileMapper;
 import org.strasa.middleware.model.UserDataFile;
 import org.strasa.middleware.model.UserDataFileExample;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class UserDataFileManagerImpl {
 
+	@WireVariable
+	ConnectionFactory connectionFactory;
 	public void addRecord(UserDataFile record){
 
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		UserDataFileMapper mapper = session.getMapper(UserDataFileMapper.class);
 		try{
 				mapper.insert(record);
@@ -25,7 +28,7 @@ public class UserDataFileManagerImpl {
 	
 	public void updateRecord(UserDataFile record){
 
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		UserDataFileMapper mapper = session.getMapper(UserDataFileMapper.class);
 		try{
 				mapper.updateByPrimaryKey(record);
@@ -37,7 +40,7 @@ public class UserDataFileManagerImpl {
 	}
 	public void deleteRecord(UserDataFile record){
 
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		UserDataFileMapper mapper = session.getMapper(UserDataFileMapper.class);
 		try{
 				mapper.deleteByPrimaryKey(record.getId());
@@ -49,7 +52,7 @@ public class UserDataFileManagerImpl {
 	}
 	
 	public List<UserDataFile> getFileByStudyId(int studyid){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		UserDataFileMapper mapper = session.getMapper(UserDataFileMapper.class);
 		try{
 			UserDataFileExample example = new UserDataFileExample();
@@ -62,7 +65,7 @@ public class UserDataFileManagerImpl {
 	}
 	
 	public List<UserDataFile> getFileByFileName(String filename){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		UserDataFileMapper mapper = session.getMapper(UserDataFileMapper.class);
 		try{
 			UserDataFileExample example = new UserDataFileExample();
@@ -75,7 +78,7 @@ public class UserDataFileManagerImpl {
 	}
 	
 	public List<UserDataFile> getFile(String filename, int studyid, int userid){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		UserDataFileMapper mapper = session.getMapper(UserDataFileMapper.class);
 		try{
 			UserDataFileExample example = new UserDataFileExample();

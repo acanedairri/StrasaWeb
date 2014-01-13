@@ -9,15 +9,20 @@ import org.strasa.middleware.mapper.EcotypeMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.StudySite;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class EcotypeManagerImpl {
+
+	
+	@WireVariable
+	ConnectionFactory connectionFactory;
 
 	public EcotypeManagerImpl() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public List<Ecotype> getAllEcotypes(){
-		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		EcotypeMapper ecotypeMapper = session.getMapper(EcotypeMapper.class);
 		
 		try{
@@ -31,7 +36,7 @@ public class EcotypeManagerImpl {
 		
 	}
 	public Ecotype getEcotypeById(int id){
-		SqlSession session =new ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		EcotypeMapper ecotypeMapper = session.getMapper(EcotypeMapper.class);
 		try{
 			Ecotype ecotypes = ecotypeMapper.selectByPrimaryKey(id);

@@ -1,0 +1,7 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="new page title" border="normal">
+<button label="Logout" unless="${empty execution.userPrincipal}"
+			href="/j_spring_security_logout" />
+</window>
+</zk>

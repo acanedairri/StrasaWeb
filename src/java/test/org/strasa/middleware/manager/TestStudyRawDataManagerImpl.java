@@ -25,12 +25,13 @@ import au.com.bytecode.opencsv.CSVReader;
 public class TestStudyRawDataManagerImpl {
 
 
+	private static ConnectionFactory connectionFactory;
 	private long startTime;
 	
 
 	@BeforeClass
 	public static void setUp() throws Exception {
-
+		 connectionFactory= new ConnectionFactory();
 	}
 
 	@Before
@@ -62,8 +63,7 @@ public class TestStudyRawDataManagerImpl {
 	}
 	@Test
 	public void testNewBuildColumnRaw() throws Exception {
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
 		 List<StudySite> lstData = mapper.getRawSite(129, "studyrawdata",1);
 		 System.out.println(lstData.size());
@@ -75,8 +75,7 @@ public class TestStudyRawDataManagerImpl {
 	@Test
 	public void testGermplasmRaw() throws Exception{
 		System.out.println("Start");
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
 		 List<StudyGermplasm> lstData = mapper.getRawGermplasm(60, "studyrawdata",1);
 		 System.out.println(lstData.size());
@@ -87,8 +86,7 @@ public class TestStudyRawDataManagerImpl {
 	@Test
 	public void testSiteRaw() throws Exception{
 		System.out.println("Start");
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
 		 List<StudySite> lstData = mapper.getRawSite(60, "studyrawdata",1);
 		 System.out.println(lstData.size());
@@ -98,8 +96,7 @@ public class TestStudyRawDataManagerImpl {
 	}
 	@Test
 	public void testRawCount(){
-		SqlSession session = new ConnectionFactory().getSqlSessionFactory()
-				.openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyRawDataMapper mapper = session.getMapper(StudyRawDataMapper.class);
 		StudyRawData data = new StudyRawData();
 		data.setDatacolumn("s");

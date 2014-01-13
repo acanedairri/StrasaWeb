@@ -6,16 +6,18 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyAgronomyMapper;
-import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.model.StudyAgronomy;
 import org.strasa.middleware.model.StudyAgronomyExample;
-import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudySite;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class StudyAgronomyManagerImpl {
 
+	@WireVariable
+	ConnectionFactory connectionFactory;
+	
 	public void addStudyAgronomy(StudyAgronomy record){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyAgronomyMapper studyAgronomyMapper = session.getMapper(StudyAgronomyMapper.class);
 
 		try{
@@ -29,7 +31,7 @@ public class StudyAgronomyManagerImpl {
 	}
 
 	public void addStudyAgronomy(ArrayList<StudyAgronomy> records){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyAgronomyMapper studyAgronomyMapper = session.getMapper(StudyAgronomyMapper.class);
 
 		try{
@@ -45,7 +47,7 @@ public class StudyAgronomyManagerImpl {
 	}
 
 	public void updateStudyAgronomy(List<StudyAgronomy> agroInfo){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyAgronomyMapper studyAgronomyMapper = session.getMapper(StudyAgronomyMapper.class);
 
 		try{
@@ -61,7 +63,7 @@ public class StudyAgronomyManagerImpl {
 
 	}
 	public void updateStudyAgronomy(StudyAgronomy record){
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyAgronomyMapper studyAgronomyMapper = session.getMapper(StudyAgronomyMapper.class);
 
 		try{
@@ -78,7 +80,7 @@ public class StudyAgronomyManagerImpl {
 
 	public List<StudyAgronomy> getAllStudyAgronomy() {
 		// TODO Auto-generated method stub
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyAgronomyMapper studyAgronomyMapper = session.getMapper(StudyAgronomyMapper.class);
 		try{
 			List<StudyAgronomy> studyAgronomy = studyAgronomyMapper.selectByExample(null);
@@ -100,7 +102,7 @@ public class StudyAgronomyManagerImpl {
 
 	public StudyAgronomy getStudyAgronomy(int studyid) {
 		// TODO Auto-generated method stub
-		SqlSession session = new  ConnectionFactory().getSqlSessionFactory().openSession();
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyAgronomyMapper studyAgronomyMapper = session.getMapper(StudyAgronomyMapper.class);
 		try{
 			StudyAgronomyExample example = new StudyAgronomyExample();
