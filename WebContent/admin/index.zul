@@ -1,7 +1,45 @@
-<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?page title="Strasa Administrator Page" contentType="text/html;charset=UTF-8"?>
 <zk>
-<window title="new page title" border="normal">
-<button label="Logout" unless="${empty execution.userPrincipal}"
-			href="/j_spring_security_logout" />
-</window>
+
+	<window border="none">
+		<zscript>
+	String username = org.spring.security.model.SecurityUtil.getUserName();
+</zscript>
+		<hlayout sclass="z-valign-center"
+			style="background:#336633;color:white;" height="30px">
+			<!-- 			<div align="left" hflex="1" >
+				<image src="/images/strasa.jpg" height="50px" width="50px"></image>
+				<span><label>Strasa Web</label></span>
+				</div> -->
+
+			<div align="right" hflex="1">
+				<hbox align="center" pack="end">
+					<label>Welcome:</label>
+					<label>${username}</label>
+					<label>| Role : Admin</label>
+					<button label="Logout"
+						unless="${empty execution.userPrincipal}"
+						href="/j_spring_security_logout" />
+				</hbox>
+			</div>
+			<space/>
+		</hlayout>
+
+		<hlayout sclass="z-valign-center"
+			style="background:#808080;color:white;" height="70px">
+
+			<hbox pack="center">
+				<space />
+				<toolbarbutton label="Account"
+					src="/images/account48.png" tooltiptext="User Account"
+					orient="vertical"
+					href="http://localhost:8080/StrasaWeb/admin/usermanagement.zul" />
+				<space />
+				<toolbarbutton label="Settings"
+					src="/images/settings48.png" orient="vertical" />
+				<space />
+			</hbox>
+		</hlayout>
+
+	</window>
 </zk>

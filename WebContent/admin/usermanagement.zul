@@ -1,6 +1,8 @@
-<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?page title="Account Management" contentType="text/html;charset=UTF-8"?>
 <zk>
-<window title="User Management" border="normal">
+<include id="mainHeader" self="@define(content)" src="/admin/index.zul"/>
+<separator></separator>
+<window title="Account Management" border="normal">
 
 <div apply="org.zkoss.bind.BindComposer"
     viewModel="@id('vm') @init('org.strasa.web.admin.view.model.UserManagement')">
@@ -33,8 +35,9 @@
 				<checkbox hflex="1"  width="100px"
                     label="@load(each.status ?'Active':'Inactive')" 
                     checked="@bind(each.status)" onCheck='@command("onChecked", user= each)' />
-				 <button label="Delete" onClick="@command('deleteUser', user=each)" />
-                
+				<!--  <button label="Delete" onClick="@command('deleteUser', user=each)" /> -->
+                <toolbarbutton tooltiptext="Delete User"
+					src="/images/deleteuser16.png" orient="vertical" onClick="@command('deleteUser', user=each)" />
             </row>
         </template>
     </grid>
