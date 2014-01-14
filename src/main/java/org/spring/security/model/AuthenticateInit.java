@@ -17,12 +17,12 @@ public class AuthenticateInit extends org.zkoss.zk.ui.util.GenericInitiator{
 		if(SecurityUtil.isAnyGranted("ROLE_ADMIN")){
 			Execution exec = Executions.getCurrent();
 			HttpServletResponse response = (HttpServletResponse)exec.getNativeResponse();
-			response.sendRedirect(response.encodeRedirectURL("admin/index.zul")); //assume there is /login
+			response.sendRedirect(response.encodeRedirectURL("admin/")); //assume there is /login
 			exec.setVoided(true); //no
 		}else if(SecurityUtil.isAnyGranted("ROLE_USER")){
 			Execution exec = Executions.getCurrent();
 			HttpServletResponse response = (HttpServletResponse)exec.getNativeResponse();
-			response.sendRedirect(response.encodeRedirectURL("user/index.zul")); //assume there is /login
+			response.sendRedirect(response.encodeRedirectURL("user/")); //assume there is /login
 			exec.setVoided(true); //no
 		}
 		

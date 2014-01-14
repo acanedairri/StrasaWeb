@@ -22,7 +22,7 @@
 						href="/j_spring_security_logout" />
 				</hbox>
 			</div>
-			<space/>
+			<space />
 		</hlayout>
 
 		<hlayout sclass="z-valign-center"
@@ -40,6 +40,8 @@
 				<space />
 			</hbox>
 		</hlayout>
+
+
 
 	</window>
 </zk>

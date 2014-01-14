@@ -21,7 +21,7 @@ public class AjaxAccessDeniedHandler extends GenericInitiator {
                 Execution exec = Executions.getCurrent();
                 
                 if (null == SecurityUtil.getUser()){ //unauthenticated user
-                        exec.sendRedirect("/login.zul");
+                        exec.sendRedirect("/index.zul");
                 }else{
                         //display error's detail
                         Executions.createComponents("/WEB-INF/errors/displayAccessDeniedException.zul", null, args);
