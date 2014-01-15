@@ -109,7 +109,8 @@ public class DataSetTabView {
 			 tabDisabled[4] = false;
 			 
 		 }
-	
+		 
+		 uploadModel.processTabID = Math.random();
 		 
 		
 
@@ -165,6 +166,7 @@ public class DataSetTabView {
 	@GlobalCommand("nextTab")
 	public void nextTab(@BindingParam("model") ProcessTabViewModel uploadData) {
 		
+		if(uploadData.processTabID != uploadModel.processTabID) return;
 		
 		if(!uploadData.validateTab()){
 			return;

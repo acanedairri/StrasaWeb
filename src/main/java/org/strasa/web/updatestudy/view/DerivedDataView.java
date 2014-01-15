@@ -20,6 +20,7 @@ import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
 import org.strasa.middleware.manager.StudyDataSetManagerImpl;
+import org.strasa.middleware.manager.StudyDerivedDataManagerImpl;
 import org.strasa.middleware.manager.StudyGermplasmManagerImpl;
 import org.strasa.middleware.manager.StudyLocationManagerImpl;
 import org.strasa.middleware.manager.StudyManager;
@@ -67,7 +68,7 @@ import org.zkoss.zul.Window;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-public class RawDataView extends ProcessTabViewModel {
+public class DerivedDataView extends ProcessTabViewModel {
 
 	// Wired Components
 
@@ -84,11 +85,11 @@ public class RawDataView extends ProcessTabViewModel {
 	private ArrayList<String> studyTypeList = new ArrayList<String>();
 	public int userID = 1;
 	private ArrayList<String> dataTypeList = new ArrayList<String>();
-	private ArrayList<GenotypeFileModel> genotypeFileList = new ArrayList<RawDataView.GenotypeFileModel>();
+	private ArrayList<GenotypeFileModel> genotypeFileList = new ArrayList<DerivedDataView.GenotypeFileModel>();
 	private Program txtProgram = new Program();
 	private Project txtProject = new Project();
 	private boolean isDataUploaded = false;
-	private boolean processComplete = false;
+
 	public boolean isDataUploaded() {
 		return isDataUploaded;
 	}
@@ -484,12 +485,8 @@ public class RawDataView extends ProcessTabViewModel {
 			Map arg = new HashMap();
 			arg.put("studyid", this.studyID);
 			arg.put("dataset", this.dataset.getId());
-			if(this.isRaw) Executions.createComponents("/user/browsestudy/rawdata.zul",
+			Executions.createComponents("/user/browsestudy/deriveddata.zul",
 					divRawData, arg);
-			else{
-				 Executions.createComponents("/user/browsestudy/deriveddata.zul",
-						divRawData, arg);
-			}
 		}
 	}
 
@@ -522,7 +519,7 @@ public class RawDataView extends ProcessTabViewModel {
 			this.startYear = Integer.parseInt(study.getStartyear());
 			this.endYear = Integer.parseInt(study.getEndyear());
 			isNewDataSet = false;
-
+			
 		}
 		else{
 			this.isDataReUploaded = true;
@@ -570,11 +567,10 @@ public class RawDataView extends ProcessTabViewModel {
 					isNewDataSet = true;
 					varData.clear();
 					isDataUploaded = false;
-					processComplete = false;
 					BindUtils.postGlobalCommand(null, null,
 							"disableTabs", null);
 					BindUtils.postNotifyChange(null, null,
-							RawDataView.this, "*");
+							DerivedDataView.this, "*");
 					new StudyRawDataManagerImpl(studyType
 							.equalsIgnoreCase("rawdata"))
 					.deleteByStudyId(study.getId());
@@ -589,7 +585,6 @@ public class RawDataView extends ProcessTabViewModel {
 					new StudyGermplasmManagerImpl()
 					.removeGermplasmByStudyId(study
 							.getId());
-					
 
 				} else if ("onCancel".equals(e.getName())) {
 
@@ -627,13 +622,13 @@ public class RawDataView extends ProcessTabViewModel {
 					BindUtils.postGlobalCommand(null, null,
 							"disableTabs", null);
 					BindUtils.postNotifyChange(null, null,
-							RawDataView.this, "*");
+							DerivedDataView.this, "*");
 					new StudyRawDataManagerImpl(studyType
 							.equalsIgnoreCase("rawdata"))
 					.deleteByStudyId(study.getId());
-					new StudyDataColumnManagerImpl().removeStudyDataColumnByStudyId(RawDataView.this.studyID, "rd",dataset.getId());
+					new StudyDataColumnManagerImpl().removeStudyDataColumnByStudyId(DerivedDataView.this.studyID, "rd",dataset.getId());
 
-					RawDataView.this.isDataReUploaded = true;
+					DerivedDataView.this.isDataReUploaded = true;
 
 				} else if ("onCancel".equals(e.getName())) {
 
@@ -735,11 +730,10 @@ public class RawDataView extends ProcessTabViewModel {
 
 	@Override
 	public boolean validateTab() {
-		if(processComplete) return true;
 		if(this.isUpdateMode) return true;
 		Runtimer timer = new Runtimer();
 		timer.start();
-		boolean isRawData = this.isRaw;
+		boolean isRawData = false;
 		System.out.println("StudyType: " + studyType + " + " + isRawData);
 		StudyManager studyMan = new StudyManager();
 		HashSet noDupSet = new HashSet();
@@ -780,7 +774,6 @@ public class RawDataView extends ProcessTabViewModel {
 				if(newdataset == null){
 					newdataset = new StudyDataSet();
 					newdataset.setStudyid(this.studyID);
-					newdataset.setDatatype((this.isRaw) ? "rd" : "dd");
 					new StudyDataSetManagerImpl().addDataSet(newdataset);
 				}
 				studyRawData.addStudyRawData(study,
@@ -799,7 +792,6 @@ public class RawDataView extends ProcessTabViewModel {
 			BindUtils.postNotifyChange(null, null, this, "*");
 
 		} 
-		processComplete = true;
 		return true;
 
 	}

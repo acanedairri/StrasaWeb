@@ -103,9 +103,8 @@ public class DerivedData {
 	}
 	
 	@Init
-	public void init(@ExecutionArgParam("studyid") Integer studyId){
+	public void init(@ExecutionArgParam("studyid") Integer studyId, @ExecutionArgParam("dataset") Integer dataset ){
 		
-		int dataset=1; // changes dataset value
 		studyMan=new StudyManagerImpl();
 		browseStudyManagerImpl= new BrowseStudyManagerImpl(); 
 		

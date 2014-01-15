@@ -6,13 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.strasa.middleware.filesystem.manager.UserFileManager;
+import org.apache.ibatis.annotations.Param;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyDataSetManagerImpl;
 import org.strasa.middleware.manager.StudyManager;
 import org.strasa.middleware.manager.StudyManagerImpl;
-import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.manager.StudyTypeManagerImpl;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
@@ -25,13 +24,10 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
-import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Messagebox;
@@ -43,9 +39,15 @@ import com.mysql.jdbc.StringUtils;
 
 public class Index {
 
-	@Wire("#mainDataTab")
-	Tabbox mainDataTab;
+	@Wire("#rawDataTab")
+	Tabbox rawDataTab;
 
+
+	@Wire("#derivedDataTab")
+	Tabbox derivedDataTab;
+	
+	
+	
 	ArrayList<Tabpanel> arrTabPanels = new ArrayList<Tabpanel>();
 	private UploadData uploadData;
 	private int selectedIndex = 1;
@@ -93,6 +95,8 @@ public class Index {
 	private int startYear = Calendar.getInstance().get(Calendar.YEAR);
 	private int endYear = Calendar.getInstance().get(Calendar.YEAR);
 	private boolean isNewDataSet;
+
+	private int  datasetinc = 1;
 
 	public ArrayList<Program> getProgramList() {
 		return programList;
@@ -218,8 +222,9 @@ public class Index {
 	}
 
 	@Command
-	public void addNewDataset(){
-		initializeDataSetTab(new StudyDataSet(), false);
+	public void addNewDataset(@BindingParam("datatype") boolean datatype){
+		
+		initializeDataSetTab(new StudyDataSet(), false, datatype);
 	}
 	@Command
 	public void saveStudyInformation() {
@@ -329,25 +334,36 @@ public class Index {
 		List<StudyDataSet> studyDataSets = new StudyDataSetManagerImpl().getDataSetsByStudyId(this.uploadModel.studyID);
 		for(StudyDataSet datasetNum : studyDataSets){
 		
-			initializeDataSetTab(datasetNum, true);	
+			initializeDataSetTab(datasetNum, true, datasetNum.getDatatype().equals("rd"));	
 		}
+		if(derivedDataTab.getTabs().getChildren().isEmpty())initializeDataSetTab(new StudyDataSet(), false, false);	
+		if(rawDataTab.getTabs().getChildren().isEmpty())initializeDataSetTab(new StudyDataSet(), false, true);	
+		
 		
 	}
 
-	public void initializeDataSetTab(StudyDataSet dataset, boolean isUpdateMode) {
-		if(mainDataTab == null)System.out.println("TABBOX IS NULL!");
-		Tab newTab = new Tab("Dataset " + dataset);
+	public void initializeDataSetTab(StudyDataSet dataset, boolean isUpdateMode, boolean isRaw) {
+		if(rawDataTab == null)System.out.println("TABBOX IS NULL!");
+		Tab newTab = new Tab("Dataset " + datasetinc);
+		datasetinc++;
 		newTab.setSelected(true);
 		newTab.setId("dataset"+dataset);
 		Tabpanel newTabpanel = new Tabpanel();
 		// newTabpanel.appendChild();
-		mainDataTab.getTabs().getChildren().add(newTab);
-		newTabpanel.setParent(mainDataTab.getTabpanels());
+		if(isRaw){
+		rawDataTab.getTabs().getChildren().add(newTab);
+		newTabpanel.setParent(rawDataTab.getTabpanels());
+		}
+		else{
+			derivedDataTab.getTabs().getChildren().add(newTab);
+			newTabpanel.setParent(derivedDataTab.getTabpanels());
+		}
 		Map arg = new HashMap();
 		ProcessTabViewModel newUploadModel = new ProcessTabViewModel();
 		newUploadModel.dataset = dataset;
 		newUploadModel.isUpdateMode = isUpdateMode;
 		newUploadModel.studyID = uploadModel.studyID;
+		newUploadModel.isRaw = isRaw;
 		System.out.println(newUploadModel.toString());
 		arg.put("uploadModel", newUploadModel);
 

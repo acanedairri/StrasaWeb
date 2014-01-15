@@ -11,6 +11,7 @@ public class ProcessTabViewModel {
 	public StudyDataSet dataset = new StudyDataSet();
 	public boolean isUpdateMode = false;
 	public int userID = 1;
+	public double processTabID;
 	public boolean isRaw() {
 		return isRaw;
 	}
@@ -53,6 +54,7 @@ public class ProcessTabViewModel {
 			System.out.println("NULL");
 			return;
 		}
+		this.processTabID = uploadModel.processTabID;
 		isRaw = uploadModel.isRaw;
 		uploadToFolder = uploadModel.uploadToFolder;
 	    setStudyID(uploadModel.getStudyID());

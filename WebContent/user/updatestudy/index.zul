@@ -9,137 +9,177 @@
 
 
 
-			
-		<vlayout>
-		<groupbox mold="3d" width="100%">
-				<caption id="lbltest" label="Study Information" />
-				<vlayout spacing="7px">
-					<grid>
-						<columns>
-							<column label="" width="120px" />
-							<column label="" width="350px" />
-							<column label="" />
-						</columns>
-						<rows>
-							<row>
-								<label class="name" value="Program:" />
-								<bandbox id="bdProgram" mold="rounded"
-									autodrop="true" value="@bind(vm.txtProgram.name)"
-									readonly="true" width="330px">
-									<bandpopup>
-										<listbox height="250px"
-											width="650px" mold="paging" autopaging="true"
-											model="@load(vm.programList)"
-											selectedItem="@bind(vm.txtProgram)"
-											onSelect="bdProgram.value=self.selectedItem.label;bdProgram.close();">
-											<listhead>
-												<listheader
-													label="Select Program" />
-											</listhead>
-											<template name="model"
-												var="item" status="s">
-												<listitem>
 
-													<listcell
-														label="@bind(item.name)" />
-												</listitem>
-											</template>
+			<vlayout>
+				<groupbox mold="3d" width="100%">
+					<caption id="lbltest" label="Study Information" />
+					<vlayout spacing="7px">
+						<grid>
+							<columns>
+								<column label="" width="120px" />
+								<column label="" width="350px" />
+								<column label="" />
+							</columns>
+							<rows>
+								<row>
+									<label class="name"
+										value="Program:" />
+									<bandbox id="bdProgram"
+										mold="rounded" autodrop="true"
+										value="@bind(vm.txtProgram.name)" readonly="true"
+										width="330px">
+										<bandpopup>
+											<listbox height="250px"
+												width="650px" mold="paging" autopaging="true"
+												model="@load(vm.programList)"
+												selectedItem="@bind(vm.txtProgram)"
+												onSelect="bdProgram.value=self.selectedItem.label;bdProgram.close();">
+												<listhead>
+													<listheader
+														label="Select Program" />
+												</listhead>
+												<template name="model"
+													var="item" status="s">
+													<listitem>
 
-										</listbox>
-									</bandpopup>
-								</bandbox>
-								<button label="Add"
-									onClick="@command('addProgram')" />
-							</row>
-							<row>
-								<label class="name" value="Project:" />
-								<bandbox id="bdProject" mold="rounded"
-									width="330px" autodrop="true" value="@bind(vm.txtProject.name)"
-									readonly="true">
-									<bandpopup>
-										<listbox height="250px"
-											width="450px" mold="paging" autopaging="true"
-											model="@load(vm.projectList)"
-											selectedItem="@bind(vm.txtProject)"
-											onSelect="bdProject.value=self.selectedItem.label;bdProject.close();">
-											<listhead>
-												<listheader
-													label="Select Project" />
-											</listhead>
-											<template name="model"
-												var="item" status="s">
-												<listitem>
+														<listcell
+															label="@bind(item.name)" />
+													</listitem>
+												</template>
 
-													<listcell
-														label="@bind(item.name)" />
-												</listitem>
-											</template>
-										</listbox>
-									</bandpopup>
-								</bandbox>
-								<button label="Add"
-									onClick="@command('addProject')" />
-							</row>
-							<row>
-								<label class="name" value="Study Name:" />
-								<textbox width='173px'
-									value="@bind(vm.txtStudyName)" />
-							</row>
+											</listbox>
+										</bandpopup>
+									</bandbox>
+									<button label="Add"
+										onClick="@command('addProgram')" />
+								</row>
+								<row>
+									<label class="name"
+										value="Project:" />
+									<bandbox id="bdProject"
+										mold="rounded" width="330px" autodrop="true"
+										value="@bind(vm.txtProject.name)" readonly="true">
+										<bandpopup>
+											<listbox height="250px"
+												width="450px" mold="paging" autopaging="true"
+												model="@load(vm.projectList)"
+												selectedItem="@bind(vm.txtProject)"
+												onSelect="bdProject.value=self.selectedItem.label;bdProject.close();">
+												<listhead>
+													<listheader
+														label="Select Project" />
+												</listhead>
+												<template name="model"
+													var="item" status="s">
+													<listitem>
 
-							<row>
-								<label class="name" value="Study Type:" />
-								<bandbox id="bdStudyType" mold="rounded"
-									autodrop="true" value="@load(vm.txtStudyType)"
-									readonly="true">
-									<bandpopup>
-										<listbox height="250px"
-											width="450px" mold="paging" autopaging="true"
-											model="@load(vm.studyTypeList)"
-											selectedItem="@bind(vm.txtStudyType)"
-											onSelect="bdStudyType.value=self.selectedItem.label;bdStudyType.close();">
-											<listhead>
-												<listheader
-													label="Select Study types" />
-											</listhead>
-											<listitem label="${each}"
-												forEach="${languages}" />
-										</listbox>
-									</bandpopup>
-								</bandbox>
-							</row>
+														<listcell
+															label="@bind(item.name)" />
+													</listitem>
+												</template>
+											</listbox>
+										</bandpopup>
+									</bandbox>
+									<button label="Add"
+										onClick="@command('addProject')" />
+								</row>
+								<row>
+									<label class="name"
+										value="Study Name:" />
+									<textbox width='173px'
+										value="@bind(vm.txtStudyName)" />
+								</row>
 
-							<row>
-								<label class="name" value="Start Year:" />
-								<spinner width='190px'
-									value="@bind(vm.startYear)" />
-							</row>
-							<row>
-								<label class="name" value="End Year:" />
-								<spinner width='190px'
-									value="@bind(vm.endYear)" />
-							</row>
-							<row>
-								<button label="Save" onClick="@command('saveStudyInformation')"></button>
-							</row>
-						</rows>
-					</grid>
+								<row>
+									<label class="name"
+										value="Study Type:" />
+									<bandbox id="bdStudyType"
+										mold="rounded" autodrop="true" value="@load(vm.txtStudyType)"
+										readonly="true">
+										<bandpopup>
+											<listbox height="250px"
+												width="450px" mold="paging" autopaging="true"
+												model="@load(vm.studyTypeList)"
+												selectedItem="@bind(vm.txtStudyType)"
+												onSelect="bdStudyType.value=self.selectedItem.label;bdStudyType.close();">
+												<listhead>
+													<listheader
+														label="Select Study types" />
+												</listhead>
+												<listitem
+													label="${each}" forEach="${languages}" />
+											</listbox>
+										</bandpopup>
+									</bandbox>
+								</row>
 
-				</vlayout>
-			</groupbox>
-		
-		
-		<tabbox id="mainDataTab">
-		   <toolbar>
-                <toolbarbutton id="plustbbtn" label="+" width="20px" height="28px" onClick="@command('addNewDataset')">
-                    
-                </toolbarbutton>
-            </toolbar>
-		<tabs></tabs>
-		
-				<tabpanels>
-			
-				</tabpanels>
-			</tabbox></vlayout></div>
-		
+								<row>
+									<label class="name"
+										value="Start Year:" />
+									<spinner width='190px'
+										value="@bind(vm.startYear)" />
+								</row>
+								<row>
+									<label class="name"
+										value="End Year:" />
+									<spinner width='190px'
+										value="@bind(vm.endYear)" />
+								</row>
+								<row>
+									<button label="Save"
+										onClick="@command('saveStudyInformation')">
+									</button>
+								</row>
+							</rows>
+						</grid>
+
+					</vlayout>
+				</groupbox>
+
+
+
+				<tabbox>
+					<tabs>
+						<tab label="Raw Data"></tab>
+						<tab label="Derived Data"></tab>
+					</tabs>
+					<tabpanels>
+						<tabpanel>
+							<tabbox id="rawDataTab">
+								<toolbar>
+									<toolbarbutton id="plustbbtn"
+										label="Add new Dataset" width="20px" height="28px"
+										onClick="@command('addNewDataset',datatype=true)">
+
+									</toolbarbutton>
+								</toolbar>
+								<tabs></tabs>
+
+								<tabpanels>
+
+								</tabpanels>
+							</tabbox>
+						</tabpanel>
+						<tabpanel>
+							<tabbox id="derivedDataTab">
+								<toolbar>
+									<toolbarbutton id="derivedplustbbtn"
+										label="Add new Dataset" width="20px" height="28px"
+										onClick="@command('addNewDataset',datatype=false)">
+
+									</toolbarbutton>
+								</toolbar>
+								<tabs></tabs>
+
+								<tabpanels>
+
+								</tabpanels>
+							</tabbox>
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</vlayout>
+		</div>
+
 	</window>
 </zk>
