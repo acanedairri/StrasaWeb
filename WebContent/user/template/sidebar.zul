@@ -1,14 +1,15 @@
+
 <tabbox id="tb" width="100%"  mold="accordion"
 	apply="org.strasa.web.page.navigation.user.SidebarAjaxbasedController">
 	<tabs>
-		<tab label="Upload Data" image="/images/upload.png" />
-		<tab label="Browse" image="/images/browse.png"/>
-		<tab label="Analysis" image="/images/analysis.png" />
-		<tab label="Settings" image="/images/settings.png" />
+		<tab label="Upload Data" image="/images/deleteuser16.png" />
+		<tab label="Browse" image="/images/deleteuser16.png"/>
+		<tab label="Analysis" image="/images/deleteuser16.png" />
+		<tab label="Settings" image="/images/deleteuser16.png" />
 	</tabs>
 	<tabpanels>
 		<tabpanel>
-			<grid hflex="1" vflex="1" sclass="sidebar" oddRowSclass="empty"
+			<grid sclass="sidebar" oddRowSclass="empty"
 				id="fnListUpload">
 				<columns>
 					<column width="36px" />
@@ -19,7 +20,7 @@
 
 		</tabpanel>
 		<tabpanel>
-			<grid hflex="1" vflex="1" sclass="sidebar" oddRowSclass="empty"
+			<grid sclass="sidebar" oddRowSclass="empty"
 				id="fnListBrowse">
 				<columns>
 					<column width="36px" />
@@ -30,7 +31,7 @@
 
 		</tabpanel>
 		<tabpanel>
-			<grid hflex="1" vflex="1" sclass="sidebar" oddRowSclass="empty"
+			<grid sclass="sidebar" oddRowSclass="empty"
 				id="fnAnalysis">
 				<columns>
 					<column width="36px" />
@@ -41,7 +42,7 @@
 
 		</tabpanel>
 		<tabpanel>
-			<grid hflex="1" vflex="1" sclass="sidebar" oddRowSclass="empty"
+			<grid sclass="sidebar" oddRowSclass="empty"
 				id="fnMaintenance">
 				<columns>
 					<column width="36px" />

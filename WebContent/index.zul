@@ -61,7 +61,7 @@
 
 	<html:form action="j_spring_security_check" method="POST"
 		xmlns:html="native">
-		<grid width="300px">
+		<grid width="300px" oddRowSclass="none">
 			<rows>
 				<row>
 					User:

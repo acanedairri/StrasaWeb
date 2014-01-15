@@ -4,7 +4,7 @@
         <north height="50px" border="none" sclass="myheaderwithgreen">
             <include src="template/header.zul" />
         </north>
-        <west width="260px" border="none" collapsible="true" splittable="true" minsize="300"  margins="0,5,0,0" flex="true">
+        <west width="260px" border="none" collapsible="true" splittable="true"   margins="0,5,0,0"  vflex="1">
               <include src="template/sidebar.zul" />
         </west>
  		<center id="mainContentPage" autoscroll="true" border="none" self="@insert(content)">

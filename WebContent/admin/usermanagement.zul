@@ -1,66 +1,59 @@
 <?page title="Account Management" contentType="text/html;charset=UTF-8"?>
 <zk>
+<style src="/css/grid.css" />
 	<include id="mainHeader" self="@define(content)"
-		src="/admin/index.zul" />
-	<separator></separator>
-	<window title="Account Management" border="normal">
+		src="/admin/header.zul" />
+	<div apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.admin.view.model.UserManagement')"
+		align="center" style="background:#D3D3D3;padding:10px">
+		<grid id="grid" model="@load(vm.user)" mold="paging"
+			pageSize="6" sizedByContent="true" width="90%">
+			<auxhead>
+				<auxheader label="User Management" colspan="8"
+					style="background:#424040;color:white;padding:2px" />
+			</auxhead>
+			<columns>
+				<column label="id" align="left" visible="false" />
+				<column label="Name(Lastname,Firstname)" align="left"
+					sort="auto(lastname)" />
+				<column label="Agency" align="center"
+					sort="auto(agency)" />
+				<column label="Country" align="center"
+					sort="auto(country)" />
+				<column label="Email Address" align="center" />
+				<column hflex="1" label="Date Registered" align="center"
+					sort="auto(dateregistered)" />
+				<column label="Status" align="center" />
+				<column label="Action" align="center" />
+			</columns>
+			<template name="model">
+				<row>
+					<label value="@load(each.id)" visible="false" />
+					<hbox>
+						<label value="@load(each.lastname)" />
+						<label value="," />
+						<label value="@load(each.firstname)" />
+					</hbox>
 
-		<div apply="org.zkoss.bind.BindComposer"
-			viewModel="@id('vm') @init('org.strasa.web.admin.view.model.UserManagement')">
-			<grid id="grid" model="@load(vm.user)" mold="paging"
-				pageSize="6">
-				<columns>
-					<column hflex="1" label="id" align="left"
-						visible="false" />
-					<column hflex="1" label="Name(Lastname,Firstname)"
-						align="left" sort="auto(lastname)" />
-					<column hflex="2" label="Agency" align="center"
-						sort="auto(agency)" />
-					<column hflex="2" label="Country" align="center"
-						sort="auto(country)" />
-					<column hflex="1" label="Email Address"
-						align="center" />
-					<column hflex="1" label="Date Registered"
-						align="center" sort="auto(dateregistered)" />
-					<column hflex="1" label="Status" align="center" />
-					<column hflex="1" label="Action" align="center" />
-				</columns>
-				<template name="model">
-					<row>
-						<label value="@load(each.id)" visible="false" />
-						<hbox>
-							<label value="@load(each.lastname)" />
-							<label value="," />
-							<label value="@load(each.firstname)" />
-						</hbox>
-
-						<label value="@load(each.agency)" />
-						<label value="@load(each.country)" />
-						<label value="@load(each.email)" />
-						<label value="@load(each.dateregistered)" />
-						<checkbox hflex="1" width="100px"
-							label="@load(each.status ?'Active':'Inactive')"
-							checked="@bind(each.status)"
-							onCheck='@command("onChecked", user= each)' />
-						<!--  <button label="Delete" onClick="@command('deleteUser', user=each)" /> -->
-						<toolbarbutton tooltiptext="Delete User"
-							src="/images/deleteuser16.png" orient="vertical"
-							onClick="@command('deleteUser', user=each)" />
-					</row>
-				</template>
-			</grid>
-		</div>
-
-	</window>
+					<label value="@load(each.agency)" />
+					<label value="@load(each.country)" />
+					<label value="@load(each.email)" />
+					<label value="@load(each.dateregistered)" />
+					<checkbox hflex="1" width="100px"
+						label="@load(each.status ?'Active':'Inactive')"
+						checked="@bind(each.status)"
+						onCheck='@command("onChecked", user= each)' />
+					<!--  <button label="Delete" onClick="@command('deleteUser', user=each)" /> -->
+					<toolbarbutton tooltiptext="Delete User"
+						src="/images/deleteuser16.png" orient="vertical"
+						onClick="@command('deleteUser', user=each)" />
+				</row>
+			</template>
+		</grid>
+	</div>
 
 
-	<hlayout class="footer"
-		style="background:#424040;color:white; vertical-align:middle;padding:30px"
-		height="30px">
-		<vbox hflex="1" vflex="1" align="center">
-			STRASA - Stress-tolerant Rice for Africa and South Asia
-			&#169; 2013 IRRI
-		</vbox>
-		<space />
-	</hlayout>
+	<include id="mainFooter" self="@define(content)"
+		src="/admin/footer.zul" />
+
 </zk>
