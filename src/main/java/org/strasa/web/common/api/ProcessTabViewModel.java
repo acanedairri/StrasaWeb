@@ -2,6 +2,8 @@ package org.strasa.web.common.api;
 
 import org.strasa.middleware.model.StudyDataSet;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zul.Tab;
+import org.zkoss.zul.Tabpanel;
 
 public class ProcessTabViewModel {
 	public boolean isRaw = true;
@@ -17,6 +19,8 @@ public class ProcessTabViewModel {
 	}
 	
 	public boolean isDataReUploaded = false;
+	public Tab mainTab;
+	public Tabpanel mainTabPanel;
 	
 	
 	public boolean isDataReUploaded() {
@@ -62,7 +66,7 @@ public class ProcessTabViewModel {
 		this.userID = uploadModel.userID;
 		this.isDataReUploaded = uploadModel.isDataReUploaded;
 		this.setDataset(uploadModel.getDataset());
-		
+		this.mainTab = uploadModel.mainTab;
 	}
 
 	public boolean isUpdateMode() {

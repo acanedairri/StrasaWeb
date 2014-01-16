@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyDataColumnMapper;
+import org.strasa.middleware.mapper.StudyDataSetMapper;
 import org.strasa.middleware.mapper.StudyDerivedDataMapper;
 import org.strasa.middleware.mapper.StudyFileMapper;
 import org.strasa.middleware.mapper.StudyGermplasmMapper;
@@ -172,5 +173,56 @@ public class StudyManagerImpl {
 		finally{
 			session.close();
 		}
+	}
+
+
+	public void deleteStudyById(int studyId, Integer dataset) {
+		// TODO Auto-generated method stub
+		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		
+//		StudyMapper mapper = session.getMapper(StudyMapper.class);
+		StudySiteMapper siteMapper = session.getMapper(StudySiteMapper.class);
+		StudyLocationMapper locMapper = session.getMapper(StudyLocationMapper.class);
+		StudyDataColumnMapper dataColMapper = session.getMapper(StudyDataColumnMapper.class);
+		StudyDerivedDataMapper derivedMapper = session.getMapper(StudyDerivedDataMapper.class);
+		StudyRawDataMapper rawMapper = session.getMapper(StudyRawDataMapper.class);
+		StudyFileMapper fileMapper = session.getMapper(StudyFileMapper.class);
+		StudyGermplasmMapper germplasmMapper = session.getMapper(StudyGermplasmMapper.class);
+		StudyDataSetMapper datasetMapper = session.getMapper(StudyDataSetMapper.class);
+		
+		try{
+			StudySiteExample siteEx=new StudySiteExample();
+			siteEx.createCriteria().andStudyidEqualTo(studyId).andDatasetEqualTo(dataset);
+			siteMapper.deleteByExample(siteEx);
+			
+			StudyLocationExample locEx=new StudyLocationExample();
+			locEx.createCriteria().andStudyidEqualTo(studyId).andDatasetEqualTo(dataset);;
+			locMapper.deleteByExample(locEx);
+			
+			StudyDataColumnExample dataColEx=new StudyDataColumnExample();
+			dataColEx.createCriteria().andStudyidEqualTo(studyId).andDatasetEqualTo(dataset);;
+			dataColMapper.deleteByExample(dataColEx);
+			
+			StudyRawDataExample rawEx=new StudyRawDataExample();
+			rawEx.createCriteria().andStudyidEqualTo(studyId).andDatasetEqualTo(dataset);;
+			rawMapper.deleteByExample(rawEx);
+			
+			StudyDerivedDataExample derivedEx=new StudyDerivedDataExample();
+			derivedEx.createCriteria().andStudyidEqualTo(studyId).andDatasetEqualTo(dataset);;
+			derivedMapper.deleteByExample(derivedEx);
+			
+
+			StudyGermplasmExample germplasmEx=new StudyGermplasmExample();
+			germplasmEx.createCriteria().andStudyidEqualTo(studyId).andDatasetEqualTo(dataset);;
+			germplasmMapper.deleteByExample(germplasmEx);
+			
+			datasetMapper.deleteByPrimaryKey(dataset);
+			
+			session.commit();
+		}
+		finally{
+			session.close();
+		}
+		
 	}
 }

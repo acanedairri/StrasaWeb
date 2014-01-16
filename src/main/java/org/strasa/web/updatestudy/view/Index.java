@@ -167,7 +167,7 @@ public class Index {
 
 		ProgramManagerImpl programMan = new ProgramManagerImpl();
 		programList.clear();
-		programList.addAll(programMan.getProgramByUserId(userID));
+		programList.addAll(programMan.getAllProgram());
 		System.out.print(selected);
 		txtProgram = selected;
 
@@ -194,7 +194,7 @@ public class Index {
 
 		ProjectManagerImpl programMan = new ProjectManagerImpl();
 		projectList.clear();
-		projectList.addAll(programMan.getProjectList(userID, selected));
+		projectList.addAll(programMan.getProjectList( selected));
 
 	}
 
@@ -226,8 +226,9 @@ public class Index {
 
 	@Command
 	public void addNewDataset(@BindingParam("datatype") boolean datatype){
-		
-		initializeDataSetTab(new StudyDataSet(), false, datatype);
+		StudyDataSet newDataset = new StudyDataSet();
+		newDataset.setTitle("New DataSet");
+		initializeDataSetTab(newDataset, false, datatype);
 	}
 	@Command
 	public void saveStudyInformation() {
@@ -349,11 +350,11 @@ public class Index {
 	@SuppressWarnings("unchecked")
 	public void initializeDataSetTab(StudyDataSet dataset, boolean isUpdateMode, boolean isRaw) {
 		if(rawDataTab == null)System.out.println("TABBOX IS NULL!");
-		Tab newTab = new Tab("Dataset " + datasetinc);
+		Tab newTab = new Tab(dataset.getTitle());
 		datasetinc++;
 		newTab.setSelected(true);
 		newTab.setId("dataset"+dataset);
-		newTab.setClosable(true);
+//		newTab.setClosable(true);
 		newTab.addEventListener("onDoubleClick", new EventListener(){
 
 			@Override
@@ -389,6 +390,8 @@ public class Index {
 		newUploadModel.isUpdateMode = isUpdateMode;
 		newUploadModel.studyID = uploadModel.studyID;
 		newUploadModel.isRaw = isRaw;
+		newUploadModel.mainTab = newTab;
+		newUploadModel.mainTabPanel = newTabpanel;
 		System.out.println(newUploadModel.toString());
 		arg.put("uploadModel", newUploadModel);
 

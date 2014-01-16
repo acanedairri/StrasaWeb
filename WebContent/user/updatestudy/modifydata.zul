@@ -10,7 +10,7 @@
 			
 	
 			<groupbox id="gbUploadRawData" mold="3d" width="100%">
-				<caption label="Raw Data" />
+				<caption label="" />
 				<hlayout spacing="30px" height="" width="" vflex="true" hflex="true">
 
 					<vlayout width="100%" hflex="true" vflex="true">

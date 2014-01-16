@@ -34,6 +34,7 @@ public class EditUploadedStudies {
 	@Wire("#divUpdateStudy")
 	public Div divUpdateStudy;
 	
+	
 	StudyManagerImpl studyMan;
 	ProgramManagerImpl programMan;
 	ProjectManagerImpl projectMan;
@@ -118,7 +119,16 @@ public class EditUploadedStudies {
 		Executions.createComponents("/user/updatestudy/index.zul" , list.get(0), arg);
 	}
 	
-	
+	@Command
+	public void addStudy(@ContextParam(ContextType.VIEW) Component view){
+		divMain.setVisible(false);
+//		divUpdateStudy.detach();
+		divUpdateStudy.setVisible(true);
+		Map arg = new HashMap();
+		List<Component> list = Selectors.find(view, "#divUpdateStudyContainer");
+		 Components.removeAllChildren(list.get(0));
+		Executions.createComponents("/user/uploadstudy/index.zul" , list.get(0), arg);
+	}
 	@NotifyChange("editStudyList")
 	@Command("deleteStudy")
 	public void deleteStudy(@BindingParam("studyId") Integer studyId){

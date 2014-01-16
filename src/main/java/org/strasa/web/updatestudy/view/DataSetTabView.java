@@ -1,22 +1,15 @@
 package org.strasa.web.updatestudy.view;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.strasa.middleware.filesystem.manager.UserFileManager;
-import org.strasa.middleware.manager.ProgramManagerImpl;
-import org.strasa.middleware.manager.ProjectManagerImpl;
-import org.strasa.middleware.manager.StudyManager;
+import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
+import org.strasa.middleware.manager.StudyDataSetManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
-import org.strasa.middleware.manager.StudyTypeManagerImpl;
-import org.strasa.middleware.model.Program;
-import org.strasa.middleware.model.Project;
-import org.strasa.middleware.model.Study;
 import org.strasa.web.common.api.ProcessTabViewModel;
-import org.strasa.web.uploadstudy.view.model.UploadData;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -29,14 +22,14 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabpanel;
-
-import com.mysql.jdbc.StringUtils;
 
 public class DataSetTabView {
 
@@ -62,6 +55,11 @@ public class DataSetTabView {
 	Tabpanel tabpanel4;
 	@Wire("#tabpanel5")
 	Tabpanel tabpanel5;
+	
+	@Wire("#btnSaveDataset")
+	Button btnSaveDataset;
+	@Wire("#btnDeleteDataset")
+	Button btnDeleteDataset;
 	
 	ArrayList<Tabpanel> arrTabPanels = new ArrayList<Tabpanel>();
 
@@ -91,6 +89,23 @@ public class DataSetTabView {
 
 	
 
+	public ProcessTabViewModel getUploadModel() {
+		return uploadModel;
+	}
+
+	public void setUploadModel(ProcessTabViewModel uploadModel) {
+		this.uploadModel = uploadModel;
+	}
+
+
+	
+	
+	
+	
+	
+	
+	
+	
 	@Init
 	public void init(	@ExecutionArgParam("uploadModel") ProcessTabViewModel procModel){
 		//editing mode
@@ -136,9 +151,58 @@ public class DataSetTabView {
 			arrTabPanels.add(tabpanel5);
 			Events.sendEvent("onSelect",tab1,tab1);
 			
-		
+			if(!this.uploadModel.isUpdateMode){
+				btnDeleteDataset.setVisible(false);
+				btnSaveDataset.setVisible(false);
+			}
+
+			tab5.setVisible(false);
+			
 	    }
 	
+	  
+	 @SuppressWarnings("unchecked")
+	@Command
+	 public void deleteDataset(){
+		 
+		 
+			Messagebox
+			.show("Are you sure you want to delete this dataset? WARNING! This cannot be undone.",
+					"Delete dataset?", Messagebox.OK | Messagebox.CANCEL,
+					Messagebox.QUESTION, new EventListener() {
+				public void onEvent(Event e) {
+					if ("onOK".equals(e.getName())) {
+						 new StudyManagerImpl().deleteStudyById(DataSetTabView.this.uploadModel.studyID,DataSetTabView.this.uploadModel.getDataset().getId());
+
+						 DataSetTabView.this.uploadModel.mainTab.detach();
+						 DataSetTabView.this.uploadModel.mainTabPanel.detach();
+					} else if ("onCancel".equals(e.getName())) {
+
+					}
+
+					/*
+					 * Event Name Mapping list Messagebox.YES =
+					 * "onYes"; Messagebox.NO = "onNo";
+					 * Messagebox.RETRY = "onRetry";
+					 * Messagebox.ABORT = "onAbort";
+					 * Messagebox.IGNORE = "onIgnore";
+					 * Messagebox.CANCEL = "onCancel"; Messagebox.OK
+					 * = "onOK";
+					 */
+				}
+			});
+
+
+		 
+	 }
+	 @Command
+	 public void saveDataset(){
+		 
+		 Messagebox.show("Information has been saved!", "Message", Messagebox.OK, null);
+		 new StudyDataSetManagerImpl().updateDataSet(this.uploadModel.dataset);
+		 this.uploadModel.mainTab.setLabel(this.uploadModel.dataset.getTitle());
+	 }
+	  
 	 @NotifyChange("*")
 	 @GlobalCommand("disableTabs")
 	 public void disableTabs(){
@@ -150,6 +214,7 @@ public class DataSetTabView {
 		 System.out.println("Disabled Tabs Called");
 	 }
 	  
+	 
 	@Command("showzulfile")
 	public void showzulfile(@BindingParam("zulFileName") String zulFileName,
 			@BindingParam("target") Tabpanel panel) {
@@ -201,7 +266,19 @@ public class DataSetTabView {
 		}
 		Tab[] tabs = {tab1,tab2,tab3,tab4,tab5};
 		
-		Events.sendEvent("onSelect",tabs[selectedIndex + 1],tabs[selectedIndex + 1]);
+		if(selectedIndex + 1 == 4 && !this.uploadModel.isUpdateMode){
+			Messagebox.show("Successfully added a new dataset.", "Information", Messagebox.OK, Messagebox.INFORMATION);
+			return;
+		}
+		
+		if(!this.uploadModel.isUpdateMode){
+			Events.sendEvent("onSelect",tabs[selectedIndex + 1],tabs[selectedIndex + 1]);
+		}
+		else{
+			Messagebox.show("Changes has been saved", "Information", Messagebox.OK, Messagebox.INFORMATION);
+				return;
+		}
+		
 		System.out.println("INDEX: " + selectedIndex);
 		if(uploadData.uploadToFolder){
 			tabDisabled[4] = false;

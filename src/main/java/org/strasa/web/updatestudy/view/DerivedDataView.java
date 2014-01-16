@@ -697,7 +697,7 @@ public class DerivedDataView extends ProcessTabViewModel {
 
 		ProgramManagerImpl programMan = new ProgramManagerImpl();
 		programList.clear();
-		programList.addAll(programMan.getProgramByUserId(userID));
+		programList.addAll(programMan.getAllProgram());
 		System.out.print(selected);
 		txtProgram = selected;
 
@@ -724,7 +724,7 @@ public class DerivedDataView extends ProcessTabViewModel {
 
 		ProjectManagerImpl programMan = new ProjectManagerImpl();
 		projectList.clear();
-		projectList.addAll(programMan.getProjectList(userID, selected));
+		projectList.addAll(programMan.getProjectList( selected));
 
 	}
 

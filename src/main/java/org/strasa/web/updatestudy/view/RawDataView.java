@@ -702,7 +702,7 @@ public class RawDataView extends ProcessTabViewModel {
 
 		ProgramManagerImpl programMan = new ProgramManagerImpl();
 		programList.clear();
-		programList.addAll(programMan.getProgramByUserId(userID));
+		programList.addAll(programMan.getAllProgram());
 		System.out.print(selected);
 		txtProgram = selected;
 
@@ -729,7 +729,7 @@ public class RawDataView extends ProcessTabViewModel {
 
 		ProjectManagerImpl programMan = new ProjectManagerImpl();
 		projectList.clear();
-		projectList.addAll(programMan.getProjectList(userID, selected));
+		projectList.addAll(programMan.getProjectList(selected));
 
 	}
 
@@ -781,6 +781,7 @@ public class RawDataView extends ProcessTabViewModel {
 					newdataset = new StudyDataSet();
 					newdataset.setStudyid(this.studyID);
 					newdataset.setDatatype((this.isRaw) ? "rd" : "dd");
+					newdataset.setTitle(this.dataset.getTitle());
 					new StudyDataSetManagerImpl().addDataSet(newdataset);
 				}
 				studyRawData.addStudyRawData(study,
