@@ -25,7 +25,6 @@ import org.zkoss.zul.Window;
 public class EditProgram {
 	ProgramManagerImpl programMan;
 	StudyManagerImpl studyMan;
-	Integer userId=1;
 	List<ProgramStatus> programList = new ArrayList<ProgramStatus>(); 
 
 	public List<ProgramStatus> getProgramList() {
@@ -38,7 +37,7 @@ public class EditProgram {
 	public void init(@ContextParam(ContextType.VIEW) Component view){
 		programMan = new ProgramManagerImpl();
 		studyMan = new StudyManagerImpl();
-		 makeProgramStatus(programMan.getProgramByUserId(userId));
+		 makeProgramStatus(programMan.getProgramByUserId());
 		//		programList = new ArrayList<program>();
 
 //		programList = makeProgramStatus(programMan.getProgramByUserId(userId));
@@ -82,7 +81,7 @@ public class EditProgram {
 
 		if(studyMan.getStudyByProgramId(programId).isEmpty()){
 			programMan.deleteProgramById(programId);
-			makeProgramStatus(programMan.getProgramByUserId(userId));
+			makeProgramStatus(programMan.getProgramByUserId());
 			Messagebox.show("Changes saved.");
 		}
 		else  Messagebox.show("Cannot delete a program with studies.", "Error", Messagebox.OK, Messagebox.ERROR); 
@@ -100,13 +99,13 @@ public class EditProgram {
 				AddProgram.ZUL_PATH, win, params);
 
 		popup.doModal();
-		makeProgramStatus(programMan.getProgramByUserId(userId));
+		makeProgramStatus(programMan.getProgramByUserId());
 	}
 
 	@NotifyChange("programList")
 	@Command("refreshProgramList")
 	public void refreshProgramList(@BindingParam("selected") Program selected) {
-		makeProgramStatus(programMan.getProgramByUserId(userId));
+		makeProgramStatus(programMan.getProgramByUserId());
 	}
 	
 	public class ProgramStatus {

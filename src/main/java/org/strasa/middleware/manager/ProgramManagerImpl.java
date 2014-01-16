@@ -3,6 +3,7 @@ package org.strasa.middleware.manager;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
+import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.ProgramMapper;
 import org.strasa.middleware.model.Program;
@@ -13,6 +14,13 @@ public class ProgramManagerImpl {
 
 	@WireVariable
 	ConnectionFactory connectionFactory;
+	
+	private int userid;
+	
+	
+	public ProgramManagerImpl(){
+		this.userid=SecurityUtil.getDbUser().getId();
+	}
 	
 	public void addProgram(Program record){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
@@ -33,7 +41,7 @@ public class ProgramManagerImpl {
 		
 		try{
 			ProgramExample example= new ProgramExample();
-			example.createCriteria().andUseridEqualTo(userId).andNameEqualTo(name);
+			example.createCriteria().andUseridEqualTo(userid).andNameEqualTo(name);
 			
 			return (ProgramMapper.countByExample(example) != 0);
 		}finally{
@@ -46,7 +54,7 @@ public class ProgramManagerImpl {
 		
 		try{
 			ProgramExample example= new ProgramExample();
-			example.createCriteria().andUseridEqualTo(userId).andNameEqualTo(name);
+			example.createCriteria().andUseridEqualTo(userid).andNameEqualTo(name);
 			
 			return ProgramMapper.selectByExample(example).get(0);
 		}finally{
@@ -92,13 +100,13 @@ public class ProgramManagerImpl {
 			session.close();
 		}
 	}
-	public List<Program> getProgramByUserId(int id){
+	public List<Program> getProgramByUserId(){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ProgramMapper ProgramMapper = session.getMapper(ProgramMapper.class);
 		
 		try{
 			ProgramExample example= new ProgramExample();
-			example.createCriteria().andUseridEqualTo(id);
+			example.createCriteria().andUseridEqualTo(userid);
 			
 			return ProgramMapper.selectByExample(example);
 		}finally{

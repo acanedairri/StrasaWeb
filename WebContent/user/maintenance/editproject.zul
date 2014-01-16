@@ -1,6 +1,7 @@
 <zk>
 	<window id="editProjectWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditProject')">
+		<button label="Add New" onClick="@command('addProject')" />
 		<grid model="@load(vm.projectList) @template(each.editingStatus ? 'editable' : 'noneditable')"
 			sizedByContent="true" width="95%">
 			<columns width="200px">
@@ -53,6 +54,5 @@
 				</row>
 			</template>
 		</grid>
-		<button label="Add New" onClick="@command('addProject')" />
 	</window>
 </zk>

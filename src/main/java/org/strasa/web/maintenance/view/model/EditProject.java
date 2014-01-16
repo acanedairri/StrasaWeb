@@ -25,7 +25,6 @@ import org.zkoss.zul.Window;
 
 public class EditProject {
 	ProjectManagerImpl projectMan;
-	Integer userId=1;
 	List<ProjectStatus> projectList = new ArrayList<ProjectStatus>(); 
 	
 	private StudyManagerImpl studyMan;
@@ -43,7 +42,7 @@ public class EditProject {
 		projectMan = new ProjectManagerImpl();
 		//		projectList = new ArrayList<Project>();
 
-		 makeProjectStatus(projectMan.getProjectByUserId(userId));
+		 makeProjectStatus(projectMan.getProjectByUserId());
 	}
 	
 	private void makeProjectStatus(List<Project> projectByUserId) {
@@ -85,7 +84,7 @@ public class EditProject {
 		
 		if(studyMan.getStudyByProgramId(projectId).isEmpty()){
 			projectMan.deleteProjectById(projectId);
-			makeProjectStatus(projectMan.getProjectByUserId(userId));
+			makeProjectStatus(projectMan.getProjectByUserId());
 			Messagebox.show("Changes saved.");
 		}
 		else  Messagebox.show("Cannot delete a project with studies.", "Error", Messagebox.OK, Messagebox.ERROR); 
@@ -107,14 +106,14 @@ public class EditProject {
 				 AddProject.ZUL_PATH, win, params);
 
 		popup.doModal();
-		makeProjectStatus(projectMan.getProjectByUserId(userId));
+		makeProjectStatus(projectMan.getProjectByUserId());
 		
 	}
 	
 	@NotifyChange("projectList")
 	@Command("refreshProjectList")
 	public void refreshProjectList(@BindingParam("selected") Project selected) {
-		makeProjectStatus(projectMan.getProjectByUserId(userId));
+		makeProjectStatus(projectMan.getProjectByUserId());
 	}
 	
 	public class ProjectStatus {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
+import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.ProjectMapper;
 import org.strasa.middleware.model.Program;
@@ -15,6 +16,12 @@ public class ProjectManagerImpl {
 
 	@WireVariable
 	ConnectionFactory connectionFactory;
+	private int userid;
+	
+	
+	public ProjectManagerImpl(){
+		this.userid=SecurityUtil.getDbUser().getId();
+	}
 	
 	public void addProject(Project record){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
@@ -31,13 +38,13 @@ public class ProjectManagerImpl {
 	}
 	
 	
-	public ArrayList<Project> getProjectList(int userID, Program selected){
+	public ArrayList<Project> getProjectList(Program selected){
 	
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ProjectMapper projectMapper = session.getMapper(ProjectMapper.class);
 		try{
 			ProjectExample example = new ProjectExample();
-			example.createCriteria().andUseridEqualTo(userID).andProgramidEqualTo(selected.getId());
+			example.createCriteria().andUseridEqualTo(userid).andProgramidEqualTo(selected.getId());
 			return new ArrayList<Project>(projectMapper.selectByExample(example));
 		}finally{
 			session.close();
@@ -85,13 +92,13 @@ public class ProjectManagerImpl {
 		}
 	}
 	
-	public List<Project> getProjectByUserId(int id){
+	public List<Project> getProjectByUserId(){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ProjectMapper projectMapper = session.getMapper(ProjectMapper.class);
 		
 		try{
 			ProjectExample example= new ProjectExample();
-			example.createCriteria().andUseridEqualTo(id);
+			example.createCriteria().andUseridEqualTo(userid);
 			
 			return projectMapper.selectByExample(example);
 		}finally{
@@ -118,7 +125,7 @@ public class ProjectManagerImpl {
 		
 		try{
 			ProjectExample example= new ProjectExample();
-			example.createCriteria().andUseridEqualTo(userID).andProgramidEqualTo(programID).andNameEqualTo(name);
+			example.createCriteria().andUseridEqualTo(userid).andProgramidEqualTo(programID).andNameEqualTo(name);
 			
 			return (projectMapper.countByExample(example) != 0 );
 		}finally{
