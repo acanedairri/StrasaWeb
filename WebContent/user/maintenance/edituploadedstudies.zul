@@ -1,17 +1,25 @@
 <zk>
-	<div width="95%" align="right" style="padding:10px">
-	<button  label="Upload New Study" src="/images/edit16.png" orient="horizontal" tooltiptext="Add Study"
-								onClick="@command('editStudy',studyID=each.study.id)" height="50px"/>
-	</div>
 	<div apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditUploadedStudies')" align="center" style="background:#D3D3D3;padding:10px">
+		viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditUploadedStudies')"
+		align="center" style="padding:10px">
+
+		<div width="95%" align="right" style="padding:10px">
+			<button id="btnUploadId" label="Upload New Study"
+				src="/images/upload16.png" orient="horizontal"
+				tooltiptext="Add Study"
+				onClick="@command('editStudy',studyID=each.study.id)" height="35px" />
+			<button id="btnBackId" label="Back" visible="true"
+				src="/images/back16.png" orient="horizontal" tooltiptext="Add Study"
+				onClick="@command('loadMainDiv')" height="35px" />
+		</div>
+
 		<div id="divMain">
-			<grid model="@load(vm.editStudyList)"
-				sizedByContent="true"  width="95%">
+			<grid model="@load(vm.editStudyList)" sizedByContent="true"
+				width="95%">
 				<auxhead>
-				<auxheader label="My Studies" colspan="7"
-					style="background:#424040;color:white;padding:2px" />
-			</auxhead>
+					<auxheader label="My Studies" colspan="7"
+						style="background:#424040;color:white;padding:2px" />
+				</auxhead>
 				<columns width="200px">
 					<column hflex="1" label="Study Name" />
 					<column label="Program Name" />
@@ -34,10 +42,12 @@
 							checked="@bind(each.study.shared)"
 							onCheck='@command("changeStudyPrivacy", study=each.study)' />
 						<cell>
-							<toolbarbutton  src="/images/edit16.png" orient="vertical" tooltiptext="Edit Study"
+							<toolbarbutton src="/images/edit16.png"
+								orient="vertical" tooltiptext="Edit Study"
 								onClick="@command('editStudy',studyID=each.study.id)" />
-							<space/>
-							<toolbarbutton  src="/images/Delete16.png" orient="vertical" tooltiptext="Delete Study"
+							<space />
+							<toolbarbutton src="/images/Delete16.png"
+								orient="vertical" tooltiptext="Delete Study"
 								onClick="@command('deleteStudy', studyId=each.study.id)" />
 						</cell>
 					</row>
@@ -47,9 +57,11 @@
 		<div id="divUpdateStudy">
 
 			<vlayout>
-				<button label="Go Back"
-					onClick="@command('loadMainDiv')" />
-				<div id="divUpdateStudyContainer">
+			
+<!-- 			<button label="Go Back"
+					onClick="@command('loadMainDiv')" />  -->
+				
+		<div id="divUpdateStudyContainer"> 
 
 				</div>
 			</vlayout>
