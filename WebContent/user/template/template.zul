@@ -7,7 +7,7 @@
         <west width="260px" border="none" collapsible="true" splittable="true"   margins="0,5,0,0"  vflex="1">
               <include src="template/sidebar.zul" />
         </west>
- 		<center id="mainContentPage" autoscroll="true" border="none" self="@insert(content)">
+ 		<center id="mainContentPage" autoscroll="true" border="none" self="@insert(content)" style="background:#D3D3D3;">
 			<!-- the main content will be insert to here -->
 		</center>
         <south height="50px" border="none">
