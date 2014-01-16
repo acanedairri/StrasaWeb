@@ -1,13 +1,16 @@
 package org.strasa.web.maintenance.view.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
+import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
 import org.strasa.web.uploadstudy.view.model.AddProject;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
@@ -23,12 +26,14 @@ import org.zkoss.zul.Window;
 public class EditProject {
 	ProjectManagerImpl projectMan;
 	Integer userId=1;
-	List<Project> projectList;
+	List<ProjectStatus> projectList = new ArrayList<ProjectStatus>(); 
+	
 	private StudyManagerImpl studyMan;
-	public List<Project> getProjectList() {
+	
+	public List<ProjectStatus> getProjectList() {
 		return projectList;
 	}
-	public void setProjectList(List<Project> projectList) {
+	public void setProjectList(List<ProjectStatus> projectList) {
 		this.projectList = projectList;
 	}
 	@Init
@@ -38,7 +43,40 @@ public class EditProject {
 		projectMan = new ProjectManagerImpl();
 		//		projectList = new ArrayList<Project>();
 
-		projectList = projectMan.getProjectByUserId(userId);
+		 makeProjectStatus(projectMan.getProjectByUserId(userId));
+	}
+	
+	private void makeProjectStatus(List<Project> projectByUserId) {
+		// TODO Auto-generated method stub
+		
+		projectList.clear();
+		for (Project p: projectByUserId){
+			ProjectStatus ps = new ProjectStatus(p,false);
+			projectList.add(ps);
+		}
+	}
+	
+	@Command
+	public void changeEditableStatus(@BindingParam("ProjectStatus") ProjectStatus ps) {
+		ps.setEditingStatus(!ps.getEditingStatus());
+		refreshRowTemplate(ps);
+	}
+
+	@Command
+	public void confirm(@BindingParam("ProjectStatus") ProjectStatus ps) {
+		changeEditableStatus(ps);
+		refreshRowTemplate(ps);
+		projectMan.updateProject(ps.getProject());
+		Messagebox.show("Changes saved.");
+	}
+
+	public void refreshRowTemplate(ProjectStatus ps) {
+		/*
+		 * This code is special and notifies ZK that the bean's value
+		 * has changed as it is used in the template mechanism.
+		 * This stops the entire Grid's data from being refreshed
+		 */
+		BindUtils.postNotifyChange(null, null, ps, "editingStatus");
 	}
 	
 	@NotifyChange("projectList")
@@ -47,7 +85,7 @@ public class EditProject {
 		
 		if(studyMan.getStudyByProgramId(projectId).isEmpty()){
 			projectMan.deleteProjectById(projectId);
-			setProjectList(projectMan.getProjectByUserId(userId));
+			makeProjectStatus(projectMan.getProjectByUserId(userId));
 			Messagebox.show("Changes saved.");
 		}
 		else  Messagebox.show("Cannot delete a project with studies.", "Error", Messagebox.OK, Messagebox.ERROR); 
@@ -64,19 +102,40 @@ public class EditProject {
 		
 		params.put("oldVar", null);
 		params.put("programID",1); //yah better change this! Make Dynamic
-		params.put("parent", win);
 
 		Window popup = (Window) Executions.getCurrent().createComponents(
 				 AddProject.ZUL_PATH, win, params);
 
 		popup.doModal();
+		makeProjectStatus(projectMan.getProjectByUserId(userId));
 		
 	}
 	
 	@NotifyChange("projectList")
 	@Command("refreshProjectList")
 	public void refreshProjectList(@BindingParam("selected") Project selected) {
-		projectList.clear();
-		projectList.addAll(projectMan.getProjectByUserId(userId));
+		makeProjectStatus(projectMan.getProjectByUserId(userId));
+	}
+	
+	public class ProjectStatus {
+	    private Project p;
+	    private boolean editingStatus;
+	     
+	    public ProjectStatus(Project p, boolean editingStatus) {
+	        this.p = p;
+	        this.editingStatus = editingStatus;
+	    }
+	     
+	    public Project getProject() {
+	        return p;
+	    }
+	     
+	    public boolean getEditingStatus() {
+	        return editingStatus;
+	    }
+	     
+	    public void setEditingStatus(boolean editingStatus) {
+	        this.editingStatus = editingStatus;
+	    }
 	}
 }

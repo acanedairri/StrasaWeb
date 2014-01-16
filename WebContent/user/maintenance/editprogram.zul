@@ -1,16 +1,16 @@
 <zk>
 	<window id="editProgramWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditProgram')">
-		<grid hflex="1" vflex="1"
+		<grid 
 			model="@load(vm.programList) @template(each.editingStatus ? 'editable' : 'noneditable')"
-			sizedByContent="true">
+			sizedByContent="true" width="95%">
 			<columns width="200px">
 				<column label="Program Name" />
 				<column label="Objective" />
 				<column label="Collaborator" />
 				<column label="Coordinator" />
 				<column label="Leading Institute" />
-				<column label="Action" />
+				<column label="Action" width="100px"/>
 			</columns>
 			<template name="editable">
 				<row>
@@ -26,9 +26,9 @@
 						value="@load(each.program.leadinginstitute) @save(each.program.leadinginstitute, before='confirm')" />
 					<cell>
 						<button image="/images/tick-small.png"
-							onClick="@command('confirm', ProgramStatus=each)" />
+							onClick="@command('confirm', ProgramStatus=each)" tooltiptext="Save"/>
 						<button image="/images/cross-small.png"
-							onClick="@command('changeEditableStatus', ProgramStatus=each)" />
+							onClick="@command('changeEditableStatus', ProgramStatus=each)" tooltiptext="Cancel" />
 					</cell>
 				</row>
 			</template>
@@ -39,16 +39,15 @@
 					<label value="@load(each.program.collaborator)" />
 					<label value="@load(each.program.coordinator)" />
 					<label value="@load(each.program.leadinginstitute)" />
-					<div>
+					<cell>
 						<toolbarbutton src="/images/edit16.png"
 							onClick="@command('changeEditableStatus', ProgramStatus=each)"
 							orient="vertical" tooltiptext="Edit Program" />
-						|
-						<toolbarbutton 
-							src="/images/Delete16.png"
+						<space />
+						<toolbarbutton src="/images/Delete16.png"
 							onClick="@command('deleteProgram', programId=each.program.id)"
 							orient="vertical" tooltiptext="Delete Program" />
-					</div>
+					</cell>
 				</row>
 			</template>
 		</grid>
