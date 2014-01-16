@@ -24,6 +24,7 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
@@ -289,16 +290,17 @@ public class Index {
 	}
 
 	@Init
-	public void init() {
+	public void init(@ExecutionArgParam("studyID") Integer studyID) {
 		// editing mode
 		uploadModel = new ProcessTabViewModel();
 
 		refreshProgramList(null);
 		refreshProjectList(null);
-		if (!StringUtils.isNullOrEmpty(Executions.getCurrent().getParameter(
-				"studyid"))) {
-			uploadModel.setStudyID(Integer.parseInt(Executions.getCurrent()
-					.getParameter("studyid")));
+//		Integer studyIDFromURL = Integer.parseInt(Executions.getCurrent()
+//				.getParameter("studyid"));
+//		
+		if (true) {
+			uploadModel.setStudyID(studyID);
 			uploadModel.setUpdateMode(true);
 			tabDisabled[0] = false;
 			tabDisabled[1] = false;

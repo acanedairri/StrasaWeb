@@ -581,7 +581,7 @@ public class RawDataView extends ProcessTabViewModel {
 					;
 					new StudySiteManagerImpl(studyType
 							.equalsIgnoreCase("rawdata"))
-					.removeSiteByStudyId(study.getId());
+					.removeSiteByStudyId(study.getId(),null);
 					new StudyLocationManagerImpl(studyType
 							.equalsIgnoreCase("rawdata"))
 					.removeLocationByStudyId(study
@@ -664,7 +664,7 @@ public class RawDataView extends ProcessTabViewModel {
 		.deleteByStudyId(study.getId());
 		;
 		new StudySiteManagerImpl(studyType.equalsIgnoreCase("rawdata"))
-		.removeSiteByStudyId(study.getId());
+		.removeSiteByStudyId(study.getId(),null);
 		new StudyLocationManagerImpl(studyType.equalsIgnoreCase("rawdata"))
 		.removeLocationByStudyId(study.getId());
 		new StudyGermplasmManagerImpl().removeGermplasmByStudyId(study.getId());

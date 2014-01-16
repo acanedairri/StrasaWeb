@@ -567,7 +567,7 @@ public class UploadData extends ProcessTabViewModel {
 									;
 									new StudySiteManagerImpl(studyType
 											.equalsIgnoreCase("rawdata"))
-											.removeSiteByStudyId(study.getId());
+											.removeSiteByStudyId(study.getId(),null);
 									new StudyLocationManagerImpl(studyType
 											.equalsIgnoreCase("rawdata"))
 											.removeLocationByStudyId(study
@@ -649,7 +649,7 @@ public class UploadData extends ProcessTabViewModel {
 				.deleteByStudyId(study.getId());
 		;
 		new StudySiteManagerImpl(studyType.equalsIgnoreCase("rawdata"))
-				.removeSiteByStudyId(study.getId());
+				.removeSiteByStudyId(study.getId(),null);
 		new StudyLocationManagerImpl(studyType.equalsIgnoreCase("rawdata"))
 				.removeLocationByStudyId(study.getId());
 		new StudyGermplasmManagerImpl().removeGermplasmByStudyId(study.getId());
@@ -804,11 +804,13 @@ public class UploadData extends ProcessTabViewModel {
 
 			return false;
 		}
+		studyRawData.addStudy(study);
 		if (uploadTo.equals("database")) {
 
 			if (isNewDataset) {
 				System.out.println("DATA UPLOADING! ");
-				this.dataset.setStudyid(this.studyID);
+				this.dataset.setStudyid(study.getId());
+				this.dataset.setDatatype((isRawData) ? "rd" : "dd");
 				new StudyDataSetManagerImpl().addDataSet(this.dataset);
 				studyRawData.addStudyRawData(study,
 						columnList.toArray(new String[columnList.size()]),
@@ -816,7 +818,7 @@ public class UploadData extends ProcessTabViewModel {
 				
 			}
 
-			studyRawData.addStudy(study);
+		
 
 			new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(),
 					columnList.toArray(new String[columnList.size()]),

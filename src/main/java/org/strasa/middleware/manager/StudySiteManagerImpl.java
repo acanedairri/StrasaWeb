@@ -37,6 +37,7 @@ public class StudySiteManagerImpl {
 				.getMapper(StudySiteMapper.class);
 
 		try {
+			System.out.println("Inserting!");
 			studySiteMapper.insert(record);
 			session.commit();
 
@@ -46,7 +47,7 @@ public class StudySiteManagerImpl {
 
 	}
 	
-	public void removeSiteByStudyId(int studyID){
+	public void removeSiteByStudyId(int studyID, Integer dataset){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudySiteMapper studySiteMapper = session
 				.getMapper(StudySiteMapper.class);
@@ -58,7 +59,8 @@ public class StudySiteManagerImpl {
 		try {
 			
 			StudySiteExample example = new StudySiteExample();
-			example.createCriteria().andStudyidEqualTo(studyID);
+			if(dataset != null) example.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset);
+			else example.createCriteria().andStudyidEqualTo(studyID);
 			List<StudySite> lstSite = studySiteMapper.selectByExample(example);
 			for(StudySite site: lstSite){
 				StudyAgronomyExample agEx = new StudyAgronomyExample();

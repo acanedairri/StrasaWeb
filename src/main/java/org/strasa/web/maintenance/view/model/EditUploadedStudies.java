@@ -9,16 +9,31 @@ import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.model.Study;
+import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.ContextParam;
+import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zhtml.Messagebox;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.select.Selectors;
+import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Tabpanel;
 
 
 public class EditUploadedStudies {
+	
+	@Wire("#divMain")
+	public Div divMain;
+	
+	@Wire("#divUpdateStudy")
+	public Div divUpdateStudy;
+	
 	StudyManagerImpl studyMan;
 	ProgramManagerImpl programMan;
 	ProjectManagerImpl projectMan;
@@ -37,6 +52,12 @@ public class EditUploadedStudies {
 		setEditStudyList(new ArrayList<EditStudyModel>());
 
 		populateEditStudyList();
+	}
+	@AfterCompose
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
+
+		Selectors.wireComponents(view, this, false);
+		divUpdateStudy.setVisible(false);
 	}
 
 	private void populateEditStudyList() {
@@ -60,6 +81,7 @@ public class EditUploadedStudies {
 	}
 
 	public List<EditStudyModel> getEditStudyList() {
+		
 		return editStudyList;
 	}
 
@@ -67,6 +89,12 @@ public class EditUploadedStudies {
 		this.editStudyList = editStudyList;
 	}
 	
+	
+	@Command
+	public void loadMainDiv(){
+		divUpdateStudy.setVisible(false);
+		divMain.setVisible(true);
+	}
 	@Command("showzulfile")
 	public void showzulfile(@BindingParam("zulFileName") String zulFileName,
 			@BindingParam("target") Tabpanel panel) {
@@ -77,6 +105,19 @@ public class EditUploadedStudies {
 			
 		}
 	}
+	
+	@Command
+	public void editStudy(@ContextParam(ContextType.VIEW) Component view,@BindingParam("studyID") Integer studyid){
+		divMain.setVisible(false);
+//		divUpdateStudy.detach();
+		divUpdateStudy.setVisible(true);
+		Map arg = new HashMap();
+		arg.put("studyID", studyid);
+		List<Component> list = Selectors.find(view, "#divUpdateStudyContainer");
+		 Components.removeAllChildren(list.get(0));
+		Executions.createComponents("/user/updatestudy/index.zul" , list.get(0), arg);
+	}
+	
 	
 	@NotifyChange("editStudyList")
 	@Command("deleteStudy")

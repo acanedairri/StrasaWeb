@@ -414,7 +414,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		StudySiteManagerImpl siteMan = new StudySiteManagerImpl(isRaw);
 		boolean renewData = false;
 	if(this.isDataReUploaded || hasBeenProcessed){
-			siteMan.removeSiteByStudyId(this.getStudyID());
+			siteMan.removeSiteByStudyId(this.getStudyID(),this.getDataset().getId());
 			renewData =true;
 		}
 	
