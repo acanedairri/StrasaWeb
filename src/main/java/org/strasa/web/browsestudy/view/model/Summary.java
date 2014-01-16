@@ -1,5 +1,6 @@
 package org.strasa.web.browsestudy.view.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.strasa.middleware.manager.BrowseStudyManagerImpl;
@@ -7,6 +8,7 @@ import org.strasa.middleware.manager.CountryManagerImpl;
 import org.strasa.middleware.manager.LocationManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
+import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudyTypeManagerImpl;
 import org.strasa.middleware.model.Country;
 import org.strasa.middleware.model.Program;
@@ -14,18 +16,36 @@ import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.StudyType;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.ExecutionArgParam;
+import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zul.Tab;
 
 public class Summary {
-	private ProgramManagerImpl programMan = new ProgramManagerImpl();
-	private ProjectManagerImpl projectMan = new ProjectManagerImpl();
-	private StudyTypeManagerImpl studyTypeMan = new StudyTypeManagerImpl();
-	private BrowseStudyManagerImpl studyQueryManagerImpl= new BrowseStudyManagerImpl();
+	private ProgramManagerImpl programMan;
+	private ProjectManagerImpl projectMan;
+	private StudyTypeManagerImpl studyTypeMan;
+	private BrowseStudyManagerImpl studyQueryManagerImpl;
 	
-	private List<StudySummaryModel> summary= studyQueryManagerImpl.getStudySummary();
-	private List<Program> programList = programMan.getAllProgram();
-	private List<Project> projectList = projectMan.getAllProject();
-	private List<StudyType> studyTypeList = studyTypeMan.getAllStudyType();
+	private List<StudySummaryModel> summary;
+	private List<Program> programList;
+	private List<Project> projectList;
+	private List<StudyType> studyTypeList;
+	
+	@Init
+	public void init(){
+		 programMan = new ProgramManagerImpl();
+		 projectMan = new ProjectManagerImpl();
+
+			 studyTypeMan = new StudyTypeManagerImpl();
+			 studyQueryManagerImpl= new BrowseStudyManagerImpl();
+			
+			 summary= studyQueryManagerImpl.getStudySummary();
+		 programList = programMan.getAllProgram();
+			 projectList = projectMan.getAllProject();
+			 studyTypeList = studyTypeMan.getAllStudyType();
+	}
+	
 	
 	@NotifyChange("*")
 	@Command("updateSearchFilter")

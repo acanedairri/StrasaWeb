@@ -16,18 +16,39 @@ import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.StudyType;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.ContextParam;
+import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
+import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Path;
+import org.zkoss.zul.Include;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Tab;
+import org.zkoss.zul.Tabbox;
+import org.zkoss.zul.Tabpanel;
+import org.zkoss.zul.Tabpanels;
+import org.zkoss.zul.Window;
 
 public class SearchResult {
-	private BrowseStudyManagerImpl browseStudyManagerImpl= new BrowseStudyManagerImpl();
-	private StudyManagerImpl studyMan= new StudyManagerImpl();
+	private BrowseStudyManagerImpl browseStudyManagerImpl;
+	private StudyManagerImpl studyMan;
 
-	private List<StudySearchResultModel> searchResult = new ArrayList<StudySearchResultModel>();
+	private List<StudySearchResultModel> searchResult;
 
 	private String searchResultLabel;
+	private Tab resultTab;
 	
+	@Init
+	public void init(@ExecutionArgParam("resultTab") Tab resultTab){
+		this.resultTab = resultTab;
+		
+		browseStudyManagerImpl= new BrowseStudyManagerImpl();
+		studyMan= new StudyManagerImpl();
+		searchResult = new ArrayList<StudySearchResultModel>();
+	}
 	
 	@NotifyChange("*")
 	@GlobalCommand
@@ -36,6 +57,7 @@ public class SearchResult {
 			StudySearchFilterModel searchFilter = new StudySearchFilterModel();
 			searchFilter.setStudyname(studyName);
 			searchResult = browseStudyManagerImpl.getStudySearchResult(searchFilter);
+			resultTab.setSelected(true);
 		}else{
 			
 		}
@@ -54,6 +76,7 @@ public class SearchResult {
 			searchResult = browseStudyManagerImpl.getStudySearchResult(searchFilter);
 			setSearchResultLabel("Search Result:  "+ searchResult.size()+"  row(s) returned");
 			System.out.println("Size:"+searchResult.size());
+			resultTab.setSelected(true);
 		}else{
 			Messagebox.show("Please filter your search.", "Search Filter too broad", Messagebox.OK, Messagebox.EXCLAMATION);
 		}
@@ -82,7 +105,8 @@ public class SearchResult {
 
 	@NotifyChange("*")
 	@GlobalCommand
-	public void updateSummaryResult(@BindingParam("summaryFilter")StudySummaryModel summary){
+	public void updateSummaryResult(@ContextParam(ContextType.COMPONENT) Component component, @BindingParam("summaryFilter")StudySummaryModel summary){
+		resultTab.setSelected(true);
 		StudySearchFilterModel searchFilter = new StudySearchFilterModel();
 		searchFilter.setProgramid(summary.getProgramId());
 		searchFilter.setProjectid(summary.getProjectId());
@@ -94,7 +118,8 @@ public class SearchResult {
 	}
 	@NotifyChange("*")
 	@GlobalCommand
-	public void updateSummaryResultByStudyType(@BindingParam("summaryFilter")StudySummaryModel summary, @BindingParam("studyTypeId")Integer studyTypeId){
+	public void updateSummaryResultByStudyType(@ContextParam(ContextType.COMPONENT) Component component, @BindingParam("summaryFilter")StudySummaryModel summary, @BindingParam("studyTypeId")Integer studyTypeId){
+		resultTab.setSelected(true);
 		StudySearchFilterModel searchFilter = new StudySearchFilterModel();
 		searchFilter.setProgramid(summary.getProgramId());
 		searchFilter.setProjectid(summary.getProjectId());

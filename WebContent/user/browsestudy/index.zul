@@ -1,5 +1,9 @@
 <zk>
 	<style>
+		.z-button {
+		font-weight: bold;
+		}
+		
 		.z-toolbarbutton-cnt { color: #000080;
 		text-decoration:underline; font-size: 12px; font-weight: bold;
 
@@ -7,45 +11,46 @@
 	</style>
 	<window id="mainBrowseWindow" title="Browse Study"
 		apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Index')" width="100%" height="95%">
-		<tabbox id="tabBox" >
+		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Index')"
+		width="100%" height="95%">
+		<tabbox id="tabBox">
 			<tabs id="tabs">
 				<tab label="Search" />
 			</tabs>
 			<tabpanels id="tabPanels">
 				<tabpanel>
-				<vbox>
-					<toolbar id="tb" sclass="vista" height="30px"
-						align="start">
-						Study name:
-						<textbox id="studyNameBox" />
-						<toolbarbutton image="/images/browse_small.png"
-							onClick="@global-command('searchByStudyName', studyName=studyNameBox.value)" />
-						<toolbarbutton label="advanced search"
-							tooltip="advancedSearch" />
-					</toolbar>
-					<tabbox style="overflow: Auto">
-						<tabs>
-							<tab label="Summary" />
-							<tab label="Result" />
-						</tabs>
-						<tabpanels>
-							<tabpanel>
-								<include
-									src="/user/browsestudy/summary.zul"
-									progressing="true" />
-							</tabpanel>
-							<tabpanel>
-								<include
-									src="/user/browsestudy/searchresult.zul" 
-									progressing="true" />
-							</tabpanel>
-						</tabpanels>
-					</tabbox>
-					<popup id="advancedSearch" width="400px">
-						<include
-							src="/user/browsestudy/searchfilter.zul" />
-					</popup>
+					<vbox>
+						<toolbar id="tb" sclass="vista" height="30px"
+							align="start">
+							Study name:
+							<textbox id="studyNameBox" />
+							<toolbarbutton
+								image="/images/browse_small.png"
+								onClick="@global-command('searchByStudyName', studyName=studyNameBox.value)" />
+							<toolbarbutton label="advanced search"
+								tooltip="advancedSearch" />
+						</toolbar>
+						<tabbox style="overflow: Auto"
+							id="resultTabBox">
+							<tabs id="resultTabs">
+								<tab label="Summary" />
+							</tabs>
+							<tabpanels id="resultPanels">
+								<tabpanel>
+									<include
+										src="/user/browsestudy/summary.zul" progressing="true" />
+								</tabpanel>
+								<!-- 							<tabpanel> -->
+								<!-- 								<include resultTab="resultTab" -->
+								<!-- 									src="/user/browsestudy/searchresult.zul"  -->
+								<!-- 									progressing="true" mode="defer"/> -->
+								<!-- 							</tabpanel> -->
+							</tabpanels>
+						</tabbox>
+						<popup id="advancedSearch" width="400px">
+							<include
+								src="/user/browsestudy/searchfilter.zul" />
+						</popup>
 					</vbox>
 				</tabpanel>
 			</tabpanels>
