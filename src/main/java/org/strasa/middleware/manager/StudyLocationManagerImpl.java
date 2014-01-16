@@ -30,6 +30,10 @@ public class StudyLocationManagerImpl {
 		this.isRaw = isRaw;
 	}
 
+	public StudyLocationManagerImpl() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public void addStudyLocation(StudyLocation record){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
@@ -149,6 +153,20 @@ public class StudyLocationManagerImpl {
 
 	}
 
+
+	public List<StudyLocation> getStudyLocationsByLocId(Integer id) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
+		try{
+			StudyLocationExample example = new StudyLocationExample();
+			example.createCriteria().andLocationidEqualTo(id);
+			List<StudyLocation> studyLocations = studyLocationMapper.selectByExample(example);
+			return studyLocations;
+		}finally{
+			session.close();
+		}
+	}
 
 	public List<StudyLocation> getAllStudyLocations(int studyId) {
 		// TODO Auto-generated method stub
