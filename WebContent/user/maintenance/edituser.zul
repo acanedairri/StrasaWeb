@@ -1,13 +1,17 @@
 <?page title="Registration" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<window width="800px"
-		position="center" apply="org.zkoss.bind.BindComposer"
+
+	<div style="padding:10px 0px 20px 20px" align="left">
+		<label style="font-size:20px">User Profile</label>
+	</div>
+
+	<div align="center" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditUser')"
 		validationMessages="@id('vmsgs')"
 		form="@id('fx') @load(vm.user) @save(vm.user, before='submit') @validator('org.strasa.web.main.view.model.RegistrationValidator', retypedPassword=vm.retypedPassword, captcha=vm.captcha, captchaInput=vm.captchaInput)">
-		<grid>
+		<grid width="90%" oddRowSclass="false">
 			<columns width="200px">
-				<column label="" />
+				<column label="" width="150px" />
 				<column label="" />
 			</columns>
 			<rows>
@@ -55,7 +59,7 @@
 				</row>
 				<row>
 					Address
-					<textbox value="@bind(fx.address)" width="150px"
+					<textbox value="@bind(fx.address)" width="300px"
 						tabindex="5" />
 				</row>
 
@@ -68,16 +72,22 @@
 				<row>
 					Email
 					<cell>
-						<textbox value="@bind(fx.email)" width="150px"
+						<textbox value="@bind(fx.email)" width="300px"
 							tabindex="6" />
 						<label class="error"
 							value="@load(vmsgs['email'])" />
 					</cell>
 				</row>
 				<row>
-				<button label="Save" onClick="@command('add')"></button>
+
 				</row>
 			</rows>
 		</grid>
-	</window>
+		<div style="padding:20px" align="left" width="90%">
+			<button label="Save" image="/images/save16.png"
+				onClick="@command('add')">
+			</button>
+		</div>
+	</div>
+
 </zk>

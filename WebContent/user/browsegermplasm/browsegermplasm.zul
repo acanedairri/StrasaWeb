@@ -17,14 +17,17 @@
 
 		<!-- 		} -->
 	</style>
-
+	
+	<div style="padding:10px 0px 0px 20px" align="left">
+	<label style="font-size:20px">Browse Germplasm</label>
+	</div>
 
 	<vbox apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.BrowseGermplasm')">
 
-		<div align="center" style="padding:20px">
+		<div align="center" style="5px 0px 0px 20px">
 			<hlayout>
-				<label value="Search Germplasm By" />
+				<label value="Search By" />
 				<combobox id="cmbSearchKey" autodrop="true"
 					selectedIndex="@bind(vm.searchKey)"
 					onChange="@command('SetSearchUI')">
