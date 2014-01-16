@@ -29,6 +29,8 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Messagebox;
@@ -344,15 +346,36 @@ public class Index {
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	public void initializeDataSetTab(StudyDataSet dataset, boolean isUpdateMode, boolean isRaw) {
 		if(rawDataTab == null)System.out.println("TABBOX IS NULL!");
 		Tab newTab = new Tab("Dataset " + datasetinc);
 		datasetinc++;
 		newTab.setSelected(true);
 		newTab.setId("dataset"+dataset);
+		newTab.setClosable(true);
+		newTab.addEventListener("onDoubleClick", new EventListener(){
+
+			@Override
+			public void onEvent(Event arg0) throws Exception {
+				System.out.println("Double clicked");
+				
+			}});
+		
+		newTab.addEventListener("onClose", new EventListener() {
+
+			@Override
+			public void onEvent(Event event) throws Exception {
+				event.stopPropagation();
+			}
+		});
 		Tabpanel newTabpanel = new Tabpanel();
 		// newTabpanel.appendChild();
 		if(isRaw){
+			
+			
+			
+			
 		rawDataTab.getTabs().getChildren().add(newTab);
 		newTabpanel.setParent(rawDataTab.getTabpanels());
 		}

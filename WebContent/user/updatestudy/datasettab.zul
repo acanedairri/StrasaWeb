@@ -6,7 +6,7 @@
 		
 				<tabs>
 
-					<tab label="Study Information" id="tab1" disabled="@load(vm.tabDisabled[self.index])" onSelect="@command('showzulfile', zulFileName='/user/updatestudy/modifydata.zul', target=self.linkedPanel)" />
+					<tab label="Data" id="tab1" disabled="@load(vm.tabDisabled[self.index])" onSelect="@command('showzulfile', zulFileName='/user/updatestudy/modifydata.zul', target=self.linkedPanel)" />
 
 					<tab label="Study Site" id="tab2" disabled="@bind(vm.tabDisabled[self.index])" onSelect="@command('showzulfile', zulFileName='/user/uploadstudy/studysiteinfo.zul', target=self.linkedPanel)" />
 
