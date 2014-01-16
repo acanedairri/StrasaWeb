@@ -31,7 +31,7 @@
 
 		from studyderiveddata as t1
 		left join study as t2 on t1.studyid=t2.id group
-		by t1.datarow having
+		by t1.studyid,t1.datarow having
 
 		<foreach item="item" index="index" collection="list">
 			<if test="item.columnAs =='filter' and item.orderCriteria == 'last'">
@@ -113,7 +113,7 @@
 			</if>
 
 		</foreach>
-		order by t1.datarow,t1.datavalue
+		order by t1.studyid,t1.datarow,t1.datavalue
 	</select>
 
 </mapper>

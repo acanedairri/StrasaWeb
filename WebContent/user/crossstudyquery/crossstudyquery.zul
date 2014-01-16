@@ -18,22 +18,20 @@
 		<!-- 		} -->
 	</style>
 
-	<window width="98%" height="98%" title="Across Study Query"
-		contentStyle="overflow:auto">
-		<html>
-			<br></br>
-		</html>
-		<vbox apply="org.zkoss.bind.BindComposer"
-			viewModel="@id('vm') @init('org.strasa.web.crossstudyquery.view.model.CrossStudyQuery')"
-			spacing="10px">
-			<hbox width="98%">
-			Data
-			<radiogroup onCreate="self.setSelectedIndex(0)">
-				<radio label="Raw" value="rd" />
-				<radio label="Derived" value="dd" />
-			</radiogroup>
-			</hbox>
-			<hbox width="98%">
+
+	<div apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.crossstudyquery.view.model.CrossStudyQuery')">
+		<!--  Search -->
+		<div style="background:#3CB371;">
+		<div style="padding:20px" align="center">
+			<hbox align="center">
+				Query
+				<radiogroup onCreate="self.setSelectedIndex(1)"
+					vflex="1">
+					<radio label="Raw Data" value="rd" />
+					<radio label="Derived Data" value="dd" />
+				</radiogroup>
+				<space width="10px" />
 				<label value="Select Variable" />
 				<bandbox id="studyVariable" instant="true"
 					autodrop="true" width="200px" vflex="1"
@@ -98,7 +96,12 @@
 					onClick="@command('AddCriteria')" />
 
 			</hbox>
-
+		</div>
+		</div>
+		<separator/>
+		<!--  End Search -->
+		<!-- Criteria -->
+		<div align="center">
 			<groupbox mold="3d" width="98%">
 				<caption label="Query Criteria" />
 				<hbox>
@@ -118,15 +121,19 @@
 								<label value="@load(each.variable)" />
 								<label value="@load(each.operator)" />
 								<label value="@load(each.valueString)" />
-								<button label="Delete"
+
+								<toolbarbutton
+									src="/images/Delete16.png" orient="vertical"
+									tooltiptext="Delete Criteria"
 									onClick="@command('DeleteCriteria',rowIndex=s.index)" />
 							</row>
 						</template>
 					</grid>
+					<space></space>
 					<vbox>
-						<groupbox mold="3d" width="98%"
-							height="200px">
-							<caption label="Set additional columns" />
+						<groupbox mold="3d" height="200px">
+							<caption
+								label="Additional variable to display on result" />
 							<hbox>
 								<label value="Select" />
 								<bandbox id="studyVariable2"
@@ -181,18 +188,19 @@
 							</hbox>
 
 							<grid model="@load(vm.additionalColumns)"
-								emptyMessage="No added column">
+								emptyMessage="No added variable" sizedByContent="false">
 
 								<columns>
-									<column label="Column"
-										width="150px" />
-									<column label="Action" />
+									<column hflex="1" label="Variable" />
+									<column label="Action" width="70px" />
 
 								</columns>
 								<template name="model" status="s">
 									<row>
 										<label value="@load(each)" />
-										<button label="Delete"
+										<toolbarbutton
+											src="/images/Delete16.png" orient="vertical"
+											tooltiptext="Delete Variable"
 											onClick="@command('DeleteAdditionalColumn',rowIndex=s.index)" />
 									</row>
 								</template>
@@ -209,15 +217,17 @@
 				</hbox>
 			</groupbox>
 
-
-
+		</div>
+		<separator />
+		<div align="center">
 			<groupbox id="crossResultId" mold="3d" width="98%"
 				visible="false">
 				<caption label="@load(vm.searchResultLabel)" />
-				
+
 				<div align="right">
 					<button id="btnExportId" label="Export to CSV"
-						visible="false" onClick="@command('exportToCSV', columns=vm.columnList, rows=vm.newDataRow)" />
+						visible="false"
+						onClick="@command('exportToCSV', columns=vm.columnList, rows=vm.newDataRow)" />
 				</div>
 
 				<grid model="@load(vm.newDataRow)"
@@ -258,11 +268,8 @@
 						onClick="@command('exportRawData', columns=vm.columnList, rows=vm.dataList, studyName=vm.studyName, dataType=vm.dataType)" />
 				</div>
 			</groupbox>
-		</vbox>
-
-
-
-	</window>
+		</div>
+	</div>
 
 
 </zk>
