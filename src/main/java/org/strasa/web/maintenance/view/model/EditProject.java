@@ -111,7 +111,7 @@ public class EditProject {
 	}
 	
 	@NotifyChange("projectList")
-	@Command("refreshProjectList")
+	@Command("changeProjectList")
 	public void refreshProjectList(@BindingParam("selected") Project selected) {
 		makeProjectStatus(projectMan.getProjectByUserId());
 	}

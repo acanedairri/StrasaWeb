@@ -115,7 +115,7 @@ public class AddProject {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("selected",projectModel);
 
-		bind.postCommand("refreshProjectList", params);
+		bind.postCommand("changeProjectList", params);
 		mainView.detach();
 	}
 	@Command
