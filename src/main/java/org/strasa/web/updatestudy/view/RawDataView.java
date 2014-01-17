@@ -782,6 +782,7 @@ public class RawDataView extends ProcessTabViewModel {
 					newdataset.setStudyid(this.studyID);
 					newdataset.setDatatype((this.isRaw) ? "rd" : "dd");
 					newdataset.setTitle(this.dataset.getTitle());
+					this.mainTab.setLabel(this.dataset.getTitle());
 					new StudyDataSetManagerImpl().addDataSet(newdataset);
 				}
 				studyRawData.addStudyRawData(study,

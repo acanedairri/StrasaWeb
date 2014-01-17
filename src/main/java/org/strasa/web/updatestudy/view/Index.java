@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Messagebox;
@@ -55,7 +56,7 @@ public class Index {
 	private UploadData uploadData;
 	private int selectedIndex = 1;
 	private boolean[] tabDisabled = { false, true, true, true, true };
-
+	private Tab firstRawTab, firstDerivedTab;
 	private boolean isRaw;
 	private ProcessTabViewModel uploadModel;
 	private int datasetCount;
@@ -65,11 +66,12 @@ public class Index {
 	private ArrayList<Program> programList = new ArrayList<Program>();
 	private ArrayList<Project> projectList = new ArrayList<Project>();
 	private ArrayList<String> studyTypeList = new ArrayList<String>();
-
+	private HashMap<String,tabObject> tabMap = new HashMap<String,tabObject>();
 	private Program txtProgram = new Program();
 	private Project txtProject = new Project();
 	private boolean isDataUploaded = false;
-
+	
+	private boolean hasRawTabLoaded, hasDerivedLoaded;
 	public boolean isDataUploaded() {
 		return isDataUploaded;
 	}
@@ -353,14 +355,16 @@ public class Index {
 		Tab newTab = new Tab(dataset.getTitle());
 		datasetinc++;
 		newTab.setSelected(true);
-		newTab.setId("dataset"+dataset);
+		String tabId = "dataset"+Math.random();
+		newTab.setId(tabId);
 //		newTab.setClosable(true);
-		newTab.addEventListener("onDoubleClick", new EventListener(){
+
+		newTab.addEventListener("onClick", new EventListener(){
 
 			@Override
 			public void onEvent(Event arg0) throws Exception {
-				System.out.println("Double clicked");
-				
+
+				Executions.createComponents("/user/updatestudy/datasettab.zul", Index.this.tabMap.get(arg0.getTarget().getId()).panel,  Index.this.tabMap.get(arg0.getTarget().getId()).arg);
 			}});
 		
 		newTab.addEventListener("onClose", new EventListener() {
@@ -374,13 +378,15 @@ public class Index {
 		// newTabpanel.appendChild();
 		if(isRaw){
 			
-			
+			firstRawTab = newTab;
 			
 			
 		rawDataTab.getTabs().getChildren().add(newTab);
 		newTabpanel.setParent(rawDataTab.getTabpanels());
 		}
 		else{
+			firstDerivedTab = newTab;
+			
 			derivedDataTab.getTabs().getChildren().add(newTab);
 			newTabpanel.setParent(derivedDataTab.getTabpanels());
 		}
@@ -394,11 +400,25 @@ public class Index {
 		newUploadModel.mainTabPanel = newTabpanel;
 		System.out.println(newUploadModel.toString());
 		arg.put("uploadModel", newUploadModel);
-
-		Executions.createComponents("/user/updatestudy/datasettab.zul", newTabpanel, arg);
+		
+		tabMap.put(tabId, new tabObject(arg,newTabpanel));
 
 	}
 
+	@Command
+	public void loadRawDataTab(){
+		if(hasRawTabLoaded) return;
+		Events.sendEvent("onClick",firstRawTab,firstRawTab);
+		hasRawTabLoaded = true;
+		System.out.println("RAW TAB SELECTED!!");
+		
+	}
+	@Command
+	public void loadDerivedDataTab(){
+		if(hasDerivedLoaded) return;
+		Events.sendEvent("onClick",firstDerivedTab,firstDerivedTab);
+		hasDerivedLoaded=true;
+	}
 	@Command("showzulfile")
 	public void showzulfile(@BindingParam("zulFileName") String zulFileName,
 			@BindingParam("target") Tabpanel panel) {
@@ -409,6 +429,15 @@ public class Index {
 
 			Executions.createComponents(zulFileName, panel, arg);
 
+		}
+	}
+	
+	public class tabObject {
+		public Map arg;
+		public Tabpanel panel;
+		public tabObject(Map arg0, Tabpanel arg1){
+			this.arg = arg0;
+			this.panel = arg1;
 		}
 	}
 

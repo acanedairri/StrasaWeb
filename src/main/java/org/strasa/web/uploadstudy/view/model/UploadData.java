@@ -811,6 +811,7 @@ public class UploadData extends ProcessTabViewModel {
 				System.out.println("DATA UPLOADING! ");
 				this.dataset.setStudyid(study.getId());
 				this.dataset.setDatatype((isRawData) ? "rd" : "dd");
+				this.dataset.setTitle("Dataset 1");
 				new StudyDataSetManagerImpl().addDataSet(this.dataset);
 				studyRawData.addStudyRawData(study,
 						columnList.toArray(new String[columnList.size()]),

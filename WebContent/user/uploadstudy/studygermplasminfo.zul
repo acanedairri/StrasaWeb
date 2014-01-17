@@ -13,9 +13,9 @@
 
 
 
-					<groupbox mold="3d" height="50%">
+					<groupbox mold="3d" height="400px">
 						<caption label="List of unknown Germplasm"></caption>
-						<grid id="tblStudyGerm" height="100%"
+						<grid id="tblStudyGerm"
 							model="@load(vm.lstStudyGermplasm)" vflex="1" hflex="1"
 							sizedByContent="true">
 							<auxhead width="100%">
@@ -212,9 +212,9 @@
 						</grid>
 
 					</groupbox>
-					<groupbox id="gbKnownGermplasm" mold="3d" height="50%">
+					<groupbox id="gbKnownGermplasm" mold="3d" height="400px">
 						<caption label="List of known Germplasm"></caption>
-						<grid id="tblKnownGerm" height="100%"
+						<grid id="tblKnownGerm" 
 							sizedByContent="true" model="@load(vm.lstKnownGermplasm)"
 							vflex="1" hflex="1">
 							<auxhead width="100%">

@@ -17,8 +17,8 @@
 				<tabbox>
 					<tabs>
 						<tab label="Study Information"></tab>
-						<tab label="Raw Data"></tab>
-						<tab label="Derived Data"></tab>
+						<tab label="Raw Data" onClick = "@command('loadRawDataTab')"></tab>
+						<tab label="Derived Data" onClick = "@command('loadDerivedDataTab')"></tab>
 					</tabs>
 					<tabpanels>
 						<tabpanel>
