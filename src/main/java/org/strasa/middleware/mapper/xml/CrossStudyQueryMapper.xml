@@ -5,7 +5,7 @@
 
 <mapper namespace="CrossStudyStudyQuery">
 
-	<select id="getCrossStudyQueryResult" resultType="hashmap"
+	<select id="getCrossStudyQueryResultDerived" resultType="hashmap"
 		parameterType="CrossStudyQueryFilterModel">
 
 		select t1.studyid as studyid,datarow as datarow,t2.name as

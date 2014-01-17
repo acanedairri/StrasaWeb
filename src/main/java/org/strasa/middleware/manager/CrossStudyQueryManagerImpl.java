@@ -16,12 +16,15 @@ public class CrossStudyQueryManagerImpl {
 	@WireVariable
 	ConnectionFactory connectionFactory;
 	public List<HashMap<String, String>> getCrossStudyQueryResult(
-			ArrayList<CrossStudyQueryFilterModel> filters) {
+			ArrayList<CrossStudyQueryFilterModel> filters,String dataCategory) {
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		try{
-
-			List<HashMap<String,String>> toreturn= session.selectList("CrossStudyStudyQuery.getCrossStudyQueryResult",filters);
-			
+			List<HashMap<String,String>> toreturn=null;
+			if(dataCategory.equals("dd")){
+				toreturn= session.selectList("CrossStudyStudyQuery.getCrossStudyQueryResultDerived",filters);
+			}else{
+				toreturn= session.selectList("CrossStudyStudyQuery.getCrossStudyQueryResultDerived",filters);
+			}
 			return toreturn;
 			
 		}finally{

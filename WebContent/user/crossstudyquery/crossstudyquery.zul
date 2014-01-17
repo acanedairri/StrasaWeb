@@ -28,7 +28,7 @@
 		<!--  Search -->
 		<hbox align="center">
 			Query
-			<radiogroup onCreate="self.setSelectedIndex(1)" vflex="1">
+			<radiogroup id="dataCategoryId" onCreate="self.setSelectedIndex(1)" vflex="1" selectedItem="@bind(vm.dataCategory)">
 				<radio label="Raw Data" value="rd" />
 				<radio label="Derived Data" value="dd" />
 			</radiogroup>

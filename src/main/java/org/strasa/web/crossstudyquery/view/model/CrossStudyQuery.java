@@ -25,6 +25,7 @@ import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Popup;
+import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
@@ -36,6 +37,7 @@ public class CrossStudyQuery extends StudyVariable {
 	String variableValue2;
 	String studyVariable=null;
 	String operator;
+	String dataCategory="dd";
 	private CrossStudyQueryManagerImpl mgr;
 	private int pageSize = 5;
 	private int activePage = 0;
@@ -175,6 +177,14 @@ public class CrossStudyQuery extends StudyVariable {
 
 
 
+
+	public String getDataCategory() {
+		return dataCategory;
+	}
+
+	public void setDataCategory(String dataCategory) {
+		this.dataCategory = dataCategory;
+	}
 
 	@Init
 	public void init(){
@@ -348,6 +358,8 @@ public class CrossStudyQuery extends StudyVariable {
 		Groupbox groupBoxResult = (Groupbox) component.getFellow("crossResultId");
 		groupBoxResult.setVisible(true);
 		Button btnExport = (Button) component.getFellow("btnExportId");
+//		Radiogroup radioGroupData= (Radiogroup) component.getFellow("dataCategoryId");
+		System.out.println("DataCategory:"+dataCategory);
 
 		if(crossStudyFilterModelList.isEmpty()){
 			Messagebox.show("Please specify a criteria" ,"Warning",null,null,null,null); 
@@ -489,7 +501,7 @@ public class CrossStudyQuery extends StudyVariable {
 
 
 
-			List<HashMap<String,String>> toreturn = crossStudyQueryManagerImpl.getCrossStudyQueryResult(filters);
+			List<HashMap<String,String>> toreturn = crossStudyQueryManagerImpl.getCrossStudyQueryResult(filters,dataCategory);
 			System.out.println("Size:"+toreturn.size());
 			this.searchResultLabel="Cross Study Query Result(s): "+toreturn.size()+"  row(s) returned";
 
