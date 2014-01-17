@@ -10,10 +10,13 @@ import org.strasa.middleware.mapper.LocationMapper;
 import org.strasa.middleware.mapper.PlantingTypeMapper;
 import org.strasa.middleware.mapper.StudyAgronomyMapper;
 import org.strasa.middleware.mapper.StudyDesignMapper;
+import org.strasa.middleware.mapper.StudyMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
+import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyAgronomy;
 import org.strasa.middleware.model.StudyAgronomyExample;
 import org.strasa.middleware.model.StudyDesignExample;
+import org.strasa.middleware.model.StudyExample;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudySite;
 import org.strasa.middleware.model.StudySiteExample;
@@ -29,6 +32,10 @@ public class StudySiteManagerImpl {
 
 	public StudySiteManagerImpl(boolean isRaw) {
 		this.isRaw = isRaw;
+	}
+
+	public StudySiteManagerImpl() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public void addStudySite(StudySite record) {
@@ -256,4 +263,18 @@ public class StudySiteManagerImpl {
 		return list;
 	}
 
+
+	public List<StudySite> getSiteByEcotypeId(Integer id) {
+		// TODO Auto-generated method stub
+		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		StudySiteMapper mapper = session.getMapper(StudySiteMapper.class);
+		try{
+			StudySiteExample example = new StudySiteExample();
+			example.createCriteria().andEcotypeidEqualTo(id);
+			return mapper.selectByExample(example);
+		}
+		finally{
+			session.close();
+		}
+	}
 }

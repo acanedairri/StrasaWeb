@@ -100,14 +100,14 @@ public class LocationManagerImpl {
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		LocationMapper locationMapper = session.getMapper(LocationMapper.class);
 		try{	
-		locationMapper.updateByPrimaryKey(location);
-		session.commit();
+			locationMapper.updateByPrimaryKey(location);
+			session.commit();
 
-	}finally{
-		session.close();
+		}finally{
+			session.close();
+		}
+
 	}
-
-}
 
 }
 
