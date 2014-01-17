@@ -6,7 +6,7 @@
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.admin.view.model.AdminSettings')"
 		align="center" style="background:#D3D3D3;padding:10px">
-		<tabbox id="tb" orient="vertical" hflex="1" vflex="1">
+		<tabbox id="tb" hflex="1" vflex="1">
 			<tabs  width="100px">
 				<tab label="Study Type" />
 				<tab label="Location"

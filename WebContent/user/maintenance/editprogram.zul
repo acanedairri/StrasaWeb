@@ -1,22 +1,33 @@
 <zk>
-	<window id="editProgramWindow" apply="org.zkoss.bind.BindComposer"
+
+	<div style="padding:10px 0px 0px 20px" align="left">
+		<label style="font-size:20px">Program</label>
+	</div>
+
+	<div id="editProgramWindow" apply="org.zkoss.bind.BindComposer"
+		align="center"
 		viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditProgram')">
-		<button label="Add New" onClick="@command('addProgram')" />
-		<grid 
+
+		<div width="95%" align="right" style="padding:10px">
+			<button label="Add New" image="/images/New16.png"
+				tooltiptext="Add Program" onClick="@command('addProgram')" />
+		</div>
+
+		<grid
 			model="@load(vm.programList) @template(each.editingStatus ? 'editable' : 'noneditable')"
 			sizedByContent="true" width="95%">
-			<columns width="200px">
-				<column label="Program Name" />
+			<columns>
+				<column label="Program Name" hflex="1" />
 				<column label="Objective" />
 				<column label="Collaborator" />
 				<column label="Coordinator" />
 				<column label="Leading Institute" />
-				<column label="Action" width="100px"/>
+				<column label="Action" width="100px" />
 			</columns>
 			<template name="editable">
-				<row>
+				<row hflex="1">
 					<textbox
-						value="@load(each.program.name) @save(each.program.name, before='confirm')" />
+						value="@load(each.program.name) @save(each.program.name, before='confirm')"/>
 					<textbox
 						value="@load(each.program.objective) @save(each.program.objective, before='confirm')" />
 					<textbox
@@ -25,22 +36,24 @@
 						value="@load(each.program.coordinator) @save(each.program.coordinator, before='confirm')" />
 					<textbox
 						value="@load(each.program.leadinginstitute) @save(each.program.leadinginstitute, before='confirm')" />
-					<cell>
+					<cell width="100px">
 						<button image="/images/tick-small.png"
-							onClick="@command('confirm', ProgramStatus=each)" tooltiptext="Save"/>
+							onClick="@command('confirm', ProgramStatus=each)"
+							tooltiptext="Save" />
 						<button image="/images/cross-small.png"
-							onClick="@command('changeEditableStatus', ProgramStatus=each)" tooltiptext="Cancel" />
+							onClick="@command('changeEditableStatus', ProgramStatus=each)"
+							tooltiptext="Cancel" />
 					</cell>
 				</row>
 			</template>
 			<template name="noneditable">
 				<row>
-					<label value="@load(each.program.name)" />
+					<label value="@load(each.program.name)" hflex="1" />
 					<label value="@load(each.program.objective)" />
 					<label value="@load(each.program.collaborator)" />
 					<label value="@load(each.program.coordinator)" />
 					<label value="@load(each.program.leadinginstitute)" />
-					<cell>
+					<cell width="100px">
 						<toolbarbutton src="/images/edit16.png"
 							onClick="@command('changeEditableStatus', ProgramStatus=each)"
 							orient="vertical" tooltiptext="Edit Program" />
@@ -52,5 +65,5 @@
 				</row>
 			</template>
 		</grid>
-	</window>
+	</div>
 </zk>
