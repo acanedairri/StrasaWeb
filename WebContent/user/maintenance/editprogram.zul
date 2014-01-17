@@ -25,9 +25,9 @@
 				<column label="Action" width="100px" />
 			</columns>
 			<template name="editable">
-				<row hflex="1">
+				<row >
 					<textbox
-						value="@load(each.program.name) @save(each.program.name, before='confirm')"/>
+						value="@load(each.program.name) @save(each.program.name, before='confirm')" />
 					<textbox
 						value="@load(each.program.objective) @save(each.program.objective, before='confirm')" />
 					<textbox

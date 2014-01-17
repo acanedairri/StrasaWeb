@@ -104,7 +104,7 @@ public class TestCrossStudyQueryManagerImpl {
 		
 
 
-		List<HashMap<String,String>> toreturn = crossStudyQueryManagerImpl.getCrossStudyQueryResult(filters);
+		List<HashMap<String,String>> toreturn = crossStudyQueryManagerImpl.getCrossStudyQueryResult(filters,"dd");
 		System.out.println("Size:"+toreturn.size());
 
 		//Column Header

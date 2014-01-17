@@ -2,7 +2,7 @@
 	<window id="editLocationWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.admin.view.model.EditLocation')">
 		<button label="Add New" onClick="@command('add')" />
-		<grid
+		<grid height="300px"
 			model="@load(vm.list) @template(each.editingStatus ? 'editable' : 'noneditable')"
 			sizedByContent="true" width="95%">
 			<columns width="200px">

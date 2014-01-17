@@ -5,7 +5,7 @@
 		src="/admin/header.zul" />
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.admin.view.model.UserManagement')"
-		align="center" style="background:#D3D3D3;padding:10px">
+		align="center" style="padding:10px">
 		<grid id="grid" model="@load(vm.user)" mold="paging"
 			pageSize="6" sizedByContent="true" width="90%">
 			<auxhead>

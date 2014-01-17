@@ -5,8 +5,8 @@
 		src="/admin/header.zul" />
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.admin.view.model.AdminSettings')"
-		align="center" style="background:#D3D3D3;padding:10px">
-		<tabbox id="tb" hflex="1" vflex="1">
+		align="center" style="padding:10px">
+		<tabbox id="tb" hflex="1" vflex="1" height="400px">
 			<tabs  width="100px">
 				<tab label="Study Type" />
 				<tab label="Location"
@@ -27,23 +27,6 @@
 							<column label="StudyType Name" />
 							<column label="Action" width="100px" />
 						</columns>
-						<!-- 						<template name="editable"> -->
-						<!-- 							<row> -->
-						<!-- 								<textbox -->
-						<!-- 									value="@load(each.value.ecotype) @save(each.value.ecotype, before='confirm')" /> -->
-						<!-- 								<cell> -->
-						<!-- 									<button -->
-						<!-- 										image="/images/tick-small.png" -->
-						<!-- 										onClick="@command('confirm', RowStatus=each)" -->
-						<!-- 										tooltiptext="Save" /> -->
-						<!-- 									<button -->
-						<!-- 										image="/images/cross-small.png" -->
-						<!-- 										onClick="@command('changeEditableStatus', RowStatus=each)" -->
-						<!-- 										tooltiptext="Cancel" /> -->
-						<!-- 								</cell> -->
-						<!-- 							</row> -->
-						<!-- 						</template> -->
-						<!-- 						<template name="noneditable"> -->
 						<rows>
 						<row>
 							<label value="PBT" />

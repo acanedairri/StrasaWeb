@@ -23,7 +23,7 @@ public class CrossStudyQueryManagerImpl {
 			if(dataCategory.equals("dd")){
 				toreturn= session.selectList("CrossStudyStudyQuery.getCrossStudyQueryResultDerived",filters);
 			}else{
-				toreturn= session.selectList("CrossStudyStudyQuery.getCrossStudyQueryResultDerived",filters);
+				toreturn= session.selectList("CrossStudyStudyQuery.getCrossStudyQueryResultRawData",filters);
 			}
 			return toreturn;
 			

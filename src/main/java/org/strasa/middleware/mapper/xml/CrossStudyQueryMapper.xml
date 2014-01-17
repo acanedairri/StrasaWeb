@@ -115,5 +115,118 @@
 		</foreach>
 		order by t1.studyid,t1.datarow,t1.datavalue
 	</select>
+	
+	
+	<select id="getCrossStudyQueryResultRawData" resultType="hashmap"
+		parameterType="CrossStudyQueryFilterModel">
+
+		select t1.studyid as studyid,datarow as datarow,t2.name as
+		studyname,datavalue as GName,
+
+		<foreach item="item" index="index" collection="list">
+			<if test="item.columnAs =='field' and item.orderCriteria == 'last'">
+
+				MAX(CASE datacolumn WHEN #{item.variable} THEN datavalue
+				ELSE '' END) AS
+				#{item.variable}
+
+			</if>
+
+			<if test="item.columnAs =='field' and item.orderCriteria != 'last'">
+				MAX(CASE datacolumn WHEN #{item.variable} THEN datavalue
+				ELSE '' END) AS
+				#{item.variable},
+			</if>
+
+
+		</foreach>
+
+		from studyrawdata as t1
+		left join study as t2 on t1.studyid=t2.id group
+		by t1.studyid,t1.datarow having
+
+		<foreach item="item" index="index" collection="list">
+			<if test="item.columnAs =='filter' and item.orderCriteria == 'last'">
+
+				<if test="item.dataType == 'Number'">
+
+					MAX(CASE datacolumn WHEN #{item.variable} THEN datavalue ELSE ''
+					END)
+
+					<if test="item.operator == 'greaterthan'">
+						&gt; #{item.valueDouble}
+					</if>
+
+					<if test="item.operator == 'lessthan'">
+						&lt; #{item.valueDouble}
+					</if>
+					<if test="item.operator == 'greaterthanequal'">
+						&gt;= #{item.valueDouble}
+					</if>
+					<if test="item.operator == 'lessthanequal'">
+						&lt;= #{item.valueDouble}
+					</if>
+					<if test="item.operator == 'equalto'">
+						= #{item.valueDouble}
+					</if>
+
+				</if>
+
+				<if test="item.dataType == 'String'">
+					<if test="item.operator == 'equalto'">
+						MAX(CASE datacolumn WHEN #{item.variable} THEN
+						datavalue ELSE '' END) =
+						#{item.valueString}
+					</if>
+					<if test="item.operator == 'like'">
+						MAX(CASE datacolumn WHEN #{item.variable} THEN
+						datavalue ELSE '' END) like
+						#{item.valueString}
+					</if>
+				</if>
+			</if>
+
+			<if test="item.columnAs =='filter' and item.orderCriteria != 'last'">
+				<if test="item.dataType == 'Number'">
+					MAX(CASE datacolumn WHEN #{item.variable} THEN datavalue ELSE ''
+					END)
+					<if test="item.operator == 'greaterthan'">
+						&gt; #{item.valueDouble} and
+					</if>
+
+					<if test="item.operator == 'lessthan'">
+						&lt; #{item.valueDouble} and
+					</if>
+
+					<if test="item.operator == 'greaterthanequal'">
+						&gt;= #{item.valueDouble} and
+					</if>
+
+					<if test="item.operator == 'lessthanequal'">
+						&lt;= #{item.valueDouble} and
+					</if>
+
+				</if>
+
+				<if test="item.dataType == 'String'">
+
+					<if test="item.operator == 'equalto'">
+						MAX(CASE datacolumn WHEN #{item.variable} THEN
+						datavalue ELSE '' END)) =
+						#{item.valueString} and
+					</if>
+
+					<if test="item.operator == 'like'">
+						MAX(CASE datacolumn WHEN #{item.variable} THEN
+						datavalue ELSE '' END) like
+						#{item.valueString} and
+					</if>
+				</if>
+			</if>
+
+		</foreach>
+		order by t1.studyid,t1.datarow,t1.datavalue
+	</select>
+	
 
 </mapper>
