@@ -1,0 +1,83 @@
+<?page title="Admin Settings" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<style src="/css/grid.css" />
+	<include id="mainHeader" self="@define(content)"
+		src="/admin/header.zul" />
+	<div apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.admin.view.model.AdminSettings')"
+		align="center" style="background:#D3D3D3;padding:10px">
+		<tabbox id="tb" orient="vertical" hflex="1" vflex="1">
+			<tabs  width="100px">
+				<tab label="Study Type" />
+				<tab label="Location"
+					onSelect="@command('showzulfile', zulFileName='/admin/settings/editlocation.zul', target=self.linkedPanel)" />
+				<tab label="Ecotype"
+					onSelect="@command('showzulfile', zulFileName='/admin/settings/editecotype.zul', target=self.linkedPanel)" />
+				<tab label="Study Variable" />
+				<tab label="Planting Type" />
+				<tab label="Biotic" />
+				<tab label="Abiotic" />
+				<tab label="Grain Quality" />
+				<tab label="Major Genes" />
+			</tabs>
+			<tabpanels width="100%">
+				<tabpanel style="overflow: auto">
+					<grid sizedByContent="true" width="90%">
+						<columns width="200px">
+							<column label="StudyType Name" />
+							<column label="Action" width="100px" />
+						</columns>
+						<!-- 						<template name="editable"> -->
+						<!-- 							<row> -->
+						<!-- 								<textbox -->
+						<!-- 									value="@load(each.value.ecotype) @save(each.value.ecotype, before='confirm')" /> -->
+						<!-- 								<cell> -->
+						<!-- 									<button -->
+						<!-- 										image="/images/tick-small.png" -->
+						<!-- 										onClick="@command('confirm', RowStatus=each)" -->
+						<!-- 										tooltiptext="Save" /> -->
+						<!-- 									<button -->
+						<!-- 										image="/images/cross-small.png" -->
+						<!-- 										onClick="@command('changeEditableStatus', RowStatus=each)" -->
+						<!-- 										tooltiptext="Cancel" /> -->
+						<!-- 								</cell> -->
+						<!-- 							</row> -->
+						<!-- 						</template> -->
+						<!-- 						<template name="noneditable"> -->
+						<rows>
+						<row>
+							<label value="PBT" />
+							<!-- 								<label -->
+							<!-- 									value="@load(each.value.ecotype)" /> -->
+							<cell>
+								<toolbarbutton src="/images/edit16.png"
+									onClick="@command('changeEditableStatus', RowStatus=each)"
+									orient="vertical" tooltiptext="Edit Ecotype" />
+								<space />
+								<toolbarbutton
+									src="/images/Delete16.png"
+									onClick="@command('delete', id=each.value.id)"
+									orient="vertical" tooltiptext="Delete Ecotype" />
+							</cell>
+						</row>
+						<!-- 						</template> -->
+						</rows>
+					</grid>
+				</tabpanel>
+				<tabpanel style="overflow: auto" />
+				<tabpanel style="overflow: auto" />
+				<tabpanel style="overflow: auto" />
+				<tabpanel style="overflow: auto" />
+				<tabpanel style="overflow: auto" />
+				<tabpanel style="overflow: auto" />
+				<tabpanel style="overflow: auto" />
+				<tabpanel style="overflow: auto" />
+				<tabpanel style="overflow: auto" />
+			</tabpanels>
+		</tabbox>
+	</div>
+
+	<include id="mainFooter" self="@define(content)"
+		src="/admin/footer.zul" />
+
+</zk>

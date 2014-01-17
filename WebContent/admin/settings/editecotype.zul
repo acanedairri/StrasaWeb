@@ -1,5 +1,5 @@
 <zk>
-	<window id="editLocationWindow" apply="org.zkoss.bind.BindComposer"
+	<window id="editEcotypeWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.admin.view.model.EditEcotype')">
 		<button label="Add New" onClick="@command('add')" />
 		<grid

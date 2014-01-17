@@ -33,7 +33,8 @@
 				href="http://localhost:8080/StrasaWeb/admin/usermanagement.zul" />
 			<space />
 			<toolbarbutton label="Settings" src="/images/settings48.png"
-				orient="vertical" />
+				orient="vertical" 
+				href="http://localhost:8080/StrasaWeb/admin/adminsettings.zul"/>
 			<space />
 		</hbox>
 	</hlayout>
