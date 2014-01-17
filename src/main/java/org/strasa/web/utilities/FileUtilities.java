@@ -52,7 +52,7 @@ public class FileUtilities {
 		}
 		
 		System.out.println("downloading File...");
-		   Filedownload.save(sb.toString().getBytes(), "text/plain", outputFileName);
+		   Filedownload.save(sb.toString().getBytes(), "text/plain", outputFileName+".csv");
 	}
 
 }

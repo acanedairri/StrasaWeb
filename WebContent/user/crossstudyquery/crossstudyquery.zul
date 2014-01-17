@@ -213,7 +213,7 @@
 	
 			<button id="btnExportId" label="Export to CSV"
 				image="/images/export16.png" visible="false"
-				onClick="@command('exportToCSV', columns=vm.columnList, rows=vm.newDataRow)" />
+				onClick="@command('exportToCSV', columns=vm.columnList, rows=vm.dataList)" />
 
 			<grid model="@load(vm.newDataRow)"
 				rowRenderer="org.strasa.web.crossstudyquery.view.model.AcrossStudyRowRenderer"

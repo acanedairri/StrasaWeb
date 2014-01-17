@@ -495,7 +495,7 @@ public class CrossStudyQuery extends StudyVariable {
 
 
 			if(toreturn.size() > 0){
-				
+
 				btnExport.setVisible(true);
 
 				//Column Header
@@ -514,19 +514,21 @@ public class CrossStudyQuery extends StudyVariable {
 					ArrayList<String> otherDataList = new ArrayList<String>();
 					for (CrossStudyQueryFilterModel d: filters) {
 						if(d.getColumnAs().equals("field")){
-							String value= String.valueOf(rec.get(d.getVariable()));
-							if(d.getVariable().equals("studyname")){
-								dataRow.setStudyname(value);
-							}else if(d.getVariable().equals("GName")){
-								dataRow.setGname(value);
-							}else if(d.getVariable().equals("studyid")){
-								dataRow.setStudyId(Integer.valueOf(value));
-							}else{
-								otherDataList.add(value);
-							}
+							if(!d.getVariable().equals("studyid")){
+								String value= String.valueOf(rec.get(d.getVariable()));
+								if(d.getVariable().equals("studyname")){
+									dataRow.setStudyname(value);
+								}else if(d.getVariable().equals("GName")){
+									dataRow.setGname(value);
+								}else if(d.getVariable().equals("studyid")){
+									dataRow.setStudyId(Integer.valueOf(value));
+								}else{
+									otherDataList.add(value);
+								}
 
-							System.out.print("Value "+value + "\t");
-							newRow.add(value);
+								System.out.print("Value "+value + "\t");
+								newRow.add(value);
+							}
 						}
 					}
 					dataRow.setOtherdata(otherDataList);
@@ -551,15 +553,15 @@ public class CrossStudyQuery extends StudyVariable {
 
 	@Command
 	public void exportToCSV(@BindingParam("columns")List<String> columns, @BindingParam("rows")List<String[]> rows){
-//		List<String[]> grid = new ArrayList<String[]>();
-//		grid.addAll(rows);
-//		grid.add(0,columns.toArray(new String[columns.size()]));
-		
+		//		List<String[]> grid = new ArrayList<String[]>();
+		//		grid.addAll(rows);
+		//		grid.add(0,columns.toArray(new String[columns.size()]));
+
 		String fileName = "accrossStudyQuery";
 		FileUtilities.exportData(columns, rows, fileName);
-		
+
 	}
-	
+
 	private ArrayList<String> removeDuplicateField(List<String> s) {
 		String oldString="";
 		ArrayList<String> toreturn= new ArrayList<String>();
