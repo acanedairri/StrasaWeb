@@ -420,82 +420,10 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 	@Command
 	public void updateCharacteristicInfo(
 			@BindingParam("model") GermplasmDeepInfoModel model) {
-		System.out.println("Called");
-		Runtimer timer = new Runtimer();
-		timer.start();
-		model.characteristic = "";
-		StringBuilder strVal = new StringBuilder();
-		String tmpStr = "";
-		for (CharacteristicModel charData : model.keyAbiotic) {
-			if (charData.value) {
-				if (strVal.length() == 0) {
-					strVal.append("Abiotic: {");
-				} else {
-					strVal.append(" ,");
-				}
-				strVal.append(charData.name);
-			}
-		}
-		if (strVal.length() > 0) {
-			strVal.append("} ");
-			tmpStr = tmpStr + strVal.toString();
-			strVal = new StringBuilder();
-		}
-
-		for (CharacteristicModel charData : model.keyBiotic) {
-			if (charData.value) {
-				if (strVal.length() == 0) {
-					strVal.append("Biotic: {");
-				} else {
-					strVal.append(" ,");
-				}
-				strVal.append(charData.name);
-			}
-		}
-		if (strVal.length() > 0) {
-			strVal.append("} ");
-			tmpStr = tmpStr + strVal.toString();
-			strVal = new StringBuilder();
-		}
-
-		for (CharacteristicModel charData : model.keyGrainQuality) {
-			if (charData.value) {
-				if (strVal.length() == 0) {
-					strVal.append("Grain Quality: {");
-				} else {
-					strVal.append(" ,");
-				}
-				strVal.append(charData.name);
-			}
-		}
-		if (strVal.length() > 0) {
-			strVal.append("} ");
-			tmpStr = tmpStr + strVal.toString();
-			strVal = new StringBuilder();
-		}
-		for (CharacteristicModel charData : model.keyMajorGenes) {
-			if (charData.value) {
-				if (strVal.length() == 0) {
-					strVal.append("Major Genes: {");
-				} else {
-					strVal.append(" ,");
-				}
-				strVal.append(charData.name);
-			}
-		}
-		if (strVal.length() > 0) {
-			strVal.append("} ");
-			tmpStr = tmpStr + strVal.toString();
-			strVal = new StringBuilder();
-		}
-
-		lstStudyGermplasm.get(model.getGermplasmname()).setCharacteristic(
-				tmpStr);
-
-		// lstStudyGermplasm.get(model.primaryid).characteristic =
-		// lstStudyGermplasm.get(model.primaryid).characteristic + model.name;
-		System.out.println("Elapse: " + timer.end());
+		BindUtils.postNotifyChange(null, null, this.getLstStudyGermplasm().get(model.rowIndex), "*");
+		this.tblStudyGerm.invalidate();
 	}
+	
 
 	@NotifyChange({ "lstKnownGermplasm", "lstStudyGermplasm" })
 	@Command
@@ -1042,6 +970,50 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 		}
 
+		
+		
+		
+		
+		public String getStrAbiotic(){
+			
+			String returnVal = "";
+			for(CharacteristicModel model : keyAbiotic){
+				if(model.value) returnVal = returnVal + " " + model.name; 
+			}
+			return returnVal;
+		}
+		
+public String getStrBiotic(){
+			
+			String returnVal = "";
+			for(CharacteristicModel model : keyBiotic){
+				if(model.value) returnVal = returnVal + " " + model.name; 
+			}
+			return returnVal;
+		}
+		
+public String getStrMajorGenes(){
+	
+	String returnVal = "";
+	for(CharacteristicModel model : keyMajorGenes){
+		if(model.value) returnVal = returnVal + " " + model.name; 
+	}
+	return returnVal;
+}
+		
+public String getStrGrainQuality(){
+	
+	String returnVal = "";
+	for(CharacteristicModel model : keyGrainQuality){
+		if(model.value) returnVal = returnVal + " " + model.name; 
+	}
+	return returnVal;
+}
+
+		
+		
+		
+		
 		public String getCharacteristic() {
 			return characteristic;
 		}
@@ -1055,7 +1027,14 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		}
 
 		public List<CharacteristicModel> getKeyBiotic() {
-			return keyBiotic;
+			List<CharacteristicModel> returnVal = new ArrayList<StudyGermplasmInfo.CharacteristicModel>();
+			for(CharacteristicModel model : keyBiotic){
+				if(model.value)returnVal.add(model);
+			}
+			for(CharacteristicModel model : keyBiotic){
+				if(!model.value)returnVal.add(model);
+			}
+			return returnVal;
 		}
 
 		public void setKeyBiotic(List<CharacteristicModel> keyBiotic) {
@@ -1063,7 +1042,14 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		}
 
 		public List<CharacteristicModel> getKeyAbiotic() {
-			return keyAbiotic;
+			List<CharacteristicModel> returnVal = new ArrayList<StudyGermplasmInfo.CharacteristicModel>();
+			for(CharacteristicModel model : keyAbiotic){
+				if(model.value)returnVal.add(model);
+			}
+			for(CharacteristicModel model : keyAbiotic){
+				if(!model.value)returnVal.add(model);
+			}
+			return returnVal;
 		}
 
 		public void setKeyAbiotic(List<CharacteristicModel> keyAbiotic) {
@@ -1071,7 +1057,14 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		}
 
 		public List<CharacteristicModel> getKeyGrainQuality() {
-			return keyGrainQuality;
+			List<CharacteristicModel> returnVal = new ArrayList<StudyGermplasmInfo.CharacteristicModel>();
+			for(CharacteristicModel model : keyGrainQuality){
+				if(model.value)returnVal.add(model);
+			}
+			for(CharacteristicModel model : keyGrainQuality){
+				if(!model.value)returnVal.add(model);
+			}
+			return returnVal;
 		}
 
 		public void setKeyGrainQuality(List<CharacteristicModel> keyGrainQuality) {
@@ -1079,7 +1072,14 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		}
 
 		public List<CharacteristicModel> getKeyMajorGenes() {
-			return keyMajorGenes;
+			List<CharacteristicModel> returnVal = new ArrayList<StudyGermplasmInfo.CharacteristicModel>();
+			for(CharacteristicModel model : keyMajorGenes){
+				if(model.value)returnVal.add(model);
+			}
+			for(CharacteristicModel model : keyMajorGenes){
+				if(!model.value)returnVal.add(model);
+			}
+			return returnVal;
 		}
 
 		public void setKeyMajorGenes(List<CharacteristicModel> keyMajorGenes) {
