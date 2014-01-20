@@ -10,10 +10,7 @@
 			<separator></separator>
 			<hlayout spacing="50px">
 				<vlayout width="100%">
-
-
-
-					<groupbox mold="3d" height="400px">
+				<groupbox mold="3d" height="400px"  vflex="1" hflex="1">
 						<caption label="List of unknown Germplasm"></caption>
 						<grid id="tblStudyGerm"
 							model="@load(vm.lstStudyGermplasm)" vflex="1" hflex="1"
@@ -44,11 +41,18 @@
 									style="background-color:#ffffb2;" />
 								<column label="Selection History" />
 								<column label="Source" />
-								<column label="Characteristic" />
+										<column label="Biotic"
+									sort="auto(biotic)" />
+								<column label="Abiotic"
+									sort="auto(abiotic)" />
+								<column label="Grain Quality"
+									sort="auto(grainquality)" />
+								<column label="Major Genes"
+									sort="auto(majorgenes)" />
 
 							</columns>
 							<template name="model">
-								<row style="@load(each.styleBG)">
+								<row style="@load(each.styleBG)" vflex="1" hflex="1">
 									<intbox value="@bind(each.gid)" />
 									<label
 										value="@bind(each.germplasmname)" />
@@ -81,142 +85,139 @@
 									<textbox
 										value="@bind(each.selectionhistory)" />
 									<textbox value="@bind(each.source)" />
-									<vbox width="65%">
-										<bandbox
-											id="bms_${forEachStatus.index}" readonly="true"
-											mold="rounded" width="65%" value="Select..."
-											onBlur='@command("updateCharacteristicInfo", model= each)'>
-											<bandpopup>
-												<vbox>
+									<bandbox readonly="true" hflex="1"
+										mold="rounded"  value="@load(each.strAbiotic)"
+									onBlur="@command('updateCharacteristicInfo',model= each)">	
+										<bandpopup>
+											<listbox
+												model="@load(each.keyAbiotic)" width="200px">
+												<listhead>
+													<listheader
+														label="Name" />
+													<listheader
+														label="Value" />
+												</listhead>
+												<template
+													name="model">
+													<listitem>
+														<listcell
+															label="@load(each.name)" />
+														<listcell>
+															<checkbox
+																checked="@bind(each.value)">
+															</checkbox>
+														</listcell>
+													</listitem>
 
-													<tabbox>
+												</template>
+											</listbox>
+										</bandpopup>
 
-														<tabs>
-															<tab
-																label="Abiotic Stress" />
-															<tab
-																label="Biotic Stress" />
-															<tab
-																label="Grain Quality" />
-															<tab
-																label="Major Genes" />
-
-														</tabs>
-														<tabpanels>
-															<tabpanel>
-																<listbox
-																	model="@load(each.keyAbiotic)" width="200px">
-																	<listhead>
-																		<listheader
-																			label="Name" />
-																		<listheader
-																			label="Value" />
-																	</listhead>
-																	<template
-																		name="model">
-																		<listitem>
-																			<listcell
-																				label="@load(each.name)" />
-																			<listcell>
-																				<checkbox
-																					checked="@bind(each.value)">
-																				</checkbox>
-																			</listcell>
-																		</listitem>
-
-																	</template>
-																</listbox>
-															</tabpanel>
-															<tabpanel>
-																<listbox
-																	model="@load(each.keyBiotic)" width="200px">
-																	<listhead>
-																		<listheader
-																			label="Name" />
-																		<listheader
-																			label="Value" />
-																	</listhead>
-																	<template
-																		name="model">
-																		<listitem>
-																			<listcell
-																				label="@load(each.name)" />
-																			<listcell>
-																				<checkbox
-																					checked="@bind(each.value)">
-																				</checkbox>
-																			</listcell>
-																		</listitem>
-
-																	</template>
-																</listbox>
-															</tabpanel>
-															<tabpanel>
-																<listbox
-																	model="@load(each.keyGrainQuality)" width="200px">
-																	<listhead>
-																		<listheader
-																			label="Name" />
-																		<listheader
-																			label="Value" />
-																	</listhead>
-																	<template
-																		name="model">
-																		<listitem>
-																			<listcell
-																				label="@load(each.name)" />
-																			<listcell>
-																				<checkbox
-																					checked="@bind(each.value)">
-																				</checkbox>
-																			</listcell>
-																		</listitem>
-
-																	</template>
-																</listbox>
-															</tabpanel>
-															<tabpanel>
-																<listbox
-																	model="@load(each.keyMajorGenes)" width="200px">
-																	<listhead>
-																		<listheader
-																			label="Name" />
-																		<listheader
-																			label="Value" />
-																	</listhead>
-																	<template
-																		name="model">
-																		<listitem>
-																			<listcell
-																				label="@load(each.name)" />
-																			<listcell>
-																				<checkbox
-																					checked="@bind(each.value)">
-																				</checkbox>
-																			</listcell>
-																		</listitem>
-
-																	</template>
-																</listbox>
-															</tabpanel>
-														</tabpanels>
-													</tabbox>
-												</vbox>
-											</bandpopup>
-										</bandbox>
+									</bandbox>
+								<bandbox readonly="true"
+										mold="rounded"  value="@load(each.strBiotic)"
+									onBlur="@command('updateCharacteristicInfo',model= each)">	
 									
-									</vbox>
+															<bandpopup>
+
+											<listbox
+												model="@load(each.keyBiotic)" width="200px">
+												<listhead>
+													<listheader
+														label="Name" />
+													<listheader
+														label="Value" />
+												</listhead>
+												<template
+													name="model">
+													<listitem>
+														<listcell
+															label="@load(each.name)" />
+														<listcell>
+															<checkbox
+																checked="@bind(each.value)">
+															</checkbox>
+														</listcell>
+													</listitem>
+
+												</template>
+											</listbox>
+
+										</bandpopup>
+									</bandbox>
+
+
+									<bandbox readonly="true"
+										mold="rounded" value="@load(each.strGrainQuality)"
+										onBlur="@command('updateCharacteristicInfo', model= each)">	
+										<bandpopup>
+											<listbox
+												model="@load(each.keyGrainQuality)" width="200px">
+												<listhead>
+													<listheader
+														label="Name" />
+													<listheader
+														label="Value" />
+												</listhead>
+												<template
+													name="model">
+													<listitem>
+														<listcell
+															label="@load(each.name)" />
+														<listcell>
+															<checkbox
+																checked="@bind(each.value)">
+															</checkbox>
+														</listcell>
+													</listitem>
+
+												</template>
+											</listbox>
+
+										</bandpopup>
+									</bandbox>
+
+
+									<bandbox readonly="true"
+										mold="rounded" value="@load(each.strMajorGenes)"
+										onBlur="@command('updateCharacteristicInfo', model= each)">	
+										<bandpopup>
+
+											<listbox
+												model="@load(each.keyMajorGenes)" width="200px">
+												<listhead>
+													<listheader
+														label="Name" />
+													<listheader
+														label="Value" />
+												</listhead>
+												<template
+													name="model">
+													<listitem>
+														<listcell
+															label="@load(each.name)" />
+														<listcell>
+															<checkbox
+																checked="@bind(each.value)">
+															</checkbox>
+														</listcell>
+													</listitem>
+
+												</template>
+											</listbox>
+										</bandpopup>
+									</bandbox>
 								</row>
 							</template>
 
 						</grid>
 
 					</groupbox>
-					<groupbox id="gbKnownGermplasm" mold="3d" height="400px">
+					<groupbox id="gbKnownGermplasm" mold="3d"
+						height="400px">
 						<caption label="List of known Germplasm"></caption>
-						<grid id="tblKnownGerm" 
-							sizedByContent="true" model="@load(vm.lstKnownGermplasm)"
-							vflex="1" hflex="1">
+						<grid id="tblKnownGerm" sizedByContent="true"
+							model="@load(vm.lstKnownGermplasm)" vflex="1" hflex="1">
 							<auxhead width="100%">
 								<auxheader colspan="12" label=""
 									width="100%">
@@ -271,13 +272,13 @@
 
 									<combobox
 										model="@load(vm.getGermplasmByName(each.germplasmname))"
-										readonly="true"
-										selectedItem="@bind(each.selectedData)"
-										width="99%" onSelect="@command('changeGermplasmInfo', index = event.target.selectedItem.value)">
-										<template name="model" var = "item">
+										readonly="true" selectedItem="@bind(each.selectedData)"
+										width="99%"
+										onSelect="@command('changeGermplasmInfo', index = event.target.selectedItem.value)">
+										<template name="model"
+											var="item">
 											<comboitem
-												value="@load(item)"
-												label="@load(item.comboItemName)" />
+												value="@load(item)" label="@load(item.comboItemName)" />
 										</template>
 									</combobox>
 
@@ -325,8 +326,7 @@
 										value="@bind(each.grainquality)" />
 									<label
 										value="@bind(each.majorgenes)" />
-									<button
-										label = "Edit"
+									<button label="Edit"
 										onClick="@command('modifyGermplasm', gname=each.germplasmname)" />
 
 								</row>
