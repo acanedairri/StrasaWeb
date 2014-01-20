@@ -1,116 +1,105 @@
 <zk>
 	<style>
-		.heavy { font-weight: bold; font-size: 12px; } .heavier {
-		font-weight: bold; font-size: 12px; } .searchLabel {font-size:
-		13px; }
+		.heavy { font-weight: bold; font-size: 12px;padding:0px 0px 0px
+		25px }
+
+		.heavier { font-weight: bold; font-size: 12px; }
+
+		.searchLabel {font-size: 13px; }
+
+		.no-highlight tr.z-row-over td.z-row-inner { background:white; }
 	</style>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.StudyInformation')">
-		<panel width="100%" height="100%">
-			<panelchildren style="overflow: auto">
-				<tabbox id="tb" mold="accordion" height="100%">
+				<tabbox id="tb" mold="accordion">
 					<tabs>
 						<tab label="Study Detail" />
 						<tab label="Site Information"
-						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/siteinfo.zul', target=self.linkedPanel)"/>
-						<tab label="Location Information" 
-						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/locationinfo.zul', target=self.linkedPanel)"/>
+							onSelect="@command('showzulfile', zulFileName='/user/browsestudy/siteinfo.zul', target=self.linkedPanel)" />
+						<tab label="Location Information"
+							onSelect="@command('showzulfile', zulFileName='/user/browsestudy/locationinfo.zul', target=self.linkedPanel)" />
 						<tab label="Germplasm Information"
-						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/germplasminfo.zul', target=self.linkedPanel)"/>
-						<tab label="Derived Data" 
-						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/deriveddata.zul', target=self.linkedPanel)"/>
-						<tab label="Raw Data" 
-						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/rawdata.zul', target=self.linkedPanel)"/>
-						<tab label="Genotypic Data" 
-						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/genotypicdata.zul', target=self.linkedPanel)"/>
-						<tab label="Files Data" 
-						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/filesdata.zul', target=self.linkedPanel)"/>
+							onSelect="@command('showzulfile', zulFileName='/user/browsestudy/germplasminfo.zul', target=self.linkedPanel)" />
+						<tab label="Derived Data"
+							onSelect="@command('showzulfile', zulFileName='/user/browsestudy/deriveddata.zul', target=self.linkedPanel)" />
+						<tab label="Raw Data"
+							onSelect="@command('showzulfile', zulFileName='/user/browsestudy/rawdata.zul', target=self.linkedPanel)" />
+						<tab label="Genotypic Data"
+							onSelect="@command('showzulfile', zulFileName='/user/browsestudy/genotypicdata.zul', target=self.linkedPanel)" />
+						<tab label="Files Data"
+							onSelect="@command('showzulfile', zulFileName='/user/browsestudy/filesdata.zul', target=self.linkedPanel)" />
 					</tabs>
 					<tabpanels width="100%">
 						<tabpanel style="overflow: auto">
 							<grid oddRowSclass="empty"
-								sizedByContent="true"
+								class="no-highlight" sizedByContent="true"
 								emptyMessage="Search and select a study.">
-								<columns width="200px">
-									<column label="" width="2%" />
-									<column label="" width="15%" />
+								<columns>
+									<column label="" width="150px"/>
 									<column label="" />
 								</columns>
 								<rows>
 									<row>
-										<cell colspan="2">
-											<label value="Program Name"
-												sclass="heavier" />
-										</cell>
+										<label value="Program Name"
+											sclass="heavier" />
 										<label sclass="searchLabel"
 											value="@load(vm.selectedProgram.name)" />
 									</row>
 									<row>
-										<label value="" />
 										<label value="Objective"
 											sclass="heavy" />
 										<label sclass="searchLabel"
 											value="@load(vm.selectedProgram.objective)" />
 									</row>
 									<row>
-										<label value="" />
 										<label value="Coordinator"
 											sclass="heavy" />
 										<label sclass="searchLabel"
 											value="@load(vm.selectedProgram.coordinator)" />
 									</row>
 									<row>
-										<label value="" />
 										<label value="Leading Institute"
 											sclass="heavy" />
 										<label sclass="searchLabel"
 											value="@load(vm.selectedProgram.leadinginstitute)" />
 									</row>
 									<row>
-										<label value="" />
 										<label value="Collaborator"
 											sclass="heavy" />
 										<label sclass="searchLabel"
 											value="@load(vm.selectedProgram.collaborator)" />
 									</row>
 									<row>
-										<cell colspan="2">
-											<label value="Project"
-												sclass="heavier" />
-										</cell>
+										<label value="Project"
+											sclass="heavier" />
 										<label sclass="searchLabel"
 											value="@load(vm.selectedProject.name)" />
 									</row>
 									<row>
-										<label value="" />
 										<label value="Objective"
 											sclass="heavy" />
 										<label sclass="searchLabel"
 											value="@load(vm.selectedProject.objective)" />
 									</row>
 									<row>
-										<label value="" />
 										<label value="PI"
 											sclass="heavy" />
 										<label sclass="searchLabel"
 											value="@load(vm.selectedProject.pi)" />
 									</row>
 									<row>
-										<label value="" />
 										<label value="Leading Institute"
 											sclass="heavy" />
 										<label sclass="searchLabel"
 											value="@load(vm.selectedProject.leadinginstitute)" />
 									</row>
 									<row>
-										<label value="" />
 										<label value="Collaborators"
 											sclass="heavy" />
 										<label sclass="searchLabel"
 											value="@load(vm.selectedProject.collaborators)" />
 									</row>
 									<row>
-										<label value="" />
 										<label value="Funding"
 											sclass="heavy" />
 										<label sclass="searchLabel"
@@ -118,42 +107,32 @@
 									</row>
 
 									<row>
-										<cell colspan="2">
-											<label value="Study Name"
-												sclass="heavier" />
-										</cell>
+										<label value="Study Name"
+											sclass="heavier" />
 										<label sclass="searchLabel"
 											value="@load(vm.selectedStudy.name)" />
 									</row>
 									<row>
-										<cell colspan="2">
-											<label value="Description"
-												sclass="heavier" />
-										</cell>
+										<label value="Description"
+											sclass="heavier" />
 										<label sclass="searchLabel"
 											value="@load(vm.selectedStudy.description)" />
 									</row>
 									<row>
-										<cell colspan="2">
-											<label value="Study Type"
-												sclass="heavier" />
-										</cell>
+										<label value="Study Type"
+											sclass="heavier" />
 										<label sclass="searchLabel"
 											value="@load(vm.selectedStudyType.studytype)" />
 									</row>
 									<row>
-										<cell colspan="2">
-											<label value="Start Year"
-												sclass="heavier" />
-										</cell>
+										<label value="Start Year"
+											sclass="heavier" />
 										<label sclass="searchLabel"
 											value="@load(vm.selectedStudy.startyear)" />
 									</row>
 									<row>
-										<cell colspan="2">
-											<label value="End Year"
-												sclass="heavier" />
-										</cell>
+										<label value="End Year"
+											sclass="heavier" />
 										<label sclass="searchLabel"
 											value="@load(vm.selectedStudy.endyear)" />
 									</row>
@@ -161,36 +140,34 @@
 							</grid>
 						</tabpanel>
 						<tabpanel style="overflow: auto">
-<!-- 							<include studyid="${arg.studyId}" -->
-<!-- 								src="/user/browsestudy/siteinfo.zul" /> -->
+							<!-- 							<include studyid="${arg.studyId}" -->
+							<!-- 								src="/user/browsestudy/siteinfo.zul" /> -->
 						</tabpanel>
 						<tabpanel style="overflow: auto">
-<!-- 							<include studyid="${arg.studyId}" -->
-<!-- 								src="/user/browsestudy/locationinfo.zul" /> -->
+							<!-- 							<include studyid="${arg.studyId}" -->
+							<!-- 								src="/user/browsestudy/locationinfo.zul" /> -->
 						</tabpanel>
 						<tabpanel style="overflow: auto">
-<!-- 							<include studyid="${arg.studyId}" -->
-<!-- 								src="/user/browsestudy/germplasminfo.zul" /> -->
+							<!-- 							<include studyid="${arg.studyId}" -->
+							<!-- 								src="/user/browsestudy/germplasminfo.zul" /> -->
 						</tabpanel>
 						<tabpanel style="overflow: auto">
-<!-- 							<include studyid="${arg.studyId}" -->
-<!-- 								src="/user/browsestudy/deriveddata.zul" /> -->
+							<!-- 							<include studyid="${arg.studyId}" -->
+							<!-- 								src="/user/browsestudy/deriveddata.zul" /> -->
 						</tabpanel>
 						<tabpanel style="overflow: auto">
-<!-- 							<include studyid="${arg.studyId}" -->
-<!-- 								src="/user/browsestudy/rawdata.zul" /> -->
+							<!-- 							<include studyid="${arg.studyId}" -->
+							<!-- 								src="/user/browsestudy/rawdata.zul" /> -->
 						</tabpanel>
 						<tabpanel style="overflow: auto">
-<!-- 							<include studyid="${arg.studyId}" -->
-<!-- 								src="/user/browsestudy/genotypicdata.zul" /> -->
+							<!-- 							<include studyid="${arg.studyId}" -->
+							<!-- 								src="/user/browsestudy/genotypicdata.zul" /> -->
 						</tabpanel>
 						<tabpanel style="overflow: auto">
-<!-- 							<include studyid="${arg.studyId}" -->
-<!-- 								src="/user/browsestudy/filesdata.zul" /> -->
+							<!-- 							<include studyid="${arg.studyId}" -->
+							<!-- 								src="/user/browsestudy/filesdata.zul" /> -->
 						</tabpanel>
 					</tabpanels>
 				</tabbox>
-			</panelchildren>
-		</panel>
 	</window>
 </zk>
