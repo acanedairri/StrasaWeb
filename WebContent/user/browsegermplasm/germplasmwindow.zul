@@ -6,7 +6,6 @@
 		position="center,center" closable="true"
 		action="show: slideDown;hide: slideUp" border="normal"
 		width="98%" height="98%">
-
 	</window>
 
 

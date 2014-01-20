@@ -1,18 +1,32 @@
 <zk>
-	<style>
-		.z-button {
-		font-weight: bold;
-		}
+	<!-- 	<style>
+		.z-button { font-weight: bold; }
 		
 		.z-toolbarbutton-cnt { color: #000080;
 		text-decoration:underline; font-size: 12px; font-weight: bold;
-
+		
 		}
+		</style> -->
+
+	<style>
+		.z-button { font-weight: bold; }
+
+		.myLink .z-toolbarbutton-cnt { color: #336633;
+		text-decoration:underline; font-size: 12px; align:center;background-image: none}
+
+
+		.no-highlight tr.z-row-over td.z-row-inner { 
+		background:white; }
+
 	</style>
-	<window id="mainBrowseWindow" title="Browse Study"
-		apply="org.zkoss.bind.BindComposer"
+
+	<div style="padding:10px 0px 15px 20px" align="left">
+		<label style="font-size:20px">Browse Study</label>
+	</div>
+	<div id="mainBrowseWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Index')"
-		width="100%" height="95%">
+		height="98%">
+
 		<tabbox id="tabBox">
 			<tabs id="tabs">
 				<tab label="Search" />
@@ -20,20 +34,35 @@
 			<tabpanels id="tabPanels">
 				<tabpanel>
 					<vbox>
-						<toolbar id="tb" sclass="vista" height="30px"
-							align="start">
-							Study name:
+
+						<!-- 						<toolbar id="tb" sclass="vista" height="30px" >
+							Study name
 							<textbox id="studyNameBox" />
-							<toolbarbutton
-								image="/images/browse_small.png"
-								onClick="@global-command('searchByStudyName', studyName=studyNameBox.value)" />
+							<toolbarbutton label="Search"
+							image="/images/browse_small.png"
+							onClick="@global-command('searchByStudyName', studyName=studyNameBox.value)" />
 							<toolbarbutton label="advanced search"
-								tooltip="advancedSearch" />
-						</toolbar>
+							tooltip="advancedSearch" />
+							
+							</toolbar> -->
+
+						<div align="center" style="20px 0px 0px 20px">
+							<hlayout spacing="5px">
+								Study Name
+								<textbox id="studyNameBox" />
+								<button label="Search"
+									image="/images/Search16a.png"
+									onClick="@global-command('searchByStudyName', studyName=studyNameBox.value)" />
+								<button label="Advanced Search"
+									image="/images/Search16.png" tooltip="advancedSearch" />
+							</hlayout>
+						</div>
+
 						<tabbox style="overflow: Auto"
 							id="resultTabBox">
 							<tabs id="resultTabs">
-								<tab label="Summary" />
+								<tab
+									label="Summary of Uploaded Studies" />
 							</tabs>
 							<tabpanels id="resultPanels">
 								<tabpanel>
@@ -52,8 +81,10 @@
 								src="/user/browsestudy/searchfilter.zul" />
 						</popup>
 					</vbox>
+
 				</tabpanel>
 			</tabpanels>
 		</tabbox>
-	</window>
+
+	</div>
 </zk>

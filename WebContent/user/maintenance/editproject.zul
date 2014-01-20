@@ -15,12 +15,12 @@
 			model="@load(vm.projectList) @template(each.editingStatus ? 'editable' : 'noneditable')"
 			sizedByContent="true" width="95%">
 			<columns>
-				<column hflex="1" label="Project Name" />
-				<column label="Objective" />
-				<column label="PI" />
-				<column label="Leading Institute" />
-				<column label="Collaborator" />
-				<column label="Funding Agency" />
+				<column hflex="1" label="Project Name" width="250px" />
+				<column label="Objective" width="200px"/>
+				<column label="PI" width="100px"/>
+				<column label="Leading Institute" width="200px"/>
+				<column label="Collaborator" width="100px"/>
+				<column label="Funding Agency" width="150px"/>
 				<column label="Action" width="100px" />
 			</columns>
 			<template name="editable">

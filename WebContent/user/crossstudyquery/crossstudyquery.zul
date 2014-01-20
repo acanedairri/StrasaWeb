@@ -2,20 +2,12 @@
 <?link rel="stylesheet" type="text/css" href="css/main.css"?>
 <zk>
 	<style>
-		.heavy { font-weight: bold; font-size: 12px; } .heavier {
-		font-weight: bold; font-size: 12px; } .searchLabel {font-size:
-		13px; } .z-toolbarbutton-cnt { color: #000080;
-		text-decoration:underline; font-size: 12px; font-weight: bold;
+		.z-button { font-weight: bold; } .z-toolbarbutton-cnt { color:
+		#336633; text-decoration:underline; font-size: 12px;
+		align:center;background-image: none}
 
-		}
-		<!-- 		.z-toolbarbutton-over .z-toolbarbutton-cnt { -->
-		<!-- 		background-image:none; background-color: #cff791; -->
+		tr.z-row-over td.z-row-inner { background:white; }
 
-		<!-- 		} -->
-		<!-- 		.z-toolbarbutton-select .z-toolbarbutton-cnt { -->
-		<!-- 		background-image:none; background-color: red; -->
-
-		<!-- 		} -->
 	</style>
 
 	<div style="padding:10px 0px 0px 20px" align="left">
@@ -28,7 +20,9 @@
 		<!--  Search -->
 		<hbox align="center">
 			Query
-			<radiogroup id="dataCategoryId" onCreate="self.setSelectedIndex(1)" vflex="1" selectedItem="@bind(vm.dataCategory)">
+			<radiogroup id="dataCategoryId"
+				onCreate="self.setSelectedIndex(1)" vflex="1"
+				selectedItem="@bind(vm.dataCategory)">
 				<radio label="Raw Data" value="rd" />
 				<radio label="Derived Data" value="dd" />
 			</radiogroup>
@@ -210,7 +204,7 @@
 		<groupbox id="crossResultId" mold="3d" width="98%"
 			visible="false">
 			<caption label="@load(vm.searchResultLabel)" />
-	
+
 			<button id="btnExportId" label="Export to CSV"
 				image="/images/export16.png" visible="false"
 				onClick="@command('exportToCSV', columns=vm.columnList, rows=vm.dataList)" />

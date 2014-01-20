@@ -1,4 +1,19 @@
-<zk>
+<zk>	
+<style>
+		.z-button { font-weight: bold; }
+		
+		.heavy {
+			font-weight:bold
+		}
+
+		.myLink .z-toolbarbutton-cnt { color: #336633;
+		text-decoration:underline; font-size: 12px; align:center;background-image: none}
+
+		.no-highlight tr.z-row-over td.z-row-inner { 
+		background:white; }
+
+
+	</style>
 
 	<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.GermplasmDetail')">
 			<groupbox id="GermplasmDetailId" mold="3d">
@@ -103,10 +118,10 @@
 			<groupbox id="StudyTestedId" mold="3d">
 				<caption label="Studies where this germplasm is tested" />
 				<grid height="200px" model="@load(vm.studyTested)"
-					emptyMessage="No Record Found" sizedByContent="true">
+					emptyMessage="No Record Found" sizedByContent="true" class="no-highlight">
 
 					<columns sizable="true">
-						<column label="Study Name" width="150px" />
+						<column label="Study Name" hflex="1" />
 						<column label="Program" />
 						<column label="Project" />
 						<column label="Study Type" />
@@ -120,8 +135,7 @@
 						<row
 							onClick="@command('DisplayStudyDetail', studyid=1,studyname=each.studyname)">
 							<toolbarbutton label="@load(each.studyname)"
-								width="99%"
-								onClick="@command('DisplayStudyDetail', studyid=1,studyname=each.studyname)" />
+								onClick="@command('DisplayStudyDetail', studyid=1,studyname=each.studyname)" class="myLink"/>
 							<label value="@load(each.programname)" />
 							<label value="@load(each.projectname)" />
 							<label value="@load(each.studytypename)" />

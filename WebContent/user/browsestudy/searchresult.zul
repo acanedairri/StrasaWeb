@@ -2,17 +2,15 @@
 
 	<window id="searchResultWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchResult')">
-		<groupbox mold="3d">
-			<caption label="@load(vm.searchResultLabel)" />
-			<grid model="@load(vm.searchResult)"
+		<separator/>
+		<label value="@load(vm.searchResultLabel)" />
+		<!-- <groupbox mold="3d">
+			<caption label="@load(vm.searchResultLabel)" /> -->
+			<grid model="@load(vm.searchResult)" class="no-highlight" 
 				sizedByContent="true" emptyMessage="No study site found." >
-				<auxhead>
-					<auxheader label="Search Result" colspan="8"
-						align="center" />
-				</auxhead>
 				<columns>
-					<column label="Study Name" />
-					<column label="Program" />
+					<column label="Study Name" hflex="1"/>
+					<column label="Program" hflex="1" />
 					<column label="Project" />
 					<column label="Study Type" />
 					<column label="Country" />
@@ -23,23 +21,18 @@
 				<template name="model">
 					<row>
 						<toolbarbutton label="@load(each.studyname)"
-							width="99%"
+							class="myLink"
 							onClick="@global-command('openNewSearchInfoTab', studyId=each.id, studyName=each.studyname)" />
-						<label value="@load(each.programname)"
-							width="99%" />
-						<label value="@load(each.projectname)"
-							width="99%" />
-						<label value="@load(each.studytypename)"
-							width="99%" />
-						<label value="@load(each.country)" width="99%" />
-						<label value="@load(each.locationname)"
-							width="99%" />
-						<label value="@load(each.startyear)"
-							width="99%" />
-						<label value="@load(each.endyear)" width="99%" />
+						<label value="@load(each.programname)"/>
+						<label value="@load(each.projectname)"/>
+						<label value="@load(each.studytypename)"/>
+						<label value="@load(each.country)"  />
+						<label value="@load(each.locationname)"/>
+						<label value="@load(each.startyear)"/>
+						<label value="@load(each.endyear)"/>
 					</row>
 				</template>
 			</grid>
-		</groupbox>
+	<!-- 	</groupbox> -->
 	</window>
 </zk>
