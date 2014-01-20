@@ -1,31 +1,33 @@
 <zk>
-	<window apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchFilter')">
-		<grid  width="100%">
-			<columns width="100%">
-				<column label="" />
-				<column label="" />
+	<div apply="org.zkoss.bind.BindComposer" 
+		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchFilter')" width="400px" hflex="1">
+		<grid sizedByContent="true">
+			<columns>
+				<column label="" width="100px" />
+				<column label="" hflex="1" />
 			</columns>
 			<rows>
 				<row>
 					Data
+					
 					<radiogroup onCreate="self.setSelectedIndex(2)"
 						selectedItem="@bind(vm.searchFilter.shared)">
-					<radio label="My Data" value="private" />
-					<radio label="Shared Data" value="public" />
-					<radio label="Both" value="" />
+							<radio label="My Data" value="private" />
+							<radio label="Shared Data" value="public" />
+							<radio label="Both" value="" />
 					</radiogroup>
+					
+					
 				</row>
 				<row>
 					Study Name
-					<textbox width="99%"
+					<textbox width="95%"
 						value="@bind(vm.searchFilter.studyname)" />
 				</row>
 				<row>
 					Program
 					<combobox model="@load(vm.programList)"
 						readonly="true"
-						width="99%"
 						onChange="@command('updateLists', programName=self.value)">
 					<template name="model">
 						<comboitem value="@load(each.id)"
@@ -35,8 +37,8 @@
 				</row>
 				<row>
 					Project
-					<combobox id="projectComboBox" model="@load(vm.projectList)"
-						readonly="true" width="99%"
+					<combobox id="projectComboBox" model="@load(vm.projectList)" width="95%"
+						readonly="true" 
 						onChange="@command('updateProjectId', projectName=self.value)">
 					<template name="model">
 						<comboitem value="@load(each.id)"
@@ -46,8 +48,8 @@
 				</row>
 				<row>
 					StudyType
-					<combobox model="@load(vm.studyTypeList)"
-						readonly="true" width="99%"
+					<combobox model="@load(vm.studyTypeList)" width="95%"
+						readonly="true"
 						selectedIndex="@bind(vm.searchFilter.studytypeid)" >
 					<template name="model">
 						<comboitem value="@load(each.id)"
@@ -58,17 +60,17 @@
 				<row>
 					Start Year
 					<intbox value="@bind(vm.searchFilter.startyear)"
-						hflex="1" />
+						/>
 				</row>
 				<row>
 					End Year
 					<intbox value="@bind(vm.searchFilter.endyear)"
-						hflex="1" />
+						 />
 				</row>
 				<row>
 					Country
-					<combobox model="@load(vm.countryList)"
-						autodrop="true" width="99%"
+					<combobox model="@load(vm.countryList)" width="95%"
+						autodrop="true" 
 						value="@bind(vm.searchFilter.country)" >
 					<template name="model">
 						<comboitem value="@load(each.isoabbr)"
@@ -78,8 +80,8 @@
 				</row>
 				<row>
 					Location
-					<combobox model="@load(vm.locationList)"
-						readonly="true" width="99%"
+					<combobox model="@load(vm.locationList)" width="95%"
+						readonly="true" 
 						selectedIndex="@bind(vm.searchFilter.locationid)" >
 					<template name="model">
 						<comboitem value="@load(each.id)"
@@ -89,11 +91,17 @@
 				</row>
 			</rows>
 		</grid>
-		<button label="Reset"
+		
+		<div align="right">
+			<hlayout>
+			<button label="Reset" image="/images/Reset16.png"
 			onClick=" @command('reset')" />
 			
-	<div style="float:right;" > 	<button label="Search"
-			onClick="@global-command('updateSearchFilterResult', searchFilter=vm.searchFilter)" /> </div>
+			<button label="Search" image="/images/Search16.png"
+			onClick="@global-command('updateSearchFilterResult', searchFilter=vm.searchFilter)" />
+			</hlayout>
+		</div>
+
 		
-	</window>
+	</div>
 </zk>
