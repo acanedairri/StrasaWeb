@@ -231,6 +231,7 @@ public class Index {
 		StudyDataSet newDataset = new StudyDataSet();
 		newDataset.setTitle("New DataSet");
 		initializeDataSetTab(newDataset, false, datatype);
+	
 	}
 	@Command
 	public void saveStudyInformation() {
@@ -363,8 +364,11 @@ public class Index {
 
 			@Override
 			public void onEvent(Event arg0) throws Exception {
-
-				Executions.createComponents("/user/updatestudy/datasettab.zul", Index.this.tabMap.get(arg0.getTarget().getId()).panel,  Index.this.tabMap.get(arg0.getTarget().getId()).arg);
+				if(!Index.this.tabMap.get(arg0.getTarget().getId()).hasBeenLoaded)
+				{
+					Index.this.tabMap.get(arg0.getTarget().getId()).hasBeenLoaded = true;
+					Executions.createComponents("/user/updatestudy/datasettab.zul", Index.this.tabMap.get(arg0.getTarget().getId()).panel,  Index.this.tabMap.get(arg0.getTarget().getId()).arg);
+				}
 			}});
 		
 		newTab.addEventListener("onClose", new EventListener() {
@@ -402,7 +406,9 @@ public class Index {
 		arg.put("uploadModel", newUploadModel);
 		
 		tabMap.put(tabId, new tabObject(arg,newTabpanel));
-
+		if(!isUpdateMode){
+			Events.sendEvent("onClick",newTab,newTab);
+		}
 	}
 
 	@Command
@@ -435,6 +441,7 @@ public class Index {
 	public class tabObject {
 		public Map arg;
 		public Tabpanel panel;
+		public boolean hasBeenLoaded=false;
 		public tabObject(Map arg0, Tabpanel arg1){
 			this.arg = arg0;
 			this.panel = arg1;

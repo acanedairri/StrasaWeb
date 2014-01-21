@@ -152,14 +152,16 @@
 
 						</tabpanel>
 						<tabpanel>
-							<tabbox id="rawDataTab">
-								<toolbar>
+						<toolbar hflex="1"  vflex="1" align="end"
+					style="float:right; border-style: none;">
 									<toolbarbutton id="plustbbtn"
-										label="Add new Dataset" width="20px" height="28px"
+										label="Add new Dataset" width="160px" 
 										onClick="@command('addNewDataset',datatype=true)">
 
 									</toolbarbutton>
 								</toolbar>
+							<tabbox id="rawDataTab">
+								
 								<tabs></tabs>
 
 								<tabpanels>
@@ -168,14 +170,16 @@
 							</tabbox>
 						</tabpanel>
 						<tabpanel>
-							<tabbox id="derivedDataTab">
-								<toolbar>
-									<toolbarbutton id="derivedplustbbtn"
-										label="Add new Dataset" width="20px" height="28px"
-										onClick="@command('addNewDataset',datatype=false)">
+							<toolbar hflex="1"  vflex="1" align="end"
+					style="float:right; border-style: none;">
+									<toolbarbutton id="plustbbtn2"
+										label="Add new Dataset" width="160px" 
+										onClick="@command('addNewDataset',datatype=true)">
 
 									</toolbarbutton>
 								</toolbar>
+							<tabbox id="derivedDataTab">
+							
 								<tabs></tabs>
 
 								<tabpanels>

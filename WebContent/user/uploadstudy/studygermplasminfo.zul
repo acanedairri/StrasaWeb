@@ -10,10 +10,14 @@
 			<separator></separator>
 			<hlayout spacing="50px">
 				<vlayout width="100%">
-				<groupbox mold="3d" height="400px"  vflex="1" hflex="1">
+					<groupbox mold="3d" vflex="1"
+						hflex="1">
 						<caption label="List of unknown Germplasm"></caption>
+						<vlayout>
+						
+						
 						<grid id="tblStudyGerm"
-							model="@load(vm.lstStudyGermplasm)" vflex="1" hflex="1"
+							model="@load(vm.lstStudyGermplasm)"   emptyMessage="No Unknown Genotype..."
 							sizedByContent="true">
 							<auxhead width="100%">
 								<auxheader colspan="13" label=""
@@ -41,7 +45,7 @@
 									style="background-color:#ffffb2;" />
 								<column label="Selection History" />
 								<column label="Source" />
-										<column label="Biotic"
+								<column label="Biotic"
 									sort="auto(biotic)" />
 								<column label="Abiotic"
 									sort="auto(abiotic)" />
@@ -52,7 +56,8 @@
 
 							</columns>
 							<template name="model">
-								<row style="@load(each.styleBG)" vflex="1" hflex="1">
+								<row style="@load(each.styleBG)"
+									vflex="1" hflex="1">
 									<intbox value="@bind(each.gid)" />
 									<label
 										value="@bind(each.germplasmname)" />
@@ -86,8 +91,8 @@
 										value="@bind(each.selectionhistory)" />
 									<textbox value="@bind(each.source)" />
 									<bandbox readonly="true" hflex="1"
-										mold="rounded"  value="@load(each.strAbiotic)"
-									onBlur="@command('updateCharacteristicInfo',model= each)">	
+										mold="rounded" value="@load(each.strAbiotic)"
+										onBlur="@command('updateCharacteristicInfo',model= each)">
 										<bandpopup>
 											<listbox
 												model="@load(each.keyAbiotic)" width="200px">
@@ -114,11 +119,11 @@
 										</bandpopup>
 
 									</bandbox>
-								<bandbox readonly="true"
-										mold="rounded"  value="@load(each.strBiotic)"
-									onBlur="@command('updateCharacteristicInfo',model= each)">	
-									
-															<bandpopup>
+									<bandbox readonly="true"
+										mold="rounded" value="@load(each.strBiotic)"
+										onBlur="@command('updateCharacteristicInfo',model= each)">
+
+										<bandpopup>
 
 											<listbox
 												model="@load(each.keyBiotic)" width="200px">
@@ -149,7 +154,7 @@
 
 									<bandbox readonly="true"
 										mold="rounded" value="@load(each.strGrainQuality)"
-										onBlur="@command('updateCharacteristicInfo', model= each)">	
+										onBlur="@command('updateCharacteristicInfo', model= each)">
 										<bandpopup>
 											<listbox
 												model="@load(each.keyGrainQuality)" width="200px">
@@ -180,7 +185,7 @@
 
 									<bandbox readonly="true"
 										mold="rounded" value="@load(each.strMajorGenes)"
-										onBlur="@command('updateCharacteristicInfo', model= each)">	
+										onBlur="@command('updateCharacteristicInfo', model= each)">
 										<bandpopup>
 
 											<listbox
@@ -211,13 +216,15 @@
 							</template>
 
 						</grid>
+						<separator spacing="20px" />
 
+</vlayout>
 					</groupbox>
 					<groupbox id="gbKnownGermplasm" mold="3d"
-						height="400px">
+						>
 						<caption label="List of known Germplasm"></caption>
 						<grid id="tblKnownGerm" sizedByContent="true"
-							model="@load(vm.lstKnownGermplasm)" vflex="1" hflex="1">
+							model="@load(vm.lstKnownGermplasm)" >
 							<auxhead width="100%">
 								<auxheader colspan="12" label=""
 									width="100%">
@@ -270,17 +277,122 @@
 								<row style="@load(each.styleBG)">
 									<label value="@bind(each.gid)" />
 
-									<combobox
-										model="@load(vm.getGermplasmByName(each.germplasmname))"
-										readonly="true" selectedItem="@bind(each.selectedData)"
-										width="99%"
-										onSelect="@command('changeGermplasmInfo', index = event.target.selectedItem.value)">
-										<template name="model"
-											var="item">
-											<comboitem
-												value="@load(item)" label="@load(item.comboItemName)" />
-										</template>
-									</combobox>
+
+									<bandbox
+										value="@bind(each.germplasmname)" 
+										instant="true" autodrop="true" readonly="true">
+										<bandpopup>
+											<vbox width="40%">
+												
+												<grid
+													model="@load(vm.getGermplasmByName(each.germplasmname))"
+													emptyMessage="No Germplasm is available. "
+													sizedByContent="true" vflex="1" hflex="1">
+													<auxhead
+														width="100%">
+														<auxheader
+															colspan="12" label="" width="100%">
+
+
+														</auxheader>
+														<auxheader
+															colspan="3" label="Characteristic" width="100%">
+
+
+														</auxheader>
+													</auxhead>
+													<columns
+														menupopup="auto" columnsgroup="false">
+														<column
+															label="GID" sort="auto(gid)" />
+														<column
+															label="GName" sort="auto(germplasmname)" />
+														<column
+															label="OtherName" sort="auto(othername)" />
+														<column
+															label="Breeder" sort="auto(breeder)" />
+														<column
+															label="GermplasmType" sort="auto(germplasmType)" />
+														<column
+															label="IR Number" sort="auto(irnumber)" />
+														<column
+															label="IR Cross" sort="auto(ircross)" />
+														<column
+															label="Parentage" sort="auto(parentage)" />
+														<column
+															label="Female Parent" sort="auto(femaleparent)" />
+														<column
+															label="Male Parent" sort="auto(maleparent)" />
+														<column
+															label="Selection History" sort="auto(selectionhistory)" />
+														<column
+															label="Source" sort="auto(source)" />
+														<column
+															label="Biotic" sort="auto(biotic)" />
+														<column
+															label="Abiotic" sort="auto(abiotic)" />
+														<column
+															label="Grain Quality" sort="auto(grainquality)" />
+														<column
+															label="Major Genes" sort="auto(majorgenes)" />
+														<column
+															label="Actions" visible="@bind(vm.updateMode)" />
+													</columns>
+													<template
+														name="model">
+														<row onClick="@command('changeGermplasmInfo', index = each)">
+															
+															<label
+																value="@bind(each.gid)" />
+															<label value="@bind(each.germplasmname)" />
+															<label
+																value="@bind(each.othername)" />
+															<vlayout>
+																<label
+																	value="@bind(each.dispBreeder)">
+																
+																</label>
+																
+															</vlayout>
+															<label
+																value="@bind(each.germplasmType)" />
+															<label
+																value="@bind(each.irnumber)" />
+															<label
+																value="@bind(each.ircross)" />
+															<label
+																value="@bind(each.parentage)" />
+															<label
+																value="@bind(each.femaleparent)" />
+															<label
+																value="@bind(each.maleparent)" />
+															<label
+																value="@bind(each.selectionhistory)" />
+															<label
+																value="@bind(each.source)" />
+															<label
+																value="@bind(each.biotic)" />
+															<label
+																value="@bind(each.abiotic)" />
+															<label
+																value="@bind(each.grainquality)" />
+															<label
+																value="@bind(each.majorgenes)" />
+
+														</row>
+													</template>
+												</grid>
+											</vbox>
+										</bandpopup>
+									</bandbox>
+
+
+
+
+
+
+
+
 
 
 									<label
@@ -334,6 +446,7 @@
 						</grid>
 
 					</groupbox>
+					<separator spacing="20px" />
 				</vlayout>
 
 			</hlayout>

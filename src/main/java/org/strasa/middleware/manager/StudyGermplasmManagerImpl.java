@@ -52,6 +52,21 @@ public class StudyGermplasmManagerImpl {
 		}
 	}
 
+	
+	public List<StudyGermplasm> getStudyGermplasmByStudyId(int studyID, Integer dataset) {
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		StudyGermplasmMapper mapper = session
+				.getMapper(StudyGermplasmMapper.class);
+
+		try {
+			StudyGermplasmExample example = new StudyGermplasmExample();
+			example.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset);
+			return mapper.selectByExample(example);
+
+		} finally {
+			session.close();
+		}
+	}
 	public boolean isStudyGermplasmExisting(String value) {
 		if (this.getStudyGermplasmByName(value) == null)
 			return false;
@@ -157,6 +172,11 @@ public class StudyGermplasmManagerImpl {
 				.getMapper(StudyGermplasmCharacteristicsMapper.class);
 		try {
 			
+			if(!lstRecord.isEmpty()){
+				this.removeGermplasmByStudyId(lstRecord.get(0).getStudyid(),lstRecord.get(0).getDataset());
+			}
+			
+			
 			System.out.println("Inserting StudyGermplasms");
 			for (GermplasmDeepInfoModel record : lstRecord) {
 				StudyGermplasm newRec = record;
@@ -210,4 +230,21 @@ public class StudyGermplasmManagerImpl {
 		
 	}
 
+	
+	public void removeGermplasmByStudyId(Integer id, Integer dataset) {
+		
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		StudyGermplasmMapper mapper = session
+				.getMapper(StudyGermplasmMapper.class);
+		StudyGermplasmExample ex = new StudyGermplasmExample();
+		try {
+			ex.createCriteria().andStudyidEqualTo(id).andDatasetEqualTo(dataset);
+			mapper.deleteByExample(ex);
+			session.commit();
+		} finally {
+			session.close();
+		}
+		// TODO Auto-generated method stub
+		
+	}
 }

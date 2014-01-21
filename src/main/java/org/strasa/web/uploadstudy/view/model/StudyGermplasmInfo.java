@@ -228,7 +228,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 			if (!lstGerm.isEmpty()) {
 				for (Germplasm germData : lstGerm) {
 					GermplasmDeepInfoModel newData = new GermplasmDeepInfoModel(
-							(int) this.studyID);
+							(int) this.studyID,this.dataset.getId());
 					newData.setValuesFromExistingGermplasm(germData);
 					GermplasmCharacteristicsExample charEx = new GermplasmCharacteristicsExample();
 					charEx.createCriteria().andGermplasmnameEqualTo(
@@ -250,7 +250,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 				}
 			} else {
 				GermplasmDeepInfoModel newData = new GermplasmDeepInfoModel(
-						(int) this.studyID);
+						(int) this.studyID,this.dataset.getId());
 				if (newData.getGid() != null)
 					if (newData.getGid() == 0)
 						newData.setGid(null);
@@ -287,10 +287,32 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 			iterator++;
 		}
 		
-		printArrList();
-
-		System.out.println("ERROR: " + arrGermplasmDeepInfo.size());
+		if(this.isUpdateMode){
+			
+			StudyGermplasmManagerImpl studyMan = new StudyGermplasmManagerImpl();
+			List<StudyGermplasm> lstExistingStudyGerms = studyMan.getStudyGermplasmByStudyId(this.studyID, this.dataset.getId());
+			
+			for(StudyGermplasm studyGerm : lstExistingStudyGerms){
+				System.out.println("Changing....");
+				
+				lstKnownGermplasm.put(studyGerm.getGermplasmname(), getGermplasmDeepInfoModelById(studyGerm.getGref()));
+			}
+		}
+		
+		
+//		printArrList();
+//
+//		System.out.println("ERROR: " + arrGermplasmDeepInfo.size());
 		timer.end();
+	}
+	
+	
+	public GermplasmDeepInfoModel getGermplasmDeepInfoModelById(Integer id){
+		
+		for(GermplasmDeepInfoModel model : arrGermplasmDeepInfo){
+			if(model.getId() == id ) return model;
+		}
+		return null;
 	}
 	@NotifyChange("lstKnownGermplasm")
 	@Command
@@ -428,10 +450,12 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 	@NotifyChange({ "lstKnownGermplasm", "lstStudyGermplasm" })
 	@Command
 	public void modifyGermplasm(@BindingParam("gname") String gname) {
+		lstKnownGermplasm.get(gname).rowIndex = lstStudyGermplasm.size();
 		lstStudyGermplasm.put(gname, lstKnownGermplasm.get(gname));
 		lstKnownGermplasm.remove(gname);
 		lstStudyGermplasm.get(gname).processOthers();
 		lstStudyGermplasm.get(gname).reprocessCharacteristic();
+		
 		lstStudyGermplasm.get(gname).currBreeder = lstStudyGermplasm.get(gname)
 				.getBreeder();
 		for (GermplasmType gType : lstGermplasmType) {
@@ -441,7 +465,8 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 			}
 		}
 
-		if (this.userID != lstStudyGermplasm.get(gname).userID) {
+		if (this.getUserID() != lstStudyGermplasm.get(gname).userID) {
+			System.out.println("New User!");
 			lstStudyGermplasm.get(gname).setUserID(this.userID);
 			lstStudyGermplasm.get(gname).setId(null);
 			lstStudyGermplasm.get(gname).isAppend = true;
@@ -882,6 +907,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		}
 
 		public void setValuesGern(Germplasm data) {
+			setGref(data.getId());
 			setBreeder(data.getBreeder());
 			setFemaleparent(data.getFemaleparent());
 			setGermplasmname(data.getGermplasmname());
@@ -1141,10 +1167,11 @@ public String getStrGrainQuality(){
 			return newData;
 		}
 
-		public GermplasmDeepInfoModel(int studyID) {
+		public GermplasmDeepInfoModel(int studyID, int dataset) {
 
 			processOthers();
 			setStudyid((int) studyID);
+			setDataset(dataset);
 
 		}
 
