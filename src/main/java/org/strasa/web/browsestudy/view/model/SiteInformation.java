@@ -133,7 +133,7 @@ public class SiteInformation extends ProcessTabViewModel {
 	}
 
 	@Init
-	public void init(@ExecutionArgParam("studyid") Integer studyId){
+	public void init(@ExecutionArgParam("studyId") Integer studyId){
 		this.setStudyID(studyId);
 
 		sites =  new ArrayList<StudySiteInfoModel>();
@@ -239,7 +239,7 @@ public class SiteInformation extends ProcessTabViewModel {
 			this.ecotype = ecotype;
 		}
 		public Ecotype getEcotypeById(int id) {
-			return ecotypes.get(id);
+			return ecotypeMan.getEcotypeById(id);
 		}
 
 	}

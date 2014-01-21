@@ -11,12 +11,6 @@
 				<tabbox id="tb" mold="accordion" height="100%">
 					<tabs>
 						<tab label="Study Detail" />
-						<tab label="Site Information"
-						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/siteinfo.zul', target=self.linkedPanel)"/>
-						<tab label="Location Information" 
-						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/locationinfo.zul', target=self.linkedPanel)"/>
-						<tab label="Germplasm Information"
-						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/germplasminfo.zul', target=self.linkedPanel)"/>
 						<tab label="Derived Data" 
 						onSelect="@command('showzulfile', zulFileName='/user/browsestudy/deriveddata.zul', target=self.linkedPanel)"/>
 						<tab label="Raw Data" 
@@ -162,10 +156,6 @@
 						</tabpanel>
 						<tabpanel style="overflow: auto">
 <!-- 							<include studyid="${arg.studyId}" -->
-<!-- 								src="/user/browsestudy/siteinfo.zul" /> -->
-						</tabpanel>
-						<tabpanel style="overflow: auto">
-<!-- 							<include studyid="${arg.studyId}" -->
 <!-- 								src="/user/browsestudy/locationinfo.zul" /> -->
 						</tabpanel>
 						<tabpanel style="overflow: auto">
@@ -179,14 +169,6 @@
 						<tabpanel style="overflow: auto">
 <!-- 							<include studyid="${arg.studyId}" -->
 <!-- 								src="/user/browsestudy/rawdata.zul" /> -->
-						</tabpanel>
-						<tabpanel style="overflow: auto">
-<!-- 							<include studyid="${arg.studyId}" -->
-<!-- 								src="/user/browsestudy/genotypicdata.zul" /> -->
-						</tabpanel>
-						<tabpanel style="overflow: auto">
-<!-- 							<include studyid="${arg.studyId}" -->
-<!-- 								src="/user/browsestudy/filesdata.zul" /> -->
 						</tabpanel>
 					</tabpanels>
 				</tabbox>
