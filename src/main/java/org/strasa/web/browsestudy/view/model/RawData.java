@@ -35,7 +35,7 @@ import org.zkoss.zul.Tabs;
 
 public class RawData {
 	StudyDataSetManagerImpl dataSetMan;
-	
+
 	public RawData() {
 		// TODO Auto-generated constructor stub
 	}
@@ -43,34 +43,40 @@ public class RawData {
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("studyId") Integer studyId, @ExecutionArgParam("dataset") Integer dataset){
-		
+
 		dataSetMan = new StudyDataSetManagerImpl();
-		
+
 		Tabbox tabBox = (Tabbox) component.getFellow("dataTabBox");
 		Tabpanels tabPanels = (Tabpanels) component.getFellow("dataPanels");
 		Tabs tabs = (Tabs) component.getFellow("dataTabs");
 
 		List<StudyDataSet> datasets = dataSetMan.getDataSetsByStudyId(studyId);
-		
+
 		for(StudyDataSet data : datasets){
-		Tabpanel newPanel = new Tabpanel();
-		Tab newTab = new Tab();
-		newTab.setLabel(data.getTitle());
-		
-		//initialize view after view construction.
-		Include studyInformationPage = new Include();
-		studyInformationPage.setParent(newPanel);
-		studyInformationPage.setDynamicProperty("dataType", "rd");
-		studyInformationPage.setDynamicProperty("studyId", studyId);
-		studyInformationPage.setDynamicProperty("dataset", data.getId());
-		studyInformationPage.setSrc("/user/browsestudy/datasettab.zul");
-		tabPanels.appendChild(newPanel);
-		tabs.appendChild(newTab);
-//		tabBox.setSelectedPanel(newPanel);
+			StudyDataColumnManagerImpl mgr= new StudyDataColumnManagerImpl();
+			
+			if(!mgr.getStudyDataColumnByStudyId(studyId, "rd", data.getId()).isEmpty()){
+				Tabpanel newPanel = new Tabpanel();
+				Tab newTab = new Tab();
+				newTab.setLabel(data.getTitle());
+
+				//initialize view after view construction.
+				Include studyInformationPage = new Include();
+				studyInformationPage.setParent(newPanel);
+				studyInformationPage.setDynamicProperty("dataType", "rd");
+				studyInformationPage.setDynamicProperty("studyId", studyId);
+				studyInformationPage.setDynamicProperty("dataset", data.getId());
+				studyInformationPage.setSrc("/user/browsestudy/datasettab.zul");
+				tabPanels.appendChild(newPanel);
+				tabs.appendChild(newTab);
+				
+				tabBox.setSelectedIndex(newTab.getIndex());
+			}
+			//		tabBox.setSelectedPanel(newPanel);
 		}
+
 		
-		tabBox.setSelectedIndex(0);
-		
+
 
 	}
 

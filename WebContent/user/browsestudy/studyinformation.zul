@@ -14,6 +14,8 @@
 		<tabbox id="tb" mold="accordion">
 			<tabs>
 				<tab label="Study Detail" />
+				<tab label="Germplasm Information"
+					onSelect="@command('showzulfile', zulFileName='/user/browsestudy/germplasminfo.zul', target=self.linkedPanel)" />
 				<tab label="Derived Data"
 					onSelect="@command('showzulfile', zulFileName='/user/browsestudy/deriveddata.zul', target=self.linkedPanel)" />
 				<tab label="Raw Data"
@@ -139,6 +141,10 @@
 				<tabpanel style="overflow: auto">
 					<!-- 							<include studyid="${arg.studyId}" -->
 					<!-- 								src="/user/browsestudy/genotypicdata.zul" /> -->
+				</tabpanel>
+				<tabpanel style="overflow: auto">
+					<!-- 							<include studyid="${arg.studyId}" -->
+					<!-- 								src="/user/browsestudy/filesdata.zul" /> -->
 				</tabpanel>
 				<tabpanel style="overflow: auto">
 					<!-- 							<include studyid="${arg.studyId}" -->

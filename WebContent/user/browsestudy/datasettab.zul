@@ -10,9 +10,6 @@
 
 				<tab label="Location Information"
 					onSelect="@command('showzulfile', zulFileName='/user/browsestudy/locationinfo.zul', target=self.linkedPanel)" />
-
-				<tab label="Germplasm Information"
-					onSelect="@command('showzulfile', zulFileName='/user/browsestudy/germplasminfo.zul', target=self.linkedPanel)" />
 			</tabs>
 			<tabpanels>
 				<tabpanel id="tabpanel1">
@@ -44,7 +41,6 @@
 				</tabpanel>
 				<tabpanel id="tabpanel2"></tabpanel>
 				<tabpanel id="tabpanel3"></tabpanel>
-				<tabpanel id="tabpanel4"></tabpanel>
 			</tabpanels>
 		</tabbox>
 	</window>
