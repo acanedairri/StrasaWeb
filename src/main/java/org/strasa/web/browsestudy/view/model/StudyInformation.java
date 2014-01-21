@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
+import org.strasa.middleware.manager.StudyDataSetManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudyTypeManagerImpl;
 import org.strasa.middleware.model.Program;
@@ -26,7 +27,7 @@ public class StudyInformation {
 	ProgramManagerImpl proramMan = new ProgramManagerImpl();
 	ProjectManagerImpl projectMan = new ProjectManagerImpl();
 	StudyTypeManagerImpl studyTypeMan= new StudyTypeManagerImpl();
-
+	StudyDataSetManagerImpl studyDatasetMan = new StudyDataSetManagerImpl();
 	private Study selectedStudy = new Study();
 	private Program selectedProgram = new Program();
 	private Project selectedProject = new Project();
@@ -34,20 +35,22 @@ public class StudyInformation {
 	private boolean isRaw = false;
 
 	private Integer studyId;
+	private Integer dataset;
 
 	@Command("showzulfile")
 	public void showzulfile(@BindingParam("zulFileName") String zulFileName,
 			@BindingParam("target") Tabpanel panel) {
 		if (panel != null && panel.getChildren().isEmpty()) {
 			 Map arg = new HashMap();
-		        arg.put("studyid", studyId);
+		        arg.put("studyId", studyId);
+		        arg.put("dataset", dataset);
 			Executions.createComponents(zulFileName, panel, arg);
-			
 		}
 	}
 	
 	@Init
 	public void init(@ExecutionArgParam("studyId") Integer studyId){
+		this.setDataset(studyDatasetMan.getDataSetsByStudyId(studyId).size());
 		this.setStudyId(studyId);
 
 		System.out.println("studyId"+ Integer.toString(studyId));
@@ -70,11 +73,9 @@ public class StudyInformation {
 
 	}
 
-
 	public Study getSelectedStudy() {
 		return selectedStudy;
 	}
-
 
 	public Program getSelectedProgram() {
 		return selectedProgram;
@@ -94,6 +95,14 @@ public class StudyInformation {
 
 	public void setStudyId(Integer studyId) {
 		this.studyId = studyId;
+	}
+
+	public Integer getDataset() {
+		return dataset;
+	}
+
+	public void setDataset(Integer dataset) {
+		this.dataset = dataset;
 	}
 
 

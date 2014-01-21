@@ -13,7 +13,7 @@
 
 		<grid
 			model="@load(vm.projectList) @template(each.editingStatus ? 'editable' : 'noneditable')"
-			sizedByContent="true" width="95%">
+			sizedByContent="true" width="95%" emptyMessage="No study site found.">
 			<columns>
 				<column hflex="1" label="Project Name" width="250px" />
 				<column label="Objective" width="200px"/>

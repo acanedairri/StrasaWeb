@@ -14,8 +14,8 @@
 		</div>
 
 		<grid
-			model="@load(vm.programList) @template(each.editingStatus ? 'editable' : 'noneditable')"
-			sizedByContent="true" width="95%">
+			model="@load(vm.programList) @template(each.editingStatus ? 'editable' : 'noneditable')" 
+			sizedByContent="true" width="95%" emptyMessage="No study site found.">
 			<columns>
 				<column label="Program Name" width="250px" hflex="1" />
 				<column label="Objective"  width="200px"/>

@@ -30,7 +30,7 @@ import org.zkoss.zul.Window;
 
 public class Index {	
 //public static ArrayList<Integer> activeStudyIds = new ArrayList<Integer>();
-private static HashMap<Integer,Tab> activeStudyIds = new HashMap<Integer,Tab>();
+private static HashMap<Integer,Tab> activeStudyIds;
 
 private Tab resultTab;
 
@@ -41,6 +41,8 @@ private Tab resultTab;
 	 @AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
+		activeStudyIds = new HashMap<Integer,Tab>();
+		
 		Tabpanels tabPanels = (Tabpanels) component.getFellow("resultPanels");
 		Tabs tabs = (Tabs) component.getFellow("resultTabs");
 		Tabbox tabBox = (Tabbox) component.getFellow("resultTabBox");

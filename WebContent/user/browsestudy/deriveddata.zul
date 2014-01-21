@@ -1,23 +1,9 @@
 <zk>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.DerivedData')">
-		<grid model="@bind(vm.dataList)" sizedByContent="true" height="360px"
-			emptyMessage="No data loaded..." >
-			<columns children="@load(vm.columnList)" sizable="true">
-				<template name="children">
-					<column hflex="1" label="@load(each)" />
-				</template>
-			</columns>
-			<rows children="@bind(vm.derivedData)">
-				<template name="children" var="data">
-					<row>
-						<label forEach="${data}" value="${each}" />
-					</row>
-				</template>
-			</rows>
-		</grid>
-		<paging pageSize="@load(vm.pageSize)"
-			totalSize="@load(vm.totalSize)" activePage="@bind(vm.activePage)" unless="${vm.derivedData==null}"/>
-			<div style="float:right;" > <button label="export to CSV" unless="${vm.derivedData==null}" onClick="@command('exportDerivedData', columns=vm.columnList, rows=vm.dataList, studyName=vm.studyName, dataType=vm.dataType)"/> </div>
+		<tabbox id="dataTabBox" height="100%">
+			<tabs id="dataTabs" />
+			<tabpanels id="dataPanels" width="100%" />
+		</tabbox>
 	</window>
 </zk>

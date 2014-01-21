@@ -1,14 +1,36 @@
 <?page title="Registration" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<window title="User Registration" border="normal" width="800px"
-		position="center" apply="org.zkoss.bind.BindComposer"
+
+	<style>
+		.myRegistration { font-family: 'Open Sans',arial; color: rgb(85,
+		85, 85); font-size: 20px; font-weight: 400; margin-bottom:
+		20px;margin-top:20px; }
+
+		.card { background-color: rgb(247, 247, 247); padding: 20px 25px
+		30px; margin: 0px auto 25px; width: 400px; border-radius: 2px;
+		box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3); }
+
+
+	</style>
+
+	<include self="@define(content)" src="header.zul" />
+	<separator width="50px"></separator>
+	
+	<div apply="org.zkoss.bind.BindComposer" align="center"
+		style="padding:10px"
 		viewModel="@id('vm') @init('org.strasa.web.main.view.model.Registration')"
 		validationMessages="@id('vmsgs')"
 		form="@id('fx') @load(vm.user) @save(vm.user, before='submit') @validator('org.strasa.web.main.view.model.RegistrationValidator', retypedPassword=vm.retypedPassword, captcha=vm.captcha, captchaInput=vm.captchaInput)">
-		<grid>
-			<columns width="200px">
-				<column label="" />
-				<column label="" />
+
+
+		<div align="left" width="60%">
+		<label value="Registration" class="myRegistration"></label>
+		</div>
+
+		<grid sizedByContent="true" width="60%">
+			<columns>
+				<column label="" width="150px" />
+				<column label="" hflex="1" />
 			</columns>
 			<rows>
 				<row>
@@ -42,13 +64,13 @@
 
 				<row>
 					Country
-					<combobox id="cmbCountry" width="150px" value="@bind(fx.country)"
-                    model="@load(vm.countries)">
-                    <template name="model">
-                        <comboitem label="@load(each.isoabbr)" />
-                    </template>
-                </combobox>
-					
+					<combobox id="cmbCountry" width="150px"
+						value="@bind(fx.country)" model="@load(vm.countries)">
+						<template name="model">
+							<comboitem label="@load(each.isoabbr)" />
+						</template>
+					</combobox>
+
 				</row>
 
 				<row>
@@ -115,10 +137,10 @@
 				</row>
 
 				<row>
-					<cell colspan="3" style="text-align:center">
+					<cell colspan="3" align="left">
 						<vlayout>
-							<label visible="@load(empty vmsgs)"
-								value="@load(empty vmsgs ? 'Form successfully submitted!' : '', before='submit')" />
+							<!-- <label visible="@load(empty vmsgs)"
+								value="@load(empty vmsgs ? 'Form successfully submitted!' : '', before='submit')" /> -->
 							<button label="Submit"
 								onClick="@command('submit')" width="100px" height="30px" />
 						</vlayout>
@@ -127,5 +149,9 @@
 
 			</rows>
 		</grid>
-	</window>
+	</div>
+
+	<separator width="50px"></separator>
+	<include self="@define(content)" src="footer.zul" />
+
 </zk>

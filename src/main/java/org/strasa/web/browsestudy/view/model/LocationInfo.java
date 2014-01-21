@@ -45,7 +45,7 @@ public class LocationInfo{
 	}
 
 	@Init
-	public void init(@ExecutionArgParam("studyid") Integer studyId){
+	public void init(@ExecutionArgParam("studyId") Integer studyId){
 		this.setStudyId(studyId);
 		
 		studyLocationManager = new StudyLocationManagerImpl(false);
