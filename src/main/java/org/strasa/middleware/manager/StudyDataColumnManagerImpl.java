@@ -98,6 +98,17 @@ public class StudyDataColumnManagerImpl {
 		}
 
 	}
+	
+	public boolean existsStudyDataColumnByName(String varCode) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
+		StudyDataColumnMapper mapper = session.getMapper(StudyDataColumnMapper.class);
+		
+		StudyDataColumnExample example = new StudyDataColumnExample();
+		example.createCriteria().andColumnheaderEqualTo(varCode);
+		if(!mapper.selectByExample(example).isEmpty()) return true;
+		return false;
+	}
 
 
 

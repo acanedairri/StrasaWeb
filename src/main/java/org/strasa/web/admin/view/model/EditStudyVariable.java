@@ -7,11 +7,17 @@ import java.util.Map;
 
 import org.strasa.middleware.manager.EcotypeManagerImpl;
 import org.strasa.middleware.manager.LocationManagerImpl;
+import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
 import org.strasa.middleware.manager.StudyLocationManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudySiteManagerImpl;
+import org.strasa.middleware.manager.StudyTypeManagerImpl;
+import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.Location;
+import org.strasa.middleware.model.StudyType;
+import org.strasa.middleware.model.StudyVariable;
+import org.strasa.web.admin.view.model.AdminSettings.RowStatus;
 import org.strasa.web.uploadstudy.view.model.AddLocation;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
@@ -22,13 +28,16 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Tabpanel;
 import org.zkoss.zul.Window;
 
 
-public class EditEcotype {
-	EcotypeManagerImpl man;
-	StudySiteManagerImpl studySiteMan;
+public class EditStudyVariable {
+
+	StudyVariableManagerImpl man;
+	StudyDataColumnManagerImpl studyDataColMan;
 	List<RowStatus> rowList = new ArrayList<RowStatus>(); 
 
 	public List<RowStatus> getRowList() {
@@ -41,21 +50,20 @@ public class EditEcotype {
 
 	@Init
 	public void init(@ContextParam(ContextType.VIEW) Component view){
-		man = new EcotypeManagerImpl();
-		studySiteMan = new StudySiteManagerImpl();
-		 makeRowStatus(man.getAllEcotypes());
+		man = new StudyVariableManagerImpl();
+		studyDataColMan = new StudyDataColumnManagerImpl();
+		makeRowStatus(man.getVariables());
 	}
 
-	private void makeRowStatus(List<Ecotype> list) {
+	private void makeRowStatus(List<StudyVariable> list) {
 		// TODO Auto-generated method stub
-		
 		rowList.clear();
-		for (Ecotype p: list){
+		for (StudyVariable p: list){
 			RowStatus ps = new RowStatus(p,false);
 			rowList.add(ps);
 		}
 	}
-	
+
 	@Command
 	public void changeEditableStatus(@BindingParam("RowStatus") RowStatus ps) {
 		ps.setEditingStatus(!ps.getEditingStatus());
@@ -66,7 +74,7 @@ public class EditEcotype {
 	public void confirm(@BindingParam("RowStatus") RowStatus ps) {
 		changeEditableStatus(ps);
 		refreshRowTemplate(ps);
-		man.updateEcotype(ps.getValue());
+		//		man.update(ps.getValue());
 		Messagebox.show("Changes saved.");
 	}
 
@@ -78,65 +86,63 @@ public class EditEcotype {
 		 */
 		BindUtils.postNotifyChange(null, null, ps, "editingStatus");
 	}
-	
+
 	@NotifyChange("rowList")
 	@Command("delete")
-	public void delete(@BindingParam("id") Integer Id){
-		if(studySiteMan.getSiteByEcotypeId(Id).isEmpty()){
-			man.deleteById(Id);
-			makeRowStatus(man.getAllEcotypes());
-			Messagebox.show("Changes saved.");
-		} else  Messagebox.show("Cannot delete an ecotype that is in use.", "Error", Messagebox.OK, Messagebox.ERROR); 
+	public void delete(@BindingParam("id") Integer Id, @BindingParam("varCode") String varCode){
+		if(!studyDataColMan.existsStudyDataColumnByName(varCode)){
+		man.deleteById(Id);
+		makeRowStatus(man.getVariables());
+		Messagebox.show("Changes saved.");
+		} else  Messagebox.show("Cannot delete a study variable that is in use.", "Error", Messagebox.OK, Messagebox.ERROR); 
 	}
 
-//	@NotifyChange("list")
+	//	@NotifyChange("list")
 	@Command("add")
 	public void add(@ContextParam(ContextType.COMPONENT) Component component) {
-		Window win = (Window) component.getFellow("editEcotypeWindow");
+		Window win = (Window) component.getFellow("editStudyVariableWindow");
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		params.put("oldVar", null);
 
 		Window popup = (Window) Executions.createComponents(
-				AddEcotype.ZUL_PATH, win, params);
+				AddStudyVariable.ZUL_PATH, win, params);
 
 		popup.doModal();
-//		makeRowStatus(man.getAllLocations());
+		//		makeRowStatus(man.getAllLocations());
 	}
 
 	@NotifyChange("rowList")
 	@Command("refreshList")
 	public void refreshList() {
-		makeRowStatus(man.getAllEcotypes());
+		makeRowStatus(man.getVariables());
 	}
-	
-	
+
+
 	public class RowStatus {
-	    private  Ecotype value;
-	    private boolean editingStatus;
-	     
-	    public RowStatus(Ecotype p, boolean editingStatus) {
-	        this.setValue(p);
-	        this.editingStatus = editingStatus;
-	    }
-	     
-	     
-	    public boolean getEditingStatus() {
-	        return editingStatus;
-	    }
-	     
-	    public void setEditingStatus(boolean editingStatus) {
-	        this.editingStatus = editingStatus;
-	    }
+		private  StudyVariable value;
+		private boolean editingStatus;
 
+		public RowStatus(StudyVariable p, boolean editingStatus) {
+			this.setValue(p);
+			this.editingStatus = editingStatus;
+		}
 
-		public Ecotype getValue() {
-			return value;
+		public boolean getEditingStatus() {
+			return editingStatus;
+		}
+
+		public void setEditingStatus(boolean editingStatus) {
+			this.editingStatus = editingStatus;
 		}
 
 
-		public void setValue(Ecotype value) {
-			this.value = value;
+		public StudyVariable getValue() {
+			return value;
+		}
+
+		public void setValue(StudyVariable p) {
+			this.value = p;
 		}
 	}
 }
