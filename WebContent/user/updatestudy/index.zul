@@ -19,6 +19,8 @@
 						<tab label="Study Information"></tab>
 						<tab label="Raw Data" onClick = "@command('loadRawDataTab')"></tab>
 						<tab label="Derived Data" onClick = "@command('loadDerivedDataTab')"></tab>
+							<tab label="Genotype Data"  onClick="@command('loadGenotypeDataTab')"/>
+							
 					</tabs>
 					<tabpanels>
 						<tabpanel>
@@ -152,32 +154,23 @@
 
 						</tabpanel>
 						<tabpanel>
-						<toolbar hflex="1"  vflex="1" align="end"
-					style="float:right; border-style: none;">
-									<toolbarbutton id="plustbbtn"
-										label="Add new Dataset" width="160px" 
-										onClick="@command('addNewDataset',datatype=true)">
-
-									</toolbarbutton>
-								</toolbar>
+						
+								<button label = "Add new Dataset" onClick="@command('addNewDataset',datatype=true)"/>
+							
 							<tabbox id="rawDataTab">
 								
-								<tabs></tabs>
+								<tabs>
+							
+								</tabs>
 
 								<tabpanels>
-
+								
 								</tabpanels>
 							</tabbox>
 						</tabpanel>
 						<tabpanel>
-							<toolbar hflex="1"  vflex="1" align="end"
-					style="float:right; border-style: none;">
-									<toolbarbutton id="plustbbtn2"
-										label="Add new Dataset" width="160px" 
-										onClick="@command('addNewDataset',datatype=true)">
-
-									</toolbarbutton>
-								</toolbar>
+					
+								<button label = "Add new Dataset" onClick="@command('addNewDataset',datatype=false)"/>
 							<tabbox id="derivedDataTab">
 							
 								<tabs></tabs>
@@ -187,6 +180,9 @@
 								</tabpanels>
 							</tabbox>
 						</tabpanel>
+							<tabpanel id="tabGenotypeData">
+							
+							</tabpanel>
 					</tabpanels>
 				</tabbox>
 			</vlayout>

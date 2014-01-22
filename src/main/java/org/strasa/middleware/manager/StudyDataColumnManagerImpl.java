@@ -54,6 +54,24 @@ public class StudyDataColumnManagerImpl {
 			session.close();
 		}
 	}
+	public void updateStudyDataColumnByStudyId(int studyId,int dataset,String oldVar, String newVar){
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		StudyDataColumnMapper mapper = session.getMapper(StudyDataColumnMapper.class);
+
+		try{
+
+			StudyDataColumnExample example = new StudyDataColumnExample();
+				example.createCriteria().andStudyidEqualTo(studyId).andDatasetEqualTo(dataset).andColumnheaderEqualTo(oldVar);
+				StudyDataColumn data = mapper.selectByExample(example).get(0);
+				data.setColumnheader(newVar);
+				mapper.updateByPrimaryKey(data);
+			
+
+		}finally{
+			session.commit();
+			session.close();
+		}
+	}
 	
 	public void addStudyDataColumn(int studyId,String[] columns, boolean isRaw, Integer dataset){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);

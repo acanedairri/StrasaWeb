@@ -482,14 +482,12 @@ public class RawDataView extends ProcessTabViewModel {
 
 		if (this.isUpdateMode) {
 			Map arg = new HashMap();
-			arg.put("studyid", this.studyID);
+			arg.put("studyId", this.studyID);
 			arg.put("dataset", this.dataset.getId());
-			if(this.isRaw) Executions.createComponents("/user/browsestudy/rawdata.zul",
+			arg.put("dataType", (this.isRaw) ? "rd" : "dd");
+			Executions.createComponents("/user/browsestudy/data.zul",
 					divRawData, arg);
-			else{
-				 Executions.createComponents("/user/browsestudy/deriveddata.zul",
-						divRawData, arg);
-			}
+			
 		}
 	}
 
@@ -534,10 +532,15 @@ public class RawDataView extends ProcessTabViewModel {
 		params.put("CSVPath", CSVPath);
 		params.put("parent", getMainView());
 		params.put("showAll", showAll);
+		params.put("tabModel", this);
 		Window popup = (Window) Executions.createComponents(
 				DataColumnValidation.ZUL_PATH, getMainView(), params);
 
 		popup.doModal();
+	}
+	@Command
+	public void updateColumnHeader(){
+		openCSVHeaderValidator("", true);
 	}
 
 	@NotifyChange("*")
@@ -575,20 +578,8 @@ public class RawDataView extends ProcessTabViewModel {
 							"disableTabs", null);
 					BindUtils.postNotifyChange(null, null,
 							RawDataView.this, "*");
-					new StudyRawDataManagerImpl(studyType
-							.equalsIgnoreCase("rawdata"))
-					.deleteByStudyId(study.getId());
-					;
-					new StudySiteManagerImpl(studyType
-							.equalsIgnoreCase("rawdata"))
-					.removeSiteByStudyId(study.getId(),null);
-					new StudyLocationManagerImpl(studyType
-							.equalsIgnoreCase("rawdata"))
-					.removeLocationByStudyId(study
-							.getId());
-					new StudyGermplasmManagerImpl()
-					.removeGermplasmByStudyId(study
-							.getId());
+					 new StudyManagerImpl().deleteStudyById(RawDataView.this.studyID,RawDataView.this.getDataset().getId());
+
 					
 
 				} else if ("onCancel".equals(e.getName())) {
@@ -674,6 +665,19 @@ public class RawDataView extends ProcessTabViewModel {
 	@NotifyChange("*")
 	@Command("refreshCsv")
 	public void refreshCsv() {
+		if (this.isUpdateMode) {
+			Map arg = new HashMap();
+			arg.put("studyId", this.studyID);
+			arg.put("dataset", this.dataset.getId());
+			divRawData.getChildren().clear();
+			if(this.isRaw) Executions.createComponents("/user/browsestudy/rawdata.zul",
+					divRawData, arg);
+			else{
+				 Executions.createComponents("/user/browsestudy/deriveddata.zul",
+						divRawData, arg);
+			}
+			return;
+		}
 		activePage = 0;
 		CSVReader reader;
 		try {

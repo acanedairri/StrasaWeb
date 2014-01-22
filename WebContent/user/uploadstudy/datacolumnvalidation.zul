@@ -11,7 +11,7 @@
 				<columns>
 					<column label="Variable" width="40%" />
 					<column label="Selected" width="30%"
-						visible="@load(vm.showAll)" />
+					 />
 					<column label="Action" width="30%" />
 				</columns>
 				<template name="model">
@@ -19,7 +19,7 @@
 						<label value="@load(each.currentVariable)" />
 						<label value="@bind(each.newVariable)" />
 						<button label="Change"
-							onClick="@command('changeVar', oldVar=each.currentVariable)" />
+							onClick="@command('changeVar', oldVar=each.currentVariable)" disabled="@load(!each.editable)" />
 					</row>
 				</template>
 			</grid>

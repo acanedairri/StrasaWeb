@@ -1,24 +1,26 @@
 <zk>
 	<div apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditUploadedStudies')" width="98%">
-		<separator height="30px"></separator>
-		<div align="right">
+		viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditUploadedStudies')"
+		align="center" style="padding:10px">
+
+		<div width="95%" align="right" style="padding:10px">
 			<button id="btnUploadId" label="Upload New Study"
 				src="/images/upload16.png" orient="horizontal"
-				tooltiptext="Add Study" onClick="@command('addStudy')" />
+				tooltiptext="Add Study"
+				onClick="@command('addStudy')" height="35px" />
 			<button id="btnBackId" label="Back" visible="true"
 				src="/images/back16.png" orient="horizontal" tooltiptext="Add Study"
-				onClick="@command('loadMainDiv')" />
+				onClick="@command('loadMainDiv')" height="35px" />
 		</div>
 
 		<div id="divMain">
-			<grid model="@load(vm.editStudyList)"
-				sizedByContent="true" hflex="1">
+			<grid model="@load(vm.editStudyList)" sizedByContent="true"
+				width="95%">
 				<auxhead>
 					<auxheader label="My Studies" colspan="7"
 						style="background:#424040;color:white;padding:2px" />
 				</auxhead>
-				<columns>
+				<columns width="200px">
 					<column hflex="1" label="Study Name" />
 					<column label="Program Name" />
 					<column label="Project Name" />
@@ -32,9 +34,8 @@
 						<label value="@load(each.study.name)" />
 						<label value="@load(each.program.name)" />
 						<label value="@load(each.project.name)" />
-						<label value="date created" />
-						<label value="date modified" />
-
+						<label value="@load(vm.formatDate(each.study.datecreated))" />
+					<label value="@load(vm.formatDate(each.study.datelastmodified))" />
 						<checkbox
 							label="@load(each.study.shared ?'Shared':'Not Shared')"
 							checked="@bind(each.study.shared)"
@@ -55,11 +56,11 @@
 		<div id="divUpdateStudy">
 
 			<vlayout>
-
-				<!-- 			<button label="Go Back"
+			
+<!-- 			<button label="Go Back"
 					onClick="@command('loadMainDiv')" />  -->
-
-				<div id="divUpdateStudyContainer">
+				
+		<div id="divUpdateStudyContainer"> 
 
 				</div>
 			</vlayout>

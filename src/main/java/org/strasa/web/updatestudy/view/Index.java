@@ -2,11 +2,11 @@ package org.strasa.web.updatestudy.view;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyDataSetManagerImpl;
@@ -39,8 +39,6 @@ import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tabpanel;
 
-import com.mysql.jdbc.StringUtils;
-
 public class Index {
 
 	@Wire("#rawDataTab")
@@ -50,13 +48,16 @@ public class Index {
 	@Wire("#derivedDataTab")
 	Tabbox derivedDataTab;
 	
+	@Wire("#tabGenotypeData")
+	Tabpanel tabGenotype;
+	
 	
 	
 	ArrayList<Tabpanel> arrTabPanels = new ArrayList<Tabpanel>();
 	private UploadData uploadData;
 	private int selectedIndex = 1;
 	private boolean[] tabDisabled = { false, true, true, true, true };
-	private Tab firstRawTab, firstDerivedTab;
+	private Tab firstRawTab, firstDerivedTab, firstGenotypeTab;
 	private boolean isRaw;
 	private ProcessTabViewModel uploadModel;
 	private int datasetCount;
@@ -71,7 +72,7 @@ public class Index {
 	private Project txtProject = new Project();
 	private boolean isDataUploaded = false;
 	
-	private boolean hasRawTabLoaded, hasDerivedLoaded;
+	private boolean hasRawTabLoaded, hasDerivedLoaded,hasGenotypeLoaded;
 	public boolean isDataUploaded() {
 		return isDataUploaded;
 	}
@@ -282,6 +283,7 @@ public class Index {
 		study.setEndyear(String.valueOf(String.valueOf(endYear)));
 		study.setUserid(userID);
 		study.setId(uploadModel.studyID);
+		study.setDatelastmodified(new Date());
 		if (new StudyManager().isProjectExist(study, userID)) {
 			Messagebox
 					.show("Error: Study name already exist! Please choose a different name.",
@@ -339,15 +341,36 @@ public class Index {
 		// wire event listener
 		// Selectors.wireEventListeners(view, this);
 	
+		boolean rawLoaded = false, derivedLoaded = false;
+		
 		List<StudyDataSet> studyDataSets = new StudyDataSetManagerImpl().getDataSetsByStudyId(this.uploadModel.studyID);
 		for(StudyDataSet datasetNum : studyDataSets){
 		
+			
+			if( datasetNum.getDatatype().equals("rd")){
+				if(!rawLoaded){
+					rawLoaded = true;
+				}
+			}
+			else{
+				if(!derivedLoaded){
+					derivedLoaded = true;
+		
+				}
+			}
 			initializeDataSetTab(datasetNum, true, datasetNum.getDatatype().equals("rd"));	
+			
 		}
-		if(derivedDataTab.getTabs().getChildren().isEmpty())initializeDataSetTab(new StudyDataSet(), false, false);	
-		if(rawDataTab.getTabs().getChildren().isEmpty())initializeDataSetTab(new StudyDataSet(), false, true);	
+//		if(derivedDataTab.getTabs().getChildren().isEmpty())initializeDataSetTab(new StudyDataSet(), false, false);	
+//		if(rawDataTab.getTabs().getChildren().isEmpty())initializeDataSetTab(new StudyDataSet(), false, true);	
 		
-		
+//		
+//		if(derivedLoaded){
+//			derivedDataTab.getChildren().remove(0);
+//		}
+//		if(rawLoaded){
+//			rawDataTab.getChildren().remove(0);
+//		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -413,6 +436,7 @@ public class Index {
 
 	@Command
 	public void loadRawDataTab(){
+		if(firstRawTab == null) return;
 		if(hasRawTabLoaded) return;
 		Events.sendEvent("onClick",firstRawTab,firstRawTab);
 		hasRawTabLoaded = true;
@@ -421,9 +445,17 @@ public class Index {
 	}
 	@Command
 	public void loadDerivedDataTab(){
+		if(firstDerivedTab == null) return;
 		if(hasDerivedLoaded) return;
 		Events.sendEvent("onClick",firstDerivedTab,firstDerivedTab);
 		hasDerivedLoaded=true;
+	}
+	@Command
+	public void loadGenotypeDataTab(){
+		if(hasGenotypeLoaded) return;
+		
+		showzulfile("/user/updatestudy/genotypicdata.zul",tabGenotype);
+		hasGenotypeLoaded=true;
 	}
 	@Command("showzulfile")
 	public void showzulfile(@BindingParam("zulFileName") String zulFileName,

@@ -35,6 +35,7 @@ import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyType;
 import org.strasa.web.common.api.Encryptions;
 import org.strasa.web.common.api.ProcessTabViewModel;
+import org.strasa.web.uploadstudy.view.pojos.GenotypeFileModel;
 import org.strasa.web.uploadstudy.view.pojos.UploadCSVDataVariableModel;
 import org.strasa.web.utilities.FileUtilities;
 import org.zkoss.bind.BindContext;
@@ -81,7 +82,7 @@ public class UploadData extends ProcessTabViewModel {
 	public int userID = 1;
 	
 	private ArrayList<String> dataTypeList = new ArrayList<String>();
-	private ArrayList<GenotypeFileModel> genotypeFileList = new ArrayList<UploadData.GenotypeFileModel>();
+	private ArrayList<GenotypeFileModel> genotypeFileList = new ArrayList<GenotypeFileModel>();
 	private Program txtProgram = new Program();
 	private Project txtProject = new Project();
 	private boolean isDataUploaded = false;
@@ -796,6 +797,8 @@ public class UploadData extends ProcessTabViewModel {
 		study.setStartyear(String.valueOf(startYear));
 		study.setEndyear(String.valueOf(String.valueOf(endYear)));
 		study.setUserid(userID);
+		study.setDatecreated(new Date());
+		study.setDatelastmodified(new Date());
 		if (study.getId() == null
 				&& new StudyManager().isProjectExist(study, userID)) {
 			Messagebox
@@ -836,7 +839,7 @@ public class UploadData extends ProcessTabViewModel {
 
 		}
 		for (GenotypeFileModel genoFile : genotypeFileList) {
-			fileMan.createNewFileFromUpload(1, study.getId(), genoFile.name,
+			fileMan.createNewFileFromUpload(this.getUserID(), study.getId(), genoFile.name,
 					genoFile.tempFile, "gd");
 		}
 		this.setStudyID(study.getId());
@@ -912,31 +915,5 @@ public class UploadData extends ProcessTabViewModel {
 
 	}
 
-	public class GenotypeFileModel {
-
-		private String name;
-		private File tempFile;
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public File getFilepath() {
-			return tempFile;
-		}
-
-		public void setFilepath(File filepath) {
-			this.tempFile = filepath;
-		}
-
-		public GenotypeFileModel(String name, File path) {
-			this.name = name;
-			this.tempFile = path;
-		}
-
-	}
+	
 }
