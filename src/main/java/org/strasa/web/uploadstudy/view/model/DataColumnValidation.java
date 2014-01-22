@@ -11,7 +11,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
+import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
+import org.strasa.middleware.model.StudyDataColumn;
+import org.strasa.web.common.api.ProcessTabViewModel;
 import org.strasa.web.uploadstudy.view.pojos.UploadCSVDataVariableModel;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
@@ -39,6 +43,7 @@ public class DataColumnValidation {
 	private Component mainView;
 
 	private Binder parBinder;
+	private ProcessTabViewModel model;
 
 	public List<UploadCSVDataVariableModel> varData = new ArrayList<UploadCSVDataVariableModel>();
 
@@ -51,13 +56,23 @@ public class DataColumnValidation {
 	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,
 			@ContextParam(ContextType.VIEW) Component view,
 			@ExecutionArgParam("CSVPath") String CSVPath,
-			@ExecutionArgParam("showAll") boolean showAll) {
+			@ExecutionArgParam("showAll") boolean showAll, 
+			@ExecutionArgParam("tabModel") ProcessTabViewModel model) {
 		mainView = view;
+		this.model = model;
 		parBinder = (Binder) view.getParent().getAttribute("binder");
 		CsvPath = CSVPath;
 		this.showAll = showAll;
 		ArrayList<String> invalidHeader = new ArrayList<String>();
-
+		if(model.isUpdateMode){
+			StudyDataColumnManagerImpl columnMan = new StudyDataColumnManagerImpl();
+			List<StudyDataColumn> lstColumns = columnMan.getStudyDataColumnByStudyId(model.getStudyID(), (model.isRaw) ? "rd" : "dd", model.dataset.getId());
+			for(StudyDataColumn colVar : lstColumns){
+				invalidHeader.add(colVar.getColumnheader());
+			}
+			this.showAll = true;
+		}
+		else{
 		try {
 			StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
 			CSVReader reader = new CSVReader(new FileReader(CsvPath));
@@ -76,7 +91,7 @@ public class DataColumnValidation {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		}
 		populateVarData(invalidHeader);
 	}
 
@@ -109,7 +124,23 @@ public class DataColumnValidation {
 
 			return ;
 		}
-		FileWriter mFileWriter;
+		if(model.isUpdateMode){
+			
+			StudyRawDataManagerImpl dataMan = new StudyRawDataManagerImpl(this.model.isRaw);
+			StudyDataColumnManagerImpl columnMan = new StudyDataColumnManagerImpl();
+			for(UploadCSVDataVariableModel var : varData){
+				if(var.modified){
+					dataMan.changeDataColumn(model.studyID, model.dataset.getId(), var.getCurrentVariable(),var.getNewVariable());
+					columnMan.updateStudyDataColumnByStudyId(model.studyID, model.dataset.getId(), var.getCurrentVariable(),var.getNewVariable());
+				}
+			}
+
+			Messagebox.show(" Data successfully updated!", "Save",
+					Messagebox.OK, Messagebox.INFORMATION);
+		}
+		else {
+			FileWriter mFileWriter;
+		
 		try {
 			CSVReader reader = new CSVReader(new FileReader(CsvPath));
 			List<String[]> currDataSet = reader.readAll();
@@ -126,6 +157,7 @@ public class DataColumnValidation {
 
 		Messagebox.show("CSV Data successfully updated!", "Save",
 				Messagebox.OK, Messagebox.INFORMATION);
+		}
 		System.out.println("SavePath: " + CsvPath);
 
 		Binder bind = parBinder;
@@ -159,6 +191,7 @@ public class DataColumnValidation {
 			if (varData.get(i).getCurrentVariable().equals(oldVar)) {
 				System.out.println("   ss");
 				varData.get(i).setNewVariable(newValue);
+				varData.get(i).modified = true;
 			}
 
 		}

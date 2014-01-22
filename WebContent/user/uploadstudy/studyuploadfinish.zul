@@ -3,13 +3,15 @@
 	
 
 
-	<div>
+<div apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudyUploadFinish')">
 		<vlayout>
 			<label value="Study Upload has been completed."
 				style="font-size:16pt" />
 			<hlayout>
-				<button label="Upload new Study" onClick=""></button>
-				<button label="Upload new data" onClick=""></button>
+				<button label="Upload new Study" onClick="@global-command('addStudy')"></button>
+			
+                <button label="Upload new data" onClick="@global-command('showIndex', index=vm.studyID)"/>
 			</hlayout>
 		</vlayout>
 	</div>

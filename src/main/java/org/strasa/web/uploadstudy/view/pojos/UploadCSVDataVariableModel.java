@@ -1,10 +1,22 @@
 package org.strasa.web.uploadstudy.view.pojos;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class UploadCSVDataVariableModel {
 	
 	private String currentVariable;
 	private String newVariable;
 	private boolean isHeaderExisting = false;
+	List<String> systemHeader = Arrays.asList("GName","Site","Location","Season","Year");
+	public boolean modified;
+	public boolean isEditable() {
+		if(systemHeader.contains(currentVariable)) return false;
+		
+		return true;
+	}
+
+	
 	public String getCurrentVariable() {
 		return currentVariable;
 	}

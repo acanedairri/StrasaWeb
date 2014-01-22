@@ -13,6 +13,7 @@ import org.strasa.middleware.mapper.StudyMapper;
 import org.strasa.middleware.mapper.StudyRawDataByDataColumnMapper;
 import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.mapper.StudyRawDerivedDataByDataColumnMapper;
+import org.strasa.middleware.mapper.other.ExtendedStudyDataColumnMapper;
 import org.strasa.middleware.mapper.other.StudyRawDataBatch;
 import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.Study;
@@ -39,6 +40,26 @@ public class StudyRawDataManagerImpl {
 
 	}
 
+
+	public void changeDataColumn(Integer studyid, Integer dataset, String oldColumn, String newColumn){
+		
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		try {
+			ExtendedStudyDataColumnMapper mapper = session.getMapper(ExtendedStudyDataColumnMapper.class);
+			if (isRaw) {
+				mapper.updateRawDataColumn(newColumn, oldColumn, studyid, dataset);
+			} else {
+				mapper.updateDerivedDataColumn(newColumn, oldColumn, studyid, dataset);
+				
+			}
+			session.commit();
+		} finally {
+			session.close();
+		}
+
+		
+	}
+	
 	public void deleteByStudyId(int studyID) {
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		try {
