@@ -1,20 +1,8 @@
 <?link rel="stylesheet" type="text/css" href="css/main.css"?>
 <zk>
-<style src="../css/main.css"/>
-	<style>
-		.myheader { font-family: inherit; font-size: 32px; position:
-		fixed; top: 0; bottom: 0; left: 0; overflow: auto; height: 10%;
-		background-color: #3E4939; color: White; opacity: 0.9; }
-
-		.myHeaderLogin { font-family: 'Open Sans',arial; color:#F5DEB3;
-		font-size: 16px; font-weight: 400; margin-bottom: 20px;
-		padding:10px 0px 15px 20px"; }
-
-	</style>
-
+	<style src="../css/main.css" />
 
 	<div hflex="1" vflex="1">
-
 		<zscript>
 	String username = org.spring.security.model.SecurityUtil.getUserName();
 </zscript>
@@ -23,11 +11,11 @@
 			<image src="/images/logo.png" style="padding:10px" />
 			<div align="right" hflex="1" style="padding:50px">
 				<hbox align="center" pack="end">
-					<label class="myHeaderLogin">Welcome:</label>
-					<label class="myHeaderLogin">${username}</label>
-					<label class="myHeaderLogin">| Role : User</label>
+					<label class="header-login">Welcome:</label>
+					<label class="header-login">${username}</label>
+					<label class="header-login">| Role : User</label>
 					<space width="15px"></space>
-					<button label="Logout" sclass="btn-ok"
+					<button label="Logout" sclass="btn-blue"
 						unless="${empty execution.userPrincipal}"
 						href="/j_spring_security_logout" />
 				</hbox>
@@ -35,5 +23,4 @@
 			<space />
 		</hlayout>
 	</div>
-
 </zk>

@@ -4,7 +4,7 @@
 	<style src="../css/main.css" />
 	
 	<div style="padding:10px 0px 0px 20px" align="left">
-		<label class="header-menu">Browse Germplasm</label>
+		<label sclass="header-menu">Browse Germplasm</label>
 	</div>
 
 	<div align="center">
@@ -13,7 +13,7 @@
 
 			<div align="center">
 				<hlayout>
-					<label value="Search By" class="header-search" />
+					<label value="Search By" class="label-search" />
 					<combobox id="cmbSearchKey" autodrop="true"
 						selectedIndex="@bind(vm.searchKey)"
 						onChange="@command('SetSearchUI')">
@@ -165,7 +165,7 @@
 						</tabbox>
 					</vbox>
 
-					<button label="Search" sclass="btn-ok"
+					<button label="Search" sclass="btn-blue"
 						onClick="@command('SearchGermplasm')" />
 
 				</hlayout>

@@ -1,20 +1,12 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
-<?link rel="stylesheet" type="text/css" href="css/main.css"?>
 <zk>
-	<style>
-		.z-button { font-weight: bold; } .z-toolbarbutton-cnt { color:
-		#336633; text-decoration:underline; font-size: 12px;
-		align:center;background-image: none}
+	<style src="../css/main.css" />
 
-		tr.z-row-over td.z-row-inner { background:white; }
-
-		.myHeader { font-family: 'Open Sans',arial; color: rgb(85, 85,
-		85); font-size: 18px; font-weight: 400; margin-bottom: 20px;
-		padding:10px 0px 15px 20px"; }
-	</style>
 
 	<div style="padding:10px 0px 0px 20px" align="left">
-		<label style="font-size:20px" class="myHeader">Across Study Query</label>
+		<label style="font-size:20px" class="header-menu">
+			Across Study Query
+		</label>
 	</div>
 
 	<div apply="org.zkoss.bind.BindComposer"
@@ -86,7 +78,7 @@
 				value="@bind(vm.variableValue2)" visible="false" />
 
 			<button label="Add Criteria" image="/images/New16.png"
-				onClick="@command('AddCriteria')" />
+				sclass="btn-blue" onClick="@command('AddCriteria')" />
 
 		</hbox>
 
@@ -169,7 +161,7 @@
 							</bandpopup>
 						</bandbox>
 						<button label="Add" image="/images/New16.png"
-							onClick="@command('AddColumn')" />
+							sclass="btn-blue" onClick="@command('AddColumn')" />
 					</hbox>
 
 					<grid model="@load(vm.additionalColumns)"
@@ -195,9 +187,9 @@
 			<div align="left" vflex="1">
 				<hbox align="start">
 					<button label="Query" image="/images/Query16.png"
-						onClick="@command('RunQuery')" />
+						sclass="btn-blue" onClick="@command('RunQuery')" />
 					<button label="Reset" onClick="@command('reset')"
-						image="/images/Refresh16.png" />
+						sclass="btn-plain" image="/images/Refresh16.png" />
 				</hbox>
 			</div>
 		</groupbox>
@@ -207,10 +199,12 @@
 		<groupbox id="crossResultId" mold="3d" width="98%"
 			visible="false">
 			<caption label="@load(vm.searchResultLabel)" />
+			<div align="left">
+				<button id="btnExportId" label="Export to CSV"
+					sclass="btn-blue" image="/images/export16.png" visible="false"
+					onClick="@command('exportToCSV', columns=vm.columnList, rows=vm.dataList)" />
+			</div>
 
-			<button id="btnExportId" label="Export to CSV"
-				image="/images/export16.png" visible="false"
-				onClick="@command('exportToCSV', columns=vm.columnList, rows=vm.dataList)" />
 
 			<grid model="@load(vm.newDataRow)"
 				rowRenderer="org.strasa.web.crossstudyquery.view.model.AcrossStudyRowRenderer"

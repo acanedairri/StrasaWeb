@@ -2,21 +2,9 @@
 
 
 <zk>
+	<style src="css/main.css" />
 
-	<style>
-		.myHeader { font-family: 'Open Sans',arial; color: rgb(85, 85,
-		85); font-size: 18px; font-weight: 400; margin-bottom: 20px;
-		padding:30px; }
-
-		.card { background-color: rgb(247, 247, 247); padding: 20px 25px
-		30px; margin: 0px auto 25px; width: 400px; border-radius: 2px;
-		box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3); }
-
-
-	</style>
-
-	<include id="mainHeader" self="@define(content)"
-		src="header.zul" />
+	<include id="mainHeader" self="@define(content)" src="header.zul" />
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.spring.security.model.AuthenticateInit')">
 	</div>
@@ -24,9 +12,9 @@
 
 	<separator height="150px"></separator>
 
-	<div align="center" class="card">
+	<div align="center" class="login-box">
 		<label value="Sign in to access Strasa Database"
-			class="myHeader">
+			class="login-header-main">
 		</label>
 
 		<div width="300px">
@@ -35,10 +23,12 @@
 				if="${not empty param.login_error}">
 
 
+
 				
 				<![CDATA[ Your login attempt was not successful, try
 				again.<br/><br/> Reason:
 				${SPRING_SECURITY_LAST_EXCEPTION.message} ]]>
+				
 				
 			
 
@@ -54,7 +44,7 @@
 					</columns>
 					<rows>
 						<row zclass="none" height="50px">
-							<label value="User"></label>
+							<label value="Username"></label>
 							<textbox id="u" name="j_username" hflex="1" />
 
 						</row>
@@ -68,8 +58,8 @@
 				<separator width="200px"></separator>
 				<div align="right" width="300px">
 					<hbox>
-						<button type="reset" label="Reset" />
-						<button type="submit" label="Login" />
+						<button type="reset" label="Reset" sclass="btn-plain"/>
+						<button type="submit" label="Login" sclass="btn-blue" />
 					</hbox>
 				</div>
 				<div align="right" width="300px">
@@ -86,8 +76,7 @@
 		</div>
 	</div>
 	<separator height="100px"></separator>
-<include id="mainFooter" self="@define(content)"
-		src="footer.zul" />
+	<include id="mainFooter" self="@define(content)" src="footer.zul" />
 
 </zk>
 
