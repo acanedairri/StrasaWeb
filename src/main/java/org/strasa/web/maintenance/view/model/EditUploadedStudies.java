@@ -1,6 +1,8 @@
 package org.strasa.web.maintenance.view.model;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,22 +10,22 @@ import java.util.Map;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
-import org.strasa.middleware.manager.UserManagerImpl;
 import org.strasa.middleware.model.Study;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zhtml.Messagebox;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Tabpanel;
 
@@ -36,11 +38,18 @@ public class EditUploadedStudies {
 	@Wire("#divUpdateStudy")
 	public Div divUpdateStudy;
 	
+	@Wire("#btnBackId")
+	Button btnBack;
 	
 	StudyManagerImpl studyMan;
 	ProgramManagerImpl programMan;
 	ProjectManagerImpl projectMan;
 
+	
+	public String formatDate(Date date){
+		if(date==null) return new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		return new SimpleDateFormat("yyyy-MM-dd").format(date);
+	}
 	
 	private List<EditStudyModel> editStudyList;
 	
@@ -61,6 +70,7 @@ public class EditUploadedStudies {
 
 		Selectors.wireComponents(view, this, false);
 		divUpdateStudy.setVisible(false);
+		btnBack.setVisible(false);
 	}
 
 	private void populateEditStudyList() {
@@ -92,11 +102,14 @@ public class EditUploadedStudies {
 		this.editStudyList = editStudyList;
 	}
 	
-	
+	@NotifyChange("editStudyList")
 	@Command
 	public void loadMainDiv(){
 		divUpdateStudy.setVisible(false);
 		divMain.setVisible(true);
+		btnBack.setVisible(false);
+		populateEditStudyList();
+		
 	}
 	@Command("showzulfile")
 	public void showzulfile(@BindingParam("zulFileName") String zulFileName,
@@ -109,10 +122,12 @@ public class EditUploadedStudies {
 		}
 	}
 	
+	@GlobalCommand
 	@Command
 	public void editStudy(@ContextParam(ContextType.VIEW) Component view,@BindingParam("studyID") Integer studyid){
 		divMain.setVisible(false);
 //		divUpdateStudy.detach();
+		btnBack.setVisible(true);
 		divUpdateStudy.setVisible(true);
 		Map arg = new HashMap();
 		arg.put("studyID", studyid);
@@ -120,9 +135,10 @@ public class EditUploadedStudies {
 		 Components.removeAllChildren(list.get(0));
 		Executions.createComponents("/user/updatestudy/index.zul" , list.get(0), arg);
 	}
-	
+	@GlobalCommand
 	@Command
 	public void addStudy(@ContextParam(ContextType.VIEW) Component view){
+		btnBack.setVisible(true);
 		divMain.setVisible(false);
 //		divUpdateStudy.detach();
 		divUpdateStudy.setVisible(true);
@@ -131,18 +147,11 @@ public class EditUploadedStudies {
 		 Components.removeAllChildren(list.get(0));
 		Executions.createComponents("/user/uploadstudy/index.zul" , list.get(0), arg);
 	}
-	@SuppressWarnings("unchecked")
 	@NotifyChange("editStudyList")
 	@Command("deleteStudy")
-	public void deleteStudy(@BindingParam("studyId") final Integer studyId){
-		Messagebox.show("Are you sure you want to delete this study? This cannot be undone", "Confirm Dialog", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
-			public void onEvent(Event evt) throws InterruptedException {
-				if (evt.getName().equals("onOK")) {
-					studyMan.deleteStudyById(studyId);
-					populateEditStudyList();
-				} 
-			}
-		});
+	public void deleteStudy(@BindingParam("studyId") Integer studyId){
+		studyMan.deleteStudyById(studyId);
+		populateEditStudyList();
 	}
 
 	@NotifyChange("*")
