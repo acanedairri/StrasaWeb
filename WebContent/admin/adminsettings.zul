@@ -5,9 +5,10 @@
 		src="/admin/header.zul" />
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.admin.view.model.AdminSettings')"
-		align="center" style="padding:10px">
+		align="center" style="padding:10px"
+		id="adminSettingsWindow">
 		<tabbox id="tb" hflex="1" vflex="1" height="400px">
-			<tabs  width="100px">
+			<tabs width="100px">
 				<tab label="Study Type" />
 				<tab label="Location"
 					onSelect="@command('showzulfile', zulFileName='/admin/settings/editlocation.zul', target=self.linkedPanel)" />
@@ -22,29 +23,47 @@
 			</tabs>
 			<tabpanels width="100%">
 				<tabpanel style="overflow: auto">
-					<grid sizedByContent="true" width="90%">
+					<button label="Add New" onClick="@command('add')" />
+					<grid
+						model="@load(vm.rowList) @template(each.editingStatus ? 'editable' : 'noneditable')"
+						sizedByContent="true" width="95%">
 						<columns width="200px">
 							<column label="StudyType Name" />
 							<column label="Action" width="100px" />
 						</columns>
-						<rows>
-						<row>
-							<label value="PBT" />
-							<!-- 								<label -->
-							<!-- 									value="@load(each.value.ecotype)" /> -->
-							<cell>
-								<toolbarbutton src="/images/edit16.png"
-									onClick="@command('changeEditableStatus', RowStatus=each)"
-									orient="vertical" tooltiptext="Edit Ecotype" />
-								<space />
-								<toolbarbutton
-									src="/images/Delete16.png"
-									onClick="@command('delete', id=each.value.id)"
-									orient="vertical" tooltiptext="Delete Ecotype" />
-							</cell>
-						</row>
-						<!-- 						</template> -->
-						</rows>
+						<template name="editable">
+							<row>
+								<textbox
+									value="@load(each.value.studytype) @save(each.value.studytype, before='confirm')" />
+								<cell>
+									<button
+										image="/images/tick-small.png"
+										onClick="@command('confirm', RowStatus=each)"
+										tooltiptext="Save" />
+									<button
+										image="/images/cross-small.png"
+										onClick="@command('changeEditableStatus', RowStatus=each)"
+										tooltiptext="Cancel" />
+								</cell>
+							</row>
+						</template>
+						<template name="noneditable">
+							<row>
+								<label
+									value="@load(each.value.studytype)" />
+								<cell>
+									<toolbarbutton
+										src="/images/edit16.png"
+										onClick="@command('changeEditableStatus', RowStatus=each)"
+										orient="vertical" tooltiptext="Edit Study type" />
+									<space />
+									<toolbarbutton
+										src="/images/Delete16.png"
+										onClick="@command('delete', id=each.value.id)"
+										orient="vertical" tooltiptext="Delete Study type" />
+								</cell>
+							</row>
+						</template>
 					</grid>
 				</tabpanel>
 				<tabpanel style="overflow: auto" />

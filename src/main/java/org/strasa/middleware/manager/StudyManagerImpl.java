@@ -225,4 +225,19 @@ public class StudyManagerImpl {
 		}
 		
 	}
+
+
+	public List<Study> getByStudyTypeId(Integer id) {
+		// TODO Auto-generated method stub
+		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		StudyMapper mapper = session.getMapper(StudyMapper.class);
+		try{
+			StudyExample example = new StudyExample();
+			example.createCriteria().andStudytypeidEqualTo(id);
+			return mapper.selectByExample(example);
+		}
+		finally{
+			session.close();
+		}
+	}
 }
