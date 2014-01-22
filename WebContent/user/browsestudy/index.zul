@@ -29,7 +29,7 @@
 	</div>
 	<div id="mainBrowseWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Index')"
-		height="98%">
+		height="98%" width="80%" align="center">
 
 		<tabbox id="tabBox">
 			<tabs id="tabs">

@@ -88,4 +88,37 @@
 	padding-left: 50px;
 }
 
-.label-heavy { font-weight: bold; font-size: 12px; }
+.label-heavy {
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.grid-link .z-toolbarbutton-cnt {
+	color: #336633;
+	text-decoration: underline;
+	font-size: 12px;
+	align: center;
+	background-image: none
+}
+
+.grid-no-highlight tr.z-row-over td.z-row-inner {
+	background: white;
+}
+
+.header-menu {
+	font-family: 'Open Sans', arial;
+	color: rgb(85, 85, 85);
+	font-size: 18px;
+	font-weight: 400;
+	margin-bottom: 20px;
+	padding: 10px 0px 15px 20px";
+}
+
+.header-search {
+	font-family: 'Open Sans', arial;
+	color: rgb(85, 85, 85);
+	font-size: 15px;
+	font-weight: 400;
+	margin-bottom: 20px;
+	padding: 10px 0px 15px 20px";
+}

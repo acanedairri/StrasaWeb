@@ -135,8 +135,6 @@ public class EditUploadedStudies {
 	@NotifyChange("editStudyList")
 	@Command("deleteStudy")
 	public void deleteStudy(@BindingParam("studyId") final Integer studyId){
-		
-		
 		Messagebox.show("Are you sure you want to delete this study? This cannot be undone", "Confirm Dialog", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 			public void onEvent(Event evt) throws InterruptedException {
 				if (evt.getName().equals("onOK")) {
@@ -145,8 +143,6 @@ public class EditUploadedStudies {
 				} 
 			}
 		});
-		
-		
 	}
 
 	@NotifyChange("*")

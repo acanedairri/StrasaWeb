@@ -1,7 +1,7 @@
 <?link rel="stylesheet" type="text/css" href="css/main.css"?>
 <zk>
     <borderlayout hflex="1" vflex="1">
-        <north height="50px" border="none" sclass="myheaderwithgreen">
+        <north height="100px" border="none" sclass="myheaderwithgreen">
             <include src="template/header.zul" />
         </north>
         <west width="260px" border="none" collapsible="true" splittable="true"   margins="0,5,0,0"  vflex="1">

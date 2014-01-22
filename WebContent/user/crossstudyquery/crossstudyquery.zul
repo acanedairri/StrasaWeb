@@ -8,10 +8,13 @@
 
 		tr.z-row-over td.z-row-inner { background:white; }
 
+		.myHeader { font-family: 'Open Sans',arial; color: rgb(85, 85,
+		85); font-size: 18px; font-weight: 400; margin-bottom: 20px;
+		padding:10px 0px 15px 20px"; }
 	</style>
 
 	<div style="padding:10px 0px 0px 20px" align="left">
-		<label style="font-size:20px">Across Study Query</label>
+		<label style="font-size:20px" class="myHeader">Across Study Query</label>
 	</div>
 
 	<div apply="org.zkoss.bind.BindComposer"

@@ -1,5 +1,8 @@
 <zk>
-	<hlayout 
-		style="background:#228B22;color:white;" height="50px">
+<style>
+</style>
+	<hlayout sclass="z-valign-center"
+			style="background:#3E4939;color:white;" height="120px">
+			<image src="/images/logo.png" style="padding:10px" />
 	</hlayout>
 </zk>

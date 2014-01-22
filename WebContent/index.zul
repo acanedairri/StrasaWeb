@@ -22,7 +22,7 @@
 	</div>
 
 
-	<separator width="300px"></separator>
+	<separator height="150px"></separator>
 
 	<div align="center" class="card">
 		<label value="Sign in to access Strasa Database"
@@ -85,6 +85,7 @@
 			</html:form>
 		</div>
 	</div>
+	<separator height="100px"></separator>
 <include id="mainFooter" self="@define(content)"
 		src="footer.zul" />
 

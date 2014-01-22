@@ -14,7 +14,7 @@
 	</style>
 
 	<include self="@define(content)" src="header.zul" />
-	<separator width="50px"></separator>
+	<separator height="150px"></separator>
 	
 	<div apply="org.zkoss.bind.BindComposer" align="center"
 		style="padding:10px"
