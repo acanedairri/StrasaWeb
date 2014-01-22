@@ -42,7 +42,7 @@ public class StudyInformation {
 			@BindingParam("target") Tabpanel panel) {
 		if (panel != null && panel.getChildren().isEmpty()) {
 			 Map arg = new HashMap();
-		        arg.put("studyId", studyId);
+		        arg.put("studyid", studyId);
 		        arg.put("dataset", dataset);
 			Executions.createComponents(zulFileName, panel, arg);
 		}

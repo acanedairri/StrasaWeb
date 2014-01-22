@@ -42,7 +42,7 @@ public class DerivedData {
 
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("studyId") Integer studyId, @ExecutionArgParam("dataset") Integer dataset){
+			@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("studyid") Integer studyId, @ExecutionArgParam("dataset") Integer dataset){
 
 		dataSetMan = new StudyDataSetManagerImpl();
 

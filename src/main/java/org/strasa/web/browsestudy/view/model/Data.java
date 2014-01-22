@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Tabpanel;
 
-public class DataSet {
+public class Data {
 
 	private int pageSize = 10;
 	private int activePage = 0;
@@ -39,41 +39,10 @@ public class DataSet {
 
 	private BrowseStudyManagerImpl browseStudyManagerImpl;
 	private StudyManagerImpl studyMan;
-	
-	private Integer studyId;
-	private Integer dataset;
-	
-	public Integer getStudyId() {
-		return studyId;
-	}
-
-	public void setStudyId(Integer studyId) {
-		this.studyId = studyId;
-	}
-
-	public Integer getDataset() {
-		return dataset;
-	}
-
-	public void setDataset(Integer dataset) {
-		this.dataset = dataset;
-	}
-
 	private String dataType;
 	
-	public DataSet() {
+	public Data() {
 		// TODO Auto-generated constructor stub
-	}
-	
-	@Command("showzulfile")
-	public void showzulfile(@BindingParam("zulFileName") String zulFileName,
-			@BindingParam("target") Tabpanel panel) {
-		if (panel != null && panel.getChildren().isEmpty()) {
-			 Map arg = new HashMap();
-		        arg.put("studyId", studyId);
-		        arg.put("dataset", dataset);
-			Executions.createComponents(zulFileName, panel, arg);
-		}
 	}
 	
 	public int getTotalSize() {
@@ -140,8 +109,6 @@ public class DataSet {
 
 	@Init
 	public void init(@ExecutionArgParam("dataType") String dataType, @ExecutionArgParam("studyId") Integer studyId, @ExecutionArgParam("dataset") Integer dataset){
-		setDataset(dataset);
-		setStudyId(studyId);
 		setDataType(dataType);
 		
 		studyMan=new StudyManagerImpl();
@@ -151,7 +118,8 @@ public class DataSet {
 		
 		 // change this value as parameter
 		
-		System.out.println("StudyId:"+ Integer.toString(studyId) +" and dataset:" +Integer.toString(dataset));
+		System.out.println("StudyId:"+ Integer.toString(studyId));
+		System.out.println("and dataset:" +Integer.toString(dataset));
 		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(studyId,dataType,dataset);
 		System.out.println("Size:"+toreturn.size());
 		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyId,dataType,dataset); // rd as raw data, dd as derived data

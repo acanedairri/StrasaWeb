@@ -154,14 +154,17 @@ public class SiteInformation extends ProcessTabViewModel {
 			for(StudySite siteD : subsites){
 				System.out.println(Integer.toString(siteD.getId()));
 				StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteD);
-				siteInfo.selectedDesignInfo = studyDesignMan.getStudyDesign(siteD.getId());
-				siteInfo.selectedAgroInfo = studyAgroMan.getStudyAgronomy(siteD.getId());
-				siteInfo.selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(siteInfo.getSelectedAgroInfo().getPlantingtypeid());
+				siteInfo.setSelectedDesignInfo(studyDesignMan.getStudyDesign(siteD.getId()));
+				siteInfo.setSelectedAgroInfo(studyAgroMan.getStudyAgronomy(siteD.getId()));
+				siteInfo.setSelectedSitePlantingType(plantingtypeMan.getPlantingTypeById(siteInfo.getSelectedAgroInfo().getPlantingtypeid()));
 				sites.add(siteInfo);
 			}
 			selectedSite = sites.get(0);
 			updateDesignInfo(0);
 		}
+		selectedDesignInfo = studyDesignMan.getStudyDesign(subsites.get(0).getId());
+		selectedAgroInfo =  studyAgroMan.getStudyAgronomy(subsites.get(0).getId());
+		selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
 	}
 
 	public PlantingType getSelectedSitePlantingType() {

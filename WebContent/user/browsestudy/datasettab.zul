@@ -13,31 +13,7 @@
 			</tabs>
 			<tabpanels>
 				<tabpanel id="tabpanel1">
-					<grid model="@bind(vm.dataList)"
-						sizedByContent="true" height="360px"
-						emptyMessage="No data loaded...">
-						<columns children="@load(vm.columnList)">
-							<template name="children">
-								<column hflex="1" label="@load(each)" />
-							</template>
-						</columns>
-						<rows children="@bind(vm.rowData)">
-							<template name="children" var="data">
-								<row>
-									<label forEach="${data}"
-										value="${each}" />
-								</row>
-							</template>
-						</rows>
-					</grid>
-					<paging pageSize="@load(vm.pageSize)"
-						totalSize="@load(vm.totalSize)" activePage="@bind(vm.activePage)"
-						unless="${vm.rowData==null}" />
-					<div style="float:right;">
-						<button label="export to CSV"
-							unless="${vm.rowData==null}"
-							onClick="@command('exportRowData', columns=vm.columnList, rows=vm.dataList, studyName=vm.studyName, dataType=vm.dataType)" />
-					</div>
+					<include studyId="${arg.studyId}" dataset="${arg.dataset}" dataType="${arg.dataType}" src="/user/browsestudy/data.zul"/>
 				</tabpanel>
 				<tabpanel id="tabpanel2"></tabpanel>
 				<tabpanel id="tabpanel3"></tabpanel>

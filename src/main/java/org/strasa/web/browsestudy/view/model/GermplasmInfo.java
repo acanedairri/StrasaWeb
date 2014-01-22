@@ -63,7 +63,7 @@ public class GermplasmInfo {
 
 
 	@Init
-	public void init(@ExecutionArgParam("studyId") Integer studyId){
+	public void init(@ExecutionArgParam("studyid") Integer studyId){
 		for(StudyGermplasm sg :getGermplasmById(studyId)){
 			germplasmList.add(new GermplasmInfoModel(sg));
 		}
