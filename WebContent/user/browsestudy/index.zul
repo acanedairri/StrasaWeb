@@ -12,16 +12,20 @@
 		.z-button { font-weight: bold; }
 
 		.myLink .z-toolbarbutton-cnt { color: #336633;
-		text-decoration:underline; font-size: 12px; align:center;background-image: none}
+		text-decoration:underline; font-size: 12px;
+		align:center;background-image: none}
 
 
-		.no-highlight tr.z-row-over td.z-row-inner { 
-		background:white; }
+		.no-highlight tr.z-row-over td.z-row-inner { background:white; }
+
+		.myHeader { font-family: 'Open Sans',arial; color: rgb(85, 85,
+		85); font-size: 18px; font-weight: 400; margin-bottom: 20px;
+		padding:10px 0px 15px 20px"; }
 
 	</style>
 
 	<div style="padding:10px 0px 15px 20px" align="left">
-		<label style="font-size:20px">Browse Study</label>
+		<label class="myHeader">Browse Study</label>
 	</div>
 	<div id="mainBrowseWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Index')"

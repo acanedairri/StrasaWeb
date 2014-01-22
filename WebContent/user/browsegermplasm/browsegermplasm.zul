@@ -5,213 +5,221 @@
 		.z-button { font-weight: bold; }
 
 		.myLink .z-toolbarbutton-cnt { color: #336633;
-		text-decoration:underline; font-size: 12px; align:center;background-image: none}
+		text-decoration:underline; font-size: 12px;
+		align:center;background-image: none}
 
-		.no-highlight tr.z-row-over td.z-row-inner { 
-		background:white; }
+		.no-highlight tr.z-row-over td.z-row-inner { background:white; }
 
+		.myHeader { font-family: 'Open Sans',arial; color: rgb(85, 85,
+		85); font-size: 18px; font-weight: 400; margin-bottom: 20px;
+		padding:10px 0px 15px 20px"; }
 
 	</style>
-	
+
 	<div style="padding:10px 0px 0px 20px" align="left">
-	<label style="font-size:20px">Browse Germplasm</label>
+		<label class="myHeader">Browse Germplasm</label>
 	</div>
 
-	<vbox apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.BrowseGermplasm')">
+	<div align="center" width="98%">
+		<vbox apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.BrowseGermplasm')">
 
-		<div align="center" style="5px 0px 0px 20px">
-			<hlayout>
-				<label value="Search By" />
-				<combobox id="cmbSearchKey" autodrop="true"
-					selectedIndex="@bind(vm.searchKey)"
-					onChange="@command('SetSearchUI')">
-					<comboitem label="Name" />
-					<comboitem label="Key Characteristics" />
-					<comboitem label="Type" />
-				</combobox>
-				<textbox id='txtNameSearch' width="150px"
-					value="@bind(vm.nameSearch)" visible="true" />
+			<div align="center">
+				<hlayout>
+					<label value="Search By" />
+					<combobox id="cmbSearchKey" autodrop="true"
+						selectedIndex="@bind(vm.searchKey)"
+						onChange="@command('SetSearchUI')">
+						<comboitem label="Name" />
+						<comboitem label="Key Characteristics" />
+						<comboitem label="Type" />
+					</combobox>
+					<textbox id='txtNameSearch' width="150px"
+						value="@bind(vm.nameSearch)" visible="true" />
 
-				<combobox id="cmbKeyChar" visible="false"
-					onChange="@command('getKeyCharacteristicOptionsList')">
-					<comboitem label="Abiotic" />
-					<comboitem label="Biotic" />
-					<comboitem label="Grain Quality" />
-					<comboitem label="Major Genes" />
-				</combobox>
+					<combobox id="cmbKeyChar" visible="false"
+						onChange="@command('getKeyCharacteristicOptionsList')">
+						<comboitem label="Abiotic" />
+						<comboitem label="Biotic" />
+						<comboitem label="Grain Quality" />
+						<comboitem label="Major Genes" />
+					</combobox>
 
-				<!-- 
-					<combobox id="cmbKeyCharValue" visible="false"
-					model="@load(vm.keyCharacteristicOption)"
-					selectedItem="@bind(vm.keyCharactericticValue)">
+					<!-- 
+						<combobox id="cmbKeyCharValue" visible="false"
+						model="@load(vm.keyCharacteristicOption)"
+						selectedItem="@bind(vm.keyCharactericticValue)">
+						<template name="model">
+						<comboitem value="${each}"
+						label="${each}" />
+						</template>
+						</combobox>  
+						
+					-->
+
+					<chosenbox width="250px" id="cmbKeyCharValue"
+						visible="false" model="@load(vm.keyCharacteristicOption)" />
+
+					<combobox id="cmbGermplasmType" visible="false"
+						model="@load(vm.germplasmType)">
+						<template name="model">
+							<comboitem value="@load(each.id)"
+								label="@load(each.germplasmtype)" />
+						</template>
+					</combobox>
+
+					<vbox>
+						<tabbox height="200px"
+							id="keyCharacteristicsOptions" visible="false" width="400px">
+							<tabs>
+								<tab label="Abiotic Stress" />
+								<tab label="Biotic Stress" />
+								<tab label="Grain Quality" />
+								<tab label="Major Genes" />
+							</tabs>
+							<tabpanels>
+								<tabpanel height="300px">
+									<listbox
+										model="@load(vm.keyAbioticList)" width="200px" vflex="1"
+										sizedByContent="true">
+										<listhead>
+											<listheader label="Select" />
+											<listheader
+												label="Characteristics" />
+
+										</listhead>
+										<template name="model">
+											<listitem>
+
+												<listcell>
+													<checkbox
+														checked="@bind(each.value)">
+													</checkbox>
+												</listcell>
+												<listcell
+													label="@load(each.name)" />
+											</listitem>
+
+										</template>
+									</listbox>
+								</tabpanel>
+								<tabpanel>
+									<listbox
+										model="@load(vm.keyBioticList)" vflex="1"
+										sizedByContent="true" width="200px">
+										<listhead>
+											<listheader label="Select" />
+											<listheader
+												label="Characteristics" />
+										</listhead>
+										<template name="model">
+											<listitem>
+
+												<listcell>
+													<checkbox
+														checked="@bind(each.value)">
+													</checkbox>
+												</listcell>
+												<listcell
+													label="@load(each.name)" />
+											</listitem>
+
+										</template>
+									</listbox>
+								</tabpanel>
+								<tabpanel>
+									<listbox
+										model="@load(vm.keyGrainQualityList)" width="200px" vflex="1"
+										sizedByContent="true">
+										<listhead>
+											<listheader label="Select" />
+											<listheader
+												label="Characteristic" />
+										</listhead>
+										<template name="model">
+											<listitem>
+												<listcell>
+													<checkbox
+														checked="@bind(each.value)">
+													</checkbox>
+												</listcell>
+												<listcell
+													label="@load(each.name)" />
+											</listitem>
+
+
+										</template>
+									</listbox>
+								</tabpanel>
+								<tabpanel>
+									<listbox vflex="1"
+										model="@load(vm.keyMajorGenesList)" width="200px"
+										sizedByContent="true">
+										<listhead>
+											<listheader label="Select" />
+											<listheader
+												label="Characteristics" />
+										</listhead>
+										<template name="model">
+											<listitem>
+												<listcell>
+													<checkbox
+														checked="@bind(each.value)">
+													</checkbox>
+												</listcell>
+												<listcell
+													label="@load(each.name)" />
+											</listitem>
+
+										</template>
+									</listbox>
+								</tabpanel>
+							</tabpanels>
+						</tabbox>
+					</vbox>
+
+					<button label="Search"
+						onClick="@command('SearchGermplasm')" />
+
+				</hlayout>
+			</div>
+
+			
+			<groupbox mold="3d" hflex="1">
+				<caption label="@load(vm.searchResultLabel)" />
+				<grid height="200px" model="@load(vm.germplasmList)"
+					emptyMessage="No Record Found" sizedByContent="true"
+					class="no-highlight">
+
+					<columns>
+						<column label="Germplasm Name" hflex="1" />
+						<column label="Other Name" />
+						<column label="Breeder" />
+						<column label="Germplasm Type" width="200px" />
+
+					</columns>
 					<template name="model">
-					<comboitem value="${each}"
-					label="${each}" />
+						<row
+							onClick="@command('DisplayGermplasmInfo', germplasmId=each.id,gname=each.germplasmname)">
+							<toolbarbutton
+								label="@load(each.germplasmname)"
+								onClick="@command('DisplayGermplasmDetail', germplasmId=each.id,gname=each.germplasmname)"
+								class="myLink" />
+							<label value="@load(each.othername)" />
+							<label value="@load(each.breeder)" />
+							<label value="@load(each.remarks)" />
+						</row>
 					</template>
-					</combobox>  
-					
-				-->
+				</grid>
+			</groupbox>
 
-				<chosenbox width="250px" id="cmbKeyCharValue"
-					visible="false" model="@load(vm.keyCharacteristicOption)" />
+			<separator />
 
-				<combobox id="cmbGermplasmType" visible="false"
-					model="@load(vm.germplasmType)">
-					<template name="model">
-						<comboitem value="@load(each.id)"
-							label="@load(each.germplasmtype)" />
-					</template>
-				</combobox>
+			<tabbox id="tabBox">
+				<tabs id="tabs" />
+				<tabpanels id="tabPanels" />
+			</tabbox>
 
-				<vbox>
-					<tabbox height="200px"
-						id="keyCharacteristicsOptions" visible="false" width="400px">
-						<tabs>
-							<tab label="Abiotic Stress" />
-							<tab label="Biotic Stress" />
-							<tab label="Grain Quality" />
-							<tab label="Major Genes" />
-						</tabs>
-						<tabpanels>
-							<tabpanel height="300px">
-								<listbox
-									model="@load(vm.keyAbioticList)" width="200px" vflex="1"
-									sizedByContent="true">
-									<listhead>
-										<listheader label="Select" />
-										<listheader
-											label="Characteristics" />
-
-									</listhead>
-									<template name="model">
-										<listitem>
-
-											<listcell>
-												<checkbox
-													checked="@bind(each.value)">
-												</checkbox>
-											</listcell>
-											<listcell
-												label="@load(each.name)" />
-										</listitem>
-
-									</template>
-								</listbox>
-							</tabpanel>
-							<tabpanel>
-								<listbox model="@load(vm.keyBioticList)"
-									vflex="1" sizedByContent="true" width="200px">
-									<listhead>
-										<listheader label="Select" />
-										<listheader
-											label="Characteristics" />
-									</listhead>
-									<template name="model">
-										<listitem>
-
-											<listcell>
-												<checkbox
-													checked="@bind(each.value)">
-												</checkbox>
-											</listcell>
-											<listcell
-												label="@load(each.name)" />
-										</listitem>
-
-									</template>
-								</listbox>
-							</tabpanel>
-							<tabpanel>
-								<listbox
-									model="@load(vm.keyGrainQualityList)" width="200px" vflex="1"
-									sizedByContent="true">
-									<listhead>
-										<listheader label="Select" />
-										<listheader
-											label="Characteristic" />
-									</listhead>
-									<template name="model">
-										<listitem>
-											<listcell>
-												<checkbox
-													checked="@bind(each.value)">
-												</checkbox>
-											</listcell>
-											<listcell
-												label="@load(each.name)" />
-										</listitem>
-
-
-									</template>
-								</listbox>
-							</tabpanel>
-							<tabpanel>
-								<listbox vflex="1"
-									model="@load(vm.keyMajorGenesList)" width="200px"
-									sizedByContent="true">
-									<listhead>
-										<listheader label="Select" />
-										<listheader
-											label="Characteristics" />
-									</listhead>
-									<template name="model">
-										<listitem>
-											<listcell>
-												<checkbox
-													checked="@bind(each.value)">
-												</checkbox>
-											</listcell>
-											<listcell
-												label="@load(each.name)" />
-										</listitem>
-
-									</template>
-								</listbox>
-							</tabpanel>
-						</tabpanels>
-					</tabbox>
-				</vbox>
-
-				<button label="Search"
-					onClick="@command('SearchGermplasm')" />
-
-			</hlayout>
+		</vbox>
 	</div>
-
-		<div align="center">
-		<groupbox mold="3d" width="98%">
-			<caption label="@load(vm.searchResultLabel)" />
-			<grid height="200px" model="@load(vm.germplasmList)"
-				emptyMessage="No Record Found" sizedByContent="true" class="no-highlight" hflex="1">
-
-				<columns>
-					<column label="Germplasm Name" hflex="1" />
-					<column label="Other Name" />
-					<column label="Breeder" />
-					<column label="Germplasm Type" />
-
-				</columns>
-				<template name="model">
-					<row
-						onClick="@command('DisplayGermplasmInfo', germplasmId=each.id,gname=each.germplasmname)">
-						<toolbarbutton label="@load(each.germplasmname)"
-							onClick="@command('DisplayGermplasmDetail', germplasmId=each.id,gname=each.germplasmname)" class="myLink" />
-						<label value="@load(each.othername)" />
-						<label value="@load(each.breeder)" />
-						<label value="@load(each.remarks)" />
-					</row>
-				</template>
-			</grid>
-		</groupbox>
-		</div>
-		<separator/>
-		<div align="center">
-		<tabbox id="tabBox" width="98%">
-			<tabs id="tabs" />
-			<tabpanels id="tabPanels" />
-		</tabbox>
-		</div>
-</vbox>
-
 </zk>
