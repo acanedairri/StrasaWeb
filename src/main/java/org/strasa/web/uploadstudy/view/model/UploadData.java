@@ -690,6 +690,7 @@ public class UploadData extends ProcessTabViewModel {
 		programList.clear();
 		programList.addAll(programMan.getAllProgram());
 		System.out.print(selected);
+		refreshProjectList(selected);
 		txtProgram = selected;
 
 	}
