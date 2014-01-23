@@ -174,14 +174,14 @@
 
 			<groupbox mold="3d" width="98%">
 				<caption label="@load(vm.searchResultLabel)" />
-				<grid height="200px" model="@load(vm.germplasmList)"
+				<grid height="200px" model="@load(vm.germplasmList)" hflex="1"
 					emptyMessage="No Record Found" sizedByContent="true">
 
 					<columns>
 						<column label="Germplasm Name" hflex="1" />
 						<column label="Other Name" />
 						<column label="Breeder" />
-						<column label="Germplasm Type" width="200px" />
+						<column label="Germplasm Type" hflex="1" />
 
 					</columns>
 					<template name="model">
