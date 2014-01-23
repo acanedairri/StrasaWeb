@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
+import org.strasa.middleware.mapper.EcotypeMapper;
 import org.strasa.middleware.mapper.PlantingTypeMapper;
 import org.strasa.middleware.model.PlantingType;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
@@ -66,6 +67,45 @@ public class PlantingTypeManagerImpl {
 			
 			return PlantingType;
 			
+		}finally{
+			session.close();
+		}
+	}
+
+	public void update(PlantingType value) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		PlantingTypeMapper mapper = session.getMapper(PlantingTypeMapper.class);
+		try{	
+			mapper.updateByPrimaryKey(value);
+			session.commit();
+
+		}finally{
+			session.close();
+		}
+	}
+
+	public void deleteById(Integer id) {
+		// TODO Auto-generated method stub
+		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		PlantingTypeMapper mapper = session.getMapper(PlantingTypeMapper.class);
+		try{
+			mapper.deleteByPrimaryKey(id);
+			session.commit();
+		}
+		finally{
+			session.close();
+		}
+	}
+
+	public void addPlantingType(PlantingType record) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		PlantingTypeMapper mapper = session.getMapper(PlantingTypeMapper.class);
+		try{	
+			mapper.insert(record);
+			session.commit();
+
 		}finally{
 			session.close();
 		}
