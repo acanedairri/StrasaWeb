@@ -9,7 +9,7 @@
 		<button id="uploadGenotypeData" upload="true"
 				label="Import Germplasm Table"
 				onUpload="@command('uploadGenotypeData')" />
-		</div>
+		</div> 
 			
 			<separator></separator>
 			<hlayout spacing="50px">
