@@ -108,4 +108,19 @@ public class StudyVariableManagerImpl {
 	private String buildRelevanceClause(String var){
 		return "CASE WHEN variablecode like '" + var +" %' THEN 0  WHEN variablecode like '" + var +"%' THEN 1 WHEN variablecode like '% " + var +"%' THEN 2 ELSE 3  END, variablecode";
 	}
+	
+	public void deleteById(Integer id) {
+		// TODO Auto-generated method stub
+		try{
+			getMapper().deleteByPrimaryKey(id);
+			
+			session.commit();
+			
+		}
+		finally{
+			session.close();
+		}
+		
+	}
+	
 }

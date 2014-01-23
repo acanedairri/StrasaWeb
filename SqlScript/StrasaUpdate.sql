@@ -1,4 +1,4 @@
-﻿/*
+/*
 SQLyog Community Edition- MySQL GUI v6.03
 Host - 5.6.15 : Database - strasa
 *********************************************************************

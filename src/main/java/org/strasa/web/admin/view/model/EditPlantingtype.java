@@ -7,11 +7,14 @@ import java.util.Map;
 
 import org.strasa.middleware.manager.EcotypeManagerImpl;
 import org.strasa.middleware.manager.LocationManagerImpl;
+import org.strasa.middleware.manager.PlantingTypeManagerImpl;
+import org.strasa.middleware.manager.StudyAgronomyManagerImpl;
 import org.strasa.middleware.manager.StudyLocationManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudySiteManagerImpl;
 import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.Location;
+import org.strasa.middleware.model.PlantingType;
 import org.strasa.web.uploadstudy.view.model.AddLocation;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
@@ -26,9 +29,9 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
 
-public class EditEcotype {
-	EcotypeManagerImpl man;
-	StudySiteManagerImpl studySiteMan;
+public class EditPlantingtype {
+	PlantingTypeManagerImpl man;
+	StudyAgronomyManagerImpl studyAgroMan;
 	List<RowStatus> rowList = new ArrayList<RowStatus>(); 
 
 	public List<RowStatus> getRowList() {
@@ -41,16 +44,16 @@ public class EditEcotype {
 
 	@Init
 	public void init(@ContextParam(ContextType.VIEW) Component view){
-		man = new EcotypeManagerImpl();
-		studySiteMan = new StudySiteManagerImpl();
-		 makeRowStatus(man.getAllEcotypes());
+		man = new PlantingTypeManagerImpl();
+		studyAgroMan = new StudyAgronomyManagerImpl();
+		 makeRowStatus(man.getAllPlantingTypes());
 	}
 
-	private void makeRowStatus(List<Ecotype> list) {
+	private void makeRowStatus(List<PlantingType> list) {
 		// TODO Auto-generated method stub
 		
 		rowList.clear();
-		for (Ecotype p: list){
+		for (PlantingType p: list){
 			RowStatus ps = new RowStatus(p,false);
 			rowList.add(ps);
 		}
@@ -66,7 +69,7 @@ public class EditEcotype {
 	public void confirm(@BindingParam("RowStatus") RowStatus ps) {
 		changeEditableStatus(ps);
 		refreshRowTemplate(ps);
-		man.updateEcotype(ps.getValue());
+		man.update(ps.getValue());
 		Messagebox.show("Changes saved.");
 	}
 
@@ -82,23 +85,23 @@ public class EditEcotype {
 	@NotifyChange("rowList")
 	@Command("delete")
 	public void delete(@BindingParam("id") Integer Id){
-		if(studySiteMan.getSiteByEcotypeId(Id).isEmpty()){
+		if(studyAgroMan.getStudyAgronomyByPLantingTypeId(Id).isEmpty()){
 			man.deleteById(Id);
-			makeRowStatus(man.getAllEcotypes());
+			makeRowStatus(man.getAllPlantingTypes());
 			Messagebox.show("Changes saved.");
-		} else  Messagebox.show("Cannot delete an ecotype that is in use.", "Error", Messagebox.OK, Messagebox.ERROR); 
+		} else  Messagebox.show("Cannot delete a planting type that is in use.", "Error", Messagebox.OK, Messagebox.ERROR); 
 	}
 
 //	@NotifyChange("list")
 	@Command("add")
 	public void add(@ContextParam(ContextType.COMPONENT) Component component) {
-		Window win = (Window) component.getFellow("editEcotypeWindow");
+		Window win = (Window) component.getFellow("editPLantingTypeWindow");
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		params.put("oldVar", null);
 
 		Window popup = (Window) Executions.createComponents(
-				AddEcotype.ZUL_PATH, win, params);
+				AddPlantingType.ZUL_PATH, win, params);
 
 		popup.doModal();
 //		makeRowStatus(man.getAllLocations());
@@ -107,15 +110,15 @@ public class EditEcotype {
 	@NotifyChange("rowList")
 	@Command("refreshList")
 	public void refreshList() {
-		makeRowStatus(man.getAllEcotypes());
+		makeRowStatus(man.getAllPlantingTypes());
 	}
 	
 	
 	public class RowStatus {
-	    private  Ecotype value;
+	    private  PlantingType value;
 	    private boolean editingStatus;
 	     
-	    public RowStatus(Ecotype p, boolean editingStatus) {
+	    public RowStatus(PlantingType p, boolean editingStatus) {
 	        this.setValue(p);
 	        this.editingStatus = editingStatus;
 	    }
@@ -130,12 +133,12 @@ public class EditEcotype {
 	    }
 
 
-		public Ecotype getValue() {
+		public PlantingType getValue() {
 			return value;
 		}
 
 
-		public void setValue(Ecotype value) {
+		public void setValue(PlantingType value) {
 			this.value = value;
 		}
 	}

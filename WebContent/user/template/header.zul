@@ -1,34 +1,27 @@
 <?link rel="stylesheet" type="text/css" href="css/main.css"?>
+<zk>
+	<style src="../css/main.css" />
 
-<div hflex="1" vflex="1">
-	<!-- <vbox align="center" width="800px">
-	<button label="Logout" unless="${empty execution.userPrincipal}"
-			href="/j_spring_security_logout" />
-			
-			
-	</vbox> -->
-	
-	<zscript>
+	<div hflex="1" vflex="1">
+		<zscript>
 	String username = org.spring.security.model.SecurityUtil.getUserName();
 </zscript>
 		<hlayout sclass="z-valign-center"
-			style="background:#336633;color:white;" height="50px">
-			<!-- 			<div align="left" hflex="1" >
-				<image src="/images/strasa.jpg" height="50px" width="50px"></image>
-				<span><label>Strasa Web</label></span>
-				</div> -->
-
-			<div align="right" hflex="1">
+			style="background:#3E4939;color:white;" height="120px">
+			<image src="/images/logo.png" style="padding:10px" />
+			<div align="right" hflex="1" style="padding:50px">
 				<hbox align="center" pack="end">
-					<label>Welcome:</label>
-					<label>${username}</label>
-					<label>| Role : User</label>
-					<button label="Logout"
+					<label sclass="login-header">Welcome </label>
+					<image src="/images/user32.png"></image>
+					<label sclass="login-header">${username}</label>
+			<!-- 		<label sclass="login-header"> Logged as User</label> -->
+					<space width="15px"></space>
+					<button label="Logout" sclass="btn-blue"
 						unless="${empty execution.userPrincipal}"
 						href="/j_spring_security_logout" />
 				</hbox>
 			</div>
-			<space/>
+			<space />
 		</hlayout>
-</div>
-
+	</div>
+</zk>

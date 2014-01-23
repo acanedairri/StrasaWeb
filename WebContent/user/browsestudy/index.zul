@@ -1,35 +1,14 @@
 <zk>
-	<!-- 	<style>
-		.z-button { font-weight: bold; }
-		
-		.z-toolbarbutton-cnt { color: #000080;
-		text-decoration:underline; font-size: 12px; font-weight: bold;
-		
-		}
-		</style> -->
 
-	<style>
-		.z-button { font-weight: bold; }
+	<style src="../css/main.css" />
 
-		.myLink .z-toolbarbutton-cnt { color: #336633;
-		text-decoration:underline; font-size: 12px;
-		align:center;background-image: none}
-
-
-		.no-highlight tr.z-row-over td.z-row-inner { background:white; }
-
-		.myHeader { font-family: 'Open Sans',arial; color: rgb(85, 85,
-		85); font-size: 18px; font-weight: 400; margin-bottom: 20px;
-		padding:10px 0px 15px 20px"; }
-
-	</style>
 
 	<div style="padding:10px 0px 15px 20px" align="left">
-		<label class="myHeader">Browse Study</label>
+		<label class="header-menu">Browse Study</label>
 	</div>
 	<div id="mainBrowseWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Index')"
-		height="98%">
+		height="98%" width="98%" align="center">
 
 		<tabbox id="tabBox">
 			<tabs id="tabs">
@@ -38,26 +17,14 @@
 			<tabpanels id="tabPanels">
 				<tabpanel>
 					<vbox>
-
-						<!-- 						<toolbar id="tb" sclass="vista" height="30px" >
-							Study name
-							<textbox id="studyNameBox" />
-							<toolbarbutton label="Search"
-							image="/images/browse_small.png"
-							onClick="@global-command('searchByStudyName', studyName=studyNameBox.value)" />
-							<toolbarbutton label="advanced search"
-							tooltip="advancedSearch" />
-							
-							</toolbar> -->
-
 						<div align="center" style="20px 0px 0px 20px">
 							<hlayout spacing="5px">
-								Study Name
+								<label value="Study Name" sclass="label-search"/>
 								<textbox id="studyNameBox" />
-								<button label="Search"
+								<button label="Search" sclass="btn-blue"
 									image="/images/Search16a.png"
 									onClick="@global-command('searchByStudyName', studyName=studyNameBox.value)" />
-								<button label="Advanced Search"
+								<button label="Advanced Search" sclass="btn-blue"
 									image="/images/Search16.png" tooltip="advancedSearch" />
 							</hlayout>
 						</div>

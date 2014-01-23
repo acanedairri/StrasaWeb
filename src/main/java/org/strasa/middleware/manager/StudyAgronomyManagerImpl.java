@@ -131,4 +131,17 @@ public class StudyAgronomyManagerImpl {
 		return null;
 	}
 
+	public List<StudyAgronomy> getStudyAgronomyByPLantingTypeId(Integer id) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		StudyAgronomyMapper studyAgronomyMapper = session.getMapper(StudyAgronomyMapper.class);
+		try{
+			StudyAgronomyExample example = new StudyAgronomyExample();
+			example.createCriteria().andPlantingtypeidEqualTo(id);
+			return studyAgronomyMapper.selectByExample(example);
+		}finally{
+			session.close();
+		}
+	}
+
 }

@@ -1,32 +1,19 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
-<?link rel="stylesheet" type="text/css" href="css/main.css"?>
+
 <zk>
-	<style>
-		.z-button { font-weight: bold; }
-
-		.myLink .z-toolbarbutton-cnt { color: #336633;
-		text-decoration:underline; font-size: 12px;
-		align:center;background-image: none}
-
-		.no-highlight tr.z-row-over td.z-row-inner { background:white; }
-
-		.myHeader { font-family: 'Open Sans',arial; color: rgb(85, 85,
-		85); font-size: 18px; font-weight: 400; margin-bottom: 20px;
-		padding:10px 0px 15px 20px"; }
-
-	</style>
-
+	<style src="../css/main.css" />
+	
 	<div style="padding:10px 0px 0px 20px" align="left">
-		<label class="myHeader">Browse Germplasm</label>
+		<label sclass="header-menu">Browse Germplasm</label>
 	</div>
 
-	<div align="center" width="98%">
+	<div align="center">
 		<vbox apply="org.zkoss.bind.BindComposer"
 			viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.BrowseGermplasm')">
 
 			<div align="center">
 				<hlayout>
-					<label value="Search By" />
+					<label value="Search By" class="label-search" />
 					<combobox id="cmbSearchKey" autodrop="true"
 						selectedIndex="@bind(vm.searchKey)"
 						onChange="@command('SetSearchUI')">
@@ -178,18 +165,17 @@
 						</tabbox>
 					</vbox>
 
-					<button label="Search"
+					<button label="Search" sclass="btn-blue"
 						onClick="@command('SearchGermplasm')" />
 
 				</hlayout>
 			</div>
 
-			
-			<groupbox mold="3d" hflex="1">
+
+			<groupbox mold="3d" width="98%">
 				<caption label="@load(vm.searchResultLabel)" />
 				<grid height="200px" model="@load(vm.germplasmList)"
-					emptyMessage="No Record Found" sizedByContent="true"
-					class="no-highlight">
+					emptyMessage="No Record Found" sizedByContent="true">
 
 					<columns>
 						<column label="Germplasm Name" hflex="1" />
@@ -204,7 +190,7 @@
 							<toolbarbutton
 								label="@load(each.germplasmname)"
 								onClick="@command('DisplayGermplasmDetail', germplasmId=each.id,gname=each.germplasmname)"
-								class="myLink" />
+								class="grid-link" />
 							<label value="@load(each.othername)" />
 							<label value="@load(each.breeder)" />
 							<label value="@load(each.remarks)" />
