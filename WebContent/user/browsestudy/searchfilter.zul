@@ -1,4 +1,6 @@
 <zk>
+	<style src="../css/main.css" />
+
 	<div apply="org.zkoss.bind.BindComposer" 
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchFilter')" width="400px" hflex="1">
 		<grid sizedByContent="true" class="no-highlight">
@@ -94,10 +96,10 @@
 		
 		<div align="right">
 			<hlayout>
-			<button label="Reset" image="/images/Reset16.png"
+			<button label="Reset" image="/images/Reset16.png" sclass="btn-plain"
 			onClick=" @command('reset')" />
 			
-			<button label="Search" image="/images/Search16.png"
+			<button label="Search" image="/images/Search16.png" sclass="btn-blue"
 			onClick="@global-command('updateSearchFilterResult', searchFilter=vm.searchFilter)" />
 			</hlayout>
 		</div>

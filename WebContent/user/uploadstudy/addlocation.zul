@@ -3,7 +3,7 @@
 		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.AddLocation')"
 		width="35%">
-
+		<style src="../css/main.css" />
 
 		<grid vflex="1">
 			<columns>
@@ -12,12 +12,13 @@
 			</columns>
 			<rows>
 				<row>
-					<label value="Location Name" width="150px" />
-					<textbox value='@bind(vm.locationModel.locationname)'
-						constraint="no empty" width="150px" />
+					<label value="Location Name" />
+					<textbox
+						value='@bind(vm.locationModel.locationname)' constraint="no empty"
+						width="150px" />
 				</row>
 				<row>
-					<label value="Country" width="150px" />
+					<label value="Country" />
 					<combobox model="@load(vm.cmbCountry)"
 						selectedItem="@bind(vm.locationModel.country)" width="99%"
 						unless="${each.id !=null}">
@@ -28,38 +29,44 @@
 					</combobox>
 				</row>
 				<row>
-					<label value="Province" width="150px" />
+					<label value="Province" />
 					<textbox value='@bind(vm.locationModel.province)'
-						constraint="no empty" width="150px" />
+						constraint="no empty" hflex="1" />
 				</row>
 				<row>
-					<label value="Region" width="150px" />
-					<textbox
-						value='@bind(vm.locationModel.region)'
-						constraint="no empty" width="150px" />
+					<label value="Region" />
+					<textbox value='@bind(vm.locationModel.region)'
+						constraint="no empty" hflex="1" />
 				</row>
 				<row>
-					<label value="Altitude" width="150px" />
+					<label value="Altitude" />
 					<textbox value='@bind(vm.locationModel.altitude)'
-						constraint="no empty" width="150px" />
+						constraint="no empty" hflex="1" />
 				</row>
 				<row>
-					<label value="Latitude" width="150px" />
+					<label value="Latitude" />
 					<textbox value='@bind(vm.locationModel.latitude)'
-						constraint="no empty" width="150px" />
+						constraint="no empty" hflex="1" />
 				</row>
 				<row>
-					<label value="Weather Station" width="150px" />
-					<textbox value='@bind(vm.locationModel.weatherstation)'
-						constraint="no empty" width="150px" />
+					<label value="Weather Station" hflex="1" />
+					<textbox
+						value='@bind(vm.locationModel.weatherstation)'
+						constraint="no empty" hflex="1" />
 				</row>
 
 
 				<row>
-					<button label="Save" onClick="@command('add')"></button>
-					<button label="Cancel"
-						onClick="@command('cancel')">
-					</button>
+					<label></label>
+					<hlayout>
+
+						<button label="Cancel" sclass="btn-plain"
+							image="/images/cancel16.png" onClick="@command('cancel')">
+						</button>
+						<button label="Save" sclass="btn-blue"
+							image="/images/save16.png" onClick="@command('add')">
+						</button>
+					</hlayout>
 				</row>
 			</rows>
 		</grid>

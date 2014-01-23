@@ -1,31 +1,34 @@
 <zk>
+	<style src="../css/main.css" />
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudySiteInfo')">
 		<columnlayout>
-			<columnchildren width="65%">
+			<columnchildren width="65%" vflex="1">
 				<grid id="mainGrid" height="350px"
 					model="@load(vm.sites)" emptyMessage="No study site found.">
 					<columns>
-						<column label="Site Name"
-							style="background-color:#ffffb2;" />
+						<column label="Site Name" style="color:red;" />
 						<column label="Site Location"
-							style="background-color:#ffffb2;" />
+							style="color:red;" />
 						<column label="Year" width="80px"
-							style="background-color:#ffffb2;" />
+							style="color:red;" />
 						<column label="Season" width="80px"
-							style="background-color:#ffffb2;" />
-						<column label="Eco System"
-							style="background-color:#ffffb2;" />
+							style="color:red;" />
+						<column label="Eco System" style="color:red;" />
 						<column label="Soil Type" />
 						<column label="Soil PH" />
 					</columns>
 					<template name="model">
 						<row>
 
+
+							<textbox value="@bind(each.sitename)"
+								width="99%"
+								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
+								if="${vm.uploadMode}" />
 							<bandbox value="@bind(each.sitename)"
-								
 								instant="true" autodrop="true"
-									onClick="@command('openSiteBandbox', id=forEachStatus.index)">
+								onClick="@command('openSiteBandbox', id=forEachStatus.index)" unless="${vm.uploadMode}">
 								<bandpopup>
 									<vbox width="40%">
 
@@ -34,17 +37,19 @@
 											emptyMessage="No previous site available."
 											sizedByContent="true" hflex="true">
 											<columns>
-											<column label="Site Name"/>
-											<column
-												label="Site Location"  />
-											<column label="Year"
-												width="80px"  />
-											<column label="Season"
-												width="80px"  />
-											<column label="Eco System"
-												 />
-											<column label="Soil Type" />
-											<column label="Soil PH" />
+												<column
+													label="Site Name" />
+												<column
+													label="Site Location" />
+												<column label="Year"
+													width="80px" />
+												<column label="Season"
+													width="80px" />
+												<column
+													label="Eco System" />
+												<column
+													label="Soil Type" />
+												<column label="Soil PH" />
 											</columns>
 											<template name="model">
 												<row>
@@ -52,19 +57,23 @@
 														label="@load(each.sitename)" width="99%"
 														onClick="@command('setSiteRow', model = each)" />
 													<label
-														value="@bind(each.sitelocation)" 	onClick="@command('setSiteRow', model = each)" />
+														value="@bind(each.sitelocation)"
+														onClick="@command('setSiteRow', model = each)" />
 
 													<label
 														value="@bind(each.year)" />
 
 													<label
-														value="@bind(each.selectedEcotype.ecotype)" 	onClick="@command('setSiteRow', model = each)" />
+														value="@bind(each.selectedEcotype.ecotype)"
+														onClick="@command('setSiteRow', model = each)" />
 
 													<label
-														value="@bind(each.soiltype)" 	onClick="@command('setSiteRow', model = each)" />
+														value="@bind(each.soiltype)"
+														onClick="@command('setSiteRow', model = each)" />
 
 													<label
-														value="@bind(each.soilph)" 	onClick="@command('setSiteRow', model = each)" />
+														value="@bind(each.soilph)"
+														onClick="@command('setSiteRow', model = each)" />
 
 
 												</row>
@@ -166,10 +175,11 @@
 						</row>
 					</template>
 				</grid>
+				<label value="Red labels are mandatory fields" style="color:red"></label>
 			</columnchildren>
 			<columnchildren width="35%">
 				<vlayout>
-					<groupbox width="99%">
+					<groupbox width="99%" mold="3d">
 						<caption label="Agronomy" />
 						<grid vflex="1">
 							<columns>
@@ -177,9 +187,9 @@
 								<column />
 							</columns>
 							<rows>
-								<row
-									style="background-color:#ffffb2;">
-									Planting Type:
+								<row>
+									<label value="Planting Type:"
+										style="color:red" />
 									<hlayout>
 										<combobox
 											model="@load(vm.plantingtypes)" readonly="true"
@@ -192,18 +202,17 @@
 										</combobox>
 									</hlayout>
 								</row>
-								<row
-									style="background-color:#ffffb2;">
-									<label
-										value="@load(vm.labelDate)">
+								<row>
+									<label value="@load(vm.labelDate)"
+										style="color:red">
 									</label>
 									<datebox
 										value="@bind(vm.selectedAgroInfo.sowingdate)" width="99%"
 										format="MM/dd/yyyy" />
 								</row>
-								<row
-									style="background-color:#ffffb2;">
-									Harvest Date:
+								<row>
+									<label value="Harvest Date:"
+										style="color:red" />
 									<datebox
 										value="@bind(vm.selectedAgroInfo.harvestdate)" width="99%"
 										format="MM/dd/yyyy" />
@@ -222,7 +231,7 @@
 
 						</grid>
 					</groupbox>
-					<groupbox width="99%">
+					<groupbox width="99%" mold="3d">
 						<caption label="Design Information" />
 						<grid vflex="1">
 							<columns>
@@ -231,22 +240,25 @@
 							</columns>
 							<rows>
 
-								<row
-									style="background-color:#ffffb2;">
-									Treatment Structure:
+								<row>
+									<label value="Treatment Structure:"
+										style="color:red" />
+
 									<textbox
 										value="@bind(vm.selectedDesignInfo.treatmentstructure)"
 										width="99%" />
 								</row>
-								<row
-									style="background-color:#ffffb2;">
-									Plot Size:
+								<row>
+									<label value="Plot Size:"
+										style="color:red" />
+
 									<textbox
 										value="@bind(vm.selectedDesignInfo.plotsize)" width="99%" />
 								</row>
-								<row
-									style="background-color:#ffffb2;">
-									Design Structure:
+								<row>
+
+									<label value="Design Structure:"
+										style="color:red" />
 									<textbox
 										value="@bind(vm.selectedDesignInfo.designstructure)"
 										width="99%" />
@@ -278,10 +290,15 @@
 
 							</rows>
 						</grid>
+						<div align="left">
+							<checkbox label="Apply to ALL"
+								checked="@bind(vm.applyToAll)" />
+						</div>
+
 					</groupbox>
 					<hlayout valign="middle">
-						<checkbox label="Apply to ALL"
-							checked="@bind(vm.applyToAll)" />
+						<!-- <checkbox label="Apply to ALL"
+							checked="@bind(vm.applyToAll)" /> -->
 
 
 					</hlayout>
@@ -289,10 +306,10 @@
 			</columnchildren>
 		</columnlayout>
 		<separator spacing="20px" />
-		<hlayout style="float:right;">
+		<hlayout style="float:center">
 
-			<button label="Save"
-				onClick="@global-command('nextTab',model=vm)" sclass="btn-plain">
+			<button label="Save" image="/images/save16.png"
+				onClick="@global-command('nextTab',model=vm)" sclass="btn-blue">
 			</button>
 
 		</hlayout>

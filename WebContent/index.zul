@@ -13,7 +13,7 @@
 	<separator height="150px"></separator>
 
 	<div align="center" class="login-box">
-		<label value="Sign in to access Strasa Database"
+		<label value="Sign in to access STRASA database"
 			class="login-header-main">
 		</label>
 
