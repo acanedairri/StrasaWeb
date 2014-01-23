@@ -16,7 +16,8 @@
 					onSelect="@command('showzulfile', zulFileName='/admin/settings/editstudyvariable.zul', target=self.linkedPanel)" />
 				<tab label="Planting Type" 
 					onSelect="@command('showzulfile', zulFileName='/admin/settings/editplantingtype.zul', target=self.linkedPanel)" />
-				<tab label="Biotic" />
+				<tab label="Biotic" 
+					onSelect="@command('showzulfile', zulFileName='/admin/settings/editbiotickey.zul', target=self.linkedPanel)" />
 				<tab label="Abiotic" />
 				<tab label="Grain Quality" />
 				<tab label="Major Genes" />
