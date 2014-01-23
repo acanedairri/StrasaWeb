@@ -14,6 +14,17 @@ public class ProcessTabViewModel {
 	public boolean isUpdateMode = false;
 	public int userID = 1;
 	public double processTabID;
+	private boolean isUploadMode = false;
+	public boolean isUploadMode() {
+		return isUploadMode;
+	}
+
+
+	public void setUploadMode(boolean isUploadMode) {
+		this.isUploadMode = isUploadMode;
+	}
+
+
 	public boolean isRaw() {
 		return isRaw;
 	}
@@ -67,6 +78,7 @@ public class ProcessTabViewModel {
 		this.isDataReUploaded = uploadModel.isDataReUploaded;
 		this.setDataset(uploadModel.getDataset());
 		this.mainTab = uploadModel.mainTab;
+		this.isUploadMode = uploadModel.isUploadMode;
 	}
 
 	public boolean isUpdateMode() {

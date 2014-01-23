@@ -18,6 +18,8 @@ import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyDataSet;
 import org.strasa.web.common.api.ProcessTabViewModel;
+import org.strasa.web.uploadstudy.view.model.AddProgram;
+import org.strasa.web.uploadstudy.view.model.AddProject;
 import org.strasa.web.uploadstudy.view.model.UploadData;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
@@ -38,6 +40,7 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tabpanel;
+import org.zkoss.zul.Window;
 
 public class Index {
 
@@ -51,7 +54,40 @@ public class Index {
 	@Wire("#tabGenotypeData")
 	Tabpanel tabGenotype;
 	
+	@Command("addProgram")
+	public void addProgram(@ContextParam(ContextType.VIEW) Component view) {
+		Map<String, Object> params = new HashMap<String, Object>();
+
+		params.put("oldVar", null);
+		params.put("parent", view);
+
+		Window popup = (Window) Executions.createComponents(
+				AddProgram.ZUL_PATH, view, params);
+
+		popup.doModal();
+	}
+
 	
+
+	@Command("addProject")
+	public void addProject(@ContextParam(ContextType.VIEW) Component view) {
+
+		if (txtProgram == null) {
+			Messagebox.show("Error: Please specify/select a program first.",
+					"Upload Error", Messagebox.OK, Messagebox.ERROR);
+			return;
+		}
+		Map<String, Object> params = new HashMap<String, Object>();
+
+		params.put("oldVar", null);
+		params.put("parent", view);
+		params.put("programID", txtProgram.getId());
+
+		Window popup = (Window) Executions.createComponents(
+				AddProject.ZUL_PATH, view, params);
+
+		popup.doModal();
+	}
 	
 	ArrayList<Tabpanel> arrTabPanels = new ArrayList<Tabpanel>();
 	private UploadData uploadData;
@@ -173,6 +209,7 @@ public class Index {
 		programList.addAll(programMan.getAllProgram());
 		System.out.print(selected);
 		txtProgram = selected;
+		refreshProjectList(selected);
 
 	}
 

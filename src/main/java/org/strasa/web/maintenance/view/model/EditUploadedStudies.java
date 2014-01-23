@@ -42,6 +42,8 @@ public class EditUploadedStudies {
 	
 	@Wire("#btnBackId")
 	Button btnBack;
+	@Wire("#btnUploadId")
+	Button btnUploadNewStudy;
 	
 	StudyManagerImpl studyMan;
 	ProgramManagerImpl programMan;
@@ -73,6 +75,7 @@ public class EditUploadedStudies {
 		Selectors.wireComponents(view, this, false);
 		divUpdateStudy.setVisible(false);
 		btnBack.setVisible(false);
+		btnUploadNewStudy.setVisible(true);
 	}
 
 	private void populateEditStudyList() {
@@ -110,6 +113,7 @@ public class EditUploadedStudies {
 		divUpdateStudy.setVisible(false);
 		divMain.setVisible(true);
 		btnBack.setVisible(false);
+		btnUploadNewStudy.setVisible(true);
 		populateEditStudyList();
 		
 	}
@@ -130,6 +134,7 @@ public class EditUploadedStudies {
 		divMain.setVisible(false);
 //		divUpdateStudy.detach();
 		btnBack.setVisible(true);
+		btnUploadNewStudy.setVisible(true);
 		divUpdateStudy.setVisible(true);
 		Map arg = new HashMap();
 		arg.put("studyID", studyid);
@@ -142,6 +147,7 @@ public class EditUploadedStudies {
 	public void addStudy(@ContextParam(ContextType.VIEW) Component view){
 		btnBack.setVisible(true);
 		divMain.setVisible(false);
+		btnUploadNewStudy.setVisible(false);
 //		divUpdateStudy.detach();
 		divUpdateStudy.setVisible(true);
 		Map arg = new HashMap();

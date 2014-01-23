@@ -21,9 +21,14 @@
 					<template name="model">
 						<row>
 
+
+							<textbox value="@bind(each.sitename)"
+								width="99%"
+								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
+								if="${vm.uploadMode}" />
 							<bandbox value="@bind(each.sitename)"
 								instant="true" autodrop="true"
-								onClick="@command('openSiteBandbox', id=forEachStatus.index)">
+								onClick="@command('openSiteBandbox', id=forEachStatus.index)" unless="${vm.uploadMode}">
 								<bandpopup>
 									<vbox width="40%">
 

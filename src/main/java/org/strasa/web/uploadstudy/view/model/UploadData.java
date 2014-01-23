@@ -476,12 +476,7 @@ public class UploadData extends ProcessTabViewModel {
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
 
-		if (this.isUpdateMode) {
-			Map arg = new HashMap();
-			arg.put("studyid", this.studyID);
-			Executions.createComponents("/user/browsestudy/rawdata.zul",
-					divRawData, arg);
-		}
+	System.out.println("LOAD");
 	}
 
 	@GlobalCommand
@@ -500,21 +495,8 @@ public class UploadData extends ProcessTabViewModel {
 		refreshProgramList(null);
 		refreshProjectList(null);
 		System.out.println("LOADED");
-		if (this.isUpdateMode) {
-			StudyManagerImpl studyMan = new StudyManagerImpl();
-			study = studyMan.getStudyById(uploadModel.getStudyID());
-			this.txtStudyName = study.getName();
-			this.txtStudyType = new StudyTypeManagerImpl().getStudyTypeById(
-					study.getStudytypeid()).getStudytype();
-			this.txtProgram = new ProgramManagerImpl().getProgramById(study
-					.getProgramid());
-			this.txtProject = new ProjectManagerImpl().getProjectById(study
-					.getProjectid());
-			this.startYear = Integer.parseInt(study.getStartyear());
-			this.endYear = Integer.parseInt(study.getEndyear());
-			isNewDataset = false;
-
-		}
+	
+		System.out.println("AFTERLOAD");
 	}
 
 	public void openCSVHeaderValidator(String CSVPath, boolean showAll) {
@@ -547,6 +529,14 @@ public class UploadData extends ProcessTabViewModel {
 	@NotifyChange("*")
 	@Command("removeUpload")
 	public void removeUpload() {
+		if(!isDataUploaded){
+			isVariableDataVisible = false;
+			dataFileName = "";
+			isNewDataset = true;
+			varData.clear();
+			isDataUploaded = false;
+			return;
+		}
 		Messagebox
 				.show("Are you sure you want to delete the previous uploaded data? WARNING! This cannot be undone.",
 						"Delete all data?", Messagebox.OK | Messagebox.CANCEL,
@@ -845,6 +835,7 @@ public class UploadData extends ProcessTabViewModel {
 		}
 		this.setStudyID(study.getId());
 		this.isRaw = isRawData;
+		this.setUploadMode(true);
 		System.out.println("Timer ends in: " + timer.end());
 
 		return true;
