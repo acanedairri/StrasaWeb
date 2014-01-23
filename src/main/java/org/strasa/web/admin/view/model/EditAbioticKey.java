@@ -16,6 +16,7 @@ import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.manager.StudySiteManagerImpl;
 import org.strasa.middleware.model.Ecotype;
+import org.strasa.middleware.model.KeyAbiotic;
 import org.strasa.middleware.model.KeyBiotic;
 import org.strasa.middleware.model.Location;
 import org.strasa.web.uploadstudy.view.model.AddLocation;
@@ -36,7 +37,7 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
 
-public class EditBioticKey {
+public class EditAbioticKey {
 	KeyCharacteristicManagerImpl man;
 	GermplasmCharacteristicMananagerImpl germplasmCharMan;
 	List<RowStatus> rowList = new ArrayList<RowStatus>(); 
@@ -53,14 +54,14 @@ public class EditBioticKey {
 	public void init(@ContextParam(ContextType.VIEW) Component view){
 		man = new KeyCharacteristicManagerImpl();
 		germplasmCharMan = new GermplasmCharacteristicMananagerImpl();
-		makeRowStatus(man.getAllBiotic());
+		makeRowStatus(man.getAllAbiotic());
 	}
 
-	private void makeRowStatus(List<KeyBiotic> list) {
+	private void makeRowStatus(List<KeyAbiotic> list) {
 		// TODO Auto-generated method stub
 
 		rowList.clear();
-		for (KeyBiotic p: list){
+		for (KeyAbiotic p: list){
 			RowStatus ps = new RowStatus(p,false);
 			rowList.add(ps);
 		}
@@ -76,7 +77,7 @@ public class EditBioticKey {
 	public void confirm(@BindingParam("RowStatus") RowStatus ps) {
 		changeEditableStatus(ps);
 		refreshRowTemplate(ps);
-		man.updateBiotic(ps.getValue());
+		man.updateAbiotic(ps.getValue());
 		Messagebox.show("Changes saved.");
 	}
 
@@ -93,16 +94,16 @@ public class EditBioticKey {
 	@NotifyChange("rowList")
 	@Command("delete")
 	public void delete(@BindingParam("id") final Integer Id, @BindingParam("keyName") String keyName){
-		if(!germplasmCharMan.isCharacteristicValueExisting("Biotic", keyName)){
-			Messagebox.show("Are you sure you want to delete"+keyName+"?",
+		if(!germplasmCharMan.isCharacteristicValueExisting("Abiotic", keyName)){
+			Messagebox.show("Are you sure you want to delete "+keyName+"?",
 					"Delete", Messagebox.OK | Messagebox.CANCEL,
 					Messagebox.QUESTION, new EventListener() {
 				public void onEvent(Event e) {
 					if ("onOK".equals(e.getName())) {
-						man.deleteBioticById(Id);
-						makeRowStatus(man.getAllBiotic());
+						man.deleteAbioticById(Id);
+						makeRowStatus(man.getAllAbiotic());
 						BindUtils.postNotifyChange(null, null,
-								EditBioticKey.this, "rowList");
+								EditAbioticKey.this, "rowList");
 						Messagebox.show("Changes saved.");
 					} else if ("onCancel".equals(e.getName())) {
 					}
@@ -115,13 +116,13 @@ public class EditBioticKey {
 	//	@NotifyChange("list")
 	@Command("add")
 	public void add(@ContextParam(ContextType.COMPONENT) Component component) {
-		Window win = (Window) component.getFellow("editBioticKeyWindow");
+		Window win = (Window) component.getFellow("editAbioticKeyWindow");
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		params.put("oldVar", null);
 
 		Window popup = (Window) Executions.createComponents(
-				AddBioticKey.ZUL_PATH, win, params);
+				AddAbioticKey.ZUL_PATH, win, params);
 
 		popup.doModal();
 		//		makeRowStatus(man.getAllLocations());
@@ -130,15 +131,15 @@ public class EditBioticKey {
 	@NotifyChange("rowList")
 	@Command("refreshList")
 	public void refreshList() {
-		makeRowStatus(man.getAllBiotic());
+		makeRowStatus(man.getAllAbiotic());
 	}
 
 
 	public class RowStatus {
-		private  KeyBiotic value;
+		private  KeyAbiotic value;
 		private boolean editingStatus;
 
-		public RowStatus(KeyBiotic p, boolean editingStatus) {
+		public RowStatus(KeyAbiotic p, boolean editingStatus) {
 			this.setValue(p);
 			this.editingStatus = editingStatus;
 		}
@@ -153,12 +154,12 @@ public class EditBioticKey {
 		}
 
 
-		public KeyBiotic getValue() {
+		public KeyAbiotic getValue() {
 			return value;
 		}
 
 
-		public void setValue(KeyBiotic p) {
+		public void setValue(KeyAbiotic p) {
 			this.value = p;
 		}
 	}

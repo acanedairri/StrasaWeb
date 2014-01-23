@@ -155,20 +155,4 @@ public class StudyGermplasmCharacteristicsManagerImpl {
 		}
 	}
 
-	public boolean isCharacteristicValueExisting(String attribute, String value) {
-		// TODO Auto-generated method stub
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-
-		try {
-			StudyGermplasmCharacteristicsMapper mapper = session
-					.getMapper(StudyGermplasmCharacteristicsMapper.class);
-			StudyGermplasmCharacteristicsExample example = new StudyGermplasmCharacteristicsExample();
-			example.createCriteria().andAttributeEqualTo(attribute).andValueEqualTo(value);
-			return !mapper.selectByExample(example).isEmpty();
-			
-		} finally {
-			session.close();
-		}
-	}
-
 }
