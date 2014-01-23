@@ -68,7 +68,7 @@ public class GermplasmInfo {
 			germplasmList.add(new GermplasmInfoModel(sg));
 		}
 		
-		setSearchResultLabel("Search Result:  "+ germplasmList.size()+"  row(s) returned");
+		setSearchResultLabel("Record Count:  "+ germplasmList.size()+"  row(s)");
 	}
 
 	public String getNameSearch() {

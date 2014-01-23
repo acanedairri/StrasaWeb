@@ -1,10 +1,11 @@
 <zk>
-	<style src="../css/main.css" />
+
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudySiteInfo')">
+			<style src="../css/main.css" />
 		<columnlayout>
 			<columnchildren width="65%" vflex="1">
-				<grid id="mainGrid" height="350px"
+				<grid id="mainGrid"
 					model="@load(vm.sites)" emptyMessage="No study site found.">
 					<columns>
 						<column label="Site Name" style="color:red;" />
@@ -54,7 +55,7 @@
 											<template name="model">
 												<row>
 													<toolbarbutton
-														label="@load(each.sitename)" width="99%"
+														label="@load(each.sitename)" width="99%" sclass="grid-link"
 														onClick="@command('setSiteRow', model = each)" />
 													<label
 														value="@bind(each.sitelocation)"
@@ -181,7 +182,7 @@
 				<vlayout>
 					<groupbox width="99%" mold="3d">
 						<caption label="Agronomy" />
-						<grid vflex="1">
+						<grid>
 							<columns>
 								<column />
 								<column />

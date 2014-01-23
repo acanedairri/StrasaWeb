@@ -133,9 +133,9 @@
 					</columns>
 					<template name="model">
 						<row
-							onClick="@command('DisplayStudyDetail', studyid=1,studyname=each.studyname)">
+							onClick="@command('DisplayStudyDetail', studyid=each.id,studyname=each.studyname)">
 							<toolbarbutton label="@load(each.studyname)"
-								onClick="@command('DisplayStudyDetail', studyid=1,studyname=each.studyname)" class="grid-link"/>
+								onClick="@command('DisplayStudyDetail', studyid=each.id,studyname=each.studyname)" class="grid-link"/>
 							<label value="@load(each.programname)" />
 							<label value="@load(each.projectname)" />
 							<label value="@load(each.studytypename)" />

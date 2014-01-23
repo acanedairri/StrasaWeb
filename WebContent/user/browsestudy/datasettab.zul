@@ -5,18 +5,18 @@
 		<tabbox>
 			<tabs>
 				<tab label="Data" />
-				<tab label="Site Information"
+				<tab label="Site" vflex="1"
 					onSelect="@command('showzulfile', zulFileName='/user/browsestudy/siteinfo.zul', target=self.linkedPanel)" />
 
-				<tab label="Location Information"
+				<tab label="Location"
 					onSelect="@command('showzulfile', zulFileName='/user/browsestudy/locationinfo.zul', target=self.linkedPanel)" />
 			</tabs>
 			<tabpanels>
 				<tabpanel id="tabpanel1">
 					<include studyId="${arg.studyId}" dataset="${arg.dataset}" dataType="${arg.dataType}" src="/user/browsestudy/data.zul"/>
 				</tabpanel>
-				<tabpanel id="tabpanel2"></tabpanel>
-				<tabpanel id="tabpanel3"></tabpanel>
+				<tabpanel id="tabpanel2" vflex="1"></tabpanel>
+				<tabpanel id="tabpanel3" vflex="1"></tabpanel>
 			</tabpanels>
 		</tabbox>
 	</window>
