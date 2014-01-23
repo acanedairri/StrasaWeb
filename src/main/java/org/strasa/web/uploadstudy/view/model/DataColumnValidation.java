@@ -64,7 +64,7 @@ public class DataColumnValidation {
 		CsvPath = CSVPath;
 		this.showAll = showAll;
 		ArrayList<String> invalidHeader = new ArrayList<String>();
-		if(model.isUpdateMode){
+		if(model != null && model.isUpdateMode ){
 			StudyDataColumnManagerImpl columnMan = new StudyDataColumnManagerImpl();
 			List<StudyDataColumn> lstColumns = columnMan.getStudyDataColumnByStudyId(model.getStudyID(), (model.isRaw) ? "rd" : "dd", model.dataset.getId());
 			for(StudyDataColumn colVar : lstColumns){
@@ -124,7 +124,7 @@ public class DataColumnValidation {
 
 			return ;
 		}
-		if(model.isUpdateMode){
+		if(model != null && model.isUpdateMode){
 			
 			StudyRawDataManagerImpl dataMan = new StudyRawDataManagerImpl(this.model.isRaw);
 			StudyDataColumnManagerImpl columnMan = new StudyDataColumnManagerImpl();
