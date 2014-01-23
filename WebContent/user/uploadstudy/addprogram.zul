@@ -1,42 +1,61 @@
 <zk>
-  <window title="Add Program" border="normal" closable="true"  apply="org.zkoss.bind.BindComposer"
-        viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.AddProgram')" width = "35%">
- 
-
-<grid vflex="1">
-	<columns>
-		<column label="Type" width="150px" />
-		<column label="Content" />
-	</columns>
-	<rows>
-		<row>
-			<label value="Name" width="150px" />
-			<textbox value='@bind(vm.programModel.name)' constraint="no empty" width="150px" />
-		</row>
-		<row>
-			<label value="Objective" width="150px" />
-			<textbox value='@bind(vm.programModel.objective)' constraint="no empty" width="150px" />
-		</row>
-		<row>
-			<label value="Coordinator" width="150px" />
-			<textbox value='@bind(vm.programModel.coordinator)' constraint="no empty" width="150px" />
-		</row>
-		<row>
-			<label value="Leading Institute" width="150px" />
-			<textbox value='@bind(vm.programModel.leadinginstitute)' constraint="no empty" width="150px" />
-		</row>
-		<row>
-			<label value="Collaborator" width="150px" />
-			<textbox value='@bind(vm.programModel.collaborator)' constraint="no empty" width="150px" />
-		</row>
-	
-	
-		<row>
-			<button label="Save" onClick="@command('add')"></button> <button label="Cancel" onClick="@command('cancel')"></button>
-		</row>
-	</rows>
-</grid>
 
 
-    </window>
+	<window title="Add Program" border="normal" closable="true"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.AddProgram')"
+		width="35%">
+		<style src="../css/main.css" />
+
+		<grid vflex="1">
+			<columns>
+				<column label="Type" width="150px" />
+				<column label="Content" hflex="1" />
+			</columns>
+			<rows>
+				<row>
+					<label value="Name" />
+					<textbox value='@bind(vm.programModel.name)'
+						constraint="no empty" hflex="1" />
+				</row>
+				<row>
+					<label value="Objective" />
+					<textbox value='@bind(vm.programModel.objective)'
+						constraint="no empty" hflex="1" />
+				</row>
+				<row>
+					<label value="Coordinator" />
+					<textbox value='@bind(vm.programModel.coordinator)'
+						constraint="no empty" hflex="1" />
+				</row>
+				<row>
+					<label value="Leading Institute" />
+					<textbox
+						value='@bind(vm.programModel.leadinginstitute)'
+						constraint="no empty" hflex="1" />
+				</row>
+				<row>
+					<label value="Collaborator" />
+					<textbox value='@bind(vm.programModel.collaborator)'
+						constraint="no empty" hflex="1" />
+				</row>
+
+				<row>
+					<label></label>
+					<hlayout>
+						<button label="Cancel"
+							onClick="@command('cancel')" sclass="btn-plain" image="/images/cancel16.png">
+						</button>
+						<button label="Save" sclass="btn-blue"
+							onClick="@command('add')" image="/images/save16.png">
+						</button>
+
+					</hlayout>
+				</row>
+			</rows>
+		</grid>
+
+
+	</window>
+
 </zk>
