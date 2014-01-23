@@ -3,6 +3,7 @@
 	<window id="searchResultWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.SearchResult')">
 		<separator/>
+			<style src="../css/main.css" />
 		<label value="@load(vm.searchResultLabel)" />
 		<!-- <groupbox mold="3d">
 			<caption label="@load(vm.searchResultLabel)" /> -->
@@ -21,7 +22,7 @@
 				<template name="model">
 					<row>
 						<toolbarbutton label="@load(each.studyname)"
-							class="myLink"
+							class="grid-link"
 							onClick="@global-command('openNewSearchInfoTab', studyId=each.id, studyName=each.studyname)" />
 						<label value="@load(each.programname)"/>
 						<label value="@load(each.projectname)"/>

@@ -1,7 +1,7 @@
 <zk>
   <window title="Add Project" border="normal" closable="true"  apply="org.zkoss.bind.BindComposer"
         viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.AddNewProject')" width = "35%" >
- 
+ <style src="../css/main.css" />
 
 <grid vflex="1">
 	<columns>

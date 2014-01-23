@@ -1,6 +1,6 @@
 <?page title="Registration" contentType="text/html;charset=UTF-8"?>
 <zk>
-
+	<style src="../css/main.css" />
 	<div style="padding:10px 0px 20px 20px" align="left">
 		<label style="font-size:20px">User Profile</label>
 	</div>
@@ -84,7 +84,7 @@
 			</rows>
 		</grid>
 		<div style="padding:20px" align="left" width="90%">
-			<button label="Save" image="/images/save16.png"
+			<button label="Save" image="/images/save16.png" sclass="btn-blue"
 				onClick="@command('add')">
 			</button>
 		</div>

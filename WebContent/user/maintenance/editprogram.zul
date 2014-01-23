@@ -1,21 +1,20 @@
 <zk>
-
+<style src="../css/main.css" />
 	<div style="padding:10px 0px 0px 20px" align="left">
 		<label style="font-size:20px">Program</label>
 	</div>
 
-	<div id="editProgramWindow" apply="org.zkoss.bind.BindComposer"
-		align="center"
+	<window id="editProgramWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditProgram')">
-
-		<div width="95%" align="right" style="padding:10px">
-			<button label="Add New" image="/images/New16.png"
+<div align="center">
+		<div width="98%" align="left" style="padding:10px">
+			<button label="Add New" image="/images/New16.png" sclass="btn-blue"
 				tooltiptext="Add Program" onClick="@command('addProgram')" />
 		</div>
 
 		<grid
 			model="@load(vm.programList) @template(each.editingStatus ? 'editable' : 'noneditable')" 
-			sizedByContent="true" width="95%" emptyMessage="No study site found.">
+			sizedByContent="true" width="98%" emptyMessage="No study site found.">
 			<columns>
 				<column label="Program Name" width="250px" hflex="1" />
 				<column label="Objective"  width="200px"/>
@@ -65,5 +64,6 @@
 				</row>
 			</template>
 		</grid>
-	</div>
+		</div>
+	</window>
 </zk>
