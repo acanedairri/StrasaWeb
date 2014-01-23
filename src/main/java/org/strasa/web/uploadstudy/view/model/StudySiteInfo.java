@@ -85,10 +85,18 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	@Command
 	public void newLocationModel(
 			@BindingParam("locationModel") Location newValue) {
-		sites.get(selectedID).setSelectedLocation(newValue);
 		
 		lstLocations.add(newValue);
-		BindUtils.postNotifyChange(null, null, this.sites.get(selectedID), "*");
+		
+		for(int i = 0; i < sites.getSize(); i++){
+			
+			if(sites.get(i).getSitelocation().equals(newValue.getLocationname())){
+				sites.get(i).setSelectedLocation(newValue);
+				BindUtils.postNotifyChange(null, null, this.sites.get(i), "*");
+			}
+		
+		}
+	
 		
 	}
 

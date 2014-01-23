@@ -3,6 +3,7 @@ package org.strasa.web.uploadstudy.view.model;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -61,6 +62,7 @@ import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Row;
 
 import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.CSVWriter;
 import au.com.bytecode.opencsv.bean.CsvToBean;
 import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
 
@@ -367,29 +369,43 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 	}
 
-	public List<GermplasmExt> CSVToBean(File file) throws FileNotFoundException {
+	public List<GermplasmExt> CSVToBean(File file) throws IOException {
 		CsvToBean<GermplasmExt> bean = new CsvToBean<GermplasmExt>();
 
 		Map<String, String> columnMapping = new HashMap<String, String>();
 		columnMapping.put("GID", "gid");
-		columnMapping.put("GName", "germplasmname");
-		columnMapping.put("OtherName", "othername");
-		columnMapping.put("Breeder", "breeder");
-		columnMapping.put("IR Number", "irnumber");
-		columnMapping.put("IR Cross", "ircross");
-		columnMapping.put("GermplasmType", "germplasmtype");
-		columnMapping.put("Parentage", "parentage");
-		columnMapping.put("Female Parent", "femaleparent");
-		columnMapping.put("Male Parent", "maleparent");
-		columnMapping.put("Selection History", "selectionhistory");
-		columnMapping.put("Source", "source");
+		columnMapping.put("GNAME", "germplasmname");
+		columnMapping.put("OTHERNAME", "othername");
+		columnMapping.put("BREEDER", "breeder");
+		columnMapping.put("IR NUMBER", "irnumber");
+		columnMapping.put("IR CROSS", "ircross");
+		columnMapping.put("GERMPLASMTYPE", "germplasmtype");
+		columnMapping.put("PARENTAGE", "parentage");
+		columnMapping.put("FEMALE PARENT", "femaleparent");
+		columnMapping.put("MALE PARENT", "maleparent");
+		columnMapping.put("SELECTION HISTORY", "selectionhistory");
+		columnMapping.put("SOURCE", "source");
 
+		System.out.println(file.getAbsolutePath());
 		HeaderColumnNameTranslateMappingStrategy<GermplasmExt> strategy = new HeaderColumnNameTranslateMappingStrategy<GermplasmExt>();
 		strategy.setType(GermplasmExt.class);
 		strategy.setColumnMapping(columnMapping);
 
+		
 		CSVReader reader = new CSVReader(new FileReader(file));
 
+		List<String[]> lstWriter = reader.readAll();
+		String[] header = lstWriter.get(0);
+		for(int i = 0; i < header.length; i++){
+			header[i] = header[i].toUpperCase();
+		}
+		lstWriter.set(0, header);
+		CSVWriter writer = new CSVWriter(new FileWriter(file.getAbsolutePath()));
+		
+		writer.writeAll(lstWriter);
+		writer.close();
+		reader = new CSVReader(new FileReader(file));
+		
 		return bean.parse(strategy, reader);
 	}
 
