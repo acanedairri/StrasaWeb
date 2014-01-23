@@ -5,7 +5,7 @@
 
 
 <!-- 		<groupbox id="gbUnknownGermplasm"> -->
-		<div align="left">
+		<div align="left" >
 		<button id="uploadGenotypeData" upload="true"
 				label="Import Germplasm Table"
 				onUpload="@command('uploadGenotypeData')" />
@@ -14,7 +14,7 @@
 			<separator></separator>
 			<hlayout spacing="50px">
 				<vlayout width="100%">
-					<groupbox mold="3d" vflex="1"
+					<groupbox mold="3d" vflex="1"  id="gbUnknownGermplasm"
 						hflex="1">
 						<caption label="List of unknown Germplasm"></caption>
 						<vlayout>
