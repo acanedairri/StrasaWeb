@@ -121,8 +121,8 @@
 .label-search {
 	font-family: 'Open Sans', arial;
 	color: rgb(85, 85, 85);
-	font-size: 13px;
-	font-weight: 400;
+	font-size: 15px;
+	font-weight: bold;
 	margin-bottom: 20px;
 	padding: 10px 0px 15px 20px";
 }
@@ -167,3 +167,16 @@
 	vertical-align: middle;
 	padding: 30px;
 }
+
+.groupbox-label .z-groupbox-3d-hl .z-groupbox-3d-header {
+	/* color: #363636; */
+	color:black;
+	font-family: arial, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.label-column-default {
+	color: red;
+}
+

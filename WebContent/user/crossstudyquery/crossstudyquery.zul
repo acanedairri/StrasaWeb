@@ -14,7 +14,7 @@
 		align="center">
 		<!--  Search -->
 		<hbox align="center">
-			Query
+			<label value="Select" sclass="label-search" />
 			<radiogroup id="dataCategoryId"
 				onCreate="self.setSelectedIndex(1)" vflex="1"
 				selectedItem="@bind(vm.dataCategory)">
@@ -22,7 +22,7 @@
 				<radio label="Derived Data" value="dd" />
 			</radiogroup>
 			<space width="10px" />
-			<label value="Select Variable" />
+			<label value="Variable" sclass="label-search" />
 			<bandbox id="studyVariable" instant="true" autodrop="true"
 				width="200px" vflex="1" onChange="@command('changeFilter')">
 				<bandpopup width="700px" height="330px">
@@ -60,7 +60,7 @@
 				</bandpopup>
 			</bandbox>
 
-			<label value="Operator" />
+			<label value="Operator" sclass="label-search"/>
 
 			<combobox id="cmbOperator" visible="true"
 				value="@bind(vm.operator)" model="@load(vm.operators)"
@@ -71,7 +71,7 @@
 				</template>
 			</combobox>
 
-			<label value="Value" />
+			<label value="Value"  sclass="label-search"/>
 			<textbox id='txtVaribleValue' width="100px"
 				value="@bind(vm.variableValue)" visible="true" />
 			<textbox id='txtVaribleValue2' width="100px"
@@ -86,7 +86,7 @@
 		<!--  End Search -->
 		<!-- Criteria -->
 
-		<groupbox mold="3d" width="98%">
+		<groupbox mold="3d" width="98%" sclass="groupbox-label">
 			<caption label="Query Criteria" />
 			<hbox>
 				<grid vflex="1" height="185px"
@@ -117,7 +117,7 @@
 				<groupbox mold="3d" vflex="1" height="185px">
 					<caption label="Other Variable" />
 					<hbox>
-						<label value="Select" />
+						<label value="Select" sclass="label-search" />
 						<bandbox id="studyVariable2" instant="true"
 							autodrop="true" width="200px"
 							onChange="@command('changeFilter2')">
@@ -186,17 +186,18 @@
 			</hbox>
 			<div align="left" vflex="1">
 				<hbox align="start">
-					<button label="Query" image="/images/Query16.png"
-						sclass="btn-blue" onClick="@command('RunQuery')" />
 					<button label="Reset" onClick="@command('reset')"
 						sclass="btn-plain" image="/images/Refresh16.png" />
+					<button label="Query" image="/images/Query16.png"
+						sclass="btn-blue" onClick="@command('RunQuery')" />
+
 				</hbox>
 			</div>
 		</groupbox>
 
 		<separator />
 
-		<groupbox id="crossResultId" mold="3d" width="98%"
+		<groupbox id="crossResultId" mold="3d" width="98%" sclass="groupbox-label"
 			visible="false">
 			<caption label="@load(vm.searchResultLabel)" />
 			<div align="left">
@@ -206,7 +207,7 @@
 			</div>
 
 
-			<grid model="@load(vm.newDataRow)"
+			<grid model="@load(vm.newDataRow)" sclass="grid-link"
 				rowRenderer="org.strasa.web.crossstudyquery.view.model.AcrossStudyRowRenderer"
 				sizedByContent="true" height="360px"
 				emptyMessage="No data loaded...">

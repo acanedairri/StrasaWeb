@@ -10,6 +10,7 @@ import java.util.Map;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
+import org.strasa.middleware.manager.UserManagerImpl;
 import org.strasa.middleware.model.Study;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
@@ -23,6 +24,7 @@ import org.zkoss.zhtml.Messagebox;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
@@ -149,9 +151,17 @@ public class EditUploadedStudies {
 	}
 	@NotifyChange("editStudyList")
 	@Command("deleteStudy")
-	public void deleteStudy(@BindingParam("studyId") Integer studyId){
-		studyMan.deleteStudyById(studyId);
-		populateEditStudyList();
+	public void deleteStudy(@BindingParam("studyId") final Integer studyId){
+
+		
+		Messagebox.show("Are you sure to delete this Study?", "Confirm Dialog", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+			public void onEvent(Event evt) throws InterruptedException {
+				if (evt.getName().equals("onOK")) {
+					studyMan.deleteStudyById(studyId);
+					populateEditStudyList();
+				} 
+			}
+		});
 	}
 
 	@NotifyChange("*")

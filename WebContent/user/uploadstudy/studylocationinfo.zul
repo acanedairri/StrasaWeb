@@ -1,19 +1,21 @@
 <zk>
+
+	<style src="../css/main.css" />
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudyLocationInfo')">
 
 		<groupbox id="gb" mold="3d" width="100%">
 			<caption label="List of known location" />
-			<grid id="step4" height="350px"
+			<grid id="step4"
 				model="@load(vm.lstLocations)">
 				<columns hflex="1">
-					<column label="Location" style="background-color:#ffffb2;"/>
+					<column label="Location" style="color:red;"/>
 					<column label="Country" />
 					<column label="Province" />
 					<column label="Region" />
-					<column label="Altitude" style="background-color:#ffffb2;"/>
-					<column label="Latitude" style="background-color:#ffffb2;"/>
-					<column label="Weather Station" style="background-color:#ffffb2;"/>
+					<column label="Altitude" style="color:red;"/>
+					<column label="Latitude" style="color:red;"/>
+					<column label="Weather Station" style="color:red;"/>
 				</columns>
 				<template name="model">
 					<row>
@@ -40,10 +42,10 @@
 		</groupbox>
 		
 				
-		<hlayout style="float:right;">
+		<hlayout style="float:center;">
 	 
-		<button label="Save" 
-			onClick="@global-command('nextTab',model=vm)" sclass="btn-plain">
+		<button label="Save"  image="/images/save16.png"
+			onClick="@global-command('nextTab',model=vm)" sclass="btn-blue">
 		</button>
 	
 		</hlayout>

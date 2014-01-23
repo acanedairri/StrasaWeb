@@ -1,12 +1,16 @@
 <zk>
+	<style src="../css/main.css" />
 	<div width="100%" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudyGermplasmInfo')">
 
 
-		<groupbox id="gbUnknownGermplasm">
-			<button id="uploadGenotypeData" upload="true"
+<!-- 		<groupbox id="gbUnknownGermplasm"> -->
+		<div align="left">
+		<button id="uploadGenotypeData" upload="true"
 				label="Import Germplasm Table"
 				onUpload="@command('uploadGenotypeData')" />
+		</div>
+			
 			<separator></separator>
 			<hlayout spacing="50px">
 				<vlayout width="100%">
@@ -14,15 +18,13 @@
 						hflex="1">
 						<caption label="List of unknown Germplasm"></caption>
 						<vlayout>
-						
-						
+	
 						<grid id="tblStudyGerm"
 							model="@load(vm.lstStudyGermplasm)"   emptyMessage="No Unknown Genotype..."
 							sizedByContent="true">
 							<auxhead width="100%">
 								<auxheader colspan="13" label=""
 									width="100%">
-
 								</auxheader>
 
 							</auxhead>
@@ -30,19 +32,19 @@
 								columnsgroup="false">
 								<column label="GID" />
 								<column label="GName"
-									sort="auto(germplasmname)" style="background-color:#ffffb2;" />
+									sort="auto(germplasmname)" style="color:red" />
 								<column label="OtherName" />
 								<column label="Breeder"
-									style="background-color:#ffffb2;" />
+									style="color:red"/>
 								<column label="GermplasmType"
-									style="background-color:#ffffb2;" />
+									style="color:red"/>
 								<column label="IR Number" />
 								<column label="IR Cross" />
 								<column label="Parentage" />
 								<column label="Female Parent"
-									style="background-color:#ffffb2;" />
+									style="color:red"/>
 								<column label="Male Parent"
-									style="background-color:#ffffb2;" />
+									style="color:red" />
 								<column label="Selection History" />
 								<column label="Source" />
 								<column label="Biotic"
@@ -220,10 +222,9 @@
 
 </vlayout>
 					</groupbox>
-					<groupbox id="gbKnownGermplasm" mold="3d"
-						>
+					<groupbox id="gbKnownGermplasm" mold="3d">
 						<caption label="List of known Germplasm"></caption>
-						<grid id="tblKnownGerm" sizedByContent="true"
+						<grid id="tblKnownGerm" sizedByContent="true" hflex="1"
 							model="@load(vm.lstKnownGermplasm)" >
 							<auxhead width="100%">
 								<auxheader colspan="12" label=""
@@ -386,15 +387,6 @@
 										</bandpopup>
 									</bandbox>
 
-
-
-
-
-
-
-
-
-
 									<label
 										value="@bind(each.othername)" />
 									<vlayout>
@@ -450,16 +442,13 @@
 				</vlayout>
 
 			</hlayout>
-		</groupbox>
+<!-- 		</groupbox> -->
 
-		<hlayout style="float:right;">
+		<hlayout>
 
 			<button label="Save" onClick="@command('validateList')"
-				sclass="btn-plain">
+				sclass="btn-blue" image="/images/save16.png">
 			</button>
-
-
-
 		</hlayout>
 
 	</div>

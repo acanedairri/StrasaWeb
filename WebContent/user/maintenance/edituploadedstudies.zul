@@ -1,14 +1,20 @@
 <zk>
+	<style src="../css/main.css" />
+	
+	<div style="padding:10px 0px 5px 20px" align="left">
+		<label class="header-menu">Study</label>
+	</div>
+
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditUploadedStudies')"
 		align="center" style="padding:10px">
 
-		<div width="95%" align="right" style="padding:10px">
+		<div width="95%" align="left" style="padding:10px">
 			<button id="btnUploadId" label="Upload New Study"
-				src="/images/upload16.png" orient="horizontal"
-				tooltiptext="Add Study"
-				onClick="@command('addStudy')" height="35px" />
-			<button id="btnBackId" label="Back" visible="true"
+				sclass="btn-blue" src="/images/upload16.png" orient="horizontal"
+				tooltiptext="Add Study" onClick="@command('addStudy')"
+				height="35px" />
+			<button id="btnBackId" label="Back" visible="true" sclass="btn-blue"
 				src="/images/back16.png" orient="horizontal" tooltiptext="Add Study"
 				onClick="@command('loadMainDiv')" height="35px" />
 		</div>
@@ -34,8 +40,10 @@
 						<label value="@load(each.study.name)" />
 						<label value="@load(each.program.name)" />
 						<label value="@load(each.project.name)" />
-						<label value="@load(vm.formatDate(each.study.datecreated))" />
-					<label value="@load(vm.formatDate(each.study.datelastmodified))" />
+						<label
+							value="@load(vm.formatDate(each.study.datecreated))" />
+						<label
+							value="@load(vm.formatDate(each.study.datelastmodified))" />
 						<checkbox
 							label="@load(each.study.shared ?'Shared':'Not Shared')"
 							checked="@bind(each.study.shared)"
@@ -56,11 +64,11 @@
 		<div id="divUpdateStudy">
 
 			<vlayout>
-			
-<!-- 			<button label="Go Back"
+
+				<!-- 			<button label="Go Back"
 					onClick="@command('loadMainDiv')" />  -->
-				
-		<div id="divUpdateStudyContainer"> 
+
+				<div id="divUpdateStudyContainer">
 
 				</div>
 			</vlayout>
