@@ -194,4 +194,46 @@ public class KeyCharacteristicManagerImpl {
 			session.close();
 		}
 	}
+
+	public void addAbioticKey(KeyAbiotic record) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		KeyAbioticMapper mapper = session.getMapper(KeyAbioticMapper.class);
+
+		try{
+			mapper.insert(record);
+			session.commit();
+
+		}finally{
+			session.close();
+		}
+	}
+
+	public void updateAbiotic(KeyAbiotic record) {
+		// TODO Auto-generated method stub
+
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		KeyAbioticMapper mapper = session.getMapper(KeyAbioticMapper.class);
+		try{	
+			mapper.updateByPrimaryKey(record);
+			session.commit();
+
+		}finally{
+			session.close();
+		}
+	}
+
+	public void deleteAbioticById(Integer id) {
+		// TODO Auto-generated method stub
+		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		KeyAbioticMapper mapper = session.getMapper(KeyAbioticMapper.class);
+		try{
+			mapper.deleteByPrimaryKey(id);
+			session.commit();
+		}
+		finally{
+			session.close();
+		}
+	}
+
 }
