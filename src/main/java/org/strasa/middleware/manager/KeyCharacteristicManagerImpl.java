@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
+import org.strasa.middleware.mapper.EcotypeMapper;
 import org.strasa.middleware.mapper.GermplasmCharacteristicsMapper;
 import org.strasa.middleware.mapper.KeyAbioticMapper;
 import org.strasa.middleware.mapper.KeyBioticMapper;
@@ -75,9 +76,9 @@ public class KeyCharacteristicManagerImpl {
 
 
 
-	
+
 	public List<KeyMajorGenes> getAllMajorGenes(){
-		
+
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		KeyMajorGenesMapper mapper = session.getMapper(KeyMajorGenesMapper.class);
 		try{
@@ -96,7 +97,7 @@ public class KeyCharacteristicManagerImpl {
 			for(KeyAbiotic key : mapper.selectByExample(null)){
 				strReturn.add(new Container(key.getValue(),key.getValue()));
 			}
-			
+
 			return strReturn;
 		} finally {
 			session.close();
@@ -111,7 +112,7 @@ public class KeyCharacteristicManagerImpl {
 			for(KeyBiotic key : mapper.selectByExample(null)){
 				strReturn.add(new Container(key.getValue(),key.getValue()));
 			}
-			
+
 			return strReturn;
 		} finally {
 			session.close();
@@ -127,7 +128,7 @@ public class KeyCharacteristicManagerImpl {
 			for(KeyGrainQuality key : mapper.selectByExample(null)){
 				strReturn.add(new Container(key.getValue(),key.getValue()));
 			}
-			
+
 			return strReturn;
 		} finally {
 			session.close();
@@ -144,9 +145,52 @@ public class KeyCharacteristicManagerImpl {
 			for(KeyMajorGenes key : mapper.selectByExample(null)){
 				strReturn.add(new Container(key.getValue(),key.getValue()));
 			}
-			
+
 			return strReturn;
 		} finally {
+			session.close();
+		}
+	}
+
+	public void updateBiotic(KeyBiotic record) {
+		// TODO Auto-generated method stub
+
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		KeyBioticMapper mapper = session.getMapper(KeyBioticMapper.class);
+		try{	
+			mapper.updateByPrimaryKey(record);
+			session.commit();
+
+		}finally{
+			session.close();
+		}
+
+	}
+
+	public void deleteBioticById(Integer id) {
+		// TODO Auto-generated method stub
+		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		KeyBioticMapper mapper = session.getMapper(KeyBioticMapper.class);
+		try{
+			mapper.deleteByPrimaryKey(id);
+			session.commit();
+		}
+		finally{
+			session.close();
+		}
+	}
+
+	public void addBioticKey(KeyBiotic record) {
+		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		KeyBioticMapper mapper = session.getMapper(KeyBioticMapper.class);
+
+		try{
+			mapper.insert(record);
+			session.commit();
+
+		}finally{
 			session.close();
 		}
 	}
