@@ -2,7 +2,7 @@
 <?link rel="stylesheet" type="text/css" href="css/main.css"?>
 <zk>
 
-	<window id="studyDetail" title="StudyInfo" visible="false"
+	<window title="StudyInfo" visible="false"
 		position="center,center" closable="true"
 		action="show: slideDown;hide: slideUp" border="normal"
 		width="98%" height="98%">

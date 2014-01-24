@@ -16,8 +16,9 @@ import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.manager.StudySiteManagerImpl;
 import org.strasa.middleware.model.Ecotype;
-import org.strasa.middleware.model.KeyAbiotic;
 import org.strasa.middleware.model.KeyBiotic;
+import org.strasa.middleware.model.KeyGrainQuality;
+import org.strasa.middleware.model.KeyMajorGenes;
 import org.strasa.middleware.model.Location;
 import org.strasa.web.uploadstudy.view.model.AddLocation;
 import org.strasa.web.uploadstudy.view.model.UploadData;
@@ -37,7 +38,7 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
 
-public class EditAbioticKey {
+public class EditMajorGenes {
 	KeyCharacteristicManagerImpl man;
 	GermplasmCharacteristicMananagerImpl germplasmCharMan;
 	List<RowStatus> rowList = new ArrayList<RowStatus>(); 
@@ -54,14 +55,14 @@ public class EditAbioticKey {
 	public void init(@ContextParam(ContextType.VIEW) Component view){
 		man = new KeyCharacteristicManagerImpl();
 		germplasmCharMan = new GermplasmCharacteristicMananagerImpl();
-		makeRowStatus(man.getAllAbiotic());
+		makeRowStatus(man.getAllMajorGenes());
 	}
 
-	private void makeRowStatus(List<KeyAbiotic> list) {
+	private void makeRowStatus(List<KeyMajorGenes> list) {
 		// TODO Auto-generated method stub
 
 		rowList.clear();
-		for (KeyAbiotic p: list){
+		for (KeyMajorGenes p: list){
 			RowStatus ps = new RowStatus(p,false);
 			rowList.add(ps);
 		}
@@ -77,7 +78,7 @@ public class EditAbioticKey {
 	public void confirm(@BindingParam("RowStatus") RowStatus ps) {
 		changeEditableStatus(ps);
 		refreshRowTemplate(ps);
-		man.updateAbiotic(ps.getValue());
+//		man.updateBiotic(ps.getValue());
 		Messagebox.show("Changes saved.");
 	}
 
@@ -94,35 +95,35 @@ public class EditAbioticKey {
 	@NotifyChange("rowList")
 	@Command("delete")
 	public void delete(@BindingParam("id") final Integer Id, @BindingParam("keyName") String keyName){
-		if(!germplasmCharMan.isCharacteristicValueExisting("Abiotic", keyName)){
+		if(!germplasmCharMan.isCharacteristicValueExisting("MajorGenes", keyName)){
 			Messagebox.show("Are you sure you want to delete "+keyName+"?",
 					"Delete", Messagebox.OK | Messagebox.CANCEL,
 					Messagebox.QUESTION, new EventListener() {
 				public void onEvent(Event e) {
 					if ("onOK".equals(e.getName())) {
-						man.deleteAbioticById(Id);
-						makeRowStatus(man.getAllAbiotic());
+						man.deleteMajorGenesById(Id);
+						makeRowStatus(man.getAllMajorGenes());
 						BindUtils.postNotifyChange(null, null,
-								EditAbioticKey.this, "rowList");
+								EditMajorGenes.this, "rowList");
 						Messagebox.show("Changes saved.");
 					} else if ("onCancel".equals(e.getName())) {
 					}
 				}
 			});
 
-		} else  Messagebox.show("Cannot delete an abiotic key that is in use.", "Error", Messagebox.OK, Messagebox.ERROR); 
+		} else  Messagebox.show("Cannot delete a key that is in use.", "Error", Messagebox.OK, Messagebox.ERROR); 
 	}
 
 	//	@NotifyChange("list")
 	@Command("add")
 	public void add(@ContextParam(ContextType.COMPONENT) Component component) {
-		Window win = (Window) component.getFellow("editAbioticKeyWindow");
+		Window win = (Window) component.getFellow("editMajorGenesWindow");
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		params.put("oldVar", null);
 
 		Window popup = (Window) Executions.createComponents(
-				AddAbioticKey.ZUL_PATH, win, params);
+				AddMajorGenes.ZUL_PATH, win, params);
 
 		popup.doModal();
 		//		makeRowStatus(man.getAllLocations());
@@ -131,15 +132,15 @@ public class EditAbioticKey {
 	@NotifyChange("rowList")
 	@Command("refreshList")
 	public void refreshList() {
-		makeRowStatus(man.getAllAbiotic());
+		makeRowStatus(man.getAllMajorGenes());
 	}
 
 
 	public class RowStatus {
-		private  KeyAbiotic value;
+		private  KeyMajorGenes value;
 		private boolean editingStatus;
 
-		public RowStatus(KeyAbiotic p, boolean editingStatus) {
+		public RowStatus(KeyMajorGenes p, boolean editingStatus) {
 			this.setValue(p);
 			this.editingStatus = editingStatus;
 		}
@@ -154,12 +155,12 @@ public class EditAbioticKey {
 		}
 
 
-		public KeyAbiotic getValue() {
+		public KeyMajorGenes getValue() {
 			return value;
 		}
 
 
-		public void setValue(KeyAbiotic p) {
+		public void setValue(KeyMajorGenes p) {
 			this.value = p;
 		}
 	}

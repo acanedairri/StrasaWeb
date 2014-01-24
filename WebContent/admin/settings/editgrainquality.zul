@@ -1,12 +1,12 @@
 <zk>
-	<window id="editBioticKeyWindow" apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.admin.view.model.EditBioticKey')">
+	<window id="editGrainQualityWindow" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.admin.view.model.EditGrainQuality')">
 		<button label="Add New" onClick="@command('add')" />
 		<grid
 			model="@load(vm.rowList) @template(each.editingStatus ? 'editable' : 'noneditable')"
 			sizedByContent="true" width="95%">
 			<columns width="200px">
-				<column label="Biotic Name" />
+				<column label="Grain Quality Name" />
 				<column label="Action" width="100px"/>
 			</columns>
 			<template name="editable">
@@ -28,11 +28,11 @@
 					<cell>
 <!-- 						<toolbarbutton src="/images/edit16.png" -->
 <!-- 							onClick="@command('changeEditableStatus', RowStatus=each)" -->
-<!-- 							orient="vertical" tooltiptext="Edit Biotic Key" /> -->
+<!-- 							orient="vertical" tooltiptext="Edit Grain Quality" /> -->
 <!-- 						<space /> -->
 						<toolbarbutton src="/images/Delete16.png"
 							onClick="@command('delete', id=each.value.id, keyName=each.value.value)"
-							orient="vertical" tooltiptext="Delete Biotic Key" />
+							orient="vertical" tooltiptext="Delete Grain Quality" />
 					</cell>
 				</row>
 			</template>

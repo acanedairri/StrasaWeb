@@ -236,4 +236,59 @@ public class KeyCharacteristicManagerImpl {
 		}
 	}
 
+	public void deleteGrainQualityById(Integer id) {
+		// TODO Auto-generated method stub
+		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		KeyGrainQualityMapper mapper = session.getMapper(KeyGrainQualityMapper.class);
+		try{
+			mapper.deleteByPrimaryKey(id);
+			session.commit();
+		}
+		finally{
+			session.close();
+		}
+	}
+
+	public void addGrainQualityKey(KeyGrainQuality record) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		KeyGrainQualityMapper mapper = session.getMapper(KeyGrainQualityMapper.class);
+
+		try{
+			mapper.insert(record);
+			session.commit();
+
+		}finally{
+			session.close();
+		}
+	}
+
+	public void deleteMajorGenesById(Integer id) {
+		// TODO Auto-generated method stub
+		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		KeyMajorGenesMapper mapper = session.getMapper(KeyMajorGenesMapper.class);
+		try{
+			mapper.deleteByPrimaryKey(id);
+			session.commit();
+		}
+		finally{
+			session.close();
+		}
+	}
+
+	public void addMajorGeneKey(KeyMajorGenes record) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		KeyMajorGenesMapper mapper = session.getMapper(KeyMajorGenesMapper.class);
+
+		try{
+			mapper.insert(record);
+			session.commit();
+
+		}finally{
+			session.close();
+		}
+		
+	}
+
 }

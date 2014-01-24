@@ -17,6 +17,7 @@ import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -30,7 +31,7 @@ import org.zkoss.zul.Window;
 
 public class Index {	
 //public static ArrayList<Integer> activeStudyIds = new ArrayList<Integer>();
-private static HashMap<Integer,Tab> activeStudyIds;
+private static HashMap<String,Tab> activeStudyIds;
 
 private Tab resultTab;
 
@@ -41,7 +42,7 @@ private Tab resultTab;
 	 @AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
-		activeStudyIds = new HashMap<Integer,Tab>();
+		activeStudyIds = new HashMap<String,Tab>();
 		
 		Tabpanels tabPanels = (Tabpanels) component.getFellow("resultPanels");
 		Tabs tabs = (Tabs) component.getFellow("resultTabs");
@@ -73,7 +74,7 @@ private Tab resultTab;
 		Tabs tabs = (Tabs) component.getFellow("tabs");
 		Tabbox tabBox = (Tabbox) component.getFellow("tabBox");
 		
-		if(!activeStudyIds.containsKey(studyId)){
+		if(!activeStudyIds.containsKey(Integer.toString(studyId))){
 		final int id=studyId;
 		Tab newTab = new Tab();
 		newTab.setLabel(studyName);
@@ -81,7 +82,7 @@ private Tab resultTab;
 		newTab.addEventListener("onClose", new EventListener() {
 			@Override
 			public void onEvent(Event event) throws Exception {
-				activeStudyIds.remove(id);
+				activeStudyIds.remove(Integer.toString(id));
 			}
 		});
 		Tabpanel newPanel = new Tabpanel();
@@ -96,11 +97,54 @@ private Tab resultTab;
 		tabBox.setSelectedPanel(newPanel);
 		
 		newTab.setSelected(true);
-		activeStudyIds.put(studyId, newTab);
+		activeStudyIds.put(Integer.toString(studyId), newTab);
 		
 		}
 		else{
-		Tab tab = activeStudyIds.get(studyId);
+		Tab tab = activeStudyIds.get(Integer.toString(studyId));
+		tab.setSelected(true);
+		}
+	}
+	
+	@NotifyChange
+	@GlobalCommand
+	public void DisplayGermplasmDetailInfoTab(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view, @BindingParam("studyId")  String studyId, @BindingParam("gname")  String gname,  @BindingParam("germplasmId")  Integer germplasmId){
+		
+		Tabpanels tabPanels = (Tabpanels) component.getFellow("tabPanels");
+		Tabs tabs = (Tabs) component.getFellow("tabs");
+		Tabbox tabBox = (Tabbox) component.getFellow("tabBox");
+		
+		if(!activeStudyIds.containsKey(gname)){
+		final String id=gname;
+		Tab newTab = new Tab();
+		newTab.setLabel(gname);
+		newTab.setClosable(true);
+		newTab.addEventListener("onClose", new EventListener() {
+			@Override
+			public void onEvent(Event event) throws Exception {
+				activeStudyIds.remove(id);
+			}
+		});
+		Tabpanel newPanel = new Tabpanel();
+		
+		//initialize view after view construction.
+
+		Include studyInformationPage = new Include();
+		studyInformationPage.setSrc("/user/browsegermplasm/germplasmdetail.zul");
+		studyInformationPage.setDynamicProperty("gname", gname);
+		studyInformationPage.setParent(newPanel);
+		
+		tabPanels.appendChild(newPanel);
+		tabs.appendChild(newTab);
+		tabBox.setSelectedPanel(newPanel);
+		
+		newTab.setSelected(true);
+		activeStudyIds.put(gname, newTab);
+		
+		}
+		else{
+		Tab tab = activeStudyIds.get(gname);
 		tab.setSelected(true);
 		}
 	}

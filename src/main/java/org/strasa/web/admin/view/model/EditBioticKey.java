@@ -94,7 +94,7 @@ public class EditBioticKey {
 	@Command("delete")
 	public void delete(@BindingParam("id") final Integer Id, @BindingParam("keyName") String keyName){
 		if(!germplasmCharMan.isCharacteristicValueExisting("Biotic", keyName)){
-			Messagebox.show("Are you sure you want to delete"+keyName+"?",
+			Messagebox.show("Are you sure you want to delete "+keyName+"?",
 					"Delete", Messagebox.OK | Messagebox.CANCEL,
 					Messagebox.QUESTION, new EventListener() {
 				public void onEvent(Event e) {

@@ -80,10 +80,10 @@ public class GermplasmCharacteristicMananagerImpl {
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 
 		try {
-			StudyGermplasmCharacteristicsMapper mapper = session
-					.getMapper(StudyGermplasmCharacteristicsMapper.class);
-			StudyGermplasmCharacteristicsExample example = new StudyGermplasmCharacteristicsExample();
-			example.createCriteria().andAttributeEqualTo(attribute).andValueEqualTo(value);
+			GermplasmCharacteristicsMapper mapper = session
+					.getMapper(GermplasmCharacteristicsMapper.class);
+			GermplasmCharacteristicsExample example = new GermplasmCharacteristicsExample();
+			example.createCriteria().andAttributeEqualTo(attribute).andKeyvalueEqualTo(value);
 			return !mapper.selectByExample(example).isEmpty();
 
 		} finally {

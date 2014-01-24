@@ -28,7 +28,7 @@ public class StudyInformation {
 	ProjectManagerImpl projectMan = new ProjectManagerImpl();
 	StudyTypeManagerImpl studyTypeMan= new StudyTypeManagerImpl();
 	StudyDataSetManagerImpl studyDatasetMan = new StudyDataSetManagerImpl();
-	private Study selectedStudy = new Study();
+	private Study selectedStudy;
 	private Program selectedProgram = new Program();
 	private Project selectedProject = new Project();
 	private StudyType selectedStudyType = new StudyType();
@@ -50,9 +50,10 @@ public class StudyInformation {
 	
 	@Init
 	public void init(@ExecutionArgParam("studyId") Integer studyId){
-		this.setDataset(studyDatasetMan.getDataSetsByStudyId(studyId).size());
-		this.setStudyId(studyId);
-
+		setDataset(studyDatasetMan.getDataSetsByStudyId(studyId).size());
+		setStudyId(studyId);
+		
+		selectedStudy = new Study();
 		System.out.println("studyId"+ Integer.toString(studyId));
 		selectedStudy = studyMan.getStudyById(studyId);
 		try{
