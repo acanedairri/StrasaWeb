@@ -37,6 +37,34 @@ public class StudyGermplasmManagerImpl {
 		}
 	}
 
+	public StudyGermplasm getStudyGermplasmByName(String value, Integer studyid, Integer dataset) {
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		StudyGermplasmMapper mapper = session
+				.getMapper(StudyGermplasmMapper.class);
+
+		try {
+			StudyGermplasmExample example = new StudyGermplasmExample();
+			example.createCriteria().andGermplasmnameEqualTo(value).andStudyidEqualTo(studyid).andDatasetEqualTo(dataset);
+			return mapper.selectByExample(example).get(0);
+
+		} finally {
+			session.close();
+		}
+	}
+	public boolean isStudyGermplasmExist(String value, Integer studyid, Integer dataset) {
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		StudyGermplasmMapper mapper = session
+				.getMapper(StudyGermplasmMapper.class);
+
+		try {
+			StudyGermplasmExample example = new StudyGermplasmExample();
+			example.createCriteria().andGermplasmnameEqualTo(value).andStudyidEqualTo(studyid).andDatasetEqualTo(dataset);
+			return (mapper.countByExample(example) > 0);
+
+		} finally {
+			session.close();
+		}
+	}
 	public List<StudyGermplasm> getStudyGermplasmByStudyId(int studyID) {
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyGermplasmMapper mapper = session

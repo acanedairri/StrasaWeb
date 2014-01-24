@@ -215,7 +215,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
 		List<StudyGermplasm> lst = rawMan.getStudyGermplasmInfo(studyID,
 				dataset.getId());
-
+		StudyGermplasmManagerImpl studyGermMan = new StudyGermplasmManagerImpl();
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 		GermplasmCharacteristicsMapper charMapper = session
@@ -246,8 +246,15 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 							newData.setOthername(null);
 					newData.rowIndex = lstKnownGermplasm.size();
 					arrGermplasmDeepInfo.add(newData);
-					System.out.println(newData.toString());
-					if(!lstKnownGermplasm.containsKey(newData.getGermplasmname())) lstKnownGermplasm.put(newData.getGermplasmname(), newData);
+//					System.out.println(newData.toString());
+				
+						if(studyGermMan.isStudyGermplasmExist(newData.getGermplasmname(), this.studyID, this.dataset.getId())){
+							System.out.println("CHANGING " + newData.getGermplasmname());
+							if(studyGermMan.getStudyGermplasmByName(newData.getGermplasmname(), this.studyID, this.dataset.getId()).getGref().equals(newData.getId())){
+							lstKnownGermplasm.put(newData.getGermplasmname(), newData);
+							}
+						}
+					
 
 				}
 			} else {
@@ -289,17 +296,17 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 			iterator++;
 		}
 		
-		if(this.isUpdateMode){
-			
-			StudyGermplasmManagerImpl studyMan = new StudyGermplasmManagerImpl();
-			List<StudyGermplasm> lstExistingStudyGerms = studyMan.getStudyGermplasmByStudyId(this.studyID, this.dataset.getId());
-			
-			for(StudyGermplasm studyGerm : lstExistingStudyGerms){
-				System.out.println("Changing....");
-				
-				lstKnownGermplasm.put(studyGerm.getGermplasmname(), getGermplasmDeepInfoModelById(studyGerm.getGref()));
-			}
-		}
+//		if(this.isUpdateMode){
+//			
+//			StudyGermplasmManagerImpl studyMan = new StudyGermplasmManagerImpl();
+//			List<StudyGermplasm> lstExistingStudyGerms = studyMan.getStudyGermplasmByStudyId(this.studyID, this.dataset.getId());
+//			
+//			for(StudyGermplasm studyGerm : lstExistingStudyGerms){
+//				System.out.println("Changing....");
+//				
+//				lstKnownGermplasm.put(studyGerm.getGermplasmname(), getGermplasmDeepInfoModelById(studyGerm.getGref()));
+//			}
+//		}
 		
 		
 //		printArrList();
@@ -323,6 +330,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
     	selected.selectedData = selected;
 		lstKnownGermplasm.put(selected.getGermplasmname(), selected.selectedData);
 //		printArrList();
+		tblKnownGerm.invalidate();
 		
 	}
 
@@ -466,6 +474,9 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 	@NotifyChange({ "lstKnownGermplasm", "lstStudyGermplasm" })
 	@Command
 	public void modifyGermplasm(@BindingParam("gname") String gname) {
+		System.out.println("GNAME: " + gname);
+		System.out.println("SIZE: " + lstKnownGermplasm.size());
+		
 		lstKnownGermplasm.get(gname).rowIndex = lstStudyGermplasm.size();
 		lstStudyGermplasm.put(gname, lstKnownGermplasm.get(gname));
 		lstKnownGermplasm.remove(gname);

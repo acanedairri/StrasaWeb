@@ -119,7 +119,6 @@ public class StudySiteInfoModel extends StudySite {
 		}
 
 		public Ecotype getSelectedEcotype() {
-			System.out.println("ss");
 			return selectedEcotype;
 		}
 
