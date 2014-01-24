@@ -84,10 +84,10 @@
 						<groupbox id="grpRawData" hflex="true"
 							vflex="true" visible="@bind(!vm.dataReUploaded)">
 							<vlayout>
-									<button label="Remove"
-													onClick="@command('removeRawData') "
-													/>
-									<button label="Update Column Header"
+<!-- 									<button label="Remove"
+													onClick="@command('removeRawData') " /> -->
+													
+									<button label="Update Column Header" sclass="btn-blue"
 													onClick="@command('updateColumnHeader') "
 													/>	
 								<div id="divRawData" vflex="true" hflex="true"></div>
@@ -106,10 +106,10 @@
 
 		</vlayout>
 		<separator spacing="20px" />
-		<hlayout style="float:right;">
+		<hlayout style="float:center;">
 
 			<button label="Save"
-				onClick="@global-command('nextTab',model=vm)" sclass="btn-plain">
+				onClick="@global-command('nextTab',model=vm)" image="/images/save16.png" sclass="btn-blue">
 			</button>
 
 		</hlayout>
