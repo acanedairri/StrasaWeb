@@ -68,7 +68,7 @@ private Tab resultTab;
 	@NotifyChange
 	@GlobalCommand
 	public void openNewSearchInfoTab(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view,@BindingParam("studyId")  Integer studyId, @BindingParam("studyName")String studyName){
+			@ContextParam(ContextType.VIEW) Component view,@BindingParam("studyid")  Integer studyId, @BindingParam("studyName")String studyName){
 		
 		Tabpanels tabPanels = (Tabpanels) component.getFellow("tabPanels");
 		Tabs tabs = (Tabs) component.getFellow("tabs");
@@ -135,6 +135,7 @@ private Tab resultTab;
 		Include studyInformationPage = new Include();
 		studyInformationPage.setSrc("/user/browsegermplasm/germplasmdetail.zul");
 		studyInformationPage.setDynamicProperty("gname", gname);
+		studyInformationPage.setDynamicProperty("parentSource", "studyBrowser");
 		studyInformationPage.setParent(newPanel);
 		
 		tabPanels.appendChild(newPanel);

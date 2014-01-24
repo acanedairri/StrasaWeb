@@ -65,8 +65,20 @@ public class GermplasmDetail {
 	private List<CharacteristicModel> keyMajorGenesList;
 	private List<String> listKeyCharFilter= new ArrayList<String>();
 
+	private boolean openAsTab;
+	
+
 	@Init
-	public void init(@ExecutionArgParam("gname")String germplasmName){
+	public void init(@ExecutionArgParam("gname")String germplasmName, @ExecutionArgParam("parentSource")String source){
+		
+		try{
+			System.out.print("not null then open as tab");
+			if(source.equals("studyBrowser")) setOpenAsTab(true);
+		}catch(NullPointerException npe){
+			System.out.print("null then false");
+			setOpenAsTab(false);
+		}
+		
 		System.out.println("gname"+ germplasmName);
 		BrowseGermplasmManagerImpl mgr= new BrowseGermplasmManagerImpl();
 		setGermplasmList( mgr.getGermplasmByNameLike(germplasmName));
@@ -83,6 +95,13 @@ public class GermplasmDetail {
 		setStudyTested(getStudyTested(germplasmName));
 	}
 	
+	public Boolean getOpenAsTab() {
+		return openAsTab;
+	}
+
+	public void setOpenAsTab(Boolean openStudyDetailsLink) {
+		this.openAsTab = openStudyDetailsLink;
+	}
 	public String getNameSearch() {
 		return nameSearch;
 	}
