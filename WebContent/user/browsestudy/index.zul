@@ -12,7 +12,7 @@
 
 		<tabbox id="tabBox">
 			<tabs id="tabs">
-				<tab label="Search" />
+				<tab label="Search" image="/images/Search16a.png" />
 			</tabs>
 			<tabpanels id="tabPanels">
 				<tabpanel>
