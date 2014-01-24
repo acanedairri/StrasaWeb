@@ -1,5 +1,6 @@
 package org.strasa.web.common.api;
 
+import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.model.StudyDataSet;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Tab;
@@ -12,7 +13,7 @@ public class ProcessTabViewModel {
 	public boolean uploadToFolder = false;
 	public StudyDataSet dataset = new StudyDataSet();
 	public boolean isUpdateMode = false;
-	public int userID = 1;
+	public int userID = SecurityUtil.getDbUser().getId();
 	public double processTabID;
 	private boolean isUploadMode = false;
 	public boolean isUploadMode() {

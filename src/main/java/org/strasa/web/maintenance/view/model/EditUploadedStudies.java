@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
@@ -82,7 +83,7 @@ public class EditUploadedStudies {
 		// TODO Auto-generated method stub
 		setEditStudyList(new ArrayList<EditStudyModel>());
 		List<Study> studies = new ArrayList<Study>();
-		studies = studyMan.getStudiesByUserID(1);
+		studies = studyMan.getStudiesByUserID(SecurityUtil.getDbUser().getId());
 		int ctr=0;
 		for(Study s: studies){
 			EditStudyModel e = new EditStudyModel();

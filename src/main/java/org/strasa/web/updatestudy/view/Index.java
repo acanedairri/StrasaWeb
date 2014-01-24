@@ -27,6 +27,7 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.ExecutionArgParam;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
@@ -268,7 +269,7 @@ public class Index {
 	public void addNewDataset(@BindingParam("datatype") boolean datatype){
 		StudyDataSet newDataset = new StudyDataSet();
 		newDataset.setTitle("New DataSet");
-		initializeDataSetTab(newDataset, false, datatype);
+		initializeDataSetTab(newDataset, false, datatype,true);
 	
 	}
 	@Command
@@ -395,7 +396,7 @@ public class Index {
 		
 				}
 			}
-			initializeDataSetTab(datasetNum, true, datasetNum.getDatatype().equals("rd"));	
+			initializeDataSetTab(datasetNum, true, datasetNum.getDatatype().equals("rd"),false);	
 			
 		}
 //		if(derivedDataTab.getTabs().getChildren().isEmpty())initializeDataSetTab(new StudyDataSet(), false, false);	
@@ -409,10 +410,19 @@ public class Index {
 //			rawDataTab.getChildren().remove(0);
 //		}
 	}
+	@GlobalCommand("removeDataSet")
+	public void removeDataSet(@BindingParam("dataset") StudyDataSet dataset, @BindingParam("isUpdateMode") boolean isUpdateMode, @BindingParam("isRaw") boolean isRaw){
+		System.out.println("REMOVE!");
+		initializeDataSetTab(dataset, isUpdateMode, isRaw,true);
 
+		
+	}
+
+	
+	@GlobalCommand("initializeDataSetTab")
 	@SuppressWarnings("unchecked")
-	public void initializeDataSetTab(StudyDataSet dataset, boolean isUpdateMode, boolean isRaw) {
-		if(rawDataTab == null)System.out.println("TABBOX IS NULL!");
+	public void initializeDataSetTab(@BindingParam("dataset") StudyDataSet dataset, @BindingParam("isUpdateMode") boolean isUpdateMode, @BindingParam("isRaw") boolean isRaw,boolean selected) {
+	System.out.println("TABBOX IS NULL!");
 		Tab newTab = new Tab(dataset.getTitle());
 		datasetinc++;
 		newTab.setSelected(true);
@@ -430,14 +440,7 @@ public class Index {
 					Executions.createComponents("/user/updatestudy/datasettab.zul", Index.this.tabMap.get(arg0.getTarget().getId()).panel,  Index.this.tabMap.get(arg0.getTarget().getId()).arg);
 				}
 			}});
-		
-		newTab.addEventListener("onClose", new EventListener() {
 
-			@Override
-			public void onEvent(Event event) throws Exception {
-				event.stopPropagation();
-			}
-		});
 		Tabpanel newTabpanel = new Tabpanel();
 		// newTabpanel.appendChild();
 		if(isRaw){
@@ -466,7 +469,7 @@ public class Index {
 		arg.put("uploadModel", newUploadModel);
 		
 		tabMap.put(tabId, new tabObject(arg,newTabpanel));
-		if(!isUpdateMode){
+		if(selected){
 			Events.sendEvent("onClick",newTab,newTab);
 		}
 	}

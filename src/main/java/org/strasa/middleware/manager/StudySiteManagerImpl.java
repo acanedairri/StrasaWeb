@@ -9,15 +9,19 @@ import org.strasa.middleware.mapper.EcotypeMapper;
 import org.strasa.middleware.mapper.LocationMapper;
 import org.strasa.middleware.mapper.PlantingTypeMapper;
 import org.strasa.middleware.mapper.StudyAgronomyMapper;
+import org.strasa.middleware.mapper.StudyDerivedDataMapper;
 import org.strasa.middleware.mapper.StudyDesignMapper;
 import org.strasa.middleware.mapper.StudyMapper;
+import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyAgronomy;
 import org.strasa.middleware.model.StudyAgronomyExample;
+import org.strasa.middleware.model.StudyDerivedDataExample;
 import org.strasa.middleware.model.StudyDesignExample;
 import org.strasa.middleware.model.StudyExample;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
+import org.strasa.middleware.model.StudyRawDataExample;
 import org.strasa.middleware.model.StudySite;
 import org.strasa.middleware.model.StudySiteExample;
 import org.strasa.web.uploadstudy.view.pojos.StudySiteInfoModel;
@@ -52,6 +56,25 @@ public class StudySiteManagerImpl {
 			session.close();
 		}
 
+	}
+	
+	public boolean hasSiteHeader(int studyID, Integer dataset){
+		
+		if(isRaw){
+			StudyRawDataMapper mapper = connectionFactory.sqlSessionFactory.openSession().getMapper(StudyRawDataMapper.class);
+			
+			StudyRawDataExample example = new StudyRawDataExample();
+			example.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset).andDatacolumnEqualTo("Site");
+			return mapper.countByExample(example) > 0;
+			
+		}
+		else{
+
+			StudyDerivedDataMapper mapper = connectionFactory.sqlSessionFactory.openSession().getMapper(StudyDerivedDataMapper.class);
+			StudyDerivedDataExample example = new StudyDerivedDataExample();
+			example.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset).andDatacolumnEqualTo("Site");
+			return mapper.countByExample(example) > 0;
+		}
 	}
 	
 	public void removeSiteByStudyId(int studyID, Integer dataset){

@@ -220,6 +220,8 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 		GermplasmCharacteristicsMapper charMapper = session
 				.getMapper(GermplasmCharacteristicsMapper.class);
+		System.out.println("EMPTY?:  " + lst.size());
+	
 		for (StudyGermplasm data : lst) {
 	
 			GermplasmExample example = new GermplasmExample();
@@ -253,6 +255,13 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 							if(studyGermMan.getStudyGermplasmByName(newData.getGermplasmname(), this.studyID, this.dataset.getId()).getGref().equals(newData.getId())){
 							lstKnownGermplasm.put(newData.getGermplasmname(), newData);
 							}
+							else{
+								System.out.println(studyGermMan.getStudyGermplasmByName(newData.getGermplasmname(), this.studyID, this.dataset.getId()).toString());
+								System.out.println(newData.toString());
+							}
+						}
+						else{
+							lstKnownGermplasm.put(newData.getGermplasmname(), newData);
 						}
 					
 

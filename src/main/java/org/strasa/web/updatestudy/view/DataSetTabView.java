@@ -268,6 +268,13 @@ public class DataSetTabView {
 		
 		if(selectedIndex + 1 == 4 && !this.uploadModel.isUpdateMode){
 			Messagebox.show("Successfully added a new dataset.", "Information", Messagebox.OK, Messagebox.INFORMATION);
+			 Map<String,Object> args = new HashMap<String,Object>();
+		        args.put("dataset", this.uploadModel.dataset);
+		        args.put("isUpdateMode", true);
+		        args.put("isRaw", this.uploadModel.isRaw);
+				 DataSetTabView.this.uploadModel.mainTab.close();;
+//				 DataSetTabView.this.uploadModel.mainTabPanel.detach();
+		        BindUtils.postGlobalCommand(null, null, "removeDataSet", args);
 			return;
 		}
 		
@@ -276,6 +283,7 @@ public class DataSetTabView {
 		}
 		else{
 			Messagebox.show("Changes has been saved", "Information", Messagebox.OK, Messagebox.INFORMATION);
+			
 				return;
 		}
 		

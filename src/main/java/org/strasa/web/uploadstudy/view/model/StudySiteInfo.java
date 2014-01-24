@@ -597,8 +597,11 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		} else {
 			List<StudySite> lstSiteRaw = studyRawMan.getStudySiteInfo(
 					this.getStudyID(), dataset.getId());
+	
 			for (StudySite siteData : lstSiteRaw) {
+				
 				StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteData);
+	
 				if (StringUtils.isNullOrEmpty(siteInfo.getYear())) {
 
 					siteInfo.setYear(studyStartYear);
@@ -621,6 +624,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 				siteInfo.selectedAgroInfo = new StudyAgronomy();
 				System.out.println("NO PLANTING TYPE");
 				sites.add(siteInfo);
+			
 			}
 			if (this.isDataReUploaded) {
 				previousSites.addAll(studySiteMan.getStudySiteByStudyId(this
@@ -644,6 +648,12 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 		}
 
+		boolean hasSite = new StudySiteManagerImpl().hasSiteHeader(this.studyID, this.dataset.getId());
+		
+		if(!hasSite){
+			for(int i = 0; i < sites.size(); i++)	
+			sites.remove(i);
+		}
 		selectedSite = sites.get(0);
 
 		updateDesignInfo(0);
