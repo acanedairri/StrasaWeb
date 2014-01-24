@@ -150,7 +150,7 @@ public class Data {
 //		grid.addAll(rows);
 //		grid.add(0,columns.toArray(new String[columns.size()]));
 		
-		if(dataType.endsWith("dd")) FileUtilities.exportData(columns, rows, studyName+"_rawData.csv");
+		if(dataType.endsWith("rd")) FileUtilities.exportData(columns, rows, studyName+"_rawData.csv");
 		else FileUtilities.exportData(columns, rows, studyName+"_derivedData.csv");
 	}
 	
