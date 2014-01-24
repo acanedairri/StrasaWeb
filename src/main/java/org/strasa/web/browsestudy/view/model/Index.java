@@ -77,6 +77,7 @@ private Tab resultTab;
 		if(!activeStudyIds.containsKey(Integer.toString(studyId))){
 		final int id=studyId;
 		Tab newTab = new Tab();
+		newTab.setImage("/images/study16.png");
 		newTab.setLabel(studyName);
 		newTab.setClosable(true);
 		newTab.addEventListener("onClose", new EventListener() {
@@ -118,6 +119,7 @@ private Tab resultTab;
 		if(!activeStudyIds.containsKey(gname)){
 		final String id=gname;
 		Tab newTab = new Tab();
+		newTab.setImage("/images/Germplasm16.png");
 		newTab.setLabel(gname);
 		newTab.setClosable(true);
 		newTab.addEventListener("onClose", new EventListener() {
