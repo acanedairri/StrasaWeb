@@ -66,20 +66,27 @@ public class SearchResult {
 	@NotifyChange("*")
 	@GlobalCommand
 	public void updateSearchFilterResult(@BindingParam("searchFilter")StudySearchFilterModel searchFilter){
-		if(validateSearch(searchFilter)){
+//		if(validateSearch(searchFilter)){
 			searchFilter.shared = checkIfEmpty(searchFilter.shared);
 			searchFilter.studyname = checkIfEmpty(searchFilter.studyname);
 			searchFilter.country = checkIfEmpty(searchFilter.country);
 			searchFilter.endyear = checkIfEmpty(searchFilter.endyear);
 			searchFilter.startyear =  checkIfEmpty(searchFilter.startyear);
-
+			
+			try{
+			if(searchFilter.shared.equals("private")) searchFilter.shared = "0";
+			else searchFilter.shared = "1";
+			}catch(NullPointerException npe){
+				
+			}
+			
 			searchResult = browseStudyManagerImpl.getStudySearchResult(searchFilter);
 			setSearchResultLabel("Search Result:  "+ searchResult.size()+"  row(s) returned");
 			System.out.println("Size:"+searchResult.size());
 			resultTab.setSelected(true);
-		}else{
-			Messagebox.show("Please filter your search.", "Search Filter too broad", Messagebox.OK, Messagebox.EXCLAMATION);
-		}
+//		}else{
+//			Messagebox.show("Please filter your search.", "Search Filter too broad", Messagebox.OK, Messagebox.EXCLAMATION);
+//		}
 	}
 
 	private boolean validateSearch(StudySearchFilterModel searchFilter) {
