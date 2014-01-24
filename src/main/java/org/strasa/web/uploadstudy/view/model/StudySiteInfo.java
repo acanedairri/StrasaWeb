@@ -651,7 +651,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		boolean hasSite = new StudySiteManagerImpl().hasSiteHeader(this.studyID, this.dataset.getId());
 		
 		if(!hasSite){
-			for(int i = 0; i < sites.size(); i++)	
+			for(int i = 1; i < sites.size(); i++)	
 			sites.remove(i);
 		}
 		selectedSite = sites.get(0);
