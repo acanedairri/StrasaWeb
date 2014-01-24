@@ -38,7 +38,7 @@
 					<label value="@load(each.gid)" />
 					<toolbarbutton label="@load(each.germplasmname)"
 						sclass="grid-link"
-						onClick=" @command('DisplayGermplasmDetail', gname=each.germplasmname)" />
+						onClick="@global-command('DisplayGermplasmDetailInfoTab', gname=each.germplasmname)" />
 					<label value="@load(each.othername)" />
 					<label value="@load(each.breeder)" />
 					<label value="@load(each.type.germplasmtype)" />
