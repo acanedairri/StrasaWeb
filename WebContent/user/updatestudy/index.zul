@@ -70,7 +70,7 @@
 													</listbox>
 												</bandpopup>
 											</bandbox>
-											<button label="Add"
+											<button label="Add" image="/images/New16.png"
 												sclass="btn-blue" onClick="@command('addProgram')" />
 										</row>
 										<row>
@@ -100,7 +100,7 @@
 													</listbox>
 												</bandpopup>
 											</bandbox>
-											<button label="Add"
+											<button label="Add" image="/images/New16.png"
 												sclass="btn-blue" onClick="@command('addProject')" />
 										</row>
 										<row>

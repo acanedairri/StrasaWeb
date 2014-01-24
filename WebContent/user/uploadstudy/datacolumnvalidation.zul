@@ -18,7 +18,7 @@
 					<row visible="@load(each.headerExisting)">
 						<label value="@load(each.currentVariable)" />
 						<label value="@bind(each.newVariable)" />
-						<button label="Change"
+						<toolbarbutton src="/images/edit16.png" tooltiptext="Edit Variable" 
 							onClick="@command('changeVar', oldVar=each.currentVariable)" disabled="@load(!each.editable)" />
 					</row>
 				</template>
@@ -27,10 +27,11 @@
 				</vlayout>
 <separator spacing="5px" />
 		<hlayout style="float:right;">
+		<button label="Cancel"
+						onClick="@command('cancel')"  sclass="btn-plain" image="/images/cancel16.png" />
 					<button label="Save"
-						onClick="@command('saveHeader')" sclass="btn-ok" />
-					<button label="Cancel"
-						onClick="@command('cancel')"  sclass="btn-cancel" />
+						onClick="@command('saveHeader')" sclass="btn-blue" image="/images/save16.png" />
+					
 				</hlayout>
 
 

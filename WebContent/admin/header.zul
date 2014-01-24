@@ -1,14 +1,32 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
+	<style src="../css/main.css" />
 	<zscript>
 	String username = org.spring.security.model.SecurityUtil.getUserName();
 </zscript>
 	<hlayout sclass="z-valign-center"
+		style="background:#3E4939;color:white;" height="120px">
+		<image src="/images/logo.png" style="padding:10px" />
+		<div align="right" hflex="1" style="padding:50px">
+			<hbox align="center" pack="end">
+				<label sclass="login-header">Welcome</label>
+				<image src="/images/user32.png"></image>
+				<label sclass="login-header">${username}</label>
+				<!-- 		<label sclass="login-header"> Logged as User</label> -->
+				<space width="15px"></space>
+				<button label="Logout" sclass="btn-blue"
+					unless="${empty execution.userPrincipal}"
+					href="/j_spring_security_logout" />
+			</hbox>
+		</div>
+		<space />
+	</hlayout>
+<!-- 	<hlayout sclass="z-valign-center"
 		style="background:#336633;color:white;" height="30px">
-		<!-- 			<div align="left" hflex="1" >
+					<div align="left" hflex="1" >
 			<image src="/images/strasa.jpg" height="50px" width="50px"></image>
 			<span><label>Strasa Web</label></span>
-			</div> -->
+			</div>
 
 		<div align="right" hflex="1">
 			<hbox align="center" pack="end">
@@ -21,7 +39,7 @@
 			</hbox>
 		</div>
 		<space />
-	</hlayout>
+	</hlayout> -->
 
 	<hlayout sclass="z-valign-center"
 		style="background:#808080;color:white;" height="70px">
@@ -33,8 +51,8 @@
 				href="http://localhost:8080/StrasaWeb/admin/usermanagement.zul" />
 			<space />
 			<toolbarbutton label="Settings" src="/images/settings48.png"
-				orient="vertical" 
-				href="http://localhost:8080/StrasaWeb/admin/adminsettings.zul"/>
+				orient="vertical"
+				href="http://localhost:8080/StrasaWeb/admin/adminsettings.zul" />
 			<space />
 		</hbox>
 	</hlayout>
