@@ -161,10 +161,10 @@ public class SiteInformation extends ProcessTabViewModel {
 			}
 			selectedSite = sites.get(0);
 			updateDesignInfo(0);
+			selectedDesignInfo = studyDesignMan.getStudyDesign(subsites.get(0).getId());
+			selectedAgroInfo =  studyAgroMan.getStudyAgronomy(subsites.get(0).getId());
+			selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
 		}
-		selectedDesignInfo = studyDesignMan.getStudyDesign(subsites.get(0).getId());
-		selectedAgroInfo =  studyAgroMan.getStudyAgronomy(subsites.get(0).getId());
-		selectedSitePlantingType = plantingtypeMan.getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
 	}
 
 	public PlantingType getSelectedSitePlantingType() {
@@ -173,6 +173,8 @@ public class SiteInformation extends ProcessTabViewModel {
 
 	public void setSelectedSitePlantingType(PlantingType selectedSitePlantingType) {
 		this.selectedSitePlantingType = selectedSitePlantingType;
+
+		System.out.println(selectedSitePlantingType.getPlanting());
 	}
 
 
@@ -232,8 +234,6 @@ public class SiteInformation extends ProcessTabViewModel {
 		}
 		public void setSelectedSitePlantingType(PlantingType selectedSitePlantingType) {
 			this.selectedSitePlantingType = selectedSitePlantingType;
-
-			System.out.println(selectedSitePlantingType.getPlanting());
 		}
 		public Ecotype getEcotype() {
 			return ecotype;
