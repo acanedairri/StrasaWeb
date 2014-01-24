@@ -92,35 +92,8 @@
 									<textbox
 										value="@bind(each.selectionhistory)" />
 									<textbox value="@bind(each.source)" />
-									<bandbox readonly="true" hflex="1"
-										mold="rounded" value="@load(each.strAbiotic)"
-										onBlur="@command('updateCharacteristicInfo',model= each)">
-										<bandpopup>
-											<listbox
-												model="@load(each.keyAbiotic)" width="200px">
-												<listhead>
-													<listheader
-														label="Name" />
-													<listheader
-														label="Value" />
-												</listhead>
-												<template
-													name="model">
-													<listitem>
-														<listcell
-															label="@load(each.name)" />
-														<listcell>
-															<checkbox
-																checked="@bind(each.value)">
-															</checkbox>
-														</listcell>
-													</listitem>
-
-												</template>
-											</listbox>
-										</bandpopup>
-
-									</bandbox>
+									
+									
 									<bandbox readonly="true"
 										mold="rounded" value="@load(each.strBiotic)"
 										onBlur="@command('updateCharacteristicInfo',model= each)">
@@ -152,7 +125,37 @@
 
 										</bandpopup>
 									</bandbox>
+									
+									<bandbox readonly="true" hflex="1"
+										mold="rounded" value="@load(each.strAbiotic)"
+										onBlur="@command('updateCharacteristicInfo',model= each)">
+										<bandpopup>
+											<listbox
+												model="@load(each.keyAbiotic)" width="200px">
+												<listhead>
+													<listheader
+														label="Name" />
+													<listheader
+														label="Value" />
+												</listhead>
+												<template
+													name="model">
+													<listitem>
+														<listcell
+															label="@load(each.name)" />
+														<listcell>
+															<checkbox
+																checked="@bind(each.value)">
+															</checkbox>
+														</listcell>
+													</listitem>
 
+												</template>
+											</listbox>
+										</bandpopup>
+
+									</bandbox>
+									
 
 									<bandbox readonly="true"
 										mold="rounded" value="@load(each.strGrainQuality)"

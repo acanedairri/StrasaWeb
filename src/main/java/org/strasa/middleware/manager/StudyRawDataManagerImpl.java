@@ -263,6 +263,38 @@ public class StudyRawDataManagerImpl {
 		}
 
 	}
+	
+	public Integer getLastDataRow(Integer studyid, boolean isRaw){
+		
+		if(isRaw){
+			SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
+			StudyRawDataMapper mapper = session.getMapper(StudyRawDataMapper.class);
+			StudyRawDataExample example =  new StudyRawDataExample();
+			example.createCriteria().andStudyidEqualTo(studyid);
+			example.createCriteria().andStudyidEqualTo(studyid);
+			if(mapper.countByExample(example) > 0){
+				return mapper.selectByExample(example).get(mapper.selectByExample(example).size() - 1).getDatarow();
+			}
+			else{
+				return 0;
+			}
+		}
+		else{
+
+			SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
+			StudyDerivedDataMapper mapper = session.getMapper(StudyDerivedDataMapper.class);
+			StudyDerivedDataExample example =  new StudyDerivedDataExample();
+			example.createCriteria().andStudyidEqualTo(studyid);
+			if(mapper.countByExample(example) > 0){
+				return mapper.selectByExample(example).get(mapper.selectByExample(example).size() - 1).getDatarow();
+			}
+			else{
+				return 0;
+			}
+			
+		}
+	
+	}
 
 	public void addStudyRawData(Study study, String[] header,
 			List<String[]> rawCSVData, int dataset, boolean isRawData) {
@@ -272,6 +304,8 @@ public class StudyRawDataManagerImpl {
 				.getMapper(StudyRawDataBatch.class);
 		try {
 			addStudy(study);
+			Integer lastRow  = getLastDataRow(study.getId(), isRawData);
+			
 			List<StudyRawData> lstData = new ArrayList<StudyRawData>();
 			System.out.println("StudyID______________________: " + study.getId());
 			for (int i = 0; i < rawCSVData.size(); i++) {
@@ -282,7 +316,7 @@ public class StudyRawDataManagerImpl {
 						StudyRawData record = new StudyRawData();
 
 						record.setDatacolumn(header[j]);
-						record.setDatarow(i + 1);
+						record.setDatarow((int) (i + 1 + lastRow));
 						record.setDatavalue(row[j]);
 						record.setStudyid(study.getId());
 						record.setDataset(dataset);
