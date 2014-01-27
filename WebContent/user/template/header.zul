@@ -7,7 +7,7 @@
 	String username = org.spring.security.model.SecurityUtil.getUserName();
 </zscript>
 		<hlayout sclass="z-valign-center"
-			style="background:#3E4939;color:white;" height="120px">
+			style="background:#628640;color:white;" height="120px">
 			<image src="/images/logo.png" style="padding:10px" />
 			<div align="right" hflex="1" style="padding:50px">
 				<hbox align="center" pack="end">

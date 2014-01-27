@@ -176,7 +176,7 @@
 						</row>
 					</template>
 				</grid>
-				<label value="Red labels are mandatory fields" style="color:red"></label>
+			<!-- 	<label value="Red labels are mandatory fields" style="color:red"></label> -->
 			</columnchildren>
 			<columnchildren width="35%">
 				<vlayout>
