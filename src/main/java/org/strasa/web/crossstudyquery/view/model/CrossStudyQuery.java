@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.manager.CrossStudyQueryManagerImpl;
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.StudyVariable;
@@ -354,211 +355,237 @@ public class CrossStudyQuery extends StudyVariable {
 	@NotifyChange({"*"})
 	public void RunQuery(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
+		try{
+			int studyid = 0;
+			Groupbox groupBoxResult = (Groupbox) component.getFellow("crossResultId");
+			groupBoxResult.setVisible(true);
+			Button btnExport = (Button) component.getFellow("btnExportId");
+			//		Radiogroup radioGroupData= (Radiogroup) component.getFellow("dataCategoryId");
+			System.out.println("DataCategory:"+dataCategory);
 
-		Groupbox groupBoxResult = (Groupbox) component.getFellow("crossResultId");
-		groupBoxResult.setVisible(true);
-		Button btnExport = (Button) component.getFellow("btnExportId");
-//		Radiogroup radioGroupData= (Radiogroup) component.getFellow("dataCategoryId");
-		System.out.println("DataCategory:"+dataCategory);
+			if(crossStudyFilterModelList.isEmpty()){
+				Messagebox.show("Please specify a criteria" ,"Warning",null,null,null,null); 
+			}else{
 
-		if(crossStudyFilterModelList.isEmpty()){
-			Messagebox.show("Please specify a criteria" ,"Warning",null,null,null,null); 
-		}else{
+				Groupbox gridResult = (Groupbox) component.getFellow("crossResultId");
+				gridResult.setVisible(true);
 
-			Groupbox gridResult = (Groupbox) component.getFellow("crossResultId");
-			gridResult.setVisible(true);
-
-			dataList = new ArrayList<String[]>();
-			columnList = new ArrayList<String>();
-			newDataRow= new ArrayList<AcrossStudyData>();
-
-
-			final CrossStudyQueryManagerImpl crossStudyQueryManagerImpl= new CrossStudyQueryManagerImpl(); 
-
-			ArrayList<CrossStudyQueryFilterModel> filters = new ArrayList<CrossStudyQueryFilterModel>();
-
-			// Field
-
-			//			CrossStudyQueryFilterModel fieldStudyId= new CrossStudyQueryFilterModel();
-			//			fieldStudyId.setVariable("STUDY ID");
-			//			fieldStudyId.setColumnAs("field");
-			//			filters.add(fieldStudyId);
-			//
-			//
-			//			CrossStudyQueryFilterModel fieldDataRow= new CrossStudyQueryFilterModel();
-			//			fieldDataRow.setVariable("datarow");
-			//			fieldDataRow.setColumnAs("field");
-			//			filters.add(fieldDataRow);
-
-			CrossStudyQueryFilterModel fieldStudyId= new CrossStudyQueryFilterModel();
-			fieldStudyId.setColumnHeader("Study id");
-			fieldStudyId.setVariable("studyid");
-			fieldStudyId.setColumnAs("field");
-			filters.add(fieldStudyId);
-
-			CrossStudyQueryFilterModel fieldStudyName= new CrossStudyQueryFilterModel();
-			fieldStudyName.setColumnHeader("Study Name");
-			fieldStudyName.setVariable("studyname");
-			fieldStudyName.setColumnAs("field");
-			filters.add(fieldStudyName);
-
-			CrossStudyQueryFilterModel fieldGName= new CrossStudyQueryFilterModel();
-			fieldGName.setColumnHeader("Germplasm");
-			fieldGName.setVariable("GName");
-			fieldGName.setColumnAs("field");
-			filters.add(fieldGName);
-
-			//Get Other Field
-			int sizeFieldSelected=crossStudyFilterModelList.size();
-
-			List<String> s= new ArrayList<String>();
-			for(CrossStudyQueryFilterModel f:crossStudyFilterModelList){
-				s.add(f.getVariable());
-			}
-			// new Field
-			if(additionalColumns.size() > 0){
-				List<String> s2= new ArrayList<String>();
-				for(String column:additionalColumns){
-					s2.add(column);
-				}
-				Collections.sort(s2);
-				ArrayList<String> newFieldAdded=removeDuplicateField(s);
-				s.addAll(s2);
-			}
-			Collections.sort(s);
-			int counter=1;
-			ArrayList<String> newField=removeDuplicateField(s);
-
-			for(String fieldLabel:newField){
-				CrossStudyQueryFilterModel field= new CrossStudyQueryFilterModel();
-				field.setColumnHeader(fieldLabel);
-				field.setVariable(fieldLabel);
-				field.setColumnAs("field");
-
-				if(counter==newField.size()){
-					field.setOrderCriteria("last");
-				}
-				counter++;
-				filters.add(field);
-			}
+				dataList = new ArrayList<String[]>();
+				columnList = new ArrayList<String>();
+				newDataRow= new ArrayList<AcrossStudyData>();
 
 
-			for(CrossStudyQueryFilterModel f:filters){
+				final CrossStudyQueryManagerImpl crossStudyQueryManagerImpl= new CrossStudyQueryManagerImpl(); 
 
-				System.out.println(f.getVariable());
-				System.out.println(f.getColumnAs());
-				System.out.println(f.getDataType());
-				System.out.println(f.getValueDouble());
-				System.out.println(f.getValueString());
-				System.out.println(f.getOperator());
-				System.out.println(f.getOrderCriteria());
-				System.out.println("-------------------");
+				ArrayList<CrossStudyQueryFilterModel> filters = new ArrayList<CrossStudyQueryFilterModel>();
 
-			}
+				// Field
 
+				//			CrossStudyQueryFilterModel fieldStudyId= new CrossStudyQueryFilterModel();
+				//			fieldStudyId.setVariable("STUDY ID");
+				//			fieldStudyId.setColumnAs("field");
+				//			filters.add(fieldStudyId);
+				//
+				//
+				//			CrossStudyQueryFilterModel fieldDataRow= new CrossStudyQueryFilterModel();
+				//			fieldDataRow.setVariable("datarow");
+				//			fieldDataRow.setColumnAs("field");
+				//			filters.add(fieldDataRow);
 
-			System.out.println("FILTER");
-			counter=1;
-			for(CrossStudyQueryFilterModel f:crossStudyFilterModelList){
-				CrossStudyQueryFilterModel field= new CrossStudyQueryFilterModel();
-				field.setVariable(f.getVariable());
-				field.setColumnHeader(f.getVariable());
-				field.setColumnAs("field");
+				CrossStudyQueryFilterModel fieldStudyId= new CrossStudyQueryFilterModel();
+				fieldStudyId.setColumnHeader("Study id");
+				fieldStudyId.setVariable("studyid");
+				fieldStudyId.setColumnAs("field");
+				filters.add(fieldStudyId);
 
-				String valueString=f.getValueString();
+				CrossStudyQueryFilterModel fieldStudyName= new CrossStudyQueryFilterModel();
+				fieldStudyName.setColumnHeader("Study Name");
+				fieldStudyName.setVariable("studyname");
+				fieldStudyName.setColumnAs("field");
+				filters.add(fieldStudyName);
 
-				if(isNumeric(valueString)){
-					field.setValueDouble(Double.valueOf(valueString));
-					field.setDataType("Number");
-				}else{
-					field.setValueString(valueString);
-					field.setDataType("String");
-				}
+				CrossStudyQueryFilterModel fieldGName= new CrossStudyQueryFilterModel();
+				fieldGName.setColumnHeader("Germplasm");
+				fieldGName.setVariable("GName");
+				fieldGName.setColumnAs("field");
+				filters.add(fieldGName);
 
-				field.setColumnAs("filter");
+				//Get Other Field
+				int sizeFieldSelected=crossStudyFilterModelList.size();
 
-				if(f.getOperator().equals("Equal")){
-					field.setOperator(CrossStudyQueryOperator.EQUAL_TO);
-				}else if(f.getOperator().equals("Not Equal")){
-					field.setOperator(CrossStudyQueryOperator.NOT_EQUAL_TO);
-				}else if(f.getOperator().equals("Greater Than")){
-					field.setOperator(CrossStudyQueryOperator.GREATER_THAN);
-				}else if(f.getOperator().equals("Greater Than Equal")){
-					field.setOperator(CrossStudyQueryOperator.GREATER_THAN_EQUAL);
-				}else if(f.getOperator().equals("Less Than")){
-					field.setOperator(CrossStudyQueryOperator.LESS_THAN);
-				}else if(f.getOperator().equals("Less Than Equal")){
-					field.setOperator(CrossStudyQueryOperator.LESS_THAN_EQUAL);
-				}
-
-
-				if(counter==sizeFieldSelected){
-					field.setOrderCriteria("last");
-				}
-				counter++;
-				filters.add(field);
-			}
-
-
-
-			List<HashMap<String,String>> toreturn = crossStudyQueryManagerImpl.getCrossStudyQueryResult(filters,dataCategory);
-			System.out.println("Size:"+toreturn.size());
-			this.searchResultLabel="Cross Study Query Result(s): "+toreturn.size()+"  row(s) returned";
-
-
-			if(toreturn.size() > 0){
-
-				btnExport.setVisible(true);
-
-				//Column Header
-				for (CrossStudyQueryFilterModel d: filters) {
-					if(d.getColumnAs().equals("field")){
-						//					System.out.print(d.getVariable()+ "\t");
-						if(!d.getVariable().equals("studyid")){
-							columnList.add(d.getColumnHeader());
-						}
+				List<String> s= new ArrayList<String>();
+				for(CrossStudyQueryFilterModel f:crossStudyFilterModelList){
+					s.add(f.getVariable());
+					if(f.getVariable().contains("Study")){
+						studyid=Integer.valueOf(f.getValueString());
+						//					System.out.println("******************** study id"+studyid);
 					}
 				}
-				System.out.println("\n ");
-				for( HashMap<String,String> rec:toreturn){
-					ArrayList<String> newRow = new ArrayList<String>();
-					AcrossStudyData dataRow= new AcrossStudyData();
-					ArrayList<String> otherDataList = new ArrayList<String>();
+				// new Field
+				if(additionalColumns.size() > 0){
+					List<String> s2= new ArrayList<String>();
+					for(String column:additionalColumns){
+						s2.add(column);
+					}
+					Collections.sort(s2);
+					ArrayList<String> newFieldAdded=removeDuplicateField(s);
+					s.addAll(s2);
+				}
+				Collections.sort(s);
+				int counter=1;
+				ArrayList<String> newField=removeDuplicateField(s);
+
+				for(String fieldLabel:newField){
+					CrossStudyQueryFilterModel field= new CrossStudyQueryFilterModel();
+					field.setColumnHeader(fieldLabel);
+					field.setVariable(fieldLabel);
+					field.setColumnAs("field");
+
+					if(counter==newField.size()){
+						field.setOrderCriteria("last");
+						field.setUserid(SecurityUtil.getDbUser().getId());
+						field.setStudyid(studyid);
+						//					System.out.println("StudyId &&&&&&&&&&&&&&&&&&&&&&&&&:"+studyid);
+
+					}
+					counter++;
+					filters.add(field);
+				}
+
+
+
+				//			System.out.println("FILTER");
+				counter=1;
+				boolean resetLastToAnotherField=false;
+				for(CrossStudyQueryFilterModel f:crossStudyFilterModelList){
+
+
+					CrossStudyQueryFilterModel field= new CrossStudyQueryFilterModel();
+					field.setVariable(f.getVariable());
+					field.setColumnHeader(f.getVariable());
+					field.setColumnAs("field");
+
+					String valueString=f.getValueString();
+
+					if(isNumeric(valueString)){
+						field.setValueDouble(Double.valueOf(valueString));
+						field.setDataType("Number");
+					}else{
+						field.setValueString(valueString);
+						field.setDataType("String");
+					}
+
+					field.setColumnAs("filter");
+
+					if(f.getOperator().equals("Equal")){
+						field.setOperator(CrossStudyQueryOperator.EQUAL_TO);
+					}else if(f.getOperator().equals("Not Equal")){
+						field.setOperator(CrossStudyQueryOperator.NOT_EQUAL_TO);
+					}else if(f.getOperator().equals("Greater Than")){
+						field.setOperator(CrossStudyQueryOperator.GREATER_THAN);
+					}else if(f.getOperator().equals("Greater Than Equal")){
+						field.setOperator(CrossStudyQueryOperator.GREATER_THAN_EQUAL);
+					}else if(f.getOperator().equals("Less Than")){
+						field.setOperator(CrossStudyQueryOperator.LESS_THAN);
+					}else if(f.getOperator().equals("Less Than Equal")){
+						field.setOperator(CrossStudyQueryOperator.LESS_THAN_EQUAL);
+					}
+
+
+					if(counter==sizeFieldSelected){
+						if(f.getVariable().equals("Study")){
+							resetLastToAnotherField=true;
+						}else{
+							field.setOrderCriteria("last");
+						}
+					}
+					filters.add(field);
+
+					counter++;
+				}
+
+				if(resetLastToAnotherField){
+					System.out.println("Last is Study");
+					filters.get(filters.size()-2).setOrderCriteria("last");
+				}
+
+				for(CrossStudyQueryFilterModel f:filters){
+					System.out.println("Variable :"+f.getVariable());
+					System.out.println("Column as :"+f.getColumnAs());
+					System.out.println("DataType as :"+f.getDataType());
+					System.out.println("Value Double as :"+f.getValueDouble());
+					System.out.println("Value String as :"+f.getValueString());
+					System.out.println("Operator as :"+f.getOperator());
+					System.out.println("OrderCriteria as :"+f.getOrderCriteria());
+					System.out.println("UserId :"+f.getUserid());
+					System.out.println("StudyId :"+f.getStudyid());
+					System.out.println("-------------------");
+
+				}
+
+
+
+				List<HashMap<String,String>> toreturn = crossStudyQueryManagerImpl.getCrossStudyQueryResult(filters,dataCategory);
+				//			System.out.println("Size:"+toreturn.size());
+				this.searchResultLabel="Cross Study Query Result(s): "+toreturn.size()+"  row(s) returned";
+
+
+				if(toreturn.size() > 0){
+
+					btnExport.setVisible(true);
+
+					//Column Header
 					for (CrossStudyQueryFilterModel d: filters) {
 						if(d.getColumnAs().equals("field")){
-							if(!d.getVariable().equals("studyid")){
-								String value= String.valueOf(rec.get(d.getVariable()));
-								if(d.getVariable().equals("studyname")){
-									dataRow.setStudyname(value);
-								}else if(d.getVariable().equals("GName")){
-									dataRow.setGname(value);
-								}else if(d.getVariable().equals("studyid")){
-									dataRow.setStudyId(Integer.valueOf(value));
-								}else{
-									otherDataList.add(value);
-								}
-
-								System.out.print("Value "+value + "\t");
-								newRow.add(value);
+							//					System.out.print(d.getVariable()+ "\t");
+							if(!d.getVariable().equals("studyid") ){
+								columnList.add(d.getColumnHeader());
 							}
 						}
 					}
-					dataRow.setOtherdata(otherDataList);
-					newDataRow.add(dataRow);
-					System.out.print("\n");
-					dataList.add(newRow.toArray(new String[newRow.size()]));
 					//				System.out.println("\n ");
+					for( HashMap<String,String> rec:toreturn){
+						ArrayList<String> newRow = new ArrayList<String>();
+						AcrossStudyData dataRow= new AcrossStudyData();
+						ArrayList<String> otherDataList = new ArrayList<String>();
+						for (CrossStudyQueryFilterModel d: filters) {
+							if(d.getColumnAs().equals("field")){
+								if(!d.getVariable().equals("studyid")){
+									String value= String.valueOf(rec.get(d.getVariable()));
+									if(d.getVariable().equals("studyname")){
+										dataRow.setStudyname(value);
+									}else if(d.getVariable().equals("GName")){
+										dataRow.setGname(value);
+									}else if(d.getVariable().equals("studyid")){
+										dataRow.setStudyId(Integer.valueOf(value));
+									}else{
+										otherDataList.add(value);
+									}
 
-				}
+									//								System.out.print("Value "+value + "\t");
+									newRow.add(value);
+								}
+							}
+						}
+						dataRow.setOtherdata(otherDataList);
+						newDataRow.add(dataRow);
+						//					System.out.print("\n");
+						dataList.add(newRow.toArray(new String[newRow.size()]));
+						//				System.out.println("\n ");
 
-				for(AcrossStudyData d: newDataRow){
+					}
+
+					/*				for(AcrossStudyData d: newDataRow){
 
 					System.out.println(d.getGname()+ " "+d.getStudyname());
 				}
-
-			}else{
-				btnExport.setVisible(false);
+					 */
+				}else{
+					btnExport.setVisible(false);
+				}
 			}
+		}catch(Exception e){
+
 		}
 
 	}
@@ -580,7 +607,7 @@ public class CrossStudyQuery extends StudyVariable {
 		for(String fieldLabel:s){
 			CrossStudyQueryFilterModel field= new CrossStudyQueryFilterModel();
 			if(!oldString.equals(fieldLabel)){
-				if(!fieldLabel.equals("GName")){
+				if(!fieldLabel.equals("GName") && !fieldLabel.contains("Study")){
 					toreturn.add(fieldLabel);
 				}
 			}

@@ -11,6 +11,8 @@ public class CrossStudyQueryFilterModel {
 	String dataType;
 	String orderCriteria;
 	String columnAs;
+	int userid;
+	int studyid;
 	
 	
 	public String getVariable() {
@@ -61,6 +63,20 @@ public class CrossStudyQueryFilterModel {
 	public void setColumnHeader(String columnHeader) {
 		this.columnHeader = columnHeader;
 	}
+	public int getUserid() {
+		return userid;
+	}
+	public void setUserid(int userid) {
+		this.userid = userid;
+	}
+	public int getStudyid() {
+		return studyid;
+	}
+	public void setStudyid(int studyid) {
+		this.studyid = studyid;
+	}
+	
+	
 	
 	
 

@@ -18,6 +18,18 @@
 				ELSE '' END) AS
 				#{item.variable}
 
+				from studyderiveddata as t1
+				left join
+				study as t2 on t1.studyid=t2.id where (t1.userid=#{item.userid} or
+				t1.shared=1)
+				
+				<if test="item.studyid != 0" >
+				    and t1.studyid=#{item.studyid} 
+				</if>
+				
+				 group
+				by t1.studyid,t1.datarow having
+
 			</if>
 
 			<if test="item.columnAs =='field' and item.orderCriteria != 'last'">
@@ -29,12 +41,10 @@
 
 		</foreach>
 
-		from studyderiveddata as t1
-		left join study as t2 on t1.studyid=t2.id group
-		by t1.studyid,t1.datarow having
+
 
 		<foreach item="item" index="index" collection="list">
-			<if test="item.columnAs =='filter' and item.orderCriteria == 'last'">
+			<if test="item.columnAs =='filter' and item.orderCriteria == 'last' and item.variable !='Study'">
 
 				<if test="item.dataType == 'Number'">
 
@@ -74,7 +84,7 @@
 				</if>
 			</if>
 
-			<if test="item.columnAs =='filter' and item.orderCriteria != 'last'">
+			<if test="item.columnAs =='filter' and item.orderCriteria != 'last' and item.variable !='Study'" >
 				<if test="item.dataType == 'Number'">
 					MAX(CASE datacolumn WHEN #{item.variable} THEN datavalue ELSE ''
 					END)
@@ -115,8 +125,8 @@
 		</foreach>
 		order by t1.studyid,t1.datarow,t1.datavalue
 	</select>
-	
-	
+
+
 	<select id="getCrossStudyQueryResultRawData" resultType="hashmap"
 		parameterType="CrossStudyQueryFilterModel">
 
@@ -129,6 +139,10 @@
 				MAX(CASE datacolumn WHEN #{item.variable} THEN datavalue
 				ELSE '' END) AS
 				#{item.variable}
+				from studyrawdata as t1
+				left join study as t2 on t1.studyid=t2.id where (t1.userid=#{item.userid} or
+				t1.shared=1) group
+				by t1.studyid,t1.datarow having
 
 			</if>
 
@@ -141,9 +155,7 @@
 
 		</foreach>
 
-		from studyrawdata as t1
-		left join study as t2 on t1.studyid=t2.id group
-		by t1.studyid,t1.datarow having
+
 
 		<foreach item="item" index="index" collection="list">
 			<if test="item.columnAs =='filter' and item.orderCriteria == 'last'">
@@ -227,6 +239,6 @@
 		</foreach>
 		order by t1.studyid,t1.datarow,t1.datavalue
 	</select>
-	
+
 
 </mapper>
