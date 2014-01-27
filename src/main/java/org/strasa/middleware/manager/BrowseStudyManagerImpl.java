@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
+import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.other.StudySummaryMapper;
 import org.strasa.middleware.model.StudyDataColumn;
@@ -25,39 +26,39 @@ public class BrowseStudyManagerImpl {
 		List<StudySummaryModel> s= new ArrayList<StudySummaryModel>();
 		try{
 
-			List<StudySummaryModel> distinctProgram= mapper.selectDistinctProgram();
+			List<StudySummaryModel> distinctProgram= mapper.selectDistinctProgram(SecurityUtil.getDbUser().getId());
 			for(StudySummaryModel p:distinctProgram){
 				StudySummaryModel rec=new StudySummaryModel();
 				rec.setProgramId(p.getProgramId());
 				rec.setProgramName(p.getProgramName());
 				List<StudySummaryModel> projectCount= mapper.selectDistinctProjectByProgramId(p.getProgramId());
 				rec.setProjectCount(projectCount.size());
-				List<StudySummaryModel> studyCount= mapper.countStudyByProgram(p.getProgramId());
+				List<StudySummaryModel> studyCount= mapper.countStudyByProgram(p.getProgramId(),SecurityUtil.getDbUser().getId());
 				rec.setStudyCount(studyCount.get(0).getStudyCount());
 
 				// count StypeType PBT
 				rec.setStudyTypeIdPbt(1);
-				List<StudySummaryModel> pbtStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(),rec.getStudyTypeIdPbt());
+				List<StudySummaryModel> pbtStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(),rec.getStudyTypeIdPbt(),SecurityUtil.getDbUser().getId());
 				rec.setCountPbt(pbtStudyType.get(0).getCountStudyTypeId());
 
 				// count StypeType OnFarm
 				rec.setStudyTypeIdOnFarm(2);
-				List<StudySummaryModel> onFarmStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdOnFarm());
+				List<StudySummaryModel> onFarmStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdOnFarm(),SecurityUtil.getDbUser().getId());
 				rec.setCountOnFarm(onFarmStudyType.get(0).getCountStudyTypeId());
 
 				// count StypeType Experiment Station
 				rec.setStudyTypeIdExperiment(3);
-				List<StudySummaryModel> experimentStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdExperiment());
+				List<StudySummaryModel> experimentStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdExperiment(),SecurityUtil.getDbUser().getId());
 				rec.setCountExperiment(experimentStudyType.get(0).getCountStudyTypeId());
 
 				// count StypeType Glass House
 				rec.setStudytypeIdGlassHouse(4);
-				List<StudySummaryModel> glassHouseStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudytypeIdGlassHouse());
+				List<StudySummaryModel> glassHouseStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudytypeIdGlassHouse(),SecurityUtil.getDbUser().getId());
 				rec.setCountGlassHouse(glassHouseStudyType.get(0).getCountStudyTypeId());
 
 				// count StypeType Lab
 				rec.setStudyTypeIdLab(5);
-				List<StudySummaryModel> labStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdLab());
+				List<StudySummaryModel> labStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdLab(),SecurityUtil.getDbUser().getId());
 				rec.setCountLab(labStudyType.get(0).getCountStudyTypeId());
 
 				System.out.println("rec:"+rec.toString());

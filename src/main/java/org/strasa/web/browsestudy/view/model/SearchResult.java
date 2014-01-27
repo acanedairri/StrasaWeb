@@ -3,6 +3,7 @@ package org.strasa.web.browsestudy.view.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.manager.BrowseStudyManagerImpl;
 import org.strasa.middleware.manager.CountryManagerImpl;
 import org.strasa.middleware.manager.LocationManagerImpl;
@@ -117,7 +118,8 @@ public class SearchResult {
 		StudySearchFilterModel searchFilter = new StudySearchFilterModel();
 		searchFilter.setProgramid(summary.getProgramId());
 		searchFilter.setProjectid(summary.getProjectId());
-
+		searchFilter.setShared("1");
+		searchFilter.setUserid(SecurityUtil.getDbUser().getId());
 		searchResult = browseStudyManagerImpl.getStudySearchResult(searchFilter);
 		System.out.println("Size:"+searchResult.size());
 		setSearchResultLabel("Search Result:  "+ searchResult.size()+"  row(s) returned");
@@ -131,6 +133,8 @@ public class SearchResult {
 		searchFilter.setProgramid(summary.getProgramId());
 		searchFilter.setProjectid(summary.getProjectId());
 		searchFilter.setStudytypeid(studyTypeId);
+		searchFilter.setShared("1");
+		searchFilter.setUserid(SecurityUtil.getDbUser().getId());
 		searchResult = browseStudyManagerImpl.getStudySearchResult(searchFilter);
 		System.out.println("Result "+summary.toString());
 		setSearchResultLabel("Search Result:  "+ searchResult.size()+"  row(s) returned");

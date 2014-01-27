@@ -42,7 +42,7 @@
 		<where>
 
 			<if test="shared != null">
-				AND t1.shared=#{shared}
+				AND (t1.shared=1 or t1.userid=#{userid} )
 			</if>
 			<if test="studyname != null">
 				AND t1.name LIKE #{studyname}

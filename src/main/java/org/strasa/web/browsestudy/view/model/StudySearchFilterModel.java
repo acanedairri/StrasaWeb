@@ -11,13 +11,14 @@ public class StudySearchFilterModel {
 	String endyear;
 	String country;
 	int locationid;
+	int userid;
 	
 	
 	
 	
 	
 	public StudySearchFilterModel() {
-		this.shared =null;
+		this.shared ="0";
 		this.programid = 0;
 		this.projectid = 0;
 		this.studyname = null;
@@ -81,6 +82,14 @@ public class StudySearchFilterModel {
 	public void setLocationid(int locationid) {
 		this.locationid = locationid;
 	}
+	public int getUserid() {
+		return userid;
+	}
+	public void setUserid(int userid) {
+		this.userid = userid;
+	}
+	
+	
 	
 
 }
