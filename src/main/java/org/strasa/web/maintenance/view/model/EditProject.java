@@ -19,6 +19,8 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
@@ -78,14 +80,26 @@ public class EditProject {
 		BindUtils.postNotifyChange(null, null, ps, "editingStatus");
 	}
 	
+	@SuppressWarnings("unchecked")
 	@NotifyChange("projectList")
 	@Command("deleteProject")
-	public void deleteStudy(@BindingParam("projectId") Integer projectId){
+	public void deleteStudy(@BindingParam("projectId") final Integer projectId){
 		
 		if(studyMan.getStudyByProgramId(projectId).isEmpty()){
-			projectMan.deleteProjectById(projectId);
-			makeProjectStatus(projectMan.getProjectByUserId());
-			Messagebox.show("Changes saved.");
+			Messagebox.show("Are you sure?",
+					"Delete", Messagebox.OK | Messagebox.CANCEL,
+					Messagebox.QUESTION, new EventListener() {
+				public void onEvent(Event e) {
+					if ("onOK".equals(e.getName())) {
+						projectMan.deleteProjectById(projectId);
+						makeProjectStatus(projectMan.getProjectByUserId());
+						BindUtils.postNotifyChange(null, null,
+								EditProject.this, "rowList");
+						Messagebox.show("Changes saved.");
+					} else if ("onCancel".equals(e.getName())) {
+					}
+				}
+			});
 		}
 		else  Messagebox.show("Cannot delete a project with studies.", "Error", Messagebox.OK, Messagebox.ERROR); 
 //		populateEditStudyList();

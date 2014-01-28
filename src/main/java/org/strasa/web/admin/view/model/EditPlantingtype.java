@@ -25,6 +25,8 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
@@ -82,13 +84,25 @@ public class EditPlantingtype {
 		BindUtils.postNotifyChange(null, null, ps, "editingStatus");
 	}
 	
+	@SuppressWarnings("unchecked")
 	@NotifyChange("rowList")
 	@Command("delete")
-	public void delete(@BindingParam("id") Integer Id){
+	public void delete(@BindingParam("id") final Integer Id){
 		if(studyAgroMan.getStudyAgronomyByPLantingTypeId(Id).isEmpty()){
-			man.deleteById(Id);
-			makeRowStatus(man.getAllPlantingTypes());
-			Messagebox.show("Changes saved.");
+			Messagebox.show("Are you sure?",
+					"Delete", Messagebox.OK | Messagebox.CANCEL,
+					Messagebox.QUESTION, new EventListener() {
+				public void onEvent(Event e) {
+					if ("onOK".equals(e.getName())) {
+						man.deleteById(Id);
+						makeRowStatus(man.getAllPlantingTypes());
+						BindUtils.postNotifyChange(null, null,
+								EditPlantingtype.this, "rowList");
+						Messagebox.show("Changes saved.");
+					} else if ("onCancel".equals(e.getName())) {
+					}
+				}
+			});
 		} else  Messagebox.show("Cannot delete a planting type that is in use.", "Error", Messagebox.OK, Messagebox.ERROR); 
 	}
 

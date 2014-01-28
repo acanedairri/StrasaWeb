@@ -17,6 +17,7 @@ import org.strasa.middleware.model.Country;
 import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.ExtensionData;
 import org.strasa.middleware.model.Location;
+import org.strasa.web.admin.view.model.EditAbioticKey;
 import org.strasa.web.uploadstudy.view.model.AddLocation;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -28,6 +29,8 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
@@ -91,13 +94,26 @@ public class EditExtensionData {
 		BindUtils.postNotifyChange(null, null, ps, "editingStatus");
 	}
 
+	@SuppressWarnings("unchecked")
 	@NotifyChange("rowList")
 	@Command("delete")
-	public void delete(@BindingParam("id") Integer Id){
+	public void delete(@BindingParam("id") final Integer Id){
 		//		if(studySiteMan.getSiteByEcotypeId(Id).isEmpty()){
-		man.deleteById(Id);
-		makeRowStatus(man.getAllExtensionData());
-		Messagebox.show("Changes saved.");
+		Messagebox.show("Are you sure?",
+				"Delete", Messagebox.OK | Messagebox.CANCEL,
+				Messagebox.QUESTION, new EventListener() {
+			public void onEvent(Event e) {
+				if ("onOK".equals(e.getName())) {
+					man.deleteById(Id);
+					makeRowStatus(man.getAllExtensionData());
+					BindUtils.postNotifyChange(null, null,
+							EditExtensionData.this, "rowList");
+					Messagebox.show("Changes saved.");
+				} else if ("onCancel".equals(e.getName())) {
+				}
+			}
+		});
+
 		//		} else  Messagebox.show("Cannot delete an extension data that is in use.", "Error", Messagebox.OK, Messagebox.ERROR); 
 	}
 

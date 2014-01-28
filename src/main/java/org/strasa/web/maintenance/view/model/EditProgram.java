@@ -8,6 +8,7 @@ import java.util.Map;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.model.Program;
+import org.strasa.web.admin.view.model.EditEcotype;
 import org.strasa.web.uploadstudy.view.model.AddProgram;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
@@ -18,6 +19,8 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
@@ -75,14 +78,26 @@ public class EditProgram {
 		 */
 		BindUtils.postNotifyChange(null, null, ps, "editingStatus");
 	}
+	@SuppressWarnings("unchecked")
 	@NotifyChange("programList")
 	@Command("deleteProgram")
-	public void deleteStudy(@BindingParam("programId") Integer programId){
+	public void deleteStudy(@BindingParam("programId") final Integer programId){
 
 		if(studyMan.getStudyByProgramId(programId).isEmpty()){
-			programMan.deleteProgramById(programId);
-			makeProgramStatus(programMan.getProgramByUserId());
-			Messagebox.show("Changes saved.");
+			Messagebox.show("Are you sure?",
+					"Delete", Messagebox.OK | Messagebox.CANCEL,
+					Messagebox.QUESTION, new EventListener() {
+				public void onEvent(Event e) {
+					if ("onOK".equals(e.getName())) {
+						programMan.deleteProgramById(programId);
+						makeProgramStatus(programMan.getProgramByUserId());
+						BindUtils.postNotifyChange(null, null,
+								EditProgram.this, "rowList");
+						Messagebox.show("Changes saved.");
+					} else if ("onCancel".equals(e.getName())) {
+					}
+				}
+			});
 		}
 		else  Messagebox.show("Cannot delete a program with studies.", "Error", Messagebox.OK, Messagebox.ERROR); 
 	}
