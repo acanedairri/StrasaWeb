@@ -1,0 +1,72 @@
+<zk>
+	<window title="Add extension data" border="normal" closable="true"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.extensiondata.view.model.AddExtensionData')"
+		width="35%">
+
+
+		<grid vflex="1">
+			<columns>
+				<column label="Type" width="150px" />
+				<column label="Content" />
+			</columns>
+			<rows>
+				<row>
+					<label value="Germplasm Name" width="150px" />
+					<textbox value='@bind(vm.model.germplasmname)'
+						constraint="no empty" width="150px" />
+				</row>
+				<row>
+					<label value="Year" width="150px" />
+					<!-- 					<intbox  -->
+					<textbox constraint="no empty"
+						value='@bind(vm.model.year)' width="150px" />
+				</row>
+				<row>
+					<label value="Location" width="150px" />
+					<textbox value='@bind(vm.model.location)'
+						constraint="no empty" width="150px" />
+				</row>
+				<row>
+					<label value="Area" width="150px" />
+					<decimalbox value='@bind(vm.model.area)'
+						constraint="no empty" width="150px" />
+				</row>
+				<row>
+					<label value="Data Source" width="150px" />
+					<textbox value='@bind(vm.model.datasource)'
+						constraint="no empty" width="150px" />
+				</row>
+				<row>
+					<label value="Country" />
+					<combobox model="@load(vm.cmbCountry)"
+						selectedItem="@bind(vm.model.country)" width="99%"
+						unless="${each.id !=null}">
+						<template name="model" var="p1">
+							<comboitem value="@load(p1)"
+								label="@load(p1)" />
+						</template>
+					</combobox>
+				</row>
+				<row>
+					<label value="Year Release" width="150px" />
+					<!-- 					<intbox  -->
+					<textbox constraint="no empty"
+						value='@bind(vm.model.yearrelease)' width="150px" />
+				</row>
+				<row>
+					<label value="Seed Availability" width="150px" />
+					<intbox value='@bind(vm.model.seedavailability)'
+						constraint="no empty" width="150px" />
+				</row>
+
+				<row>
+					<button label="Save" onClick="@command('add')"></button>
+					<button label="Cancel"
+						onClick="@command('cancel')">
+					</button>
+				</row>
+			</rows>
+		</grid>
+	</window>
+</zk>
