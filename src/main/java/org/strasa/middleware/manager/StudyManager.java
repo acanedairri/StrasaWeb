@@ -37,4 +37,21 @@ public class StudyManager {
 		}
 		
 	}
+	
+	
+	public int getStudyByStudyName(String studyname){
+		int toreturn=0;
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		StudyMapper mapper = session.getMapper(StudyMapper.class);
+		StudyExample example = new StudyExample();
+		example.createCriteria().andNameEqualTo(studyname);
+		try{
+			toreturn= mapper.selectByExample(example).get(0).getId();
+			return toreturn;
+		}
+		finally{
+			session.close();
+		}
+		
+	}
 }

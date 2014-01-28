@@ -72,7 +72,7 @@
 			</combobox>
 
 			<label value="Value"  sclass="label-search"/>
-			<textbox id='txtVaribleValue' width="100px"
+			<textbox id='txtVaribleValue' width="150px"
 				value="@bind(vm.variableValue)" visible="true" />
 			<textbox id='txtVaribleValue2' width="100px"
 				value="@bind(vm.variableValue2)" visible="false" />

@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.manager.CrossStudyQueryManagerImpl;
+import org.strasa.middleware.manager.StudyManager;
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.StudyVariable;
 import org.strasa.web.utilities.FileUtilities;
@@ -49,6 +50,7 @@ public class CrossStudyQuery extends StudyVariable {
 	private StudyVariable variableInfo= new StudyVariable();
 
 	private List<String> operatorString=Arrays.asList(new String[]{"Equal","Like"});
+	private List<String> operatorStringStudy=Arrays.asList(new String[]{"Equal"});
 	private List<String> operatorNumber=Arrays.asList(new String[]{"Equal","Greater Than","Greater Than Equal","Less Than","Less Than Equal","Range"});
 	private List<String> operators;
 	private List<String> additionalColumns= new ArrayList<String>();
@@ -234,6 +236,10 @@ public class CrossStudyQuery extends StudyVariable {
 		}else{
 			this.operators=operatorNumber;
 		}
+		
+		if(variableSelected.getValue().contains("Study")){
+			this.operators=operatorStringStudy;
+		}
 	}
 
 	@Command
@@ -417,7 +423,7 @@ public class CrossStudyQuery extends StudyVariable {
 				for(CrossStudyQueryFilterModel f:crossStudyFilterModelList){
 					s.add(f.getVariable());
 					if(f.getVariable().contains("Study")){
-						studyid=Integer.valueOf(f.getValueString());
+						studyid=getStudyIdByStudyName(f.getValueString());
 						//					System.out.println("******************** study id"+studyid);
 					}
 				}
@@ -505,11 +511,10 @@ public class CrossStudyQuery extends StudyVariable {
 				}
 
 				if(resetLastToAnotherField){
-					System.out.println("Last is Study");
 					filters.get(filters.size()-2).setOrderCriteria("last");
 				}
 
-				for(CrossStudyQueryFilterModel f:filters){
+/*				for(CrossStudyQueryFilterModel f:filters){
 					System.out.println("Variable :"+f.getVariable());
 					System.out.println("Column as :"+f.getColumnAs());
 					System.out.println("DataType as :"+f.getDataType());
@@ -521,9 +526,7 @@ public class CrossStudyQuery extends StudyVariable {
 					System.out.println("StudyId :"+f.getStudyid());
 					System.out.println("-------------------");
 
-				}
-
-
+				}*/
 
 				List<HashMap<String,String>> toreturn = crossStudyQueryManagerImpl.getCrossStudyQueryResult(filters,dataCategory);
 				//			System.out.println("Size:"+toreturn.size());
@@ -588,6 +591,14 @@ public class CrossStudyQuery extends StudyVariable {
 
 		}
 
+	}
+
+	private int getStudyIdByStudyName(String studyname) {
+		int toreturn=0;
+		StudyManager mgr = new StudyManager();
+		toreturn=mgr.getStudyByStudyName(studyname);
+		
+		return toreturn;
 	}
 
 	@Command
