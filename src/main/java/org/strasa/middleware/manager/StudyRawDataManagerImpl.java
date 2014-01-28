@@ -15,10 +15,10 @@ import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.mapper.StudyRawDerivedDataByDataColumnMapper;
 import org.strasa.middleware.mapper.other.ExtendedStudyDataColumnMapper;
 import org.strasa.middleware.mapper.other.StudyRawDataBatch;
+import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyDerivedDataExample;
-import org.strasa.middleware.model.StudyGermplasm;
 import org.strasa.middleware.model.StudyRawData;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudyRawDataByDataColumnExample;
@@ -40,28 +40,30 @@ public class StudyRawDataManagerImpl {
 
 	}
 
+	public void changeDataColumn(Integer studyid, Integer dataset,
+			String oldColumn, String newColumn) {
 
-	public void changeDataColumn(Integer studyid, Integer dataset, String oldColumn, String newColumn){
-		
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		try {
-			ExtendedStudyDataColumnMapper mapper = session.getMapper(ExtendedStudyDataColumnMapper.class);
+			ExtendedStudyDataColumnMapper mapper = session
+					.getMapper(ExtendedStudyDataColumnMapper.class);
 			if (isRaw) {
-				mapper.updateRawDataColumn(newColumn, oldColumn, studyid, dataset);
+				mapper.updateRawDataColumn(newColumn, oldColumn, studyid,
+						dataset);
 			} else {
-				mapper.updateDerivedDataColumn(newColumn, oldColumn, studyid, dataset);
-				
+				mapper.updateDerivedDataColumn(newColumn, oldColumn, studyid,
+						dataset);
+
 			}
 			session.commit();
 		} finally {
 			session.close();
 		}
 
-		
 	}
-	
+
 	public void deleteByStudyId(int studyID) {
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		try {
 			if (isRaw) {
 				StudyRawDataMapper studyMapper = session
@@ -85,7 +87,7 @@ public class StudyRawDataManagerImpl {
 	}
 
 	public int addStudy(Study record) {
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyMapper studyMapper = session.getMapper(StudyMapper.class);
 		try {
 			if (record.getId() == null)
@@ -100,14 +102,15 @@ public class StudyRawDataManagerImpl {
 	}
 
 	public List<Location> getStudyLocationInfo(int studyid, int dataset) {
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
 		List<Location> lstData = mapper.getRawLocation(studyid,
 				getStudyRawTable(), dataset);
 		return lstData;
 	}
 
-	public HashMap<String, Location> getStudyLocationInfoToMap(int studyid, int dataset) {
+	public HashMap<String, Location> getStudyLocationInfoToMap(int studyid,
+			int dataset) {
 		List<Location> lstRaw = getStudyLocationInfo(studyid, dataset);
 		HashMap<String, Location> returnVal = new HashMap<String, Location>();
 		for (Location data : lstRaw) {
@@ -117,22 +120,23 @@ public class StudyRawDataManagerImpl {
 	}
 
 	public List<StudySite> getStudySiteInfo(int studyid, int dataset) {
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
-		List<StudySite> lstData = mapper
-				.getRawSite(studyid, getStudyRawTable(), dataset);
+		List<StudySite> lstData = mapper.getRawSite(studyid,
+				getStudyRawTable(), dataset);
 		return lstData;
 	}
 
-	public List<StudyGermplasm> getStudyGermplasmInfo(int studyid, int dataset) {
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+	public List<Germplasm> getStudyGermplasmInfo(int studyid, int dataset) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
-		List<StudyGermplasm> lstData = mapper.getRawGermplasm(studyid,
-				getStudyRawTable(),  dataset);
+		List<Germplasm> lstData = mapper.getRawGermplasm(studyid,
+				getStudyRawTable(), dataset);
 		return lstData;
 	}
 
-	public HashMap<String, StudySite> getStudySiteInfoToMap(int studyid, int dataset) {
+	public HashMap<String, StudySite> getStudySiteInfoToMap(int studyid,
+			int dataset) {
 		List<StudySite> lstRaw = getStudySiteInfo(studyid, dataset);
 		HashMap<String, StudySite> returnVal = new HashMap<String, StudySite>();
 		for (StudySite data : lstRaw) {
@@ -141,19 +145,9 @@ public class StudyRawDataManagerImpl {
 		return returnVal;
 	}
 
-	public HashMap<String, StudyGermplasm> getStudyGermplasmInfoToMap(
-			int studyid, int dataset) {
-		List<StudyGermplasm> lstRaw = getStudyGermplasmInfo(studyid, dataset);
-		HashMap<String, StudyGermplasm> returnVal = new HashMap<String, StudyGermplasm>();
-		for (StudyGermplasm data : lstRaw) {
-			returnVal.put(data.getGermplasmname(), data);
-		}
-		return returnVal;
-	}
-
 	public ArrayList<ArrayList<String>> constructDataRaw(int studyid,
 			String[] columns, String baseColumn, boolean isDistinct) {
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyRawDataMapper mapper = getStudyRawMapper(session);
 
 		StudyRawDataExample example = new StudyRawDataExample();
@@ -202,7 +196,7 @@ public class StudyRawDataManagerImpl {
 	}
 
 	public void addStudyRawData(Study study, List<StudyRawData> studyData) {
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyRawDataMapper studyDataMapper = getStudyRawMapper(session);
 		StudyMapper studyMapper = session.getMapper(StudyMapper.class);
 		try {
@@ -220,9 +214,10 @@ public class StudyRawDataManagerImpl {
 	}
 
 	public void addStudyRawDataByRawCsvList(Study study,
-			List<String[]> rawCSVData,int dataset) {
+			List<String[]> rawCSVData, int dataset) {
 		String[] header = rawCSVData.get(0);
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
+		SqlSession session = connectionFactory.sqlSessionFactory
+				.openSession(ExecutorType.BATCH);
 		StudyRawDataBatch studyRawBatch = session
 				.getMapper(StudyRawDataBatch.class);
 		StudyRawDataMapper rawMapper = session
@@ -231,7 +226,8 @@ public class StudyRawDataManagerImpl {
 			addStudy(study);
 			List<StudyRawData> lstData = new ArrayList<StudyRawData>();
 
-			System.out.println("StudyIDDDDDDDDDDDDDDDDDDDDDDDD: " + study.getId());
+			System.out.println("StudyIDDDDDDDDDDDDDDDDDDDDDDDD: "
+					+ study.getId());
 			for (int i = 1; i < rawCSVData.size(); i++) {
 				String[] row = rawCSVData.get(i);
 				for (int j = 0; j < header.length; j++) {
@@ -263,51 +259,58 @@ public class StudyRawDataManagerImpl {
 		}
 
 	}
-	
-	public Integer getLastDataRow(Integer studyid, boolean isRaw){
-		
-		if(isRaw){
-			SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
-			StudyRawDataMapper mapper = session.getMapper(StudyRawDataMapper.class);
-			StudyRawDataExample example =  new StudyRawDataExample();
-			example.createCriteria().andStudyidEqualTo(studyid);
-			example.createCriteria().andStudyidEqualTo(studyid);
-			if(mapper.countByExample(example) > 0){
-				return mapper.selectByExample(example).get(mapper.selectByExample(example).size() - 1).getDatarow();
-			}
-			else{
-				return 0;
-			}
-		}
-		else{
 
-			SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
-			StudyDerivedDataMapper mapper = session.getMapper(StudyDerivedDataMapper.class);
-			StudyDerivedDataExample example =  new StudyDerivedDataExample();
+	public Integer getLastDataRow(Integer studyid, boolean isRaw) {
+
+		if (isRaw) {
+			SqlSession session = connectionFactory.sqlSessionFactory
+					.openSession(ExecutorType.BATCH);
+			StudyRawDataMapper mapper = session
+					.getMapper(StudyRawDataMapper.class);
+			StudyRawDataExample example = new StudyRawDataExample();
 			example.createCriteria().andStudyidEqualTo(studyid);
-			if(mapper.countByExample(example) > 0){
-				return mapper.selectByExample(example).get(mapper.selectByExample(example).size() - 1).getDatarow();
-			}
-			else{
+			example.createCriteria().andStudyidEqualTo(studyid);
+			if (mapper.countByExample(example) > 0) {
+				return mapper.selectByExample(example)
+						.get(mapper.selectByExample(example).size() - 1)
+						.getDatarow();
+			} else {
 				return 0;
 			}
-			
+		} else {
+
+			SqlSession session = connectionFactory.sqlSessionFactory
+					.openSession(ExecutorType.BATCH);
+			StudyDerivedDataMapper mapper = session
+					.getMapper(StudyDerivedDataMapper.class);
+			StudyDerivedDataExample example = new StudyDerivedDataExample();
+			example.createCriteria().andStudyidEqualTo(studyid);
+			if (mapper.countByExample(example) > 0) {
+				return mapper.selectByExample(example)
+						.get(mapper.selectByExample(example).size() - 1)
+						.getDatarow();
+			} else {
+				return 0;
+			}
+
 		}
-	
+
 	}
 
 	public void addStudyRawData(Study study, String[] header,
 			List<String[]> rawCSVData, int dataset, boolean isRawData) {
 
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
+		SqlSession session = connectionFactory.sqlSessionFactory
+				.openSession(ExecutorType.BATCH);
 		StudyRawDataBatch studyRawBatch = session
 				.getMapper(StudyRawDataBatch.class);
 		try {
 			addStudy(study);
-			Integer lastRow  = getLastDataRow(study.getId(), isRawData);
-			
+			Integer lastRow = getLastDataRow(study.getId(), isRawData);
+
 			List<StudyRawData> lstData = new ArrayList<StudyRawData>();
-			System.out.println("StudyID______________________: " + study.getId());
+			System.out.println("StudyID______________________: "
+					+ study.getId());
 			for (int i = 0; i < rawCSVData.size(); i++) {
 				String[] row = rawCSVData.get(i);
 				for (int j = 0; j < header.length; j++) {
@@ -339,7 +342,7 @@ public class StudyRawDataManagerImpl {
 
 	public boolean hasSiteColumnData(int studyid) {
 
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyRawDataByDataColumnMapper studySiteByStudyMapper = getStudyRawMapperByColumn(session);
 
 		StudyRawDataByDataColumnExample example = new StudyRawDataByDataColumnExample();
@@ -351,7 +354,7 @@ public class StudyRawDataManagerImpl {
 
 	public boolean hasLocationColumnData(int studyid) {
 
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyRawDataByDataColumnMapper studySiteByStudyMapper = getStudyRawMapperByColumn(session);
 
 		StudyRawDataByDataColumnExample example = new StudyRawDataByDataColumnExample();
@@ -364,7 +367,7 @@ public class StudyRawDataManagerImpl {
 	public List<StudyRawDataByDataColumn> getStudyRawDataColumn(int studyid,
 			String column) {
 
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyRawDataByDataColumnMapper StudyRawDataByDataColumnMapper = getStudyRawMapperByColumn(session);
 
 		StudyRawDataByDataColumnExample example = new StudyRawDataByDataColumnExample();
@@ -377,7 +380,7 @@ public class StudyRawDataManagerImpl {
 	}
 
 	public List<StudyRawData> getAllStudyRawData() {
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyRawDataMapper studyrawdataMapper = getStudyRawMapper(session);
 
 		try {

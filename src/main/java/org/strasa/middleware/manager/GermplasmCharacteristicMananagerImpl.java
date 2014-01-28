@@ -7,11 +7,9 @@ import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.GermplasmCharacteristicsMapper;
-import org.strasa.middleware.mapper.StudyGermplasmCharacteristicsMapper;
 import org.strasa.middleware.model.GermplasmCharacteristics;
 import org.strasa.middleware.model.GermplasmCharacteristicsExample;
-import org.strasa.middleware.model.StudyGermplasmCharacteristicsExample;
-import org.strasa.web.uploadstudy.view.model.StudyGermplasmInfo.GermplasmDeepInfoModel;
+import org.strasa.web.uploadstudy.view.pojos.GermplasmDeepInfoModel;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class GermplasmCharacteristicMananagerImpl {
@@ -19,71 +17,98 @@ public class GermplasmCharacteristicMananagerImpl {
 	@WireVariable
 	ConnectionFactory connectionFactory;
 
-	public void addCharacteristict(List<GermplasmCharacteristics> lstCharRecord){
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
-		GermplasmCharacteristicsMapper mapper = session.getMapper(GermplasmCharacteristicsMapper.class);
-		try{
-			for(GermplasmCharacteristics record : lstCharRecord){
+	public void addCharacteristict(List<GermplasmCharacteristics> lstCharRecord) {
+		SqlSession session = connectionFactory.sqlSessionFactory
+				.openSession(ExecutorType.BATCH);
+		GermplasmCharacteristicsMapper mapper = session
+				.getMapper(GermplasmCharacteristicsMapper.class);
+		try {
+			for (GermplasmCharacteristics record : lstCharRecord) {
 				mapper.insert(record);
 			}
 
 			session.commit();
-		}
-		finally{
+		} finally {
 			session.close();
 		}
 	}
 
-	public void addCharacteristicBatch(Collection<GermplasmDeepInfoModel> collection){
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
-		GermplasmCharacteristicsMapper mapper = session.getMapper(GermplasmCharacteristicsMapper.class);
+	public void addCharacteristicBatch(
+			Collection<GermplasmDeepInfoModel> collection) {
+		SqlSession session = connectionFactory.sqlSessionFactory
+				.openSession(ExecutorType.BATCH);
+		GermplasmCharacteristicsMapper mapper = session
+				.getMapper(GermplasmCharacteristicsMapper.class);
 
-		try{
+		try {
 
-			for(GermplasmDeepInfoModel recData : collection){
+			for (GermplasmDeepInfoModel recData : collection) {
 				GermplasmCharacteristicsExample ex = new GermplasmCharacteristicsExample();
-				ex.createCriteria().andGermplasmnameEqualTo(recData.getGermplasmname());
+				ex.createCriteria().andGermplasmnameEqualTo(
+						recData.getGermplasmname());
 				mapper.deleteByExample(ex);
-				for(GermplasmCharacteristics record : recData.getCharacteristicValues()){
+				System.out.println("CHARSIZE: "
+						+ recData.getCharacteristicValues().size());
+				for (GermplasmCharacteristics record : recData
+						.getCharacteristicValues()) {
 					mapper.insert(record);
 				}
 			}
 
 			session.commit();
-		}
-		finally{
+		} finally {
 			session.close();
 		}
 	}
 
-	public List<GermplasmCharacteristics> getGermplasmCharacteristicByKeyandGname(String attribute,String gname){
+	public List<GermplasmCharacteristics> getGermplasmCharacteristicByKeyandGname(
+			String attribute, String gname) {
 
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		try{
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		try {
 			List<GermplasmCharacteristics> toreturn = null;
-			GermplasmCharacteristics  param= new GermplasmCharacteristics();
+			GermplasmCharacteristics param = new GermplasmCharacteristics();
 			param.setGermplasmname(gname);
 			param.setAttribute(attribute);
 
-			toreturn= session.selectList("BrowseGermplasm.getGermplasmKeyCharacteristicsByGermplasmName",param);
+			toreturn = session
+					.selectList(
+							"BrowseGermplasm.getGermplasmKeyCharacteristicsByGermplasmName",
+							param);
 
 			return toreturn;
 
-		}finally{
+		} finally {
 			session.close();
 		}
 
+	}
+
+	public List<GermplasmCharacteristics> getGermplasmByGermplasmName(
+			String gname) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		try {
+
+			GermplasmCharacteristicsMapper mapper = session
+					.getMapper(GermplasmCharacteristicsMapper.class);
+			GermplasmCharacteristicsExample example = new GermplasmCharacteristicsExample();
+			example.createCriteria().andGermplasmnameEqualTo(gname);
+			return mapper.selectByExample(example);
+		} finally {
+			session.close();
+		}
 	}
 
 	public boolean isCharacteristicValueExisting(String attribute, String value) {
 		// TODO Auto-generated method stub
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 
 		try {
 			GermplasmCharacteristicsMapper mapper = session
 					.getMapper(GermplasmCharacteristicsMapper.class);
 			GermplasmCharacteristicsExample example = new GermplasmCharacteristicsExample();
-			example.createCriteria().andAttributeEqualTo(attribute).andKeyvalueEqualTo(value);
+			example.createCriteria().andAttributeEqualTo(attribute)
+					.andKeyvalueEqualTo(value);
 			return !mapper.selectByExample(example).isEmpty();
 
 		} finally {
