@@ -25,13 +25,20 @@ CREATE TABLE `extensiondata` (
   `location` varchar(50) DEFAULT NULL,
   `area` double(5,2) DEFAULT NULL,
   `datasource` varchar(200) DEFAULT NULL,
-  `country` varchar(100) DEFAULT NULL,
+  `countryextension` varchar(100) DEFAULT NULL,
   `yearrelease` varchar(4) DEFAULT NULL,
   `seedavailability` int(10) DEFAULT NULL,
+  `programid` int(5) DEFAULT NULL,
+  `projectid` int(5) DEFAULT NULL,
+  `countryrelease` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 /*Data for the table `extensiondata` */
+
+insert  into `extensiondata`(`id`,`germplasmname`,`year`,`location`,`area`,`datasource`,`countryextension`,`yearrelease`,`seedavailability`,`programid`,`projectid`,`countryrelease`) values (1,'IR64','2010','IRRI',100.00,'IRRI','Philippines','1980',100,2,3,NULL);
+insert  into `extensiondata`(`id`,`germplasmname`,`year`,`location`,`area`,`datasource`,`countryextension`,`yearrelease`,`seedavailability`,`programid`,`projectid`,`countryrelease`) values (2,'IR64','2011','LB',999.99,'LB','Philippines','1980',100,2,3,NULL);
+insert  into `extensiondata`(`id`,`germplasmname`,`year`,`location`,`area`,`datasource`,`countryextension`,`yearrelease`,`seedavailability`,`programid`,`projectid`,`countryrelease`) values (3,'IR72','2010','IRRI',999.99,'IRRI','Philippines','1982',100,2,3,NULL);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
