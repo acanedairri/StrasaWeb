@@ -4,290 +4,110 @@
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudyGermplasmInfo')">
 
 
-<!-- 		<groupbox id="gbUnknownGermplasm"> -->
-		<div align="left" >
-		<button id="uploadGenotypeData" upload="true"
+		<!-- 		<groupbox id="gbUnknownGermplasm"> -->
+		<div align="left">
+			<button id="uploadGenotypeData" upload="true"
 				label="Import Germplasm Table"
 				onUpload="@command('uploadGenotypeData')" />
-		</div> 
-			
-			<separator></separator>
-			<hlayout spacing="50px">
-				<vlayout width="100%">
-					<groupbox mold="3d" vflex="1"  id="gbUnknownGermplasm"
-						hflex="1">
+		</div>
+
+		<columnlayout vflex="">
+			<columnchildren vflex="1" width="70%">
+				<vlayout width="100%" vflex="1">
+					<groupbox mold="3d" vflex="1"
+						id="gbUnknownGermplasm" hflex="1">
 						<caption label="List of unknown Germplasm"></caption>
 						<vlayout>
-	
-						<grid id="tblStudyGerm"
-							model="@load(vm.lstStudyGermplasm)"   emptyMessage="No Unknown Genotype..."
-							sizedByContent="true">
-							<auxhead width="100%">
-								<auxheader colspan="13" label=""
-									width="100%">
-								</auxheader>
 
-							</auxhead>
-							<columns menupopup="auto"
-								columnsgroup="false">
-								<column label="GID" />
-								<column label="GName"
-									sort="auto(germplasmname)" style="color:red" />
-								<column label="OtherName" />
-								<column label="Breeder"
-									style="color:red"/>
-								<column label="GermplasmType"
-									style="color:red"/>
-								<column label="IR Number" />
-								<column label="IR Cross" />
-								<column label="Parentage" />
-								<column label="Female Parent"
-									style="color:red"/>
-								<column label="Male Parent"
-									style="color:red" />
-								<column label="Selection History" />
-								<column label="Source" />
-								<column label="Biotic"
-									sort="auto(biotic)" />
-								<column label="Abiotic"
-									sort="auto(abiotic)" />
-								<column label="Grain Quality"
-									sort="auto(grainquality)" />
-								<column label="Major Genes"
-									sort="auto(majorgenes)" />
+							<grid id="tblStudyGerm"
+								model="@load(vm.lstStudyGermplasm)"
+								emptyMessage="No Unknown Genotype..." sizedByContent="true" vflex="1">
+								<auxhead width="100%">
+									<auxheader colspan="13" label=""
+										width="100%">
+									</auxheader>
 
-							</columns>
-							<template name="model">
-								<row style="@load(each.styleBG)"
-									vflex="1" hflex="1">
-									<intbox value="@bind(each.gid)" />
-									<label
-										value="@bind(each.germplasmname)" />
-									<textbox
-										value="@bind(each.othername)" />
-									<textbox
-										value="@bind(each.currBreader)" constraint="no empty" />
-									<combobox
-										model="@load(vm.lstGermplasmType)"
-										readonly="${each.germplasmtypeid != null}"
-										selectedItem="@bind(each.selectedGermplasmType)"
-										width="99%">
-										<template name="model">
-											<comboitem
-												value="@load(each.germplasmtype)"
-												label="@load(each.germplasmtype)" />
-										</template>
-									</combobox>
+								</auxhead>
+								<columns menupopup="auto"
+									columnsgroup="false">
+									<column label="GName"
+										sort="auto(germplasmname)" style="color:red" hflex="1" />
+									<column label="Breeder"
+										style="color:red" hflex="1" />
+									<column label="GermplasmType"
+										style="color:red" hflex="1" />
+									<column label="Female Parent"
+										style="color:red" hflex="1" />
+									<column label="Male Parent"
+										style="color:red" hflex="1" />
 
-									<textbox
-										value="@bind(each.irnumber)" />
-									<textbox
-										value="@bind(each.ircross)" />
-									<textbox
-										value="@bind(each.parentage)" />
-									<textbox
-										value="@bind(each.femaleparent)" constraint="no empty" />
-									<textbox
-										value="@bind(each.maleparent)" constraint="no empty" />
-									<textbox
-										value="@bind(each.selectionhistory)" />
-									<textbox value="@bind(each.source)" />
-									
-									
-									<bandbox readonly="true"
-										mold="rounded" value="@load(each.strBiotic)"
-										onBlur="@command('updateCharacteristicInfo',model= each)">
+								</columns>
+								<template name="model">
+									<row style="@load(each.styleBG)"
+										vflex="1" hflex="1"
+										onClick="@command('selectGermplasm', germplasm = each)">
+										<label
+											value="@bind(each.germplasmname)" />
+										<combobox
+											model="@load(vm.lstGermplasmType)"
+											readonly="${each.germplasmtypeid != null}"
+											selectedItem="@bind(each.selectedGermplasmType)"
+											width="99%">
+											<template name="model">
+												<comboitem
+													value="@load(each.germplasmtype)"
+													label="@load(each.germplasmtype)" />
+											</template>
+										</combobox>
 
-										<bandpopup>
+										<textbox
+											value="@bind(each.breeder)" />
 
-											<listbox
-												model="@load(each.keyBiotic)" width="200px">
-												<listhead>
-													<listheader
-														label="Name" />
-													<listheader
-														label="Value" />
-												</listhead>
-												<template
-													name="model">
-													<listitem>
-														<listcell
-															label="@load(each.name)" />
-														<listcell>
-															<checkbox
-																checked="@bind(each.value)">
-															</checkbox>
-														</listcell>
-													</listitem>
-
-												</template>
-											</listbox>
-
-										</bandpopup>
-									</bandbox>
-									
-									<bandbox readonly="true" hflex="1"
-										mold="rounded" value="@load(each.strAbiotic)"
-										onBlur="@command('updateCharacteristicInfo',model= each)">
-										<bandpopup>
-											<listbox
-												model="@load(each.keyAbiotic)" width="200px">
-												<listhead>
-													<listheader
-														label="Name" />
-													<listheader
-														label="Value" />
-												</listhead>
-												<template
-													name="model">
-													<listitem>
-														<listcell
-															label="@load(each.name)" />
-														<listcell>
-															<checkbox
-																checked="@bind(each.value)">
-															</checkbox>
-														</listcell>
-													</listitem>
-
-												</template>
-											</listbox>
-										</bandpopup>
-
-									</bandbox>
-									
-
-									<bandbox readonly="true"
-										mold="rounded" value="@load(each.strGrainQuality)"
-										onBlur="@command('updateCharacteristicInfo', model= each)">
-										<bandpopup>
-											<listbox
-												model="@load(each.keyGrainQuality)" width="200px">
-												<listhead>
-													<listheader
-														label="Name" />
-													<listheader
-														label="Value" />
-												</listhead>
-												<template
-													name="model">
-													<listitem>
-														<listcell
-															label="@load(each.name)" />
-														<listcell>
-															<checkbox
-																checked="@bind(each.value)">
-															</checkbox>
-														</listcell>
-													</listitem>
-
-												</template>
-											</listbox>
-
-										</bandpopup>
-									</bandbox>
+										<textbox
+											value="@bind(each.femaleparent)" constraint="no empty" />
+										<textbox
+											value="@bind(each.maleparent)" constraint="no empty" />
 
 
-									<bandbox readonly="true"
-										mold="rounded" value="@load(each.strMajorGenes)"
-										onBlur="@command('updateCharacteristicInfo', model= each)">
-										<bandpopup>
 
-											<listbox
-												model="@load(each.keyMajorGenes)" width="200px">
-												<listhead>
-													<listheader
-														label="Name" />
-													<listheader
-														label="Value" />
-												</listhead>
-												<template
-													name="model">
-													<listitem>
-														<listcell
-															label="@load(each.name)" />
-														<listcell>
-															<checkbox
-																checked="@bind(each.value)">
-															</checkbox>
-														</listcell>
-													</listitem>
 
-												</template>
-											</listbox>
-										</bandpopup>
-									</bandbox>
-								</row>
-							</template>
+									</row>
+								</template>
 
-						</grid>
-						<separator spacing="20px" />
+							</grid>
+							<separator spacing="20px" />
 
-</vlayout>
+						</vlayout>
 					</groupbox>
 					<groupbox id="gbKnownGermplasm" mold="3d">
 						<caption label="List of known Germplasm"></caption>
-						<grid id="tblKnownGerm" sizedByContent="true" hflex="1"
-							model="@load(vm.lstKnownGermplasm)" >
-							<auxhead width="100%">
-								<auxheader colspan="12" label=""
-									width="100%">
-
-
-								</auxheader>
-								<auxheader colspan="3"
-									label="Characteristic" width="100%">
-
-
-								</auxheader>
-							</auxhead>
+						<grid id="tblKnownGerm" sizedByContent="true"
+							hflex="1" model="@load(vm.lstKnownGermplasm)">
 							<columns menupopup="auto"
 								columnsgroup="false">
-								<column label="GID" sort="auto(gid)" />
 								<column label="GName"
-									sort="auto(germplasmname)" />
-								<column label="OtherName"
-									sort="auto(othername)" />
+									sort="auto(germplasmname)" hflex="1"/>
 								<column label="Breeder"
-									sort="auto(breeder)" />
+									sort="auto(breeder)" hflex="1"/>
 								<column label="GermplasmType"
-									sort="auto(germplasmType)" />
-								<column label="IR Number"
-									sort="auto(irnumber)" />
-								<column label="IR Cross"
-									sort="auto(ircross)" />
-								<column label="Parentage"
-									sort="auto(parentage)" />
+									sort="auto(germplasmType)" hflex="1"/>
 								<column label="Female Parent"
-									sort="auto(femaleparent)" />
+									sort="auto(femaleparent)" hflex="1"/>
 								<column label="Male Parent"
-									sort="auto(maleparent)" />
-								<column label="Selection History"
-									sort="auto(selectionhistory)" />
-								<column label="Source"
-									sort="auto(source)" />
-								<column label="Biotic"
-									sort="auto(biotic)" />
-								<column label="Abiotic"
-									sort="auto(abiotic)" />
-								<column label="Grain Quality"
-									sort="auto(grainquality)" />
-								<column label="Major Genes"
-									sort="auto(majorgenes)" />
+									sort="auto(maleparent)" hflex="1"/>
 								<column label="Actions"
 									visible="@bind(vm.updateMode)" />
 							</columns>
 							<template name="model">
-								<row style="@load(each.styleBG)">
-									<label value="@bind(each.gid)" />
+								<row style="@load(each.styleBG)" 		onClick="@command('selectGermplasm', germplasm = each)">
 
 
 									<bandbox
-										value="@bind(each.germplasmname)" 
-										instant="true" autodrop="true" readonly="true">
+										value="@bind(each.germplasmname)" instant="true"
+										autodrop="true" readonly="true">
 										<bandpopup>
 											<vbox width="40%">
-												
+
 												<grid
 													model="@load(vm.getGermplasmByName(each.germplasmname))"
 													emptyMessage="No Germplasm is available. "
@@ -331,35 +151,31 @@
 															label="Selection History" sort="auto(selectionhistory)" />
 														<column
 															label="Source" sort="auto(source)" />
-														<column
-															label="Biotic" sort="auto(biotic)" />
-														<column
-															label="Abiotic" sort="auto(abiotic)" />
-														<column
-															label="Grain Quality" sort="auto(grainquality)" />
-														<column
-															label="Major Genes" sort="auto(majorgenes)" />
+												
 														<column
 															label="Actions" visible="@bind(vm.updateMode)" />
 													</columns>
 													<template
 														name="model">
-														<row onClick="@command('changeGermplasmInfo', index = each)">
-															
+														<row
+															onClick="@command('changeGermplasmInfo', index = each)">
+
 															<label
 																value="@bind(each.gid)" />
-															<label value="@bind(each.germplasmname)" />
+															<label
+																value="@bind(each.germplasmname)" />
 															<label
 																value="@bind(each.othername)" />
 															<vlayout>
 																<label
-																	value="@bind(each.dispBreeder)">
-																
+																	value="@bind(each.breeder)">
+
 																</label>
-																
+
 															</vlayout>
+
 															<label
-																value="@bind(each.germplasmType)" />
+																value="@bind(each.selectedGermplasmType.germplasmtype)" />
 															<label
 																value="@bind(each.irnumber)" />
 															<label
@@ -374,14 +190,7 @@
 																value="@bind(each.selectionhistory)" />
 															<label
 																value="@bind(each.source)" />
-															<label
-																value="@bind(each.biotic)" />
-															<label
-																value="@bind(each.abiotic)" />
-															<label
-																value="@bind(each.grainquality)" />
-															<label
-																value="@bind(each.majorgenes)" />
+										
 
 														</row>
 													</template>
@@ -389,50 +198,16 @@
 											</vbox>
 										</bandpopup>
 									</bandbox>
+									<label
+										value="@bind(each.breeder)">
+									</label>
 
 									<label
-										value="@bind(each.othername)" />
-									<vlayout>
-										<label
-											value="@bind(each.dispBreeder)"
-											tooltip="ttip_${forEachStatus.index}">
-										</label>
-										<popup
-											id="ttip_${forEachStatus.index}" width="200px">
-											<vbox>
-												<groupbox width="200px"
-													closable="false">
-													<caption>
-														Known Breeders
-													</caption>
-													<label
-														multiline="true" sclass="word-wrap"
-														value="${each.oldBreeders}">
-													</label>
-												</groupbox>
-											</vbox>
-										</popup>
-									</vlayout>
-
-									<label
-										value="@bind(each.germplasmType)" />
-									<label value="@bind(each.irnumber)" />
-									<label value="@bind(each.ircross)" />
-									<label
-										value="@bind(each.parentage)" />
+										value="@bind(each.selectedGermplasmType.germplasmtype)" />
 									<label
 										value="@bind(each.femaleparent)" />
 									<label
 										value="@bind(each.maleparent)" />
-									<label
-										value="@bind(each.selectionhistory)" />
-									<label value="@bind(each.source)" />
-									<label value="@bind(each.biotic)" />
-									<label value="@bind(each.abiotic)" />
-									<label
-										value="@bind(each.grainquality)" />
-									<label
-										value="@bind(each.majorgenes)" />
 									<button label="Edit"
 										onClick="@command('modifyGermplasm', gname=each.germplasmname)" />
 
@@ -444,15 +219,215 @@
 					<separator spacing="20px" />
 				</vlayout>
 
-			</hlayout>
-<!-- 		</groupbox> -->
+			</columnchildren>
+			<columnchildren width="30%">
 
-		<hlayout>
+
+				<vlayout vflex="1">
+					<groupbox width="100%" mold="3d">
+						<caption label="Other Information" />
+						<grid vflex="1">
+							<columns>
+								<column />
+								<column />
+							</columns>
+							<rows>
+
+								<row>
+									<label value="GID:" style="" />
+
+									<intbox
+										value="@bind(vm.selectedGermplasm.gid)" width="99%"
+										disabled="@load(vm.selectedGermplasm.editMode)"  inplace="@load(vm.selectedGermplasm.editMode)" style="color: #000000 !important;"/>
+
+								</row>
+								<row>
+									<label value="Other Name:" style="" />
+
+									<textbox
+										value="@bind(vm.selectedGermplasm.othername)" width="99%"
+										disabled="@load(vm.selectedGermplasm.editMode)" inplace="@load(vm.selectedGermplasm.editMode)" style="color: #000000 !important;"/>
+										
+
+								</row>
+								<row>
+
+									<label value="IR Number:" style="" />
+									<textbox
+										value="@bind(vm.selectedGermplasm.irnumber)" width="99%"
+										disabled="@load(vm.selectedGermplasm.editMode)" inplace="@load(vm.selectedGermplasm.editMode)" style="color: #000000 !important;"/>
+								</row>
+								<row>
+									<label value="IR Cross:" />
+									<textbox
+										value="@bind(vm.selectedGermplasm.ircross)" width="99%"
+										disabled="@load(vm.selectedGermplasm.editMode)" inplace="@load(vm.selectedGermplasm.editMode)" style="color: #000000 !important;"/>
+								</row>
+								<row>
+									<label value="Parentage:" />
+									<textbox
+										value="@bind(vm.selectedGermplasm.parentage)" width="99%"
+										disabled="@load(vm.selectedGermplasm.editMode)" inplace="@load(vm.selectedGermplasm.editMode)" style="color: #000000 !important;"/>
+								</row>
+								<row>
+									<label value="Selection History:" />
+									<textbox
+										value="@bind(vm.selectedGermplasm.selectionhistory)"
+										width="99%" disabled="@load(vm.selectedGermplasm.editMode)" inplace="@load(vm.selectedGermplasm.editMode)" style="color: #000000 !important;"/>
+								</row>
+								<row>
+									<label value="Source:" />
+									<textbox
+										value="@bind(vm.selectedGermplasm.source)" width="99%"
+										disabled="@load(vm.selectedGermplasm.editMode)" inplace="@load(vm.selectedGermplasm.editMode)" style="color: #000000 !important;"/>
+								</row>
+
+							</rows>
+						</grid>
+					</groupbox>
+					<groupbox width="99%" mold="3d">
+						<caption label="Characteristic" />
+						<grid vflex="1">
+							<rows>
+
+
+								<row width="100%">
+									<tabbox hflex="1" vflex="1"
+										width="100%">
+										<tabs>
+											<tab label="Biotic"></tab>
+											<tab label="Abiotic"
+												width="">
+											</tab>
+											<tab label="Major Genes"
+												width="">
+											</tab>
+											<tab label="Grain Quality"
+												width="">
+											</tab>
+										</tabs>
+										<tabpanels>
+											<tabpanel>
+												<listbox
+													model="@load(vm.selectedGermplasm.keyBiotic)"
+													width="200px">
+													<listhead>
+														<listheader
+															label="Name" />
+														<listheader
+															label="Value" />
+													</listhead>
+													<template
+														name="model">
+														<listitem>
+															<listcell
+																label="@load(each.name)" />
+															<listcell>
+																<checkbox
+																	checked="@bind(each.value)" disabled="@load(vm.selectedGermplasm.known)">
+																</checkbox>
+															</listcell>
+														</listitem>
+
+													</template>
+												</listbox>
+											</tabpanel>
+											<tabpanel>
+												<listbox
+													model="@load(vm.selectedGermplasm.keyAbiotic)"
+													width="200px">
+													<listhead>
+														<listheader
+															label="Name" />
+														<listheader
+															label="Value" />
+													</listhead>
+													<template
+														name="model">
+														<listitem>
+															<listcell
+																label="@load(each.name)" />
+															<listcell>
+																<checkbox
+																	checked="@bind(each.value)" disabled="@load(vm.selectedGermplasm.known)">
+																</checkbox>
+															</listcell>
+														</listitem>
+
+													</template>
+												</listbox>
+											</tabpanel>
+											<tabpanel>
+												<listbox
+													model="@load(vm.selectedGermplasm.keyGrainQuality)"
+													width="200px">
+													<listhead>
+														<listheader
+															label="Name" />
+														<listheader
+															label="Value" />
+													</listhead>
+													<template
+														name="model">
+														<listitem>
+															<listcell
+																label="@load(each.name)" />
+															<listcell>
+																<checkbox
+																	checked="@bind(each.value)" disabled="@load(vm.selectedGermplasm.known)">
+																</checkbox>
+															</listcell>
+														</listitem>
+
+													</template>
+												</listbox>
+											</tabpanel>
+											<tabpanel>
+												<listbox
+													model="@load(vm.selectedGermplasm.keyMajorGenes)"
+													width="200px">
+													<listhead>
+														<listheader
+															label="Name" />
+														<listheader
+															label="Value" />
+													</listhead>
+													<template
+														name="model">
+														<listitem>
+															<listcell
+																label="@load(each.name)" />
+															<listcell>
+																<checkbox
+																	checked="@bind(each.value)" disabled="@load(vm.selectedGermplasm.known)">
+																</checkbox>
+															</listcell>
+														</listitem>
+
+													</template>
+												</listbox>
+											</tabpanel>
+										</tabpanels>
+
+									</tabbox>
+								</row>
+							</rows>
+						</grid>
+
+					</groupbox>
+				</vlayout>
+			</columnchildren>
+		</columnlayout>
+		<separator></separator>
+		<!-- 		</groupbox> -->
+
+		<hlayout width="">
 
 			<button label="Save" onClick="@command('validateList')"
 				sclass="btn-blue" image="/images/save16.png">
 			</button>
 		</hlayout>
+
 
 	</div>
 </zk>
