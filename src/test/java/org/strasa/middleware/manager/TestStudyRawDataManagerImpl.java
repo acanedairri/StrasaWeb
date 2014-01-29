@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.mapper.other.StudyRawDataBatch;
+import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyGermplasm;
@@ -77,9 +78,9 @@ public class TestStudyRawDataManagerImpl {
 		System.out.println("Start");
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
-		 List<StudyGermplasm> lstData = mapper.getRawGermplasm(60, "studyrawdata",1);
+		 List<Germplasm> lstData = mapper.getRawGermplasm(60, "studyrawdata",1);
 		 System.out.println(lstData.size());
-		 for(StudyGermplasm loc : lstData){
+		 for(Germplasm loc : lstData){
 			 System.out.println(loc.toString());
 		 }
 	}

@@ -64,7 +64,7 @@ public class GermplasmInfo {
 
 	@Init
 	public void init(@ExecutionArgParam("studyid") Integer studyId){
-		for(StudyGermplasm sg :getGermplasmById(studyId)){
+		for(Germplasm sg :getGermplasmById(studyId)){
 			germplasmList.add(new GermplasmInfoModel(sg));
 		}
 		
@@ -240,14 +240,14 @@ public class GermplasmInfo {
 
 	}
 	
-	private  List<StudyGermplasm> getGermplasmById(Integer studyId){
+	private  List<Germplasm> getGermplasmById(Integer studyId){
 
 		StudyGermplasmManagerImpl mgr= new StudyGermplasmManagerImpl();
-		List<StudyGermplasm> list;
+		List<Germplasm> list;
 		try{
-		list = mgr.getStudyGermplasmByStudyId(studyId);
+		list = mgr.getGermplasmFromStudy(studyId);
 		}catch (NullPointerException npe){
-			list  = new ArrayList<StudyGermplasm>();
+			list  = new ArrayList<Germplasm>();
 		}
 		return list;
 
@@ -388,24 +388,24 @@ public class GermplasmInfo {
 		return germplasmType;
 	}
 
-	public class GermplasmInfoModel extends StudyGermplasm{
+	public class GermplasmInfoModel extends Germplasm{
 		private GermplasmType type;
 		private String characteristics;
 		
 		private StringBuilder sb = new StringBuilder();
-		public GermplasmInfoModel(StudyGermplasm s){
-			this.setGid(s.getGid());
-			this.setGermplasmname(s.getGermplasmname());
-			this.setOthername(s.getOthername());
-			this.setBreeder(s.getBreeder());
-			this.setIrnumber(s.getIrnumber());
-			this.setIrcross(s.getIrcross());
-			this.setParentage(s.getParentage());
-			this.setFemaleparent(s.getFemaleparent());
-			this.setMaleparent(s.getMaleparent());
-			this.setSelectionhistory(s.getSelectionhistory());
-			this.setSource(s.getSource());
-			setType(getGermplasmTypeList().get(s.getGermplasmtypeid()));
+		public GermplasmInfoModel(Germplasm sg){
+			this.setGid(sg.getGid());
+			this.setGermplasmname(sg.getGermplasmname());
+			this.setOthername(sg.getOthername());
+			this.setBreeder(sg.getBreeder());
+			this.setIrnumber(sg.getIrnumber());
+			this.setIrcross(sg.getIrcross());
+			this.setParentage(sg.getParentage());
+			this.setFemaleparent(sg.getFemaleparent());
+			this.setMaleparent(sg.getMaleparent());
+			this.setSelectionhistory(sg.getSelectionhistory());
+			this.setSource(sg.getSource());
+			setType(getGermplasmTypeList().get(sg.getGermplasmtypeid()));
 			sb.append(" ");
 //			sb.append(getGermplasmCharacteristics("Biotic", getGermplasmname()));
 //			sb.append(getGermplasmCharacteristics("Abiotic", getGermplasmname()));
