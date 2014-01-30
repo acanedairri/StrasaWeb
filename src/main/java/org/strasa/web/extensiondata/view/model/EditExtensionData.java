@@ -10,6 +10,8 @@ import org.strasa.middleware.manager.EcotypeManagerImpl;
 import org.strasa.middleware.manager.ExtensionDataManagerImpl;
 import org.strasa.middleware.manager.GermplasmManagerImpl;
 import org.strasa.middleware.manager.LocationManagerImpl;
+import org.strasa.middleware.manager.ProgramManagerImpl;
+import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyLocationManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudySiteManagerImpl;
@@ -17,6 +19,8 @@ import org.strasa.middleware.model.Country;
 import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.ExtensionData;
 import org.strasa.middleware.model.Location;
+import org.strasa.middleware.model.Program;
+import org.strasa.middleware.model.Project;
 import org.strasa.web.admin.view.model.EditAbioticKey;
 import org.strasa.web.uploadstudy.view.model.AddLocation;
 import org.zkoss.bind.BindUtils;
@@ -31,6 +35,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
@@ -38,9 +44,17 @@ import org.zkoss.zul.Window;
 public class EditExtensionData {
 	ExtensionDataManagerImpl man;
 	StudySiteManagerImpl studySiteMan;
-	List<RowStatus> rowList = new ArrayList<RowStatus>(); 
+	ProgramManagerImpl programMan;
+	ProjectManagerImpl projectMan;
+	
+	List<RowStatus> rowList = new ArrayList<RowStatus>();
+	private List<Program> programList= null;
+	private List<Project> projectList= null;
+	
 	private ArrayList<String> cmbCountry = new ArrayList<String>(); 
-
+	private HashMap<Integer,String> programKeyList = new HashMap<Integer,String>();
+	private HashMap<Integer,String> projectKeyList = new HashMap<Integer,String>();
+	
 	public List<RowStatus> getRowList() {
 		return rowList;
 	}
@@ -53,6 +67,15 @@ public class EditExtensionData {
 	public void init(@ContextParam(ContextType.VIEW) Component view){
 		man = new ExtensionDataManagerImpl();
 		studySiteMan = new StudySiteManagerImpl();
+		programMan = new ProgramManagerImpl();
+		projectMan = new ProjectManagerImpl();
+		
+		setProgramList(new ArrayList<Program>());
+		for(Program p: programMan.getAllProgram()){
+			if(!projectMan.getProjectByProgramId(p.getId()).isEmpty())programList.add(p);
+		}
+		setProjectList(projectMan.getAllProject());
+		
 		makeRowStatus(man.getAllExtensionData());
 
 		List<Country> lCountries = new CountryManagerImpl().getAllCountry();
@@ -63,26 +86,59 @@ public class EditExtensionData {
 
 	private void makeRowStatus(List<ExtensionData> list) {
 		// TODO Auto-generated method stub
-
+		projectKeyList.clear();
+		programKeyList.clear();
 		rowList.clear();
 		for (ExtensionData p: list){
-			RowStatus ps = new RowStatus(p,false);
+			Program prog = programMan.getProgramById(p.getProgramid());
+			programKeyList.put(prog.getId(),prog.getName());
+
+			Project proj = projectMan.getProjectById(p.getProjectid());
+			projectKeyList.put(proj.getId(),proj.getName());
+			
+			RowStatus ps = new RowStatus(p,false, prog, proj);
 			rowList.add(ps);
 		}
 	}
 
+	@NotifyChange("projectList")
 	@Command
 	public void changeEditableStatus(@BindingParam("RowStatus") RowStatus ps) {
+		setProjectList(projectMan.getProjectByProgramId(ps.getValue().getProgramid()));
+		unCheckAllRowStatusExcept(ps);
 		ps.setEditingStatus(!ps.getEditingStatus());
 		refreshRowTemplate(ps);
 	}
+	
+	private void unCheckAllRowStatusExcept(RowStatus ps) {
+		// TODO Auto-generated method stub
+		for(RowStatus rs: rowList){
+			if(!rs.equals(ps))rs.setEditingStatus(false);
+			refreshRowTemplate(rs);
+		}
+	}
 
 	@Command
-	public void confirm(@BindingParam("RowStatus") RowStatus ps) {
-		changeEditableStatus(ps);
+	public String getProgramName(@BindingParam("programId") Integer programId) {
+		return programKeyList.get(programId);
+	}
+
+	@Command
+	public void confirm(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view, @BindingParam("RowStatus") RowStatus ps) {
+		Combobox programComboBox = (Combobox) component.getFellow("programComboBox");
+		Combobox projectComboBox = (Combobox) component.getFellow("projectComboBox");
+		
+//		Program prog= programMan.getProgramById((Integer)programComboBox.getSelectedItem().getValue());
+//		Project proj= projectMan.getProjectById((Integer)projectComboBox.getSelectedItem().getValue());
+		
+		ps.getValue().setProgramid((Integer)programComboBox.getSelectedItem().getValue());
+		ps.getValue().setProjectid((Integer)projectComboBox.getSelectedItem().getValue());
+//		ps.setProject(proj);
 		refreshRowTemplate(ps);
 		man.updateExtensionData(ps.getValue());
 		Messagebox.show("Changes saved.");
+		changeEditableStatus(ps);
 	}
 
 	public void refreshRowTemplate(RowStatus ps) {
@@ -137,7 +193,22 @@ public class EditExtensionData {
 		makeRowStatus(man.getAllExtensionData());
 	}
 
-
+	@NotifyChange("projectList")
+	@Command
+	public void updateLists(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view, @BindingParam("program") Comboitem program){
+		Combobox projectComboBox = (Combobox) component.getFellow("projectComboBox");
+		
+		try{
+		setProjectList(projectMan.getProjectByProgramId((Integer)program.getValue()));
+		projectComboBox.setValue(projectList.get(0).getName());
+		BindUtils.postNotifyChange(null, null,
+				EditExtensionData.this, "projectList");
+		}catch(RuntimeException re){
+			setProjectList(projectMan.getAllProject());
+		}
+	}
+	
 	public ArrayList<String> getCmbCountry() {
 		return cmbCountry;
 	}
@@ -146,14 +217,35 @@ public class EditExtensionData {
 		this.cmbCountry = cmbCountry;
 	}
 
+	public List<Program> getProgramList() {
+		return programList;
+	}
+
+	public void setProgramList(List<Program> programList) {
+		this.programList = programList;
+	}
+
+
+	public List<Project> getProjectList() {
+		return projectList;
+	}
+
+	public void setProjectList(List<Project> projectList) {
+		this.projectList = projectList;
+	}
+
 
 	public class RowStatus {
+		private  Program program;
+		private Project project;
 		private  ExtensionData value;
 		private boolean editingStatus;
 
-		public RowStatus(ExtensionData p, boolean editingStatus) {
+		public RowStatus(ExtensionData p, boolean editingStatus, Program program, Project project) {
 			this.setValue(p);
 			this.editingStatus = editingStatus;
+			this.setProgram(program);
+			this.setProject(project);
 		}
 
 
@@ -174,5 +266,26 @@ public class EditExtensionData {
 		public void setValue(ExtensionData p) {
 			this.value = p;
 		}
+
+
+		public Program getProgram() {
+			return program;
+		}
+
+
+		public void setProgram(Program program) {
+			this.program = program;
+		}
+
+
+		public Project getProject() {
+			return project;
+		}
+
+
+		public void setProject(Project project) {
+			this.project = project;
+		}
+
 	}
 }
