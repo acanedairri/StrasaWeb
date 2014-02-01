@@ -623,6 +623,8 @@ public class StudySiteInfo extends ProcessTabViewModel {
 				siteInfo.selectedSitePlantingType = blankPlantingType;
 				siteInfo.selectedAgroInfo = new StudyAgronomy();
 				System.out.println("NO PLANTING TYPE");
+				siteInfo.selectedAgroInfo.setStudysiteid(this.getStudyID());
+				siteInfo.selectedDesignInfo.setStudyid(this.studyID);
 				sites.add(siteInfo);
 			
 			}

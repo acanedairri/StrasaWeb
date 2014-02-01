@@ -75,6 +75,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 	@Wire("#gbKnownGermplasm")
 	Groupbox gbKnownGermplasm;
 
+	
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
@@ -179,34 +180,66 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 	}
 
+	
+	public String getTotalUnknownGermplasm() {
+		return "List of total unknown germplasm (total: " + lstStudyGermplasm.size() + ")";
+	}
+
+	public String getTotalKnownGermplasm() {
+		return "List of total of uploaded germplasm (total: " + lstKnownGermplasm.size() + ")";
+	}
+	
+	
+	
+	
 	@Command
-	@NotifyChange("selectedGermplasm")
 	public void selectGermplasm(@BindingParam("germplasm") GermplasmDeepInfoModel data) {
 
-		String oldGerm = selectedGermplasm.getGermplasmname();
-		if (selectedGermplasm.isKnown()) {
-			lstKnownGermplasm.get(oldGerm).setStyleBG("background-color: #FFF");
-			BindUtils.postNotifyChange(null, null, lstKnownGermplasm.get(oldGerm), "styleBG");
-		} else {
-
-			lstStudyGermplasm.get(oldGerm).setStyleBG("background-color: #FFF");
-			BindUtils.postNotifyChange(null, null, lstStudyGermplasm.get(oldGerm), "styleBG");
-		}
-		if (data.isKnown()) {
-			lstKnownGermplasm.get(data.getGermplasmname()).setStyleBG("background-color: #BEC7F7 ");
-			BindUtils.postNotifyChange(null, null, lstKnownGermplasm.get(data.getGermplasmname()), "styleBG");
-			System.out.println("COLOR CHANGED");
-		} else {
-
-			lstStudyGermplasm.get(data.getGermplasmname()).setStyleBG("background-color: #BEC7F7 ");
-			BindUtils.postNotifyChange(null, null, lstStudyGermplasm.get(data.getGermplasmname()), "styleBG");
-			System.out.println("COLOR CHANGED");
+		if (data.getId().equals(selectedGermplasm.getId())) {
+			return;
 		}
 
+		selectedGermplasm.setStyleBG("background-color: #FFF");
+		data.setStyleBG("background-color: #BEC7F7 ");
 		selectedGermplasm = data;
+		BindUtils.postNotifyChange(null, null, "*", "selectedGermplasm");
+	}
+
+	@Command
+	public void saveGermplasm(@BindingParam("germplasm") GermplasmDeepInfoModel data) {
+
+		if (validateGermplasm(data)) {
+			StudyGermplasmManagerImpl studyMan = new StudyGermplasmManagerImpl();
+			if (studyMan.isGermplasmConflict(data)) {
+
+				int oldID = data.getId();
+				data.setId(null);
+
+				new GermplasmManagerImpl().addGermplasm(data);
+				new StudyGermplasmManagerImpl().updateStudyGermplasmID(oldID, data.getId(), data.getUserid());
+				new GermplasmCharacteristicMananagerImpl().addCharacteristic(data);
+			} else {
+				new GermplasmManagerImpl().updateGermplasm(data);
+				new GermplasmCharacteristicMananagerImpl().addCharacteristic(data);
+			}
+
+			cancelEdit(data);
+		}
 
 	}
 
+	@Command
+	public void cancelEdit(@BindingParam("germplasm") GermplasmDeepInfoModel data) {
+
+		lstKnownGermplasm.get(data.getGermplasmname()).setKnown(true);
+		selectedGermplasm = lstKnownGermplasm.get(data.getGermplasmname());
+
+		BindUtils.postNotifyChange(null, null, data, "known");
+		BindUtils.postNotifyChange(null, null, selectedGermplasm, "*");
+
+	}
+	
+	
 	@Init
 	public void init(@ExecutionArgParam("uploadModel") ProcessTabViewModel uploadModel) {
 
@@ -307,7 +340,18 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		selectedGermplasm = allData.get(0);
 		timer.end();
 	}
+	@NotifyChange("selectedGermplasm")
+	@Command
+	public void modifyGermplasm(@BindingParam("gname") String gname) {
+		// System.out.println("GNAME: " + gname);
+		// System.out.println("SIZE: " + lstKnownGermplasm.size());
 
+		lstKnownGermplasm.get(gname).setKnown(false);
+		selectedGermplasm = lstKnownGermplasm.get(gname);
+
+		BindUtils.postNotifyChange(null, null, lstKnownGermplasm.get(gname), "known");
+
+	}
 	public GermplasmDeepInfoModel getGermplasmDeepInfoModelById(Integer id) {
 
 		for (GermplasmDeepInfoModel model : arrGermplasmDeepInfo) {
@@ -412,7 +456,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 	public boolean validateKnownGermplasm() {
 		int studyGerm = 0;
 		for (GermplasmDeepInfoModel data : lstKnownGermplasm.values()) {
-			String validate = data.validate(false);
+			String validate = data.validate();
 			((Row) tblKnownGerm.getRows().getChildren().get(studyGerm)).setStyle("background-color: #FFF");
 			if (validate != null) {
 				Messagebox.show(validate, "OK", Messagebox.OK, Messagebox.EXCLAMATION);
@@ -432,7 +476,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		int studyGerm = 0;
 		for (GermplasmDeepInfoModel data : lstStudyGermplasm.values()) {
 			((Row) tblStudyGerm.getRows().getChildren().get(studyGerm)).setStyle("background-color: #FFF");
-			String validate = data.validate(true);
+			String validate = data.validate();
 			if (validate != null) {
 				Messagebox.show(validate, "OK", Messagebox.OK, Messagebox.EXCLAMATION);
 
@@ -453,34 +497,22 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		this.tblStudyGerm.invalidate();
 	}
 
-	@NotifyChange({ "lstKnownGermplasm", "lstStudyGermplasm" })
-	@Command
-	public void modifyGermplasm(@BindingParam("gname") String gname) {
-		System.out.println("GNAME: " + gname);
-		System.out.println("SIZE: " + lstKnownGermplasm.size());
 
-		lstKnownGermplasm.get(gname).rowIndex = lstStudyGermplasm.size();
-		lstKnownGermplasm.get(gname).setKnown(false);
-		lstStudyGermplasm.put(gname, lstKnownGermplasm.get(gname));
-		lstKnownGermplasm.remove(gname);
-
-		for (GermplasmType gType : lstGermplasmType) {
-			if (gType.getId() == lstStudyGermplasm.get(gname).getGermplasmtypeid()) {
-				lstStudyGermplasm.get(gname).setSelectedGermplasmType(gType);
-			}
+	public boolean validateGermplasm(GermplasmDeepInfoModel data) {
+		String validate = data.validate();
+		if (!data.getStyleBG().equals("background-color: #FFF")) {
+			data.setStyleBG("background-color: #FFF");
+			BindUtils.postNotifyChange(null, null, data, "styleBG");
 		}
+		if (validate != null) {
+			Messagebox.show(validate, "OK", Messagebox.OK, Messagebox.EXCLAMATION);
 
-		if (this.getUserID() != lstStudyGermplasm.get(gname).getUserid()) {
-			System.out.println("New User!");
-			lstStudyGermplasm.get(gname).setUserid(this.userID);
-			lstStudyGermplasm.get(gname).setId(null);
-
+			data.setStyleBG("background-color: #ff6666");
+			BindUtils.postNotifyChange(null, null, data, "styleBG");
+			return false;
 		}
-		selectGermplasm(lstStudyGermplasm.get(gname));
-		gbKnownGermplasm.invalidate();
-		gbUnknownGermplasm.invalidate();
+		return true;
 	}
-
 	@Command
 	public void validateList() {
 		Runtimer timer = new Runtimer();
