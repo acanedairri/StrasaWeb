@@ -25,8 +25,7 @@ public class StudyGermplasmManagerImpl {
 
 	public List<StudyGermplasm> getStudyGermplasmByStudyId(int studyID) {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
-		StudyGermplasmMapper mapper = session
-				.getMapper(StudyGermplasmMapper.class);
+		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
 
 		try {
 			StudyGermplasmExample example = new StudyGermplasmExample();
@@ -38,16 +37,43 @@ public class StudyGermplasmManagerImpl {
 		}
 	}
 
-	public List<StudyGermplasm> getStudyGermplasmByStudyId(int studyID,
-			Integer dataset) {
+	public boolean isGermplasmConflict(Germplasm data) {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
-		StudyGermplasmMapper mapper = session
-				.getMapper(StudyGermplasmMapper.class);
+		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
 
 		try {
 			StudyGermplasmExample example = new StudyGermplasmExample();
-			example.createCriteria().andStudyidEqualTo(studyID)
-					.andDatasetEqualTo(dataset);
+			example.createCriteria().andGrefEqualTo(data.getId()).andUseridNotEqualTo(data.getUserid());
+			return mapper.countByExample(example) > 0;
+		} finally {
+			session.close();
+		}
+
+	}
+
+	public void updateStudyGermplasmID(Integer oldID, Integer newID, Integer userID) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
+
+		try {
+			StudyGermplasmExample example = new StudyGermplasmExample();
+			example.createCriteria().andGrefEqualTo(oldID).andUseridEqualTo(userID);
+			StudyGermplasm updateData = new StudyGermplasm();
+			updateData.setGref(newID);
+			mapper.updateByExampleSelective(updateData, example);
+		} finally {
+
+		}
+
+	}
+
+	public List<StudyGermplasm> getStudyGermplasmByStudyId(int studyID, Integer dataset) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
+
+		try {
+			StudyGermplasmExample example = new StudyGermplasmExample();
+			example.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset);
 			return mapper.selectByExample(example);
 
 		} finally {
@@ -55,15 +81,13 @@ public class StudyGermplasmManagerImpl {
 		}
 	}
 
-	public List<Germplasm> getGermplasmFromStudy(Integer studyID,
-			Integer dataset) {
+	public List<Germplasm> getGermplasmFromStudy(Integer studyID, Integer dataset) {
 
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 
 		try {
-			List<StudyGermplasm> lstStudyGerm = getStudyGermplasmByStudyId(
-					studyID, dataset);
+			List<StudyGermplasm> lstStudyGerm = getStudyGermplasmByStudyId(studyID, dataset);
 
 			List<Germplasm> returnVal = new ArrayList<Germplasm>();
 
@@ -101,8 +125,7 @@ public class StudyGermplasmManagerImpl {
 
 	public int addStudyGermplasm(StudyGermplasm record) {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
-		StudyGermplasmMapper mapper = session
-				.getMapper(StudyGermplasmMapper.class);
+		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
 		try {
 			mapper.insert(record);
 			session.commit();
@@ -113,10 +136,8 @@ public class StudyGermplasmManagerImpl {
 	}
 
 	public void addStudyGermplasm(List<StudyGermplasm> lstRecord) {
-		SqlSession session = connectionFactory.sqlSessionFactory
-				.openSession(ExecutorType.BATCH);
-		StudyGermplasmMapper mapper = session
-				.getMapper(StudyGermplasmMapper.class);
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
+		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
 
 		try {
 			for (StudyGermplasm record : lstRecord) {
@@ -133,12 +154,9 @@ public class StudyGermplasmManagerImpl {
 		}
 	}
 
-	public void addStudyGermplasm(List<StudyGermplasm> lstRecord,
-			List<GermplasmCharacteristics> lstCharRecord) {
-		SqlSession session = connectionFactory.sqlSessionFactory
-				.openSession(ExecutorType.BATCH);
-		StudyGermplasmMapper mapper = session
-				.getMapper(StudyGermplasmMapper.class);
+	public void addStudyGermplasm(List<StudyGermplasm> lstRecord, List<GermplasmCharacteristics> lstCharRecord) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
+		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
 		try {
 			System.out.println("Inserting StudyGermplasms");
 			for (StudyGermplasm record : lstRecord) {
@@ -149,8 +167,7 @@ public class StudyGermplasmManagerImpl {
 				}
 				System.out.println("SID: " + record.getId());
 			}
-			GermplasmCharacteristicsMapper charmapper = session
-					.getMapper(GermplasmCharacteristicsMapper.class);
+			GermplasmCharacteristicsMapper charmapper = session.getMapper(GermplasmCharacteristicsMapper.class);
 
 			for (GermplasmCharacteristics record : lstCharRecord)
 				charmapper.insert(record);
@@ -161,14 +178,10 @@ public class StudyGermplasmManagerImpl {
 		}
 	}
 
-	public void addStudyGermplasmBatch(
-			Collection<GermplasmDeepInfoModel> collection, Integer studyID,
-			Integer dataset) {
+	public void addStudyGermplasmBatch(Collection<GermplasmDeepInfoModel> collection, Integer studyID, Integer dataset) {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
-		StudyGermplasmMapper mapper = session
-				.getMapper(StudyGermplasmMapper.class);
-		StudyGermplasmCharacteristicsMapper charmapper = session
-				.getMapper(StudyGermplasmCharacteristicsMapper.class);
+		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
+		StudyGermplasmCharacteristicsMapper charmapper = session.getMapper(StudyGermplasmCharacteristicsMapper.class);
 		try {
 
 			if (!collection.isEmpty()) {
@@ -202,8 +215,7 @@ public class StudyGermplasmManagerImpl {
 
 	public void updateStudyGermplasm(StudyGermplasm record) {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
-		StudyGermplasmMapper mapper = session
-				.getMapper(StudyGermplasmMapper.class);
+		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
 		try {
 			mapper.updateByPrimaryKey(record);
 			session.commit();
@@ -216,8 +228,7 @@ public class StudyGermplasmManagerImpl {
 	public void removeGermplasmByStudyId(Integer id) {
 
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
-		StudyGermplasmMapper mapper = session
-				.getMapper(StudyGermplasmMapper.class);
+		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
 		StudyGermplasmExample ex = new StudyGermplasmExample();
 		try {
 			ex.createCriteria().andStudyidEqualTo(id);
@@ -230,15 +241,12 @@ public class StudyGermplasmManagerImpl {
 
 	}
 
-	public boolean isGermplasmRecordExist(Integer gref, Integer studyID,
-			Integer dataset) {
+	public boolean isGermplasmRecordExist(Integer gref, Integer studyID, Integer dataset) {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
-		StudyGermplasmMapper mapper = session
-				.getMapper(StudyGermplasmMapper.class);
+		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
 		StudyGermplasmExample ex = new StudyGermplasmExample();
 		try {
-			ex.createCriteria().andStudyidEqualTo(studyID)
-					.andDatasetEqualTo(dataset).andGrefEqualTo(gref);
+			ex.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset).andGrefEqualTo(gref);
 			return mapper.countByExample(ex) > 0;
 
 		} finally {
@@ -250,12 +258,10 @@ public class StudyGermplasmManagerImpl {
 	public void removeGermplasmByStudyId(Integer id, Integer dataset) {
 
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
-		StudyGermplasmMapper mapper = session
-				.getMapper(StudyGermplasmMapper.class);
+		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
 		StudyGermplasmExample ex = new StudyGermplasmExample();
 		try {
-			ex.createCriteria().andStudyidEqualTo(id)
-					.andDatasetEqualTo(dataset);
+			ex.createCriteria().andStudyidEqualTo(id).andDatasetEqualTo(dataset);
 			mapper.deleteByExample(ex);
 			session.commit();
 		} finally {

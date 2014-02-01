@@ -31,6 +31,10 @@ public class GermplasmDeepInfoModel extends Germplasm {
 	public boolean recordExist = false;
 	private boolean isKnown;
 
+	public GermplasmDeepInfoModel() {
+
+	}
+
 	public GermplasmDeepInfoModel(Germplasm data) {
 		// TODO Auto-generated constructor stub
 
@@ -62,30 +66,14 @@ public class GermplasmDeepInfoModel extends Germplasm {
 			setSource(data.getSource());
 		this.setUserid(data.getUserid());
 		this.setId(data.getId());
-		System.out.println(data.toString());
 	}
 
 	@Override
 	public String toString() {
-		return "GermplasmDeepInfoModel [keyBiotic=" + keyBiotic
-				+ ", keyAbiotic=" + keyAbiotic + ", keyGrainQuality="
-				+ keyGrainQuality + ", keyMajorGenes=" + keyMajorGenes
-				+ ", styleBG=" + styleBG + ", rowIndex=" + rowIndex
-				+ ", selectedGermplasmType=" + selectedGermplasmType
-				+ ", category=" + category + ", isKnown=" + isKnown
-				+ ", getId()=" + getId() + ", getGid()=" + getGid()
-				+ ", getGermplasmname()=" + getGermplasmname()
-				+ ", getOthername()=" + getOthername() + ", getBreeder()="
-				+ getBreeder() + ", getGermplasmtypeid()="
-				+ getGermplasmtypeid() + ", getIrnumber()=" + getIrnumber()
-				+ ", getIrcross()=" + getIrcross() + ", getParentage()="
-				+ getParentage() + ", getFemaleparent()=" + getFemaleparent()
-				+ ", getMaleparent()=" + getMaleparent()
-				+ ", getSelectionhistory()=" + getSelectionhistory()
-				+ ", getSource()=" + getSource() + ", getRemarks()="
-				+ getRemarks() + ", getUserid()=" + getUserid()
-				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
-				+ ", toString()=" + super.toString() + "]";
+		return "GermplasmDeepInfoModel [keyBiotic=" + keyBiotic + ", keyAbiotic=" + keyAbiotic + ", keyGrainQuality=" + keyGrainQuality + ", keyMajorGenes=" + keyMajorGenes + ", styleBG=" + styleBG + ", rowIndex=" + rowIndex + ", selectedGermplasmType=" + selectedGermplasmType
+				+ ", category=" + category + ", isKnown=" + isKnown + ", getId()=" + getId() + ", getGid()=" + getGid() + ", getGermplasmname()=" + getGermplasmname() + ", getOthername()=" + getOthername() + ", getBreeder()=" + getBreeder() + ", getGermplasmtypeid()="
+				+ getGermplasmtypeid() + ", getIrnumber()=" + getIrnumber() + ", getIrcross()=" + getIrcross() + ", getParentage()=" + getParentage() + ", getFemaleparent()=" + getFemaleparent() + ", getMaleparent()=" + getMaleparent() + ", getSelectionhistory()="
+				+ getSelectionhistory() + ", getSource()=" + getSource() + ", getRemarks()=" + getRemarks() + ", getUserid()=" + getUserid() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
 
 	public boolean isEditMode() {
@@ -247,36 +235,32 @@ public class GermplasmDeepInfoModel extends Germplasm {
 		}
 	}
 
-	public String validate(boolean isBreederReq) {
+	public String validate() {
 		// if(true) return true;
-
+		styleBG = "background-color: #ff6666";
 		if (StringUtils.isNullOrEmpty(getGermplasmname())) {
 			// styleBG = "background-color: #ff6666";
 			return "Error: GName cannot be empty";
 		}
-		if (StringUtils.isNullOrEmpty(getBreeder()) && isBreederReq) {
+		if (StringUtils.isNullOrEmpty(getBreeder())) {
 			// styleBG = "background-color: #ff6666";
-			return "Error: Breeder must not be empty in GName: "
-					+ getGermplasmname();
+			return "Error: Breeder must not be empty in GName: " + getGermplasmname();
 		}
 
 		if (StringUtils.isNullOrEmpty(getFemaleparent())) {
 			// styleBG = "background-color: #ff6666";
-			return "Error: Female Parent must not be empty in GName: "
-					+ getGermplasmname();
+			return "Error: Female Parent must not be empty in GName: " + getGermplasmname();
 		}
 
 		;
 		if (StringUtils.isNullOrEmpty(getMaleparent())) {
 			// styleBG = "background-color: #ff6666";
-			return "Error: Male Parent must not be empty in GName: "
-					+ getGermplasmname();
+			return "Error: Male Parent must not be empty in GName: " + getGermplasmname();
 		}
 
 		if (getGermplasmtypeid() == null) {
 			// styleBG = "background-color: #ff6666";
-			return "Error: Germplasm Type must not be empty in GName: "
-					+ getGermplasmname();
+			return "Error: Germplasm Type must not be empty in GName: " + getGermplasmname();
 		}
 		styleBG = "background-color: #FFF";
 		return null;
@@ -352,8 +336,6 @@ public class GermplasmDeepInfoModel extends Germplasm {
 			setSelectionhistory(data.getSelectionhistory());
 		if (!StringUtils.isNullOrEmpty(data.getSource()))
 			setSource(data.getSource());
-
-		System.out.println(data.toString());
 
 	}
 }

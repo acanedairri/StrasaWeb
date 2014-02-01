@@ -65,6 +65,21 @@ public class GermplasmManagerImpl {
 		}
 	}
 
+	public List<Germplasm> getGermplasmListByUserID(int userid) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
+
+		try {
+			GermplasmExample example = new GermplasmExample();
+			example.createCriteria().andUseridEqualTo(userid);
+			if (mapper.selectByExample(example).isEmpty())
+				return null;
+			return mapper.selectByExample(example);
+		} finally {
+			session.close();
+		}
+	}
+
 	public List<Germplasm> getGermplasmListByType(int id) {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
@@ -98,9 +113,20 @@ public class GermplasmManagerImpl {
 		return record.getId();
 	}
 
+	public int updateGermplasm(Germplasm record) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
+		try {
+			mapper.updateByPrimaryKey(record);
+			session.commit();
+		} finally {
+			session.close();
+		}
+		return record.getId();
+	}
+
 	public void addGermplasmList(Collection<GermplasmDeepInfoModel> collection) {
-		SqlSession session = connectionFactory.sqlSessionFactory
-				.openSession(ExecutorType.BATCH);
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 		try {
 
@@ -122,10 +148,8 @@ public class GermplasmManagerImpl {
 	}
 
 	public void updateBreeders(List<GermplasmDeepInfoModel> lstRecord) {
-		SqlSession session = connectionFactory.sqlSessionFactory
-				.openSession(ExecutorType.BATCH);
-		GermplasmBreederMapper mapper = session
-				.getMapper(GermplasmBreederMapper.class);
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
+		GermplasmBreederMapper mapper = session.getMapper(GermplasmBreederMapper.class);
 		try {
 			for (GermplasmDeepInfoModel record : lstRecord) {
 
@@ -145,16 +169,13 @@ public class GermplasmManagerImpl {
 	}
 
 	public void addGermplasmBatch(List<GermplasmDeepInfoModel> lstRecord) {
-		SqlSession session = connectionFactory.sqlSessionFactory
-				.openSession(ExecutorType.BATCH);
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
-		GermplasmCharacteristicsMapper charmapper = session
-				.getMapper(GermplasmCharacteristicsMapper.class);
+		GermplasmCharacteristicsMapper charmapper = session.getMapper(GermplasmCharacteristicsMapper.class);
 		try {
 			for (GermplasmDeepInfoModel rec : lstRecord) {
 
 				Germplasm record = rec;
-				System.out.println(record.toString());
 				if (record.getId() == null)
 					mapper.insert(record);
 				else {
@@ -162,7 +183,6 @@ public class GermplasmManagerImpl {
 
 				}
 
-				System.out.println("SID: " + record.getId());
 			}
 			session.commit();
 		} finally {
