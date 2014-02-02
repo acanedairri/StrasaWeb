@@ -65,20 +65,12 @@ public class GermplasmDetail {
 	private List<CharacteristicModel> keyMajorGenesList;
 	private List<String> listKeyCharFilter= new ArrayList<String>();
 
-	private boolean openAsTab;
-	
+	private String parentSource;
 
 	@Init
 	public void init(@ExecutionArgParam("gname")String germplasmName, @ExecutionArgParam("parentSource")String source){
-		
-		try{
-			System.out.print("not null then open as tab");
-			if(source.equals("studyBrowser")) setOpenAsTab(true);
-		}catch(NullPointerException npe){
-			System.out.print("null then false");
-			setOpenAsTab(false);
-		}
-		
+		setParentSource(source);
+		System.out.println("parentSource "+source);
 		System.out.println("gname"+ germplasmName);
 		BrowseGermplasmManagerImpl mgr= new BrowseGermplasmManagerImpl();
 		setGermplasmList( mgr.getGermplasmByNameLike(germplasmName));
@@ -95,13 +87,6 @@ public class GermplasmDetail {
 		setStudyTested(getStudyTested(germplasmName));
 	}
 	
-	public Boolean getOpenAsTab() {
-		return openAsTab;
-	}
-
-	public void setOpenAsTab(Boolean openStudyDetailsLink) {
-		this.openAsTab = openStudyDetailsLink;
-	}
 	public String getNameSearch() {
 		return nameSearch;
 	}
@@ -411,6 +396,7 @@ public class GermplasmDetail {
 
 		Include studyInformationPage = new Include();
 		studyInformationPage.setSrc("/user/browsestudy/studyinformation.zul");
+		studyInformationPage.setDynamicProperty("parentSource", getParentSource());
 		studyInformationPage.setParent(studyDetailWindow);
 		studyInformationPage.setDynamicProperty("studyId", studyid);
 
@@ -502,6 +488,14 @@ public class GermplasmDetail {
 			germplasmTypeKey.put(type.getGermplasmtype(), type.getId());
 		}
 		return germplasmType;
+	}
+
+	public String getParentSource() {
+		return parentSource;
+	}
+
+	public void setParentSource(String parentSource) {
+		this.parentSource = parentSource;
 	}
 
 	public class CharacteristicModel {

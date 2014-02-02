@@ -21,6 +21,8 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
@@ -71,9 +73,11 @@ public class BrowseGermplasm {
 	private List<String> listKeyCharFilter= new ArrayList<String>();
 	private HashMap<Integer, Tab> activeGermplasmIds;
 
+	private Tab germplasmSearchTab;
 	@Init
-	public void setInitialData(){
+	public void setInitialData(@ExecutionArgParam("germplasmSearchTab")Tab germplasmSearchTab){
 		activeGermplasmIds = new HashMap<Integer, Tab>();
+		this.germplasmSearchTab = germplasmSearchTab;
 		this.germplasmList=getGermplasmByName("");
 		this.germplasm=getGermplasmDetailInformation(-1);
 		this.germplasmType=getGermplasmTypeList();
@@ -518,8 +522,8 @@ public class BrowseGermplasm {
 
 
 	@NotifyChange("*")
-	@Command
-	public void DisplayGermplasmDetail(@ContextParam(ContextType.COMPONENT) Component component,
+	@GlobalCommand
+	public void openGermplasmDetailInGermplasm(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view,@BindingParam("germplasmId")Integer id,@BindingParam("gname")String gname){
 		
 		Tabpanels tabPanels = (Tabpanels) component.getFellow("tabPanels");
@@ -543,6 +547,7 @@ public class BrowseGermplasm {
 		Include studyInformationPage = new Include();
 		studyInformationPage.setSrc("/user/browsegermplasm/germplasmdetail.zul");
 		studyInformationPage.setParent(newPanel);
+		studyInformationPage.setDynamicProperty("parentSource", "germplasm");
 		studyInformationPage.setDynamicProperty("gname", gname);
 
 		tabPanels.appendChild(newPanel);
@@ -551,39 +556,20 @@ public class BrowseGermplasm {
 		
 		newTab.setSelected(true);
 		activeGermplasmIds.put(id, newTab);
+		
 		}
 		else{
 		Tab tab = activeGermplasmIds.get(id);
 		tab.setSelected(true);
 		}
 //		
+		germplasmSearchTab.setSelected(true);
 //		Include studyInformationPage = new Include();
 //		studyInformationPage.setSrc("/user/browsegermplasm/germplasmdetail.zul");
 //		studyInformationPage.setParent(studyDetailWindow);
 //		studyInformationPage.setDynamicProperty("gname", gname);
 		
 	}
-	@NotifyChange("*")
-	@Command
-	public void DisplayStudyDetail(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view,@BindingParam("studyid")Integer studyid,@BindingParam("studyname")String studyname){
-
-
-		Window studyDetailWindow = (Window)Executions.getCurrent().createComponents(
-				"/user/browsegermplasm/studydetails.zul", null, null);
-		studyDetailWindow.doModal();
-		studyDetailWindow.setTitle(studyname);
-
-		Include studyInformationPage = new Include();
-		studyInformationPage.setSrc("/user/browsestudy/studyinformation.zul");
-		studyInformationPage.setParent(studyDetailWindow);
-		studyInformationPage.setDynamicProperty("studyId", studyid);
-
-
-
-
-	}
-
 
 	private List<StudySearchResultModel> getStudyTested(String gname) {
 		BrowseGermplasmManagerImpl browseStudyManagerImpl= new BrowseGermplasmManagerImpl(); 

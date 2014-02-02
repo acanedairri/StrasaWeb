@@ -67,7 +67,7 @@ private Tab resultTab;
 	
 	@NotifyChange
 	@GlobalCommand
-	public void openNewSearchInfoTab(@ContextParam(ContextType.COMPONENT) Component component,
+	public void openStudyDetailInStudy(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view,@BindingParam("studyid")  Integer studyId, @BindingParam("studyName")String studyName){
 		
 		Tabpanels tabPanels = (Tabpanels) component.getFellow("tabPanels");
@@ -93,6 +93,7 @@ private Tab resultTab;
 		studyInformationPage.setParent(newPanel);
 		studyInformationPage.setSrc("/user/browsestudy/studyinformation.zul");
 		studyInformationPage.setDynamicProperty("studyId", studyId);
+		studyInformationPage.setDynamicProperty("parentSource", "study");
 		tabPanels.appendChild(newPanel);
 		tabs.appendChild(newTab);
 		tabBox.setSelectedPanel(newPanel);
@@ -109,7 +110,7 @@ private Tab resultTab;
 	
 	@NotifyChange
 	@GlobalCommand
-	public void DisplayGermplasmDetailInfoTab(@ContextParam(ContextType.COMPONENT) Component component,
+	public void openGermplasmDetailInStudy(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view, @BindingParam("studyId")  String studyId, @BindingParam("gname")  String gname,  @BindingParam("germplasmId")  Integer germplasmId){
 		
 		Tabpanels tabPanels = (Tabpanels) component.getFellow("tabPanels");
@@ -135,7 +136,7 @@ private Tab resultTab;
 		Include studyInformationPage = new Include();
 		studyInformationPage.setSrc("/user/browsegermplasm/germplasmdetail.zul");
 		studyInformationPage.setDynamicProperty("gname", gname);
-		studyInformationPage.setDynamicProperty("parentSource", "studyBrowser");
+		studyInformationPage.setDynamicProperty("parentSource", "study");
 		studyInformationPage.setParent(newPanel);
 		
 		tabPanels.appendChild(newPanel);

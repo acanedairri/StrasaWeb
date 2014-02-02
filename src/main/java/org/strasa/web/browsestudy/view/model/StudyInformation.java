@@ -36,6 +36,7 @@ public class StudyInformation {
 
 	private Integer studyId;
 	private Integer dataset;
+	private String parentSource;
 
 	@Command("showzulfile")
 	public void showzulfile(@BindingParam("zulFileName") String zulFileName,
@@ -44,14 +45,16 @@ public class StudyInformation {
 			 Map arg = new HashMap();
 		        arg.put("studyid", studyId);
 		        arg.put("dataset", dataset);
+		        arg.put("parentSource", parentSource);
 			Executions.createComponents(zulFileName, panel, arg);
 		}
 	}
 	
 	@Init
-	public void init(@ExecutionArgParam("studyId") Integer studyId){
+	public void init(@ExecutionArgParam("studyId") Integer studyId,@ExecutionArgParam("parentSource") String source){
 		setDataset(studyDatasetMan.getDataSetsByStudyId(studyId).size());
 		setStudyId(studyId);
+		setParentSource(source);
 		
 		selectedStudy = new Study();
 		System.out.println("studyId"+ Integer.toString(studyId));
@@ -104,6 +107,14 @@ public class StudyInformation {
 
 	public void setDataset(Integer dataset) {
 		this.dataset = dataset;
+	}
+
+	public String getParentSource() {
+		return parentSource;
+	}
+
+	public void setParentSource(String parentSource) {
+		this.parentSource = parentSource;
 	}
 
 
