@@ -473,8 +473,8 @@
 
 		<hlayout width="">
 
-			<button label="Save" onClick="@command('saveData')"
-				sclass="btn-blue" image="/images/save16.png">
+			<button label="Save" image="/images/save16.png"
+				onClick="@global-command('nextTab',model=vm)" sclass="btn-blue">
 			</button>
 		</hlayout>
 

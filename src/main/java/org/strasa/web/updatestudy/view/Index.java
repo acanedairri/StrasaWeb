@@ -213,7 +213,67 @@ public class Index {
 		refreshProjectList(selected);
 
 	}
+	
+	public void closeAllTabs(boolean isRaw){
+		for(tabObject tObj : tabMap.values()){
+			if(tObj.isRaw)tObj.tab.close();
+		}
+	}
+	public void getFirstTabSelected(boolean isRaw){
+		for(tabObject tObj : tabMap.values()){
+			if(tObj.isRaw)Events.sendEvent("onClick",tObj.tab,tObj.tab);;
+		}
+	}
+	 @SuppressWarnings("unchecked")
+	@Command
+	 public void mergeData(){
+		
+			Messagebox
+			.show("Are you sure you want to merge the datasets? WARNING! This cannot be undone.",
+					"Delete dataset?", Messagebox.OK | Messagebox.CANCEL,
+					Messagebox.QUESTION, new EventListener() {
+				public void onEvent(Event e) {
+					if ("onOK".equals(e.getName())) {
+						 new StudyManagerImpl().mergeStudyData(uploadModel.getStudyID(), uploadModel.isRaw);
+					closeAllTabs(Index.this.uploadModel.isRaw);
+						 
+							boolean rawLoaded = false, derivedLoaded = false;
+							
+							List<StudyDataSet> studyDataSets = new StudyDataSetManagerImpl().getDataSetsByStudyId(Index.this.uploadModel.studyID);
+							for(StudyDataSet datasetNum : studyDataSets){
+							
+								
+								if( datasetNum.getDatatype().equals("rd")){
+									if(!rawLoaded){
+										rawLoaded = true;
+									}
+								}
+								else{
+									if(!derivedLoaded){
+										derivedLoaded = true;
+							
+									}
+								}
+								initializeDataSetTab(datasetNum, true, datasetNum.getDatatype().equals("rd"),false);
+								
+							}
+							getFirstTabSelected(Index.this.uploadModel.isRaw);
+					} else if ("onCancel".equals(e.getName())) {
 
+					}
+
+					/*
+					 * Event Name Mapping list Messagebox.YES =
+					 * "onYes"; Messagebox.NO = "onNo";
+					 * Messagebox.RETRY = "onRetry";
+					 * Messagebox.ABORT = "onAbort";
+					 * Messagebox.IGNORE = "onIgnore";
+					 * Messagebox.CANCEL = "onCancel"; Messagebox.OK
+					 * = "onOK";
+					 */
+				}
+			});
+	 }
 	@NotifyChange({ "txtProject", "projectList" })
 	@Command("changeProjectList")
 	public void changeProjectList(@BindingParam("selected") Project selected) {
@@ -468,7 +528,7 @@ public class Index {
 		System.out.println(newUploadModel.toString());
 		arg.put("uploadModel", newUploadModel);
 		
-		tabMap.put(tabId, new tabObject(arg,newTabpanel));
+		tabMap.put(tabId, new tabObject(arg,newTabpanel,newTab,isRaw));
 		if(selected){
 			Events.sendEvent("onClick",newTab,newTab);
 		}
@@ -512,11 +572,15 @@ public class Index {
 	
 	public class tabObject {
 		public Map arg;
+		public Tab tab;
 		public Tabpanel panel;
 		public boolean hasBeenLoaded=false;
-		public tabObject(Map arg0, Tabpanel arg1){
+		public boolean isRaw;
+		public tabObject(Map arg0, Tabpanel arg1, Tab arg2, boolean raw){
 			this.arg = arg0;
 			this.panel = arg1;
+			this.tab = arg2;
+			this.isRaw = raw;
 		}
 	}
 

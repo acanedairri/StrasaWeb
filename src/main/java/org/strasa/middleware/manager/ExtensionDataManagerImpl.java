@@ -100,7 +100,7 @@ public class ExtensionDataManagerImpl {
 
 	public void deleteById(Integer id) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
 		try{
 			mapper.deleteByPrimaryKey(id);
