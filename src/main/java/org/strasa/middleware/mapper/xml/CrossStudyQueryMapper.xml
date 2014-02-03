@@ -8,7 +8,7 @@
 	<select id="getCrossStudyQueryResultDerived" resultType="hashmap"
 		parameterType="CrossStudyQueryFilterModel">
 
-		select t1.studyid as studyid as id,datarow as datarow,t2.name as
+		select t1.studyid as studyid,datarow as datarow,t2.name as
 		studyname,datavalue as GName,
 
 		<foreach item="item" index="index" collection="list">
@@ -130,7 +130,7 @@
 	<select id="getCrossStudyQueryResultRawData" resultType="hashmap"
 		parameterType="CrossStudyQueryFilterModel">
 
-		select t1.studyid as studyid as id,datarow as datarow,t2.name as
+		select t1.studyid as studyid,datarow as datarow,t2.name as
 		studyname,datavalue as GName,
 
 		<foreach item="item" index="index" collection="list">
