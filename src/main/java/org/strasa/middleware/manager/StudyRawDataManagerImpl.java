@@ -40,6 +40,10 @@ public class StudyRawDataManagerImpl {
 
 	}
 
+	public StudyRawDataManagerImpl() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public void changeDataColumn(Integer studyid, Integer dataset,
 			String oldColumn, String newColumn) {
 
@@ -413,6 +417,28 @@ public class StudyRawDataManagerImpl {
 
 	private String getStudyRawTable() {
 		return (isRaw) ? "studyrawdata" : "studyderiveddata";
+
+	}
+
+	public void setPrivacyByStudyId(Integer studyid, Boolean shared) {
+		// TODO Auto-generated method stub
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudyRawDataMapper studyDataMapper = getStudyRawMapper(session);
+		
+		try {
+			StudyRawDataExample example = new StudyRawDataExample();
+			example.createCriteria().andStudyidEqualTo(studyid);
+			
+			List<StudyRawData> studyData = studyDataMapper.selectByExample(example);
+			for (StudyRawData sdata : studyData) {
+				sdata.setShared(shared);
+				studyDataMapper.updateByPrimaryKey(sdata);
+			}
+			session.commit();
+
+		} finally {
+			session.close();
+		}
 
 	}
 

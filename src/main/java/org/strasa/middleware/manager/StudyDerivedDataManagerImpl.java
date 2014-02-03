@@ -8,12 +8,16 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyDerivedDataMapper;
+import org.strasa.middleware.mapper.StudyDerivedRawDataMapper;
 import org.strasa.middleware.mapper.StudyMapper;
 import org.strasa.middleware.mapper.StudyRawDataByDataColumnMapper;
+import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyDerivedData;
 import org.strasa.middleware.model.StudyDerivedDataExample;
+import org.strasa.middleware.model.StudyRawData;
 import org.strasa.middleware.model.StudyRawDataByDataColumnExample;
+import org.strasa.middleware.model.StudyRawDataExample;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class StudyDerivedDataManagerImpl {
@@ -166,6 +170,29 @@ public class StudyDerivedDataManagerImpl {
 			return returnVal;
 		
 	}
+
+
+	public void setPrivacyByStudyId(Integer studyid, Boolean shared) {
+		// TODO Auto-generated method stub
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudyDerivedDataMapper studyDataMapper = session.getMapper(StudyDerivedDataMapper.class);
+		
+		try {
+			StudyDerivedDataExample example = new StudyDerivedDataExample();
+			example.createCriteria().andStudyidEqualTo(studyid);
+			
+			List<StudyDerivedData> studyData = studyDataMapper.selectByExample(example);
+			for (StudyDerivedData sdata : studyData) {
+				sdata.setShared(shared);
+				studyDataMapper.updateByPrimaryKey(sdata);
+			}
+			session.commit();
+
+		} finally {
+			session.close();
+		}
+	}
+
 
 	
 }
