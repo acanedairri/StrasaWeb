@@ -1,9 +1,4 @@
 <zk>
-
-	<style src="../css/main.css" />
-	<div style="padding:10px 0px 15px 20px" align="left">
-		<label class="header-menu">Across Study Query</label>
-	</div>
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.crossstudyquery.view.model.CrossStudyQuery')"
 		align="center">

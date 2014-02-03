@@ -3,6 +3,7 @@ package org.strasa.web.crossstudyquery.view.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.strasa.middleware.manager.StudyManager;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.Binder;
@@ -35,6 +36,14 @@ public class  AcrossStudyRowRenderer implements RowRenderer<AcrossStudyData>{
 //        parBinder =  (Binder) view.getParent().getAttribute("binder");
 	}
 	
+	private int getStudyIdByStudyName(String studyname) {
+		int toreturn=0;
+		StudyManager mgr = new StudyManager();
+		toreturn=mgr.getStudyByStudyName(studyname);
+		
+		return toreturn;
+	}
+	
 	@Override
 	public void render(Row row, final AcrossStudyData data, int index) throws Exception {
 
@@ -49,7 +58,7 @@ public class  AcrossStudyRowRenderer implements RowRenderer<AcrossStudyData>{
 				// TODO Auto-generated method stub
 
 				Map<String, Object> params = new HashMap<String, Object>();
-				params.put("studyid",data.getStudyId());
+				params.put("studyid",getStudyIdByStudyName(data.getStudyname()));
 				params.put("studyName",data.getStudyname());
 				
 				BindUtils.postGlobalCommand(null, null, "openStudyDetailInAcrossStudy", params);
