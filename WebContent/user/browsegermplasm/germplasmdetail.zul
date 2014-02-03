@@ -144,7 +144,7 @@
 						<toolbarbutton
 							if="${vm.parentSource=='crossstudy'}"
 							label="@load(each.studyname)"
-							onClick="@command('DisplayStudyDetail', studyid=each.id,studyname=each.studyname)"
+							onClick="@global-command('openStudyDetailInAcrossStudy', studyid=each.id,studyName=each.studyname)"
 							class="grid-link" />
 						<label value="@load(each.programname)" />
 						<label value="@load(each.projectname)" />

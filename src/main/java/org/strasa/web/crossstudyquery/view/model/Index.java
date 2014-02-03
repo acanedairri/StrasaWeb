@@ -56,6 +56,7 @@ private Tab resultTab;
 		//initialize view after view construction.
 		Include studyInformationPage = new Include();
 		studyInformationPage.setParent(newPanel);
+		studyInformationPage.setDynamicProperty("parentSource", "crossstudy");
 		studyInformationPage.setDynamicProperty("crossstudySearchTab", newTab);
 		studyInformationPage.setSrc("/user/crossstudyquery/crossstudyquery.zul");
 		tabPanels.appendChild(newPanel);
@@ -65,6 +66,50 @@ private Tab resultTab;
 		tabBox.setSelectedIndex(0);
 	}
 	
+	 @NotifyChange
+		@GlobalCommand
+		public void openGermplasmDetailInAcrossStudy(@ContextParam(ContextType.COMPONENT) Component component,
+				@ContextParam(ContextType.VIEW) Component view, @BindingParam("gname")  String gname){
+			
+			Tabpanels tabPanels = (Tabpanels) component.getFellow("tabPanels");
+			Tabs tabs = (Tabs) component.getFellow("tabs");
+			Tabbox tabBox = (Tabbox) component.getFellow("tabBox");
+			
+			if(!activeStudyIds.containsKey(gname)){
+			final String id=gname;
+			Tab newTab = new Tab();
+			newTab.setImage("/images/Germplasm16.png");
+			newTab.setLabel(gname);
+			newTab.setClosable(true);
+			newTab.addEventListener("onClose", new EventListener() {
+				@Override
+				public void onEvent(Event event) throws Exception {
+					activeStudyIds.remove(id);
+				}
+			});
+			Tabpanel newPanel = new Tabpanel();
+			
+			//initialize view after view construction.
+			Include studyInformationPage = new Include();
+			studyInformationPage.setSrc("/user/browsegermplasm/germplasmdetail.zul");
+			studyInformationPage.setDynamicProperty("parentSource", "crossstudy");
+			studyInformationPage.setDynamicProperty("gname", gname);
+			studyInformationPage.setParent(newPanel);
+			
+			tabPanels.appendChild(newPanel);
+			tabs.appendChild(newTab);
+			tabBox.setSelectedPanel(newPanel);
+			
+			newTab.setSelected(true);
+			activeStudyIds.put(gname, newTab);
+			
+			}
+			else{
+			Tab tab = activeStudyIds.get(gname);
+			tab.setSelected(true);
+			}
+		}
+	 
 	 @NotifyChange
 		@GlobalCommand
 		public void openStudyDetailInAcrossStudy(@ContextParam(ContextType.COMPONENT) Component component,
