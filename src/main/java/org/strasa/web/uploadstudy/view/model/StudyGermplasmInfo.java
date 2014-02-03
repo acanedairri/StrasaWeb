@@ -75,7 +75,6 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 	@Wire("#gbKnownGermplasm")
 	Groupbox gbKnownGermplasm;
 
-	
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
@@ -180,7 +179,6 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 	}
 
-	
 	public String getTotalUnknownGermplasm() {
 		return "List of total unknown germplasm (total: " + lstStudyGermplasm.size() + ")";
 	}
@@ -188,10 +186,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 	public String getTotalKnownGermplasm() {
 		return "List of total of uploaded germplasm (total: " + lstKnownGermplasm.size() + ")";
 	}
-	
-	
-	
-	
+
 	@Command
 	public void selectGermplasm(@BindingParam("germplasm") GermplasmDeepInfoModel data) {
 
@@ -238,8 +233,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		BindUtils.postNotifyChange(null, null, selectedGermplasm, "*");
 
 	}
-	
-	
+
 	@Init
 	public void init(@ExecutionArgParam("uploadModel") ProcessTabViewModel uploadModel) {
 
@@ -340,6 +334,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		selectedGermplasm = allData.get(0);
 		timer.end();
 	}
+
 	@NotifyChange("selectedGermplasm")
 	@Command
 	public void modifyGermplasm(@BindingParam("gname") String gname) {
@@ -352,6 +347,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		BindUtils.postNotifyChange(null, null, lstKnownGermplasm.get(gname), "known");
 
 	}
+
 	public GermplasmDeepInfoModel getGermplasmDeepInfoModelById(Integer id) {
 
 		for (GermplasmDeepInfoModel model : arrGermplasmDeepInfo) {
@@ -497,7 +493,6 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		this.tblStudyGerm.invalidate();
 	}
 
-
 	public boolean validateGermplasm(GermplasmDeepInfoModel data) {
 		String validate = data.validate();
 		if (!data.getStyleBG().equals("background-color: #FFF")) {
@@ -513,6 +508,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		}
 		return true;
 	}
+
 	@Command
 	public void validateList() {
 		Runtimer timer = new Runtimer();
@@ -548,7 +544,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		lstStudyGermpl.addAll(lstStudyGermplasm.values());
 		germplasmManagerImpl.addGermplasmList(lstStudyGermplasm.values());
 
-		studyGermplasmMan.addStudyGermplasmBatch(lstStudyGermpl, this.studyID, this.dataset.getId());
+		studyGermplasmMan.addStudyGermplasmBatch(lstStudyGermpl, this.studyID, this.dataset.getId(), this.userID);
 		germCharMan.addCharacteristicBatch(lstStudyGermplasm.values());
 
 		return true;

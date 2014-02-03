@@ -147,6 +147,35 @@ public class GermplasmManagerImpl {
 		return;
 	}
 
+	public void addGermplasmListNoRepeat(Collection<GermplasmDeepInfoModel> collection, Integer userid) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
+		try {
+
+			for (Germplasm record : collection) {
+				System.out.print(record.toString());
+
+				GermplasmExample example = new GermplasmExample();
+				example.createCriteria().andGermplasmnameEqualTo(record.getGermplasmname()).andUseridEqualTo(userid);
+				if (record.getId() == null) {
+					if (mapper.countByExample(example) > 0) {
+						record.setId(mapper.selectByExample(example).get(0).getId());
+						mapper.updateByPrimaryKey(record);
+					} else {
+						mapper.insert(record);
+					}
+				} else {
+					mapper.updateByPrimaryKey(record);
+
+				}
+			}
+			session.commit();
+		} finally {
+			session.close();
+		}
+		return;
+	}
+
 	public void updateBreeders(List<GermplasmDeepInfoModel> lstRecord) {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
 		GermplasmBreederMapper mapper = session.getMapper(GermplasmBreederMapper.class);

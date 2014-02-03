@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.input.ReaderInputStream;
+import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.manager.GermplasmCharacteristicMananagerImpl;
 import org.strasa.middleware.manager.GermplasmManagerImpl;
@@ -45,8 +46,8 @@ import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
-import org.zkoss.zul.Grid;
 import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Listbox;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
@@ -61,10 +62,10 @@ public class Index {
 	ConnectionFactory connectionFactory;
 
 	@Wire("#tblKnownGerm")
-	Grid tblKnownGerm;
+	Listbox tblKnownGerm;
 
 	@Wire("#tblStudyGerm")
-	Grid tblStudyGerm;
+	Listbox tblStudyGerm;
 
 	@Wire("#gbUnknownGermplasm")
 	Groupbox gbUnknownGermplasm;
@@ -77,6 +78,7 @@ public class Index {
 
 		// wire event listener
 		// Selectors.wireEventListeners(view, this);
+		gbUnknownGermplasm.setVisible(false);
 	}
 
 	HashMap<String, GermplasmDeepInfoModel> lstStudyGermplasm = new HashMap<String, GermplasmDeepInfoModel>();
@@ -125,7 +127,7 @@ public class Index {
 
 	private List<KeyMajorGenes> lstAllMajorGenes;
 
-	private Integer userID = 1;
+	private Integer userID = SecurityUtil.getDbUser().getId();
 
 	public List<GermplasmType> getLstGermplasmType() {
 		return lstGermplasmType;
@@ -188,14 +190,23 @@ public class Index {
 	@Command
 	public void selectGermplasm(@BindingParam("germplasm") GermplasmDeepInfoModel data) {
 
-		if (data.getId().equals(selectedGermplasm.getId())) {
+		if (data.getGermplasmname().equals(selectedGermplasm.getGermplasmname())) {
 			return;
 		}
 
-		selectedGermplasm.setStyleBG("background-color: #FFF");
-		data.setStyleBG("background-color: #BEC7F7 ");
+		// selectedGermplasm.setStyleBG("background-color: #FFF");
+		// data.setStyleBG("background-color: #BEC7F7 ");
 		selectedGermplasm = data;
 		BindUtils.postNotifyChange(null, null, "*", "selectedGermplasm");
+		if (lstStudyGermplasm.containsKey(data.getGermplasmname())) {
+
+			tblStudyGerm.getItemAtIndex(data.rowIndex).setSelected(true);
+			;
+		} else {
+
+			tblStudyGerm.getItemAtIndex(data.rowIndex).setSelected(true);
+
+		}
 	}
 
 	@Command
@@ -316,6 +327,12 @@ public class Index {
 			InputStream in = event.getMedia().isBinary() ? event.getMedia().getStreamData() : new ReaderInputStream(event.getMedia().getReaderData());
 			FileUtilities.uploadFile(tempGenoFile.getAbsolutePath(), in);
 			List<GermplasmExt> lstGermplasm = CSVToBean(tempGenoFile);
+
+			KeyCharacteristicManagerImpl keyMan = new KeyCharacteristicManagerImpl();
+			List<KeyBiotic> lstKeyBiotics = keyMan.getAllBiotic();
+			List<KeyAbiotic> lstKeyAbioitc = keyMan.getAllAbiotic();
+			List<KeyMajorGenes> lstKeyMajorGenes = keyMan.getAllMajorGenes();
+			List<KeyGrainQuality> lstKeyGrainQuality = keyMan.getAllGrainQuality();
 			for (GermplasmExt germData : lstGermplasm) {
 				if (!StringUtils.isNullOrEmpty(germData.getGermplasmname())) {
 
@@ -324,17 +341,32 @@ public class Index {
 					newData.setGermplasmtypeid(getGermplasmTypeById(germData.getGermplasmtype()));
 					newData.setGermplasmname(germData.getGermplasmname());
 					newData.setValueFromeGermplasmEx(germData);
+					newData.setBiotic(lstKeyBiotics);
+					newData.setAbiotic(lstKeyAbioitc);
+					newData.setMajorGenes(lstKeyMajorGenes);
+					newData.setUserid(this.userID);
+					newData.setGrainQuality(lstKeyGrainQuality);
 					lstStudyGermplasm.put(newData.getGermplasmname(), newData);
 
 				}
 			}
-			gbKnownGermplasm.invalidate();
-			gbUnknownGermplasm.invalidate();
 
+			gbUnknownGermplasm.setVisible(true);
+			gbKnownGermplasm.setVisible(false);
+			// gbKnownGermplasm.invalidate();
+			// gbUnknownGermplasm.invalidate();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 		}
 
+	}
+
+	@NotifyChange({ "lstStudyGermplasm" })
+	@Command
+	public void resetUnknownGermplasm() {
+		lstStudyGermplasm.clear();
+		gbUnknownGermplasm.setVisible(false);
+		gbKnownGermplasm.setVisible(true);
 	}
 
 	public Integer getGermplasmTypeById(String key) {
@@ -474,11 +506,15 @@ public class Index {
 		// convertDeepInfoToModel(lstStudyGermplasm.values());
 		GermplasmCharacteristicMananagerImpl germCharMan = new GermplasmCharacteristicMananagerImpl();
 		List<GermplasmDeepInfoModel> lstStudyGermpl = new ArrayList<GermplasmDeepInfoModel>();
-		lstStudyGermpl.addAll(lstKnownGermplasm.values());
 		lstStudyGermpl.addAll(lstStudyGermplasm.values());
-		germplasmManagerImpl.addGermplasmList(lstStudyGermplasm.values());
+		germplasmManagerImpl.addGermplasmListNoRepeat(lstStudyGermplasm.values(), this.userID);
 
 		germCharMan.addCharacteristicBatch(lstStudyGermplasm.values());
+
+		resetUnknownGermplasm();
+		init();
+		BindUtils.postNotifyChange(null, null, this, "*");
+		Messagebox.show("Germplasms has been added to the database!", "Information", Messagebox.OK, Messagebox.INFORMATION);
 
 	}
 

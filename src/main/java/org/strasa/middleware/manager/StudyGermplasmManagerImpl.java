@@ -178,7 +178,7 @@ public class StudyGermplasmManagerImpl {
 		}
 	}
 
-	public void addStudyGermplasmBatch(Collection<GermplasmDeepInfoModel> collection, Integer studyID, Integer dataset) {
+	public void addStudyGermplasmBatch(Collection<GermplasmDeepInfoModel> collection, Integer studyID, Integer dataset, Integer userid) {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
 		StudyGermplasmCharacteristicsMapper charmapper = session.getMapper(StudyGermplasmCharacteristicsMapper.class);
@@ -194,6 +194,7 @@ public class StudyGermplasmManagerImpl {
 				newRec.setDataset(dataset);
 				newRec.setStudyid(studyID);
 				newRec.setGref(record.getId());
+				newRec.setUserid(userid);
 
 				// newRec.setBreeder(record.getCurrBreader());
 				mapper.insert(newRec);
