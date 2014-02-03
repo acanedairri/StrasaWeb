@@ -10,7 +10,9 @@ import java.util.Map;
 import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
+import org.strasa.middleware.manager.StudyDerivedDataManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
+import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.manager.UserManagerImpl;
 import org.strasa.middleware.model.Study;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -47,6 +49,8 @@ public class EditUploadedStudies {
 	Button btnUploadNewStudy;
 	
 	StudyManagerImpl studyMan;
+	StudyRawDataManagerImpl studyRawMan;
+	StudyDerivedDataManagerImpl studyDerivedMan;
 	ProgramManagerImpl programMan;
 	ProjectManagerImpl projectMan;
 
@@ -63,9 +67,12 @@ public class EditUploadedStudies {
 	public void init(){
 		Integer studyId=1;
 		
-		studyMan = new StudyManagerImpl();
+		studyMan = new StudyManagerImpl();		
+		studyRawMan = new StudyRawDataManagerImpl();		
+		studyDerivedMan = new StudyDerivedDataManagerImpl();
 		programMan = new ProgramManagerImpl();
 		projectMan = new ProjectManagerImpl();
+		
 		setEditStudyList(new ArrayList<EditStudyModel>());
 
 		populateEditStudyList();
@@ -156,11 +163,10 @@ public class EditUploadedStudies {
 		 Components.removeAllChildren(list.get(0));
 		Executions.createComponents("/user/uploadstudy/index.zul" , list.get(0), arg);
 	}
+	
 	@NotifyChange("editStudyList")
 	@Command("deleteStudy")
-	public void deleteStudy(@BindingParam("studyId") final Integer studyId){
-
-		
+	public void deleteStudy(@BindingParam("studyId") final Integer studyId){	
 		Messagebox.show("Are you sure to delete this Study?", "Confirm Dialog", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 			public void onEvent(Event evt) throws InterruptedException {
 				if (evt.getName().equals("onOK")) {
@@ -178,6 +184,9 @@ public class EditUploadedStudies {
 //		if(study.getShared()) study.setShared(1);
 		System.out.println("shared:" +study.getShared());
 		studyMan.updateStudyById(study);
+		studyRawMan.setPrivacyByStudyId(study.getId(), study.getShared());
+		studyDerivedMan.setPrivacyByStudyId(study.getId(), study.getShared());
+		
 		Messagebox.show("Changes saved.");
 	}
 }
