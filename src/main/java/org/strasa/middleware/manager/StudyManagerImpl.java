@@ -6,9 +6,11 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
+import org.strasa.middleware.mapper.StudyAgronomyMapper;
 import org.strasa.middleware.mapper.StudyDataColumnMapper;
 import org.strasa.middleware.mapper.StudyDataSetMapper;
 import org.strasa.middleware.mapper.StudyDerivedDataMapper;
+import org.strasa.middleware.mapper.StudyDesignMapper;
 import org.strasa.middleware.mapper.StudyFileMapper;
 import org.strasa.middleware.mapper.StudyGermplasmMapper;
 import org.strasa.middleware.mapper.StudyLocationMapper;
@@ -16,11 +18,14 @@ import org.strasa.middleware.mapper.StudyMapper;
 import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.model.Study;
+import org.strasa.middleware.model.StudyAgronomy;
+import org.strasa.middleware.model.StudyAgronomyExample;
 import org.strasa.middleware.model.StudyDataColumn;
 import org.strasa.middleware.model.StudyDataColumnExample;
 import org.strasa.middleware.model.StudyDataSetExample;
 import org.strasa.middleware.model.StudyDerivedData;
 import org.strasa.middleware.model.StudyDerivedDataExample;
+import org.strasa.middleware.model.StudyDesignExample;
 import org.strasa.middleware.model.StudyExample;
 import org.strasa.middleware.model.StudyFileExample;
 import org.strasa.middleware.model.StudyGermplasm;
@@ -172,6 +177,10 @@ public class StudyManagerImpl {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		
 		StudyMapper mapper = session.getMapper(StudyMapper.class);
+		
+		StudyDataSetMapper dateSetMapper = session.getMapper(StudyDataSetMapper.class);
+		StudyDesignMapper designMapper =  session.getMapper(StudyDesignMapper.class);
+		StudyAgronomyMapper studyAgroMapper = session.getMapper(StudyAgronomyMapper.class);
 		StudySiteMapper siteMapper = session.getMapper(StudySiteMapper.class);
 		StudyLocationMapper locMapper = session.getMapper(StudyLocationMapper.class);
 		StudyDataColumnMapper dataColMapper = session.getMapper(StudyDataColumnMapper.class);
@@ -182,8 +191,22 @@ public class StudyManagerImpl {
 		 
 		
 		try{
+
 			StudySiteExample siteEx=new StudySiteExample();
 			siteEx.createCriteria().andStudyidEqualTo(studyId);
+			List<StudySite> studySites = siteMapper.selectByExample(siteEx);
+			
+			for(StudySite s: studySites){
+				StudyAgronomyExample agEx = new StudyAgronomyExample();
+				agEx.createCriteria().andStudysiteidEqualTo(s.getId());
+//				List<StudyAgronomy> lstAgronomies = studyAgroMapper.selectByExample(agEx);
+				studyAgroMapper.deleteByExample(agEx);
+				
+				StudyDesignExample designEx = new StudyDesignExample();
+				designEx.createCriteria().andStudysiteidEqualTo(s.getId());
+				designMapper.deleteByExample(designEx);
+			}
+			
 			siteMapper.deleteByExample(siteEx);
 			
 			StudyLocationExample locEx=new StudyLocationExample();
@@ -209,6 +232,11 @@ public class StudyManagerImpl {
 			StudyGermplasmExample germplasmEx=new StudyGermplasmExample();
 			germplasmEx.createCriteria().andStudyidEqualTo(studyId);
 			germplasmMapper.deleteByExample(germplasmEx);
+			
+
+			StudyDataSetExample datasetEx = new StudyDataSetExample();
+			datasetEx.createCriteria().andStudyidEqualTo(studyId);
+			dateSetMapper.deleteByExample(datasetEx);
 			
 			mapper.deleteByPrimaryKey(studyId);
 			

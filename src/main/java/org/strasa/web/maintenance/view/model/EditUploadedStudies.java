@@ -15,6 +15,7 @@ import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.manager.UserManagerImpl;
 import org.strasa.middleware.model.Study;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -172,6 +173,9 @@ public class EditUploadedStudies {
 				if (evt.getName().equals("onOK")) {
 					studyMan.deleteStudyById(studyId);
 					populateEditStudyList();
+					BindUtils.postNotifyChange(null, null,
+							EditUploadedStudies.this, "editStudyList");
+					Messagebox.show("Changes saved.");
 				} 
 			}
 		});
