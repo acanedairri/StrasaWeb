@@ -117,7 +117,7 @@ public class EditProject {
 		params.put("programID",1); //yah better change this! Make Dynamic
 
 		Window popup = (Window) Executions.getCurrent().createComponents(
-				 AddProject.ZUL_PATH, win, params);
+				 AddNewProject.ZUL_PATH, win, params);
 
 		popup.doModal();
 		makeProjectStatus(projectMan.getProjectByUserId());

@@ -61,7 +61,6 @@ public class AddExtensionData {
 	        
 	        programMan = new ProgramManagerImpl();
 	    	projectMan = new ProjectManagerImpl();
-	    	
 	    	setProgramList(new ArrayList<Program>());
 			for(Program p: programMan.getAllProgram()){
 				if(!projectMan.getProjectByProgramId(p.getId()).isEmpty())programList.add(p);

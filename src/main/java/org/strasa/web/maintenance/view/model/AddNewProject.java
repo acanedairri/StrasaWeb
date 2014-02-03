@@ -1,31 +1,44 @@
 package org.strasa.web.maintenance.view.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
+import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
 import org.strasa.web.common.api.FormValidator;
+import org.strasa.web.extensiondata.view.model.AddExtensionData;
 import org.strasa.web.uploadstudy.view.model.AddProject;
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Messagebox;
 
 public class AddNewProject{
-	public static String ZUL_PATH = "/user/uploadstudy/addproject.zul";
+	public static String ZUL_PATH = "/user/maintenance/addnewproject.zul";
 	private Component mainView;
 	private Binder parBinder;
 	private FormValidator formValidator;
 	private Project projectModel = new Project();
 	public int programID;
 	private Integer userID = 1;
-
+	private List<Program> programList= null;
+	private Program program= new Program();
+	private ProgramManagerImpl programMan;	
+	
 	public Integer getUserID() {
 		return userID;
 	}
@@ -76,18 +89,19 @@ public class AddNewProject{
 	//}
 
 	@Init
-	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar, @ExecutionArgParam("programID") int pID ) {
+	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar ) {
 
 		setMainView(view);
 		parBinder = (Binder) view.getParent().getAttribute("binder");
-		programID = pID;
+
+        programMan = new ProgramManagerImpl();
+    	setProgramList(programMan.getAllProgram());
 	}
 
 	@Command("add")
 	public void add(){
-
 		ProjectManagerImpl projectMan = new ProjectManagerImpl();
-		if(projectMan.isProjectExist(projectModel.getName(), userID,programID)){
+		if(projectMan.isProjectExist(projectModel.getName(), userID, programID)){
 			Messagebox.show("Project name already exist! Choose a different name.", "Validation Error", Messagebox.OK, Messagebox.EXCLAMATION);
 			return;
 		}
@@ -124,12 +138,35 @@ public class AddNewProject{
 		params.put("selected",null);
 
 		// this.parBinder.postCommand("change", params);
-		bind.postCommand("refreshProjectList", params);
+		bind.postCommand("changeProjectList", params);
 		mainView.detach();
 		
 	}
 	@Command
 	public void cancel(){
 		mainView.detach();
+	}
+
+	@NotifyChange("projectList")
+	@Command
+	public void updateLists(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view, @BindingParam("program") Comboitem comboProgram){
+		programID=comboProgram.getValue();
+		program.setId(programID);
+	}
+	public List<Program> getProgramList() {
+		return programList;
+	}
+
+	public void setProgramList(List<Program> programList) {
+		this.programList = programList;
+	}
+
+	public Program getProgram() {
+		return program;
+	}
+
+	public void setProgram(Program program) {
+		this.program = program;
 	}
 }
