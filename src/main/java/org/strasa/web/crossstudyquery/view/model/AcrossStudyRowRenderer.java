@@ -1,5 +1,16 @@
 package org.strasa.web.crossstudyquery.view.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.zkoss.bind.BindContext;
+import org.zkoss.bind.BindUtils;
+import org.zkoss.bind.Binder;
+import org.zkoss.bind.annotation.ContextParam;
+import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
+import org.zkoss.bind.annotation.Init;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -8,11 +19,22 @@ import org.zkoss.zul.Include;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
+import org.zkoss.zul.Tab;
 import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.Window;
 
 public class  AcrossStudyRowRenderer implements RowRenderer<AcrossStudyData>{
 
+	
+	private Tab crossstudySearchTab;
+//	private Binder parBinder;
+	
+	@Init
+	public void setInitialData(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view,@ExecutionArgParam("crossstudySearchTab")Tab crossstudySearchTab){
+		this.crossstudySearchTab = crossstudySearchTab;
+//        parBinder =  (Binder) view.getParent().getAttribute("binder");
+	}
+	
 	@Override
 	public void render(Row row, final AcrossStudyData data, int index) throws Exception {
 
@@ -26,15 +48,11 @@ public class  AcrossStudyRowRenderer implements RowRenderer<AcrossStudyData>{
 			public void onEvent(Event arg0) throws Exception {
 				// TODO Auto-generated method stub
 
-				Window studyDetailWindow = (Window)Executions.getCurrent().createComponents(
-						"/user/browsegermplasm/studydetails.zul", null, null);
-				studyDetailWindow.doModal();
-				studyDetailWindow.setTitle(data.getStudyname());
-
-				Include studyInformationPage = new Include();
-				studyInformationPage.setSrc("/user/browsestudy/studyinformation.zul");
-				studyInformationPage.setParent(studyDetailWindow);
-				studyInformationPage.setDynamicProperty("studyId",data.getStudyId());
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("studyid",data.getStudyId());
+				params.put("studyName",data.getStudyname());
+				
+				BindUtils.postGlobalCommand(null, null, "openStudyDetailInAcrossStudy", params);
 			}
 
 		});
@@ -50,15 +68,10 @@ public class  AcrossStudyRowRenderer implements RowRenderer<AcrossStudyData>{
 			public void onEvent(Event arg0) throws Exception {
 				// TODO Auto-generated method stub
 
-				Window studyDetailWindow = (Window)Executions.getCurrent().createComponents(
-						"/user/browsegermplasm/germplasmwindow.zul", null, null);
-				studyDetailWindow.doModal();
-				studyDetailWindow.setTitle(data.getStudyname());
-
-				Include studyInformationPage = new Include();
-				studyInformationPage.setSrc("/user/browsegermplasm/germplasmdetail.zul");
-				studyInformationPage.setParent(studyDetailWindow);
-				studyInformationPage.setDynamicProperty("gname",data.getGname());
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("gname",data.getGname());
+				
+				BindUtils.postGlobalCommand(null, null, "openGermplasmDetailInAcrossStudy", params);
 			}
 
 		});

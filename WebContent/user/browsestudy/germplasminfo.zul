@@ -47,6 +47,10 @@
 						sclass="grid-link"
 						onClick="@global-command('openGermplasmDetailInStudy', gname=each.germplasmname)" />
 						
+					<toolbarbutton  if="${vm.parentSource=='crossstudy'}"
+						label="@load(each.germplasmname)"
+						sclass="grid-link"
+						onClick="@global-command('openGermplasmDetailInAcrossStudy', gname=each.germplasmname)" />
 					<label value="@load(each.othername)" />
 					<label value="@load(each.breeder)" />
 					<label value="@load(each.type.germplasmtype)" />
