@@ -1,55 +1,109 @@
 <zk>
 
 	<window>
+		<separator height="50px"></separator>
+			<hlayout valign="middle">
+			<div apply="org.zkoss.bind.BindComposer" align="center"
+				viewModel="@id('vm') @init('org.strasa.extensiondata.chart.LineChartVM')">
+				<chart id="chart" width="520" height="350" title="Stress Tolerant Variety Released By Country"
+					paneColor="#FFFFFF" type="line" yAxis="No of Variety"
+					model="@bind(vm.model)" engine="@bind(vm.engine)"
+					threeD="@bind(vm.threeD)"
+					onClick="@command('showMessage',msg=event.areaComponent.tooltiptext)" />
+				<hlayout visible="@bind(not empty vm.message)">
+					You clicked on :
+					<label value="@bind(vm.message)" />
+				</hlayout>
+			</div>
+
 	
-		<vlayout apply="org.zkoss.bind.BindComposer"
-			viewModel="@id('vm') @init('org.strasa.extensiondata.chart.LineChartVM')">
-			<chart id="chart"
-				title="Stress Tolerant Variety Released By Country" width="520"
-				height="350" paneColor="#FFFFFF" type="line" yAxis="No of Variety"
-				model="@bind(vm.model)" engine="@bind(vm.engine)"
-				threeD="@bind(vm.threeD)"
-				onClick="@command('showMessage',msg=event.areaComponent.tooltiptext)" />
-			<hlayout visible="@bind(not empty vm.message)">
-				You clicked on :
-				<label value="@bind(vm.message)" />
-			</hlayout>
-		</vlayout>
-		<vlayout apply="org.zkoss.bind.BindComposer"
-			viewModel="@id('vm') @init('org.strasa.extensiondata.chart.LineChartVM2')">
-			<chart id="chart2"
-				title="Stress Tolerant Variety Released By Year" width="520"
-				height="350" paneColor="#FFFFFF" type="line" yAxis="No of Variety"
-				model="@bind(vm.model)" engine="@bind(vm.engine)"
-				threeD="@bind(vm.threeD)"
-				onClick="@command('showMessage',msg=event.areaComponent.tooltiptext)" />
-			<hlayout visible="@bind(not empty vm.message)">
-				You clicked on :
-				<label value="@bind(vm.message)" />
-			</hlayout>
-		</vlayout>
+			<div apply="org.zkoss.bind.BindComposer" width="350px"
+				viewModel="@id('vm') @init('org.strasa.web.extensiondata.view.model.ExtensionDataBrowse')">
+				<listbox model="@load(vm.summaryByCountry)"
+					sizedByContent="true">
+					<listhead>
+						<listheader label="Country Release" hflex="1" />
+						<listheader
+							label="Total No. of Variety Release" />
+
+					</listhead>
+					<template name="model">
+						<listitem>
+
+							<listcell label="@load(each.data)" />
+							<listcell label="@load(each.totalCount)" />
+						</listitem>
+
+					</template>
+				</listbox>
+
+			</div>
+
+		</hlayout>
+
+
+		<hlayout valign="middle">
+			<div apply="org.zkoss.bind.BindComposer"
+				viewModel="@id('vm') @init('org.strasa.extensiondata.chart.LineChartVM2')">
+				<chart id="chart2"
+					title="Stress Tolerant Variety Released By Year" width="520"
+					height="350" paneColor="#FFFFFF" type="line" yAxis="No of Variety"
+					model="@bind(vm.model)" engine="@bind(vm.engine)"
+					threeD="@bind(vm.threeD)"
+					onClick="@command('showMessage',msg=event.areaComponent.tooltiptext)" />
+				<hlayout visible="@bind(not empty vm.message)">
+					You clicked on :
+					<label value="@bind(vm.message)" />
+				</hlayout>
+			</div>
+
+			<div apply="org.zkoss.bind.BindComposer" width="350px"
+				viewModel="@id('vm') @init('org.strasa.web.extensiondata.view.model.ExtensionDataBrowse')">
+				<listbox model="@load(vm.summaryByYear)"
+					sizedByContent="true">
+					<listhead>
+						<listheader label="Year Release" hflex="1" />
+						<listheader
+							label="Total No. of Variety Release" />
+
+					</listhead>
+					<template name="model">
+						<listitem>
+
+							<listcell label="@load(each.data)" />
+							<listcell label="@load(each.totalCount)" />
+						</listitem>
+
+					</template>
+				</listbox>
+
+			</div>
+		</hlayout>
 		<!-- <hlayout>
 			<vlayout apply="org.zkoss.bind.BindComposer"
-				viewModel="@id('vm') @init('org.strasa.extensiondata.chart.ChartsVM')">
-
-				<flashchart id="chart3" width="570" height="300" 
-					style="font-weight:bold" type="@bind(vm.type)"
-					model="@bind(vm.model)" />
-
+			viewModel="@id('vm') @init('org.strasa.extensiondata.chart.ChartsVM')">
+			
+			<flashchart id="chart3" width="570" height="300" 
+			style="font-weight:bold" type="@bind(vm.type)"
+			model="@bind(vm.model)" />
+			
 			</vlayout>
-
+			
 			<vlayout apply="org.zkoss.bind.BindComposer">
-				<radiogroup
-					onCheck="@global-command('configChanged',type=self.selectedItem.value)">
-					<vlayout>
-						<radio value="bar" label="Bar Chart"
-							checked="true" />
-						<radio value="line" label="Line Chart" />
-						<radio value="column" label="Column Plot" />
-					</vlayout>
-				</radiogroup>
+			<radiogroup
+			onCheck="@global-command('configChanged',type=self.selectedItem.value)">
+			<vlayout>
+			<radio value="bar" label="Bar Chart"
+			checked="true" />
+			<radio value="line" label="Line Chart" />
+			<radio value="column" label="Column Plot" />
 			</vlayout>
-		</hlayout> -->
+			</radiogroup>
+			</vlayout>
+			</hlayout> -->
+
+
+
 	</window>
 
 </zk>

@@ -13,6 +13,7 @@ public class LineChartVM {
     CategoryModel model;
     LineChartEngine engine;
     String message;
+    
      
     boolean threeD;
  
