@@ -4,19 +4,21 @@ public class ExtensionDataSummaryModel {
 	
 
 	String data;
-	double totalCount;
+	int totalCount;
 	public String getData() {
 		return data;
 	}
 	public void setData(String data) {
 		this.data = data;
 	}
-	public double getTotalCount() {
+	public int getTotalCount() {
 		return totalCount;
 	}
-	public void setTotalCount(double totalCount) {
+	public void setTotalCount(int totalCount) {
 		this.totalCount = totalCount;
 	}
+	
+	
 	
 	
 
