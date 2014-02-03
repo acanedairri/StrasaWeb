@@ -95,7 +95,7 @@ public class EcotypeManagerImpl {
 
 	public void deleteById(Integer id) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		EcotypeMapper mapper = session.getMapper(EcotypeMapper.class);
 		try{
 			mapper.deleteByPrimaryKey(id);

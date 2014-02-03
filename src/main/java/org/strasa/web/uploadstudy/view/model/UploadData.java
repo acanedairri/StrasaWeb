@@ -79,7 +79,7 @@ public class UploadData extends ProcessTabViewModel {
 	private ArrayList<Program> programList = new ArrayList<Program>();
 	private ArrayList<Project> projectList = new ArrayList<Project>();
 	private ArrayList<String> studyTypeList = new ArrayList<String>();
-	public int userID = 1;
+
 	
 	private ArrayList<String> dataTypeList = new ArrayList<String>();
 	private ArrayList<GenotypeFileModel> genotypeFileList = new ArrayList<GenotypeFileModel>();
@@ -186,7 +186,6 @@ public class UploadData extends ProcessTabViewModel {
 	private Study study;
 
 	public List<UploadCSVDataVariableModel> varData = new ArrayList<UploadCSVDataVariableModel>();
-	private int userId = 1;
 
 	public ArrayList<Program> getProgramList() {
 		return programList;
@@ -788,6 +787,7 @@ public class UploadData extends ProcessTabViewModel {
 		study.setStartyear(String.valueOf(startYear));
 		study.setEndyear(String.valueOf(String.valueOf(endYear)));
 		study.setUserid(userID);
+		study.setShared(false);
 		study.setDatecreated(new Date());
 		study.setDatelastmodified(new Date());
 		if (study.getId() == null
@@ -809,7 +809,7 @@ public class UploadData extends ProcessTabViewModel {
 				new StudyDataSetManagerImpl().addDataSet(this.dataset);
 				studyRawData.addStudyRawData(study,
 						columnList.toArray(new String[columnList.size()]),
-						dataList, this.dataset.getId(), isRawData);
+						dataList, this.dataset.getId(), isRawData,this.userID);
 				
 			}
 

@@ -298,7 +298,7 @@ public class StudyRawDataManagerImpl {
 	}
 
 	public void addStudyRawData(Study study, String[] header,
-			List<String[]> rawCSVData, int dataset, boolean isRawData) {
+			List<String[]> rawCSVData, int dataset, boolean isRawData,Integer userid) {
 
 		SqlSession session = connectionFactory.sqlSessionFactory
 				.openSession(ExecutorType.BATCH);
@@ -323,6 +323,8 @@ public class StudyRawDataManagerImpl {
 						record.setDatavalue(row[j]);
 						record.setStudyid(study.getId());
 						record.setDataset(dataset);
+						record.setShared(false);
+						record.setUserid(userid);
 						// studyDataMapper.insert(record);
 						lstData.add(record);
 					}

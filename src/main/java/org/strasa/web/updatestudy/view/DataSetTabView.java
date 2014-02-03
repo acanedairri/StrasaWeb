@@ -8,6 +8,7 @@ import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
 import org.strasa.middleware.manager.StudyDataSetManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
+import org.strasa.web.browsestudy.view.model.StudyInformation;
 import org.strasa.web.common.api.ProcessTabViewModel;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -65,7 +66,7 @@ public class DataSetTabView {
 
 	private int selectedIndex = 1;
 	private boolean[] tabDisabled = {false,true,true,true,true};
-	private long studyID = 7;
+
 	private boolean isRaw;
 	private ProcessTabViewModel uploadModel = new ProcessTabViewModel();
 	
@@ -213,6 +214,7 @@ public class DataSetTabView {
 		 tabDisabled[4] = true;
 		 System.out.println("Disabled Tabs Called");
 	 }
+	 
 	  
 	 
 	@Command("showzulfile")
@@ -238,7 +240,7 @@ public class DataSetTabView {
 		}
 		if(selectedIndex == 0){
 			isRaw = uploadData.isRaw;
-			studyID = uploadData.getStudyID();
+			
 			uploadModel = uploadData;
 			System.out.println("IsRaw: " + uploadData.isDataReUploaded + " ");
 			

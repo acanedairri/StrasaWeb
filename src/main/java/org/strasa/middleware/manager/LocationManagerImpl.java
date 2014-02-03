@@ -83,7 +83,7 @@ public class LocationManagerImpl {
 	}
 	public void deleteById(Integer id) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		LocationMapper mapper = session.getMapper(LocationMapper.class);
 
 

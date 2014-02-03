@@ -60,10 +60,11 @@ public class GermplasmInfo {
 	private HashMap<String,Integer> germplasmTypeKey = new HashMap<String,Integer>();
 	private String searchResultLabel;
 
-
+	private String parentSource;
 
 	@Init
-	public void init(@ExecutionArgParam("studyid") Integer studyId){
+	public void init(@ExecutionArgParam("studyid") Integer studyId, @ExecutionArgParam("parentSource") String source){
+		setParentSource(source);
 		for(Germplasm sg :getGermplasmById(studyId)){
 			germplasmList.add(new GermplasmInfoModel(sg));
 		}
@@ -193,22 +194,6 @@ public class GermplasmInfo {
 		this.searchResultLabel = searchResultLabel;
 	}
 
-	@NotifyChange("*")
-	@Command
-	public void DisplayGermplasmDetail(@BindingParam("gname")String gname){
-
-		Window studyDetailWindow = (Window)Executions.getCurrent().createComponents(
-				"/user/browsegermplasm/studydetails.zul", null, null);
-		studyDetailWindow.doModal();
-		studyDetailWindow.setTitle(gname);
-
-		Include studyInformationPage = new Include();
-		studyInformationPage.setSrc("/user/browsegermplasm/germplasmdetail.zul");
-		studyInformationPage.setParent(studyDetailWindow);
-		studyInformationPage.setDynamicProperty("gname", gname);
-		
-	}
-	
 	
 	@Command
 	public void SetSearchUI(@ContextParam(ContextType.COMPONENT) Component component,
@@ -388,12 +373,21 @@ public class GermplasmInfo {
 		return germplasmType;
 	}
 
+	public String getParentSource() {
+		return parentSource;
+	}
+
+	public void setParentSource(String parentSource) {
+		this.parentSource = parentSource;
+	}
+
 	public class GermplasmInfoModel extends Germplasm{
 		private GermplasmType type;
 		private String characteristics;
 		
 		private StringBuilder sb = new StringBuilder();
 		public GermplasmInfoModel(Germplasm sg){
+			this.setUserid(sg.getUserid());
 			this.setGid(sg.getGid());
 			this.setGermplasmname(sg.getGermplasmname());
 			this.setOthername(sg.getOthername());

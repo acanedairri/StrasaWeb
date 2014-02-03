@@ -116,7 +116,7 @@ public class ProgramManagerImpl {
 	
 	public void deleteProgramById(Integer programId) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		ProgramMapper mapper = session.getMapper(ProgramMapper.class);
 		 
 		

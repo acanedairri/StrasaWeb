@@ -87,7 +87,7 @@ public class PlantingTypeManagerImpl {
 
 	public void deleteById(Integer id) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		PlantingTypeMapper mapper = session.getMapper(PlantingTypeMapper.class);
 		try{
 			mapper.deleteByPrimaryKey(id);

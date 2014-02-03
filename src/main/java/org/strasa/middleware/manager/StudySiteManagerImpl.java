@@ -289,7 +289,7 @@ public class StudySiteManagerImpl {
 
 	public List<StudySite> getSiteByEcotypeId(Integer id) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudySiteMapper mapper = session.getMapper(StudySiteMapper.class);
 		try{
 			StudySiteExample example = new StudySiteExample();

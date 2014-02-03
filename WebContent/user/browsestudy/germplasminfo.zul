@@ -36,9 +36,17 @@
 			<template name="model">
 				<row>
 					<label value="@load(each.gid)" />
-					<toolbarbutton label="@load(each.germplasmname)"
+					
+					<toolbarbutton if="${vm.parentSource=='germplasm'}"
+							label="@load(each.germplasmname)"
+							onClick="@global-command('openGermplasmDetailInGermplasm', gname=each.germplasmname, germplasmId=each.gid)"
+							class="grid-link" />
+							
+					<toolbarbutton  if="${vm.parentSource=='study'}"
+						label="@load(each.germplasmname)"
 						sclass="grid-link"
-						onClick="@global-command('DisplayGermplasmDetailInfoTab', gname=each.germplasmname)" />
+						onClick="@global-command('openGermplasmDetailInStudy', gname=each.germplasmname)" />
+						
 					<label value="@load(each.othername)" />
 					<label value="@load(each.breeder)" />
 					<label value="@load(each.type.germplasmtype)" />
@@ -49,7 +57,6 @@
 					<label value="@load(each.maleparent)" />
 					<label value="@load(each.selectionhistory)" />
 					<label value="@load(each.source)" />
-					<!-- 					<label value="@load(each.characteristics)" /> -->
 
 				</row>
 			</template>

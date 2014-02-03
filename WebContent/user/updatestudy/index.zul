@@ -170,7 +170,7 @@
 
 						<button label="Add New Dataset" image="/images/New16.png" sclass="btn-blue"
 							onClick="@command('addNewDataset',datatype=true)" />
-
+							<button label="Merge Data" onClick="@command('mergeData')"></button>
 						<tabbox id="rawDataTab">
 
 							<tabs>

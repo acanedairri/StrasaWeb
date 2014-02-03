@@ -6,18 +6,18 @@
 <mapper namespace="org.strasa.middleware.mapper.other.StudyRawDataBatch">
 <insert id="insertBatchRaw" parameterType="java.util.List">
 
-   INSERT INTO studyrawdata (id,studyid,dataset,datarow,datacolumn,datavalue)
+   INSERT INTO studyrawdata (id,studyid,dataset,datarow,datacolumn,datavalue,shared,userid)
         VALUES
         <foreach collection="list" item="item" open="(" separator="),(" close=")">
-           #{item.id},#{item.studyid},#{item.dataset},#{item.datarow},#{item.datacolumn},#{item.datavalue}
+           #{item.id},#{item.studyid},#{item.dataset},#{item.datarow},#{item.datacolumn},#{item.datavalue},#{item.shared},#{item.userid}
         </foreach>
 </insert>
 <insert id="insertBatchDerived" parameterType="java.util.List">
 
-   INSERT INTO studyderiveddata (id,studyid,dataset,datarow,datacolumn,datavalue)
+   INSERT INTO studyderiveddata (id,studyid,dataset,datarow,datacolumn,datavalue,shared,userid)
         VALUES
         <foreach collection="list" item="item" open="(" separator="),(" close=")">
-           #{item.id},#{item.studyid},#{item.dataset},#{item.datarow},#{item.datacolumn},#{item.datavalue}
+           #{item.id},#{item.studyid},#{item.dataset},#{item.datarow},#{item.datacolumn},#{item.datavalue},#{item.shared},#{item.userid}
         </foreach>
 </insert>
 </mapper>

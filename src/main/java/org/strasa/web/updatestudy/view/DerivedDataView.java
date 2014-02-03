@@ -83,7 +83,7 @@ public class DerivedDataView extends ProcessTabViewModel {
 	private ArrayList<Program> programList = new ArrayList<Program>();
 	private ArrayList<Project> projectList = new ArrayList<Project>();
 	private ArrayList<String> studyTypeList = new ArrayList<String>();
-	public int userID = 1;
+
 	private ArrayList<String> dataTypeList = new ArrayList<String>();
 	private ArrayList<GenotypeFileModel> genotypeFileList = new ArrayList<DerivedDataView.GenotypeFileModel>();
 	private Program txtProgram = new Program();
@@ -189,7 +189,7 @@ public class DerivedDataView extends ProcessTabViewModel {
 	private Study study;
 
 	public List<UploadCSVDataVariableModel> varData = new ArrayList<UploadCSVDataVariableModel>();
-	private int userId = 1;
+
 
 	private StudyDataSet newdataset;
 
@@ -778,7 +778,7 @@ public class DerivedDataView extends ProcessTabViewModel {
 				}
 				studyRawData.addStudyRawData(study,
 						columnList.toArray(new String[columnList.size()]),
-						dataList, newdataset.getId(), isRawData);
+						dataList, newdataset.getId(), isRawData,this.userID);
 				this.dataset = newdataset;
 			}
 

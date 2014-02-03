@@ -82,7 +82,7 @@ public class RawDataView extends ProcessTabViewModel {
 	private ArrayList<Program> programList = new ArrayList<Program>();
 	private ArrayList<Project> projectList = new ArrayList<Project>();
 	private ArrayList<String> studyTypeList = new ArrayList<String>();
-	public int userID = 1;
+	
 	private ArrayList<String> dataTypeList = new ArrayList<String>();
 	private ArrayList<GenotypeFileModel> genotypeFileList = new ArrayList<RawDataView.GenotypeFileModel>();
 	private Program txtProgram = new Program();
@@ -188,7 +188,7 @@ public class RawDataView extends ProcessTabViewModel {
 	private Study study;
 
 	public List<UploadCSVDataVariableModel> varData = new ArrayList<UploadCSVDataVariableModel>();
-	private int userId = 1;
+
 
 	private StudyDataSet newdataset;
 
@@ -774,6 +774,7 @@ public class RawDataView extends ProcessTabViewModel {
 		study = studyMan.getStudyByStudyId(this.getStudyID());
 		if (study == null) {
 			study = new Study();
+			study.setShared(false);
 		}
 
 
@@ -786,12 +787,13 @@ public class RawDataView extends ProcessTabViewModel {
 					newdataset.setStudyid(this.studyID);
 					newdataset.setDatatype((this.isRaw) ? "rd" : "dd");
 					newdataset.setTitle(this.dataset.getTitle());
+					
 					this.mainTab.setLabel(this.dataset.getTitle());
 					new StudyDataSetManagerImpl().addDataSet(newdataset);
 				}
 				studyRawData.addStudyRawData(study,
 						columnList.toArray(new String[columnList.size()]),
-						dataList, newdataset.getId(), isRawData);
+						dataList, newdataset.getId(), isRawData,this.userID);
 				this.dataset = newdataset;
 			}
 

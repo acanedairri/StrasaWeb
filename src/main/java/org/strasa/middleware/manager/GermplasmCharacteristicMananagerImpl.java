@@ -18,10 +18,8 @@ public class GermplasmCharacteristicMananagerImpl {
 	ConnectionFactory connectionFactory;
 
 	public void addCharacteristict(List<GermplasmCharacteristics> lstCharRecord) {
-		SqlSession session = connectionFactory.sqlSessionFactory
-				.openSession(ExecutorType.BATCH);
-		GermplasmCharacteristicsMapper mapper = session
-				.getMapper(GermplasmCharacteristicsMapper.class);
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
+		GermplasmCharacteristicsMapper mapper = session.getMapper(GermplasmCharacteristicsMapper.class);
 		try {
 			for (GermplasmCharacteristics record : lstCharRecord) {
 				mapper.insert(record);
@@ -33,24 +31,18 @@ public class GermplasmCharacteristicMananagerImpl {
 		}
 	}
 
-	public void addCharacteristicBatch(
-			Collection<GermplasmDeepInfoModel> collection) {
-		SqlSession session = connectionFactory.sqlSessionFactory
-				.openSession(ExecutorType.BATCH);
-		GermplasmCharacteristicsMapper mapper = session
-				.getMapper(GermplasmCharacteristicsMapper.class);
+	public void addCharacteristicBatch(Collection<GermplasmDeepInfoModel> collection) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
+		GermplasmCharacteristicsMapper mapper = session.getMapper(GermplasmCharacteristicsMapper.class);
 
 		try {
 
 			for (GermplasmDeepInfoModel recData : collection) {
 				GermplasmCharacteristicsExample ex = new GermplasmCharacteristicsExample();
-				ex.createCriteria().andGermplasmnameEqualTo(
-						recData.getGermplasmname());
+				ex.createCriteria().andGermplasmnameEqualTo(recData.getGermplasmname());
 				mapper.deleteByExample(ex);
-				System.out.println("CHARSIZE: "
-						+ recData.getCharacteristicValues().size());
-				for (GermplasmCharacteristics record : recData
-						.getCharacteristicValues()) {
+				System.out.println("CHARSIZE: " + recData.getCharacteristicValues().size());
+				for (GermplasmCharacteristics record : recData.getCharacteristicValues()) {
 					mapper.insert(record);
 				}
 			}
@@ -61,8 +53,27 @@ public class GermplasmCharacteristicMananagerImpl {
 		}
 	}
 
-	public List<GermplasmCharacteristics> getGermplasmCharacteristicByKeyandGname(
-			String attribute, String gname) {
+	public void addCharacteristic(GermplasmDeepInfoModel recData) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
+		GermplasmCharacteristicsMapper mapper = session.getMapper(GermplasmCharacteristicsMapper.class);
+
+		try {
+
+			GermplasmCharacteristicsExample ex = new GermplasmCharacteristicsExample();
+			ex.createCriteria().andGermplasmnameEqualTo(recData.getGermplasmname());
+			mapper.deleteByExample(ex);
+			System.out.println("CHARSIZE: " + recData.getCharacteristicValues().size());
+			for (GermplasmCharacteristics record : recData.getCharacteristicValues()) {
+				mapper.insert(record);
+			}
+
+			session.commit();
+		} finally {
+			session.close();
+		}
+	}
+
+	public List<GermplasmCharacteristics> getGermplasmCharacteristicByKeyandGname(String attribute, String gname) {
 
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		try {
@@ -71,10 +82,7 @@ public class GermplasmCharacteristicMananagerImpl {
 			param.setGermplasmname(gname);
 			param.setAttribute(attribute);
 
-			toreturn = session
-					.selectList(
-							"BrowseGermplasm.getGermplasmKeyCharacteristicsByGermplasmName",
-							param);
+			toreturn = session.selectList("BrowseGermplasm.getGermplasmKeyCharacteristicsByGermplasmName", param);
 
 			return toreturn;
 
@@ -84,13 +92,11 @@ public class GermplasmCharacteristicMananagerImpl {
 
 	}
 
-	public List<GermplasmCharacteristics> getGermplasmByGermplasmName(
-			String gname) {
+	public List<GermplasmCharacteristics> getGermplasmByGermplasmName(String gname) {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		try {
 
-			GermplasmCharacteristicsMapper mapper = session
-					.getMapper(GermplasmCharacteristicsMapper.class);
+			GermplasmCharacteristicsMapper mapper = session.getMapper(GermplasmCharacteristicsMapper.class);
 			GermplasmCharacteristicsExample example = new GermplasmCharacteristicsExample();
 			example.createCriteria().andGermplasmnameEqualTo(gname);
 			return mapper.selectByExample(example);
@@ -104,11 +110,9 @@ public class GermplasmCharacteristicMananagerImpl {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 
 		try {
-			GermplasmCharacteristicsMapper mapper = session
-					.getMapper(GermplasmCharacteristicsMapper.class);
+			GermplasmCharacteristicsMapper mapper = session.getMapper(GermplasmCharacteristicsMapper.class);
 			GermplasmCharacteristicsExample example = new GermplasmCharacteristicsExample();
-			example.createCriteria().andAttributeEqualTo(attribute)
-					.andKeyvalueEqualTo(value);
+			example.createCriteria().andAttributeEqualTo(attribute).andKeyvalueEqualTo(value);
 			return !mapper.selectByExample(example).isEmpty();
 
 		} finally {

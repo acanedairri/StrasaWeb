@@ -11,7 +11,7 @@
     <style src="http://stanlemon.net/stylesheet/jquery.jgrowl.css" />
 	
 	<div width="100%" apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.managegermplasm.view.model.Index')" onClientInfo="onClientInfo(event)">
+		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudyGermplasmInfo')" onClientInfo="onClientInfo(event)">
 
 
 		<div align="left">

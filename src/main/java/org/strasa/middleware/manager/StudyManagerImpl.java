@@ -1,6 +1,7 @@
 package org.strasa.middleware.manager;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -15,20 +16,30 @@ import org.strasa.middleware.mapper.StudyMapper;
 import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.model.Study;
+import org.strasa.middleware.model.StudyDataColumn;
 import org.strasa.middleware.model.StudyDataColumnExample;
+import org.strasa.middleware.model.StudyDataSetExample;
+import org.strasa.middleware.model.StudyDerivedData;
 import org.strasa.middleware.model.StudyDerivedDataExample;
 import org.strasa.middleware.model.StudyExample;
 import org.strasa.middleware.model.StudyFileExample;
+import org.strasa.middleware.model.StudyGermplasm;
 import org.strasa.middleware.model.StudyGermplasmExample;
 import org.strasa.middleware.model.StudyLocationExample;
+import org.strasa.middleware.model.StudyRawData;
 import org.strasa.middleware.model.StudyRawDataExample;
+import org.strasa.middleware.model.StudySite;
 import org.strasa.middleware.model.StudySiteExample;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class StudyManagerImpl {
 
-	
+
+
+	@WireVariable
+	ConnectionFactory connectionFactory;
 	public Study getStudyById(int studyid){
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyMapper mapper = session.getMapper(StudyMapper.class);
 		try{
 			return mapper.selectByPrimaryKey(studyid);
@@ -39,8 +50,86 @@ public class StudyManagerImpl {
 	}
 
 
+	
+	public void mergeStudyData(Integer studyid, boolean isRaw){
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession(); 
+		
+		StudyRawDataMapper mapperRaw = session.getMapper(StudyRawDataMapper.class);
+		StudyRawDataExample exampleRaw = new StudyRawDataExample();
+		StudyDerivedDataMapper mapperDerived = session.getMapper(StudyDerivedDataMapper.class);
+		StudyDerivedDataExample exampleDerived = new StudyDerivedDataExample();
+		StudyDataSetMapper mapperDataset = session.getMapper(StudyDataSetMapper.class);
+		StudyDataSetExample exampleDataset = new StudyDataSetExample();
+		StudyDataColumnMapper mapperColumn = session.getMapper(StudyDataColumnMapper.class);
+		StudyDataColumnExample exampleColumn = new StudyDataColumnExample();
+		StudySiteMapper mapperSite = session.getMapper(StudySiteMapper.class);
+		StudySiteExample exampleSite = new StudySiteExample();     
+		StudyGermplasmMapper mapperGermplasm = session.getMapper(StudyGermplasmMapper.class);
+		StudyGermplasmExample exampleGermplasm = new StudyGermplasmExample();
+		
+		
+	
+       
+		try{
+			Integer firstDatasetID;
+			
+			exampleDataset.createCriteria().andDatatypeEqualTo((isRaw) ? "rd" : "dd").andStudyidEqualTo(studyid);
+			firstDatasetID = mapperDataset.selectByExample(exampleDataset).get(0).getId();
+			
+			if(isRaw){
+				
+				StudyRawData data  = new StudyRawData();
+				data.setDataset(firstDatasetID);
+				exampleRaw.createCriteria().andStudyidEqualTo(studyid);
+				mapperRaw.updateByExampleSelective(data, exampleRaw);
+			}	
+			else{
+				StudyDerivedData data  = new StudyDerivedData();
+				data.setDataset(firstDatasetID);
+				exampleDerived.createCriteria().andStudyidEqualTo(studyid);
+				mapperDerived.updateByExampleSelective(data, exampleDerived);
+			}
+			HashSet<String> noDup = new HashSet<String>();
+			exampleColumn.createCriteria().andStudyidEqualTo(firstDatasetID).andDatatypeEqualTo((isRaw) ? "rd" : "dd");
+			
+			List<StudyDataColumn> arrCol = mapperColumn.selectByExample(exampleColumn);
+			mapperColumn.deleteByExample(exampleColumn);
+			for(StudyDataColumn col : arrCol){
+				if(noDup.add(col.getColumnheader())){
+					mapperColumn.insert(col);
+				}
+				
+			}
+			exampleSite.createCriteria().andStudyidEqualTo(studyid);
+			StudySite siteData = new StudySite();
+			siteData.setDataset(firstDatasetID);
+			mapperSite.updateByExampleSelective(siteData, exampleSite);
+			
+			exampleGermplasm.createCriteria().andStudyidEqualTo(firstDatasetID);
+			
+			StudyGermplasm germplasmData = new StudyGermplasm();
+			germplasmData.setDataset(firstDatasetID);
+			mapperGermplasm.updateByExampleSelective(germplasmData, exampleGermplasm);
+			
+			exampleDataset = new StudyDataSetExample();
+			exampleDataset.createCriteria().andStudyidEqualTo(studyid).andDatatypeEqualTo((isRaw) ? "rd" : "dd").andIdNotEqualTo(firstDatasetID);
+			mapperDataset.deleteByExample(exampleDataset);
+			
+			
+		
+			
+		}
+		finally{
+			session.commit();
+			session.close();
+		}
+		
+		
+	}
+	
+	
 	public boolean isDataSetExist(Integer studyID, Integer dataset){
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyRawDataMapper mapperRaw = session.getMapper(StudyRawDataMapper.class);
 		StudyRawDataExample exampleRaw = new StudyRawDataExample();
 		exampleRaw.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset);
@@ -66,7 +155,7 @@ public class StudyManagerImpl {
 
 	public List<Study> getStudiesByUserID(int userID) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyMapper mapper = session.getMapper(StudyMapper.class);
 		try{
 			StudyExample example = new StudyExample();
@@ -80,7 +169,7 @@ public class StudyManagerImpl {
 
 	public void deleteStudyById(Integer studyId) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		
 		StudyMapper mapper = session.getMapper(StudyMapper.class);
 		StudySiteMapper siteMapper = session.getMapper(StudySiteMapper.class);
@@ -133,7 +222,7 @@ public class StudyManagerImpl {
 
 	public void updateStudyById(Study record) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyMapper mapper = session.getMapper(StudyMapper.class);
 		
 		try{
@@ -149,7 +238,7 @@ public class StudyManagerImpl {
 
 	public List<Study> getStudyByProgramId(Integer programId) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyMapper mapper = session.getMapper(StudyMapper.class);
 		try{
 			StudyExample example = new StudyExample();
@@ -163,7 +252,7 @@ public class StudyManagerImpl {
 	
 	public List<Study> getStudyByProjectId(Integer projectId) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyMapper mapper = session.getMapper(StudyMapper.class);
 		try{
 			StudyExample example = new StudyExample();
@@ -178,7 +267,7 @@ public class StudyManagerImpl {
 
 	public void deleteStudyById(int studyId, Integer dataset) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		
 //		StudyMapper mapper = session.getMapper(StudyMapper.class);
 		StudySiteMapper siteMapper = session.getMapper(StudySiteMapper.class);
@@ -229,7 +318,7 @@ public class StudyManagerImpl {
 
 	public List<Study> getByStudyTypeId(Integer id) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyMapper mapper = session.getMapper(StudyMapper.class);
 		try{
 			StudyExample example = new StudyExample();

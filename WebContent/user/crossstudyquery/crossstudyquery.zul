@@ -1,13 +1,3 @@
-<?page title="new page title" contentType="text/html;charset=UTF-8"?>
-<zk>
-	<style src="../css/main.css" />
-
-
-	<div style="padding:10px 0px 0px 20px" align="left">
-		<label style="font-size:20px" class="header-menu">
-			Across Study Query
-		</label>
-	</div>
 
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.crossstudyquery.view.model.CrossStudyQuery')"
@@ -245,6 +235,3 @@
 
 		</groupbox>
 	</div>
-
-
-</zk>

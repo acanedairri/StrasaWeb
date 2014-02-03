@@ -23,7 +23,7 @@
 					<row>
 						<toolbarbutton label="@load(each.studyname)"
 							class="grid-link"
-							onClick="@global-command('openNewSearchInfoTab', studyid=each.id, studyName=each.studyname)" />
+							onClick="@global-command('openStudyDetailInStudy', studyid=each.id, studyName=each.studyname)" />
 						<label value="@load(each.programname)"/>
 						<label value="@load(each.projectname)"/>
 						<label value="@load(each.studytypename)"/>

@@ -169,7 +169,7 @@ public class KeyCharacteristicManagerImpl {
 
 	public void deleteBioticById(Integer id) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		KeyBioticMapper mapper = session.getMapper(KeyBioticMapper.class);
 		try{
 			mapper.deleteByPrimaryKey(id);
@@ -225,7 +225,7 @@ public class KeyCharacteristicManagerImpl {
 
 	public void deleteAbioticById(Integer id) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		KeyAbioticMapper mapper = session.getMapper(KeyAbioticMapper.class);
 		try{
 			mapper.deleteByPrimaryKey(id);
@@ -238,7 +238,7 @@ public class KeyCharacteristicManagerImpl {
 
 	public void deleteGrainQualityById(Integer id) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		KeyGrainQualityMapper mapper = session.getMapper(KeyGrainQualityMapper.class);
 		try{
 			mapper.deleteByPrimaryKey(id);
@@ -265,7 +265,7 @@ public class KeyCharacteristicManagerImpl {
 
 	public void deleteMajorGenesById(Integer id) {
 		// TODO Auto-generated method stub
-		SqlSession session = new ConnectionFactory().sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		KeyMajorGenesMapper mapper = session.getMapper(KeyMajorGenesMapper.class);
 		try{
 			mapper.deleteByPrimaryKey(id);

@@ -130,12 +130,19 @@
 				</columns>
 				<template name="model">
 					<row>
-						<toolbarbutton if="${vm.openAsTab}"
+						<toolbarbutton if="${vm.parentSource=='study'}"
 							label="@load(each.studyname)"
-							onClick="@global-command('openNewSearchInfoTab', studyid=each.id,studyName=each.studyname)"
+							onClick="@global-command('openStudyDetailInStudy', studyid=each.id,studyName=each.studyname)"
 							class="grid-link" />
 
-						<toolbarbutton unless="@${vm.openAsTab}"
+						<toolbarbutton
+							if="${vm.parentSource=='germplasm'}"
+							label="@load(each.studyname)"
+							onClick="@global-command('openStudyDetailInGermplasm', studyid=each.id,studyName=each.studyname)"
+							class="grid-link" />
+
+						<toolbarbutton
+							if="${vm.parentSource=='crossstudy'}"
 							label="@load(each.studyname)"
 							onClick="@command('DisplayStudyDetail', studyid=each.id,studyname=each.studyname)"
 							class="grid-link" />
