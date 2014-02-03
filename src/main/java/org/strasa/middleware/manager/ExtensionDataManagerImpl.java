@@ -10,10 +10,16 @@ import org.strasa.middleware.mapper.ExtensionDataMapper;
 import org.strasa.middleware.mapper.LocationMapper;
 import org.strasa.middleware.mapper.ProgramMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
+import org.strasa.middleware.mapper.other.ExtensionDataSummaryMapper;
+import org.strasa.middleware.mapper.other.StudySummaryMapper;
 import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.ExtensionData;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.StudySite;
+import org.strasa.web.browsestudy.view.model.StudySearchFilterModel;
+import org.strasa.web.browsestudy.view.model.StudySearchResultModel;
+import org.strasa.web.browsestudy.view.model.StudySummaryModel;
+import org.strasa.web.extensiondata.view.model.ExtensionDataSummaryModel;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class ExtensionDataManagerImpl {
@@ -109,6 +115,42 @@ public class ExtensionDataManagerImpl {
 		finally{
 			session.close();
 		}
+	}
+	
+	public List<ExtensionDataSummaryModel> getCountOfGermplasmByCountrRealease() {
+		
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
+		List<ExtensionDataSummaryModel> s= new ArrayList<ExtensionDataSummaryModel>();
+		try{
+
+			List<ExtensionDataSummaryModel> toreturn= mapper.selectExtentionDataSummaryByCountryRelease();
+
+			return toreturn;
+
+		}finally{
+			session.close();
+		}
+
+
+	}
+	
+	public List<ExtensionDataSummaryModel> getCountOfGermplasmByYear() {
+		
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
+		List<ExtensionDataSummaryModel> s= new ArrayList<ExtensionDataSummaryModel>();
+		try{
+
+			List<ExtensionDataSummaryModel> toreturn= mapper.selectExtentionDataSummaryByYear();
+
+			return toreturn;
+
+		}finally{
+			session.close();
+		}
+
+
 	}
 
 }

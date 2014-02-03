@@ -28,7 +28,7 @@
 				<label value="@bind(vm.message)" />
 			</hlayout>
 		</vlayout>
-		<hlayout>
+		<!-- <hlayout>
 			<vlayout apply="org.zkoss.bind.BindComposer"
 				viewModel="@id('vm') @init('org.strasa.extensiondata.chart.ChartsVM')">
 
@@ -49,7 +49,7 @@
 					</vlayout>
 				</radiogroup>
 			</vlayout>
-		</hlayout>
+		</hlayout> -->
 	</window>
 
 </zk>
