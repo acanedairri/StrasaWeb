@@ -26,8 +26,8 @@ public class SidebarPageConfigAjaxBasedImpl implements SidebarPageConfig{
 //		pageMap.put("upload_menu4",new SidebarPage("upload_menu4","Genotyping Data","/images/fn.png","/user/home.zul"));
 		pageMap.put("upload_menu5",new SidebarPage("upload_menu4","Extension Data","/images/fn.png","/user/extension/index.zul"));
 		pageMap.put("browse_menu1",new SidebarPage("browse_menu1","Studies","/images/study16.png","/user/browsestudy/index.zul"));
-		pageMap.put("browse_menu2",new SidebarPage("browse_menu2","Germplasm","/images/Germplasm16.png","/user/browsegermplasm/browsegermplasm.zul"));
-		pageMap.put("browse_menu3",new SidebarPage("browse_menu3","Across Study Query","/images/study16.png","/user/crossstudyquery/crossstudyquery.zul"));
+		pageMap.put("browse_menu2",new SidebarPage("browse_menu2","Germplasm","/images/Germplasm16.png","/user/browsegermplasm/index.zul"));
+		pageMap.put("browse_menu3",new SidebarPage("browse_menu3","Across Study Query","/images/study16.png","/user/crossstudyquery/index.zul"));
 		pageMap.put("browse_menu4",new SidebarPage("browse_menu4","Extension Data","/images/study16.png","/user/extension/extensiondatabrowse.zul"));
 		pageMap.put("analysis_menu1",new SidebarPage("analysis_menu1","Phenotypic Analysis","/images/fn.png","/user/home.zul"));
 //		pageMap.put("maintenance_menu1",new SidebarPage("maintenance_menu1","Uploaded Studies","/images/fn.png","/user/maintenance/edituploadedstudies.zul"));

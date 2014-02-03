@@ -1,10 +1,5 @@
 <vbox apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.BrowseGermplasm')">
-	
-	<div style="padding:10px 0px 15px 20px" align="left">
-		<label class="header-menu">Browse Germplasm</label>
-	</div>
-
 	<div align="center">
 		<hlayout>
 			<label value="Search By" class="label-search" />
