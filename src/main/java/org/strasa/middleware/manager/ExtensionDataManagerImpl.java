@@ -19,7 +19,9 @@ import org.strasa.middleware.model.StudySite;
 import org.strasa.web.browsestudy.view.model.StudySearchFilterModel;
 import org.strasa.web.browsestudy.view.model.StudySearchResultModel;
 import org.strasa.web.browsestudy.view.model.StudySummaryModel;
+import org.strasa.web.extensiondata.view.model.ExtensionDataListModel;
 import org.strasa.web.extensiondata.view.model.ExtensionDataSummaryModel;
+import org.strasa.web.extensiondata.view.model.SummaryModel;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class ExtensionDataManagerImpl {
@@ -151,6 +153,104 @@ public class ExtensionDataManagerImpl {
 		}
 
 
+	}
+	
+	public List<ExtensionDataListModel> getExtensionDataList() {
+		
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
+		List<ExtensionDataSummaryModel> s= new ArrayList<ExtensionDataSummaryModel>();
+		try{
+
+			List<ExtensionDataListModel> toreturn= mapper.selectExtentionDataList();
+
+			return toreturn;
+
+		}finally{
+			session.close();
+		}
+
+
+	}
+	public List<SummaryModel> getAreaSummaryGermplasmByYearandCountryExtension(){
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
+		List<SummaryModel> s= new ArrayList<SummaryModel>();
+		try{
+			List<SummaryModel> toreturn= mapper.selectAreaSummaryGermplasmByYearandCountryExtension();
+
+			return toreturn;
+
+		}finally{
+			session.close();
+		}
+	}
+	
+	public List<SummaryModel> getAreaSummaryGermplasmByYear(){
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
+		List<SummaryModel> s= new ArrayList<SummaryModel>();
+		try{
+			List<SummaryModel> toreturn= mapper.selectAreaSummaryGermplasmByYear();
+
+			return toreturn;
+
+		}finally{
+			session.close();
+		}
+	}
+	
+	public List<SummaryModel> getAreaSummaryGermplasmByCountryExtension(){
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
+		List<SummaryModel> s= new ArrayList<SummaryModel>();
+		try{
+			List<SummaryModel> toreturn= mapper.selectAreaSummaryGermplasmByCountryExtension();
+
+			return toreturn;
+
+		}finally{
+			session.close();
+		}
+	}
+	
+	public List<SummaryModel> getNoOfVarietyReleaseByCountryAndYear(){
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
+		List<SummaryModel> s= new ArrayList<SummaryModel>();
+		try{
+			List<SummaryModel> toreturn= mapper.selectNoOfVarietyReleaseByCountryAndYear();
+			return toreturn;
+
+		}finally{
+			session.close();
+		}
+	}
+	
+	public List<SummaryModel> getNoOfVarietyReleaseByCountryRelease(){
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
+		List<SummaryModel> s= new ArrayList<SummaryModel>();
+		try{
+			List<SummaryModel> toreturn= mapper.selectNoOfVarietyReleaseByCountryRelease();
+			return toreturn;
+
+		}finally{
+			session.close();
+		}
+	}
+	
+	public List<SummaryModel> getNoOfVarietyReleaseByYear(){
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
+		List<SummaryModel> s= new ArrayList<SummaryModel>();
+		try{
+			List<SummaryModel> toreturn= mapper.selectNoOfVarietyReleaseByYear();
+			return toreturn;
+
+		}finally{
+			session.close();
+		}
 	}
 
 }

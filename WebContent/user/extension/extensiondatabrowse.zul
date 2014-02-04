@@ -1,106 +1,146 @@
 <zk>
 
-	<window>
-		<separator height="50px"></separator>
-			<hlayout valign="middle">
-			<div apply="org.zkoss.bind.BindComposer" align="center"
-				viewModel="@id('vm') @init('org.strasa.extensiondata.chart.LineChartVM')">
-				<chart id="chart" width="520" height="350" title="Stress Tolerant Variety Released By Country"
-					paneColor="#FFFFFF" type="line" yAxis="No of Variety"
-					model="@bind(vm.model)" engine="@bind(vm.engine)"
-					threeD="@bind(vm.threeD)"
-					onClick="@command('showMessage',msg=event.areaComponent.tooltiptext)" />
-				<hlayout visible="@bind(not empty vm.message)">
-					You clicked on :
-					<label value="@bind(vm.message)" />
-				</hlayout>
-			</div>
-
-	
-			<div apply="org.zkoss.bind.BindComposer" width="350px"
-				viewModel="@id('vm') @init('org.strasa.web.extensiondata.view.model.ExtensionDataBrowse')">
-				<listbox model="@load(vm.summaryByCountry)"
-					sizedByContent="true">
-					<listhead>
-						<listheader label="Country Release" hflex="1" />
-						<listheader
-							label="Total No. of Variety Release" />
-
-					</listhead>
-					<template name="model">
-						<listitem>
-
-							<listcell label="@load(each.data)" />
-							<listcell label="@load(each.totalCount)" />
-						</listitem>
-
-					</template>
-				</listbox>
-
-			</div>
-
-		</hlayout>
+	<style src="../css/main.css" />
 
 
-		<hlayout valign="middle">
-			<div apply="org.zkoss.bind.BindComposer"
-				viewModel="@id('vm') @init('org.strasa.extensiondata.chart.LineChartVM2')">
-				<chart id="chart2"
-					title="Stress Tolerant Variety Released By Year" width="520"
-					height="350" paneColor="#FFFFFF" type="line" yAxis="No of Variety"
-					model="@bind(vm.model)" engine="@bind(vm.engine)"
-					threeD="@bind(vm.threeD)"
-					onClick="@command('showMessage',msg=event.areaComponent.tooltiptext)" />
-				<hlayout visible="@bind(not empty vm.message)">
-					You clicked on :
-					<label value="@bind(vm.message)" />
-				</hlayout>
-			</div>
+	<div style="padding:10px 0px 15px 20px" align="left">
+		<label class="header-menu">Extension Data</label>
+	</div>
+	<window apply="org.zkoss.bind.BindComposer" width="500px" style="padding:10px 0px 15px 20px"
+		viewModel="@id('vm') @init('org.strasa.web.extensiondata.view.model.ExtensionDataBrowse')">
 
-			<div apply="org.zkoss.bind.BindComposer" width="350px"
-				viewModel="@id('vm') @init('org.strasa.web.extensiondata.view.model.ExtensionDataBrowse')">
-				<listbox model="@load(vm.summaryByYear)"
-					sizedByContent="true">
-					<listhead>
-						<listheader label="Year Release" hflex="1" />
-						<listheader
-							label="Total No. of Variety Release" />
+		<groupbox mold="3d">
+			<caption label="Germplasm by Country Extension" />
+			<listbox
+				model="@load(vm.areaSummaryGermplasmByCountryExtension)"
+				sizedByContent="true">
+				<listhead>
+					<listheader label="Program Name" />
+					<listheader label="Country Extension" />
+					<listheader label="Germplasm" />
+					<listheader label="Total Area" hflex="1" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.programName)" />
+						<listcell label="@load(each.countryextension)" />
+						<listcell label="@load(each.germplasmname)" />
+						<listcell label="@load(each.sumArea)" />
+					</listitem>
 
-					</listhead>
-					<template name="model">
-						<listitem>
+				</template>
+			</listbox>
+		</groupbox>
 
-							<listcell label="@load(each.data)" />
-							<listcell label="@load(each.totalCount)" />
-						</listitem>
 
-					</template>
-				</listbox>
+		<groupbox mold="3d">
+			<caption label="Germplasm by Year" />
+			<listbox model="@load(vm.areaSummaryGermplasmByYear)"
+				sizedByContent="true">
+				<listhead>
+					<listheader label="Program Name" />
+					<listheader label="Germplasm" />
+					<listheader label="Year" />
+					<listheader label="Total Area"  hflex="1" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.programName)" />
+						<listcell label="@load(each.germplasmname)" />
+						<listcell label="@load(each.year)" />
+						<listcell label="@load(each.sumArea)" />
+					</listitem>
 
-			</div>
-		</hlayout>
-		<!-- <hlayout>
-			<vlayout apply="org.zkoss.bind.BindComposer"
-			viewModel="@id('vm') @init('org.strasa.extensiondata.chart.ChartsVM')">
-			
-			<flashchart id="chart3" width="570" height="300" 
-			style="font-weight:bold" type="@bind(vm.type)"
-			model="@bind(vm.model)" />
-			
-			</vlayout>
-			
-			<vlayout apply="org.zkoss.bind.BindComposer">
-			<radiogroup
-			onCheck="@global-command('configChanged',type=self.selectedItem.value)">
-			<vlayout>
-			<radio value="bar" label="Bar Chart"
-			checked="true" />
-			<radio value="line" label="Line Chart" />
-			<radio value="column" label="Column Plot" />
-			</vlayout>
-			</radiogroup>
-			</vlayout>
-			</hlayout> -->
+				</template>
+			</listbox>
+		</groupbox>
+
+		<groupbox mold="3d">
+			<caption label="Germplasm by Year by Country Extention" />
+			<listbox
+				model="@load(vm.areaSummaryGermplasmByYearandCountryExtension)"
+				sizedByContent="true">
+				<listhead>
+					<listheader label="Program Name" />
+					<listheader label="Germplasm" />
+					<listheader label="Country Extension" />
+					<listheader label="Total Area"   hflex="1"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.programName)" />
+						<listcell label="@load(each.germplasmname)" />
+						<listcell label="@load(each.countryextension)" />
+						<listcell label="@load(each.sumArea)" />
+					</listitem>
+
+				</template>
+			</listbox>
+		</groupbox>
+
+		<!-- Release Summary -->
+
+		<groupbox mold="3d">
+			<caption label="Total Number of Variety Released by Year" />
+			<listbox model="@load(vm.noOfVarietyReleaseByYear)"
+				sizedByContent="true">
+				<listhead>
+					<listheader label="Program Name" />
+					<listheader label="Year" />
+					<listheader label="No of Variety"  hflex="1" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.programName)" />
+						<listcell label="@load(each.year)" />
+						<listcell label="@load(each.countVariety)" />
+					</listitem>
+
+				</template>
+			</listbox>
+		</groupbox>
+
+		<groupbox mold="3d">
+			<caption label="Total Number of Variety Released by Country" />
+			<listbox
+				model="@load(vm.noOfVarietyReleaseByCountryRelease)"
+				sizedByContent="true">
+				<listhead>
+					<listheader label="Program Name" />
+					<listheader label="Country Release" />
+					<listheader label="No of Variety"  hflex="1"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.programName)" />
+						<listcell label="@load(each.countryrelease)" />
+						<listcell label="@load(each.countVariety)" />
+					</listitem>
+
+				</template>
+			</listbox>
+		</groupbox>
+
+		<groupbox mold="3d">
+			<caption label="Total Number of Variety Released by Year" />
+			<listbox
+				model="@load(vm.noOfVarietyReleaseByYear)"
+				sizedByContent="true">
+				<listhead>
+					<listheader label="Program Name" />
+					<listheader label="Year" />
+					<listheader label="No of Variety"  hflex="1" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.programName)" />
+						<listcell label="@load(each.year)" />
+						<listcell label="@load(each.countVariety)" />
+					</listitem>
+
+				</template>
+			</listbox>
+		</groupbox>
 
 
 

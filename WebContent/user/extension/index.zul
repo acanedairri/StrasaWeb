@@ -1,13 +1,21 @@
 <zk>
-	<window id="editExtensionWindow" apply="org.zkoss.bind.BindComposer"
+
+	<style src="../css/main.css" />
+	<div style="padding:10px 0px 15px 20px" align="left">
+		<label class="header-menu">Extension Data</label>
+	</div>
+
+	<window id="editExtensionWindow" apply="org.zkoss.bind.BindComposer" style="padding:10px"
 		viewModel="@id('vm') @init('org.strasa.web.extensiondata.view.model.EditExtensionData')">
-		<button label="Add New" onClick="@command('add')" />
-		<grid
+	
+		<button label="Add New" onClick="@command('add')"
+			sclass="btn-blue" />
+		<grid 
 			model="@load(vm.rowList) @template(each.editingStatus ? 'editable' : 'noneditable')"
 			sizedByContent="true" width="95%" emptyMessage="No Record Found">
 			<columns width="200px">
-				<column label="Program"  width="125px"/>
-				<column label="Project"  width="125px"/>
+				<column label="Program" hflex="1" />
+				<column label="Project" />
 				<column label="Germplasm Name" />
 				<column label="Year" width="100px" />
 				<column label="Location" width="100px" />
@@ -20,27 +28,28 @@
 				<column label="Action" width="100px" />
 			</columns>
 			<template name="editable">
-			<row>
-					<combobox id="programComboBox" model="@load(vm.programList)"
-						readonly="true"
+				<row>
+					<combobox id="programComboBox"
+						model="@load(vm.programList)" readonly="true"
 						onChange="@command('updateLists', program=self.selectedItem)"
 						value="@load(each.program.name)"
-						selectedItem="@load(each.program) @save(each.program, before='confirm')" >
-					<template name="model">
-						<comboitem value="@load(each.id)"
-							label="@load(each.name)" />
-					</template>
+						selectedItem="@load(each.program) @save(each.program, before='confirm')">
+						<template name="model">
+							<comboitem value="@load(each.id)"
+								label="@load(each.name)" />
+						</template>
 					</combobox>
-					
-					<combobox id="projectComboBox" model="@load(vm.projectList)" width="95%"
-						value="@load(each.project.name)"
-						readonly="true" selectedItem="@load(each.project) @save(each.project, before='confirm')">
-					<template name="model">
-						<comboitem value="@load(each.id)"
-							label="@load(each.name)" />
-					</template>
+
+					<combobox id="projectComboBox"
+						model="@load(vm.projectList)" width="95%"
+						value="@load(each.project.name)" readonly="true"
+						selectedItem="@load(each.project) @save(each.project, before='confirm')">
+						<template name="model">
+							<comboitem value="@load(each.id)"
+								label="@load(each.name)" />
+						</template>
 					</combobox>
-					
+
 					<textbox
 						value="@load(each.value.germplasmname) @save(each.value.germplasmname, before='confirm')" />
 					<textbox
