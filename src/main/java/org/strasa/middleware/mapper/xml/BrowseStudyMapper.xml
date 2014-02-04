@@ -125,6 +125,46 @@
 
 		</foreach>
 	</select>
+	
+	<select id="getStudyRawDataNoDataset" resultType="hashmap" parameterType="StudyDataColumnModel">
+		select
+		<foreach item="item" index="index" collection="list">
+			<if test="item.order != item.count">
+				MAX(CASE datacolumn WHEN #{item.columnheader} THEN
+				datavalue ELSE '' END) AS #{item.columnheader},
+			</if>
+
+			<if test="item.order == item.count">
+				MAX(CASE datacolumn WHEN #{item.columnheader} THEN
+				datavalue ELSE '' END) AS #{item.columnheader}
+				from studyrawdata as
+				t1 where t1.studyid=#{item.studyid} 
+				group by t1.datarow
+			</if>
+
+		</foreach>
+	</select>
+
+	<select id="getStudyDerivedDataNoDataset" resultType="hashmap"
+		parameterType="StudyDataColumnModel">
+		select
+		<foreach item="item" index="index" collection="list">
+			<if test="item.order != item.count">
+				MAX(CASE datacolumn WHEN #{item.columnheader} THEN
+				datavalue ELSE '' END) AS #{item.columnheader},
+			</if>
+
+			<if test="item.order == item.count">
+				MAX(CASE datacolumn WHEN #{item.columnheader} THEN
+				datavalue ELSE '' END) AS #{item.columnheader}
+				from studyderiveddata
+				as
+				t1 where t1.studyid=#{item.studyid}
+				group by t1.datarow
+			</if>
+
+		</foreach>
+	</select>
 
 	<select id="getStudyWithGemrplasmTested" resultType="StudySearchResultModel"
 		parameterType="int">

@@ -11,22 +11,18 @@ import org.strasa.middleware.mapper.PlantingTypeMapper;
 import org.strasa.middleware.mapper.StudyAgronomyMapper;
 import org.strasa.middleware.mapper.StudyDerivedDataMapper;
 import org.strasa.middleware.mapper.StudyDesignMapper;
-import org.strasa.middleware.mapper.StudyMapper;
 import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
-import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyAgronomy;
 import org.strasa.middleware.model.StudyAgronomyExample;
 import org.strasa.middleware.model.StudyDerivedDataExample;
 import org.strasa.middleware.model.StudyDesignExample;
-import org.strasa.middleware.model.StudyExample;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudyRawDataExample;
 import org.strasa.middleware.model.StudySite;
 import org.strasa.middleware.model.StudySiteExample;
 import org.strasa.web.uploadstudy.view.pojos.StudySiteInfoModel;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
-
 
 public class StudySiteManagerImpl {
 
@@ -43,9 +39,8 @@ public class StudySiteManagerImpl {
 	}
 
 	public void addStudySite(StudySite record) {
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		StudySiteMapper studySiteMapper = session
-				.getMapper(StudySiteMapper.class);
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
 
 		try {
 			System.out.println("Inserting!");
@@ -57,18 +52,20 @@ public class StudySiteManagerImpl {
 		}
 
 	}
-	
-	public boolean hasSiteHeader(int studyID, Integer dataset){
-		
-		if(isRaw){
+
+	public boolean hasSiteHeader(int studyID, Integer dataset) {
+
+		if (isRaw) {
 			StudyRawDataMapper mapper = connectionFactory.sqlSessionFactory.openSession().getMapper(StudyRawDataMapper.class);
-			
+
 			StudyRawDataExample example = new StudyRawDataExample();
-			example.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset).andDatacolumnEqualTo("Site");
+			if (dataset != null)
+				example.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset).andDatacolumnEqualTo("Site");
+			else
+				example.createCriteria().andStudyidEqualTo(studyID).andDatacolumnEqualTo("Site");
 			return mapper.countByExample(example) > 0;
-			
-		}
-		else{
+
+		} else {
 
 			StudyDerivedDataMapper mapper = connectionFactory.sqlSessionFactory.openSession().getMapper(StudyDerivedDataMapper.class);
 			StudyDerivedDataExample example = new StudyDerivedDataExample();
@@ -76,48 +73,45 @@ public class StudySiteManagerImpl {
 			return mapper.countByExample(example) > 0;
 		}
 	}
-	
-	public void removeSiteByStudyId(int studyID, Integer dataset){
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		StudySiteMapper studySiteMapper = session
-				.getMapper(StudySiteMapper.class);
+
+	public void removeSiteByStudyId(int studyID, Integer dataset) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
 
 		StudyAgronomyMapper agroMapper = session.getMapper(StudyAgronomyMapper.class);
 		StudyDesignMapper designMapper = session.getMapper(StudyDesignMapper.class);
 		PlantingTypeMapper plantMapper = session.getMapper(PlantingTypeMapper.class);
-		
+
 		try {
-			
+
 			StudySiteExample example = new StudySiteExample();
-			if(dataset != null) example.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset);
-			else example.createCriteria().andStudyidEqualTo(studyID);
+			if (dataset != null)
+				example.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset);
+			else
+				example.createCriteria().andStudyidEqualTo(studyID);
 			List<StudySite> lstSite = studySiteMapper.selectByExample(example);
-			for(StudySite site: lstSite){
+			for (StudySite site : lstSite) {
 				StudyAgronomyExample agEx = new StudyAgronomyExample();
 				agEx.createCriteria().andStudysiteidEqualTo(site.getId());
 				List<StudyAgronomy> lstAgronomies = agroMapper.selectByExample(agEx);
-			
+
 				agroMapper.deleteByExample(agEx);
 				StudyDesignExample designEx = new StudyDesignExample();
 				designEx.createCriteria().andStudysiteidEqualTo(site.getId());
 				designMapper.deleteByExample(designEx);
 			}
-			
-			
-			
+
 			studySiteMapper.deleteByExample(example);
 			session.commit();
-		}
-		finally{
+		} finally {
 			session.close();
-			
+
 		}
 	}
 
 	public void addStudySite(ArrayList<StudySite> records) {
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		StudySiteMapper studySiteMapper = session
-				.getMapper(StudySiteMapper.class);
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
 
 		try {
 			for (StudySite record : records) {
@@ -132,9 +126,8 @@ public class StudySiteManagerImpl {
 	}
 
 	public void updateStudySite(List<StudySite> sites) {
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		StudySiteMapper studySiteMapper = session
-				.getMapper(StudySiteMapper.class);
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
 
 		try {
 			for (StudySite record : sites) {
@@ -153,9 +146,8 @@ public class StudySiteManagerImpl {
 	}
 
 	public void updateStudySite(StudySite record) {
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		StudySiteMapper studySiteMapper = session
-				.getMapper(StudySiteMapper.class);
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
 
 		try {
 
@@ -171,14 +163,12 @@ public class StudySiteManagerImpl {
 
 	public List<StudySite> getAllStudySites(int studyId) {
 		// TODO Auto-generated method stub
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		StudySiteMapper studySiteMapper = session
-				.getMapper(StudySiteMapper.class);
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
 		try {
 			StudySiteExample example = new StudySiteExample();
 			example.createCriteria().andStudyidEqualTo(studyId);
-			List<StudySite> studySites = studySiteMapper
-					.selectByExample(example);
+			List<StudySite> studySites = studySiteMapper.selectByExample(example);
 			return studySites;
 		} finally {
 			session.close();
@@ -208,8 +198,7 @@ public class StudySiteManagerImpl {
 					record.setSitename(s.getDatavalue());
 					record.setEcotypeid(1);
 					addStudySite(record);
-					System.out.println("added" + s.getDatavalue()
-							+ " to study id: " + s.getStudyid());
+					System.out.println("added" + s.getDatavalue() + " to study id: " + s.getStudyid());
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -221,17 +210,18 @@ public class StudySiteManagerImpl {
 
 	}
 
-	public boolean isSiteRecordExist(int studyID){
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+	public boolean isSiteRecordExist(int studyID) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudySiteMapper siteMapper = session.getMapper(StudySiteMapper.class);
 		StudySiteExample ex = new StudySiteExample();
 		ex.createCriteria().andStudyidEqualTo(studyID);
-		System.out.println("Count: " + siteMapper.countByExample(ex) );
+		System.out.println("Count: " + siteMapper.countByExample(ex));
 		return (siteMapper.countByExample(ex) > 0);
 	}
-	public ArrayList<StudySiteInfoModel> getStudySiteByStudyId(int studyID, Integer dataset){
+
+	public ArrayList<StudySiteInfoModel> getStudySiteByStudyId(int studyID, Integer dataset) {
 		ArrayList<StudySiteInfoModel> returnVal = new ArrayList<StudySiteInfoModel>();
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudySiteMapper siteMapper = session.getMapper(StudySiteMapper.class);
 		StudyAgronomyMapper agroMapper = session.getMapper(StudyAgronomyMapper.class);
 		StudyDesignMapper designMapper = session.getMapper(StudyDesignMapper.class);
@@ -239,45 +229,46 @@ public class StudySiteManagerImpl {
 		LocationMapper locationMapper = session.getMapper(LocationMapper.class);
 		EcotypeMapper ecoMapper = session.getMapper(EcotypeMapper.class);
 		StudySiteExample ex = new StudySiteExample();
-		ex.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset);
+		if (dataset != null) {
+			ex.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset);
+		} else {
+			ex.createCriteria().andStudyidEqualTo(studyID);
+
+		}
 		List<StudySite> lstSites = siteMapper.selectByExample(ex);
-		for(StudySite site : lstSites){
+		for (StudySite site : lstSites) {
 			StudySiteInfoModel newData = new StudySiteInfoModel(site);
-			
-			//Site
-			
-			
-			//Design
-			 StudyDesignExample desEx = new StudyDesignExample();
+
+			// Site
+
+			// Design
+			StudyDesignExample desEx = new StudyDesignExample();
 			desEx.createCriteria().andStudysiteidEqualTo(site.getId());
 			newData.selectedDesignInfo = designMapper.selectByExample(desEx).get(0);
-			//Agro
+			// Agro
 			StudyAgronomyExample agroEx = new StudyAgronomyExample();
 			agroEx.createCriteria().andStudysiteidEqualTo(site.getId());
 			newData.selectedAgroInfo = agroMapper.selectByExample(agroEx).get(0);
-			
-			//PlantingType
-			newData.selectedSitePlantingType =plantMapper.selectByPrimaryKey(newData.selectedAgroInfo.getPlantingtypeid());
-	
-			//Ecotype
-			newData.selectedEcotype =  ecoMapper.selectByPrimaryKey(newData.getEcotypeid());
+
+			// PlantingType
+			newData.selectedSitePlantingType = plantMapper.selectByPrimaryKey(newData.selectedAgroInfo.getPlantingtypeid());
+
+			// Ecotype
+			newData.selectedEcotype = ecoMapper.selectByPrimaryKey(newData.getEcotypeid());
 			returnVal.add(newData);
-			
+
 		}
-		
+
 		return returnVal;
-		
+
 	}
-	public ArrayList<StudyRawDataByDataColumn> getStudySiteByStudy(int studyId)
-			throws Exception {
-		StudyRawDataManagerImpl studyRawDataManagerImpl = new StudyRawDataManagerImpl(
-				isRaw);
-		ArrayList<StudyRawDataByDataColumn> list = (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl
-				.getStudyRawDataColumn(studyId, "site");
+
+	public ArrayList<StudyRawDataByDataColumn> getStudySiteByStudy(int studyId) throws Exception {
+		StudyRawDataManagerImpl studyRawDataManagerImpl = new StudyRawDataManagerImpl(isRaw);
+		ArrayList<StudyRawDataByDataColumn> list = (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataColumn(studyId, "site");
 		try {
 			for (StudyRawDataByDataColumn s : list) {
-				System.out.println(s.getStudyid() + " " + s.getDatacolumn()
-						+ " " + s.getDatavalue());
+				System.out.println(s.getStudyid() + " " + s.getDatacolumn() + " " + s.getDatavalue());
 			}
 		} catch (NullPointerException npe) {// if still empty since there's no
 											// site data on the rawdata table
@@ -286,17 +277,15 @@ public class StudySiteManagerImpl {
 		return list;
 	}
 
-
 	public List<StudySite> getSiteByEcotypeId(Integer id) {
 		// TODO Auto-generated method stub
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudySiteMapper mapper = session.getMapper(StudySiteMapper.class);
-		try{
+		try {
 			StudySiteExample example = new StudySiteExample();
 			example.createCriteria().andEcotypeidEqualTo(id);
 			return mapper.selectByExample(example);
-		}
-		finally{
+		} finally {
 			session.close();
 		}
 	}

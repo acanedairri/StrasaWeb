@@ -247,7 +247,12 @@ public class StudyGermplasmManagerImpl {
 		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
 		StudyGermplasmExample ex = new StudyGermplasmExample();
 		try {
-			ex.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset).andGrefEqualTo(gref);
+			if (dataset != null) {
+				ex.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset).andGrefEqualTo(gref);
+			} else {
+				ex.createCriteria().andStudyidEqualTo(studyID).andGrefEqualTo(gref);
+
+			}
 			return mapper.countByExample(ex) > 0;
 
 		} finally {

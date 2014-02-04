@@ -12,9 +12,7 @@ import org.strasa.middleware.model.StudyRawData;
 import org.strasa.middleware.model.StudySite;
 
 public interface StudyRawDataBatch {
-	String MQL_LOCATION = "SELECT DISTINCT "
-			+ "datavalue AS locationname "
-			+ " FROM ${param2} WHERE studyid = #{param1} AND dataset = #{param3}  AND datacolumn = 'Location' GROUP BY datarow";
+	String MQL_LOCATION = "SELECT DISTINCT " + "datavalue AS locationname " + " FROM ${param2} WHERE studyid = #{param1} AND dataset = #{param3}  AND datacolumn = 'Location' GROUP BY datarow";
 
 	// String MQL_LOCATION="SELECT DISTINCT "
 	// +
@@ -34,16 +32,14 @@ public interface StudyRawDataBatch {
 	// +
 	// " FROM ${param2} WHERE studyid = #{param1} AND dataset = #{param2} GROUP BY datarow";
 
-	String MQL_SITE = "SELECT DISTINCT "
-			+ " MAX(CASE datacolumn WHEN 'Site' THEN datavalue ELSE '' END) AS sitename, "
-			+ " MAX(CASE datacolumn WHEN 'Location' THEN datavalue ELSE '' END) AS sitelocation, "
-			+ " MAX(CASE datacolumn WHEN 'Year' THEN datavalue ELSE '' END) AS year, "
-			+ " MAX(CASE datacolumn WHEN 'Season' THEN datavalue ELSE NULL END) AS season "
-			+ " FROM ${param2} WHERE studyid = #{param1} AND dataset = #{param3}  GROUP BY datarow";
+	String MQL_SITE = "SELECT DISTINCT " + " MAX(CASE datacolumn WHEN 'Site' THEN datavalue ELSE '' END) AS sitename, " + " MAX(CASE datacolumn WHEN 'Location' THEN datavalue ELSE '' END) AS sitelocation, "
+			+ " MAX(CASE datacolumn WHEN 'Year' THEN datavalue ELSE '' END) AS year, " + " MAX(CASE datacolumn WHEN 'Season' THEN datavalue ELSE NULL END) AS season " + " FROM ${param2} WHERE studyid = #{param1} AND dataset = #{param3}  GROUP BY datarow";
 
-	String MQL_Germplasm = "SELECT DISTINCT "
-			+ " datavalue AS germplasmname "
-			+ " FROM ${param2} WHERE studyid = #{param1,jdbcType=INTEGER} AND dataset = #{param3} AND datacolumn = 'GName' GROUP BY datarow";
+	String MQL_SITE_NO_DATASET = "SELECT DISTINCT " + " MAX(CASE datacolumn WHEN 'Site' THEN datavalue ELSE '' END) AS sitename, " + " MAX(CASE datacolumn WHEN 'Location' THEN datavalue ELSE '' END) AS sitelocation, "
+			+ " MAX(CASE datacolumn WHEN 'Year' THEN datavalue ELSE '' END) AS year, " + " MAX(CASE datacolumn WHEN 'Season' THEN datavalue ELSE NULL END) AS season " + " FROM ${param2} WHERE studyid = #{param1}  GROUP BY datarow";
+
+	String MQL_Germplasm = "SELECT DISTINCT " + " datavalue AS germplasmname " + " FROM ${param2} WHERE studyid = #{param1,jdbcType=INTEGER} AND dataset = #{param3} AND datacolumn = 'GName' GROUP BY datarow";
+	String MQL_GermplasmNoDataset = "SELECT DISTINCT " + " datavalue AS germplasmname " + " FROM ${param2} WHERE studyid = #{param1,jdbcType=INTEGER}  AND datacolumn = 'GName' GROUP BY datarow";
 
 	// String MQL_Germplasm = "SELECT DISTINCT " +
 	// " MAX(CASE datacolumn WHEN 'GID' THEN datavalue ELSE '' END) AS gid, " +
@@ -79,22 +75,23 @@ public interface StudyRawDataBatch {
 	@Select(MQL_SITE)
 	public List<StudySite> getRawSite(int studyid, String tname, int dataset);
 
-	@Results({
-			@Result(column = "gid", property = "gid", jdbcType = JdbcType.INTEGER),
-			@Result(column = "germplasmname", property = "germplasmname", jdbcType = JdbcType.VARCHAR),
-			@Result(column = "othername", property = "othername", jdbcType = JdbcType.VARCHAR),
-			@Result(column = "breeder", property = "breeder", jdbcType = JdbcType.VARCHAR),
-			@Result(column = "germplasmtypeid", property = "germplasmtypeid", jdbcType = JdbcType.INTEGER),
-			@Result(column = "irnumber", property = "irnumber", jdbcType = JdbcType.VARCHAR),
-			@Result(column = "ircross", property = "ircross", jdbcType = JdbcType.VARCHAR),
-			@Result(column = "parentage", property = "parentage", jdbcType = JdbcType.VARCHAR),
-			@Result(column = "femaleparent", property = "femaleparent", jdbcType = JdbcType.VARCHAR),
-			@Result(column = "maleparent", property = "maleparent", jdbcType = JdbcType.VARCHAR),
-			@Result(column = "selectionhistory", property = "selectionhistory", jdbcType = JdbcType.VARCHAR),
-			@Result(column = "source", property = "source", jdbcType = JdbcType.VARCHAR),
+	@Select(MQL_SITE_NO_DATASET)
+	public List<StudySite> getRawSiteNoDataset(int studyid, String tname);
+
+	@Results({ @Result(column = "gid", property = "gid", jdbcType = JdbcType.INTEGER), @Result(column = "germplasmname", property = "germplasmname", jdbcType = JdbcType.VARCHAR), @Result(column = "othername", property = "othername", jdbcType = JdbcType.VARCHAR),
+			@Result(column = "breeder", property = "breeder", jdbcType = JdbcType.VARCHAR), @Result(column = "germplasmtypeid", property = "germplasmtypeid", jdbcType = JdbcType.INTEGER), @Result(column = "irnumber", property = "irnumber", jdbcType = JdbcType.VARCHAR),
+			@Result(column = "ircross", property = "ircross", jdbcType = JdbcType.VARCHAR), @Result(column = "parentage", property = "parentage", jdbcType = JdbcType.VARCHAR), @Result(column = "femaleparent", property = "femaleparent", jdbcType = JdbcType.VARCHAR),
+			@Result(column = "maleparent", property = "maleparent", jdbcType = JdbcType.VARCHAR), @Result(column = "selectionhistory", property = "selectionhistory", jdbcType = JdbcType.VARCHAR), @Result(column = "source", property = "source", jdbcType = JdbcType.VARCHAR),
 			@Result(column = "remarks", property = "remarks", jdbcType = JdbcType.VARCHAR) })
 	@Select(MQL_Germplasm)
-	public List<Germplasm> getRawGermplasm(int studyid, String tname,
-			int dataset);
+	public List<Germplasm> getRawGermplasm(int studyid, String tname, int dataset);
+
+	@Results({ @Result(column = "gid", property = "gid", jdbcType = JdbcType.INTEGER), @Result(column = "germplasmname", property = "germplasmname", jdbcType = JdbcType.VARCHAR), @Result(column = "othername", property = "othername", jdbcType = JdbcType.VARCHAR),
+			@Result(column = "breeder", property = "breeder", jdbcType = JdbcType.VARCHAR), @Result(column = "germplasmtypeid", property = "germplasmtypeid", jdbcType = JdbcType.INTEGER), @Result(column = "irnumber", property = "irnumber", jdbcType = JdbcType.VARCHAR),
+			@Result(column = "ircross", property = "ircross", jdbcType = JdbcType.VARCHAR), @Result(column = "parentage", property = "parentage", jdbcType = JdbcType.VARCHAR), @Result(column = "femaleparent", property = "femaleparent", jdbcType = JdbcType.VARCHAR),
+			@Result(column = "maleparent", property = "maleparent", jdbcType = JdbcType.VARCHAR), @Result(column = "selectionhistory", property = "selectionhistory", jdbcType = JdbcType.VARCHAR), @Result(column = "source", property = "source", jdbcType = JdbcType.VARCHAR),
+			@Result(column = "remarks", property = "remarks", jdbcType = JdbcType.VARCHAR) })
+	@Select(MQL_GermplasmNoDataset)
+	public List<Germplasm> getRawGermplasmNoDataset(int studyid, String tname);
 
 }

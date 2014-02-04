@@ -47,6 +47,7 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -307,7 +308,7 @@ public class Index {
 
 	}
 
-	@NotifyChange({ "lstStudyGermplasm", "lstKnownGermplasm" })
+	@NotifyChange({ "lstStudyGermplasm", "lstKnownGermplasm", "totalUnknownGermplasm" })
 	@Command("uploadGenotypeData")
 	public void uploadGenotypeData(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view) {
 
@@ -320,7 +321,7 @@ public class Index {
 			Messagebox.show("Error: File must be a text-based CSV  format", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
-
+		((Label) view.getFellow("lblFileName")).setValue(name);
 		try {
 			String filename = name + Encryptions.encryptStringToNumber(name, new Date().getTime());
 			File tempGenoFile = File.createTempFile(filename, ".tmp");
@@ -340,7 +341,7 @@ public class Index {
 
 					newData.setGermplasmtypeid(getGermplasmTypeById(germData.getGermplasmtype()));
 					newData.setGermplasmname(germData.getGermplasmname());
-					newData.setValueFromeGermplasmEx(germData);
+					newData.setValueFromeGermplasmEx(germData, lstGermplasmType);
 					newData.setBiotic(lstKeyBiotics);
 					newData.setAbiotic(lstKeyAbioitc);
 					newData.setMajorGenes(lstKeyMajorGenes);
@@ -436,9 +437,7 @@ public class Index {
 		}
 		if (validate != null) {
 			Messagebox.show(validate, "OK", Messagebox.OK, Messagebox.EXCLAMATION);
-
-			data.setStyleBG("background-color: #ff6666");
-			BindUtils.postNotifyChange(null, null, data, "styleBG");
+			selectGermplasm(data);
 			return false;
 		}
 		return true;
@@ -448,8 +447,10 @@ public class Index {
 		int studyGerm = 0;
 		for (GermplasmDeepInfoModel data : lstStudyGermplasm.values()) {
 
-			if (!validateGermplasm(data))
+			if (!validateGermplasm(data)) {
+				selectGermplasm(data);
 				return false;
+			}
 
 		}
 		return true;
@@ -489,13 +490,17 @@ public class Index {
 		BindUtils.postGlobalCommand(null, null, "nextTab", params);
 	}
 
+	public void selectRow(GermplasmDeepInfoModel model) {
+		if (model.isKnown())
+			tblKnownGerm.setSelectedIndex(model.rowIndex);
+		else
+			tblStudyGerm.setSelectedIndex(model.rowIndex);
+	}
+
 	@Command
 	public void saveData() {
 
 		// Validation
-		if (!validateKnownGermplasm()) {
-			return;
-		}
 		if (!validateStudyGermplasm()) {
 			return;
 		}

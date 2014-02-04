@@ -118,8 +118,8 @@ public class Data {
 		
 		 // change this value as parameter
 		
-		System.out.println("StudyId:"+ Integer.toString(studyId));
-		System.out.println("and dataset:" +Integer.toString(dataset));
+//		System.out.println("StudyId:"+ Integer.toString(studyId));
+//		System.out.println("and dataset:" +Integer.toString(dataset));
 		List<HashMap<String,String>> toreturn = browseStudyManagerImpl.getStudyData(studyId,dataType,dataset);
 		System.out.println("Size:"+toreturn.size());
 		List<StudyDataColumn> columns= new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyId,dataType,dataset); // rd as raw data, dd as derived data

@@ -19,89 +19,87 @@ public class BrowseStudyManagerImpl {
 
 	@WireVariable
 	ConnectionFactory connectionFactory;
-	
-	public List<StudySummaryModel> getStudySummary() {
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		StudySummaryMapper mapper = session.getMapper(StudySummaryMapper.class);
-		List<StudySummaryModel> s= new ArrayList<StudySummaryModel>();
-		try{
 
-			List<StudySummaryModel> distinctProgram= mapper.selectDistinctProgram(SecurityUtil.getDbUser().getId());
-			for(StudySummaryModel p:distinctProgram){
-				StudySummaryModel rec=new StudySummaryModel();
+	public List<StudySummaryModel> getStudySummary() {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudySummaryMapper mapper = session.getMapper(StudySummaryMapper.class);
+		List<StudySummaryModel> s = new ArrayList<StudySummaryModel>();
+		try {
+
+			List<StudySummaryModel> distinctProgram = mapper.selectDistinctProgram(SecurityUtil.getDbUser().getId());
+			for (StudySummaryModel p : distinctProgram) {
+				StudySummaryModel rec = new StudySummaryModel();
 				rec.setProgramId(p.getProgramId());
 				rec.setProgramName(p.getProgramName());
-				List<StudySummaryModel> projectCount= mapper.selectDistinctProjectByProgramId(p.getProgramId());
+				List<StudySummaryModel> projectCount = mapper.selectDistinctProjectByProgramId(p.getProgramId());
 				rec.setProjectCount(projectCount.size());
-				List<StudySummaryModel> studyCount= mapper.countStudyByProgram(p.getProgramId(),SecurityUtil.getDbUser().getId());
+				List<StudySummaryModel> studyCount = mapper.countStudyByProgram(p.getProgramId(), SecurityUtil.getDbUser().getId());
 				rec.setStudyCount(studyCount.get(0).getStudyCount());
 
 				// count StypeType PBT
 				rec.setStudyTypeIdPbt(1);
-				List<StudySummaryModel> pbtStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(),rec.getStudyTypeIdPbt(),SecurityUtil.getDbUser().getId());
+				List<StudySummaryModel> pbtStudyType = mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdPbt(), SecurityUtil.getDbUser().getId());
 				rec.setCountPbt(pbtStudyType.get(0).getCountStudyTypeId());
 
 				// count StypeType OnFarm
 				rec.setStudyTypeIdOnFarm(2);
-				List<StudySummaryModel> onFarmStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdOnFarm(),SecurityUtil.getDbUser().getId());
+				List<StudySummaryModel> onFarmStudyType = mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdOnFarm(), SecurityUtil.getDbUser().getId());
 				rec.setCountOnFarm(onFarmStudyType.get(0).getCountStudyTypeId());
 
 				// count StypeType Experiment Station
 				rec.setStudyTypeIdExperiment(3);
-				List<StudySummaryModel> experimentStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdExperiment(),SecurityUtil.getDbUser().getId());
+				List<StudySummaryModel> experimentStudyType = mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdExperiment(), SecurityUtil.getDbUser().getId());
 				rec.setCountExperiment(experimentStudyType.get(0).getCountStudyTypeId());
 
 				// count StypeType Glass House
 				rec.setStudytypeIdGlassHouse(4);
-				List<StudySummaryModel> glassHouseStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudytypeIdGlassHouse(),SecurityUtil.getDbUser().getId());
+				List<StudySummaryModel> glassHouseStudyType = mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudytypeIdGlassHouse(), SecurityUtil.getDbUser().getId());
 				rec.setCountGlassHouse(glassHouseStudyType.get(0).getCountStudyTypeId());
 
 				// count StypeType Lab
 				rec.setStudyTypeIdLab(5);
-				List<StudySummaryModel> labStudyType= mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdLab(),SecurityUtil.getDbUser().getId());
+				List<StudySummaryModel> labStudyType = mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdLab(), SecurityUtil.getDbUser().getId());
 				rec.setCountLab(labStudyType.get(0).getCountStudyTypeId());
 
-				System.out.println("rec:"+rec.toString());
+				System.out.println("rec:" + rec.toString());
 				s.add(rec);
 
 			}
 			return s;
 
-		}finally{
+		} finally {
 			session.close();
 		}
 
 	}
 
-
 	public List<StudySearchResultModel> getStudySearchResult(StudySearchFilterModel filter) {
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		try{
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		try {
 
-			List<StudySearchResultModel> toreturn= session.selectList("BrowseStudy.getStudySearchResult",filter);
+			List<StudySearchResultModel> toreturn = session.selectList("BrowseStudy.getStudySearchResult", filter);
 
 			return toreturn;
 
-		}finally{
+		} finally {
 			session.close();
 		}
 
-
 	}
 
-	public List<HashMap<String,String>> getStudyData(int studyId,String dataType, int dataset){
-		List<HashMap<String,String>> toreturn = new ArrayList<HashMap<String,String>>();
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		try{
-			StudyDataColumnManagerImpl mgr= new StudyDataColumnManagerImpl();
+	public List<HashMap<String, String>> getStudyData(int studyId, String dataType, Integer dataset) {
+		List<HashMap<String, String>> toreturn = new ArrayList<HashMap<String, String>>();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		try {
+			StudyDataColumnManagerImpl mgr = new StudyDataColumnManagerImpl();
 
-			List<StudyDataColumn> studyDataColumn =mgr.getStudyDataColumnByStudyId(studyId,dataType,dataset);
-			ArrayList<StudyDataColumnModel> dataColumns= new ArrayList<StudyDataColumnModel>();
+			List<StudyDataColumn> studyDataColumn = mgr.getStudyDataColumnByStudyId(studyId, dataType, dataset);
+			ArrayList<StudyDataColumnModel> dataColumns = new ArrayList<StudyDataColumnModel>();
 
-			int count=1;
-			int columnCount=studyDataColumn.size();
-			for(StudyDataColumn s: studyDataColumn){
-				StudyDataColumnModel m= new StudyDataColumnModel();
+			int count = 1;
+			int columnCount = studyDataColumn.size();
+			for (StudyDataColumn s : studyDataColumn) {
+				StudyDataColumnModel m = new StudyDataColumnModel();
 				m.setColumnheader(s.getColumnheader());
 				m.setStudyid(s.getStudyid());
 				m.setOrder(count);
@@ -110,22 +108,29 @@ public class BrowseStudyManagerImpl {
 				dataColumns.add(m);
 				count++;
 			}
-			
+
 			System.out.println(studyDataColumn.toString());
 
-			if(!studyDataColumn.isEmpty()){
-				if(dataType.equals("rd")){
-					toreturn= session.selectList("BrowseStudy.getStudyRawData",dataColumns);
-				}else{
-					toreturn= session.selectList("BrowseStudy.getStudyDerivedData",dataColumns);
+			if (!studyDataColumn.isEmpty()) {
+				if (dataset != null) {
+					if (dataType.equals("rd")) {
+						toreturn = session.selectList("BrowseStudy.getStudyRawData", dataColumns);
+					} else {
+						toreturn = session.selectList("BrowseStudy.getStudyDerivedData", dataColumns);
+					}
+				} else {
+					if (dataType.equals("rd")) {
+						toreturn = session.selectList("BrowseStudy.getStudyRawDataNoDataset", dataColumns);
+					} else {
+						toreturn = session.selectList("BrowseStudy.getStudyDerivedDataNoDataset", dataColumns);
+					}
 				}
 			}
 			return toreturn;
 
-		}finally{
+		} finally {
 			session.close();
 		}
-
 
 	}
 

@@ -310,7 +310,7 @@ public class GermplasmDeepInfoModel extends Germplasm {
 		return returnVal;
 	}
 
-	public void setValueFromeGermplasmEx(GermplasmExt data) {
+	public void setValueFromeGermplasmEx(GermplasmExt data, List<GermplasmType> lstGermplasmType) {
 
 		if (!StringUtils.isNullOrEmpty(data.getBreeder()))
 			setBreeder(data.getBreeder());
@@ -336,6 +336,14 @@ public class GermplasmDeepInfoModel extends Germplasm {
 			setSelectionhistory(data.getSelectionhistory());
 		if (!StringUtils.isNullOrEmpty(data.getSource()))
 			setSource(data.getSource());
+		
+		for(GermplasmType gtype : lstGermplasmType){
+			if(gtype.getGermplasmtype().equals(data.getGermplasmtype())){
+				this.setSelectedGermplasmType(gtype);
+			}
+		}
+		
+		
 
 	}
 }

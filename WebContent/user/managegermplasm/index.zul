@@ -53,11 +53,10 @@
 									<listheader label="GName"
 										sort="auto(germplasmname)" style="color:red" hflex="1"
 										width="20%" />
-									<listheader label="Breeder"
-										style="color:red" hflex="1" width="20%" />
+									
 									<listheader label="GermplasmType"
 										style="color:red" hflex="1" width="20%" />
-									<listheader label="Female Parent"
+									<listheader label="Breeder" style="color:red" hflex="1" width="20%" /><listheader label="Female Parent"
 										style="color:red" hflex="1" width="20%" />
 									<listheader label="Male Parent"
 										style="color:red" hflex="1" width="20%" />
@@ -106,11 +105,12 @@
 							</listbox>
 							<separator spacing="8px" />
 							<hlayout>
-								<button label="Add New Germplasms"
+								<button label="Submit"
 									onClick="@command('saveData')" sclass="btn-blue"
 									image="/images/save16.png">
 								</button>
-									<button label="RESET"
+								<label value="" id="lblFileName" style="font-size:16px;"></label>
+								<button label="Remove"
 										onClick="@command('resetUnknownGermplasm')"
 										sclass="btn-blue">
 									</button>
@@ -135,11 +135,10 @@
 								<listheader label="GName"
 									sort="auto(germplasmname)" style="color:red" hflex="1"
 									width="19%" />
-								<listheader label="Breeder"
-									style="color:red" hflex="1" width="19%" />
+								
 								<listheader label="GermplasmType"
 									style="color:red" hflex="1" width="19%" />
-								<listheader label="Female Parent"
+								<listheader label="Breeder" style="color:red" hflex="1" width="19%" /><listheader label="Female Parent"
 									style="color:red" hflex="1" width="19%" />
 								<listheader label="Male Parent"
 									style="color:red" hflex="1" width="16%" />

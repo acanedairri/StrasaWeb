@@ -20,13 +20,13 @@ import org.strasa.middleware.model.StudySiteExample;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class StudyLocationManagerImpl {
-	
 
 	@WireVariable
 	ConnectionFactory connectionFactory;
-	
+
 	private boolean isRaw = true;
-	public StudyLocationManagerImpl (boolean isRaw){
+
+	public StudyLocationManagerImpl(boolean isRaw) {
 		this.isRaw = isRaw;
 	}
 
@@ -34,110 +34,108 @@ public class StudyLocationManagerImpl {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void addStudyLocation(StudyLocation record){
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+	public void addStudyLocation(StudyLocation record) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
 
-		try{
+		try {
 			studyLocationMapper.insert(record);
 			session.commit();
 
-		}finally{
+		} finally {
 			session.close();
 		}
 
 	}
-	public List<Location> getLocationsFromStudySite(Integer studyID, Integer dataset){
-		
+
+	public List<Location> getLocationsFromStudySite(Integer studyID, Integer dataset) {
+
 		List<Location> lstLocations = new ArrayList<Location>();
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		LocationMapper studyLocationMapper = session.getMapper(LocationMapper.class);
 		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
-		Set uniqueEntries = new HashSet(); 
-		Set uniqueEntriesLoc = new HashSet(); 
-		try{
+		Set uniqueEntries = new HashSet();
+		Set uniqueEntriesLoc = new HashSet();
+		try {
 			StudySiteExample siteEx = new StudySiteExample();
-			siteEx.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset);
+			if (dataset != null)
+				siteEx.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset);
+			else
+				siteEx.createCriteria().andStudyidEqualTo(studyID);
 			List<StudySite> lstSites = studySiteMapper.selectByExample(siteEx);
-			
-			for(StudySite site : lstSites){
+
+			for (StudySite site : lstSites) {
 				Location locData = studyLocationMapper.selectByPrimaryKey(site.getLocationid());
-				if(uniqueEntries.add(site.getId()) && uniqueEntriesLoc.add(locData.getId())) {
-					
+				if (uniqueEntries.add(site.getId()) && uniqueEntriesLoc.add(locData.getId())) {
+
 					lstLocations.add(locData);
 				}
-				
+
 			}
-			
-			
+
 			return lstLocations;
-			}
-		finally{
+		} finally {
 			session.close();
 		}
-		
-		
+
 	}
 
-
-	public void addStudyLocation(ArrayList<StudyLocation> records){
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+	public void addStudyLocation(ArrayList<StudyLocation> records) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
 
-		try{
-			for(StudyLocation record:records){
+		try {
+			for (StudyLocation record : records) {
 				studyLocationMapper.insert(record);
 			}
 			session.commit();
 
-		}finally{
+		} finally {
 			session.close();
 		}
 
 	}
 
-
-	public boolean isStudyLocationExist(int studyid, int locationid){
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+	public boolean isStudyLocationExist(int studyid, int locationid) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
 
-		try{
+		try {
 			StudyLocationExample example = new StudyLocationExample();
 			example.createCriteria().andStudyidEqualTo(studyid).andLocationidEqualTo(locationid);
-				
-				return (!studyLocationMapper.selectByExample(example).isEmpty());
-		}
-		finally{
-			
+
+			return (!studyLocationMapper.selectByExample(example).isEmpty());
+		} finally {
+
 		}
 	}
-	public boolean LocationExist(Location location){
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+
+	public boolean LocationExist(Location location) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		LocationMapper studyLocationMapper = session.getMapper(LocationMapper.class);
 
-		try{
+		try {
 			LocationExample example = new LocationExample();
 			example.createCriteria().andAltitudeEqualTo(location.getAltitude()).andCountryEqualTo(location.getCountry());
-				
-				return (!studyLocationMapper.selectByExample(example).isEmpty());
-		}
-		finally{
-			
+
+			return (!studyLocationMapper.selectByExample(example).isEmpty());
+		} finally {
+
 		}
 	}
-	public void updateStudyLocation(List<Location> lstKnowLocations,int studyid){
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+
+	public void updateStudyLocation(List<Location> lstKnowLocations, int studyid) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
 		LocationMapper locationMapper = session.getMapper(LocationMapper.class);
 		StudyLocationExample ex = new StudyLocationExample();
 		ex.createCriteria().andStudyidEqualTo(studyid);
 		studyLocationMapper.deleteByExample(ex);
-		try{
-			for(Location record:lstKnowLocations){
-				if(record.getId() == null){
+		try {
+			for (Location record : lstKnowLocations) {
+				if (record.getId() == null) {
 					locationMapper.insert(record);
-				}
-				else{
+				} else {
 					locationMapper.updateByPrimaryKey(record);
 				}
 				StudyLocation newData = new StudyLocation();
@@ -147,62 +145,62 @@ public class StudyLocationManagerImpl {
 			}
 			session.commit();
 
-		}finally{
+		} finally {
 			session.close();
 		}
 
 	}
 
-
 	public List<StudyLocation> getStudyLocationsByLocId(Integer id) {
 		// TODO Auto-generated method stub
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
-		try{
+		try {
 			StudyLocationExample example = new StudyLocationExample();
 			example.createCriteria().andLocationidEqualTo(id);
 			List<StudyLocation> studyLocations = studyLocationMapper.selectByExample(example);
 			return studyLocations;
-		}finally{
+		} finally {
 			session.close();
 		}
 	}
 
 	public List<StudyLocation> getAllStudyLocations(int studyId) {
 		// TODO Auto-generated method stub
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
-		try{
+		try {
 			List<StudyLocation> studyLocations = studyLocationMapper.selectByExample(null);
 			return studyLocations;
-		}finally{
+		} finally {
 			session.close();
 		}
 
 	}
-	
+
 	public List<StudyLocation> getStudyLocationsById(int studyId) {
 		// TODO Auto-generated method stub
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
-		try{
+		try {
 			StudyLocationExample example = new StudyLocationExample();
 			example.createCriteria().andStudyidEqualTo(studyId);
 			List<StudyLocation> studyLocations = studyLocationMapper.selectByExample(example);
 			return studyLocations;
-		}finally{
+		} finally {
 			session.close();
 		}
 
 	}
+
 	public List<StudyLocation> getUnknownStudyLocations(int studyId) {
 		// TODO Auto-generated method stub
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyLocationMapper studyLocationMapper = session.getMapper(StudyLocationMapper.class);
-		try{
+		try {
 			List<StudyLocation> studyLocations = studyLocationMapper.selectByExample(null);
 			return studyLocations;
-		}finally{
+		} finally {
 			session.close();
 		}
 
@@ -211,12 +209,11 @@ public class StudyLocationManagerImpl {
 	private void addEmptyRecordOnStudyLocation(int studyId) {
 		// TODO Auto-generated method stub
 		StudyLocation record = new StudyLocation();
-		//		record.setId(studyId);
+		// record.setId(studyId);
 		record.setStudyid(studyId);
 		addStudyLocation(record);
 		System.out.println("Added Empty Record on Location");
 	}
-
 
 	public List<List<Location>> initializeStudyLocations(int studyId) {
 		// TODO Auto-generated method stub
@@ -226,69 +223,65 @@ public class StudyLocationManagerImpl {
 		ArrayList<StudyRawDataByDataColumn> studyList = getStudyLocationByStudy(studyId);
 		LocationManagerImpl locMan = new LocationManagerImpl();
 		System.out.println("STUDYLIST : " + studyList.size());
-		for(StudyRawDataByDataColumn s:studyList){
+		for (StudyRawDataByDataColumn s : studyList) {
 			System.out.println(s.toString());
-			if(locMan.getLocationByLocationName(s.getDatavalue()) == null){
+			if (locMan.getLocationByLocationName(s.getDatavalue()) == null) {
 				Location location = new Location();
 				location.setLocationname(s.getDatavalue());
 				lstUnKnownLocations.add(location);
-			}
-			else lstKnownLocations.add(locMan.getLocationByLocationName(s.getDatavalue()));
+			} else
+				lstKnownLocations.add(locMan.getLocationByLocationName(s.getDatavalue()));
 		}
 		returnVal.add(lstKnownLocations);
 		returnVal.add(lstUnKnownLocations);
 		return returnVal;
-		
-	}
 
+	}
 
 	public List<StudyLocation> initializeUnknownStudyLocations(int studyId) {
 		// TODO Auto-generated method stub
 		List<StudyLocation> studyLocations = getAllStudyLocations(studyId);
-		if(studyLocations.isEmpty()){
+		if (studyLocations.isEmpty()) {
 			try {
 				ArrayList<StudyRawDataByDataColumn> studyList = getStudyLocationByStudy(studyId);
-				for(StudyRawDataByDataColumn s:studyList){
+				for (StudyRawDataByDataColumn s : studyList) {
 					StudyLocation record = new StudyLocation();
 					record.setStudyid(s.getStudyid());
 					record.setLocationid(new LocationManagerImpl().getLocationByLocationName(s.getDatavalue()).getId());
-					
+
 					addStudyLocation(record);
-					System.out.println("added" + s.getDatavalue() + " to study id: "+ s.getStudyid());
+					System.out.println("added" + s.getDatavalue() + " to study id: " + s.getStudyid());
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			if(getAllStudyLocations(studyId).isEmpty()) addEmptyRecordOnStudyLocation(studyId);
+			if (getAllStudyLocations(studyId).isEmpty())
+				addEmptyRecordOnStudyLocation(studyId);
 		}
 		return getAllStudyLocations(studyId);
-		
+
 	}
 
-	
-	
 	public ArrayList<StudyRawDataByDataColumn> getStudyLocationByStudy(int studyId) {
-        StudyRawDataManagerImpl studyRawDataManagerImpl= new StudyRawDataManagerImpl(isRaw);
-        return (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataColumn(studyId,"Location");
-        
+		StudyRawDataManagerImpl studyRawDataManagerImpl = new StudyRawDataManagerImpl(isRaw);
+		return (ArrayList<StudyRawDataByDataColumn>) studyRawDataManagerImpl.getStudyRawDataColumn(studyId, "Location");
+
 	}
 
 	public void removeLocationByStudyId(Integer id) {
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		StudyLocationMapper studySiteMapper = session
-				.getMapper(StudyLocationMapper.class);
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudyLocationMapper studySiteMapper = session.getMapper(StudyLocationMapper.class);
 
 		try {
 			StudyLocationExample example = new StudyLocationExample();
 			example.createCriteria().andStudyidEqualTo(id);
 			studySiteMapper.deleteByExample(example);
 			session.commit();
-		}
-		finally{
+		} finally {
 			session.close();
-			
+
 		}
-		
+
 	}
 
 }

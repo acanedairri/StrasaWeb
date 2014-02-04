@@ -391,7 +391,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 				if (!StringUtils.isNullOrEmpty(germData.getGermplasmname())) {
 					if (lstStudyGermplasm.containsKey(germData.getGermplasmname())) {
 						lstStudyGermplasm.get(germData.getGermplasmname()).setGermplasmtypeid(getGermplasmTypeById(germData.getGermplasmtype()));
-						lstStudyGermplasm.get(germData.getGermplasmname()).setValueFromeGermplasmEx(germData);
+						lstStudyGermplasm.get(germData.getGermplasmname()).setValueFromeGermplasmEx(germData, lstGermplasmType);
 					}
 				}
 			}
