@@ -158,7 +158,9 @@ public class DataSetTabView {
 			}
 
 			tab5.setVisible(false);
-			
+			if(this.uploadModel.isMergeMode){
+				view.getFellow("divDataset").setVisible(false);
+			}
 	    }
 	
 	  
