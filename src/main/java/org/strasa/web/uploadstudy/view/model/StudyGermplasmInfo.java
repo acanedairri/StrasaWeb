@@ -81,6 +81,10 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 		// wire event listener
 		// Selectors.wireEventListeners(view, this);
+		if(lstStudyGermplasm.isEmpty()){
+			gbUnknownGermplasm.setVisible(false);
+			view.getFellow("uploadGenotypeData").setVisible(false);
+		}
 	}
 
 	HashMap<String, GermplasmDeepInfoModel> lstStudyGermplasm = new HashMap<String, GermplasmDeepInfoModel>();
