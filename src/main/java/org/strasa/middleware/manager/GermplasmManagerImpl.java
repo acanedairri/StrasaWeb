@@ -26,7 +26,8 @@ public class GermplasmManagerImpl {
 		try {
 			GermplasmExample example = new GermplasmExample();
 			example.createCriteria().andGermplasmnameEqualTo(value);
-
+			if (mapper.countByExample(example) < 1)
+				return null;
 			return mapper.selectByExample(example).get(0);
 
 		} finally {
