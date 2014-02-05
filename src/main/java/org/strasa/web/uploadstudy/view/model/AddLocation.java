@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.strasa.middleware.manager.CountryManagerImpl;
 import org.strasa.middleware.manager.LocationManagerImpl;
-import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.model.Country;
 import org.strasa.middleware.model.Location;
 import org.strasa.web.common.api.FormValidator;
@@ -23,15 +22,13 @@ import org.zkoss.zul.Messagebox;
 
 public class AddLocation {
 	public static String ZUL_PATH = "/user/uploadstudy/addlocation.zul";
-		private Component mainView;
+	private Component mainView;
 	private Binder parBinder;
 	private FormValidator formValidator;
 	private Location locationModel = new Location();
 	public int selectedID;
 	private Integer userID = 1;
 	private ArrayList<String> cmbCountry = new ArrayList<String>();
-
-
 
 	public ArrayList<String> getCmbCountry() {
 		return cmbCountry;
@@ -57,7 +54,6 @@ public class AddLocation {
 		this.formValidator = formValidator;
 	}
 
-	
 	public Component getMainView() {
 		return mainView;
 	}
@@ -75,26 +71,25 @@ public class AddLocation {
 	}
 
 	@Init
-	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("newName")  String newName) {
+	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("locname") String newName) {
 
-	        mainView = view;
-	        parBinder = (Binder) view.getParent().getAttribute("binder");
-	
-	    	List<Country> lCountries = new CountryManagerImpl().getAllCountry();
-			for (Country data : lCountries) {
-				cmbCountry.add(data.getIsoabbr());
-			}
+		mainView = view;
+		parBinder = (Binder) view.getParent().getAttribute("binder");
+
+		List<Country> lCountries = new CountryManagerImpl().getAllCountry();
+		for (Country data : lCountries) {
+			cmbCountry.add(data.getIsoabbr());
+		}
+		locationModel.setLocationname(newName);
 	}
-	
+
 	@Command("add")
-	public void add(){
-		
+	public void add() {
+
 		LocationManagerImpl locationMan = new LocationManagerImpl();
-	
-		
-		
+
 		try {
-			if(!formValidator.getBlankVariables(locationModel,new String[]{"id","userid"}).isEmpty()){
+			if (!formValidator.getBlankVariables(locationModel, new String[] { "id", "userid" }).isEmpty()) {
 				Messagebox.show("All fields are requied.", "Validation Error", Messagebox.OK, Messagebox.EXCLAMATION);
 				return;
 			}
@@ -105,31 +100,29 @@ public class AddLocation {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		locationModel.setUserid(userID);
 		locationMan.addLocation(locationModel);
-		
-		
-		//TODO Validate!!
+
+		// TODO Validate!!
 		Messagebox.show("Location successfully added to database!", "Add", Messagebox.OK, Messagebox.INFORMATION);
-//		System.out.println("SavePath: "+CsvPath);
-		
-		
+		// System.out.println("SavePath: "+CsvPath);
+
 		Binder bind = parBinder;
 		if (bind == null)
 			return;
-		
+
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("locationModel",locationModel);
-		
+		params.put("locationModel", locationModel);
 
 		// this.parBinder.postCommand("change", params);
 		bind.postCommand("newLocationModel", params);
 		mainView.detach();
 	}
+
 	@Command
-	public void cancel(){
+	public void cancel() {
 		mainView.detach();
 	}
-	
+
 }

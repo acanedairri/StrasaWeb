@@ -63,6 +63,8 @@
 										onClick="@command('selectGermplasm', germplasm = each)">
 										<label
 											value="@bind(each.germplasmname)" />
+													<textbox
+											value="@bind(each.breeder)" />
 										<combobox
 											model="@load(vm.lstGermplasmType)"
 											readonly="${each.germplasmtypeid != null}"
@@ -75,8 +77,7 @@
 											</template>
 										</combobox>
 
-										<textbox
-											value="@bind(each.breeder)" />
+								
 
 										<textbox
 											value="@bind(each.femaleparent)" constraint="no empty" />
@@ -115,7 +116,30 @@
 							<template name="display">
 								<row style="@load(each.styleBG)" 		onClick="@command('selectGermplasm', germplasm = each)">
 
+									<label
+											value="@bind(each.germplasmname)" />
+								
+									
+									<label
+										value="@bind(each.breeder)">
+									</label>
 
+									<label
+										value="@bind(each.selectedGermplasmType.germplasmtype)" />
+									<label
+										value="@bind(each.femaleparent)" />
+									<label
+										value="@bind(each.maleparent)" />
+									<button image="/images/pencil.png"
+										onClick="@command('modifyGermplasm', gname=each.germplasmname)" />
+
+								</row>
+							</template>
+										<template name="editable">
+									<row style="@load(each.styleBG)"
+										vflex="1" hflex="1"
+										onClick="@command('selectGermplasm', germplasm = each)">
+									
 									<bandbox
 										value="@bind(each.germplasmname)" instant="true"
 										autodrop="true" readonly="true">
@@ -166,8 +190,7 @@
 														<column
 															label="Source" sort="auto(source)" />
 												
-														<column
-															label="Actions" />
+												
 													</columns>
 													<template
 														name="model">
@@ -212,27 +235,14 @@
 											</vbox>
 										</bandpopup>
 									</bandbox>
-									<label
-										value="@bind(each.breeder)">
-									</label>
-
-									<label
-										value="@bind(each.selectedGermplasmType.germplasmtype)" />
-									<label
-										value="@bind(each.femaleparent)" />
-									<label
-										value="@bind(each.maleparent)" />
-									<button image="/images/pencil.png"
-										onClick="@command('modifyGermplasm', gname=each.germplasmname)" />
-
-								</row>
-							</template>
-										<template name="editable">
-									<row style="@load(each.styleBG)"
-										vflex="1" hflex="1"
-										onClick="@command('selectGermplasm', germplasm = each)">
+										<div width="100%">
 										<label
-											value="@bind(each.germplasmname)" />
+										value="@bind(each.breeder)" width="85%">
+								    	</label>
+											<textbox
+											value="@bind(each.newBreeder)" width="15%" />
+											</div>
+											
 										<combobox
 											model="@load(vm.lstGermplasmType)"
 											readonly="${each.germplasmtypeid != null}"
@@ -245,8 +255,7 @@
 											</template>
 										</combobox>
 
-										<textbox
-											value="@bind(each.breeder)" />
+										
 
 										<textbox
 											value="@bind(each.femaleparent)" constraint="no empty" />

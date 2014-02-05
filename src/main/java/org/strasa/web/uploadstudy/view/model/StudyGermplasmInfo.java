@@ -81,7 +81,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 		// wire event listener
 		// Selectors.wireEventListeners(view, this);
-		if(lstStudyGermplasm.isEmpty()){
+		if (lstStudyGermplasm.isEmpty()) {
 			gbUnknownGermplasm.setVisible(false);
 			view.getFellow("uploadGenotypeData").setVisible(false);
 		}
@@ -193,13 +193,12 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 	@Command
 	public void selectGermplasm(@BindingParam("germplasm") GermplasmDeepInfoModel data) {
-
-		if (data.getId().equals(selectedGermplasm.getId())) {
-			return;
+		if (selectedGermplasm != null) {
+			if (data.getId().equals(selectedGermplasm.getId())) {
+				return;
+			}
 		}
 
-		selectedGermplasm.setStyleBG("background-color: #FFF");
-		data.setStyleBG("background-color: #BEC7F7 ");
 		selectedGermplasm = data;
 		BindUtils.postNotifyChange(null, null, "*", "selectedGermplasm");
 	}
@@ -208,20 +207,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 	public void saveGermplasm(@BindingParam("germplasm") GermplasmDeepInfoModel data) {
 
 		if (validateGermplasm(data)) {
-			StudyGermplasmManagerImpl studyMan = new StudyGermplasmManagerImpl();
-			if (studyMan.isGermplasmConflict(data)) {
-
-				int oldID = data.getId();
-				data.setId(null);
-
-				new GermplasmManagerImpl().addGermplasm(data);
-				new StudyGermplasmManagerImpl().updateStudyGermplasmID(oldID, data.getId(), data.getUserid());
-				new GermplasmCharacteristicMananagerImpl().addCharacteristic(data);
-			} else {
-				new GermplasmManagerImpl().updateGermplasm(data);
-				new GermplasmCharacteristicMananagerImpl().addCharacteristic(data);
-			}
-
+			new GermplasmManagerImpl().modifyGermplasm(data);
 			cancelEdit(data);
 		}
 

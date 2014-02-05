@@ -14,6 +14,8 @@ import org.strasa.middleware.model.GermplasmExample;
 import org.strasa.web.uploadstudy.view.pojos.GermplasmDeepInfoModel;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 
+import com.mysql.jdbc.StringUtils;
+
 public class GermplasmManagerImpl {
 
 	@WireVariable
@@ -100,6 +102,32 @@ public class GermplasmManagerImpl {
 		if (this.getGermplasmByName(value) == null)
 			return false;
 		return true;
+	}
+
+	public void modifyGermplasm(GermplasmDeepInfoModel data) {
+		StudyGermplasmManagerImpl studyMan = new StudyGermplasmManagerImpl();
+
+		if (!StringUtils.isNullOrEmpty(data.getNewBreeder())) {
+			if (data.getId() != null && data.equalsGermplasmNoBreeder(getGermplasmById(data.getId()))) {
+
+				data.setBreeder(data.getBreeder() + ", " + data.getNewBreeder());
+
+				new GermplasmManagerImpl().updateGermplasm(data);
+			}
+		}
+		if (studyMan.isGermplasmConflict(data)) {
+
+			int oldID = data.getId();
+			data.setId(null);
+
+			new GermplasmManagerImpl().addGermplasm(data);
+			new StudyGermplasmManagerImpl().updateStudyGermplasmID(oldID, data.getId(), data.getUserid());
+			new GermplasmCharacteristicMananagerImpl().addCharacteristic(data);
+		} else {
+			new GermplasmManagerImpl().updateGermplasm(data);
+			new GermplasmCharacteristicMananagerImpl().addCharacteristic(data);
+		}
+
 	}
 
 	public int addGermplasm(Germplasm record) {

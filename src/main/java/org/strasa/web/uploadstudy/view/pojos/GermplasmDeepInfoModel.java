@@ -30,6 +30,15 @@ public class GermplasmDeepInfoModel extends Germplasm {
 	private String category;
 	public boolean recordExist = false;
 	private boolean isKnown;
+	private String newBreeder;
+
+	public String getNewBreeder() {
+		return newBreeder;
+	}
+
+	public void setNewBreeder(String newBreeder) {
+		this.newBreeder = newBreeder;
+	}
 
 	public GermplasmDeepInfoModel() {
 
@@ -336,14 +345,89 @@ public class GermplasmDeepInfoModel extends Germplasm {
 			setSelectionhistory(data.getSelectionhistory());
 		if (!StringUtils.isNullOrEmpty(data.getSource()))
 			setSource(data.getSource());
-		
-		for(GermplasmType gtype : lstGermplasmType){
-			if(gtype.getGermplasmtype().equals(data.getGermplasmtype())){
+
+		for (GermplasmType gtype : lstGermplasmType) {
+			if (gtype.getGermplasmtype().equals(data.getGermplasmtype())) {
 				this.setSelectedGermplasmType(gtype);
 			}
 		}
-		
-		
 
+	}
+
+	public boolean equalsGermplasmNoBreeder(Germplasm obj) {
+
+		Germplasm other = obj;
+
+		if (getFemaleparent() == null) {
+			if (other.getFemaleparent() != null)
+				return false;
+		} else if (!getFemaleparent().equals(other.getFemaleparent()))
+			return false;
+		if (getGermplasmname() == null) {
+			if (other.getGermplasmname() != null)
+				return false;
+		} else if (!getGermplasmname().equals(other.getGermplasmname()))
+			return false;
+		if (getGermplasmtypeid() == null) {
+			if (other.getGermplasmtypeid() != null)
+				return false;
+		} else if (!getGermplasmtypeid().equals(other.getGermplasmtypeid()))
+			return false;
+		if (getGid() == null) {
+			if (other.getGid() != null)
+				return false;
+		} else if (!getGid().equals(other.getGid()))
+			return false;
+		if (getId() == null) {
+			if (other.getId() != null)
+				return false;
+		} else if (!getId().equals(other.getId()))
+			return false;
+		if (getIrcross() == null) {
+			if (other.getIrcross() != null)
+				return false;
+		} else if (!getIrcross().equals(other.getIrcross()))
+			return false;
+		if (getIrnumber() == null) {
+			if (other.getIrnumber() != null)
+				return false;
+		} else if (!getIrnumber().equals(other.getIrnumber()))
+			return false;
+		if (getMaleparent() == null) {
+			if (other.getMaleparent() != null)
+				return false;
+		} else if (!getMaleparent().equals(other.getMaleparent()))
+			return false;
+		if (getOthername() == null) {
+			if (other.getOthername() != null)
+				return false;
+		} else if (!getOthername().equals(other.getOthername()))
+			return false;
+		if (getParentage() == null) {
+			if (other.getParentage() != null)
+				return false;
+		} else if (!getParentage().equals(other.getParentage()))
+			return false;
+		if (getRemarks() == null) {
+			if (other.getRemarks() != null)
+				return false;
+		} else if (!getRemarks().equals(other.getRemarks()))
+			return false;
+		if (getSelectionhistory() == null) {
+			if (other.getSelectionhistory() != null)
+				return false;
+		} else if (!getSelectionhistory().equals(other.getSelectionhistory()))
+			return false;
+		if (getSource() == null) {
+			if (other.getSource() != null)
+				return false;
+		} else if (!getSource().equals(other.getSource()))
+			return false;
+		if (getUserid() == null) {
+			if (other.getUserid() != null)
+				return false;
+		} else if (!getUserid().equals(other.getUserid()))
+			return false;
+		return true;
 	}
 }

@@ -19,7 +19,6 @@ import org.strasa.middleware.model.PlantingType;
 import org.strasa.middleware.model.StudyAgronomy;
 import org.strasa.middleware.model.StudyDesign;
 import org.strasa.middleware.model.StudySite;
-import org.strasa.web.browsestudy.view.model.SiteInformation;
 import org.strasa.web.common.api.ProcessTabViewModel;
 import org.strasa.web.uploadstudy.view.pojos.StudySiteInfoModel;
 import org.zkoss.bind.BindContext;
@@ -35,9 +34,12 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zhtml.Messagebox;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Bandbox;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Window;
@@ -81,23 +83,22 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 	@Wire("#mainGrid")
 	Grid mainGrid;
+	private int x;
 
 	@Command
-	public void newLocationModel(
-			@BindingParam("locationModel") Location newValue) {
-		
+	public void newLocationModel(@BindingParam("locationModel") Location newValue) {
+
 		lstLocations.add(newValue);
-		
-		for(int i = 0; i < sites.getSize(); i++){
-			
-			if(sites.get(i).getSitelocation().equals(newValue.getLocationname())){
+
+		for (int i = 0; i < sites.getSize(); i++) {
+
+			if (sites.get(i).getSitelocation().equals(newValue.getLocationname())) {
 				sites.get(i).setSelectedLocation(newValue);
 				BindUtils.postNotifyChange(null, null, this.sites.get(i), "*");
 			}
-		
+
 		}
-	
-		
+
 	}
 
 	@Command
@@ -111,17 +112,13 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	}
 
 	@Command("addLocation")
-	public void addLocation(
-			@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,
-			@ContextParam(ContextType.VIEW) Component view) {
+	public void addLocation(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view, @BindingParam("loc") StudySiteInfoModel model) {
 
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("newName", sites.get(selectedID).getSelectedLocation()
-				.getLocationname());
 		params.put("parent", view);
+		params.put("locname", model.getSitelocation());
 
-		Window popup = (Window) Executions.createComponents(
-				AddLocation.ZUL_PATH, view, params);
+		Window popup = (Window) Executions.createComponents(AddLocation.ZUL_PATH, view, params);
 
 		popup.doModal();
 
@@ -168,11 +165,9 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	}
 
 	@NotifyChange("labelDate")
-	public void setSelectedSitePlantingType(
-			PlantingType selectedSitePlantingType) {
+	public void setSelectedSitePlantingType(PlantingType selectedSitePlantingType) {
 		this.selectedSitePlantingType = selectedSitePlantingType;
-		this.selectedAgroInfo.setPlantingtypeid(selectedSitePlantingType
-				.getId());
+		this.selectedAgroInfo.setPlantingtypeid(selectedSitePlantingType.getId());
 		this.sites.get(selectedID).selectedSitePlantingType = selectedSitePlantingType;
 
 		if (selectedSitePlantingType.getPlanting().equals("Transplanting"))
@@ -236,8 +231,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 		if (mainGrid == null)
 			System.out.println("Grid is null!!");
-		Bandbox bandbox = (Bandbox) mainGrid.getRows().getChildren().get(row)
-				.getChildren().get(col);
+		Bandbox bandbox = (Bandbox) mainGrid.getRows().getChildren().get(row).getChildren().get(col).getFirstChild();
 		if (isOpen) {
 			bandbox.open();
 			bandbox.setFocus(true);
@@ -248,17 +242,19 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 	}
 
-	public Bandbox getBandBox(int row,int col) {
-		return (Bandbox) mainGrid.getRows().getChildren().get(row)
-				.getChildren().get(col);
+	public Bandbox getBandBox(int row, int col) {
+		return (Bandbox) mainGrid.getRows().getChildren().get(row).getChildren().get(col).getFirstChild();
+	}
+
+	public Button getAddButton(int row, int col) {
+		return (Button) mainGrid.getRows().getChildren().get(row).getChildren().get(col).getLastChild();
 	}
 
 	private StudyDesign getDesignInfoBySiteID(Integer id) {
 		// TODO Auto-generated method stub
 		for (StudyDesign d : designInfo) {
 			if (d.getStudysiteid() == id) {
-				System.out.println("Selected Design info id: "
-						+ d.getStudysiteid());
+				System.out.println("Selected Design info id: " + d.getStudysiteid());
 				return d;
 			}
 		}
@@ -269,8 +265,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		// TODO Auto-generated method stub
 		for (StudyAgronomy a : agroInfo) {
 			if (a.getStudysiteid() == id) {
-				System.out.println("Selected Agronomy info id: "
-						+ a.getStudysiteid());
+				System.out.println("Selected Agronomy info id: " + a.getStudysiteid());
 				return a;
 			}
 		}
@@ -318,12 +313,9 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		else
 			labelDate = "Sowing Date";
 
-		BindUtils.postNotifyChange(null, null, StudySiteInfo.this,
-				"selectedAgroInfo");
-		BindUtils.postNotifyChange(null, null, StudySiteInfo.this,
-				"selectedDesignInfo");
-		BindUtils.postNotifyChange(null, null, StudySiteInfo.this,
-				"selectedSitePlantingType");
+		BindUtils.postNotifyChange(null, null, StudySiteInfo.this, "selectedAgroInfo");
+		BindUtils.postNotifyChange(null, null, StudySiteInfo.this, "selectedDesignInfo");
+		BindUtils.postNotifyChange(null, null, StudySiteInfo.this, "selectedSitePlantingType");
 		BindUtils.postNotifyChange(null, null, StudySiteInfo.this, "labelDate");
 	}
 
@@ -350,60 +342,70 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		Messagebox.show("Changes saved.");
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean validateTab() {
-
+		x = -1;
 		for (StudySiteInfoModel site : sites) {
+			x++;
 			if (!applyToAll) {
 				if (!StringUtils.isNullOrEmpty(site.validateAll())) {
-					Messagebox.show(site.validateAll(), "Upload Error",
-							Messagebox.OK, Messagebox.ERROR);
+
+					if (site.validateColumnOnly().startsWith("Error: Location in ")) {
+						Messagebox.show(site.validateAll() + " Do you want to add a new location?", "Upload Error", Messagebox.OK | Messagebox.CANCEL, Messagebox.ERROR, new org.zkoss.zk.ui.event.EventListener() {
+							public void onEvent(Event evt) throws InterruptedException {
+								if (evt.getName().equals("onOK")) {
+									Events.sendEvent("onClick", getAddButton(x, 1), getAddButton(x, 1));
+								}
+							}
+						});
+					} else
+						Messagebox.show(site.validateAll(), "Upload Error", Messagebox.OK, Messagebox.ERROR);
+
 					return false;
 				}
 			} else {
 				if (!StringUtils.isNullOrEmpty(site.validateColumnOnly())) {
-					Messagebox.show(site.validateAll(), "Upload Error",
-							Messagebox.OK, Messagebox.ERROR);
+
+					if (site.validateColumnOnly().startsWith("Error: Location in ")) {
+						Messagebox.show(site.validateColumnOnly() + " Do you want to add a new location?", "Upload Error", Messagebox.OK | Messagebox.CANCEL, Messagebox.ERROR, new org.zkoss.zk.ui.event.EventListener() {
+							public void onEvent(Event evt) throws InterruptedException {
+								if (evt.getName().equals("onOK")) {
+									Events.sendEvent("onClick", getAddButton(x, 1), getAddButton(x, 1));
+								}
+							}
+						});
+					} else
+						Messagebox.show(site.validateColumnOnly(), "Upload Error", Messagebox.OK, Messagebox.ERROR);
+
 					return false;
 				}
 				if (selectedSitePlantingType.getId() == -1) {
-					Messagebox.show("Planting type must not be empty!",
-							"Upload Error", Messagebox.OK, Messagebox.ERROR);
+					Messagebox.show("Planting type must not be empty!", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 				}
 				if (selectedAgroInfo.getHarvestdate() == null) {
-					Messagebox.show("Harvest date must not be empty!",
-							"Upload Error", Messagebox.OK, Messagebox.ERROR);
+					Messagebox.show("Harvest date must not be empty!", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 					return false;
 				}
 				if (selectedAgroInfo.getSowingdate() == null) {
-					Messagebox.show("Sowing date type must not be empty!",
-							"Upload Error", Messagebox.OK, Messagebox.ERROR);
+					Messagebox.show("Sowing date type must not be empty!", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 					return false;
 				}
-				if (StringUtils.isNullOrEmpty(selectedDesignInfo
-						.getTreatmentstructure())) {
-					Messagebox.show("Treatment Structure must not be empty!",
-							"Upload Error", Messagebox.OK, Messagebox.ERROR);
+				if (StringUtils.isNullOrEmpty(selectedDesignInfo.getTreatmentstructure())) {
+					Messagebox.show("Treatment Structure must not be empty!", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 					return false;
 				}
-				if (StringUtils.isNullOrEmpty(selectedDesignInfo
-						.getDesignstructure())) {
-					Messagebox.show("Design Structure must not be empty!",
-							"Upload Error", Messagebox.OK, Messagebox.ERROR);
+				if (StringUtils.isNullOrEmpty(selectedDesignInfo.getDesignstructure())) {
+					Messagebox.show("Design Structure must not be empty!", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 					return false;
 				}
 				if (StringUtils.isNullOrEmpty(selectedDesignInfo.getPlotsize())) {
-					Messagebox.show("Plot size must not be empty!",
-							"Upload Error", Messagebox.OK, Messagebox.ERROR);
+					Messagebox.show("Plot size must not be empty!", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 					return false;
 				}
 
-				if (selectedAgroInfo.getSowingdate().compareTo(
-						selectedAgroInfo.getHarvestdate()) > 0) {
-					Messagebox
-							.show("Havest date must be greater than Transplanting/Sowing date!",
-									"Upload Error", Messagebox.OK,
-									Messagebox.ERROR);
+				if (selectedAgroInfo.getSowingdate().compareTo(selectedAgroInfo.getHarvestdate()) > 0) {
+					Messagebox.show("Havest date must be greater than Transplanting/Sowing date!", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 					return false;
 				}
 
@@ -413,37 +415,31 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 		System.out.println("LOOP : " + sites.size());
 
-		
-		
-		
 		List<StudySite> lstSites = new ArrayList<StudySite>();
 		List<StudyAgronomy> lstAgro = new ArrayList<StudyAgronomy>();
 		List<StudyDesign> designInfo = new ArrayList<StudyDesign>();
 		StudySiteManagerImpl siteMan = new StudySiteManagerImpl(isRaw);
 		boolean renewData = false;
-	if(this.isDataReUploaded || hasBeenProcessed){
-			siteMan.removeSiteByStudyId(this.getStudyID(),this.getDataset().getId());
-			renewData =true;
+		if (this.isDataReUploaded || hasBeenProcessed) {
+			siteMan.removeSiteByStudyId(this.getStudyID(), this.getDataset().getId());
+			renewData = true;
 		}
-	
+
 		if (applyToAll) {
 
 			selectedAgroInfo = sites.get(selectedID).selectedAgroInfo;
 			selectedDesignInfo = sites.get(selectedID).selectedDesignInfo;
 		}
-		for (StudySiteInfoModel data : sites ) {
+		for (StudySiteInfoModel data : sites) {
 			data.setStudyid(this.getStudyID());
 			data.setDataset(this.dataset.getId());
 			if (applyToAll)
-				data.selectedAgroInfo
-						.setPlantingtypeid(selectedSitePlantingType.getId());
+				data.selectedAgroInfo.setPlantingtypeid(selectedSitePlantingType.getId());
 			else
-				data.selectedAgroInfo
-						.setPlantingtypeid(data.selectedSitePlantingType
-								.getId());
+				data.selectedAgroInfo.setPlantingtypeid(data.selectedSitePlantingType.getId());
 
 			if (data.getId() == null || renewData) {
-				
+
 				System.out.println("ADD MODE");
 				StudySite siteData = data;
 				siteMan.addStudySite(siteData);
@@ -511,24 +507,22 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 	@Command
 	public void openBandbox(@BindingParam("id") int lstId) {
-		getBandBox(lstId,1).open();
+		getBandBox(lstId, 1).open();
 		updateDesignInfo(lstId);
 	}
+
 	@Command
 	public void openSiteBandbox(@BindingParam("id") int lstId) {
-		getBandBox(lstId,0).open();
+		getBandBox(lstId, 0).open();
 		updateDesignInfo(lstId);
 	}
 
 	@Command
 	public void autoFillBandbox(@BindingParam("id") int lstId) {
-		Bandbox bbox = getBandBox(lstId,1);
+		Bandbox bbox = getBandBox(lstId, 1);
 		if (!bbox.isOpen()) {
-			if (!sites.get(lstId).getFilteredLocations().isEmpty()
-					&& sites.get(lstId).getFilteredLocations().getSize() != lstLocations
-							.getSize()) {
-				sites.get(lstId).selectedLocation = sites.get(lstId)
-						.getFilteredLocations().get(0);
+			if (!sites.get(lstId).getFilteredLocations().isEmpty() && sites.get(lstId).getFilteredLocations().getSize() != lstLocations.getSize()) {
+				sites.get(lstId).selectedLocation = sites.get(lstId).getFilteredLocations().get(0);
 
 			}
 		} else {
@@ -541,13 +535,11 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	}
 
 	Location getLocationByName(String locationName) {
-		return new LocationManagerImpl()
-				.getLocationByLocationName(locationName);
+		return new LocationManagerImpl().getLocationByLocationName(locationName);
 	}
 
 	@Init
-	public void init(
-			@ExecutionArgParam("uploadModel") ProcessTabViewModel uploadModel) {
+	public void init(@ExecutionArgParam("uploadModel") ProcessTabViewModel uploadModel) {
 
 		this.initValues(uploadModel);
 		studySiteMan = new StudySiteManagerImpl(isRaw);
@@ -572,12 +564,10 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 		StudyRawDataManagerImpl studyRawMan = new StudyRawDataManagerImpl(isRaw);
 
-		String studyStartYear = new StudyManagerImpl().getStudyById(
-				this.getStudyID()).getStartyear();
+		String studyStartYear = new StudyManagerImpl().getStudyById(this.getStudyID()).getStartyear();
 
-		if (studySiteMan.isSiteRecordExist(this.getStudyID())
-				&& !this.isDataReUploaded) {
-			sites.addAll(studySiteMan.getStudySiteByStudyId(this.getStudyID(),this.dataset.getId()));
+		if (studySiteMan.isSiteRecordExist(this.getStudyID()) && !this.isDataReUploaded) {
+			sites.addAll(studySiteMan.getStudySiteByStudyId(this.getStudyID(), this.dataset.getId()));
 			System.out.println("Site exist");
 
 			for (StudySiteInfoModel site : sites) {
@@ -586,8 +576,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 						site.selectedEcotype = eco;
 				}
 				for (PlantingType plant : plantingtypes) {
-					if (plant.getId() == site.selectedAgroInfo
-							.getPlantingtypeid())
+					if (plant.getId() == site.selectedAgroInfo.getPlantingtypeid())
 						site.selectedSitePlantingType = plant;
 				}
 
@@ -595,13 +584,12 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			}
 
 		} else {
-			List<StudySite> lstSiteRaw = studyRawMan.getStudySiteInfo(
-					this.getStudyID(), dataset.getId());
-	
+			List<StudySite> lstSiteRaw = studyRawMan.getStudySiteInfo(this.getStudyID(), dataset.getId());
+
 			for (StudySite siteData : lstSiteRaw) {
-				
+
 				StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteData);
-	
+
 				if (StringUtils.isNullOrEmpty(siteInfo.getYear())) {
 
 					siteInfo.setYear(studyStartYear);
@@ -609,8 +597,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 				}
 				if (!StringUtils.isNullOrEmpty(siteInfo.getSitelocation())) {
 					Location newLoc = new Location();
-					Location exLoc = getLocationByName(siteInfo
-							.getSitelocation());
+					Location exLoc = getLocationByName(siteInfo.getSitelocation());
 
 					newLoc.setLocationname(siteInfo.getSitelocation());
 					if (exLoc == null)
@@ -626,11 +613,10 @@ public class StudySiteInfo extends ProcessTabViewModel {
 				siteInfo.selectedAgroInfo.setStudysiteid(this.getStudyID());
 				siteInfo.selectedDesignInfo.setStudyid(this.studyID);
 				sites.add(siteInfo);
-			
+
 			}
 			if (this.isDataReUploaded) {
-				previousSites.addAll(studySiteMan.getStudySiteByStudyId(this
-						.getStudyID(),this.dataset.getId()));
+				previousSites.addAll(studySiteMan.getStudySiteByStudyId(this.getStudyID(), this.dataset.getId()));
 				System.out.println("Previous Sites");
 
 				for (StudySiteInfoModel site : previousSites) {
@@ -639,8 +625,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 							site.selectedEcotype = eco;
 					}
 					for (PlantingType plant : plantingtypes) {
-						if (plant.getId() == site.selectedAgroInfo
-								.getPlantingtypeid())
+						if (plant.getId() == site.selectedAgroInfo.getPlantingtypeid())
 							site.selectedSitePlantingType = plant;
 					}
 
@@ -651,10 +636,10 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		}
 
 		boolean hasSite = new StudySiteManagerImpl().hasSiteHeader(this.studyID, this.dataset.getId());
-		
-		if(!hasSite){
-			for(int i = 1; i < sites.size(); i++)	
-			sites.remove(i);
+
+		if (!hasSite) {
+			for (int i = 1; i < sites.size(); i++)
+				sites.remove(i);
 		}
 		selectedSite = sites.get(0);
 

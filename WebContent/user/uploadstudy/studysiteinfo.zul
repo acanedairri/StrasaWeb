@@ -8,16 +8,16 @@
 				<grid id="mainGrid"
 					model="@load(vm.sites)" emptyMessage="No study site found.">
 					<columns>
-						<column label="Site Name" style="color:red;" />
+						<column label="Site Name" style="color:red;" width = "16%"/>
 						<column label="Site Location"
+							style="color:red;" width = "23%"/>
+						<column label="Year" width = "8%"
 							style="color:red;" />
-						<column label="Year" width="80px"
+						<column label="Season" width = "8%"
 							style="color:red;" />
-						<column label="Season" width="80px"
-							style="color:red;" />
-						<column label="Eco System" style="color:red;" />
-						<column label="Soil Type" />
-						<column label="Soil PH" />
+						<column label="Eco System" style="color:red;" width = "16%"/>
+						<column label="Soil Type" width = "16%"/>
+						<column label="Soil PH" width = "13%"/>
 					</columns>
 					<template name="model">
 						<row>
@@ -27,7 +27,7 @@
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
 								if="${vm.uploadMode}" />
-							<bandbox value="@bind(each.sitename)"
+						<bandbox value="@bind(each.sitename)"
 								instant="true" autodrop="true"
 								onClick="@command('openSiteBandbox', id=forEachStatus.index)" unless="${vm.uploadMode}">
 								<bandpopup>
@@ -86,17 +86,17 @@
 
 
 
-
-							<bandbox
+							<div width = "100%">
+							<bandbox  id = "bbox_${forEachStatus.index}" 
 								value="@bind(each.selectedLocation.locationname)"
 								onChange="@command('doLocationSearch',id=forEachStatus.index)"
 								instant="true" autodrop="true"
 								onOpen="@command('autoFillBandbox', id=forEachStatus.index) "
-								onClick="@command('openBandbox', id=forEachStatus.index)">
+								onClick="@command('openBandbox', id=forEachStatus.index)" width = "80%">
 								<bandpopup>
 									<vbox width="40%">
 										<button label="Add Location"
-											onClick="@command('addLocation')" />
+											onClick="@command('addLocation',loc = each)"/>
 										<grid
 											model="@load(each.filteredLocations)"
 											emptyMessage="No location is available. Please add your location."
@@ -144,7 +144,9 @@
 									</vbox>
 								</bandpopup>
 							</bandbox>
-
+							<button id = "btnadd_${forEachStatus.index}" image="/images/plus.png"
+											onClick="@command('addLocation',loc = each)" width = "30px"/>
+</div>
 							<textbox value="@bind(each.year)"
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"

@@ -13,9 +13,9 @@
 			<rows>
 				<row>
 					<label value="Location Name" />
-					<textbox
-						value='@bind(vm.locationModel.locationname)' constraint="no empty"
-						width="150px" />
+					<label
+						value='@bind(vm.locationModel.locationname)' 
+						 width="99%" />
 				</row>
 				<row>
 					<label value="Country" />
