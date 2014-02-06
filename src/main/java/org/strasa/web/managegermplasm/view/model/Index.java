@@ -277,8 +277,6 @@ public class Index {
 
 		}
 
-		selectedGermplasm.setStyleBG("background-color: #BEC7F7 ");
-
 		timer.end();
 	}
 
