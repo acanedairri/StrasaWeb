@@ -22,7 +22,8 @@
                     <groupbox mold="3d" id="gbUnknownGermplasm" hflex="1" vflex = "1">
                         <caption label="@load(vm.totalUnknownGermplasm)" />
                         <vlayout vflex = "1">
-                            <listbox id="tblStudyGerm" sizedByContent="true" hflex="1" model="@load(vm.lstStudyGermplasm) @template(each.templateMode)" sclass="gridMaxBodyHeight550" rows="10" selectedItem="@bind(vm.selectedGermplasm)">
+                        <button label="Submit" onClick="@command('saveData')" sclass="btn-blue" image="/images/save16.png" />
+                            <listbox id="tblStudyGerm" sizedByContent="true" hflex="1" model="@load(vm.lstStudyGermplasm) @template(each.templateMode)"  rows="10" selectedItem="@bind(vm.selectedGermplasm)">
                                 <listhead menupopup="auto" columnsgroup="false">
                                     <listheader label="GName" sort="auto(germplasmname)" style="color:red" hflex="1" width="19%" />
                                     <listheader label="GermplasmType" style="color:red" hflex="1" width="19%" />
@@ -108,7 +109,7 @@
                                      
                                 </template>
                                 <listfoot >
-                <listfooter><button label="Submit" onClick="@command('saveData')" sclass="btn-blue" image="/images/save16.png" /></listfooter>
+                <listfooter></listfooter>
                
             </listfoot>
                             </listbox>
