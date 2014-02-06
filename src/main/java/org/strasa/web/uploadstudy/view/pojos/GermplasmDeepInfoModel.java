@@ -44,6 +44,18 @@ public class GermplasmDeepInfoModel extends Germplasm {
 
 	}
 
+	public String getTemplateMode() {
+
+		if (this.getId() == null) {
+			return "newEntry";
+		}
+
+		if (isKnown)
+			return "display";
+
+		return "editable";
+	}
+
 	public GermplasmDeepInfoModel(Germplasm data) {
 		// TODO Auto-generated constructor stub
 
@@ -335,8 +347,8 @@ public class GermplasmDeepInfoModel extends Germplasm {
 			setIrnumber(data.getIrnumber());
 		if (!StringUtils.isNullOrEmpty(data.getMaleparent()))
 			setMaleparent(data.getMaleparent());
-		if (!StringUtils.isNullOrEmpty(data.getOthername()))
-			setOthername(data.getOthername());
+		if (!StringUtils.isNullOrEmpty(data.getOther_name()))
+			setOthername(data.getOther_name());
 		if (!StringUtils.isNullOrEmpty(data.getParentage()))
 			setParentage(data.getParentage());
 		if (!StringUtils.isNullOrEmpty(data.getRemarks()))
@@ -351,6 +363,8 @@ public class GermplasmDeepInfoModel extends Germplasm {
 				this.setSelectedGermplasmType(gtype);
 			}
 		}
+
+		// System.out.println(this.toString());
 
 	}
 

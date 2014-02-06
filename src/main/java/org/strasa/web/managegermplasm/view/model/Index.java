@@ -195,9 +195,10 @@ public class Index {
 	@Command
 	public void selectGermplasm(@BindingParam("germplasm") GermplasmDeepInfoModel data) {
 
-		if (data.getGermplasmname().equals(selectedGermplasm.getGermplasmname())) {
-			return;
-		}
+		if (selectedGermplasm != null)
+			if (data.getGermplasmname().equals(selectedGermplasm.getGermplasmname())) {
+				return;
+			}
 
 		// selectedGermplasm.setStyleBG("background-color: #FFF");
 		// data.setStyleBG("background-color: #BEC7F7 ");
@@ -327,7 +328,7 @@ public class Index {
 			List<KeyGrainQuality> lstKeyGrainQuality = keyMan.getAllGrainQuality();
 			for (GermplasmExt germData : lstGermplasm) {
 				if (!StringUtils.isNullOrEmpty(germData.getGermplasmname())) {
-
+					// System.out.println(germData.toString());
 					if (lstKnownGermplasm.containsKey(germData.getGermplasmname())) {
 
 						lstStudyGermplasm.put(germData.getGermplasmname(), lstKnownGermplasm.get(germData.getGermplasmname()));
@@ -343,6 +344,7 @@ public class Index {
 						newData.setMajorGenes(lstKeyMajorGenes);
 						newData.setUserid(this.userID);
 						newData.setGrainQuality(lstKeyGrainQuality);
+						newData.setKnown(false);
 						lstStudyGermplasm.put(newData.getGermplasmname(), newData);
 					}
 				}
@@ -382,8 +384,8 @@ public class Index {
 		Map<String, String> columnMapping = new HashMap<String, String>();
 		columnMapping.put("GID", "gid");
 		columnMapping.put("GNAME", "germplasmname");
-		columnMapping.put("OTHERNAME", "othername");
 		columnMapping.put("BREEDER", "breeder");
+		columnMapping.put("OTHERNAME", "other_name");
 		columnMapping.put("IR NUMBER", "irnumber");
 		columnMapping.put("IR CROSS", "ircross");
 		columnMapping.put("GERMPLASMTYPE", "germplasmtype");
@@ -393,7 +395,7 @@ public class Index {
 		columnMapping.put("SELECTION HISTORY", "selectionhistory");
 		columnMapping.put("SOURCE", "source");
 
-		// System.out.println(file.getAbsolutePath());
+		System.out.println(file.getAbsolutePath());
 		HeaderColumnNameTranslateMappingStrategy<GermplasmExt> strategy = new HeaderColumnNameTranslateMappingStrategy<GermplasmExt>();
 		strategy.setType(GermplasmExt.class);
 		strategy.setColumnMapping(columnMapping);
@@ -403,7 +405,7 @@ public class Index {
 		List<String[]> lstWriter = reader.readAll();
 		String[] header = lstWriter.get(0);
 		for (int i = 0; i < header.length; i++) {
-			header[i] = header[i].toUpperCase();
+			header[i] = header[i].toUpperCase().trim();
 		}
 		lstWriter.set(0, header);
 		CSVWriter writer = new CSVWriter(new FileWriter(file.getAbsolutePath()));

@@ -180,7 +180,7 @@ public class GermplasmManagerImpl {
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 		try {
 
-			for (Germplasm record : collection) {
+			for (GermplasmDeepInfoModel record : collection) {
 				System.out.print(record.toString());
 
 				GermplasmExample example = new GermplasmExample();
@@ -193,7 +193,7 @@ public class GermplasmManagerImpl {
 						mapper.insert(record);
 					}
 				} else {
-					mapper.updateByPrimaryKey(record);
+					modifyGermplasm(record);
 
 				}
 			}
