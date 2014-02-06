@@ -75,8 +75,7 @@ public class GermplasmManagerImpl {
 		try {
 			GermplasmExample example = new GermplasmExample();
 			example.createCriteria().andUseridEqualTo(userid);
-			if (mapper.selectByExample(example).isEmpty())
-				return null;
+
 			return mapper.selectByExample(example);
 		} finally {
 			session.close();
