@@ -1,5 +1,5 @@
 <zk>
-	<window title="Add Project" border="normal" closable="true"
+	<window title="Add New Project" border="normal" closable="true"
 		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.AddNewProject')"
 		width="35%">
@@ -12,11 +12,11 @@
 			</columns>
 			<rows>
 			<row>
-				<label value="Program" />
-				<combobox id="programComboBox"
+				<label value="Program Name" />
+				<combobox id="programComboBox" hflex="1"
 					model="@load(vm.programList)" readonly="true"
 					onChange="@command('updateLists', program=self.selectedItem)"
-					value="@bind(vm.program.name)" width="150px">
+					value="@bind(vm.program.name)" >
 					<template name="model">
 						<comboitem value="@load(each.id)"
 							label="@load(each.name)" />
@@ -24,47 +24,53 @@
 				</combobox>
 				</row>
 				<row>
-					<label value="Name" width="150px" />
-					<textbox value='@bind(vm.projectModel.name)'
-						constraint="no empty" width="150px" />
+					<label value="Project Name" width="150px" />
+					<textbox value='@bind(vm.projectModel.name)'  hflex="1"
+						constraint="no empty"  />
 				</row>
 				<row>
 					<label value="Objective" width="150px" />
-					<textbox value='@bind(vm.projectModel.objective)'
-						constraint="no empty" width="150px" />
+					<textbox value='@bind(vm.projectModel.objective)'  hflex="1"
+						constraint="no empty" />
 				</row>
 				<row>
-					<label value="Funding Agency" width="150px" />
+					<label value="Funding Agency"  />
 					<textbox
-						value='@bind(vm.projectModel.fundingagency)' constraint="no empty"
+						value='@bind(vm.projectModel.fundingagency)' constraint="no empty"  hflex="1"
 						width="150px" />
 				</row>
 				<row>
 					<label value="PI" width="150px" />
-					<textbox value='@bind(vm.projectModel.pi)'
-						constraint="no empty" width="150px" />
+					<textbox value='@bind(vm.projectModel.pi)'  hflex="1"
+						constraint="no empty"  />
 				</row>
 				<row>
-					<label value="Leading Institute" width="150px" />
+					<label value="Leading Institute"/>
 					<textbox
-						value='@bind(vm.projectModel.leadinginstitute)'
-						constraint="no empty" width="150px" />
+						value='@bind(vm.projectModel.leadinginstitute)'  hflex="1"
+						constraint="no empty" />
 				</row>
 				<row>
 					<label value="Collaborators" width="150px" />
 					<textbox
-						value='@bind(vm.projectModel.collaborators)' constraint="no empty"
-						width="150px" />
+						value='@bind(vm.projectModel.collaborators)' constraint="no empty"  hflex="1"
+						 />
 				</row>
 
 
 				<row>
-					<button label="Save Project"
-						onClick="@command('add')">
-					</button>
-					<button label="Cancel"
+					<label></label>
+					<hbox>
+					<button label="Cancel" image="../images/Delete16.png" sclass="btn-plain"
 						onClick="@command('cancel')">
 					</button>
+					<button label="Save" image="../images/save16.png" sclass="btn-blue"
+						onClick="@command('add')">
+					</button>
+					
+					
+					</hbox>
+					
 				</row>
 			</rows>
 		</grid>

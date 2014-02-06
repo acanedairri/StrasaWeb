@@ -32,7 +32,12 @@
 	
 	
 		<row>
-			<button label="Save Program" onClick="@command('add')"></button><button label="Cancel" onClick="@command('cancel')"></button>
+			<label></label>
+			<hbox>
+			<button label="Cancel" onClick="@command('cancel')" mage="/images/Delete16.png" sclass="btn-plain" ></button>
+			<button label="Save Program" onClick="@command('add')" mage="/images/save16.png" sclass="btn-blue"></button>
+			
+			</hbox>
 		</row>
 	</rows>
 </grid>

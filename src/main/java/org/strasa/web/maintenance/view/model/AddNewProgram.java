@@ -41,23 +41,21 @@ public class AddNewProgram{
 
 	@Init
 	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar) {
-
 	        mainView = view;
 	        parBinder = ctx.getBinder();
-	        
 	}
 	
 	@Command("add")
 	public void add(){
 		ProgramManagerImpl programMan = new ProgramManagerImpl();
 		if(programMan.isProgramExist(programModel.getName(), getUserID())){
-			Messagebox.show("Program already exist! Choose a different name.", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
+			Messagebox.show("Program already exist! Choose a different name.", "Program Added", Messagebox.OK, Messagebox.EXCLAMATION);
 			return;
 		}
 		try {
 			if(new FormValidator().getBlankVariables(programModel, new String[]{"userid","id"}).isEmpty() == false){
 
-				Messagebox.show("All fields are required", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
+				Messagebox.show("All fields are required", "Progam Added", Messagebox.OK, Messagebox.EXCLAMATION);
 				return;
 			}
 		} catch (Exception e) {
@@ -69,7 +67,7 @@ public class AddNewProgram{
 		programMan.addProgram(programModel);
 		
 		//TODO Validate!!
-		Messagebox.show("Program successfully added to database!", "OK", Messagebox.OK, Messagebox.INFORMATION);
+		Messagebox.show("Program added successfully", "Program Added", Messagebox.OK, Messagebox.INFORMATION);
 //		System.out.println("SavePath: "+CsvPath);
 		
 //		
