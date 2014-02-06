@@ -461,7 +461,8 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 	public boolean validateStudyGermplasm() {
 		int studyGerm = 0;
 		for (GermplasmDeepInfoModel data : lstStudyGermplasm.values()) {
-			((Row) tblStudyGerm.getRows().getChildren().get(studyGerm)).setStyle("background-color: #FFF");
+			// ((Row)
+			// tblStudyGerm.getRows().getChildren().get(studyGerm)).setStyle("background-color: #FFF");
 			String validate = data.validate();
 			if (validate != null) {
 				Messagebox.show(validate, "OK", Messagebox.OK, Messagebox.EXCLAMATION);
