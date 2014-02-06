@@ -194,7 +194,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 	@Command
 	public void selectGermplasm(@BindingParam("germplasm") GermplasmDeepInfoModel data) {
 		if (selectedGermplasm != null) {
-			if (data.getId().equals(selectedGermplasm.getId())) {
+			if (data.getGermplasmname().equals(selectedGermplasm.getGermplasmname())) {
 				return;
 			}
 		}

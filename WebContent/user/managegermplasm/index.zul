@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk>
     <style src="../css/main.css" />
-    <style>.gridMaxBodyHeight550 div.z-listbox-body { max-height: 100%;
-		height: 100%; overflow: auto; } tr.z-listitem-seld {
+    <style>.gridMaxBodyHeight550 div.z-listbox-body { max-height: 90%;
+		height: 90%; overflow: auto; } tr.z-listitem-seld {
 		background-image:none; background-color:#BEC7F7;}</style>
     <script src="http://stanlemon.net/javascript/jquery.jgrowl.js" />
     <style src="http://stanlemon.net/stylesheet/jquery.jgrowl.css" />
@@ -16,12 +16,12 @@
                 </div>
             </hlayout>
         </div>
-        <columnlayout id="colLayout1">
-            <columnchildren width="70%" height="100%">
-                <vlayout height="100%">
-                    <groupbox mold="3d" id="gbUnknownGermplasm" hflex="1" height="100%">
+        <columnlayout id="colLayout1"  vflex = "1">
+            <columnchildren width="70%" vflex = "1">
+                <vlayout vflex = "1">
+                    <groupbox mold="3d" id="gbUnknownGermplasm" hflex="1" vflex = "1">
                         <caption label="@load(vm.totalUnknownGermplasm)" />
-                        <vlayout height="100%">
+                        <vlayout vflex = "1">
                             <listbox id="tblStudyGerm" sizedByContent="true" hflex="1" model="@load(vm.lstStudyGermplasm) @template(each.templateMode)" sclass="gridMaxBodyHeight550" rows="10" selectedItem="@bind(vm.selectedGermplasm)">
                                 <listhead menupopup="auto" columnsgroup="false">
                                     <listheader label="GName" sort="auto(germplasmname)" style="color:red" hflex="1" width="19%" />
@@ -29,7 +29,7 @@
                                     <listheader label="Breeder" style="color:red" hflex="1" width="19%" />
                                     <listheader label="Female Parent" style="color:red" hflex="1" width="19%" />
                                     <listheader label="Male Parent" style="color:red" hflex="1" width="16%" />
-                                    <listheader label="Actions" hflex="1" width="8%" />
+                                 
                                 </listhead>
                                 <template name="display">
                                     <listitem onClick="@command('selectGermplasm', germplasm = each)">
@@ -105,10 +105,15 @@
                                             <textbox value="@bind(each.maleparent)" constraint="no empty" width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
                                         </listcell>
                                     </listitem>
+                                     
                                 </template>
+                                <listfoot >
+                <listfooter><button label="Submit" onClick="@command('saveData')" sclass="btn-blue" image="/images/save16.png" /></listfooter>
+               
+            </listfoot>
                             </listbox>
                             <separator spacing="8px" />
-                            <button label="Submit" onClick="@command('saveData')" sclass="btn-blue" image="/images/save16.png" />
+                            
                             <separator spacing="8px" />
                         </vlayout>
                     </groupbox>
@@ -174,6 +179,7 @@
                                         </div>
                                     </listcell>
                                 </listitem>
+                                
                             </template>
                         </listbox>
                     </groupbox>

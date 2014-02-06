@@ -300,7 +300,7 @@ public class Index {
 
 	}
 
-	@NotifyChange({ "lstStudyGermplasm", "lstKnownGermplasm", "totalUnknownGermplasm" })
+	@NotifyChange({ "lstStudyGermplasm", "lstKnownGermplasm", "totalUnknownGermplasm", "totalKnownGermplasm" })
 	@Command("uploadGenotypeData")
 	public void uploadGenotypeData(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view) {
 
@@ -326,12 +326,13 @@ public class Index {
 			List<KeyAbiotic> lstKeyAbioitc = keyMan.getAllAbiotic();
 			List<KeyMajorGenes> lstKeyMajorGenes = keyMan.getAllMajorGenes();
 			List<KeyGrainQuality> lstKeyGrainQuality = keyMan.getAllGrainQuality();
+			ArrayList<GermplasmDeepInfoModel> tempKnown = new ArrayList<GermplasmDeepInfoModel>();
 			for (GermplasmExt germData : lstGermplasm) {
 				if (!StringUtils.isNullOrEmpty(germData.getGermplasmname())) {
 					// System.out.println(germData.toString());
 					if (lstKnownGermplasm.containsKey(germData.getGermplasmname())) {
 
-						lstStudyGermplasm.put(germData.getGermplasmname(), lstKnownGermplasm.get(germData.getGermplasmname()));
+						tempKnown.add(lstKnownGermplasm.get(germData.getGermplasmname()));
 					} else {
 
 						GermplasmDeepInfoModel newData = new GermplasmDeepInfoModel();
@@ -350,8 +351,14 @@ public class Index {
 				}
 			}
 
+			lstKnownGermplasm.clear();
+			for (GermplasmDeepInfoModel germData : tempKnown) {
+				lstKnownGermplasm.put(germData.getGermplasmname(), germData);
+
+			}
+
 			gbUnknownGermplasm.setVisible(true);
-			gbKnownGermplasm.setVisible(false);
+			gbKnownGermplasm.setVisible(true);
 			view.getFellow("divUploadOption").setVisible(true);
 			// gbKnownGermplasm.invalidate();
 			// gbUnknownGermplasm.invalidate();
@@ -368,6 +375,9 @@ public class Index {
 		gbUnknownGermplasm.setVisible(false);
 		gbKnownGermplasm.setVisible(true);
 		divUploadOption.setVisible(false);
+		init();
+		BindUtils.postNotifyChange(null, null, this, "*");
+
 	}
 
 	public Integer getGermplasmTypeById(String key) {
@@ -517,8 +527,8 @@ public class Index {
 		germCharMan.addCharacteristicBatch(lstStudyGermplasm.values());
 
 		resetUnknownGermplasm();
-		init();
-		BindUtils.postNotifyChange(null, null, this, "*");
+		// init();
+		// BindUtils.postNotifyChange(null, null, this, "*");?
 		Messagebox.show("Germplasms has been added to the database!", "Information", Messagebox.OK, Messagebox.INFORMATION);
 
 	}
