@@ -119,7 +119,7 @@ public class ExtensionDataManagerImpl {
 		}
 	}
 	
-	public List<ExtensionDataSummaryModel> getCountOfGermplasmByCountrRealease() {
+/*	public List<ExtensionDataSummaryModel> getCountOfGermplasmByCountrRealease() {
 		
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
@@ -135,9 +135,9 @@ public class ExtensionDataManagerImpl {
 		}
 
 
-	}
+	}*/
 	
-	public List<ExtensionDataSummaryModel> getCountOfGermplasmByYear() {
+/*	public List<ExtensionDataSummaryModel> getCountOfGermplasmByYear() {
 		
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
@@ -153,9 +153,9 @@ public class ExtensionDataManagerImpl {
 		}
 
 
-	}
+	}*/
 	
-	public List<ExtensionDataListModel> getExtensionDataList() {
+/*	public List<ExtensionDataListModel> getExtensionDataList() {
 		
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
@@ -171,7 +171,7 @@ public class ExtensionDataManagerImpl {
 		}
 
 
-	}
+	}*/
 	public List<SummaryModel> getAreaSummaryGermplasmByYearandCountryExtension(){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
