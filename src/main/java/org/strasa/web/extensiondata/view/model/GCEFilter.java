@@ -1,6 +1,6 @@
 package org.strasa.web.extensiondata.view.model;
 
-public class GermplasmCountryExtensionFilter {
+public class GCEFilter {
 	
 	
 	String programName="";
