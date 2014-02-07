@@ -14,14 +14,15 @@
 	</style>
 
 	<include self="@define(content)" src="header.zul" />
-	<separator height="150px"></separator>
+	<separator height="50px"></separator>
 	
 	<div apply="org.zkoss.bind.BindComposer" align="center"
 		style="padding:10px"
 		viewModel="@id('vm') @init('org.strasa.web.main.view.model.Registration')"
 		validationMessages="@id('vmsgs')"
 		form="@id('fx') @load(vm.user) @save(vm.user, before='submit') @validator('org.strasa.web.main.view.model.RegistrationValidator', retypedPassword=vm.retypedPassword, captcha=vm.captcha, captchaInput=vm.captchaInput)">
-
+<label visible="@load(empty vmsgs)"
+								value="@load(empty vmsgs ? 'Form successfully submitted! The administrator will informed you that your account has been validated and activated' : '', before='submit')" /> 
 
 		<div align="left" width="60%">
 		<label value="Registration" class="myRegistration"></label>
@@ -139,8 +140,7 @@
 				<row>
 					<cell colspan="3" align="left">
 						<vlayout>
-							<!-- <label visible="@load(empty vmsgs)"
-								value="@load(empty vmsgs ? 'Form successfully submitted!' : '', before='submit')" /> -->
+							
 							<button label="Submit"
 								onClick="@command('submit')" width="100px" height="30px" />
 						</vlayout>
