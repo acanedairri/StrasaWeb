@@ -62,7 +62,7 @@
 														onClick="@command('setSiteRow', model = each)" />
 
 													<label
-														value="@bind(each.year)" />
+														value="@bind(each.year)" 	onClick="@command('setSiteRow', model = each)"/>
 
 													<label
 														value="@bind(each.selectedEcotype.ecotype)"
@@ -95,8 +95,7 @@
 								onClick="@command('openBandbox', id=forEachStatus.index)" width = "80%">
 								<bandpopup>
 									<vbox width="40%">
-										<button label="Add Location"
-											onClick="@command('addLocation',loc = each)"/>
+									
 										<grid
 											model="@load(each.filteredLocations)"
 											emptyMessage="No location is available. Please add your location."
@@ -146,7 +145,7 @@
 							</bandbox>
 							<button id = "btnadd_${forEachStatus.index}" image="/images/plus.png"
 											onClick="@command('addLocation',loc = each)" width = "30px"/>
-</div>
+                           </div>
 							<textbox value="@bind(each.year)"
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"

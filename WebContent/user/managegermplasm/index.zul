@@ -120,7 +120,7 @@
                     </groupbox>
                     <groupbox id="gbKnownGermplasm" mold="3d">
                         <caption label="@load(vm.totalKnownGermplasm)" />
-                        <listbox id="tblKnownGerm" sizedByContent="true" hflex="1" model="@load(vm.lstKnownGermplasm) @template((each.known) ? 'display' : 'editable')" sclass="gridMaxBodyHeight550" rows="10" selectedItem="@bind(vm.selectedGermplasm)">
+                        <listbox id="tblKnownGerm" sizedByContent="true" hflex="1" model="@load(vm.lstKnownGermplasm) @template((each.known) ? 'display' : 'editable')" sclass="gridMaxBodyHeight550" rows="10" selectedItem="@bind(vm.selectedListboxGermplasm)">
                             <listhead menupopup="auto" columnsgroup="false">
                                 <listheader label="GName" sort="auto(germplasmname)" style="color:red" hflex="1" width="19%" />
                                 <listheader label="GermplasmType" style="color:red" hflex="1" width="19%" />
@@ -152,7 +152,7 @@
                                 </listitem>
                             </template>
                             <template name="editable">
-                                <listitem vflex="1" hflex="1" onClick="@command('selectGermplasm', germplasm = each)">
+                                <listitem vflex="1" hflex="1" >
                                     <listcell>
                                         <label value="@bind(each.germplasmname)" />
                                     </listcell>
@@ -165,13 +165,13 @@
                                     </listcell>
                                     <listcell>
                                         <label value="@bind(each.breeder)" width="85%" />
-                                        <textbox value="@bind(each.newBreeder)" width="15%" onClick="@command('selectGermplasm', germplasm = each)" />
+                                        <textbox value="@bind(each.newBreeder)" width="15%" onClick="@command('selectGermplasm', germplasm = each,target=self)" />
                                     </listcell>
                                     <listcell>
-                                        <textbox value="@bind(each.femaleparent)" constraint="no empty" width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
+                                        <textbox value="@bind(each.femaleparent)" constraint="no empty" width="99%" onClick="@command('selectGermplasm', germplasm = each,target=self)" />
                                     </listcell>
                                     <listcell>
-                                        <textbox value="@bind(each.maleparent)" constraint="no empty" width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
+                                        <textbox value="@bind(each.maleparent)" constraint="no empty" width="99%" onClick="@command('selectGermplasm', germplasm = each,target=self)" />
                                     </listcell>
                                     <listcell>
                                         <div>

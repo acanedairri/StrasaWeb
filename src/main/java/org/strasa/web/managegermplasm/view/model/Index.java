@@ -50,6 +50,7 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Textbox;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
@@ -89,14 +90,27 @@ public class Index {
 	HashMap<String, GermplasmDeepInfoModel> lstStudyGermplasm = new HashMap<String, GermplasmDeepInfoModel>();
 
 	private GermplasmDeepInfoModel selectedGermplasm;
+	private GermplasmDeepInfoModel selectedListboxGermplasm;
+
+	public GermplasmDeepInfoModel getSelectedListboxGermplasm() {
+		return selectedListboxGermplasm;
+	}
+
+	public void setSelectedListboxGermplasm(GermplasmDeepInfoModel selectedListboxGermplasm) {
+		this.selectedListboxGermplasm = selectedListboxGermplasm;
+		selectedGermplasm = selectedListboxGermplasm;
+		System.out.println("Update called");
+		BindUtils.postNotifyChange(null, null, this.selectedGermplasm, "*");
+	}
 
 	public GermplasmDeepInfoModel getSelectedGermplasm() {
-
+		// System.out.println("selection happenned");
 		return selectedGermplasm;
 	}
 
 	public void setSelectedGermplasm(GermplasmDeepInfoModel selectedGermplasm) {
 		this.selectedGermplasm = selectedGermplasm;
+
 	}
 
 	public ArrayList<GermplasmDeepInfoModel> arrGermplasmDeepInfo = new ArrayList<GermplasmDeepInfoModel>();
@@ -193,30 +207,66 @@ public class Index {
 	}
 
 	@Command
-	public void selectGermplasm(@BindingParam("germplasm") GermplasmDeepInfoModel data) {
+	public void selectGermplasm(@BindingParam("germplasm") GermplasmDeepInfoModel data, @BindingParam("target") Component view) {
 
-		if (selectedGermplasm != null)
-			if (data.getGermplasmname().equals(selectedGermplasm.getGermplasmname())) {
+		System.out.println("CALLED");
+
+		if (lstStudyGermplasm.containsKey(data.getGermplasmname())) {
+
+			if (tblStudyGerm.getSelectedIndex() == selectedGermplasm.rowIndex)
+				return;
+			tblStudyGerm.setSelectedIndex(data.rowIndex);
+
+		} else {
+
+			if (tblKnownGerm.getSelectedIndex() == data.rowIndex)
+				return;
+			tblKnownGerm.setSelectedIndex(selectedGermplasm.rowIndex);
+		}
+
+		((Textbox) view).setFocus(true);
+
+	}
+
+	public boolean isGermplasmCurrentlyExist(GermplasmDeepInfoModel data) {
+		return lstKnownGermplasm.containsKey(data.getGermplasmname());
+	}
+
+	@Command
+	public void selectGermplasmProcess(@BindingParam("germplasm") GermplasmDeepInfoModel data) {
+
+		if (selectedListboxGermplasm != null)
+			if (data.getGermplasmname().equals(selectedListboxGermplasm.getGermplasmname())) {
 				return;
 			}
 
 		// selectedGermplasm.setStyleBG("background-color: #FFF");
 		// data.setStyleBG("background-color: #BEC7F7 ");
-		selectedGermplasm = data;
-		BindUtils.postNotifyChange(null, null, "*", "selectedGermplasm");
-		if (lstStudyGermplasm.containsKey(data.getGermplasmname())) {
+		System.out.println("CALLED PROCES");
+		// setSelectedGermplasm(data);
+		selectedListboxGermplasm = data;
+		// if
+		// (lstStudyGermplasm.containsKey(selectedGermplasm.getGermplasmname()))
+		// {
+		//
+		// if (tblStudyGerm.getSelectedIndex() == selectedGermplasm.rowIndex)
+		// return;
+		// tblStudyGerm.setSelectedIndex(selectedGermplasm.rowIndex);
+		//
+		// } else {
+		//
+		// if (tblKnownGerm.getSelectedIndex() == selectedGermplasm.rowIndex)
+		// return;
+		// tblKnownGerm.setSelectedIndex(selectedGermplasm.rowIndex);
+		// }
+		// selectedGermplasm = data;
+		// System.out.println("Update called");
+		// BindUtils.postNotifyChange(null, null, this.selectedGermplasm, "*");
 
-			tblStudyGerm.getItemAtIndex(data.rowIndex).setSelected(true);
-			;
-		} else {
-
-			tblStudyGerm.getItemAtIndex(data.rowIndex).setSelected(true);
-
-		}
 	}
 
 	@Command
-	public void saveGermplasm(@BindingParam("germplasm") GermplasmDeepInfoModel data) {
+	public void saveGermplasm(@BindingParam("germplasm") GermplasmDeepInfoModel data, @BindingParam("target") Component target) {
 
 		if (validateGermplasm(data)) {
 
@@ -447,7 +497,7 @@ public class Index {
 		}
 		if (validate != null) {
 			Messagebox.show(validate, "OK", Messagebox.OK, Messagebox.EXCLAMATION);
-			selectGermplasm(data);
+			selectGermplasmProcess(data);
 			return false;
 		}
 		return true;
@@ -458,7 +508,7 @@ public class Index {
 		for (GermplasmDeepInfoModel data : lstStudyGermplasm.values()) {
 
 			if (!validateGermplasm(data)) {
-				selectGermplasm(data);
+				selectGermplasmProcess(data);
 				return false;
 			}
 

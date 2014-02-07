@@ -116,7 +116,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("parent", view);
-		params.put("locname", model.getSitelocation());
+		params.put("locname", model.selectedLocation.getLocationname());
 
 		Window popup = (Window) Executions.createComponents(AddLocation.ZUL_PATH, view, params);
 
@@ -352,7 +352,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 				if (!StringUtils.isNullOrEmpty(site.validateAll())) {
 
 					if (site.validateColumnOnly().startsWith("Error: Location in ")) {
-						Messagebox.show(site.validateAll() + " Do you want to add a new location?", "Upload Error", Messagebox.OK | Messagebox.CANCEL, Messagebox.ERROR, new org.zkoss.zk.ui.event.EventListener() {
+						Messagebox.show(site.validateAll() + " Do you want to add a new location?", "Upload Error", Messagebox.OK | Messagebox.CANCEL, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
 							public void onEvent(Event evt) throws InterruptedException {
 								if (evt.getName().equals("onOK")) {
 									Events.sendEvent("onClick", getAddButton(x, 1), getAddButton(x, 1));
@@ -360,7 +360,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 							}
 						});
 					} else
-						Messagebox.show(site.validateAll(), "Upload Error", Messagebox.OK, Messagebox.ERROR);
+						Messagebox.show(site.validateAll(), "Upload Error", Messagebox.OK, Messagebox.EXCLAMATION);
 
 					return false;
 				}
@@ -368,7 +368,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 				if (!StringUtils.isNullOrEmpty(site.validateColumnOnly())) {
 
 					if (site.validateColumnOnly().startsWith("Error: Location in ")) {
-						Messagebox.show(site.validateColumnOnly() + " Do you want to add a new location?", "Upload Error", Messagebox.OK | Messagebox.CANCEL, Messagebox.ERROR, new org.zkoss.zk.ui.event.EventListener() {
+						Messagebox.show(site.validateColumnOnly() + " Do you want to add a new location?", "Upload Error", Messagebox.OK | Messagebox.CANCEL, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
 							public void onEvent(Event evt) throws InterruptedException {
 								if (evt.getName().equals("onOK")) {
 									Events.sendEvent("onClick", getAddButton(x, 1), getAddButton(x, 1));
@@ -376,36 +376,36 @@ public class StudySiteInfo extends ProcessTabViewModel {
 							}
 						});
 					} else
-						Messagebox.show(site.validateColumnOnly(), "Upload Error", Messagebox.OK, Messagebox.ERROR);
+						Messagebox.show(site.validateColumnOnly(), "Upload Error", Messagebox.OK, Messagebox.EXCLAMATION);
 
 					return false;
 				}
 				if (selectedSitePlantingType.getId() == -1) {
-					Messagebox.show("Planting type must not be empty!", "Upload Error", Messagebox.OK, Messagebox.ERROR);
+					Messagebox.show("Planting type must not be empty!", "Upload Error", Messagebox.OK, Messagebox.EXCLAMATION);
 				}
 				if (selectedAgroInfo.getHarvestdate() == null) {
-					Messagebox.show("Harvest date must not be empty!", "Upload Error", Messagebox.OK, Messagebox.ERROR);
+					Messagebox.show("Harvest date must not be empty!", "Upload Error", Messagebox.OK, Messagebox.EXCLAMATION);
 					return false;
 				}
 				if (selectedAgroInfo.getSowingdate() == null) {
-					Messagebox.show("Sowing date type must not be empty!", "Upload Error", Messagebox.OK, Messagebox.ERROR);
+					Messagebox.show("Sowing date type must not be empty!", "Upload Error", Messagebox.OK, Messagebox.EXCLAMATION);
 					return false;
 				}
 				if (StringUtils.isNullOrEmpty(selectedDesignInfo.getTreatmentstructure())) {
-					Messagebox.show("Treatment Structure must not be empty!", "Upload Error", Messagebox.OK, Messagebox.ERROR);
+					Messagebox.show("Treatment Structure must not be empty!", "Upload Error", Messagebox.OK, Messagebox.EXCLAMATION);
 					return false;
 				}
 				if (StringUtils.isNullOrEmpty(selectedDesignInfo.getDesignstructure())) {
-					Messagebox.show("Design Structure must not be empty!", "Upload Error", Messagebox.OK, Messagebox.ERROR);
+					Messagebox.show("Design Structure must not be empty!", "Upload Error", Messagebox.OK, Messagebox.EXCLAMATION);
 					return false;
 				}
 				if (StringUtils.isNullOrEmpty(selectedDesignInfo.getPlotsize())) {
-					Messagebox.show("Plot size must not be empty!", "Upload Error", Messagebox.OK, Messagebox.ERROR);
+					Messagebox.show("Plot size must not be empty!", "Upload Error", Messagebox.OK, Messagebox.EXCLAMATION);
 					return false;
 				}
 
 				if (selectedAgroInfo.getSowingdate().compareTo(selectedAgroInfo.getHarvestdate()) > 0) {
-					Messagebox.show("Havest date must be greater than Transplanting/Sowing date!", "Upload Error", Messagebox.OK, Messagebox.ERROR);
+					Messagebox.show("Havest date must be greater than Transplanting/Sowing date!", "Upload Error", Messagebox.OK, Messagebox.EXCLAMATION);
 					return false;
 				}
 
@@ -496,6 +496,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		toggleBandBox(true, lstId, 1);
 
 		BindUtils.postNotifyChange(null, null, this.sites.get(lstId), "*");
+		sites.get(lstId).selectedLocation.setId(null);
 	}
 
 	@Command

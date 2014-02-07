@@ -11,7 +11,7 @@
     <style src="http://stanlemon.net/stylesheet/jquery.jgrowl.css" />
 	
 	<div width="100%" apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.managegermplasm.view.model.Index')" onClientInfo="onClientInfo(event)">
+		viewModel="@id('vm') @init('org.strasa.web.managegermplasm.view.model.Index')">
 
 
 		<div align="left">
@@ -20,12 +20,7 @@
 				onUpload="@command('uploadGenotypeData')" />
 		</div>
 
-<zscript>
-			void onClientInfo(ClientInfoEvent evt) {
-				int totalHeight = 0.8 * evt.getScreenHeight();
-				colLayout1.setStyle("max-height:" + totalHeight + "px;");
-			 }
-		</zscript>
+
 		<columnlayout id="colLayout1" >
 			<columnchildren vflex="1" width="70%">
 				<vlayout vflex="1">
