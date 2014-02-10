@@ -9,18 +9,29 @@ import org.strasa.middleware.model.Country;
 import org.strasa.middleware.model.Location;
 import org.strasa.web.common.api.FormValidator;
 import org.strasa.web.common.api.ProcessTabViewModel;
+import org.strasa.web.utilities.ValidationUtilities;
+import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.ContextParam;
+import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zhtml.Messagebox;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.select.Selectors;
+import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Grid;
 
 import com.mysql.jdbc.StringUtils;
 
 public class StudyLocationInfo extends ProcessTabViewModel {
 
+	@Wire("#step4")
+	Grid mainGrid;
+	
 	private FormValidator formValidator = new FormValidator();
 	private boolean noLocation;
 	private List<Location> lstUnknownLocations = new ArrayList<Location>();
@@ -72,6 +83,8 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 	}
 
 	public boolean validateTab() {
+		
+		ValidationUtilities.check(mainGrid);
 		for (Location loc : lstLocations) {
 			if (StringUtils.isNullOrEmpty(loc.getLocationname())) {
 				Messagebox.show("Location must not be empty", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
@@ -125,7 +138,11 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 		lstLocations.addAll(studyLocationManager.getLocationsFromStudySite(studyID, this.dataset.getId()));
 
 	}
+	@AfterCompose
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 
+		Selectors.wireComponents(view, this, false);
+	}
 	public double getSampleID() {
 		return sampleID;
 	}

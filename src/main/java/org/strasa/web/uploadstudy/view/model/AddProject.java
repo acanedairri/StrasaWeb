@@ -6,6 +6,7 @@ import java.util.Map;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.model.Project;
 import org.strasa.web.common.api.FormValidator;
+import org.strasa.web.utilities.ValidationUtilities;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.annotation.Command;
@@ -78,10 +79,8 @@ public class AddProject {
 	public void add(){
 		
 		ProjectManagerImpl projectMan = new ProjectManagerImpl();
-		if(projectMan.isProjectExist(projectModel.getName(), userID,programID)){
-			Messagebox.show("Project name already exist! Choose a different name.", "Validation Error", Messagebox.OK, Messagebox.EXCLAMATION);
-			return;
-		}
+		
+		ValidationUtilities.check(mainView);
 		
 		
 		try {

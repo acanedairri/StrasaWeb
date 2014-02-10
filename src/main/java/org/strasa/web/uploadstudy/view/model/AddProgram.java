@@ -6,6 +6,7 @@ import java.util.Map;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.model.Program;
 import org.strasa.web.common.api.FormValidator;
+import org.strasa.web.utilities.ValidationUtilities;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.annotation.Command;
@@ -41,6 +42,7 @@ public class AddProgram {
 	@Command("add")
 	public void add(){
 		ProgramManagerImpl programMan = new ProgramManagerImpl();
+		ValidationUtilities.check(mainView);
 		if(programMan.isProgramExist(programModel.getName(), userID)){
 			Messagebox.show("Program already exist! Choose a different name.", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
 			return;

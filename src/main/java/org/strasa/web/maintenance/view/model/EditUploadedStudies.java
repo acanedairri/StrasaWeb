@@ -145,6 +145,7 @@ public class EditUploadedStudies {
 		btnBack.setVisible(true);
 		btnUploadNewStudy.setVisible(true);
 		divUpdateStudy.setVisible(true);
+		System.out.println("studyids: " + studyid);
 		Map arg = new HashMap();
 		arg.put("studyID", studyid);
 		List<Component> list = Selectors.find(view, "#divUpdateStudyContainer");

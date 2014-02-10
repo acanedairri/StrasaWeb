@@ -185,8 +185,12 @@ public class StudyGermplasmManagerImpl {
 		try {
 
 			if (!collection.isEmpty()) {
-				this.removeGermplasmByStudyId(studyID, dataset);
+				StudyGermplasmExample ex = new StudyGermplasmExample();
+			
+					ex.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset);
+					mapper.deleteByExample(ex);
 			}
+		
 
 			System.out.println("Inserting StudyGermplasms");
 			for (GermplasmDeepInfoModel record : collection) {

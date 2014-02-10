@@ -14,7 +14,7 @@
 				</button> -->
 
 				<button label="Upload New Data" sclass="btn-blue"  src="/images/upload16.png"
-					onClick="@global-command('showIndex', index=vm.studyID)" />
+					onClick="@global-command('editStudy', studyID=vm.studyID)" />
 			</hlayout>
 		</hlayout>
 	</div>
