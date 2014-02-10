@@ -1,31 +1,44 @@
 package org.strasa.web.extensiondata.view.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.strasa.middleware.manager.ExtensionDataManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
+import org.strasa.middleware.model.ExtensionData;
+import org.strasa.middleware.model.Program;
+import org.strasa.middleware.model.Project;
+import org.strasa.web.extensiondata.view.model.EditExtensionData.RowStatus;
 import org.zkoss.bind.annotation.BindingParam;
-import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zul.Listcell;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.Toolbarbutton;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zul.Include;
+import org.zkoss.zul.Tab;
+import org.zkoss.zul.Tabbox;
+import org.zkoss.zul.Tabpanel;
+import org.zkoss.zul.Tabpanels;
+import org.zkoss.zul.Tabs;
 
-public class ExtensionDataBrowse {
+public class ExtensionDataDetail {
+
+	private ProgramManagerImpl programMan;
+	private ProjectManagerImpl projectMan;
 	private ExtensionDataManagerImpl mgr;
-	
-	private List<String> stringy;
+
 	private List<ExtensionDataSummaryModel> summaryByCountry;
 	private List<ExtensionDataSummaryModel> summaryByYear;
 	private List<ExtensionDataListModel> extensionDataList;
 	private List<SummaryModel> summaryArea;
+	private List<RowStatus> rowList = new ArrayList<RowStatus>();
 	
 	private List<SummaryModel> areaSummaryGermplasmByYearandCountryExtension;
 	private List<SummaryModel> areaSummaryGermplasmByYear;
@@ -34,34 +47,85 @@ public class ExtensionDataBrowse {
 	private List<SummaryModel> noOfVarietyReleaseByCountryRelease;
 	private List<SummaryModel> noOfVarietyReleaseByYear;
 	
+
+	private HashMap<Integer,String> programKeyList = new HashMap<Integer,String>();
+	private HashMap<Integer,String> projectKeyList = new HashMap<Integer,String>();
 	
+	private Tab detailTab;
 	
+	public Tab getDetailTab() {
+		return detailTab;
+	}
+
+	public void setDetailTab(Tab detailTab) {
+		this.detailTab = detailTab;
+	}
+
 	@Init
-	public void setData(){
-		this.stringy = new ArrayList<String>();
-		this.stringy.add("1");
-		this.stringy.add("2");
-		this.stringy.add("3");
+	public void AfterCompose(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("detailTab") Tab detailTab){
+		setDetailTab(detailTab);
+		mgr= new ExtensionDataManagerImpl();
+		programMan = new ProgramManagerImpl();
+		projectMan = new ProjectManagerImpl();
+		
 //		this.summaryByCountry=mgr.getCountOfGermplasmByCountrRealease();
 //		this.summaryByYear=mgr.getCountOfGermplasmByYear();
 //		this.extensionDataList=mgr.getExtensionDataList();
 		
-		mgr= new ExtensionDataManagerImpl();
 		this.areaSummaryGermplasmByYearandCountryExtension=mgr.getAreaSummaryGermplasmByCountryExtension();
 		this.areaSummaryGermplasmByYear=mgr.getAreaSummaryGermplasmByYear();
 		this.areaSummaryGermplasmByCountryExtension=mgr.getAreaSummaryGermplasmByCountryExtension();
 		this.noOfVarietyReleaseByCountryAndYear=mgr.getNoOfVarietyReleaseByCountryAndYear();
 		this.noOfVarietyReleaseByCountryRelease=mgr.getNoOfVarietyReleaseByCountryRelease();
 		this.noOfVarietyReleaseByYear=mgr.getNoOfVarietyReleaseByYear();
-		
-//		for(SummaryModel sm : noOfVarietyReleaseByYear){
-//			System.out.println("next SM");
-//			for(String s: sm.germplasmNames){
-//				System.out.println(s);
-//			}
-//		}
 	}
 	
+	@NotifyChange("*")
+	@GlobalCommand
+	public void openExtensionDataDetail(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view,@BindingParam("function") String function, @BindingParam("model")Object each){
+		getDetailTab().setSelected(true);
+
+		programMan = new ProgramManagerImpl();
+		projectMan = new ProjectManagerImpl();
+		
+		if(function.equals("varietyByYear")){
+			SummaryModel areaSummaryGermplasmByYear = (SummaryModel) each;
+			System.out.println("ProgramName: "+areaSummaryGermplasmByYear.getProgramName());
+			System.out.println(" id:"+Integer.toString(areaSummaryGermplasmByYear.getProgramid()));
+			makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByCountryRelease(areaSummaryGermplasmByYear.getYearrelease(), areaSummaryGermplasmByYear.getProgramid()));
+		}
+		
+		
+	}
+
+	private void makeRowStatus(List<ExtensionData> list) {
+		// TODO Auto-generated method stub
+		projectKeyList.clear();
+		programKeyList.clear();
+		rowList.clear();
+		for (ExtensionData p: list){
+			Program prog = programMan.getProgramById(p.getProgramid());
+			programKeyList.put(prog.getId(),prog.getName());
+
+			Project proj = projectMan.getProjectById(p.getProjectid());
+			projectKeyList.put(proj.getId(),proj.getName());
+			
+			RowStatus ps = new RowStatus(p,false, prog, proj);
+			rowList.add(ps);
+		}
+	}
+	
+	public List<RowStatus> getRowList() {
+		return rowList;
+	}
+
+	public void setRowList(List<RowStatus> rowList) {
+		this.rowList = rowList;
+	}
+	
+
 	public List<SummaryModel> getAreaSummaryGermplasmByYearandCountryExtension() {
 		return areaSummaryGermplasmByYearandCountryExtension;
 	}
@@ -200,43 +264,57 @@ public class ExtensionDataBrowse {
 	public void setExtensionDataList(List<ExtensionDataListModel> extensionDataList) {
 		this.extensionDataList = extensionDataList;
 	}
+	public class RowStatus {
+		private  Program program;
+		private Project project;
+		private  ExtensionData value;
+		private boolean editingStatus;
 
-
-
-
-
-	public List<String> getStringy() {
-		return stringy;
-	}
-
-	public void setStringy(List<String> stringy) {
-		this.stringy = stringy;
-	}
-
-////	@NotifyChange("*")
-//	@Command
-//	public void addListCellItems(@ContextParam(ContextType.COMPONENT) Component component,
-//			@ContextParam(ContextType.VIEW) Component view,@BindingParam("function") String function,@BindingParam("count") Integer count,@BindingParam("cell") Listcell listcell){
-//		if(function.equals("varietyByYear")){
-//			Toolbarbutton tb = new Toolbarbutton();
-//			tb.setLabel("");
-//			listcell.appendChild(tb);
-////			for(int i=0;i<count;i++){
-////				Toolbarbutton toolbarButton =new Toolbarbutton();
-////				toolbarButton.setParent(listcell);
-////				toolbarButton.setLabel("toolbarbutton"+Integer.toString(i));
-////			}
-//		}
-//	}
-	
-	@NotifyChange("*")
-	@Command
-	public void show(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view,@BindingParam("function") String function,@BindingParam("summaryModel") SummaryModel summaryModel){
-		if(function.equals("varietyByYear")){
-//			mgr.getVarietyNamesOfVarietyReleaseByYear(summaryModel);
-			summaryModel.getGermplasmname();
-			System.out.println("");
+		public RowStatus(ExtensionData p, boolean editingStatus, Program program, Project project) {
+			this.setValue(p);
+			this.editingStatus = editingStatus;
+			this.setProgram(program);
+			this.setProject(project);
 		}
+
+
+		public boolean getEditingStatus() {
+			return editingStatus;
+		}
+
+		public void setEditingStatus(boolean editingStatus) {
+			this.editingStatus = editingStatus;
+		}
+
+
+		public ExtensionData getValue() {
+			return value;
+		}
+
+
+		public void setValue(ExtensionData p) {
+			this.value = p;
+		}
+
+
+		public Program getProgram() {
+			return program;
+		}
+
+
+		public void setProgram(Program program) {
+			this.program = program;
+		}
+
+
+		public Project getProject() {
+			return project;
+		}
+
+
+		public void setProject(Project project) {
+			this.project = project;
+		}
+
 	}
 }

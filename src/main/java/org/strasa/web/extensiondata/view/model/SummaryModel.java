@@ -1,9 +1,20 @@
 package org.strasa.web.extensiondata.view.model;
 
+import java.util.List;
+
 public class SummaryModel extends ExtensionDataListModel {
 	
 	double sumArea;
 	int countVariety;
+	List<String> germplasmVarietyNames;
+
+	public List<String> getGermplasmVarietyNames() {
+		return germplasmVarietyNames;
+	}
+
+	public void setGermplasmVarietyNames(List<String> germplasmVarietyNames) {
+		this.germplasmVarietyNames = germplasmVarietyNames;
+	}
 
 	public double getSumArea() {
 		return sumArea;
@@ -20,8 +31,6 @@ public class SummaryModel extends ExtensionDataListModel {
 	public void setCountVariety(int countVariety) {
 		this.countVariety = countVariety;
 	}
-	
-	
 	
 	
 

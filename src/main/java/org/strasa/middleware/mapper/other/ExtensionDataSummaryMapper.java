@@ -60,7 +60,10 @@ public interface ExtensionDataSummaryMapper {
 	
 	//No of Variety by Year
 	//select programid,year,count(germplasmname) as noOfVariety from extensiondata group by programid,year order by programid,year
-	@Select("select t2.name as programName,t1.yearrelease,count(t1.germplasmname) as countVariety from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid,yearrelease order by programid,yearrelease")
+	@Select("select t2.name as programName, t1.programid as programid,t1.yearrelease,count(t1.germplasmname) as countVariety from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid,yearrelease order by programid,yearrelease")
 	List<SummaryModel> selectNoOfVarietyReleaseByYear();
 	
+	//Names of Variety by Year
+    @Select("select distinct germplasmname from extensiondata where yearrelease=#{year} and programid=#{programid}")
+    List<String> selectVarietyNamesOfVarietyReleaseByYear(@Param("year")String year,@Param("programid")Integer programid);
 }
