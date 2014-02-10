@@ -82,37 +82,23 @@ public class ExtensionDataDetail {
 	}
 	
 	@NotifyChange("*")
-	@GlobalCommand
+	@GlobalCommand("openExtensionDataDetail")
 	public void openExtensionDataDetail(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view,@BindingParam("function") String function, @BindingParam("model")Object each){
+			@ContextParam(ContextType.VIEW) Component view,@BindingParam("function") String function, @BindingParam("summaryModel")SummaryModel each, @BindingParam("germplasmName")String germplasmName){
+		
 		getDetailTab().setSelected(true);
-
 		programMan = new ProgramManagerImpl();
-		projectMan = new ProjectManagerImpl();
 		
-		if(function.equals("varietyByYear")){
-			SummaryModel areaSummaryGermplasmByYear = (SummaryModel) each;
-			System.out.println("ProgramName: "+areaSummaryGermplasmByYear.getProgramName());
-			System.out.println(" id:"+Integer.toString(areaSummaryGermplasmByYear.getProgramid()));
-			makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByCountryRelease(areaSummaryGermplasmByYear.getYearrelease(), areaSummaryGermplasmByYear.getProgramid()));
-		}
-		
-		
+			makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByCountryRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
 	}
 
 	private void makeRowStatus(List<ExtensionData> list) {
 		// TODO Auto-generated method stub
-		projectKeyList.clear();
-		programKeyList.clear();
 		rowList.clear();
 		for (ExtensionData p: list){
 			Program prog = programMan.getProgramById(p.getProgramid());
-			programKeyList.put(prog.getId(),prog.getName());
-
-			Project proj = projectMan.getProjectById(p.getProjectid());
-			projectKeyList.put(proj.getId(),proj.getName());
 			
-			RowStatus ps = new RowStatus(p,false, prog, proj);
+			RowStatus ps = new RowStatus(p, prog);
 			rowList.add(ps);
 		}
 	}
@@ -275,6 +261,12 @@ public class ExtensionDataDetail {
 			this.editingStatus = editingStatus;
 			this.setProgram(program);
 			this.setProject(project);
+		}
+
+		public RowStatus(ExtensionData p, Program prog) {
+			// TODO Auto-generated constructor stub
+			this.setValue(p);
+			this.setProgram(prog);
 		}
 
 

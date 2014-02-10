@@ -19,7 +19,4 @@ public class ExtensionDataListModel extends ExtensionData {
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
-	
-	
-
 }

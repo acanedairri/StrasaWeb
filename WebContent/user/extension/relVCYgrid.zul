@@ -58,8 +58,8 @@
 					<label value="@load(each.yearrelease)" />
 					<label value="@load(each.countVariety)" />
 					<div children="@load(each.germplasmVarietyNames)">
-						<template name="children">
-							<toolbarbutton label="@load(each)" />
+						<template name="children" var="item">
+							<toolbarbutton label="@load(item)" onClick="@global-command('openExtensionDataDetail', function='varietyByCountryAndYear', summaryModel=each, germplasmName=item)" />
 						</template>
 					</div>
 				</row>

@@ -54,13 +54,13 @@ public interface ExtensionDataSummaryMapper {
 
 	//No of Variety by CountryRelease
 	//select programid,countryrelease,count(germplasmname) as noOfVariety from extensiondata group by programid order by programid,germplasmname
-	@Select("select t2.name as programName, t1.programid as programid, t1.countryrelease,count(t1.germplasmname) as countVariety from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid order by programid,germplasmname")
+	@Select("select t2.name as programName, t1.programid as programid, t1.countryrelease as countryrelease, t1.yearrelease as yearrelease, count(t1.germplasmname) as countVariety from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid order by programid,germplasmname")
 	List<SummaryModel> selectNoOfVarietyReleaseByCountryRelease();
 
 
 	//No of Variety by Year
 	//select programid,year,count(germplasmname) as noOfVariety from extensiondata group by programid,year order by programid,year
-	@Select("select t2.name as programName, t1.programid as programid,t1.yearrelease as yearrelease, count(t1.germplasmname) as countVariety from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid,yearrelease order by programid,yearrelease")
+	@Select("select t2.name as programName, t1.programid as programid, t1.countryrelease as countryrelease, t1.yearrelease as yearrelease, count(t1.germplasmname) as countVariety from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid,yearrelease order by programid,yearrelease")
 	List<SummaryModel> selectNoOfVarietyReleaseByYear();
 
 	//Names of Variety by Year
@@ -71,6 +71,11 @@ public interface ExtensionDataSummaryMapper {
 	@Select("select distinct germplasmname from extensiondata where countryrelease=#{countryrelease} and programid=#{programid}")
 	List<String> selectVarietyNamesOfVarietyReleaseByCountry(@Param("countryrelease")String countryrelease, @Param("programid") Integer programid);
 
+	//Names of Variety by CountryRelease and Year
 	@Select("select distinct germplasmname from extensiondata where countryrelease=#{countryrelease} and yearrelease=#{year} and programid=#{programid}")
 	List<String> selectVarietyNamesOfVarietyReleaseByCountryAndYear(@Param("countryrelease")String countryrelease,@Param("year")String year, @Param("programid") Integer programid);
+
+	//ExtensionData of Germplasm Variety by Year/Country
+	@Select("select distinct germplasmname from extensiondata where countryrelease=#{countryrelease} and yearrelease=#{year} and germplasmname=#{germplasmname} and programid=#{programid} ")
+	List<SummaryModel> selectExtensionDataDetailOfVariety(@Param("year")String year, @Param("countryrelease")String countryrelease, @Param("programid")Integer programid,@Param("germplasmname")String germplasmname);
 }

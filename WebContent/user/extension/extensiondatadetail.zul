@@ -1,12 +1,11 @@
 <zk>
-	<window apply="org.zkoss.bind.BindComposer" width="500px"
+	<window apply="org.zkoss.bind.BindComposer" width="95%"
 		style="padding:10px 0px 15px 20px"
 		viewModel="@id('vm') @init('org.strasa.web.extensiondata.view.model.ExtensionDataDetail')">
 		<grid 
-			model="@load(vm.rowList)" sizedByContent="true" width="95%" emptyMessage="No Record Found">
+			model="@load(vm.rowList)" sizedByContent="true" emptyMessage="No Record Found">
 			<columns width="200px">
-				<column label="Program" hflex="1" />
-				<column label="Project" />
+				<column label="Program" width="125px" hflex="1" />
 				<column label="Germplasm Name" />
 				<column label="Year Extension" width="100px" />
 				<column label="Location" width="100px" />
@@ -16,30 +15,19 @@
 				<column label="Year release" width="100px" />
 				<column label="Country release" width="125px" />
 				<column label="Seed Availability" width="125px" />
-				<column label="Action" width="100px" />
 			</columns>
-			<template name="noneditable">
+			<template name="model">
 				<row>
 					<label value="@load(each.program.name)" />
-					<label value="@load(each.project.name)" />
 					<label value="@load(each.value.germplasmname)" />
 					<label value="@load(each.value.yearextension)" />
-					<label value="@load(each.value.location)" />
+					<label value="@load(each.value.locationextension)" />
 					<label value="@load(each.value.countryextension)" />
 					<label value="@load(each.value.area)" />
 					<label value="@load(each.value.datasource)" />
 					<label value="@load(each.value.yearrelease)" />
 					<label value="@load(each.value.countryrelease)" />
 					<label value="@load(each.value.seedavailability)" />
-					<cell>
-						<toolbarbutton src="/images/edit16.png"
-							onClick="@command('changeEditableStatus', RowStatus=each)"
-							orient="vertical" tooltiptext="Edit Extension data" />
-						<space />
-						<toolbarbutton src="/images/Delete16.png"
-							onClick="@command('delete', id=each.value.id)" orient="vertical"
-							tooltiptext="Delete Extension data" />
-					</cell>
 				</row>
 			</template>
 		</grid>

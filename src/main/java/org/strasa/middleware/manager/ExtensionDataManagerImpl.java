@@ -263,15 +263,15 @@ public class ExtensionDataManagerImpl {
 	}
 
 	public List<ExtensionData> getExtensionDataByNoOfVarietyReleaseByCountryRelease(
-			String year, Integer programid) {
+			String year, String country, Integer programid, String germplasmName) {
 		// TODO Auto-generated method stub
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
-		ExtensionDataExample example = new ExtensionDataExample();
-		example.createCriteria().andProgramidEqualTo(programid).andYearreleaseEqualTo(year);
 		try{
-			List<ExtensionData> extensionData = mapper.selectByExample(example);
-			return extensionData;
+			ExtensionDataExample example = new ExtensionDataExample();
+			example.createCriteria().andProgramidEqualTo(programid).andYearreleaseEqualTo(year).andGermplasmnameEqualTo(germplasmName).andCountryreleaseEqualTo(country);
+			List<ExtensionData> toreturn = mapper.selectByExample(example);
+			return toreturn;
 
 		}finally{
 			session.close();
