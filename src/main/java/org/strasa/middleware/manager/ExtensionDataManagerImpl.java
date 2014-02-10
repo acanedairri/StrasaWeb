@@ -269,7 +269,39 @@ public class ExtensionDataManagerImpl {
 		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
 		try{
 			ExtensionDataExample example = new ExtensionDataExample();
-			example.createCriteria().andProgramidEqualTo(programid).andYearreleaseEqualTo(year).andGermplasmnameEqualTo(germplasmName).andCountryreleaseEqualTo(country);
+			example.createCriteria().andProgramidEqualTo(programid).andGermplasmnameEqualTo(germplasmName).andCountryreleaseEqualTo(country); //search by country only
+			List<ExtensionData> toreturn = mapper.selectByExample(example);
+			return toreturn;
+
+		}finally{
+			session.close();
+		}
+	}
+	
+	public List<ExtensionData> getExtensionDataByNoOfVarietyReleaseByYearRelease(
+			String year, String country, Integer programid, String germplasmName) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
+		try{
+			ExtensionDataExample example = new ExtensionDataExample();
+			example.createCriteria().andProgramidEqualTo(programid).andGermplasmnameEqualTo(germplasmName).andYearreleaseEqualTo(year); //search by year only
+			List<ExtensionData> toreturn = mapper.selectByExample(example);
+			return toreturn;
+
+		}finally{
+			session.close();
+		}
+	}
+	
+	public List<ExtensionData> getExtensionDataByNoOfVarietyReleaseByYearAndCountryRelease(
+			String year, String country, Integer programid, String germplasmName) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
+		try{
+			ExtensionDataExample example = new ExtensionDataExample();
+			example.createCriteria().andProgramidEqualTo(programid).andGermplasmnameEqualTo(germplasmName).andCountryreleaseEqualTo(country).andYearreleaseEqualTo(year); 
 			List<ExtensionData> toreturn = mapper.selectByExample(example);
 			return toreturn;
 

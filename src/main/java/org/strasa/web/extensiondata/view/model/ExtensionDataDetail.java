@@ -89,7 +89,9 @@ public class ExtensionDataDetail {
 		getDetailTab().setSelected(true);
 		programMan = new ProgramManagerImpl();
 		
-			makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByCountryRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
+		if(function.equals("varietyByYear"))makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByYearRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
+		else if(function.equals("varietyByCountry"))makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByCountryRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
+		else makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByYearAndCountryRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
 	}
 
 	private void makeRowStatus(List<ExtensionData> list) {

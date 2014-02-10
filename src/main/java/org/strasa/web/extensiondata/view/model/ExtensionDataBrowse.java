@@ -38,10 +38,6 @@ public class ExtensionDataBrowse {
 	
 	@Init
 	public void setData(){
-		this.stringy = new ArrayList<String>();
-		this.stringy.add("1");
-		this.stringy.add("2");
-		this.stringy.add("3");
 //		this.summaryByCountry=mgr.getCountOfGermplasmByCountrRealease();
 //		this.summaryByYear=mgr.getCountOfGermplasmByYear();
 //		this.extensionDataList=mgr.getExtensionDataList();
