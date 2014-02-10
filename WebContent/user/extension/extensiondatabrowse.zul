@@ -1,145 +1,27 @@
 <zk>
-	<window apply="org.zkoss.bind.BindComposer" width="500px"
-		style="padding:10px 0px 15px 20px"
-		viewModel="@id('vm') @init('org.strasa.web.extensiondata.view.model.ExtensionDataBrowse')">
-		<groupbox mold="3d">
-			<caption label="Germplasm by Country Extension" />
-			<listbox
-				model="@load(vm.areaSummaryGermplasmByCountryExtension)"
-				sizedByContent="true">
-				<listhead>
-					<listheader label="Program Name" />
-					<listheader label="Country Extension" />
-					<listheader label="Germplasm" />
-					<listheader label="Total Area" />
-				</listhead>
-				<template name="model">
-					<listitem>
-						<listcell label="@load(each.programName)" />
-						<listcell label="@load(each.countryextension)" />
-						<listcell label="@load(each.germplasmname)" />
-						<listcell label="@load(each.sumArea)" />
-					</listitem>
 
-				</template>
-			</listbox>
-		</groupbox>
+	<style src="../css/main.css" />
 
 
-		<groupbox mold="3d">
-			<caption label="Germplasm by Year" />
-			<listbox model="@load(vm.areaSummaryGermplasmByYear)"
-				sizedByContent="true">
-				<listhead>
-					<listheader label="Program Name" />
-					<listheader label="Germplasm" />
-					<listheader label="Year" />
-					<listheader label="Total Area" />
-				</listhead>
-				<template name="model">
-					<listitem>
-						<listcell label="@load(each.programName)" />
-						<listcell label="@load(each.germplasmname)" />
-						<listcell label="@load(each.yearrelease)" />
-						<listcell label="@load(each.sumArea)" />
-					</listitem>
+	<div style="padding:10px 0px 15px 20px" align="left">
+		<label class="header-menu">Extension Data</label>
+	</div>
+	<window>
+		<include self="@define(content)" src="extension/extGCgrid.zul" />
+		<separator height="15px"></separator>
+		<include self="@define(content)" src="extension/extGYCgrid.zul" />
+		<separator height="15px"></separator>
+		<include self="@define(content)" src="extension/extGYgrid.zul" />
 
-				</template>
-			</listbox>
-		</groupbox>
+		<separator height="15px"></separator>
+		<include self="@define(content)" src="extension/relVCYgrid.zul" />
 
-		<groupbox mold="3d">
-			<caption label="Germplasm by Year by Country Extention" />
-			<listbox
-				model="@load(vm.areaSummaryGermplasmByYearandCountryExtension)"
-				sizedByContent="true">
-				<listhead>
-					<listheader label="Program Name" />
-					<listheader label="Germplasm" />
-					<listheader label="Country Extension" />
-					<listheader label="Total Area" hflex="1" />
-				</listhead>
-				<template name="model">
-					<listitem>
-						<listcell label="@load(each.programName)" />
-						<listcell label="@load(each.germplasmname)" />
-						<listcell label="@load(each.countryextension)" />
-						<listcell label="@load(each.sumArea)" />
-					</listitem>
+		<separator height="15px"></separator>
+		<include self="@define(content)" src="extension/relVCgrid.zul" />
 
-				</template>
-			</listbox>
-		</groupbox>
+		<separator height="15px"></separator>
+		<include self="@define(content)" src="extension/relVYgrid.zul" />
 
-		<!-- Release Summary -->
-
-		<groupbox mold="3d">
-			<caption label="Total Number of Variety Released by Year" />
-			<listbox model="@load(vm.noOfVarietyReleaseByYear)"
-				sizedByContent="true">
-				<listhead>
-					<listheader label="Program Name" />
-					<listheader label="Year" />
-					<listheader label="No of Variety" />
-					<listheader label="Variety Names" hflex="1" />
-				</listhead>
-				<template name="model">
-					<listitem>
-						<listcell label="@load(each.programName)" />
-						<listcell label="@load(each.yearrelease)" />
-						<listcell label="@load(each.countVariety)" />
-						<listcell>
-							<div children="@load(each.germplasmVarietyNames)">
-								<template name="children">
-									<toolbarbutton label="@load(each)" />
-								</template>
-							</div>
-						</listcell>
-					</listitem>
-				</template>
-			</listbox>
-		</groupbox>
-
-		<groupbox mold="3d">
-			<caption
-				label="Total Number of Variety Released by Country" />
-			<listbox
-				model="@load(vm.noOfVarietyReleaseByCountryRelease)"
-				sizedByContent="true">
-				<listhead>
-					<listheader label="Program Name" />
-					<listheader label="Country Release" />
-					<listheader label="No of Variety" hflex="1" />
-				</listhead>
-				<template name="model">
-					<listitem>
-						<listcell label="@load(each.programName)" />
-						<listcell label="@load(each.countryrelease)" />
-						<listcell label="@load(each.countVariety)" />
-					</listitem>
-
-				</template>
-			</listbox>
-		</groupbox>
-
-		<groupbox mold="3d">
-			<caption label="Total Number of Variety Released by Year" />
-			<listbox model="@load(vm.noOfVarietyReleaseByYear)"
-				sizedByContent="true">
-				<listhead>
-					<listheader label="Program Name" />
-					<listheader label="Year" />
-					<listheader label="No of Variety" hflex="1" />
-				</listhead>
-				<template name="model">
-					<listitem>
-						<listcell label="@load(each.programName)" />
-						<listcell label="@load(each.yearrelease)" />
-						<listcell label="@load(each.countVariety)" />
-					</listitem>
-				</template>
-			</listbox>
-		</groupbox>
 	</window>
 
 </zk>

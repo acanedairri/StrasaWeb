@@ -221,6 +221,9 @@ public class ExtensionDataManagerImpl {
 		List<SummaryModel> s= new ArrayList<SummaryModel>();
 		try{
 			List<SummaryModel> toreturn= mapper.selectNoOfVarietyReleaseByCountryAndYear();
+			for(SummaryModel sm: toreturn){
+				sm.setGermplasmVarietyNames(mapper.selectVarietyNamesOfVarietyReleaseByCountryAndYear(sm.getCountryrelease(),sm.getYearrelease(),  sm.getProgramid()));
+			}
 			return toreturn;
 
 		}finally{
@@ -234,6 +237,9 @@ public class ExtensionDataManagerImpl {
 		List<SummaryModel> s= new ArrayList<SummaryModel>();
 		try{
 			List<SummaryModel> toreturn= mapper.selectNoOfVarietyReleaseByCountryRelease();
+			for(SummaryModel sm: toreturn){
+				sm.setGermplasmVarietyNames(mapper.selectVarietyNamesOfVarietyReleaseByCountry(sm.getCountryrelease(), sm.getProgramid()));
+			}
 			return toreturn;
 
 		}finally{
@@ -248,9 +254,6 @@ public class ExtensionDataManagerImpl {
 			List<SummaryModel> toreturn = mapper.selectNoOfVarietyReleaseByYear();
 			for(SummaryModel sm: toreturn){
 				sm.setGermplasmVarietyNames(mapper.selectVarietyNamesOfVarietyReleaseByYear(sm.getYearrelease(), sm.getProgramid()));
-				for(String s: mapper.selectVarietyNamesOfVarietyReleaseByYear(sm.getYearrelease(), sm.getProgramid())){
-					System.out.println("programid="+sm.getProgramid()+"yearrelease"+sm.getYearrelease()+"germplasmm"+s);
-				}
 			}
 			return toreturn;
 
@@ -275,16 +278,4 @@ public class ExtensionDataManagerImpl {
 		}
 	}
 
-//	public List<String> getVarietyNamesOfVarietyReleaseByYear(SummaryModel summaryModel) {
-//		// TODO Auto-generated method stub
-//		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-//		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
-//		List<String> toreturn = new ArrayList<String>();
-//		try{
-//			return toreturn;
-//
-//		}finally{
-//			session.close();
-//		}
-//	}
 }
