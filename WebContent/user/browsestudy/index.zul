@@ -1,7 +1,5 @@
 <zk>
-
 	<style src="../css/main.css" />
-
 
 	<div style="padding:10px 0px 15px 20px" align="left">
 		<label class="header-menu">Browse Study</label>
@@ -40,11 +38,6 @@
 									<include
 										src="/user/browsestudy/summary.zul" progressing="true" />
 								</tabpanel>
-								<!-- 							<tabpanel> -->
-								<!-- 								<include resultTab="resultTab" -->
-								<!-- 									src="/user/browsestudy/searchresult.zul"  -->
-								<!-- 									progressing="true" mode="defer"/> -->
-								<!-- 							</tabpanel> -->
 							</tabpanels>
 						</tabbox>
 						<popup id="advancedSearch" width="400px">

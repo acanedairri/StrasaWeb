@@ -14,6 +14,7 @@ import org.strasa.middleware.mapper.other.ExtensionDataSummaryMapper;
 import org.strasa.middleware.mapper.other.StudySummaryMapper;
 import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.ExtensionData;
+import org.strasa.middleware.model.ExtensionDataExample;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.StudySite;
 import org.strasa.web.browsestudy.view.model.StudySearchFilterModel;
@@ -243,9 +244,14 @@ public class ExtensionDataManagerImpl {
 	public List<SummaryModel> getNoOfVarietyReleaseByYear(){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
-		List<SummaryModel> s= new ArrayList<SummaryModel>();
 		try{
-			List<SummaryModel> toreturn= mapper.selectNoOfVarietyReleaseByYear();
+			List<SummaryModel> toreturn = mapper.selectNoOfVarietyReleaseByYear();
+			for(SummaryModel sm: toreturn){
+				sm.setGermplasmVarietyNames(mapper.selectVarietyNamesOfVarietyReleaseByYear(sm.getYearrelease(), sm.getProgramid()));
+				for(String s: mapper.selectVarietyNamesOfVarietyReleaseByYear(sm.getYearrelease(), sm.getProgramid())){
+					System.out.println("programid="+sm.getProgramid()+"yearrelease"+sm.getYearrelease()+"germplasmm"+s);
+				}
+			}
 			return toreturn;
 
 		}finally{
@@ -253,4 +259,32 @@ public class ExtensionDataManagerImpl {
 		}
 	}
 
+	public List<ExtensionData> getExtensionDataByNoOfVarietyReleaseByCountryRelease(
+			String year, Integer programid) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
+		ExtensionDataExample example = new ExtensionDataExample();
+		example.createCriteria().andProgramidEqualTo(programid).andYearreleaseEqualTo(year);
+		try{
+			List<ExtensionData> extensionData = mapper.selectByExample(example);
+			return extensionData;
+
+		}finally{
+			session.close();
+		}
+	}
+
+//	public List<String> getVarietyNamesOfVarietyReleaseByYear(SummaryModel summaryModel) {
+//		// TODO Auto-generated method stub
+//		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+//		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
+//		List<String> toreturn = new ArrayList<String>();
+//		try{
+//			return toreturn;
+//
+//		}finally{
+//			session.close();
+//		}
+//	}
 }
