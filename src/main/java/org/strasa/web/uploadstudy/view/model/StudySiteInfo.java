@@ -351,7 +351,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			if (!applyToAll) {
 				if (!StringUtils.isNullOrEmpty(site.validateAll())) {
 
-					if (site.validateColumnOnly().startsWith("Error: Location in ")) {
+					if (site.validateAll().startsWith("Error: Location in ")) {
 						Messagebox.show(site.validateAll() + " Do you want to add a new location?", "Upload Error", Messagebox.OK | Messagebox.CANCEL, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
 							public void onEvent(Event evt) throws InterruptedException {
 								if (evt.getName().equals("onOK")) {
@@ -617,7 +617,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 			}
 			if (this.isDataReUploaded) {
-				previousSites.addAll(studySiteMan.getStudySiteByStudyId(this.getStudyID(), this.dataset.getId()));
+				previousSites.addAll(studySiteMan.getStudySiteByStudyId(this.getStudyID(), null));
 				System.out.println("Previous Sites");
 
 				for (StudySiteInfoModel site : previousSites) {

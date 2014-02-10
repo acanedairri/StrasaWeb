@@ -50,7 +50,6 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Groupbox;
-import org.zkoss.zul.Row;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
@@ -84,6 +83,9 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		if (lstStudyGermplasm.isEmpty()) {
 			gbUnknownGermplasm.setVisible(false);
 			view.getFellow("uploadGenotypeData").setVisible(false);
+		}
+		if (lstKnownGermplasm.isEmpty()) {
+			gbKnownGermplasm.setVisible(false);
 		}
 	}
 
@@ -443,12 +445,15 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		int studyGerm = 0;
 		for (GermplasmDeepInfoModel data : lstKnownGermplasm.values()) {
 			String validate = data.validate();
-			((Row) tblKnownGerm.getRows().getChildren().get(studyGerm)).setStyle("background-color: #FFF");
+			// ((Row)
+			// tblKnownGerm.getRows().getChildren().get(studyGerm)).setStyle("background-color: #FFF");
 			if (validate != null) {
 				Messagebox.show(validate, "OK", Messagebox.OK, Messagebox.EXCLAMATION);
 
-				((Row) tblKnownGerm.getRows().getChildren().get(studyGerm)).setStyle("background-color: #ff6666");
-				((Row) tblKnownGerm.getRows().getChildren().get(studyGerm)).setFocus(true);
+				// ((Row)
+				// tblKnownGerm.getRows().getChildren().get(studyGerm)).setStyle("background-color: #ff6666");
+				// ((Row)
+				// tblKnownGerm.getRows().getChildren().get(studyGerm)).setFocus(true);
 				return false;
 			}
 			studyGerm++;
@@ -467,8 +472,10 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 			if (validate != null) {
 				Messagebox.show(validate, "OK", Messagebox.OK, Messagebox.EXCLAMATION);
 
-				((Row) tblStudyGerm.getRows().getChildren().get(studyGerm)).setStyle("background-color: #ff6666");
-				((Row) tblStudyGerm.getRows().getChildren().get(studyGerm)).setFocus(true);
+				// ((Row)
+				// tblStudyGerm.getRows().getChildren().get(studyGerm)).setStyle("background-color: #ff6666");
+				// ((Row)
+				// tblStudyGerm.getRows().getChildren().get(studyGerm)).setFocus(true);
 				return false;
 			}
 			studyGerm++;

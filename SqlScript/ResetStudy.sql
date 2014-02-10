@@ -16,3 +16,6 @@ TRUNCATE TABLE `strasa`.`studylocation`;
 
  TRUNCATE TABLE `strasa`.`studysite`; 
 
+ TRUNCATE TABLE `strasa`.`germplasm`; 
+ 
+ TRUNCATE TABLE `strasa`.`location`; 
