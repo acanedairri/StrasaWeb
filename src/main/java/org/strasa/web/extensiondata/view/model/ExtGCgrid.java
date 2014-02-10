@@ -10,30 +10,30 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zul.ListModelList;
 
-public class GCEgrid {
+public class ExtGCgrid {
 
 
 	@SuppressWarnings("unused")
-	private List<SummaryModel> areaSummaryGermplasmByCountryExtension=new ArrayList<SummaryModel>();  //gce
-	private GCEFilter gceFilter= new GCEFilter();
+	private List<SummaryModel> areaSummaryGC=new ArrayList<SummaryModel>();  //gce
+	private SummaryFilter filter= new SummaryFilter();
 	List<SummaryModel> currentModelGCE=  new ArrayList<SummaryModel>();
-	static List<SummaryModel> allDataGCE=  new ArrayList<SummaryModel>();
+	static List<SummaryModel> allDataGC=  new ArrayList<SummaryModel>();
 
 
 	@Init
 	public void setData(){
 		ExtensionDataManagerImpl mgr= new ExtensionDataManagerImpl();
-		this.areaSummaryGermplasmByCountryExtension=mgr.getAreaSummaryGermplasmByCountryExtension();
-		allDataGCE=mgr.getAreaSummaryGermplasmByCountryExtension();
+		this.areaSummaryGC=mgr.getAreaSummaryGermplasmByCountryExtension();
+		allDataGC=mgr.getAreaSummaryGermplasmByCountryExtension();
 		currentModelGCE=mgr.getAreaSummaryGermplasmByCountryExtension();
 	}
 
-	public GCEFilter getGceFilter() {
-		return gceFilter;
+	public SummaryFilter getFilter() {
+		return filter;
 	}
 
-	public void setGceFilter(GCEFilter gceFilter) {
-		this.gceFilter = gceFilter;
+	public void setFilter(SummaryFilter filter) {
+		this.filter = filter;
 	}
 
 	public List<SummaryModel> getCurrentModelGCE() {
@@ -44,22 +44,22 @@ public class GCEgrid {
 		this.currentModelGCE = currentModelGCE;
 	}
 
-	public List<SummaryModel> getAreaSummaryGermplasmByCountryExtension() {
+	public List<SummaryModel> getAreaSummaryGC() {
 		return new ListModelList<SummaryModel>(currentModelGCE);
 	}
 
-	public void setAreaSummaryGermplasmByCountryExtension(
-			List<SummaryModel> areaSummaryGermplasmByCountryExtension) {
-		this.areaSummaryGermplasmByCountryExtension = areaSummaryGermplasmByCountryExtension;
+	public void setAreaSummaryGC(
+			List<SummaryModel> areaSummaryGC) {
+		this.areaSummaryGC = areaSummaryGC;
 	}
 
-	public static List<SummaryModel> getGCE(GCEFilter gce){
+	public static List<SummaryModel> getGCE(SummaryFilter filter){
 		List<SummaryModel> someResult = new ArrayList<SummaryModel>();
-		String programName = gce.getProgramName().toLowerCase();
-		String countryExtension=gce.getCountryExtension().toLowerCase();
-		String germplasmName=gce.getGermplasmName().toLowerCase();
+		String programName = filter.getProgramName().toLowerCase();
+		String countryExtension=filter.getCountryExtension().toLowerCase();
+		String germplasmName=filter.getGermplasmName().toLowerCase();
 
-		for (Iterator<SummaryModel> i = allDataGCE.iterator(); i.hasNext();) {
+		for (Iterator<SummaryModel> i = allDataGC.iterator(); i.hasNext();) {
 			SummaryModel tmp = i.next();
 			if (tmp.getProgramName().toLowerCase().contains(programName) && 
 					tmp.getCountryextension().toLowerCase().contains(countryExtension) && 
@@ -71,9 +71,9 @@ public class GCEgrid {
 	}	
 
 	@Command
-	@NotifyChange({"areaSummaryGermplasmByCountryExtension"})
+	@NotifyChange({"areaSummaryGC"})
 	public void changeFilter() {
-		currentModelGCE = getGCE(gceFilter);
+		currentModelGCE = getGCE(filter);
 	}
 
 }

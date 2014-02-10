@@ -15,7 +15,7 @@ public class ChartData {
         String[] category = { "Country"};
         
         ExtensionDataManagerImpl mgr= new ExtensionDataManagerImpl();
-        List<ExtensionDataSummaryModel> list=mgr.getCountOfGermplasmByCountrRealease();
+        List<ExtensionDataSummaryModel> list=null;//mgr.getCountOfGermplasmByCountrRealease();
         
         for(ExtensionDataSummaryModel d:list){
         	  model.setValue(category[0], d.getData(),d.getTotalCount());
@@ -29,7 +29,7 @@ public class ChartData {
         String[] category = { "Year"};
         
         ExtensionDataManagerImpl mgr= new ExtensionDataManagerImpl();
-        List<ExtensionDataSummaryModel> list=mgr.getCountOfGermplasmByYear();
+        List<ExtensionDataSummaryModel> list=null;//mgr.getCountOfGermplasmByYear();
         
         for(ExtensionDataSummaryModel d:list){
       	  model.setValue(category[0], d.getData(),d.getTotalCount());

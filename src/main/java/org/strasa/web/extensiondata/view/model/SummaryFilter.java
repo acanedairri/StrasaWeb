@@ -1,12 +1,16 @@
 package org.strasa.web.extensiondata.view.model;
 
-public class GCEFilter {
+public class SummaryFilter {
 	
 	
 	String programName="";
 	String countryExtension="";
+	String counrtyRelease="";
 	String germplasmName="";
 	String sumArea="";
+	String yearExtention="";
+	String yearRelease="";
+	String countVariety="";
 	
 	
 	public String getProgramName() {
@@ -35,6 +39,34 @@ public class GCEFilter {
 	public void setSumArea(String sumArea) {
 		this.sumArea = sumArea==null?"":sumArea.trim();
 	}
+	public String getYearExtention() {
+		return yearExtention;
+	}
+	public void setYearExtention(String yearExtention) {
+		this.yearExtention = yearExtention==null?"":yearExtention.trim();
+	}
+	public String getCounrtyRelease() {
+		return counrtyRelease;
+	}
+	public void setCounrtyRelease(String counrtyRelease) {
+		this.counrtyRelease = counrtyRelease==null?"":counrtyRelease.trim();
+	}
+	public String getYearRelease() {
+		return yearRelease;
+	}
+	public void setYearRelease(String yearRelease) {
+		this.yearRelease = yearRelease==null?"":yearRelease.trim();
+	}
+	public String getCountVariety() {
+		return countVariety;
+	}
+	public void setCountVariety(String countVariety) {
+		this.countVariety = countVariety==null?"":countVariety.trim();
+	}
+	
+	
+	
+	
 	
 	
 	

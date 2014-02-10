@@ -7,7 +7,21 @@
 		<label class="header-menu">Extension Data</label>
 	</div>
 	<window>
-	 	<include  self="@define(content)" src="extension/gcegrid.zul" />
+		<!-- <include self="@define(content)" src="extension/extGCgrid.zul" />
+			<separator height="15px"></separator>
+			<include self="@define(content)" src="extension/extGYCgrid.zul" />
+			<separator height="15px"></separator>
+			<include self="@define(content)" src="extension/extGYgrid.zul" />
+		-->
+		<separator height="15px"></separator>
+		<include self="@define(content)" src="extension/relVCYgrid.zul" />
+
+		<separator height="15px"></separator>
+		<include self="@define(content)" src="extension/relVCgrid.zul" />
+
+		<separator height="15px"></separator>
+		<include self="@define(content)" src="extension/relVYgrid.zul" /> 
+
 	</window>
 
 </zk>
