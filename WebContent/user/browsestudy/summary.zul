@@ -7,7 +7,7 @@
 		<grid model="@load(vm.summary)" sizedByContent="true"
 			class="no-highlight">
 			<!-- 			<auxhead>
-				<auxheader label="Summary of Uploaded Studies" colspan="8"  align="center"/>
+				<auxheader label="Summary of Uploaded Studies" colspan="9"  align="center"/>
 				</auxhead> -->
 
 			<auxhead>
@@ -19,11 +19,12 @@
 				<column label="Program Name" hflex="1" />
 				<column label="Project" width="100px" />
 				<column label="Study" width="100px" />
-				<column label="PBT" width="100px" />
-				<column label="On Farm" width="100px" />
-				<column label="Experiment Station" width="150px" />
-				<column label="Glass House" width="100px" />
-				<column label="Lab" width="100px" />
+				<column label="PVS" width="100px" />
+				<column label="OYT" width="100px" />
+				<column label="PYT" width="100px" />
+				<column label="ATY" width="100px" />
+				<column label="IAT" width="100px" />
+				<column label="Genetics" width="150px" />
 			</columns>
 			<template name="model">
 				<row>
@@ -37,42 +38,51 @@
 						onClick="@global-command('updateSummaryResult', summaryFilter=each)"
 						class="grid-link" />
 
+				
 					<label value="--" width="99%"
-						if="${each.countPbt=='0'}" />
-					<toolbarbutton label="@load(each.countPbt)"
-						unless="${each.countPbt=='0'}"
-						onClick="@global-command('updateSummaryResultByStudyType', summaryFilter=each, studyTypeId=each.studyTypeIdPbt)"
+						if="${each.countStudyPVS=='0'}" />
+					<toolbarbutton label="@load(each.countStudyPVS)"
+						unless="${each.countStudyPVS=='0'}"
+						onClick="@global-command('updateSummaryResultByStudyType', summaryFilter=each, studyTypeId=each.studyPVS)"
 						class="grid-link" />
 
 					<label value="--" width="99%"
-						if="${each.countOnFarm=='0'}" />
-					<toolbarbutton label="@load(each.countOnFarm)"
-						unless="${each.countOnFarm=='0'}"
-						onClick="@global-command('updateSummaryResultByStudyType', summaryFilter=each, studyTypeId=each.studyTypeIdOnFarm)"
+						if="${each.countStudyOYT=='0'}" />
+					<toolbarbutton label="@load(each.countStudyOYT)"
+						unless="${each.countStudyOYT=='0'}"
+						onClick="@global-command('updateSummaryResultByStudyType', summaryFilter=each, studyTypeId=each.studyOYT)"
 						class="grid-link" />
 
 					<label value="--" width="99%"
-						if="${each.countExperiment=='0'}" />
-					<toolbarbutton label="@load(each.countExperiment)"
-						unless="${each.countExperiment=='0'}"
-						onClick="@global-command('updateSummaryResultByStudyType', summaryFilter=each, studyTypeId=each.studyTypeIdExperiment)"
+						if="${each.countStudyPYT=='0'}" />
+					<toolbarbutton label="@load(each.countStudyPYT)"
+						unless="${each.countStudyPYT=='0'}"
+						onClick="@global-command('updateSummaryResultByStudyType', summaryFilter=each, studyTypeId=each.studyPYT)"
+						class="grid-link" />
+					<label value="--" width="99%"
+						if="${each.countStudyAYT=='0'}" />
+					<toolbarbutton label="@load(each.countStudyAYT)"
+						unless="${each.countStudyAYT=='0'}"
+						onClick="@global-command('updateSummaryResultByStudyType', summaryFilter=each, studyTypeId=each.studyAYT)"
 						class="grid-link" />
 
 					<label value="--" width="99%"
-						if="${each.countGlassHouse=='0'}" />
-					<toolbarbutton label="@load(each.countGlassHouse)"
-						unless="${each.countGlassHouse=='0'}"
-						onClick="@global-command('updateSummaryResultByStudyType', summaryFilter=each, studyTypeId=each.studytypeIdGlassHouse)"
+						if="${each.countStudyIAT=='0'}" />
+					<toolbarbutton label="@load(each.countStudyIAT)"
+						unless="${each.countStudyIAT=='0'}"
+						onClick="@global-command('updateSummaryResultByStudyType', summaryFilter=each, studyTypeId=each.studyIAT)"
 						class="grid-link" />
 
 					<label value="--" width="99%"
-						if="${each.countLab=='0'}" />
-					<toolbarbutton label="@load(each.countLab)"
-						unless="${each.countLab=='0'}"
-						onClick="@global-command('updateSummaryResultByStudyType', summaryFilter=each, studyTypeId=each.studyTypeIdLab)"
+						if="${each.countStudyGenetics=='0'}" />
+					<toolbarbutton label="@load(each.countStudyGenetics)"
+						unless="${each.countStudyGenetics=='0'}"
+						onClick="@global-command('updateSummaryResultByStudyType', summaryFilter=each, studyTypeId=each.studyGenetics)"
 						class="grid-link" />
 				</row>
 			</template>
 		</grid>
 	</window>
 </zk>
+
+

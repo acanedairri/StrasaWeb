@@ -8,6 +8,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
  */
 package org.strasa.web.page.navigation.user;
 
+import org.spring.security.model.SecurityUtil;
 import org.strasa.web.page.util.navigation.SidebarPage;
 import org.strasa.web.page.util.navigation.SidebarPageConfig;
 import org.zkoss.zk.ui.Component;
@@ -25,6 +26,8 @@ import org.zkoss.zul.Include;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Rows;
+import org.zkoss.zul.Tab;
+import org.zkoss.zul.Tabpanel;
 
 public class SidebarAjaxbasedController extends SelectorComposer<Component>{
 
@@ -37,6 +40,9 @@ public class SidebarAjaxbasedController extends SelectorComposer<Component>{
 	Grid fnAnalysis;
 	@Wire
 	Grid fnMaintenance;
+	
+	@Wire
+	Grid fnDecisionMaking;
 
 	//wire service
 	SidebarPageConfig pageConfig = new SidebarPageConfigAjaxBasedImpl();
@@ -47,14 +53,30 @@ public class SidebarAjaxbasedController extends SelectorComposer<Component>{
 
 		//to initial view after view constructed.
 		Rows rowsUpload = fnListUpload.getRows();
-		Rows rowsBrowse= fnListBrowse.getRows();
 		Rows rowsAnalysis = fnAnalysis.getRows();
+		Rows rowsDecisionMaking = fnDecisionMaking.getRows();
 		Rows rowsMaintenance= fnMaintenance.getRows();
-
+		Rows rowsBrowse= fnListBrowse.getRows();
+		
+		if(SecurityUtil.isAnyGranted("ROLE_GUEST")){
+			Tab tabUpload = (Tab) comp.getFellow("uploadId");
+			Tabpanel tabPanelUpload = (Tabpanel) comp.getFellow("tabPanelUploadId");
+			Tab tabSetting = (Tab) comp.getFellow("settingsId");
+			Tabpanel tabPanelSettings = (Tabpanel) comp.getFellow("tabPanelSettingId");
+			
+			tabUpload.detach();
+			tabPanelUpload.detach();
+			tabSetting.detach();
+			tabPanelSettings.detach();
+			
+			Tab tabBrowse = (Tab) comp.getFellow("browseId");
+			tabBrowse.setSelected(true);
+		}
+	
 		for(SidebarPage page:pageConfig.getPages()){
 			Row row;
 			
-			if(page.getName().contains("upload")){
+			if(page.getName().contains("upload") && !SecurityUtil.isAnyGranted("ROLE_GUEST")){
 				 row= constructSidebarRow("upload",page.getLabel(),page.getLabel(),page.getIconUri(),page.getUri());
 				rowsUpload.appendChild(row);
 			}else if (page.getName().contains("browse")){
@@ -63,7 +85,10 @@ public class SidebarAjaxbasedController extends SelectorComposer<Component>{
 			}else if (page.getName().contains("analysis")){
 				row = constructSidebarRow("analysis",page.getName(),page.getLabel(),page.getIconUri(),page.getUri());
 				rowsAnalysis.appendChild(row);
-			}else if (page.getName().contains("maintenance")){
+			}else if (page.getName().contains("decision")){
+				row = constructSidebarRow("decision",page.getName(),page.getLabel(),page.getIconUri(),page.getUri());
+				rowsDecisionMaking.appendChild(row);
+			}else if (page.getName().contains("maintenance") && !SecurityUtil.isAnyGranted("ROLE_GUEST")){
 				row = constructSidebarRow("maintenance",page.getName(),page.getLabel(),page.getIconUri(),page.getUri());
 				rowsMaintenance.appendChild(row);
 			}
@@ -101,6 +126,8 @@ public class SidebarAjaxbasedController extends SelectorComposer<Component>{
 						include= (Include)Selectors.iterable(fnListBrowse.getPage(), "#mainInclude").iterator().next();
 					}else if(menuCategory.equals("analysis")){
 						include= (Include)Selectors.iterable(fnAnalysis.getPage(), "#mainInclude").iterator().next();
+					}else if(menuCategory.equals("decision")){
+						include= (Include)Selectors.iterable(fnDecisionMaking.getPage(), "#mainInclude").iterator().next();
 					}else if(menuCategory.equals("maintenance")){
 						include= (Include)Selectors.iterable(fnMaintenance.getPage(), "#mainInclude").iterator().next();
 					}

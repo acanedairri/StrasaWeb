@@ -36,31 +36,36 @@ public class BrowseStudyManagerImpl {
 				List<StudySummaryModel> studyCount = mapper.countStudyByProgram(p.getProgramId(), SecurityUtil.getDbUser().getId());
 				rec.setStudyCount(studyCount.get(0).getStudyCount());
 
-				// count StypeType PBT
-				rec.setStudyTypeIdPbt(1);
-				List<StudySummaryModel> pbtStudyType = mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdPbt(), SecurityUtil.getDbUser().getId());
-				rec.setCountPbt(pbtStudyType.get(0).getCountStudyTypeId());
+				// count StypeType PVS
+				rec.setStudyPVS(1);
+				List<StudySummaryModel> pvs = mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyPVS(), SecurityUtil.getDbUser().getId());
+				rec.setCountStudyPVS(pvs.get(0).getCountStudyTypeId());
 
-				// count StypeType OnFarm
-				rec.setStudyTypeIdOnFarm(2);
-				List<StudySummaryModel> onFarmStudyType = mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdOnFarm(), SecurityUtil.getDbUser().getId());
-				rec.setCountOnFarm(onFarmStudyType.get(0).getCountStudyTypeId());
+				// count StypeType OYT
+				rec.setStudyOYT(2);
+				List<StudySummaryModel> oyt = mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyOYT(), SecurityUtil.getDbUser().getId());
+				rec.setCountStudyOYT(oyt.get(0).getCountStudyTypeId());
 
-				// count StypeType Experiment Station
-				rec.setStudyTypeIdExperiment(3);
-				List<StudySummaryModel> experimentStudyType = mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdExperiment(), SecurityUtil.getDbUser().getId());
-				rec.setCountExperiment(experimentStudyType.get(0).getCountStudyTypeId());
+				// count StypeType PYT
+				rec.setStudyPYT(3);
+				List<StudySummaryModel> pyt = mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyPYT(), SecurityUtil.getDbUser().getId());
+				rec.setCountStudyPYT(pyt.get(0).getCountStudyTypeId());
 
-				// count StypeType Glass House
-				rec.setStudytypeIdGlassHouse(4);
-				List<StudySummaryModel> glassHouseStudyType = mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudytypeIdGlassHouse(), SecurityUtil.getDbUser().getId());
-				rec.setCountGlassHouse(glassHouseStudyType.get(0).getCountStudyTypeId());
+				// count StypeType AYT
+				rec.setStudyAYT(4);
+				List<StudySummaryModel> glassHouseStudyType = mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyAYT(), SecurityUtil.getDbUser().getId());
+				rec.setCountStudyAYT(glassHouseStudyType.get(0).getCountStudyTypeId());
 
-				// count StypeType Lab
-				rec.setStudyTypeIdLab(5);
-				List<StudySummaryModel> labStudyType = mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyTypeIdLab(), SecurityUtil.getDbUser().getId());
-				rec.setCountLab(labStudyType.get(0).getCountStudyTypeId());
+				// count StypeType IAT
+				rec.setStudyIAT(5);
+				List<StudySummaryModel> ayt = mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyIAT(), SecurityUtil.getDbUser().getId());
+				rec.setCountStudyIAT(ayt.get(0).getCountStudyTypeId());
 
+				// count StypeType Genetics
+				rec.setStudyGenetics(6);
+				List<StudySummaryModel> genetics = mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyGenetics(), SecurityUtil.getDbUser().getId());
+				rec.setCountStudyGenetics(genetics.get(0).getCountStudyTypeId());
+				
 				System.out.println("rec:" + rec.toString());
 				s.add(rec);
 

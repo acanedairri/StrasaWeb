@@ -19,6 +19,27 @@ public class StudySummaryModel {
 	int countGlassHouse;
 	int studyTypeIdLab;
 	int countLab;
+	
+	
+	int studyPVS;
+	int studyOYT;
+	int studyPYT;
+	int studyAYT;
+	int studyIAT;
+	int studyGenetics;
+	
+	int countStudyPVS;
+	int countStudyOYT;
+	int countStudyPYT;
+	int countStudyAYT;
+	int countStudyIAT;
+	int countStudyGenetics;
+	
+	
+	
+	
+	
+	
 	public int getProgramId() {
 		return programId;
 	}
@@ -120,6 +141,79 @@ public class StudySummaryModel {
 	}
 	public void setCountLab(int countLab) {
 		this.countLab = countLab;
+	}
+
+	public int getStudyPVS() {
+		return studyPVS;
+	}
+	public void setStudyPVS(int studyPVS) {
+		this.studyPVS = studyPVS;
+	}
+	public int getStudyOYT() {
+		return studyOYT;
+	}
+	public void setStudyOYT(int studyOYT) {
+		this.studyOYT = studyOYT;
+	}
+	public int getStudyPYT() {
+		return studyPYT;
+	}
+	public void setStudyPYT(int studyPYT) {
+		this.studyPYT = studyPYT;
+	}
+	public int getStudyAYT() {
+		return studyAYT;
+	}
+	public void setStudyAYT(int studyAYT) {
+		this.studyAYT = studyAYT;
+	}
+	public int getStudyIAT() {
+		return studyIAT;
+	}
+	public void setStudyIAT(int studyIAT) {
+		this.studyIAT = studyIAT;
+	}
+	public int getStudyGenetics() {
+		return studyGenetics;
+	}
+	public void setStudyGenetics(int studyGenetics) {
+		this.studyGenetics = studyGenetics;
+	}
+	public int getCountStudyPVS() {
+		return countStudyPVS;
+	}
+	public void setCountStudyPVS(int countStudyPVS) {
+		this.countStudyPVS = countStudyPVS;
+	}
+	public int getCountStudyOYT() {
+		return countStudyOYT;
+	}
+	public void setCountStudyOYT(int countStudyOYT) {
+		this.countStudyOYT = countStudyOYT;
+	}
+	public int getCountStudyPYT() {
+		return countStudyPYT;
+	}
+	public void setCountStudyPYT(int countStudyPYT) {
+		this.countStudyPYT = countStudyPYT;
+	}
+	public int getCountStudyAYT() {
+		return countStudyAYT;
+	}
+	public void setCountStudyAYT(int countStudyAYT) {
+		this.countStudyAYT = countStudyAYT;
+	}
+	public int getCountStudyIAT() {
+		return countStudyIAT;
+	}
+	public void setCountStudyIAT(int countStudyIAT) {
+		this.countStudyIAT = countStudyIAT;
+	}
+	public int getCountStudyGenetics() {
+		return countStudyGenetics;
+	}
+	public void setCountStudyGenetics(int countStudyGenetics) {
+		this.countStudyGenetics = countStudyGenetics;
 	}
 	@Override
 	public String toString() {

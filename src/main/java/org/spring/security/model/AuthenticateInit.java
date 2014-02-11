@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.spring.security.model.SecurityUtil;
+import org.springframework.security.core.userdetails.User;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
@@ -16,6 +17,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zul.Include;
+import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 public class AuthenticateInit extends org.zkoss.zk.ui.util.GenericInitiator{
@@ -28,7 +30,7 @@ public class AuthenticateInit extends org.zkoss.zk.ui.util.GenericInitiator{
 			HttpServletResponse response = (HttpServletResponse)exec.getNativeResponse();
 			response.sendRedirect(response.encodeRedirectURL("admin/")); //assume there is /login
 			exec.setVoided(true); //no
-		}else if(SecurityUtil.isAnyGranted("ROLE_USER")){
+		}else if(SecurityUtil.isAnyGranted("ROLE_USER") || SecurityUtil.isAnyGranted("ROLE_GUEST") ){
 			Execution exec = Executions.getCurrent();
 			HttpServletResponse response = (HttpServletResponse)exec.getNativeResponse();
 			response.sendRedirect(response.encodeRedirectURL("user/")); //assume there is /login
@@ -44,5 +46,7 @@ public class AuthenticateInit extends org.zkoss.zk.ui.util.GenericInitiator{
 		response.sendRedirect(response.encodeRedirectURL("registration.zul")); //assume there is /login
 		exec.setVoided(true); //no
 	}
+	
+
 
 }

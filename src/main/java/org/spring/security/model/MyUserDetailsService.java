@@ -50,13 +50,15 @@ public class MyUserDetailsService implements UserDetailsService {
 			try {
 				user = new User(dbUser.getUsername(), dbUser.getPassword(), enabled, accountNonExpired,
 						credentialsNonExpired, accountNonLocked, authList);
-				
 				return user;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
 		}else{
-			System.out.println(">>> cannot find user: "+username);
+			
+			System.out.println(user);
+//			System.out.println(">>> cannot find user: "+username);
 			//                        throw new UsernameNotFoundException("cannot found user: "+username);
 		}
 		return null;

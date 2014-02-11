@@ -24,13 +24,11 @@
 
 
 
+
 				
 				<![CDATA[ Your login attempt was not successful, try
 				again.<br/><br/> Reason:
 				${SPRING_SECURITY_LAST_EXCEPTION.message} ]]>
-				
-				
-			
 
     	</html>
 
@@ -50,7 +48,7 @@
 						</row>
 						<row zclass="none">
 							<label value="Password"></label>
-							<textbox id="p" type="password" hflex="1"
+							<textbox id="p" type="password" hflex="1" 
 								name="j_password" />
 						</row>
 					</rows>
@@ -59,7 +57,8 @@
 				<div align="right" width="300px">
 					<hbox>
 						<button type="reset" label="Reset" sclass="btn-plain"/>
-						<button type="submit" label="Login" sclass="btn-blue" />
+						<button type="submit" label="Login"
+							sclass="btn-blue" />
 					</hbox>
 				</div>
 				<div align="right" width="300px">
