@@ -531,9 +531,13 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 		// Validation
 		if (!validateKnownGermplasm()) {
+
+			new ListBoxValidationUtility(tblKnownGerm, new ArrayList<Integer>(Arrays.asList(0, 1, 3, 4))).validateAll();;
 			return false;
 		}
 		if (!validateStudyGermplasm()) {
+			new ListBoxValidationUtility(tblStudyGerm, new ArrayList<Integer>(Arrays.asList(0, 1, 3, 4))).validateAll();;
+			
 			return false;
 		}
 
