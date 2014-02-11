@@ -179,6 +179,13 @@ public class DataSetTabView {
 
 						 DataSetTabView.this.uploadModel.mainTab.detach();
 						 DataSetTabView.this.uploadModel.mainTabPanel.detach();
+						 
+						 
+						 Map<String,Object> args = new HashMap<String,Object>();
+					       
+					        args.put("isRaw", DataSetTabView.this.uploadModel.isRaw);
+		
+					        BindUtils.postGlobalCommand(null, null, "checkMerge", args);
 					} else if ("onCancel".equals(e.getName())) {
 
 					}

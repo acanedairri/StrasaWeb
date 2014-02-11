@@ -54,6 +54,9 @@ public class Index {
 	@Wire("#tabGenotypeData")
 	Tabpanel tabGenotype;
 
+	
+	Tab tabMergedRaw;
+	Tab tabMergedDerived;
 	@Command("addProgram")
 	public void addProgram(@ContextParam(ContextType.VIEW) Component view) {
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -135,6 +138,10 @@ public class Index {
 	private boolean isNewDataSet;
 
 	private int datasetinc = 1;
+
+	private String mergeRawID;
+
+	private String mergeDerivedID;
 
 	public ArrayList<Program> getProgramList() {
 		return programList;
@@ -459,11 +466,39 @@ public class Index {
 		// }
 	}
 
+	@GlobalCommand("checkMerge")
+	public void checkMerge( @BindingParam("isRaw") boolean isRaw) {
+
+		if(isRaw){
+			if(rawDataTab.getTabs().getChildren().size() < 2){
+				tabMergedRaw.close();
+				tabMergedRaw = null;
+			}
+		}
+		else{
+			if(derivedDataTab.getTabs().getChildren().size() < 2){
+				tabMergedDerived.close();
+				tabMergedDerived = null;
+			}
+		}
+	}
 	@GlobalCommand("removeDataSet")
 	public void removeDataSet(@BindingParam("dataset") StudyDataSet dataset, @BindingParam("isUpdateMode") boolean isUpdateMode, @BindingParam("isRaw") boolean isRaw) {
 		System.out.println("REMOVE!");
 		initializeDataSetTab(dataset, isUpdateMode, isRaw, true, false);
-
+		if(isRaw){
+			if(tabMergedRaw == null && rawDataTab.getTabs().getChildren().size() > 1) 
+				initializeDataSetTab(new StudyDataSet(), true, false, false, true);
+			Index.this.tabMap.get(mergeRawID).hasBeenLoaded = false;
+		}
+		else {
+			if(tabMergedDerived == null && derivedDataTab.getTabs().getChildren().size() > 1) 
+				initializeDataSetTab(new StudyDataSet(), true, false, false, true);
+			
+			Index.this.tabMap.get(mergeDerivedID).hasBeenLoaded = false;
+		}
+		
+		
 	}
 
 	@GlobalCommand("initializeDataSetTab")
@@ -517,8 +552,21 @@ public class Index {
 		System.out.println(newUploadModel.toString());
 		arg.put("uploadModel", newUploadModel);
 
+		
+		if(ismerge){
+			if(isRaw) {
+
+				tabMergedRaw = newTab;
+				mergeRawID = newTab.getId();
+			}
+			else {
+				tabMergedDerived = newTab;
+				mergeDerivedID = newTab.getId();
+			}
+		}
+		
 		tabMap.put(tabId, new tabObject(arg, newTabpanel, newTab, isRaw));
-		if (selected) {
+		if (selected && !ismerge) {
 			Events.sendEvent("onClick", newTab, newTab);
 		}
 	}
