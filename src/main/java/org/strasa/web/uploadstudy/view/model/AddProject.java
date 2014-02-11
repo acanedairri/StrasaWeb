@@ -15,11 +15,12 @@ import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.Messagebox;
 
 public class AddProject {
 	public static String ZUL_PATH = "/user/uploadstudy/addproject.zul";
-		private Component mainView;
+	private Component mainView;
 	private Binder parBinder;
 	private FormValidator formValidator;
 	private Project projectModel = new Project();
@@ -42,7 +43,6 @@ public class AddProject {
 		this.formValidator = formValidator;
 	}
 
-	
 	public Component getMainView() {
 		return mainView;
 	}
@@ -60,31 +60,37 @@ public class AddProject {
 	}
 
 	@Init
-	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar, @ExecutionArgParam("programID") int pID ) {
+	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("oldVar") String oldVar, @ExecutionArgParam("programID") int pID) {
 
-	        mainView = view;
-	        parBinder = (Binder) view.getParent().getAttribute("binder");
-	        programID = pID;
+		mainView = view;
+		parBinder = (Binder) view.getParent().getAttribute("binder");
+		programID = pID;
 	}
-	
-//	@Init
-//	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar, @ExecutionArgParam("programID") int pID ) {
-//
-//	        mainView = view;
-//	        parBinder = ctx.getBinder();
-//	        programID = pID;
-//	}
-	
+
+	// @Init
+	// public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext
+	// ctx,@ContextParam(ContextType.VIEW) Component view
+	// ,@ExecutionArgParam("oldVar") String oldVar,
+	// @ExecutionArgParam("programID") int pID ) {
+	//
+	// mainView = view;
+	// parBinder = ctx.getBinder();
+	// programID = pID;
+	// }
+
 	@Command("add")
-	public void add(){
-		
+	public void add() {
+
 		ProjectManagerImpl projectMan = new ProjectManagerImpl();
-		
-		ValidationUtilities.check(mainView);
-		
-		
+
 		try {
-			if(!formValidator.getBlankVariables(projectModel,new String[]{"id","userid","programid"}).isEmpty()){
+			ValidationUtilities.check(mainView);
+		} catch (WrongValueException e) {
+
+		}
+
+		try {
+			if (!formValidator.getBlankVariables(projectModel, new String[] { "id", "userid", "programid" }).isEmpty()) {
 				Messagebox.show("All fields are requied.", "Validation Error", Messagebox.OK, Messagebox.EXCLAMATION);
 				return;
 			}
@@ -95,31 +101,30 @@ public class AddProject {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		//TODO IMPORTANT!!! Must change this to real UserID
-		projectModel.setUserid(userID );
+
+		// TODO IMPORTANT!!! Must change this to real UserID
+		projectModel.setUserid(userID);
 		projectModel.setProgramid(programID);
 		projectMan.addProject(projectModel);
-		
-		
-		//TODO Validate!!
+
+		// TODO Validate!!
 		Messagebox.show("Program successfully added to database!", "Add", Messagebox.OK, Messagebox.INFORMATION);
-//		System.out.println("SavePath: "+CsvPath);
-		
-		
+		// System.out.println("SavePath: "+CsvPath);
+
 		Binder bind = parBinder;
 		if (bind == null)
 			return;
-		
+
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("selected",projectModel);
+		params.put("selected", projectModel);
 
 		bind.postCommand("changeProjectList", params);
 		mainView.detach();
 	}
+
 	@Command
-	public void cancel(){
+	public void cancel() {
 		mainView.detach();
 	}
-	
+
 }

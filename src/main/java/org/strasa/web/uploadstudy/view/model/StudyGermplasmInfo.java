@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,7 @@ import org.strasa.web.managegermplasm.view.pojos.GermplasmGroupingModel;
 import org.strasa.web.uploadstudy.view.pojos.GermplasmDeepInfoModel;
 import org.strasa.web.uploadstudy.view.pojos.GermplasmExt;
 import org.strasa.web.utilities.FileUtilities;
+import org.strasa.web.utilities.ListBoxValidationUtility;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -48,8 +50,8 @@ import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
-import org.zkoss.zul.Grid;
 import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Listbox;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
@@ -64,10 +66,10 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 	ConnectionFactory connectionFactory;
 
 	@Wire("#tblKnownGerm")
-	Grid tblKnownGerm;
+	Listbox tblKnownGerm;
 
 	@Wire("#tblStudyGerm")
-	Grid tblStudyGerm;
+	Listbox tblStudyGerm;
 
 	@Wire("#gbUnknownGermplasm")
 	Groupbox gbUnknownGermplasm;
@@ -207,6 +209,9 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 	@Command
 	public void saveGermplasm(@BindingParam("germplasm") GermplasmDeepInfoModel data) {
+
+		new ListBoxValidationUtility(tblKnownGerm, new ArrayList<Integer>(Arrays.asList(0, 1, 3, 4))).validateRow(data.rowIndex);
+		;
 
 		if (validateGermplasm(data)) {
 			new GermplasmManagerImpl().modifyGermplasm(data);

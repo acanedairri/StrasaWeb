@@ -23,6 +23,7 @@ public class AddProgram {
 	private Component mainView;
 	private Binder parBinder;
 	private int userID = 1;
+
 	public Program getProgramModel() {
 		return programModel;
 	}
@@ -32,23 +33,24 @@ public class AddProgram {
 	}
 
 	@Init
-	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar) {
+	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("oldVar") String oldVar) {
 
-	        mainView = view;
-	        parBinder =  (Binder) view.getParent().getAttribute("binder");
-	        
+		mainView = view;
+		parBinder = (Binder) view.getParent().getAttribute("binder");
+
 	}
-	
+
 	@Command("add")
-	public void add(){
-		ProgramManagerImpl programMan = new ProgramManagerImpl();
+	public void add() {
 		ValidationUtilities.check(mainView);
-		if(programMan.isProgramExist(programModel.getName(), userID)){
+		ProgramManagerImpl programMan = new ProgramManagerImpl();
+
+		if (programMan.isProgramExist(programModel.getName(), userID)) {
 			Messagebox.show("Program already exist! Choose a different name.", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
 			return;
 		}
 		try {
-			if(new FormValidator().getBlankVariables(programModel, new String[]{"userid","id"}).isEmpty() == false){
+			if (new FormValidator().getBlankVariables(programModel, new String[] { "userid", "id" }).isEmpty() == false) {
 
 				Messagebox.show("All fields are required", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
 				return;
@@ -57,29 +59,29 @@ public class AddProgram {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//TODO IMPORTANT!!! Must change this to real UserID
+		// TODO IMPORTANT!!! Must change this to real UserID
 		programModel.setUserid(userID);
 		programMan.addProgram(programModel);
-		
-		//TODO Validate!!
+
+		// TODO Validate!!
 		Messagebox.show("Program successfully added to database!", "OK", Messagebox.OK, Messagebox.INFORMATION);
-//		System.out.println("SavePath: "+CsvPath);
-		
-		
+		// System.out.println("SavePath: "+CsvPath);
+
 		Binder bind = parBinder;
 		if (bind == null)
 			return;
-		
+
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("selected",programModel);
+		params.put("selected", programModel);
 
 		// this.parBinder.postCommand("change", params);
 		bind.postCommand("refreshProgramList", params);
 		mainView.detach();
 	}
+
 	@Command
-	public void cancel(){
+	public void cancel() {
 		mainView.detach();
 	}
-	
+
 }

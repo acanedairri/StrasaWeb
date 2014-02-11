@@ -1,6 +1,7 @@
 package org.strasa.web.uploadstudy.view.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.strasa.middleware.manager.CountryManagerImpl;
@@ -9,7 +10,7 @@ import org.strasa.middleware.model.Country;
 import org.strasa.middleware.model.Location;
 import org.strasa.web.common.api.FormValidator;
 import org.strasa.web.common.api.ProcessTabViewModel;
-import org.strasa.web.utilities.ValidationUtilities;
+import org.strasa.web.utilities.GridValidationUtility;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -31,7 +32,7 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 
 	@Wire("#step4")
 	Grid mainGrid;
-	
+
 	private FormValidator formValidator = new FormValidator();
 	private boolean noLocation;
 	private List<Location> lstUnknownLocations = new ArrayList<Location>();
@@ -83,8 +84,9 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 	}
 
 	public boolean validateTab() {
-		
-		ValidationUtilities.check(mainGrid);
+		ArrayList<Integer> lstCol = new ArrayList<Integer>(Arrays.asList(0, 4, 5, 6));
+		new GridValidationUtility(mainGrid, lstCol).validateAll();
+		;
 		for (Location loc : lstLocations) {
 			if (StringUtils.isNullOrEmpty(loc.getLocationname())) {
 				Messagebox.show("Location must not be empty", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
@@ -138,11 +140,13 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 		lstLocations.addAll(studyLocationManager.getLocationsFromStudySite(studyID, this.dataset.getId()));
 
 	}
+
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 
 		Selectors.wireComponents(view, this, false);
 	}
+
 	public double getSampleID() {
 		return sampleID;
 	}

@@ -19,23 +19,23 @@
 				</columns>
 				<template name="update">
 					<row>
-						<textbox value="@bind(each.locationname)" width = "100%"  constraint="no empty"/>
+						<textbox value="@bind(each.locationname)" width = "100%" />
 											
 
 						<combobox
 									model="@load(vm.cmbCountry)"
-									selectedItem="@bind(each.country)" width="99%" style="color: #000000 !important;" constraint="no empty">
+									selectedItem="@bind(each.country)" width="99%" style="color: #000000 !important;" >
 									<template name="model" var="p1">
 										<comboitem
 											value="@load(p1)"
 											label="@load(p1)" />
 									</template>
 								</combobox>
-						<textbox value="@bind(each.province)"  width = "100%"  style="color: #000000 !important;" constraint="no empty"/>
-						<textbox value="@bind(each.region)"    width = "100%"  style="color: #000000 !important;" constraint="no empty"/>
-						<textbox value="@bind(each.altitude)"  width = "100%"  style="color: #000000 !important;" constraint="no empty"/>
-						<textbox value="@bind(each.latitude)"  width = "100%"  style="color: #000000 !important;" constraint="no empty"/>
-						<textbox value="@bind(each.weatherstation)"  width = "100%"  style="color: #000000 !important;" constraint="no empty"/>
+						<textbox value="@bind(each.province)"  width = "100%"  style="color: #000000 !important;" />
+						<textbox value="@bind(each.region)"    width = "100%"  style="color: #000000 !important;" />
+						<textbox value="@bind(each.altitude)"  width = "100%"  style="color: #000000 !important;"/>
+						<textbox value="@bind(each.latitude)"  width = "100%"  style="color: #000000 !important;" />
+						<textbox value="@bind(each.weatherstation)"  width = "100%"  style="color: #000000 !important;" />
 					</row>
 				</template>
 				

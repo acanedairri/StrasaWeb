@@ -67,10 +67,10 @@
                                             <textbox value="@bind(each.newBreeder)" width="15%" onClick="@command('selectGermplasm', germplasm = each)" />
                                         </listcell>
                                         <listcell>
-                                            <textbox value="@bind(each.femaleparent)" constraint="no empty" width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
+                                            <textbox value="@bind(each.femaleparent)"  width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
                                         </listcell>
                                         <listcell>
-                                            <textbox value="@bind(each.maleparent)" constraint="no empty" width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
+                                            <textbox value="@bind(each.maleparent)"  width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
                                         </listcell>
                                         <listcell>
                                             <div>
@@ -96,10 +96,10 @@
                                             <textbox value="@bind(each.breeder)" width="100%" onClick="@command('selectGermplasm', germplasm = each)" />
                                         </listcell>
                                         <listcell>
-                                            <textbox value="@bind(each.femaleparent)" constraint="no empty" width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
+                                            <textbox value="@bind(each.femaleparent)"  width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
                                         </listcell>
                                         <listcell>
-                                            <textbox value="@bind(each.maleparent)" constraint="no empty" width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
+                                            <textbox value="@bind(each.maleparent)"  width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
                                         </listcell>
                                     </listitem>
                                      
@@ -164,10 +164,10 @@
                                         <textbox value="@bind(each.newBreeder)" width="15%" onClick="@command('selectGermplasm', germplasm = each)" />
                                     </listcell>
                                     <listcell>
-                                        <textbox value="@bind(each.femaleparent)" constraint="no empty" width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
+                                        <textbox value="@bind(each.femaleparent)"  width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
                                     </listcell>
                                     <listcell>
-                                        <textbox value="@bind(each.maleparent)" constraint="no empty" width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
+                                        <textbox value="@bind(each.maleparent)"  width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
                                     </listcell>
                                     <listcell>
                                         <div>

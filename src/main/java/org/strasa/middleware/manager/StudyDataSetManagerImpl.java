@@ -13,63 +13,77 @@ public class StudyDataSetManagerImpl {
 
 	@WireVariable
 	ConnectionFactory connectionFactory;
-	
-	public void addDataSet(StudyDataSet dataset){
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+
+	public void addDataSet(StudyDataSet dataset) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyDataSetMapper mapper = session.getMapper(StudyDataSetMapper.class);
-		
-		try{
+
+		try {
 			mapper.insert(dataset);
 			session.commit();
-		}
-		finally{
+		} finally {
 			session.close();
 		}
-		
+
 	}
-	public void updateDataSet(StudyDataSet dataset){
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+
+	public void updateDataSet(StudyDataSet dataset) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyDataSetMapper mapper = session.getMapper(StudyDataSetMapper.class);
-		
-		try{
+
+		try {
 			mapper.updateByPrimaryKey(dataset);
 			session.commit();
-		}
-		finally{
+		} finally {
 			session.close();
 		}
-		
-	}
-	
-	public List<StudyDataSet> getDataSetsByStudyId(Integer studyID){
 
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+	}
+
+	public List<StudyDataSet> getDataSetsByStudyId(Integer studyID) {
+
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyDataSetMapper mapper = session.getMapper(StudyDataSetMapper.class);
-		
-		try{
+
+		try {
 			StudyDataSetExample example = new StudyDataSetExample();
 			example.createCriteria().andStudyidEqualTo(studyID);
 			System.out.println("STUDYID : + " + studyID);
 			return mapper.selectByExample(example);
-		}
-		finally{
+		} finally {
 			session.close();
 		}
 
 	}
-	
-	public StudyDataSet getDataSet(Integer datasetID){
 
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+	public StudyDataSet getDataSet(Integer datasetID) {
+
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyDataSetMapper mapper = session.getMapper(StudyDataSetMapper.class);
-		
-		try{
+
+		try {
 
 			return mapper.selectByPrimaryKey(datasetID);
-		}
-		finally{
+		} finally {
 			session.close();
 		}
 
+	}
+
+	public void removeDatasetByStudyId(Integer id) {
+		// TODO Auto-generated method stub
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudyDataSetMapper mapper = session.getMapper(StudyDataSetMapper.class);
+
+		try {
+
+			StudyDataSetExample example = new StudyDataSetExample();
+			example.createCriteria().andStudyidEqualTo(id);
+			mapper.deleteByExample(example);
+
+		} finally {
+			session.commit();
+			session.close();
+		}
 	}
 }
