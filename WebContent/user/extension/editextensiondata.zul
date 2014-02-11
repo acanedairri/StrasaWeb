@@ -14,18 +14,17 @@
 			model="@load(vm.rowList) @template(each.editingStatus ? 'editable' : 'noneditable')"
 			sizedByContent="true" width="95%" emptyMessage="No Record Found">
 			<columns width="200px">
-				<column label="Program" hflex="1" />
-				<column label="Project" />
+				<column label="Program" width="125px" hflex="1" />
+				<column label="Project" width="125px" hflex="1" />
 				<column label="Germplasm Name" />
-				<column label="Year" width="100px" />
-				<column label="Location" width="100px" />
+				<column label="Year Extension" width="100px" />
+				<column label="Location Extension" width="100px" />
+				<column label="Country Extension" width="100px" />
 				<column label="Area" width="100px" />
 				<column label="Data Source" width="100px" />
-				<column label="Country" width="100px" />
-				<column label="Country release" width="125px" />
 				<column label="Year release" width="100px" />
+				<column label="Country release" width="125px" />
 				<column label="Seed Availability" width="125px" />
-				<column label="Action" width="100px" />
 			</columns>
 			<template name="editable">
 				<row>
@@ -53,13 +52,9 @@
 					<textbox
 						value="@load(each.value.germplasmname) @save(each.value.germplasmname, before='confirm')" />
 					<textbox
-						value="@load(each.value.year) @save(each.value.year, before='confirm')" />
+						value="@load(each.value.yearextension) @save(each.value.yearextension, before='confirm')" />
 					<textbox
-						value="@load(each.value.location) @save(each.value.location, before='confirm')" />
-					<decimalbox
-						value="@load(each.value.area) @save(each.value.area, before='confirm')" />
-					<textbox
-						value="@load(each.value.datasource) @save(each.value.datasource, before='confirm')" />
+						value="@load(each.value.locationextension) @save(each.value.locationextension, before='confirm')" />
 					<combobox model="@load(vm.cmbCountry)"
 						selectedItem="@bind(each.value.countryextension)" width="99%">
 						<template name="model" var="p1">
@@ -67,10 +62,20 @@
 								label="@load(p1)" />
 						</template>
 					</combobox>
+					<decimalbox
+						value="@load(each.value.area) @save(each.value.area, before='confirm')" />
 					<textbox
-						value="@load(each.value.countryrelease) @save(each.value.countryrelease, before='confirm')" />
+						value="@load(each.value.datasource) @save(each.value.datasource, before='confirm')" />
 					<textbox
 						value="@load(each.value.yearrelease) @save(each.value.yearrelease, before='confirm')" />
+					
+					<combobox model="@load(vm.cmbCountry)"
+						selectedItem="@bind(each.value.countryrelease)" width="99%">
+						<template name="model" var="p1">
+							<comboitem value="@load(p1)"
+								label="@load(p1)" />
+						</template>
+					</combobox>
 					<intbox
 						value="@load(each.value.seedavailability) @save(each.value.seedavailability, before='confirm')" />
 					<cell>
@@ -87,13 +92,13 @@
 					<label value="@load(each.program.name)" />
 					<label value="@load(each.project.name)" />
 					<label value="@load(each.value.germplasmname)" />
-					<label value="@load(each.value.year)" />
-					<label value="@load(each.value.location)" />
+					<label value="@load(each.value.yearextension)" />
+					<label value="@load(each.value.locationextension)" />
+					<label value="@load(each.value.countryextension)" />
 					<label value="@load(each.value.area)" />
 					<label value="@load(each.value.datasource)" />
-					<label value="@load(each.value.countryextension)" />
-					<label value="@load(each.value.countryrelease)" />
 					<label value="@load(each.value.yearrelease)" />
+					<label value="@load(each.value.countryrelease)" />
 					<label value="@load(each.value.seedavailability)" />
 					<cell>
 						<toolbarbutton src="/images/edit16.png"
