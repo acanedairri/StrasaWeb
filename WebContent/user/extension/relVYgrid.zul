@@ -46,7 +46,7 @@
 					<label value="@load(each.countVariety)" />
 					<div children="@load(each.germplasmVarietyNames)">
 						<template name="children" var="item">
-							<toolbarbutton label="@load(item)" onClick="@global-command('openExtensionDataDetail', function='varietyByYear', summaryModel=each, germplasmName=item)"/>
+							<toolbarbutton label="@load(item)" onClick="@global-command('openExtensionDataDetail', function='varietyByYear', summaryModel=each, germplasmName=item)" class="grid-link" />
 						</template>
 					</div>
 				</row>

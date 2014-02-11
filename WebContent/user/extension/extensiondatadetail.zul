@@ -2,8 +2,10 @@
 	<window apply="org.zkoss.bind.BindComposer" width="95%"
 		style="padding:10px 0px 15px 20px"
 		viewModel="@id('vm') @init('org.strasa.web.extensiondata.view.model.ExtensionDataDetail')">
-		<grid 
-			model="@load(vm.rowList)" sizedByContent="true" emptyMessage="No Record Found">
+		<style src="../css/main.css" />
+		<grid id="multipleGrid" model="@load(vm.rowList)"
+			sizedByContent="true" emptyMessage="No Record Found"
+			visible="false">
 			<columns width="200px">
 				<column label="Program" width="125px" hflex="1" />
 				<column label="Germplasm Name" />
@@ -30,6 +32,64 @@
 					<label value="@load(each.value.seedavailability)" />
 				</row>
 			</template>
+		</grid>
+		<grid id="singleGrid" vflex="1">
+			<columns>
+				<column label="" width="150px" />
+				<column label="" />
+			</columns>
+			<rows>
+				<row>
+					<label value="Program" width="150px" />
+					<label value='@load(vm.row.program.name)'
+						width="150px" />
+				</row>
+				<row>
+					<label value="Germplasm" width="150px" />
+					<label value='@load(vm.row.value.germplasmname)'
+						width="150px" />
+				</row>
+				<row>
+					<label value="Year Extension" width="150px" />
+					<label value='@load(vm.row.value.yearextension)'
+						width="150px" />
+				</row>
+				<row>
+					<label value="Location" width="150px" />
+					<label value='@load(vm.row.value.locationextension)'
+						width="150px" />
+				</row>
+				<row>
+					<label value="Country" width="150px" />
+					<label value='@load(vm.row.value.countryextension)'
+						width="150px" />
+				</row>
+				<row>
+					<label value="Area" width="150px" />
+					<label value='@load(vm.row.value.area)'
+						width="150px" />
+				</row>
+				<row>
+					<label value="Data Source" width="150px" />
+					<label value='@load(vm.row.value.datasource)'
+						width="150px" />
+				</row>
+				<row>
+					<label value="Year release" width="150px" />
+					<label value='@load(vm.row.value.yearrelease)'
+						width="150px" />
+				</row>
+				<row>
+					<label value="Country release" width="150px" />
+					<label value='@load(vm.row.value.countryrelease)'
+						width="150px" />
+				</row>
+				<row>
+					<label value="Seed Availability" width="150px" />
+					<label value='@load(vm.row.value.seedavailability)'
+						width="150px" />
+				</row>
+			</rows>
 		</grid>
 	</window>
 </zk>

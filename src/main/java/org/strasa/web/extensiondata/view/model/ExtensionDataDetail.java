@@ -39,6 +39,7 @@ public class ExtensionDataDetail {
 	private List<ExtensionDataListModel> extensionDataList;
 	private List<SummaryModel> summaryArea;
 	private List<RowStatus> rowList = new ArrayList<RowStatus>();
+	private RowStatus row;
 	
 	private List<SummaryModel> areaSummaryGermplasmByYearandCountryExtension;
 	private List<SummaryModel> areaSummaryGermplasmByYear;
@@ -47,11 +48,11 @@ public class ExtensionDataDetail {
 	private List<SummaryModel> noOfVarietyReleaseByCountryRelease;
 	private List<SummaryModel> noOfVarietyReleaseByYear;
 	
-
 	private HashMap<Integer,String> programKeyList = new HashMap<Integer,String>();
 	private HashMap<Integer,String> projectKeyList = new HashMap<Integer,String>();
 	
 	private Tab detailTab;
+	private boolean single = true;
 	
 	public Tab getDetailTab() {
 		return detailTab;
@@ -92,11 +93,24 @@ public class ExtensionDataDetail {
 		if(function.equals("varietyByYear"))makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByYearRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
 		else if(function.equals("varietyByCountry"))makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByCountryRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
 		else makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByYearAndCountryRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
+	
+		if(rowList.size()==1) {
+			component.getFellow("singleGrid").setVisible(true);
+			component.getFellow("multipleGrid").setVisible(false);
+			setRow(rowList.get(0));
+		}
+		else{
+			component.getFellow("singleGrid").setVisible(false);
+			component.getFellow("multipleGrid").setVisible(true);
+		}
+		
+		System.out.println(isSingle());
 	}
 
 	private void makeRowStatus(List<ExtensionData> list) {
 		// TODO Auto-generated method stub
 		rowList.clear();
+		
 		for (ExtensionData p: list){
 			Program prog = programMan.getProgramById(p.getProgramid());
 			
@@ -251,6 +265,20 @@ public class ExtensionDataDetail {
 
 	public void setExtensionDataList(List<ExtensionDataListModel> extensionDataList) {
 		this.extensionDataList = extensionDataList;
+	}
+	public boolean isSingle() {
+		return single;
+	}
+
+	public void setSingle(boolean isSingle) {
+		this.single = isSingle;
+	}
+	public RowStatus getRow() {
+		return row;
+	}
+
+	public void setRow(RowStatus row) {
+		this.row = row;
 	}
 	public class RowStatus {
 		private  Program program;
