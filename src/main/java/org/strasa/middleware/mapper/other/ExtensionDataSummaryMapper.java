@@ -48,19 +48,19 @@ public interface ExtensionDataSummaryMapper {
 	//No of Variety Release by country and year
 	//select programid,countryrelease,year,count(germplasmname) as noOfVariety from extensiondata group by programid,year order by programid,year,germplasmname
 
-	@Select("select t2.name as programName,t1.programid as programid, t1.countryrelease as countryrelease, t1.yearrelease as yearrelease,count(t1.germplasmname) as countVariety from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid,yearrelease order by programid,yearrelease,germplasmname")
+	@Select("select t2.name as programName,t1.programid as programid,t1.projectid as projectid, t1.countryrelease as countryrelease, t1.yearrelease as yearrelease,count(t1.germplasmname) as countVariety from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid,yearrelease order by programid,yearrelease,germplasmname")
 	List<SummaryModel> selectNoOfVarietyReleaseByCountryAndYear();
 
 
 	//No of Variety by CountryRelease
 	//select programid,countryrelease,count(germplasmname) as noOfVariety from extensiondata group by programid order by programid,germplasmname
-	@Select("select t2.name as programName, t1.programid as programid, t1.countryrelease as countryrelease, count(t1.germplasmname) as countVariety from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid order by programid,germplasmname")
+	@Select("select t2.name as programName, t1.programid as programid,t1.projectid as projectid, t1.countryrelease as countryrelease, count(t1.germplasmname) as countVariety from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid order by programid,germplasmname")
 	List<SummaryModel> selectNoOfVarietyReleaseByCountryRelease();
 
 
 	//No of Variety by Year
 	//select programid,year,count(germplasmname) as noOfVariety from extensiondata group by programid,year order by programid,year
-	@Select("select t2.name as programName, t1.programid as programid, t1.yearrelease as yearrelease, count(t1.germplasmname) as countVariety from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid,yearrelease order by programid,yearrelease")
+	@Select("select t2.name as programName, t1.programid as programid,t1.projectid as projectid, t1.yearrelease as yearrelease, count(t1.germplasmname) as countVariety from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid,yearrelease order by programid,yearrelease")
 	List<SummaryModel> selectNoOfVarietyReleaseByYear();
 
 	//Names of Variety by Year

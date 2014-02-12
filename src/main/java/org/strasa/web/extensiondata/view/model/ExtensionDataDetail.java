@@ -88,7 +88,6 @@ public class ExtensionDataDetail {
 			@ContextParam(ContextType.VIEW) Component view,@BindingParam("function") String function, @BindingParam("summaryModel")SummaryModel each, @BindingParam("germplasmName")String germplasmName){
 		
 		getDetailTab().setSelected(true);
-		programMan = new ProgramManagerImpl();
 		
 		if(function.equals("varietyByYear"))makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByYearRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
 		else if(function.equals("varietyByCountry"))makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByCountryRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
@@ -113,8 +112,9 @@ public class ExtensionDataDetail {
 		
 		for (ExtensionData p: list){
 			Program prog = programMan.getProgramById(p.getProgramid());
+			Project proj = projectMan.getProjectById(p.getProjectid());
 			
-			RowStatus ps = new RowStatus(p, prog);
+			RowStatus ps = new RowStatus(p, proj, prog);
 			rowList.add(ps);
 		}
 	}
@@ -299,6 +299,13 @@ public class ExtensionDataDetail {
 			this.setProgram(prog);
 		}
 
+
+		public RowStatus(ExtensionData p, Project proj, Program prog) {
+			// TODO Auto-generated constructor stub
+			this.setValue(p);
+			this.setProgram(prog);
+			this.setProject(proj);
+		}
 
 		public boolean getEditingStatus() {
 			return editingStatus;

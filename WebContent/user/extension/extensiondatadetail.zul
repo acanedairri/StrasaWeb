@@ -8,6 +8,7 @@
 			visible="false">
 			<columns width="200px">
 				<column label="Program" width="125px" hflex="1" />
+				<column label="Project" width="125px" hflex="1" />
 				<column label="Germplasm Name" />
 				<column label="Year Extension" width="100px" />
 				<column label="Location" width="100px" />
@@ -21,6 +22,7 @@
 			<template name="model">
 				<row>
 					<label value="@load(each.program.name)" />
+					<label value="@load(each.project.name)" />
 					<label value="@load(each.value.germplasmname)" />
 					<label value="@load(each.value.yearextension)" />
 					<label value="@load(each.value.locationextension)" />
@@ -42,6 +44,11 @@
 				<row>
 					<label value="Program" width="150px" />
 					<label value='@load(vm.row.program.name)'
+						width="150px" />
+				</row>
+				<row>
+					<label value="Project" width="150px" />
+					<label value='@load(vm.row.project.name)'
 						width="150px" />
 				</row>
 				<row>
