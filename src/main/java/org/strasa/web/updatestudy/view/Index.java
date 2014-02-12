@@ -54,9 +54,9 @@ public class Index {
 	@Wire("#tabGenotypeData")
 	Tabpanel tabGenotype;
 
-	
 	Tab tabMergedRaw;
 	Tab tabMergedDerived;
+
 	@Command("addProgram")
 	public void addProgram(@ContextParam(ContextType.VIEW) Component view) {
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -464,41 +464,54 @@ public class Index {
 		// if(rawLoaded){
 		// rawDataTab.getChildren().remove(0);
 		// }
+
+		if (firstRawTab != null) {
+			firstRawTab.setSelected(true);
+			Events.sendEvent("onClick", firstRawTab, firstRawTab);
+		}
 	}
 
 	@GlobalCommand("checkMerge")
-	public void checkMerge( @BindingParam("isRaw") boolean isRaw) {
+	public void checkMerge(@BindingParam("isRaw") boolean isRaw) {
+		System.out.println("CHECK MERGED CALLED: " + isRaw);
 
-		if(isRaw){
-			if(rawDataTab.getTabs().getChildren().size() < 2){
-				tabMergedRaw.close();
-				tabMergedRaw = null;
-			}
-		}
-		else{
-			if(derivedDataTab.getTabs().getChildren().size() < 2){
-				tabMergedDerived.close();
-				tabMergedDerived = null;
-			}
+		relaunchMergeTab(isRaw);
+	}
+
+	public void relaunchMergeTab(boolean isRaw) {
+		if (isRaw) {
+
+			tabMergedRaw.close();
+			tabMergedRaw.detach();
+			tabMergedRaw = null;
+			// System.out.println;
+
+			initializeDataSetTab(new StudyDataSet(), true, true, false, true);
+		} else {
+
+			tabMergedDerived.close();
+			tabMergedRaw.detach();
+			tabMergedDerived = null;
+
+			initializeDataSetTab(new StudyDataSet(), true, false, false, true);
 		}
 	}
+
 	@GlobalCommand("removeDataSet")
 	public void removeDataSet(@BindingParam("dataset") StudyDataSet dataset, @BindingParam("isUpdateMode") boolean isUpdateMode, @BindingParam("isRaw") boolean isRaw) {
 		System.out.println("REMOVE!");
 		initializeDataSetTab(dataset, isUpdateMode, isRaw, true, false);
-		if(isRaw){
-			if(tabMergedRaw == null && rawDataTab.getTabs().getChildren().size() > 1) 
-				initializeDataSetTab(new StudyDataSet(), true, false, false, true);
+		if (isRaw) {
+			if (tabMergedRaw == null && rawDataTab.getTabs().getChildren().size() > 1)
+				initializeDataSetTab(new StudyDataSet(), true, true, false, true);
 			Index.this.tabMap.get(mergeRawID).hasBeenLoaded = false;
-		}
-		else {
-			if(tabMergedDerived == null && derivedDataTab.getTabs().getChildren().size() > 1) 
+		} else {
+			if (tabMergedDerived == null && derivedDataTab.getTabs().getChildren().size() > 1)
 				initializeDataSetTab(new StudyDataSet(), true, false, false, true);
-			
+
 			Index.this.tabMap.get(mergeDerivedID).hasBeenLoaded = false;
 		}
-		
-		
+
 	}
 
 	@GlobalCommand("initializeDataSetTab")
@@ -507,7 +520,7 @@ public class Index {
 		System.out.println("TABBOX IS NULL!");
 		Tab newTab = new Tab(dataset.getTitle());
 		datasetinc++;
-		newTab.setSelected(true);
+		newTab.setSelected(!ismerge);
 		String tabId = "dataset" + Math.random();
 		newTab.setId(tabId);
 		// newTab.setClosable(true);
@@ -517,8 +530,12 @@ public class Index {
 			@Override
 			public void onEvent(Event arg0) throws Exception {
 				if (!Index.this.tabMap.get(arg0.getTarget().getId()).hasBeenLoaded) {
+					System.out.println("RELOAD CALLED");
 					Index.this.tabMap.get(arg0.getTarget().getId()).hasBeenLoaded = true;
 					Executions.createComponents("/user/updatestudy/datasettab.zul", Index.this.tabMap.get(arg0.getTarget().getId()).panel, Index.this.tabMap.get(arg0.getTarget().getId()).arg);
+				} else {
+					System.out.println("RELOAD NoT CALLED" + arg0.getTarget().getId() + " : " + mergeRawID + " ; " + Index.this.tabMap.get(arg0.getTarget().getId()).hasBeenLoaded);
+
 				}
 			}
 		});
@@ -552,22 +569,43 @@ public class Index {
 		System.out.println(newUploadModel.toString());
 		arg.put("uploadModel", newUploadModel);
 
-		
-		if(ismerge){
-			if(isRaw) {
+		if (ismerge) {
+			if (isRaw) {
 
 				tabMergedRaw = newTab;
 				mergeRawID = newTab.getId();
-			}
-			else {
+			} else {
 				tabMergedDerived = newTab;
 				mergeDerivedID = newTab.getId();
 			}
 		}
-		
+
 		tabMap.put(tabId, new tabObject(arg, newTabpanel, newTab, isRaw));
 		if (selected && !ismerge) {
 			Events.sendEvent("onClick", newTab, newTab);
+		}
+
+		if (isRaw) {
+
+			if (tabMergedRaw != null && !ismerge) {
+
+				tabMergedRaw.close();
+				tabMergedRaw.detach();
+				tabMergedRaw = null;
+
+				initializeDataSetTab(new StudyDataSet(), true, true, false, true);
+
+			}
+		} else {
+
+			if (tabMergedDerived != null && !ismerge) {
+
+				tabMergedDerived.close();
+				tabMergedRaw.detach();
+				tabMergedDerived = null;
+
+				initializeDataSetTab(new StudyDataSet(), true, false, false, true);
+			}
 		}
 	}
 
