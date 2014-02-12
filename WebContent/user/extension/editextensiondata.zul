@@ -18,13 +18,14 @@
 				<column label="Project" width="125px" hflex="1" />
 				<column label="Germplasm Name" />
 				<column label="Year Extension" width="100px" />
-				<column label="Location Extension" width="100px" />
+				<column label="Location Extension" width="125px" />
 				<column label="Country Extension" width="100px" />
 				<column label="Area" width="100px" />
 				<column label="Data Source" width="100px" />
 				<column label="Year release" width="100px" />
 				<column label="Country release" width="125px" />
 				<column label="Seed Availability" width="125px" />
+				<column label="Action" width="125px" />
 			</columns>
 			<template name="editable">
 				<row>

@@ -12,7 +12,7 @@
 			<rows>
 				<row>
 					<label value="Program" />
-					<combobox id="programComboBox" hflex="1"
+					<combobox id="programComboBox"
 						model="@load(vm.programList)" readonly="true"
 						onChange="@command('updateLists', program=self.selectedItem)"
 						value="@bind(vm.program.name)">
@@ -34,72 +34,54 @@
 					</combobox>
 				</row>
 				<row>
-					<label value="Germplasm Name" />
-					<textbox value='@bind(vm.model.germplasmname)'
-						constraint="no empty" width="250px"/>
+					<label value="Germplasm name" />
+					<textbox value="@bind(vm.model.germplasmname)" />
 				</row>
 				<row>
-					<label value="Year" width="150px" />
-					<!-- 					<intbox  -->
-					<textbox constraint="no empty"
-						value='@bind(vm.model.year)' width="150px" />
+					<label value="Year extension" />
+					<textbox value="@bind(vm.model.yearextension)" />
 				</row>
 				<row>
-					<label value="Location" />
-					<textbox value='@bind(vm.model.location)'
-						constraint="no empty" hflex="1" />
+					<label value="Location extension" />
+					<textbox
+						value="@bind(vm.model.locationextension)" />
 				</row>
 				<row>
-					<label value="Area" width="150px" />
-					<decimalbox value='@bind(vm.model.area)'
-						constraint="no empty" width="150px" />
+					<label value="Country extension" />
+					<combobox model="@load(vm.cmbCountry)"
+						selectedItem="@bind(vm.model.countryextension)" width="99%">
+						<template name="model" var="p1">
+							<comboitem value="@load(p1)"
+								label="@load(p1)" />
+						</template>
+					</combobox>
+				</row>
+				<row>
+					<label value="Area" />
+					<decimalbox value="@bind(vm.model.area)" />
 				</row>
 				<row>
 					<label value="Data Source" />
-					<textbox value='@bind(vm.model.datasource)'
-						constraint="no empty" width="150px" />
+					<textbox value="@bind(vm.model.datasource)" />
 				</row>
 				<row>
-					<label value="Country Extension" />
+					<label value="Year release" />
+					<textbox value="@bind(vm.model.yearrelease)" />
+				</row>
+				<row>
+					<label value="Country release" />
 					<combobox model="@load(vm.cmbCountry)"
-						selectedItem="@bind(vm.model.countryextension)" width="250px"
-						unless="${each.id !=null}">
+						selectedItem="@bind(vm.model.countryrelease)" width="99%">
 						<template name="model" var="p1">
 							<comboitem value="@load(p1)"
 								label="@load(p1)" />
 						</template>
 					</combobox>
 				</row>
-
 				<row>
-					<label value="Country Release" />
-					<combobox model="@load(vm.cmbCountry)"
-						selectedItem="@bind(vm.model.countryrelease)" width="250px"
-						unless="${each.id !=null}">
-						<template name="model" var="p1">
-							<comboitem value="@load(p1)"
-								label="@load(p1)" />
-						</template>
-					</combobox>
+					<label value="Seed availability" />
+					<intbox value="@bind(vm.model.seedavailability)" />
 				</row>
-				<!-- <row>
-					<label value="Country Release" width="150px" />
-					<intbox 
-					<textbox constraint="no empty"
-					value='@bind(vm.model.countryrelease)' width="150px" />
-					</row> -->
-				<row>
-					<label value="Year Release" width="150px" />
-					<!-- 					<intbox  -->
-					<textbox constraint="no empty"
-						value='@bind(vm.model.yearrelease)' width="150px" />
-				</row>
-				<row>
-					<label value="Seed Availability" width="150px" />
-					<intbox value='@bind(vm.model.seedavailability)'
-						constraint="no empty" width="150px" />
-				</row>
-
 				<row>
 					<label></label>
 					<hbox>

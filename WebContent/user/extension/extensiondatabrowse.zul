@@ -1,11 +1,6 @@
 <zk>
 
 	<style src="../css/main.css" />
-
-
-	<div style="padding:10px 0px 15px 20px" align="left">
-		<label class="header-menu">Extension Data</label>
-	</div>
 	<window>
 		<include self="@define(content)" src="extension/extGCgrid.zul" />
 		<separator height="15px"></separator>
