@@ -6,7 +6,7 @@
 		viewModel="@id('vm') @init('org.strasa.web.extensiondata.view.model.RelVCgrid')">
 
 
-		<grid model="@load(vm.noVC)" height="400px"
+		<grid id="NumberOfVarietybyCountryRelease" model="@load(vm.noVC)" height="400px"
 			sizedByContent="true">
 			<auxhead sclass="category-center">
 				<auxheader label="Number of Variety by Country Release "
@@ -25,7 +25,11 @@
 						value="@bind(vm.filter.counrtyRelease)"
 						onChange="@command('changeFilter')" />
 				</auxheader>
-				<auxheader label="" colspan="1" />
+				<auxheader label="" colspan="1">
+					<button id="btnExportId" label="Export to CSV"
+						sclass="btn-blue" image="/images/export16.png"
+						onClick="@global-command('exportGrid', gridId='NumberOfVarietybyCountryRelease', grid=NumberOfVarietybyCountryRelease)" />
+				</auxheader>
 			</auxhead>
 			<columns menupopup="auto">
 				<column width="300px" sort="auto('programName')"

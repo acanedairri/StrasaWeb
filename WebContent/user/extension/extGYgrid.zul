@@ -6,7 +6,7 @@
 		viewModel="@id('vm') @init('org.strasa.web.extensiondata.view.model.ExtGYgrid')">
 
 
-		<grid model="@load(vm.areaSummaryGY)" height="400px"
+		<grid id="AreaSummaryByYearExtension" model="@load(vm.areaSummaryGY)" height="400px"
 			sizedByContent="true">
 			<auxhead sclass="category-center">
 				<auxheader label="Area Summary by Year Extension"
@@ -33,7 +33,11 @@
 						value="@bind(vm.filter.germplasmName)"
 						onChange="@command('changeFilter')" />
 				</auxheader>
-				<auxheader label="" colspan="1" />
+				<auxheader label="" colspan="1">
+					<button id="btnExportId" label="Export to CSV"
+						sclass="btn-blue" image="/images/export16.png"
+						onClick="@global-command('exportGrid', gridId='AreaSummaryByYearExtension', grid=AreaSummaryByYearExtension)" />
+				</auxheader>
 			</auxhead>
 			<columns menupopup="auto">
 				<column width="300px" sort="auto('programName')"

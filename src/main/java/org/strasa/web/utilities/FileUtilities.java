@@ -4,7 +4,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zul.Cell;
+import org.zkoss.zul.Column;
+import org.zkoss.zul.Columns;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Filedownload;
+import org.zkoss.zul.Label;
+import org.zkoss.zul.Row;
+import org.zkoss.zul.Rows;
+import org.zkoss.zul.Toolbarbutton;
 
 public class FileUtilities {
 
@@ -53,6 +62,53 @@ public class FileUtilities {
 		
 		System.out.println("downloading File...");
 		   Filedownload.save(sb.toString().getBytes(), "text/plain", outputFileName+".csv");
+	}
+
+	public static void exportGridData(Columns columns, Rows rows,
+			String fileName) {
+		// TODO Auto-generated method stub
+		
+		StringBuffer sb = new StringBuffer();
+
+		System.out.println("creating File...");
+			int ctr=0;
+			for (Component comp : columns.getChildren()) {
+				Column c = (Column) comp;
+				ctr++;
+				sb.append(c.getLabel());
+				if(ctr!=columns.getChildren().size()) sb.append(",");
+			}
+			sb.append("\n");
+	
+		for (Component row : rows.getChildren()) {
+			ctr=0;
+			Row r = (Row) row;
+			for (Component comp : r.getChildren()) {
+				Label l;
+				StringBuffer miniSb = new StringBuffer();
+				try{
+					l = (Label) comp;
+					ctr++;
+					sb.append(l.getValue());
+				}catch(ClassCastException npe){
+					Div d = (Div) comp;
+					miniSb.append("\"");
+					for(Component toolbarButtons: comp.getChildren()){
+						Toolbarbutton tb = (Toolbarbutton) toolbarButtons;
+						miniSb.append(tb.getLabel());
+						if(!toolbarButtons.equals(comp.getLastChild())) miniSb.append(", ");
+					}
+					miniSb.append("\"");
+					sb.append(miniSb.toString());
+				}
+				
+				if(ctr!=r.getChildren().size()) sb.append(",");
+			}
+			sb.append("\n");
+		}
+		
+		System.out.println("downloading File...");
+		   Filedownload.save(sb.toString().getBytes(), "text/plain", fileName+".csv");
 	}
 
 }
