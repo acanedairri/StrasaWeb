@@ -9,7 +9,7 @@
 		<grid id="AreaSummaryByCountryExtension" model="@load(vm.areaSummaryGC)" height="400px"
 			sizedByContent="true">
 			<auxhead sclass="category-center">
-				<auxheader label="Area Summary by Country Extension"
+				<auxheader label="Area by Country"
 					colspan="4" />
 			</auxhead>
 			<auxhead sclass="category-center">

@@ -9,7 +9,7 @@
 		<grid id="NumberOfVarietybyCountryRelease" model="@load(vm.noVC)" height="400px"
 			sizedByContent="true">
 			<auxhead sclass="category-center">
-				<auxheader label="Number of Variety by Country Release "
+				<auxheader label="Number of Variety by Country "
 					colspan="5" />
 			</auxhead>
 			<auxhead sclass="category-center">

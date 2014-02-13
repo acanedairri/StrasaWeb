@@ -27,6 +27,7 @@ import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tabpanel;
 import org.zkoss.zul.Tabpanels;
 import org.zkoss.zul.Tabs;
+import org.zkoss.bind.annotation.AfterCompose;
 
 public class ExtensionDataDetail {
 
@@ -62,32 +63,13 @@ public class ExtensionDataDetail {
 		this.detailTab = detailTab;
 	}
 
-	@Init
+	@AfterCompose
 	public void AfterCompose(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("detailTab") Tab detailTab){
+			@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("function") String function, @ExecutionArgParam("summaryModel")SummaryModel each,@ExecutionArgParam("germplasmName")String germplasmName ){
 		setDetailTab(detailTab);
 		mgr= new ExtensionDataManagerImpl();
 		programMan = new ProgramManagerImpl();
 		projectMan = new ProjectManagerImpl();
-		
-//		this.summaryByCountry=mgr.getCountOfGermplasmByCountrRealease();
-//		this.summaryByYear=mgr.getCountOfGermplasmByYear();
-//		this.extensionDataList=mgr.getExtensionDataList();
-		
-		this.areaSummaryGermplasmByYearandCountryExtension=mgr.getAreaSummaryGermplasmByCountryExtension();
-		this.areaSummaryGermplasmByYear=mgr.getAreaSummaryGermplasmByYear();
-		this.areaSummaryGermplasmByCountryExtension=mgr.getAreaSummaryGermplasmByCountryExtension();
-		this.noOfVarietyReleaseByCountryAndYear=mgr.getNoOfVarietyReleaseByCountryAndYear();
-		this.noOfVarietyReleaseByCountryRelease=mgr.getNoOfVarietyReleaseByCountryRelease();
-		this.noOfVarietyReleaseByYear=mgr.getNoOfVarietyReleaseByYear();
-	}
-	
-	@NotifyChange("*")
-	@GlobalCommand("openExtensionDataDetail")
-	public void openExtensionDataDetail(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view,@BindingParam("function") String function, @BindingParam("summaryModel")SummaryModel each, @BindingParam("germplasmName")String germplasmName){
-		
-		getDetailTab().setSelected(true);
 		
 		if(function.equals("varietyByYear"))makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByYearRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
 		else if(function.equals("varietyByCountry"))makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByCountryRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));

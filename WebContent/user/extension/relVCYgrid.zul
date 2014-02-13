@@ -10,7 +10,7 @@
 			sizedByContent="true">
 			<auxhead sclass="category-center">
 				<auxheader
-					label="Number of Variety by Country Release and Year Release"
+					label="Number of Variety by Country and Year"
 					colspan="5" />
 			</auxhead>
 			<auxhead sclass="category-center">

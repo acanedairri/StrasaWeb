@@ -56,10 +56,6 @@ public class Index {
 		newTab.setLabel("Summary");
 		newTab.setImage("/images/Search16a.png");
 
-		Tabpanel newPanel2 = new Tabpanel();
-		Tab newTab2 = new Tab();
-		newTab2.setLabel("Details");
-
 		//initialize view after view construction.
 		Include studyInformationPage = new Include();
 		studyInformationPage.setParent(newPanel);
@@ -69,17 +65,6 @@ public class Index {
 		tabs.appendChild(newTab);
 		tabBox.setSelectedPanel(newPanel);
 
-		//initialize view after view construction.
-		Include studyInformationPage2 = new Include();
-		studyInformationPage2.setParent(newPanel2);
-		studyInformationPage2.setSrc("/user/extension/extensiondatadetail.zul");
-		studyInformationPage2.setDynamicProperty("detailTab", newTab2);
-		tabPanels.appendChild(newPanel2);
-		tabs.appendChild(newTab2);
-		tabBox.setSelectedPanel(newPanel2);
-
-		tabBox.setSelectedIndex(0);
-		//		setResultTab(newTab);
 	}
 
 	@GlobalCommand
@@ -90,6 +75,33 @@ public class Index {
 		Rows rows = grid.getRows();
 
 		FileUtilities.exportGridData(columns, rows, gridId);
+
+	}
+	
+
+	@NotifyChange("*")
+	@GlobalCommand("openExtensionDataDetail")
+	public void openExtensionDataDetail(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view,@BindingParam("function") String function, @BindingParam("summaryModel")SummaryModel each, @BindingParam("germplasmName")String germplasmName){
+		
+		Tabpanels tabPanels = (Tabpanels) component.getFellow("tabPanels");
+		Tabs tabs = (Tabs) component.getFellow("tabs");
+		Tabbox tabBox = (Tabbox) component.getFellow("tabBox");
+		
+		Tabpanel newPanel2 = new Tabpanel();
+		Tab newTab2 = new Tab();
+		newTab2.setClosable(true);
+		newTab2.setLabel(germplasmName);
+		
+		Include studyInformationPage2 = new Include();
+		studyInformationPage2.setParent(newPanel2);
+		studyInformationPage2.setSrc("/user/extension/extensiondatadetail.zul");
+		studyInformationPage2.setDynamicProperty("function", function);
+		studyInformationPage2.setDynamicProperty("summaryModel", each);
+		studyInformationPage2.setDynamicProperty("germplasmName", germplasmName);
+		tabPanels.appendChild(newPanel2);
+		tabs.appendChild(newTab2);
+		tabBox.setSelectedPanel(newPanel2);
 
 	}
 }
