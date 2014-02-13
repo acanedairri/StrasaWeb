@@ -8,7 +8,7 @@
 			<div id = "divDataset"><hlayout  style="padding:15px">
 				<label value="Rename Dataset" sclass="label-bold"></label>
 				<textbox value="@bind(vm.uploadModel.dataset.title)"></textbox>
-				<button id="btnSaveDataset" label="Save"
+				<button id="btnSaveDataset" label="Rename"
 					onClick="@command('saveDataset')" image="/images/save16.png"
 					sclass="btn-blue">
 				</button>

@@ -6,8 +6,8 @@
 	<div apply="org.zkoss.bind.BindComposer" align="left"
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudyUploadFinish')">
 		<hlayout>
-			<label value="Study Upload has been completed."
-				style="font-size:13pt; padding:30px" />
+			<label value="Successfully uploaded the study..."
+				style="font-size:12pt; padding:30px" />
 			<hlayout>
 <!-- 				<button label="Upload new Study"
 					onClick="@global-command('addStudy')">

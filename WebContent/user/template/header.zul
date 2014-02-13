@@ -29,7 +29,7 @@
 </zscript>
 
 	<div hflex="1" vflex="1" sclass="footer"
-		style="background:#1F9A5B;color:white; vertical-align:middle;padding:30px"
+		style="background:#6A94D4;color:white; vertical-align:middle;padding:30px"
 		height="50px">
 		<vbox hflex="1" vflex="1" align="right">
 			<hlayout>

@@ -27,16 +27,16 @@
 											spacing="10px">
 											<hlayout>
 												<button id="uploadCSV"
-													upload="true" label="Browse"
+													upload="true" label="Browse" image="/images/add.png"
 													onUpload="@command('uploadCSV')" />
 												<label id="lblMsgUpload"
 													visible="@load(vm.variableDataVisible)"
 													value="@load(vm.dataFileName)" style="font-size:14pt;" />
-												<button label="Remove"
+												<button label="Remove" sclass="btn-blue" image="/images/remove.png"
 													onClick="@command('removeUpload') "
 													visible="@load(vm.variableDataVisible)" />
 												<button
-													label="Modify Header"
+													label="Modify Header" sclass="btn-blue" image="/images/modify.png"
 													onClick="@command('modifyDataHeader')"
 													visible="@load(vm.variableDataVisible)" />
 											</hlayout>

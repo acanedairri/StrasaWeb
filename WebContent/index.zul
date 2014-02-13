@@ -4,7 +4,7 @@
 <zk>
 	<style src="css/main.css" />
 
-	<include id="mainHeader" self="@define(content)" src="header.zul" />
+<!-- 	<include id="mainHeader" self="@define(content)" src="header.zul" /> -->
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.spring.security.model.AuthenticateInit')">
 	</div>
@@ -56,8 +56,8 @@
 				<separator width="200px"></separator>
 				<div align="right" width="300px">
 					<hbox>
-						<button type="reset" label="Reset" sclass="btn-plain"/>
-						<button type="submit" label="Login"
+						<button type="reset" label="Reset" sclass="btn-plain" image="images/reset.png"/>
+						<button type="submit" label="Login" image="images/login.png"
 							sclass="btn-blue" />
 					</hbox>
 				</div>
@@ -75,7 +75,7 @@
 		</div>
 	</div>
 	<separator height="100px"></separator>
-	<include id="mainFooter" self="@define(content)" src="footer.zul" />
+<!-- 	<include id="mainFooter" self="@define(content)" src="footer.zul" /> -->
 
 </zk>
 
