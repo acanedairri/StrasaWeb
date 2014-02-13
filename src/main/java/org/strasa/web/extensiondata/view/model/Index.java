@@ -91,7 +91,9 @@ public class Index {
 		Tabpanel newPanel2 = new Tabpanel();
 		Tab newTab2 = new Tab();
 		newTab2.setClosable(true);
-		newTab2.setLabel(germplasmName);
+		
+		if(!germplasmName.isEmpty()) newTab2.setLabel(germplasmName);
+		else newTab2.setLabel("Germplasm Detail");
 		
 		Include studyInformationPage2 = new Include();
 		studyInformationPage2.setParent(newPanel2);
@@ -99,6 +101,7 @@ public class Index {
 		studyInformationPage2.setDynamicProperty("function", function);
 		studyInformationPage2.setDynamicProperty("summaryModel", each);
 		studyInformationPage2.setDynamicProperty("germplasmName", germplasmName);
+		
 		tabPanels.appendChild(newPanel2);
 		tabs.appendChild(newTab2);
 		tabBox.setSelectedPanel(newPanel2);

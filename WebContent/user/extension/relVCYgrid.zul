@@ -10,7 +10,7 @@
 			sizedByContent="true">
 			<auxhead sclass="category-center">
 				<auxheader
-					label="Number of Variety by Country and Year"
+					label="Variety by Country and Year"
 					colspan="5" />
 			</auxhead>
 			<auxhead sclass="category-center">
@@ -60,7 +60,11 @@
 					<label value="@load(each.programName)" />
 					<label value="@load(each.countryrelease)" />
 					<label value="@load(each.yearrelease)" />
-					<label value="@load(each.countVariety)" />
+					<div>
+						<toolbarbutton label="@load(each.countVariety)"
+							onClick="@global-command('openExtensionDataDetail', function='varietyCountByCountryAndYear', summaryModel=each, germplasmName='')"
+							class="grid-link" />
+					</div>
 					<div children="@load(each.germplasmVarietyNames)">
 						<template name="children" var="item">
 							<toolbarbutton label="@load(item)" onClick="@global-command('openExtensionDataDetail', function='varietyByCountryAndYear', summaryModel=each, germplasmName=item)" class="grid-link"  />

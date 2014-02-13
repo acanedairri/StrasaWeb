@@ -55,7 +55,11 @@
 				<row>
 					<label value="@load(each.programName)" />
 					<label value="@load(each.countryextension)" />
-					<label value="@load(each.germplasmname)" />
+					<div>
+						<toolbarbutton label="@load(each.germplasmname)"
+							onClick="@global-command('openExtensionDataDetail', function='areaByCountry', summaryModel=each, germplasmName=each.germplasmname)"
+							class="grid-link" />
+					</div>
 					<label value="@load(each.sumArea)" />
 				</row>
 			</template>

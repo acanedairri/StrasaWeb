@@ -9,7 +9,7 @@
 		<grid id="NumberOfVarietybyCountryRelease" model="@load(vm.noVC)" height="400px"
 			sizedByContent="true">
 			<auxhead sclass="category-center">
-				<auxheader label="Number of Variety by Country "
+				<auxheader label="Variety by Country "
 					colspan="5" />
 			</auxhead>
 			<auxhead sclass="category-center">
@@ -49,7 +49,11 @@
 				<row>
 					<label value="@load(each.programName)" />
 					<label value="@load(each.countryrelease)" />
-					<label value="@load(each.countVariety)" />
+					<div>
+						<toolbarbutton label="@load(each.countVariety)"
+							onClick="@global-command('openExtensionDataDetail', function='varietyCountByCountry', summaryModel=each, germplasmName='')"
+							class="grid-link" />
+					</div>
 					<div children="@load(each.germplasmVarietyNames)">
 						<template name="children" var="item">
 							<toolbarbutton label="@load(item)" onClick="@global-command('openExtensionDataDetail', function='varietyByCountry', summaryModel=each, germplasmName=item)" class="grid-link" />

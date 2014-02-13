@@ -6,11 +6,11 @@
 		viewModel="@id('vm') @init('org.strasa.web.extensiondata.view.model.ExtGYCgrid')">
 
 
-		<grid id="AreaSummaryByYearAndCountryExtension" model="@load(vm.areaSummaryGYC)" height="400px"
+		<grid id="AreaSummaryByYearAndCountryExtension"
+			model="@load(vm.areaSummaryGYC)" height="400px"
 			sizedByContent="true">
 			<auxhead sclass="category-center">
-				<auxheader label="Area by Year and Country"
-					colspan="4" />
+				<auxheader label="Area by Year and Country" colspan="4" />
 			</auxhead>
 			<auxhead sclass="category-center">
 				<auxheader colspan="1">
@@ -67,7 +67,11 @@
 					<label value="@load(each.programName)" />
 					<label value="@load(each.yearextension)" />
 					<label value="@load(each.countryextension)" />
-					<label value="@load(each.germplasmname)" />
+					<div>
+						<toolbarbutton label="@load(each.germplasmname)"
+							onClick="@global-command('openExtensionDataDetail', function='areaByCountryAndYear', summaryModel=each, germplasmName=each.germplasmname)"
+							class="grid-link" />
+					</div>
 					<label value="@load(each.sumArea)" />
 				</row>
 			</template>

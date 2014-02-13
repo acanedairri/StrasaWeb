@@ -73,8 +73,13 @@ public class ExtensionDataDetail {
 		
 		if(function.equals("varietyByYear"))makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByYearRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
 		else if(function.equals("varietyByCountry"))makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByCountryRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
-		else makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByYearAndCountryRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
-	
+		else if(function.equals("varietyByCountryAndYear")) makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByYearAndCountryRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
+		else if(function.equals("areaByYear")) makeRowStatus(mgr.getProgramGermplasmByYear(each.getYearextension(), each.getProgramid(), germplasmName));
+		else if(function.equals("areaByCountry")) makeRowStatus(mgr.getProgramGermplasmByCountry(each.getCountryextension(), each.getProgramid(), germplasmName));
+		else if(function.equals("areaByCountryAndYear")) makeRowStatus(mgr.getProgramGermplasmByYearandCountry(each.getYearextension(), each.getCountryextension(), each.getProgramid(), germplasmName));
+		else if(function.equals("varietyCountByYear"))makeRowStatus(mgr.getVarietyReleaseByYear(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
+		else if(function.equals("varietyCountByCountry"))makeRowStatus(mgr.getVarietyReleaseByCountryRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
+		else if(function.equals("varietyCountByCountryAndYear")) makeRowStatus(mgr.getVarietyReleaseByCountryAndYear(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
 		if(rowList.size()==1) {
 			component.getFellow("singleGrid").setVisible(true);
 			component.getFellow("multipleGrid").setVisible(false);

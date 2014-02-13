@@ -262,6 +262,56 @@ public class ExtensionDataManagerImpl {
 		}
 	}
 
+	
+	
+	public List<ExtensionData> getVarietyReleaseByCountryRelease(
+			String year, String country, Integer programid, String germplasmName) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
+		try{
+			ExtensionDataExample example = new ExtensionDataExample();
+			example.createCriteria().andProgramidEqualTo(programid).andCountryreleaseEqualTo(country); //search by country only
+			List<ExtensionData> toreturn = mapper.selectByExample(example);
+			return toreturn;
+
+		}finally{
+			session.close();
+		}
+	}
+	
+	public List<ExtensionData> getVarietyReleaseByYear(
+			String year, String country, Integer programid, String germplasmName) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
+		try{
+			ExtensionDataExample example = new ExtensionDataExample();
+			example.createCriteria().andProgramidEqualTo(programid).andYearreleaseEqualTo(year); //search by year only
+			List<ExtensionData> toreturn = mapper.selectByExample(example);
+			return toreturn;
+
+		}finally{
+			session.close();
+		}
+	}
+	
+	public List<ExtensionData> getVarietyReleaseByCountryAndYear(
+			String year, String country, Integer programid, String germplasmName) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
+		try{
+			ExtensionDataExample example = new ExtensionDataExample();
+			example.createCriteria().andProgramidEqualTo(programid).andCountryreleaseEqualTo(country).andYearreleaseEqualTo(year); 
+			List<ExtensionData> toreturn = mapper.selectByExample(example);
+			return toreturn;
+
+		}finally{
+			session.close();
+		}
+	}
+	
 	public List<ExtensionData> getExtensionDataByNoOfVarietyReleaseByCountryRelease(
 			String year, String country, Integer programid, String germplasmName) {
 		// TODO Auto-generated method stub
@@ -302,6 +352,55 @@ public class ExtensionDataManagerImpl {
 		try{
 			ExtensionDataExample example = new ExtensionDataExample();
 			example.createCriteria().andProgramidEqualTo(programid).andGermplasmnameEqualTo(germplasmName).andCountryreleaseEqualTo(country).andYearreleaseEqualTo(year); 
+			List<ExtensionData> toreturn = mapper.selectByExample(example);
+			return toreturn;
+
+		}finally{
+			session.close();
+		}
+	}
+
+	public List<ExtensionData> getProgramGermplasmByYear(String yearextension,
+			Integer programid, String germplasmName) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
+		try{
+			ExtensionDataExample example = new ExtensionDataExample();
+			example.createCriteria().andProgramidEqualTo(programid).andGermplasmnameEqualTo(germplasmName).andYearextensionEqualTo(yearextension); 
+			List<ExtensionData> toreturn = mapper.selectByExample(example);
+			return toreturn;
+
+		}finally{
+			session.close();
+		}
+	}
+
+	public List<ExtensionData> getProgramGermplasmByCountry(
+			String countryxtension, Integer programid, String germplasmName) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
+		try{
+			ExtensionDataExample example = new ExtensionDataExample();
+			example.createCriteria().andProgramidEqualTo(programid).andGermplasmnameEqualTo(germplasmName).andCountryextensionEqualTo(countryxtension);
+			List<ExtensionData> toreturn = mapper.selectByExample(example);
+			return toreturn;
+
+		}finally{
+			session.close();
+		}
+	}
+
+	public List<ExtensionData> getProgramGermplasmByYearandCountry(
+			String yearextension, String countryxtension, Integer programid,
+			String germplasmName) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
+		try{
+			ExtensionDataExample example = new ExtensionDataExample();
+			example.createCriteria().andProgramidEqualTo(programid).andGermplasmnameEqualTo(germplasmName).andCountryextensionEqualTo(countryxtension).andYearextensionEqualTo(yearextension); 
 			List<ExtensionData> toreturn = mapper.selectByExample(example);
 			return toreturn;
 
