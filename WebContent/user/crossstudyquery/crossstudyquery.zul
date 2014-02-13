@@ -178,8 +178,8 @@
 			<div align="left" vflex="1">
 				<hbox align="start">
 					<button label="Reset" onClick="@command('reset')"
-						sclass="btn-plain" image="/images/Refresh16.png" />
-					<button label="Query" image="/images/Query16.png"
+						sclass="btn-plain" image="/images/reset.png" />
+					<button label="Query" image="/images/query.png"
 						sclass="btn-blue" onClick="@command('RunQuery')" />
 
 				</hbox>

@@ -87,7 +87,7 @@
 <!-- 									<button label="Remove"
 													onClick="@command('removeRawData') " /> -->
 													
-									<button label="Update Column Header" sclass="btn-blue"
+									<button label="Modify Column Header" sclass="btn-blue"
 													onClick="@command('updateColumnHeader') "
 													/>	
 								<div id="divRawData" vflex="true" hflex="true"></div>

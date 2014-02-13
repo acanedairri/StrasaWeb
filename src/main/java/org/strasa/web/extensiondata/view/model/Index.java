@@ -53,8 +53,8 @@ public class Index {
 
 		Tabpanel newPanel = new Tabpanel();
 		Tab newTab = new Tab();
-		newTab.setLabel("Summary");
-		newTab.setImage("/images/Search16a.png");
+		newTab.setLabel("Summary of Extension Data");
+		newTab.setImage("/images/summary.png");
 
 		//initialize view after view construction.
 		Include studyInformationPage = new Include();

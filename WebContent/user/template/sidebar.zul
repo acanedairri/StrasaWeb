@@ -28,7 +28,7 @@
 				image="/images/Settings16.png" />
 		</tabs>
 		<tabpanels>
-			<tabpanel id="tabPanelUploadId">
+			<tabpanel id="tabPanelUploadId" style="padding:0px">
 				<grid sclass="sidebar" oddRowSclass="empty"
 					id="fnListUpload" class="mygrid">
 					<columns>
@@ -39,7 +39,7 @@
 				</grid>
 
 			</tabpanel>
-			<tabpanel id="tabPanelBrowseId">
+			<tabpanel id="tabPanelBrowseId" style="padding:0px">
 				<grid sclass="sidebar" oddRowSclass="empty"
 					id="fnListBrowse" class="mygrid">
 					<columns>
@@ -50,7 +50,7 @@
 				</grid>
 
 			</tabpanel>
-			<tabpanel>
+			<tabpanel style="padding:0px">
 				<grid sclass="sidebar" oddRowSclass="empty"
 					id="fnAnalysis" class="mygrid">
 					<columns>
@@ -60,7 +60,7 @@
 					<rows />
 				</grid>
 			</tabpanel>
-			<tabpanel>
+			<tabpanel style="padding:0px">
 				<grid sclass="sidebar" oddRowSclass="empty"
 					id="fnDecisionMaking" class="mygrid">
 					<columns>
@@ -70,7 +70,7 @@
 					<rows />
 				</grid>
 			</tabpanel>
-			<tabpanel id="tabPanelSettingId">
+			<tabpanel id="tabPanelSettingId"  style="padding:0px">
 				<grid sclass="sidebar" oddRowSclass="empty"
 					id="fnMaintenance" class="mygrid">
 					<columns>

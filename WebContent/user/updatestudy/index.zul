@@ -4,203 +4,216 @@
 	<?page title="My page" contentType="text/html;charset=UTF-8"?>
 	<style src="/css/main.css"></style>
 	<style src="../css/main.css" />
-	<div style="padding:10px 0px 15px 20px" align="left">
+	<!-- 	<div style="padding:10px 0px 15px 20px" align="left">
 		<label class="header-menu">Update Study</label>
-	</div>
+		</div> -->
 	<!-- <window border="normal"> -->
-	<div apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.updatestudy.view.Index')">
+	<panel title="Update Study" border="normal">
+		<panelchildren style="overflow: auto;padding:10px">
 
-		<vlayout>
+			<div apply="org.zkoss.bind.BindComposer"
+				viewModel="@id('vm') @init('org.strasa.web.updatestudy.view.Index')">
+
+				<vlayout>
 
 
 
-			<tabbox>
-				<tabs>
-					<tab label="Study Information"></tab>
-					<tab label="Raw Data"
-						onClick="@command('loadRawDataTab')">
-					</tab>
-					<tab label="Derived Data"
-						onClick="@command('loadDerivedDataTab')">
-					</tab>
-					<tab label="Genotype Data"
-						onClick="@command('loadGenotypeDataTab')" />
+					<tabbox>
+						<tabs>
+							<tab label="Study Information"></tab>
+							<tab label="Raw Data"
+								onClick="@command('loadRawDataTab')">
+							</tab>
+							<tab label="Derived Data"
+								onClick="@command('loadDerivedDataTab')">
+							</tab>
+							<tab label="Genotype Data"
+								onClick="@command('loadGenotypeDataTab')" />
 
-				</tabs>
-				<tabpanels>
-					<tabpanel>
-						<groupbox mold="3d" width="100%">
-							<caption id="lbltest"
-								label="Study Information" />
-							<vlayout spacing="7px">
-								<grid zclass="none">
-									<columns>
-										<column label="" width="120px" />
-										<column label="" width="350px" />
-										<column label="" width="100px" />
-									</columns>
-									<rows>
-										<row>
-											<label class="name"
-												value="Program:" />
-											<bandbox id="bdProgram"
-												mold="rounded" autodrop="true"
-												value="@bind(vm.txtProgram.name)" readonly="true"
-												width="330px">
-												<bandpopup>
-													<listbox
-														height="250px" width="650px" mold="paging"
-														autopaging="true" model="@load(vm.programList)"
-														selectedItem="@bind(vm.txtProgram)"
-														onSelect="bdProgram.value=self.selectedItem.label;bdProgram.close();">
-														<listhead>
-															<listheader
-																label="Select Program" />
-														</listhead>
-														<template
-															name="model" var="item" status="s">
-															<listitem>
+						</tabs>
+						<tabpanels>
+							<tabpanel>
+								<groupbox mold="3d" width="100%">
+									<caption id="lbltest"
+										label="Study Information" />
+									<vlayout spacing="7px">
+										<grid zclass="none">
+											<columns>
+												<column label=""
+													width="120px" />
+												<column label=""
+													width="350px" />
+												<column label=""
+													width="100px" />
+											</columns>
+											<rows>
+												<row>
+													<label class="name"
+														value="Program:" />
+													<bandbox
+														id="bdProgram" mold="rounded" autodrop="true"
+														value="@bind(vm.txtProgram.name)" readonly="true"
+														width="330px">
+														<bandpopup>
+															<listbox
+																height="250px" width="650px" mold="paging"
+																autopaging="true" model="@load(vm.programList)"
+																selectedItem="@bind(vm.txtProgram)"
+																onSelect="bdProgram.value=self.selectedItem.label;bdProgram.close();">
+																<listhead>
+																	<listheader
+																		label="Select Program" />
+																</listhead>
+																<template
+																	name="model" var="item" status="s">
+																	<listitem>
 
-																<listcell
-																	label="@bind(item.name)" />
-															</listitem>
-														</template>
+																		<listcell
+																			label="@bind(item.name)" />
+																	</listitem>
+																</template>
 
-													</listbox>
-												</bandpopup>
-											</bandbox>
-											<button label="Add" image="/images/New16.png"
-												sclass="btn-blue" onClick="@command('addProgram')" />
-										</row>
-										<row>
-											<label class="name"
-												value="Project:" />
-											<bandbox id="bdProject"
-												mold="rounded" width="330px" autodrop="true"
-												value="@bind(vm.txtProject.name)" readonly="true">
-												<bandpopup>
-													<listbox
-														height="250px" width="450px" mold="paging"
-														autopaging="true" model="@load(vm.projectList)"
-														selectedItem="@bind(vm.txtProject)"
-														onSelect="bdProject.value=self.selectedItem.label;bdProject.close();">
-														<listhead>
-															<listheader
-																label="Select Project" />
-														</listhead>
-														<template
-															name="model" var="item" status="s">
-															<listitem>
+															</listbox>
+														</bandpopup>
+													</bandbox>
+													<button label="Add"
+														image="/images/New16.png" sclass="btn-blue"
+														onClick="@command('addProgram')" />
+												</row>
+												<row>
+													<label class="name"
+														value="Project:" />
+													<bandbox
+														id="bdProject" mold="rounded" width="330px"
+														autodrop="true" value="@bind(vm.txtProject.name)"
+														readonly="true">
+														<bandpopup>
+															<listbox
+																height="250px" width="450px" mold="paging"
+																autopaging="true" model="@load(vm.projectList)"
+																selectedItem="@bind(vm.txtProject)"
+																onSelect="bdProject.value=self.selectedItem.label;bdProject.close();">
+																<listhead>
+																	<listheader
+																		label="Select Project" />
+																</listhead>
+																<template
+																	name="model" var="item" status="s">
+																	<listitem>
 
-																<listcell
-																	label="@bind(item.name)" />
-															</listitem>
-														</template>
-													</listbox>
-												</bandpopup>
-											</bandbox>
-											<button label="Add" image="/images/New16.png"
-												sclass="btn-blue" onClick="@command('addProject')" />
-										</row>
-										<row>
-											<label class="name"
-												value="Study Name:" />
-											<textbox width='173px'
-												value="@bind(vm.txtStudyName)" />
-										</row>
+																		<listcell
+																			label="@bind(item.name)" />
+																	</listitem>
+																</template>
+															</listbox>
+														</bandpopup>
+													</bandbox>
+													<button label="Add"
+														image="/images/New16.png" sclass="btn-blue"
+														onClick="@command('addProject')" />
+												</row>
+												<row>
+													<label class="name"
+														value="Study Name:" />
+													<textbox
+														width='173px' value="@bind(vm.txtStudyName)" />
+												</row>
 
-										<row>
-											<label class="name"
-												value="Study Type:" />
-											<bandbox id="bdStudyType"
-												mold="rounded" autodrop="true"
-												value="@load(vm.txtStudyType)" readonly="true">
-												<bandpopup>
-													<listbox
-														height="250px" width="450px" mold="paging"
-														autopaging="true" model="@load(vm.studyTypeList)"
-														selectedItem="@bind(vm.txtStudyType)"
-														onSelect="bdStudyType.value=self.selectedItem.label;bdStudyType.close();">
-														<listhead>
-															<listheader
-																label="Select Study types" />
-														</listhead>
-														<listitem
-															label="${each}" forEach="${languages}" />
-													</listbox>
-												</bandpopup>
-											</bandbox>
-										</row>
+												<row>
+													<label class="name"
+														value="Study Type:" />
+													<bandbox
+														id="bdStudyType" mold="rounded" autodrop="true"
+														value="@load(vm.txtStudyType)" readonly="true">
+														<bandpopup>
+															<listbox
+																height="250px" width="450px" mold="paging"
+																autopaging="true" model="@load(vm.studyTypeList)"
+																selectedItem="@bind(vm.txtStudyType)"
+																onSelect="bdStudyType.value=self.selectedItem.label;bdStudyType.close();">
+																<listhead>
+																	<listheader
+																		label="Select Study types" />
+																</listhead>
+																<listitem
+																	label="${each}" forEach="${languages}" />
+															</listbox>
+														</bandpopup>
+													</bandbox>
+												</row>
 
-										<row>
-											<label class="name"
-												value="Start Year:" />
-											<spinner width='190px'
-												value="@bind(vm.startYear)" />
-										</row>
-										<row>
-											<label class="name"
-												value="End Year:" />
-											<spinner width='190px'
-												value="@bind(vm.endYear)" />
-										</row>
-										<row>
-											<!-- 											<button label="Save"
-												image="im" onClick="@command('saveStudyInformation')">
-												</button> -->
+												<row>
+													<label class="name"
+														value="Start Year:" />
+													<spinner
+														width='190px' value="@bind(vm.startYear)" />
+												</row>
+												<row>
+													<label class="name"
+														value="End Year:" />
+													<spinner
+														width='190px' value="@bind(vm.endYear)" />
+												</row>
+												<row>
+													<!-- 											<button label="Save"
+														image="im" onClick="@command('saveStudyInformation')">
+														</button> -->
 
-										</row>
-									</rows>
-								</grid>
-								<hlayout style="float:center;">
+												</row>
+											</rows>
+										</grid>
+										<hlayout
+											style="float:center;">
 
-									<button label="Save"
-										image="/images/save16.png"
-										onClick="@command('saveStudyInformation')"
-										sclass="btn-blue">
-									</button>
+											<button label="Save"
+												image="/images/save16.png"
+												onClick="@command('saveStudyInformation')"
+												sclass="btn-blue">
+											</button>
 
-								</hlayout>
-							</vlayout>
-						</groupbox>
+										</hlayout>
+									</vlayout>
+								</groupbox>
 
-					</tabpanel>
-					<tabpanel>
+							</tabpanel>
+							<tabpanel>
 
-						<button label="Add New Dataset" image="/images/New16.png" sclass="btn-blue"
-							onClick="@command('addNewDataset',datatype=true)" />
-						<tabbox id="rawDataTab">
+								<button label="Add New Dataset"
+									image="/images/New16.png" sclass="btn-blue"
+									onClick="@command('addNewDataset',datatype=true)" />
+								<tabbox id="rawDataTab">
 
-							<tabs>
+									<tabs>
 
-							</tabs>
+									</tabs>
 
-							<tabpanels>
+									<tabpanels>
 
-							</tabpanels>
-						</tabbox>
-					</tabpanel>
-					<tabpanel>
+									</tabpanels>
+								</tabbox>
+							</tabpanel>
+							<tabpanel>
 
-						<button label="Add new Dataset" image="/images/New16.png" sclass="btn-blue"
-							onClick="@command('addNewDataset',datatype=false)" />
-						<tabbox id="derivedDataTab">
+								<button label="Add new Dataset"
+									image="/images/New16.png" sclass="btn-blue"
+									onClick="@command('addNewDataset',datatype=false)" />
+								<tabbox id="derivedDataTab">
 
-							<tabs></tabs>
+									<tabs></tabs>
 
-							<tabpanels>
+									<tabpanels>
 
-							</tabpanels>
-						</tabbox>
-					</tabpanel>
-					<tabpanel id="tabGenotypeData">
+									</tabpanels>
+								</tabbox>
+							</tabpanel>
+							<tabpanel id="tabGenotypeData">
 
-					</tabpanel>
-				</tabpanels>
-			</tabbox>
-		</vlayout>
-	</div>
-
+							</tabpanel>
+						</tabpanels>
+					</tabbox>
+				</vlayout>
+			</div>
+		</panelchildren>
+	</panel>
 	<!-- 	</window> -->
 </zk>

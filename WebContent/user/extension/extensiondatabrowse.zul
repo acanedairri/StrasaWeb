@@ -3,7 +3,7 @@
 	<style src="../css/main.css" />
 	<window>
 		<groupbox mold="3d">
-			<caption label="Extension Data"/>
+			<caption label="Extension"/>
 			<vbox>
 				<include self="@define(content)"
 					src="extension/extGCgrid.zul" />
@@ -17,7 +17,7 @@
 		</groupbox>
 			<separator height="30px"></separator>
 		<groupbox mold="3d">
-			<caption label="Release Data" />
+			<caption label="Release" />
 			<vbox>
 				<separator height="15px"></separator>
 				<include self="@define(content)"

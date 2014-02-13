@@ -185,11 +185,11 @@ public class Index {
 	}
 
 	public String getTotalUnknownGermplasm() {
-		return "List of total unknown germplasm (total: " + lstStudyGermplasm.size() + ")";
+		return "New Germplasm (Total: " + lstStudyGermplasm.size() + ")";
 	}
 
 	public String getTotalKnownGermplasm() {
-		return "List of total of uploaded germplasm (total: " + lstKnownGermplasm.size() + ")";
+		return "Germplasm (Total: " + lstKnownGermplasm.size() + ")";
 	}
 
 	@Command

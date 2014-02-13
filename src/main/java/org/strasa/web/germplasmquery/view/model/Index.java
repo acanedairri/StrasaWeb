@@ -51,7 +51,7 @@ private Tab resultTab;
 		Tabpanel newPanel = new Tabpanel();
 		Tab newTab = new Tab();
 		newTab.setImage("/images/Search16a.png");
-		newTab.setLabel("Search");
+		newTab.setLabel("Browse Germplasm");
 		
 		//initialize view after view construction.
 		Include studyInformationPage = new Include();

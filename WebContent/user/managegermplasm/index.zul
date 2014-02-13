@@ -1,321 +1,523 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk>
-    <style src="../css/main.css" />
-    <style>.gridMaxBodyHeight550 div.z-listbox-body { max-height: 90%;
+	<style src="../css/main.css" />
+	<style>
+		.gridMaxBodyHeight550 div.z-listbox-body { max-height: 90%;
 		height: 90%; overflow: auto; } tr.z-listitem-seld {
-		background-image:none; background-color:#BEC7F7;}</style>
-    <script src="http://stanlemon.net/javascript/jquery.jgrowl.js" />
-    <style src="http://stanlemon.net/stylesheet/jquery.jgrowl.css" />
-    <div width="100%" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.strasa.web.managegermplasm.view.model.Index')">
-        <div align="left">
-            <hlayout>
-                <button id="uploadGenotypeData" upload="true" label="Upload Germplasm Table" onUpload="@command('uploadGenotypeData')" />
-                <div id="divUploadOption">
-                    <label value="" id="lblFileName" style="font-size:16px;" />
-                    <button label="Remove" onClick="@command('resetUnknownGermplasm')" sclass="btn-blue" />
-                </div>
-            </hlayout>
-        </div>
-        <columnlayout id="colLayout1"  vflex = "1">
-            <columnchildren width="70%" vflex = "1">
-                <vlayout vflex = "1">
-                    <groupbox mold="3d" id="gbUnknownGermplasm" hflex="1" vflex = "1">
-                        <caption label="@load(vm.totalUnknownGermplasm)" />
-                        <vlayout vflex = "1">
-                        <button label="Submit" onClick="@command('saveData')" sclass="btn-blue" image="/images/save16.png" />
-                            <listbox id="tblStudyGerm" sizedByContent="true" hflex="1" model="@load(vm.lstStudyGermplasm) @template(each.templateMode)"  rows="10" selectedItem="@bind(vm.selectedGermplasm)">
-                                <listhead menupopup="auto" columnsgroup="false">
-                                    <listheader label="GName" sort="auto(germplasmname)" style="color:red" hflex="1" width="19%" />
-                                    <listheader label="GermplasmType" style="color:red" hflex="1" width="19%" />
-                                    <listheader label="Breeder" style="color:red" hflex="1" width="19%" />
-                                    <listheader label="Female Parent" style="color:red" hflex="1" width="19%" />
-                                    <listheader label="Male Parent" style="color:red" hflex="1" width="16%" />
-                                 
-                                </listhead>
-                                <template name="display">
-                                    <listitem onClick="@command('selectGermplasm', germplasm = each)">
-                                        <listcell>
-                                            <label value="@bind(each.germplasmname)" />
-                                        </listcell>
-                                        <listcell>
-                                            <label value="@bind(each.selectedGermplasmType.germplasmtype)" />
-                                        </listcell>
-                                        <listcell>
-                                            <label value="@bind(each.breeder)" />
-                                        </listcell>
-                                        <listcell>
-                                            <label value="@bind(each.femaleparent)" />
-                                        </listcell>
-                                        <listcell>
-                                            <label value="@bind(each.maleparent)" />
-                                        </listcell>
-                                        <listcell>
-                                            <button image="/images/pencil.png" onClick="@command('modifyGermplasm', gname=each.germplasmname)" />
-                                        </listcell>
-                                    </listitem>
-                                </template>
-                                <template name="editable">
-                                    <listitem vflex="1" hflex="1" onClick="@command('selectGermplasm', germplasm = each)">
-                                        <listcell>
-                                            <label value="@bind(each.germplasmname)" />
-                                        </listcell>
-                                        <listcell>
-                                            <combobox model="@load(vm.lstGermplasmType)" readonly="${each.germplasmtypeid != null}" selectedItem="@bind(each.selectedGermplasmType)" width="99%">
-                                                <template name="model">
-                                                    <comboitem value="@load(each.germplasmtype)" label="@load(each.germplasmtype)" onClick="@command('selectGermplasm', germplasm = each)" />
-                                                </template>
-                                            </combobox>
-                                        </listcell>
-                                        <listcell>
-                                            <textbox value="@bind(each.breeder)" width="15%" onClick="@command('selectGermplasm', germplasm = each)" />
-                                            <textbox value="@bind(each.newBreeder)" width="15%" onClick="@command('selectGermplasm', germplasm = each)" />
-                                        </listcell>
-                                        <listcell>
-                                            <textbox value="@bind(each.femaleparent)" constraint="no empty" width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
-                                        </listcell>
-                                        <listcell>
-                                            <textbox value="@bind(each.maleparent)" constraint="no empty" width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
-                                        </listcell>
-                                        <listcell>
-                                            <div>
-                                                <button image="/images/disk.png" onClick="@command('saveGermplasm', germplasm = each)" />
-                                                <button image="/images/cross.png" onClick="@command('cancelEdit', germplasm = each)" />
-                                            </div>
-                                        </listcell>
-                                    </listitem>
-                                </template>
-                                <template name="newEntry">
-                                    <listitem vflex="1" hflex="1" onClick="@command('selectGermplasm', germplasm = each)">
-                                        <listcell>
-                                            <textbox value="@bind(each.germplasmname)" />
-                                        </listcell>
-                                        <listcell>
-                                            <combobox model="@load(vm.lstGermplasmType)" readonly="${each.germplasmtypeid != null}" selectedItem="@bind(each.selectedGermplasmType)" width="99%">
-                                                <template name="model">
-                                                    <comboitem value="@load(each.germplasmtype)" label="@load(each.germplasmtype)" onClick="@command('selectGermplasm', germplasm = each)" />
-                                                </template>
-                                            </combobox>
-                                        </listcell>
-                                        <listcell>
-                                            <textbox value="@bind(each.breeder)" width="100%" onClick="@command('selectGermplasm', germplasm = each)" />
-                                        </listcell>
-                                        <listcell>
-                                            <textbox value="@bind(each.femaleparent)" constraint="no empty" width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
-                                        </listcell>
-                                        <listcell>
-                                            <textbox value="@bind(each.maleparent)" constraint="no empty" width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
-                                        </listcell>
-                                    </listitem>
-                                     
-                                </template>
-                                <listfoot >
-                <listfooter></listfooter>
-               
-            </listfoot>
-                            </listbox>
-                            <separator spacing="8px" />
-                            
-                            <separator spacing="8px" />
-                        </vlayout>
-                    </groupbox>
-                    <groupbox id="gbKnownGermplasm" mold="3d">
-                        <caption label="@load(vm.totalKnownGermplasm)" />
-                        <listbox id="tblKnownGerm" sizedByContent="true" hflex="1" model="@load(vm.lstKnownGermplasm) @template((each.known) ? 'display' : 'editable')" sclass="gridMaxBodyHeight550" rows="10" selectedItem="@bind(vm.selectedGermplasm)">
-                            <listhead menupopup="auto" columnsgroup="false">
-                                <listheader label="GName" sort="auto(germplasmname)" style="color:red" hflex="1" width="19%" />
-                                <listheader label="GermplasmType" style="color:red" hflex="1" width="19%" />
-                                <listheader label="Breeder" style="color:red" hflex="1" width="19%" />
-                                <listheader label="Female Parent" style="color:red" hflex="1" width="19%" />
-                                <listheader label="Male Parent" style="color:red" hflex="1" width="16%" />
-                                <listheader label="Actions" hflex="1" width="8%" />
-                            </listhead>
-                            <template name="display">
-                                <listitem onClick="@command('selectGermplasm', germplasm = each)">
-                                    <listcell>
-                                        <label value="@bind(each.germplasmname)" />
-                                    </listcell>
-                                    <listcell>
-                                        <label value="@bind(each.selectedGermplasmType.germplasmtype)" />
-                                    </listcell>
-                                    <listcell>
-                                        <label value="@bind(each.breeder)" />
-                                    </listcell>
-                                    <listcell>
-                                        <label value="@bind(each.femaleparent)" />
-                                    </listcell>
-                                    <listcell>
-                                        <label value="@bind(each.maleparent)" />
-                                    </listcell>
-                                    <listcell>
-                                        <button image="/images/pencil.png" onClick="@command('modifyGermplasm', gname=each.germplasmname)" />
-                                    </listcell>
-                                </listitem>
-                            </template>
-                            <template name="editable">
-                                <listitem vflex="1" hflex="1" onClick="@command('selectGermplasm', germplasm = each)">
-                                    <listcell>
-                                        <label value="@bind(each.germplasmname)" />
-                                    </listcell>
-                                    <listcell>
-                                        <combobox model="@load(vm.lstGermplasmType)" readonly="${each.germplasmtypeid != null}" selectedItem="@bind(each.selectedGermplasmType)" width="99%">
-                                            <template name="model">
-                                                <comboitem value="@load(each.germplasmtype)" label="@load(each.germplasmtype)" onClick="@command('selectGermplasm', germplasm = each)" />
-                                            </template>
-                                        </combobox>
-                                    </listcell>
-                                    <listcell>
-                                        <label value="@bind(each.breeder)" width="85%" />
-                                        <textbox value="@bind(each.newBreeder)" width="15%" onClick="@command('selectGermplasm', germplasm = each)" />
-                                    </listcell>
-                                    <listcell>
-                                        <textbox value="@bind(each.femaleparent)" constraint="no empty" width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
-                                    </listcell>
-                                    <listcell>
-                                        <textbox value="@bind(each.maleparent)" constraint="no empty" width="99%" onClick="@command('selectGermplasm', germplasm = each)" />
-                                    </listcell>
-                                    <listcell>
-                                        <div>
-                                            <button image="/images/disk.png" onClick="@command('saveGermplasm', germplasm = each)" />
-                                            <button image="/images/cross.png" onClick="@command('cancelEdit', germplasm = each)" />
-                                        </div>
-                                    </listcell>
-                                </listitem>
-                                
-                            </template>
-                        </listbox>
-                    </groupbox>
-                    <separator spacing="20px" />
-                </vlayout>
-            </columnchildren>
-            <columnchildren width="30%">
-                <vlayout vflex="1">
-                    <groupbox width="100%" mold="3d">
-                        <caption label="Other Information" />
-                        <grid vflex="1">
-                            <columns>
-                                <column />
-                                <column />
-                            </columns>
-                            <rows>
-                                <row>
-                                    <label value="GID:" style="" />
-                                    <intbox value="@bind(vm.selectedGermplasm.gid)" width="99%" disabled="@load(vm.selectedGermplasm.editMode)" inplace="@load(vm.selectedGermplasm.editMode)" style="color: #000000 !important;" />
-                                </row>
-                                <row>
-                                    <label value="Other Name:" style="" />
-                                    <textbox value="@bind(vm.selectedGermplasm.othername)" width="99%" disabled="@load(vm.selectedGermplasm.editMode)" inplace="@load(vm.selectedGermplasm.editMode)" style="color: #000000 !important;" />
-                                </row>
-                                <row>
-                                    <label value="IR Number:" style="" />
-                                    <textbox value="@bind(vm.selectedGermplasm.irnumber)" width="99%" disabled="@load(vm.selectedGermplasm.editMode)" inplace="@load(vm.selectedGermplasm.editMode)" style="color: #000000 !important;" />
-                                </row>
-                                <row>
-                                    <label value="IR Cross:" />
-                                    <textbox value="@bind(vm.selectedGermplasm.ircross)" width="99%" disabled="@load(vm.selectedGermplasm.editMode)" inplace="@load(vm.selectedGermplasm.editMode)" style="color: #000000 !important;" />
-                                </row>
-                                <row>
-                                    <label value="Parentage:" />
-                                    <textbox value="@bind(vm.selectedGermplasm.parentage)" width="99%" disabled="@load(vm.selectedGermplasm.editMode)" inplace="@load(vm.selectedGermplasm.editMode)" style="color: #000000 !important;" />
-                                </row>
-                                <row>
-                                    <label value="Selection History:" />
-                                    <textbox value="@bind(vm.selectedGermplasm.selectionhistory)" width="99%" disabled="@load(vm.selectedGermplasm.editMode)" inplace="@load(vm.selectedGermplasm.editMode)" style="color: #000000 !important;" />
-                                </row>
-                                <row>
-                                    <label value="Source:" />
-                                    <textbox value="@bind(vm.selectedGermplasm.source)" width="99%" disabled="@load(vm.selectedGermplasm.editMode)" inplace="@load(vm.selectedGermplasm.editMode)" style="color: #000000 !important;" />
-                                </row>
-                            </rows>
-                        </grid>
-                    </groupbox>
-                    <groupbox width="99%" mold="3d" height="500px">
-                        <caption label="Characteristic" />
-                        <grid height="450px">
-                            <rows>
-                                <row width="100%" height="420px">
-                                    <tabbox hflex="1" height="420px" width="100%">
-                                        <tabs>
-                                            <tab label="Biotic" />
-                                            <tab label="Abiotic" width="" />
-                                            <tab label="Major Genes" width="" />
-                                            <tab label="Grain Quality" width="" />
-                                        </tabs>
-                                        <tabpanels height="400px">
-                                            <tabpanel>
-                                                <listbox model="@load(vm.selectedGermplasm.keyBiotic)" width="200px" height="400px">
-                                                    <listhead>
-                                                        <listheader label="Name" />
-                                                        <listheader label="Value" />
-                                                    </listhead>
-                                                    <template name="model">
-                                                        <listitem>
-                                                            <listcell label="@load(each.name)" />
-                                                            <listcell>
-                                                                <checkbox checked="@bind(each.value)" disabled="@load(vm.selectedGermplasm.known)" />
-                                                            </listcell>
-                                                        </listitem>
-                                                    </template>
-                                                </listbox>
-                                            </tabpanel>
-                                            <tabpanel>
-                                                <listbox model="@load(vm.selectedGermplasm.keyAbiotic)" width="200px">
-                                                    <listhead>
-                                                        <listheader label="Name" />
-                                                        <listheader label="Value" />
-                                                    </listhead>
-                                                    <template name="model">
-                                                        <listitem>
-                                                            <listcell label="@load(each.name)" />
-                                                            <listcell>
-                                                                <checkbox checked="@bind(each.value)" disabled="@load(vm.selectedGermplasm.known)" />
-                                                            </listcell>
-                                                        </listitem>
-                                                    </template>
-                                                </listbox>
-                                            </tabpanel>
-                                            <tabpanel>
-                                                <listbox model="@load(vm.selectedGermplasm.keyGrainQuality)" width="200px">
-                                                    <listhead>
-                                                        <listheader label="Name" />
-                                                        <listheader label="Value" />
-                                                    </listhead>
-                                                    <template name="model">
-                                                        <listitem>
-                                                            <listcell label="@load(each.name)" />
-                                                            <listcell>
-                                                                <checkbox checked="@bind(each.value)" disabled="@load(vm.selectedGermplasm.known)" />
-                                                            </listcell>
-                                                        </listitem>
-                                                    </template>
-                                                </listbox>
-                                            </tabpanel>
-                                            <tabpanel>
-                                                <listbox model="@load(vm.selectedGermplasm.keyMajorGenes)" width="200px">
-                                                    <listhead>
-                                                        <listheader label="Name" />
-                                                        <listheader label="Value" />
-                                                    </listhead>
-                                                    <template name="model">
-                                                        <listitem>
-                                                            <listcell label="@load(each.name)" />
-                                                            <listcell>
-                                                                <checkbox checked="@bind(each.value)" disabled="@load(vm.selectedGermplasm.known)" />
-                                                            </listcell>
-                                                        </listitem>
-                                                    </template>
-                                                </listbox>
-                                            </tabpanel>
-                                        </tabpanels>
-                                    </tabbox>
-                                </row>
-                            </rows>
-                        </grid>
-                    </groupbox>
-                </vlayout>
-            </columnchildren>
-        </columnlayout>
-        <separator />
-        <!-- 		</groupbox> -->
-        <hlayout width="" />
-    </div>
+		background-image:none; background-color:#BEC7F7;}
+	</style>
+	<script src="http://stanlemon.net/javascript/jquery.jgrowl.js" />
+	<style src="http://stanlemon.net/stylesheet/jquery.jgrowl.css" />
+	<separator height="5px"></separator>
+	<panel title="Upload Germplasm" border="normal">
+		<panelchildren style="overflow: auto;padding:10px">
+			<div width="100%" apply="org.zkoss.bind.BindComposer"
+				viewModel="@id('vm') @init('org.strasa.web.managegermplasm.view.model.Index')">
+				<div align="left">
+					<hlayout>
+						<button id="uploadGenotypeData" upload="true" image="/images/add.png"
+							label="Browse"
+							onUpload="@command('uploadGenotypeData')" />
+						<space></space>
+						<div id="divUploadOption">
+							<label value="" id="lblFileName"
+								style="font-size:16px;" />
+							<button label="Cancel" image="/images/remove.png"
+								onClick="@command('resetUnknownGermplasm')" sclass="btn-blue" />
+							<button label="Submit"
+										onClick="@command('saveData')" sclass="btn-blue"
+										image="/images/save16.png" />	
+								
+						</div>
+					</hlayout>
+				</div>
+				<columnlayout id="colLayout1" vflex="1">
+					<columnchildren width="70%" vflex="1">
+						<vlayout vflex="1">
+							<groupbox mold="3d" id="gbUnknownGermplasm"
+								hflex="1" vflex="1">
+								<caption
+									label="@load(vm.totalUnknownGermplasm)" />
+								<vlayout vflex="1">
+	<!-- 								<button label="Submit"
+										onClick="@command('saveData')" sclass="btn-blue"
+										image="/images/save16.png" /> -->
+									<listbox id="tblStudyGerm"
+										sizedByContent="true" hflex="1"
+										model="@load(vm.lstStudyGermplasm) @template(each.templateMode)"
+										rows="10" selectedItem="@bind(vm.selectedGermplasm)">
+										<listhead menupopup="auto"
+											columnsgroup="false">
+											<listheader label="GName"
+												sort="auto(germplasmname)" style="color:red" hflex="1"
+												width="19%" />
+											<listheader
+												label="GermplasmType" style="color:red" hflex="1"
+												width="19%" />
+											<listheader label="Breeder"
+												style="color:red" hflex="1" width="19%" />
+											<listheader
+												label="Female Parent" style="color:red" hflex="1"
+												width="19%" />
+											<listheader
+												label="Male Parent" style="color:red" hflex="1" width="16%" />
+
+										</listhead>
+										<template name="display">
+											<listitem
+												onClick="@command('selectGermplasm', germplasm = each)">
+												<listcell>
+													<label
+														value="@bind(each.germplasmname)" />
+												</listcell>
+												<listcell>
+													<label
+														value="@bind(each.selectedGermplasmType.germplasmtype)" />
+												</listcell>
+												<listcell>
+													<label
+														value="@bind(each.breeder)" />
+												</listcell>
+												<listcell>
+													<label
+														value="@bind(each.femaleparent)" />
+												</listcell>
+												<listcell>
+													<label
+														value="@bind(each.maleparent)" />
+												</listcell>
+												<listcell>
+													<button
+														image="/images/pencil.png"
+														onClick="@command('modifyGermplasm', gname=each.germplasmname)" />
+												</listcell>
+											</listitem>
+										</template>
+										<template name="editable">
+											<listitem vflex="1"
+												hflex="1"
+												onClick="@command('selectGermplasm', germplasm = each)">
+												<listcell>
+													<label
+														value="@bind(each.germplasmname)" />
+												</listcell>
+												<listcell>
+													<combobox
+														model="@load(vm.lstGermplasmType)"
+														readonly="${each.germplasmtypeid != null}"
+														selectedItem="@bind(each.selectedGermplasmType)"
+														width="99%">
+														<template
+															name="model">
+															<comboitem
+																value="@load(each.germplasmtype)"
+																label="@load(each.germplasmtype)"
+																onClick="@command('selectGermplasm', germplasm = each)" />
+														</template>
+													</combobox>
+												</listcell>
+												<listcell>
+													<textbox
+														value="@bind(each.breeder)" width="15%"
+														onClick="@command('selectGermplasm', germplasm = each)" />
+													<textbox
+														value="@bind(each.newBreeder)" width="15%"
+														onClick="@command('selectGermplasm', germplasm = each)" />
+												</listcell>
+												<listcell>
+													<textbox
+														value="@bind(each.femaleparent)" constraint="no empty"
+														width="99%"
+														onClick="@command('selectGermplasm', germplasm = each)" />
+												</listcell>
+												<listcell>
+													<textbox
+														value="@bind(each.maleparent)" constraint="no empty"
+														width="99%"
+														onClick="@command('selectGermplasm', germplasm = each)" />
+												</listcell>
+												<listcell>
+													<div>
+														<button
+															image="/images/disk.png"
+															onClick="@command('saveGermplasm', germplasm = each)" />
+														<button
+															image="/images/cross.png"
+															onClick="@command('cancelEdit', germplasm = each)" />
+													</div>
+												</listcell>
+											</listitem>
+										</template>
+										<template name="newEntry">
+											<listitem vflex="1"
+												hflex="1"
+												onClick="@command('selectGermplasm', germplasm = each)">
+												<listcell>
+													<textbox
+														value="@bind(each.germplasmname)" />
+												</listcell>
+												<listcell>
+													<combobox
+														model="@load(vm.lstGermplasmType)"
+														readonly="${each.germplasmtypeid != null}"
+														selectedItem="@bind(each.selectedGermplasmType)"
+														width="99%">
+														<template
+															name="model">
+															<comboitem
+																value="@load(each.germplasmtype)"
+																label="@load(each.germplasmtype)"
+																onClick="@command('selectGermplasm', germplasm = each)" />
+														</template>
+													</combobox>
+												</listcell>
+												<listcell>
+													<textbox
+														value="@bind(each.breeder)" width="100%"
+														onClick="@command('selectGermplasm', germplasm = each)" />
+												</listcell>
+												<listcell>
+													<textbox
+														value="@bind(each.femaleparent)" constraint="no empty"
+														width="99%"
+														onClick="@command('selectGermplasm', germplasm = each)" />
+												</listcell>
+												<listcell>
+													<textbox
+														value="@bind(each.maleparent)" constraint="no empty"
+														width="99%"
+														onClick="@command('selectGermplasm', germplasm = each)" />
+												</listcell>
+											</listitem>
+
+										</template>
+										<listfoot>
+											<listfooter></listfooter>
+
+										</listfoot>
+									</listbox>
+									<separator spacing="8px" />
+
+									<separator spacing="8px" />
+								</vlayout>
+							</groupbox>
+							<groupbox id="gbKnownGermplasm" mold="3d">
+								<caption
+									label="@load(vm.totalKnownGermplasm)" />
+								<listbox id="tblKnownGerm"
+									sizedByContent="true" hflex="1"
+									model="@load(vm.lstKnownGermplasm) @template((each.known) ? 'display' : 'editable')"
+									sclass="gridMaxBodyHeight550" rows="10"
+									selectedItem="@bind(vm.selectedGermplasm)">
+									<listhead menupopup="auto"
+										columnsgroup="false">
+										<listheader label="GName"
+											sort="auto(germplasmname)" style="color:red" hflex="1"
+											width="19%" />
+										<listheader
+											label="GermplasmType" style="color:red" hflex="1"
+											width="19%" />
+										<listheader label="Breeder"
+											style="color:red" hflex="1" width="19%" />
+										<listheader
+											label="Female Parent" style="color:red" hflex="1"
+											width="19%" />
+										<listheader label="Male Parent"
+											style="color:red" hflex="1" width="16%" />
+										<listheader label="Actions"
+											hflex="1" width="8%" />
+									</listhead>
+									<template name="display">
+										<listitem
+											onClick="@command('selectGermplasm', germplasm = each)">
+											<listcell>
+												<label
+													value="@bind(each.germplasmname)" />
+											</listcell>
+											<listcell>
+												<label
+													value="@bind(each.selectedGermplasmType.germplasmtype)" />
+											</listcell>
+											<listcell>
+												<label
+													value="@bind(each.breeder)" />
+											</listcell>
+											<listcell>
+												<label
+													value="@bind(each.femaleparent)" />
+											</listcell>
+											<listcell>
+												<label
+													value="@bind(each.maleparent)" />
+											</listcell>
+											<listcell>
+												<button
+													image="/images/pencil.png"
+													onClick="@command('modifyGermplasm', gname=each.germplasmname)" />
+											</listcell>
+										</listitem>
+									</template>
+									<template name="editable">
+										<listitem vflex="1" hflex="1"
+											onClick="@command('selectGermplasm', germplasm = each)">
+											<listcell>
+												<label
+													value="@bind(each.germplasmname)" />
+											</listcell>
+											<listcell>
+												<combobox
+													model="@load(vm.lstGermplasmType)"
+													readonly="${each.germplasmtypeid != null}"
+													selectedItem="@bind(each.selectedGermplasmType)"
+													width="99%">
+													<template
+														name="model">
+														<comboitem
+															value="@load(each.germplasmtype)"
+															label="@load(each.germplasmtype)"
+															onClick="@command('selectGermplasm', germplasm = each)" />
+													</template>
+												</combobox>
+											</listcell>
+											<listcell>
+												<label
+													value="@bind(each.breeder)" width="85%" />
+												<textbox
+													value="@bind(each.newBreeder)" width="15%"
+													onClick="@command('selectGermplasm', germplasm = each)" />
+											</listcell>
+											<listcell>
+												<textbox
+													value="@bind(each.femaleparent)" constraint="no empty"
+													width="99%"
+													onClick="@command('selectGermplasm', germplasm = each)" />
+											</listcell>
+											<listcell>
+												<textbox
+													value="@bind(each.maleparent)" constraint="no empty"
+													width="99%"
+													onClick="@command('selectGermplasm', germplasm = each)" />
+											</listcell>
+											<listcell>
+												<div>
+													<button
+														image="/images/disk.png"
+														onClick="@command('saveGermplasm', germplasm = each)" />
+													<button
+														image="/images/cross.png"
+														onClick="@command('cancelEdit', germplasm = each)" />
+												</div>
+											</listcell>
+										</listitem>
+
+									</template>
+								</listbox>
+							</groupbox>
+							<separator spacing="20px" />
+						</vlayout>
+					</columnchildren>
+					<columnchildren width="30%">
+						<vlayout vflex="1">
+							<groupbox width="100%" mold="3d">
+								<caption label="Other Information" />
+								<grid vflex="1">
+									<columns>
+										<column />
+										<column />
+									</columns>
+									<rows>
+										<row>
+											<label value="GID:"
+												style="" />
+											<intbox
+												value="@bind(vm.selectedGermplasm.gid)" width="99%"
+												disabled="@load(vm.selectedGermplasm.editMode)"
+												inplace="@load(vm.selectedGermplasm.editMode)"
+												style="color: #000000 !important;" />
+										</row>
+										<row>
+											<label value="Other Name:"
+												style="" />
+											<textbox
+												value="@bind(vm.selectedGermplasm.othername)" width="99%"
+												disabled="@load(vm.selectedGermplasm.editMode)"
+												inplace="@load(vm.selectedGermplasm.editMode)"
+												style="color: #000000 !important;" />
+										</row>
+										<row>
+											<label value="IR Number:"
+												style="" />
+											<textbox
+												value="@bind(vm.selectedGermplasm.irnumber)" width="99%"
+												disabled="@load(vm.selectedGermplasm.editMode)"
+												inplace="@load(vm.selectedGermplasm.editMode)"
+												style="color: #000000 !important;" />
+										</row>
+										<row>
+											<label value="IR Cross:" />
+											<textbox
+												value="@bind(vm.selectedGermplasm.ircross)" width="99%"
+												disabled="@load(vm.selectedGermplasm.editMode)"
+												inplace="@load(vm.selectedGermplasm.editMode)"
+												style="color: #000000 !important;" />
+										</row>
+										<row>
+											<label value="Parentage:" />
+											<textbox
+												value="@bind(vm.selectedGermplasm.parentage)" width="99%"
+												disabled="@load(vm.selectedGermplasm.editMode)"
+												inplace="@load(vm.selectedGermplasm.editMode)"
+												style="color: #000000 !important;" />
+										</row>
+										<row>
+											<label
+												value="Selection History:" />
+											<textbox
+												value="@bind(vm.selectedGermplasm.selectionhistory)"
+												width="99%" disabled="@load(vm.selectedGermplasm.editMode)"
+												inplace="@load(vm.selectedGermplasm.editMode)"
+												style="color: #000000 !important;" />
+										</row>
+										<row>
+											<label value="Source:" />
+											<textbox
+												value="@bind(vm.selectedGermplasm.source)" width="99%"
+												disabled="@load(vm.selectedGermplasm.editMode)"
+												inplace="@load(vm.selectedGermplasm.editMode)"
+												style="color: #000000 !important;" />
+										</row>
+									</rows>
+								</grid>
+							</groupbox>
+							<groupbox width="99%" mold="3d"
+								height="500px">
+								<caption label="Characteristic" />
+								<grid height="450px">
+									<rows>
+										<row width="100%"
+											height="420px">
+											<tabbox hflex="1"
+												height="420px" width="100%">
+												<tabs>
+													<tab label="Biotic" />
+													<tab label="Abiotic"
+														width="" />
+													<tab
+														label="Major Genes" width="" />
+													<tab
+														label="Grain Quality" width="" />
+												</tabs>
+												<tabpanels
+													height="400px">
+													<tabpanel>
+														<listbox
+															model="@load(vm.selectedGermplasm.keyBiotic)"
+															width="200px" height="400px">
+															<listhead>
+																<listheader
+																	label="Name" />
+																<listheader
+																	label="Value" />
+															</listhead>
+															<template
+																name="model">
+																<listitem>
+																	<listcell
+																		label="@load(each.name)" />
+																	<listcell>
+																		<checkbox
+																			checked="@bind(each.value)"
+																			disabled="@load(vm.selectedGermplasm.known)" />
+																	</listcell>
+																</listitem>
+															</template>
+														</listbox>
+													</tabpanel>
+													<tabpanel>
+														<listbox
+															model="@load(vm.selectedGermplasm.keyAbiotic)"
+															width="200px">
+															<listhead>
+																<listheader
+																	label="Name" />
+																<listheader
+																	label="Value" />
+															</listhead>
+															<template
+																name="model">
+																<listitem>
+																	<listcell
+																		label="@load(each.name)" />
+																	<listcell>
+																		<checkbox
+																			checked="@bind(each.value)"
+																			disabled="@load(vm.selectedGermplasm.known)" />
+																	</listcell>
+																</listitem>
+															</template>
+														</listbox>
+													</tabpanel>
+													<tabpanel>
+														<listbox
+															model="@load(vm.selectedGermplasm.keyGrainQuality)"
+															width="200px">
+															<listhead>
+																<listheader
+																	label="Name" />
+																<listheader
+																	label="Value" />
+															</listhead>
+															<template
+																name="model">
+																<listitem>
+																	<listcell
+																		label="@load(each.name)" />
+																	<listcell>
+																		<checkbox
+																			checked="@bind(each.value)"
+																			disabled="@load(vm.selectedGermplasm.known)" />
+																	</listcell>
+																</listitem>
+															</template>
+														</listbox>
+													</tabpanel>
+													<tabpanel>
+														<listbox
+															model="@load(vm.selectedGermplasm.keyMajorGenes)"
+															width="200px">
+															<listhead>
+																<listheader
+																	label="Name" />
+																<listheader
+																	label="Value" />
+															</listhead>
+															<template
+																name="model">
+																<listitem>
+																	<listcell
+																		label="@load(each.name)" />
+																	<listcell>
+																		<checkbox
+																			checked="@bind(each.value)"
+																			disabled="@load(vm.selectedGermplasm.known)" />
+																	</listcell>
+																</listitem>
+															</template>
+														</listbox>
+													</tabpanel>
+												</tabpanels>
+											</tabbox>
+										</row>
+									</rows>
+								</grid>
+							</groupbox>
+						</vlayout>
+					</columnchildren>
+				</columnlayout>
+				<separator />
+				<!-- 		</groupbox> -->
+				<hlayout width="" />
+			</div>
+		</panelchildren>
+	</panel>
 </zk>

@@ -2,7 +2,7 @@
 	viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.BrowseGermplasm')">
 	<div align="center">
 		<hlayout>
-			<label value="Search By" class="label-search" />
+			<label value="Search By" style="font-weight: bold;"/>
 			<combobox id="cmbSearchKey" autodrop="true"
 				selectedIndex="@bind(vm.searchKey)"
 				onChange="@command('SetSearchUI')">
@@ -148,7 +148,7 @@
 				</tabbox>
 			</vbox>
 
-			<button label="Search" sclass="btn-blue"
+			<button label="Search" sclass="btn-blue" image="/images/find.png"
 				onClick="@command('SearchGermplasm')" />
 
 		</hlayout>
