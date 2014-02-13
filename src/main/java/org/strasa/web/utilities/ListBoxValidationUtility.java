@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.impl.InputElement;
 
 public class ListBoxValidationUtility {
@@ -19,7 +21,7 @@ public class ListBoxValidationUtility {
 	}
 
 	public void validateAll() {
-		for (Component rows : mainCom.getItems()) {
+		for (Listitem rows : mainCom.getItems()) {
 
 			validateRow(rows);
 
@@ -27,7 +29,8 @@ public class ListBoxValidationUtility {
 
 	}
 
-	public void validateRow(Component row) {
+	public void validateRow(Listitem row) {
+		System.out.println("TBL: " + mainCom.getListhead().getChildren().size() + "  l: " + row.getChildren().size());
 		for (Integer col : lstColumns) {
 
 			check(row.getChildren().get(col));
@@ -41,6 +44,9 @@ public class ListBoxValidationUtility {
 	}
 
 	public void check(Component component) throws WrongValueException {
+		// System.out.println(component.getWidgetClass());
+		if (component instanceof Label)
+			System.out.println("val: " + ((Label) component).getValue());
 		checkIsValid(component);
 
 		List<Component> children = component.getChildren();
@@ -53,7 +59,7 @@ public class ListBoxValidationUtility {
 		if (component instanceof InputElement) {
 			((InputElement) component).setConstraint("no empty");
 			try {
-				((InputElement) component).getText();
+				System.out.println("Data: " + ((InputElement) component).getText());
 			} finally {
 				((InputElement) component).setConstraint((String) null);
 			}

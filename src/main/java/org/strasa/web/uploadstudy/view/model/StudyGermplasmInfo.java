@@ -137,6 +137,14 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 	private List<KeyMajorGenes> lstAllMajorGenes;
 
+	private List<KeyBiotic> lstKeyBiotics;
+
+	private List<KeyAbiotic> lstKeyAbioitc;
+
+	private List<KeyMajorGenes> lstKeyMajorGenes;
+
+	private List<KeyGrainQuality> lstKeyGrainQuality;
+
 	public List<GermplasmType> getLstGermplasmType() {
 		return lstGermplasmType;
 	}
@@ -208,14 +216,20 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 	}
 
 	@Command
-	public void saveGermplasm(@BindingParam("germplasm") GermplasmDeepInfoModel data) {
+	public void saveGermplasm(@BindingParam("germplasm") GermplasmDeepInfoModel data, @BindingParam("listitem") Integer item) {
 
-		new ListBoxValidationUtility(tblKnownGerm, new ArrayList<Integer>(Arrays.asList(0, 1, 3, 4))).validateRow(data.rowIndex);
-		;
+		if (lstKnownGermplasm.containsKey(data.getGermplasmname())) {
+			new ListBoxValidationUtility(tblKnownGerm, new ArrayList<Integer>(Arrays.asList(0, 1, 3, 4))).validateRow(item);
+			;
+		} else {
+			new ListBoxValidationUtility(tblStudyGerm, new ArrayList<Integer>(Arrays.asList(0, 1, 3, 4))).validateRow(item);
 
+		}
 		if (validateGermplasm(data)) {
 			new GermplasmManagerImpl().modifyGermplasm(data);
 			cancelEdit(data);
+		} else {
+
 		}
 
 	}
@@ -225,6 +239,19 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 		lstKnownGermplasm.get(data.getGermplasmname()).setKnown(true);
 		selectedGermplasm = lstKnownGermplasm.get(data.getGermplasmname());
+
+		Germplasm subGermData = new GermplasmManagerImpl().getGermplasmById(data.getId());
+
+		data.clearCharactersticValue();
+		data.setGermplasmValue(subGermData);
+		data.setBiotic(lstKeyBiotics);
+		data.setAbiotic(lstKeyAbioitc);
+		data.setMajorGenes(lstKeyMajorGenes);
+
+		data.setGrainQuality(lstKeyGrainQuality);
+		data.setCharacteristicValues(new GermplasmCharacteristicMananagerImpl().getGermplasmByGermplasmName(subGermData.getGermplasmname()));
+		data.setSelectedGermplasmType(getGermplasmTypeById(data.getGermplasmtypeid()));
+		data.setKnown(true);
 
 		BindUtils.postNotifyChange(null, null, data, "known");
 		BindUtils.postNotifyChange(null, null, selectedGermplasm, "*");
@@ -255,10 +282,10 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
 		List<Germplasm> lst = rawMan.getStudyGermplasmInfo(studyID, dataset.getId());
 
-		List<KeyBiotic> lstKeyBiotics = keyMan.getAllBiotic();
-		List<KeyAbiotic> lstKeyAbioitc = keyMan.getAllAbiotic();
-		List<KeyMajorGenes> lstKeyMajorGenes = keyMan.getAllMajorGenes();
-		List<KeyGrainQuality> lstKeyGrainQuality = keyMan.getAllGrainQuality();
+		lstKeyBiotics = keyMan.getAllBiotic();
+		lstKeyAbioitc = keyMan.getAllAbiotic();
+		lstKeyMajorGenes = keyMan.getAllMajorGenes();
+		lstKeyGrainQuality = keyMan.getAllGrainQuality();
 
 		StudyGermplasmManagerImpl studyGermMan = new StudyGermplasmManagerImpl();
 
@@ -532,12 +559,14 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		// Validation
 		if (!validateKnownGermplasm()) {
 
-			new ListBoxValidationUtility(tblKnownGerm, new ArrayList<Integer>(Arrays.asList(0, 1, 3, 4))).validateAll();;
+			new ListBoxValidationUtility(tblKnownGerm, new ArrayList<Integer>(Arrays.asList(0, 1, 3, 4))).validateAll();
+			;
 			return false;
 		}
 		if (!validateStudyGermplasm()) {
-			new ListBoxValidationUtility(tblStudyGerm, new ArrayList<Integer>(Arrays.asList(0, 1, 3, 4))).validateAll();;
-			
+			new ListBoxValidationUtility(tblStudyGerm, new ArrayList<Integer>(Arrays.asList(0, 1, 3, 4))).validateAll();
+			;
+
 			return false;
 		}
 

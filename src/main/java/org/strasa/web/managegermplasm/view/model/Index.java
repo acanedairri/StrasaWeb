@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,7 @@ import org.strasa.web.managegermplasm.view.pojos.GermplasmGroupingModel;
 import org.strasa.web.uploadstudy.view.pojos.GermplasmDeepInfoModel;
 import org.strasa.web.uploadstudy.view.pojos.GermplasmExt;
 import org.strasa.web.utilities.FileUtilities;
+import org.strasa.web.utilities.ListBoxValidationUtility;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -42,6 +44,7 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zhtml.Messagebox;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -134,6 +137,14 @@ public class Index {
 
 	private Integer userID = SecurityUtil.getDbUser().getId();
 
+	private List<KeyBiotic> lstKeyBiotics;
+
+	private List<KeyAbiotic> lstKeyAbioitc;
+
+	private List<KeyMajorGenes> lstKeyMajorGenes;
+
+	private List<KeyGrainQuality> lstKeyGrainQuality;
+
 	public List<GermplasmType> getLstGermplasmType() {
 		return lstGermplasmType;
 	}
@@ -185,11 +196,11 @@ public class Index {
 	}
 
 	public String getTotalUnknownGermplasm() {
-		return "New Germplasm (Total: " + lstStudyGermplasm.size() + ")";
+		return "List of total unknown germplasm (total: " + lstStudyGermplasm.size() + ")";
 	}
 
 	public String getTotalKnownGermplasm() {
-		return "Germplasm (Total: " + lstKnownGermplasm.size() + ")";
+		return "List of total of uploaded germplasm (total: " + lstKnownGermplasm.size() + ")";
 	}
 
 	@Command
@@ -216,13 +227,20 @@ public class Index {
 	}
 
 	@Command
-	public void saveGermplasm(@BindingParam("germplasm") GermplasmDeepInfoModel data) {
+	public void saveGermplasm(@BindingParam("germplasm") GermplasmDeepInfoModel data, @BindingParam("listitem") Integer item) {
 
+		if (lstKnownGermplasm.containsKey(data.getGermplasmname())) {
+			new ListBoxValidationUtility(tblKnownGerm, new ArrayList<Integer>(Arrays.asList(0, 1, 3, 4))).validateRow(item);
+			;
+		} else {
+			new ListBoxValidationUtility(tblStudyGerm, new ArrayList<Integer>(Arrays.asList(0, 1, 3, 4))).validateRow(item);
+
+		}
 		if (validateGermplasm(data)) {
-
 			new GermplasmManagerImpl().modifyGermplasm(data);
-
 			cancelEdit(data);
+		} else {
+
 		}
 
 	}
@@ -232,6 +250,19 @@ public class Index {
 
 		lstKnownGermplasm.get(data.getGermplasmname()).setKnown(true);
 		selectedGermplasm = lstKnownGermplasm.get(data.getGermplasmname());
+
+		Germplasm subGermData = new GermplasmManagerImpl().getGermplasmById(data.getId());
+
+		data.clearCharactersticValue();
+		data.setGermplasmValue(subGermData);
+		data.setBiotic(lstKeyBiotics);
+		data.setAbiotic(lstKeyAbioitc);
+		data.setMajorGenes(lstKeyMajorGenes);
+
+		data.setGrainQuality(lstKeyGrainQuality);
+		data.setCharacteristicValues(new GermplasmCharacteristicMananagerImpl().getGermplasmByGermplasmName(subGermData.getGermplasmname()));
+		data.setSelectedGermplasmType(getGermplasmTypeById(data.getGermplasmtypeid()));
+		data.setKnown(true);
 
 		BindUtils.postNotifyChange(null, null, data, "known");
 		BindUtils.postNotifyChange(null, null, selectedGermplasm, "*");
@@ -253,10 +284,10 @@ public class Index {
 		lstGermplasmType = germMan.getAllGermplasmType();
 		GermplasmCharacteristicMananagerImpl germCharMan = new GermplasmCharacteristicMananagerImpl();
 
-		List<KeyBiotic> lstKeyBiotics = keyMan.getAllBiotic();
-		List<KeyAbiotic> lstKeyAbioitc = keyMan.getAllAbiotic();
-		List<KeyMajorGenes> lstKeyMajorGenes = keyMan.getAllMajorGenes();
-		List<KeyGrainQuality> lstKeyGrainQuality = keyMan.getAllGrainQuality();
+		lstKeyBiotics = keyMan.getAllBiotic();
+		lstKeyAbioitc = keyMan.getAllAbiotic();
+		lstKeyMajorGenes = keyMan.getAllMajorGenes();
+		lstKeyGrainQuality = keyMan.getAllGrainQuality();
 
 		GermplasmManagerImpl germplasmMan = new GermplasmManagerImpl();
 		List<Germplasm> germplasmList = germplasmMan.getGermplasmListByUserID(this.userID);
@@ -441,6 +472,7 @@ public class Index {
 
 	public boolean validateGermplasm(GermplasmDeepInfoModel data) {
 		String validate = data.validate();
+
 		if (!data.getStyleBG().equals("background-color: #FFF")) {
 			data.setStyleBG("background-color: #FFF");
 			BindUtils.postNotifyChange(null, null, data, "styleBG");
@@ -484,6 +516,30 @@ public class Index {
 
 		BindUtils.postNotifyChange(null, null, lstKnownGermplasm.get(gname), "known");
 
+	}
+
+	@SuppressWarnings("unchecked")
+	@Command("removeGermplasm")
+	public void removeGermplasm(@BindingParam("gname") GermplasmDeepInfoModel data) {
+		final GermplasmDeepInfoModel gname = data;
+		Messagebox.show("Are you sure you want to delete? WARNING: Cannot be undone", "Confirm Dialog", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+			public void onEvent(Event evt) throws InterruptedException {
+				if (evt.getName().equals("onOK")) {
+					if (!new StudyGermplasmManagerImpl().isGermplasmGrefExist(gname)) {
+						lstKnownGermplasm.remove(gname.getGermplasmname());
+						BindUtils.postNotifyChange(null, null, Index.this, "lstKnownGermplasm");
+
+						BindUtils.postNotifyChange(null, null, Index.this, "totalKnownGermplasm");
+						new GermplasmManagerImpl().deleteGermplasmById(gname.getId());
+
+					} else {
+						Messagebox.show("Cannot delete germplasm. Studies using this germplasm found.", "Conflict Error", Messagebox.OK, Messagebox.EXCLAMATION);
+					}
+				} else {
+
+				}
+			}
+		});
 	}
 
 	@Command

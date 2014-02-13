@@ -74,8 +74,8 @@
                                         </listcell>
                                         <listcell>
                                             <div>
-                                                <button image="/images/disk.png" onClick="@command('saveGermplasm', germplasm = each)" />
-                                                <button image="/images/cross.png" onClick="@command('cancelEdit', germplasm = each)" />
+                                   <button image="/images/disk.png" onClick="@command('saveGermplasm', germplasm = each, listitem = forEachStatus.index)" />
+                                                                         <button image="/images/cross.png" onClick="@command('cancelEdit', germplasm = each)" />
                                             </div>
                                         </listcell>
                                     </listitem>
@@ -171,7 +171,7 @@
                                     </listcell>
                                     <listcell>
                                         <div>
-                                            <button image="/images/disk.png" onClick="@command('saveGermplasm', germplasm = each)" />
+                                             <button image="/images/disk.png" onClick="@command('saveGermplasm', germplasm = each, listitem = forEachStatus.index)" />
                                             <button image="/images/cross.png" onClick="@command('cancelEdit', germplasm = each)" />
                                         </div>
                                     </listcell>

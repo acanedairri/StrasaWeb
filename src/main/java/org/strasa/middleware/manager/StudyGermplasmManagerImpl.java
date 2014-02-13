@@ -51,6 +51,20 @@ public class StudyGermplasmManagerImpl {
 
 	}
 
+	public boolean isGermplasmGrefExist(Germplasm data) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
+		System.out.println("ID" + data.getId());
+		try {
+			StudyGermplasmExample example = new StudyGermplasmExample();
+			example.createCriteria().andGrefEqualTo(data.getId());
+			return mapper.countByExample(example) > 0;
+		} finally {
+			session.close();
+		}
+
+	}
+
 	public void updateStudyGermplasmID(Integer oldID, Integer newID, Integer userID) {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
@@ -186,11 +200,10 @@ public class StudyGermplasmManagerImpl {
 
 			if (!collection.isEmpty()) {
 				StudyGermplasmExample ex = new StudyGermplasmExample();
-			
-					ex.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset);
-					mapper.deleteByExample(ex);
+
+				ex.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset);
+				mapper.deleteByExample(ex);
 			}
-		
 
 			System.out.println("Inserting StudyGermplasms");
 			for (GermplasmDeepInfoModel record : collection) {

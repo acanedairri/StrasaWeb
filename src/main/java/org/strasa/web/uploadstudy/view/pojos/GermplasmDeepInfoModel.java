@@ -89,6 +89,37 @@ public class GermplasmDeepInfoModel extends Germplasm {
 		this.setId(data.getId());
 	}
 
+	public void setGermplasmValue(Germplasm data) {
+		if (!StringUtils.isNullOrEmpty(data.getBreeder()))
+			setBreeder(data.getBreeder());
+		if (!StringUtils.isNullOrEmpty(data.getFemaleparent()))
+			setFemaleparent(data.getFemaleparent());
+		if (!StringUtils.isNullOrEmpty(data.getGermplasmname()))
+			setGermplasmname(data.getGermplasmname());
+		if (data.getGid() != null)
+			setGid(data.getGid());
+		if (data.getGermplasmtypeid() != null)
+			setGermplasmtypeid(data.getGermplasmtypeid());
+		if (!StringUtils.isNullOrEmpty(data.getIrcross()))
+			setIrcross(data.getIrcross());
+		if (!StringUtils.isNullOrEmpty(data.getIrnumber()))
+			setIrnumber(data.getIrnumber());
+		if (!StringUtils.isNullOrEmpty(data.getMaleparent()))
+			setMaleparent(data.getMaleparent());
+		if (!StringUtils.isNullOrEmpty(data.getOthername()))
+			setOthername(data.getOthername());
+		if (!StringUtils.isNullOrEmpty(data.getParentage()))
+			setParentage(data.getParentage());
+		if (!StringUtils.isNullOrEmpty(data.getRemarks()))
+			setRemarks(data.getRemarks());
+		if (!StringUtils.isNullOrEmpty(data.getSelectionhistory()))
+			setSelectionhistory(data.getSelectionhistory());
+		if (!StringUtils.isNullOrEmpty(data.getSource()))
+			setSource(data.getSource());
+		this.setUserid(data.getUserid());
+		this.setId(data.getId());
+	}
+
 	@Override
 	public String toString() {
 		return "GermplasmDeepInfoModel [keyBiotic=" + keyBiotic + ", keyAbiotic=" + keyAbiotic + ", keyGrainQuality=" + keyGrainQuality + ", keyMajorGenes=" + keyMajorGenes + ", styleBG=" + styleBG + ", rowIndex=" + rowIndex + ", selectedGermplasmType=" + selectedGermplasmType
@@ -254,6 +285,13 @@ public class GermplasmDeepInfoModel extends Germplasm {
 				setGrainQualityKeyValue(germChar.getKeyvalue(), true);
 			}
 		}
+	}
+
+	public void clearCharactersticValue() {
+		keyAbiotic.clear();
+		keyBiotic.clear();
+		keyGrainQuality.clear();
+		keyMajorGenes.clear();
 	}
 
 	public String validate() {

@@ -248,4 +248,17 @@ public class GermplasmManagerImpl {
 		return;
 	}
 
+	public void deleteGermplasmById(Integer id) {
+		// TODO Auto-generated method stub
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
+		try {
+			mapper.deleteByPrimaryKey(id);
+		} finally {
+			session.commit();
+			session.close();
+
+		}
+	}
+
 }
