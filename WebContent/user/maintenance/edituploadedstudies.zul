@@ -11,7 +11,7 @@
 						sclass="btn-blue" src="/images/add.png" orient="horizontal"
 						tooltiptext="Add Study" onClick="@command('addStudy')" />
 					<button id="btnBackId" label="Back" visible="true"
-						sclass="btn-blue" src="/images/back16.png" orient="horizontal"
+						sclass="btn-blue" src="/images/back.png" orient="horizontal"
 						tooltiptext="Add Study" onClick="@command('loadMainDiv')" />
 				</div>
 				<separator height="5px"></separator>
