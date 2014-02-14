@@ -56,6 +56,7 @@ public class StudySiteManagerImpl {
 	public boolean hasSiteHeader(int studyID, Integer dataset) {
 
 		if (isRaw) {
+			System.out.println("Checking for Raw...");
 			StudyRawDataMapper mapper = connectionFactory.sqlSessionFactory.openSession().getMapper(StudyRawDataMapper.class);
 
 			StudyRawDataExample example = new StudyRawDataExample();
@@ -69,7 +70,10 @@ public class StudySiteManagerImpl {
 
 			StudyDerivedDataMapper mapper = connectionFactory.sqlSessionFactory.openSession().getMapper(StudyDerivedDataMapper.class);
 			StudyDerivedDataExample example = new StudyDerivedDataExample();
-			example.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset).andDatacolumnEqualTo("Site");
+			if (dataset != null)
+				example.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset).andDatacolumnEqualTo("Site");
+			else
+				example.createCriteria().andStudyidEqualTo(studyID).andDatacolumnEqualTo("Site");
 			return mapper.countByExample(example) > 0;
 		}
 	}
