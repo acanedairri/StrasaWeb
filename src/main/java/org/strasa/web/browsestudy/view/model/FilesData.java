@@ -11,6 +11,7 @@ import javax.activation.MimetypesFileTypeMap;
 import org.strasa.middleware.manager.StudyFileManagerImpl;
 import org.strasa.middleware.model.StudyFile;
 import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
@@ -60,22 +61,6 @@ public class FilesData {
 
 
 	@GlobalCommand
-	public void downloadFile(@BindingParam("filePath")String filePath,@BindingParam("dataType") String dataType){
-		FileInputStream inputStream;
-		try {
-			String repSrcPath = Sessions.getCurrent().getWebApp().getRealPath(filePath);
-			File file = new File(repSrcPath);
-			if (file.exists()) {
-				inputStream = new FileInputStream(file);
-				Filedownload.save(inputStream, new MimetypesFileTypeMap().getContentType(file), extractFileName(file,dataType));
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	@GlobalCommand
 	public void exportData(@BindingParam("columns")List<String> columns, @BindingParam("rows")List<String[]> rows, @BindingParam("studyName") String studyName, @BindingParam("dataType") String dataType){
 //		List<String[]> grid = new ArrayList<String[]>();
 //		grid.addAll(rows);
@@ -101,7 +86,7 @@ public class FilesData {
 		else  Filedownload.save(sb.toString().getBytes(), "text/plain", studyName+"_derivedData.csv");
 	}
 
-	private String extractFileName(File file, String dataType) {
+	public String extractFileName(File file, String dataType) {
 		String extractedFileName;
 
 		//		if(dataType.equals("dd") || dataType.equals("rd")) extractedFileName=(file.getName().split(".csv")[0])+".csv";
@@ -111,7 +96,25 @@ public class FilesData {
 		return extractedFileName;
 	}
 
-
+	@GlobalCommand
+	public void downloadFile(@BindingParam("filePath")String filePath,@BindingParam("dataType") String dataType){
+		FileInputStream inputStream;
+		try {
+			File file = new File(filePath);
+			String repSrcPath = Sessions.getCurrent().getWebApp().getRealPath(extractFileName(file,dataType));
+			if (file.exists()) {
+				inputStream = new FileInputStream(file);
+				Filedownload.save(inputStream, new MimetypesFileTypeMap().getContentType(file),extractFileName(file,dataType));
+				System.out.println("Should download from"+repSrcPath);
+			}
+			else{
+				System.out.println("Cannot find file:"+repSrcPath);
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public String getDataType() {
 		return dataType;
 	}
