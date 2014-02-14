@@ -16,7 +16,7 @@
 						selectedItem="@bind(vm.searchFilter.shared)">
 							<radio label="My Data" value="private" />
 							<radio label="Shared Data" value="public" />
-							<radio label="Both" value="" />
+							<radio label="Both" value="both" />
 					</radiogroup>
 					
 					

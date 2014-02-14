@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
+import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.StudyAgronomyMapper;
 import org.strasa.middleware.mapper.StudyDataColumnMapper;
@@ -43,6 +44,14 @@ public class StudyManagerImpl {
 
 	@WireVariable
 	ConnectionFactory connectionFactory;
+	
+
+	private int userid;
+	
+	public StudyManagerImpl(){
+		this.setUserid(SecurityUtil.getDbUser().getId());
+	}
+	
 	public Study getStudyById(int studyid){
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyMapper mapper = session.getMapper(StudyMapper.class);
@@ -356,6 +365,14 @@ public class StudyManagerImpl {
 		finally{
 			session.close();
 		}
+	}
+
+	public int getUserid() {
+		return userid;
+	}
+
+	public void setUserid(int userid) {
+		this.userid = userid;
 	}
 
 }

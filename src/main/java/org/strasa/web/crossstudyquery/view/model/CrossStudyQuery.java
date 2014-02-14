@@ -230,15 +230,18 @@ public class CrossStudyQuery extends StudyVariable {
 			@ContextParam(ContextType.VIEW) Component view) {
 		Bandbox variableSelected= (Bandbox) component.getFellow("studyVariable");
 		StudyVariableManagerImpl mgr= new StudyVariableManagerImpl();
-		StudyVariable sVariable=mgr.getVariableInfoByName(variableSelected.getValue());
+		try{StudyVariable sVariable=mgr.getVariableInfoByName(variableSelected.getValue());
 		if(sVariable.getDatatype().equals("C")){
 			this.operators=operatorString;
 		}else{
 			this.operators=operatorNumber;
 		}
-		
+
 		if(variableSelected.getValue().contains("Study")){
 			this.operators=operatorStringStudy;
+		}
+		}catch(IndexOutOfBoundsException npe ){
+
 		}
 	}
 
@@ -514,7 +517,7 @@ public class CrossStudyQuery extends StudyVariable {
 					filters.get(filters.size()-2).setOrderCriteria("last");
 				}
 
-/*				for(CrossStudyQueryFilterModel f:filters){
+				/*				for(CrossStudyQueryFilterModel f:filters){
 					System.out.println("Variable :"+f.getVariable());
 					System.out.println("Column as :"+f.getColumnAs());
 					System.out.println("DataType as :"+f.getDataType());
@@ -597,7 +600,7 @@ public class CrossStudyQuery extends StudyVariable {
 		int toreturn=0;
 		StudyManager mgr = new StudyManager();
 		toreturn=mgr.getStudyByStudyName(studyname);
-		
+
 		return toreturn;
 	}
 
