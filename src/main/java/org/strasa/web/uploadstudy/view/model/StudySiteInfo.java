@@ -587,6 +587,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		} else {
 			List<StudySite> lstSiteRaw = studyRawMan.getStudySiteInfo(this.getStudyID(), dataset.getId());
 
+			System.out.println("SITE COUNT: " + lstSiteRaw.size());
 			for (StudySite siteData : lstSiteRaw) {
 
 				StudySiteInfoModel siteInfo = new StudySiteInfoModel(siteData);
@@ -614,6 +615,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 				siteInfo.selectedAgroInfo.setStudysiteid(this.getStudyID());
 				siteInfo.selectedDesignInfo.setStudyid(this.studyID);
 				sites.add(siteInfo);
+				System.out.println("SITE COUNT: " + sites.size());
 
 			}
 			if (this.isDataReUploaded) {
@@ -636,12 +638,14 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 		}
 
-		boolean hasSite = new StudySiteManagerImpl().hasSiteHeader(this.studyID, this.dataset.getId());
+		boolean hasSite = studySiteMan.hasSiteHeader(this.studyID, this.dataset.getId());
 
 		if (!hasSite) {
-			for (int i = 1; i < sites.size(); i++)
-				sites.remove(i);
+			sites.removeRange(1, sites.size() - 1);
+
 		}
+
+		System.out.println("SITE FINAL COUNT: " + sites.size());
 		selectedSite = sites.get(0);
 
 		updateDesignInfo(0);
