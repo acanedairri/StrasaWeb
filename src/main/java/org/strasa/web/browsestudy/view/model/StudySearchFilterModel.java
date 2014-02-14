@@ -18,7 +18,7 @@ public class StudySearchFilterModel {
 	
 	
 	public StudySearchFilterModel() {
-		this.shared ="0";
+		this.shared ="both";
 		this.programid = 0;
 		this.projectid = 0;
 		this.studyname = null;

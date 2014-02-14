@@ -75,8 +75,17 @@ public class SearchResult {
 			searchFilter.startyear =  checkIfEmpty(searchFilter.startyear);
 			
 			try{
-			if(searchFilter.shared.equals("private")) searchFilter.shared = "0";
-			else searchFilter.shared = "1";
+			if(searchFilter.shared.equals("private")){ //specific user only
+				searchFilter.setShared(null);
+				searchFilter.userid = studyMan.getUserid();
+			}
+			else if(searchFilter.shared.equals("public")){
+				searchFilter.shared = "1";
+				searchFilter.userid = 0;
+			}else if(searchFilter.shared.equals("both")){//both
+				searchFilter.shared = "1";//both
+				searchFilter.userid =  studyMan.getUserid();
+			}
 			}catch(NullPointerException npe){
 				
 			}
