@@ -13,7 +13,7 @@
 
 	</style>
 
-	<include self="@define(content)" src="header.zul" />
+<!-- 	<include self="@define(content)" src="header.zul" /> -->
 	<separator height="50px"></separator>
 	
 	<div apply="org.zkoss.bind.BindComposer" align="center"
@@ -152,6 +152,6 @@
 	</div>
 
 	<separator width="50px"></separator>
-	<include self="@define(content)" src="footer.zul" />
+<!-- 	<include self="@define(content)" src="footer.zul" /> -->
 
 </zk>

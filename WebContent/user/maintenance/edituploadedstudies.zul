@@ -7,12 +7,13 @@
 				viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditUploadedStudies')">
 
 				<div width="98%" align="left">
-					<button id="btnUploadId" label="Add New Study"
-						sclass="btn-blue" src="/images/add.png" orient="horizontal"
-						tooltiptext="Add Study" onClick="@command('addStudy')" />
 					<button id="btnBackId" label="Back" visible="true"
 						sclass="btn-blue" src="/images/back.png" orient="horizontal"
 						tooltiptext="Add Study" onClick="@command('loadMainDiv')" />
+					<button id="btnUploadId" label="Add New Study"
+						sclass="btn-blue" src="/images/add.png" orient="horizontal"
+						tooltiptext="Add Study" onClick="@command('addStudy')" />
+
 				</div>
 				<separator height="5px"></separator>
 				<div id="divMain">

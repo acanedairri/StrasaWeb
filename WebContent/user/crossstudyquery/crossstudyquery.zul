@@ -68,7 +68,7 @@
 			<textbox id='txtVaribleValue2' width="100px"
 				value="@bind(vm.variableValue2)" visible="false" />
 
-			<button label="Add Criteria" image="/images/New16.png"
+			<button label="Add Criteria" image="/images/add2.png"
 				sclass="btn-blue" onClick="@command('AddCriteria')" />
 
 		</hbox>
@@ -151,7 +151,7 @@
 								</vbox>
 							</bandpopup>
 						</bandbox>
-						<button label="Add" image="/images/New16.png"
+						<button label="Add" image="/images/add2.png"
 							sclass="btn-blue" onClick="@command('AddColumn')" />
 					</hbox>
 
@@ -167,7 +167,7 @@
 							<row>
 								<label value="@load(each)" />
 								<toolbarbutton
-									src="/images/Delete16.png" orient="vertical"
+									src="/images/delete.png" orient="vertical"
 									tooltiptext="Delete Variable"
 									onClick="@command('DeleteAdditionalColumn',rowIndex=s.index)" />
 							</row>

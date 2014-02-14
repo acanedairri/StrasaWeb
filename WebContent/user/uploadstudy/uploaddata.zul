@@ -45,7 +45,7 @@
 									</bandpopup>
 								</bandbox>
 								<button label="Add" sclass="btn-blue"
-									image="/images/New16.png" onClick="@command('addProgram')" />
+									image="/images/add2.png" onClick="@command('addProgram')" />
 							</row>
 							<row>
 								<label class="name" value="Project:" />
@@ -74,7 +74,7 @@
 									</bandpopup>
 								</bandbox>
 								<button label="Add" sclass="btn-blue"
-									image="/images/New16.png" onClick="@command('addProject')" />
+									image="/images/add2.png" onClick="@command('addProject')" />
 							</row>
 							<row>
 								<label class="name" value="Study Name:" />
@@ -235,14 +235,14 @@
 																	visible="@load(vm.variableDataVisible)"
 																	value="@load(vm.dataFileName)" sclass="label-search" />
 																<button
-																	id="uploadCSV" upload="true" label="Browse"
+																	id="uploadCSV" upload="true" label="Browse" image="/images/find.png"
 																	onUpload="@command('uploadCSV')" />
 																<button
-																	label="Remove" onClick="@command('removeUpload') "
+																	label="Remove" onClick="@command('removeUpload') " image="/images/remove.png"
 																	visible="@load(vm.variableDataVisible)"
 																	sclass="btn-blue" />
 																<button
-																	label="Modify Header"
+																	label="Modify Header" image="/images/modify.png"
 																	onClick="@command('modifyDataHeader')"
 																	visible="@load(vm.variableDataVisible)"
 																	sclass="btn-blue" />
