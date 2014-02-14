@@ -23,7 +23,7 @@
 			<template name="model">
 				<row>
 					<toolbarbutton label="@load(each.filename)"
-						width="99%"  onClick="@global-command('downloadFile', filePath=each.filepath, dataType=vm.dataType)"/>
+						width="99%"  onClick="@global-command('downloadFile', filePath=each.filepath, dataType=each.typeofdata)"/>
 				</row>
 			</template>
 		</grid>

@@ -91,12 +91,12 @@ public class FilesData {
 
 		//		if(dataType.equals("dd") || dataType.equals("rd")) extractedFileName=(file.getName().split(".csv")[0])+".csv";
 		//		else
-		extractedFileName=(file.getName().split(".txt")[0])+".txt";
-
+		if(dataType.equals("gd")) extractedFileName=(file.getName().split(".txt")[0])+".txt";
+		else  extractedFileName=(file.getName().split(".csv")[0])+".csv";
 		return extractedFileName;
 	}
 
-	@GlobalCommand
+	@GlobalCommand("downloadFile")
 	public void downloadFile(@BindingParam("filePath")String filePath,@BindingParam("dataType") String dataType){
 		FileInputStream inputStream;
 		try {

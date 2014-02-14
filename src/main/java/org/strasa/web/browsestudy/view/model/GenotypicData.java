@@ -1,11 +1,21 @@
 package org.strasa.web.browsestudy.view.model;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
+
+import javax.activation.MimetypesFileTypeMap;
 
 import org.strasa.middleware.manager.StudyFileManagerImpl;
 import org.strasa.middleware.model.StudyFile;
+import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ExecutionArgParam;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zul.Filedownload;
 
 public class GenotypicData {
 	private StudyFileManagerImpl studyFileMan;
@@ -29,7 +39,7 @@ public class GenotypicData {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public List<StudyFile> getGenotypicFiles() {
 		return genotypicFiles;
 	}
