@@ -176,7 +176,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 	}
 
 	public GermplasmType getGermplasmTypeById(Integer id) {
-		System.out.println("ID:" + id);
+		// System.out.println("ID:" + id);
 		for (GermplasmType gtype : lstGermplasmType) {
 			if (gtype.getId() == id)
 				return gtype;
@@ -416,6 +416,8 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 					if (lstStudyGermplasm.containsKey(germData.getGermplasmname())) {
 						lstStudyGermplasm.get(germData.getGermplasmname()).setGermplasmtypeid(getGermplasmTypeById(germData.getGermplasmtype()));
 						lstStudyGermplasm.get(germData.getGermplasmname()).setValueFromeGermplasmEx(germData, lstGermplasmType);
+						lstStudyGermplasm.get(germData.getGermplasmname()).setGermplasmExCharacteristic(germData);
+
 					}
 				}
 			}
@@ -450,6 +452,10 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		columnMapping.put("MALE PARENT", "maleparent");
 		columnMapping.put("SELECTION HISTORY", "selectionhistory");
 		columnMapping.put("SOURCE", "source");
+		columnMapping.put("BIOTIC", "biotic");
+		columnMapping.put("ABIOTIC", "abiotic");
+		columnMapping.put("MAJOR GENES", "majorGenes");
+		columnMapping.put("GRAIN QUALITY", "grainQuality");
 
 		System.out.println(file.getAbsolutePath());
 		HeaderColumnNameTranslateMappingStrategy<GermplasmExt> strategy = new HeaderColumnNameTranslateMappingStrategy<GermplasmExt>();

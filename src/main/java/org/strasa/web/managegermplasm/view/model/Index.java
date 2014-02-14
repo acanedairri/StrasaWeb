@@ -377,6 +377,7 @@ public class Index {
 						newData.setUserid(this.userID);
 						newData.setGrainQuality(lstKeyGrainQuality);
 						newData.setKnown(false);
+						newData.setGermplasmExCharacteristic(germData);
 						lstStudyGermplasm.put(newData.getGermplasmname(), newData);
 					}
 				}
@@ -435,7 +436,10 @@ public class Index {
 		columnMapping.put("MALE PARENT", "maleparent");
 		columnMapping.put("SELECTION HISTORY", "selectionhistory");
 		columnMapping.put("SOURCE", "source");
-
+		columnMapping.put("BIOTIC", "biotic");
+		columnMapping.put("ABIOTIC", "abiotic");
+		columnMapping.put("MAJOR GENES", "majorGenes");
+		columnMapping.put("GRAIN QUALITY", "grainQuality");
 		System.out.println(file.getAbsolutePath());
 		HeaderColumnNameTranslateMappingStrategy<GermplasmExt> strategy = new HeaderColumnNameTranslateMappingStrategy<GermplasmExt>();
 		strategy.setType(GermplasmExt.class);

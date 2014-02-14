@@ -406,6 +406,40 @@ public class GermplasmDeepInfoModel extends Germplasm {
 
 	}
 
+	public void setGermplasmExCharacteristic(GermplasmExt data) {
+		// Biotic
+
+		for (String key : data.getBiotic().split(",")) {
+			for (CharacteristicModel ckey : keyBiotic) {
+				if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
+					ckey.setValue(true);
+				}
+			}
+		}
+
+		for (String key : data.getAbiotic().split(",")) {
+			for (CharacteristicModel ckey : keyAbiotic) {
+				if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
+					ckey.setValue(true);
+				}
+			}
+		}
+		for (String key : data.getGrainQuality().split(",")) {
+			for (CharacteristicModel ckey : keyGrainQuality) {
+				if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
+					ckey.setValue(true);
+				}
+			}
+		}
+		for (String key : data.getMajorGenes().split(",")) {
+			for (CharacteristicModel ckey : keyMajorGenes) {
+				if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
+					ckey.setValue(true);
+				}
+			}
+		}
+	}
+
 	public boolean equalsGermplasmNoBreeder(Germplasm obj) {
 
 		Germplasm other = obj;
