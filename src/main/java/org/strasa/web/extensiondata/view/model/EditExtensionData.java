@@ -133,7 +133,7 @@ public class EditExtensionData {
 //		Project proj= projectMan.getProjectById((Integer)projectComboBox.getSelectedItem().getValue());
 		
 		ps.getValue().setProgramid((Integer)programComboBox.getSelectedItem().getValue());
-		ps.getValue().setProjectid((Integer)projectComboBox.getSelectedItem().getValue());
+		ps.getValue().setProjectid((Integer)projectComboBox.getSelectedItem().getValue());  
 //		ps.setProject(proj);
 		refreshRowTemplate(ps);
 		man.updateExtensionData(ps.getValue());
