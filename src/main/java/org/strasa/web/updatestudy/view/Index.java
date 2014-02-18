@@ -97,7 +97,6 @@ public class Index {
 	private int datasetCount;
 	// imported in UploadData.java
 	private Study study;
-	private int userID = 1;
 	private ArrayList<Program> programList = new ArrayList<Program>();
 	private ArrayList<Project> projectList = new ArrayList<Project>();
 	private ArrayList<String> studyTypeList = new ArrayList<String>();
@@ -369,10 +368,10 @@ public class Index {
 		study.setProjectid(txtProject.getId());
 		study.setStartyear(String.valueOf(startYear));
 		study.setEndyear(String.valueOf(String.valueOf(endYear)));
-		study.setUserid(userID);
+
 		study.setId(uploadModel.studyID);
 		study.setDatelastmodified(new Date());
-		if (new StudyManager().isProjectExist(study, userID)) {
+		if (new StudyManager().isProjectExist(study, study.getUserid())) {
 			Messagebox.show("Error: Study name already exist! Please choose a different name.", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 
 			return;
@@ -517,6 +516,11 @@ public class Index {
 	@GlobalCommand("initializeDataSetTab")
 	@SuppressWarnings("unchecked")
 	public void initializeDataSetTab(@BindingParam("dataset") StudyDataSet dataset, @BindingParam("isUpdateMode") boolean isUpdateMode, @BindingParam("isRaw") boolean isRaw, boolean selected, boolean ismerge) {
+
+		if (ismerge) {
+			initializeMergeDataset(isRaw);
+			return;
+		}
 		System.out.println("TABBOX IS NULL!");
 		Tab newTab = new Tab(dataset.getTitle());
 		datasetinc++;
@@ -607,6 +611,67 @@ public class Index {
 				initializeDataSetTab(new StudyDataSet(), true, false, false, true);
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void initializeMergeDataset(boolean isRaw) {
+
+		System.out.println("TABBOX IS NULL!");
+		Tab newTab = new Tab("Merge Data");
+		datasetinc++;
+		newTab.setSelected(false);
+		String tabId = "dataset" + Math.random();
+		newTab.setId(tabId);
+		// newTab.setClosable(true);
+
+		newTab.addEventListener("onClick", new EventListener() {
+
+			@Override
+			public void onEvent(Event arg0) throws Exception {
+				if (!Index.this.tabMap.get(arg0.getTarget().getId()).hasBeenLoaded) {
+					System.out.println("RELOAD CALLED");
+					Index.this.tabMap.get(arg0.getTarget().getId()).hasBeenLoaded = true;
+					Executions.createComponents("/user/updatestudy/mergeddatasettab.zul", Index.this.tabMap.get(arg0.getTarget().getId()).panel, Index.this.tabMap.get(arg0.getTarget().getId()).arg);
+				} else {
+					System.out.println("RELOAD NoT CALLED" + arg0.getTarget().getId() + " : " + mergeRawID + " ; " + Index.this.tabMap.get(arg0.getTarget().getId()).hasBeenLoaded);
+
+				}
+			}
+		});
+
+		Tabpanel newTabpanel = new Tabpanel();
+		// newTabpanel.appendChild();
+		if (isRaw) {
+
+			firstRawTab = newTab;
+
+			rawDataTab.getTabs().getChildren().add(newTab);
+			newTabpanel.setParent(rawDataTab.getTabpanels());
+		} else {
+			firstDerivedTab = newTab;
+
+			derivedDataTab.getTabs().getChildren().add(newTab);
+			newTabpanel.setParent(derivedDataTab.getTabpanels());
+		}
+		Map arg = new HashMap();
+
+		arg.put("dataType", (isRaw) ? "rd" : "dd");
+		arg.put("studyId", study.getId());
+		arg.put("studyid", study.getId());
+		arg.put("dataset", null);
+		arg.put("parentSource", (String) null);
+
+		if (isRaw) {
+
+			tabMergedRaw = newTab;
+			mergeRawID = newTab.getId();
+		} else {
+			tabMergedDerived = newTab;
+			mergeDerivedID = newTab.getId();
+		}
+
+		tabMap.put(tabId, new tabObject(arg, newTabpanel, newTab, isRaw));
+
 	}
 
 	@Command
