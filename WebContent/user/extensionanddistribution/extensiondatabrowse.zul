@@ -1,0 +1,20 @@
+<zk>
+
+	<style src="../css/main.css" />
+	<window>
+		<groupbox mold="3d">
+			<caption label="Extension"/>
+			<vbox>
+				<include self="@define(content)"
+					src="extensionanddistribution/extGCgrid.zul" />
+				<separator height="15px"></separator>
+				<include self="@define(content)"
+					src="extensionanddistribution/extGYCgrid.zul" />
+				<separator height="15px"></separator>
+				<include self="@define(content)"
+					src="extensionanddistribution/extGYgrid.zul" />
+			</vbox>
+		</groupbox>
+	</window>
+
+</zk>

@@ -1,0 +1,23 @@
+<zk>
+
+	<style src="../css/main.css" />
+	<window>
+		<groupbox mold="3d">
+			<caption label="Release Info" />
+			<vbox>
+				<separator height="15px"></separator>
+				<include self="@define(content)"
+					src="releaseinfo/relVCYgrid.zul" />
+
+				<separator height="15px"></separator>
+				<include self="@define(content)"
+					src="releaseinfo/relVCgrid.zul" />
+
+				<separator height="15px"></separator>
+				<include self="@define(content)"
+					src="releaseinfo/relVYgrid.zul" />
+			</vbox>
+		</groupbox>
+	</window>
+
+</zk>

@@ -6,9 +6,9 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.strasa.web.browsestudy.view.model.StudySummaryModel;
-import org.strasa.web.extensiondata.view.model.ExtensionDataListModel;
-import org.strasa.web.extensiondata.view.model.ExtensionDataSummaryModel;
-import org.strasa.web.extensiondata.view.model.SummaryModel;
+import org.strasa.web.extensionanddistributiondata.view.model.ExtensionDataListModel;
+import org.strasa.web.extensionanddistributiondata.view.model.ExtensionDataSummaryModel;
+import org.strasa.web.extensionanddistributiondata.view.model.SummaryModel;
 
 public interface ExtensionDataSummaryMapper {
 
