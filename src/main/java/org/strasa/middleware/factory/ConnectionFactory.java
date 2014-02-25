@@ -73,6 +73,7 @@ public class ConnectionFactory {
 		                sqlSessionFactory.getConfiguration().addMapper(CountryMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(DistributionAndExtensionMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(EcotypeMapper.class);
+		                sqlSessionFactory.getConfiguration().addMapper(ExtensionDataMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(GeorefMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(GermplasmCharacteristicsMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(GermplasmMapper.class);

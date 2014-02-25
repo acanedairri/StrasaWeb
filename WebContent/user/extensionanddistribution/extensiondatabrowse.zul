@@ -3,7 +3,6 @@
 	<style src="../css/main.css" />
 	<window>
 		<groupbox mold="3d">
-			<caption label="Extension"/>
 			<vbox>
 				<include self="@define(content)"
 					src="extensionanddistribution/extGCgrid.zul" />

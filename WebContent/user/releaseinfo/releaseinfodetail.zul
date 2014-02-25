@@ -16,10 +16,6 @@
 				<column label="Program" width="125px"/>
 				<column label="Project" width="125px"/>
 				<column label="Germplasm Name" />
-				<column label="Year Extension" width="100px" />
-				<column label="Location" width="100px" />
-				<column label="Country" width="100px" />
-				<column label="Area" width="100px" />
 				<column label="Data Source" width="100px" />
 				<column label="Year release" width="100px" />
 				<column label="Country release" width="125px" />
@@ -30,10 +26,6 @@
 					<label value="@load(each.program.name)" />
 					<label value="@load(each.project.name)" />
 					<label value="@load(each.value.germplasmname)" />
-					<label value="@load(each.value.yearextension)" />
-					<label value="@load(each.value.locationextension)" />
-					<label value="@load(each.value.countryextension)" />
-					<label value="@load(each.value.area)" />
 					<label value="@load(each.value.datasource)" />
 					<label value="@load(each.value.yearrelease)" />
 					<label value="@load(each.value.countryrelease)" />
@@ -63,11 +55,6 @@
 						width="150px" />
 				</row>
 				<row>
-					<label value="Area" width="150px" sclass="heavier"/>
-					<label value='@load(vm.row.value.area)'
-						width="150px" />
-				</row>
-				<row>
 					<label value="Data Source" width="150px" sclass="heavier"/>
 					<label value='@load(vm.row.value.datasource)'
 						width="150px" />
@@ -75,21 +62,6 @@
 				<row>
 					<label value="Seed Availability" width="150px" sclass="heavier"/>
 					<label value='@load(vm.row.value.seedavailability)'
-						width="150px" />
-				</row>
-				<row>
-					<label value="Extension" width="150px" sclass="heavier"/>
-					<label value=''
-						width="150px" />
-				</row>
-				<row>
-					<label value="Year" width="150px" sclass="heavy"/>
-					<label value='@load(vm.row.value.yearextension)'
-						width="150px" />
-				</row>
-				<row>
-					<label value="Location" width="150px" sclass="heavy"/>
-					<label value='@load(vm.row.value.locationextension)'
 						width="150px" />
 				</row>
 				<row>

@@ -51,12 +51,12 @@
 					<label value="@load(each.countryrelease)" />
 					<div>
 						<toolbarbutton label="@load(each.countVariety)"
-							onClick="@global-command('openExtensionDataDetail', function='varietyCountByCountry', summaryModel=each, germplasmName='')"
+							onClick="@global-command('openReleaseInfoDetail', function='varietyCountByCountry', summaryModel=each, germplasmName='')"
 							class="grid-link" />
 					</div>
 					<div children="@load(each.germplasmVarietyNames)">
 						<template name="children" var="item">
-							<toolbarbutton label="@load(item)" onClick="@global-command('openExtensionDataDetail', function='varietyByCountry', summaryModel=each, germplasmName=item)" class="grid-link" />
+							<toolbarbutton label="@load(item)" onClick="@global-command('openReleaseInfoDetail', function='varietyByCountry', summaryModel=each, germplasmName=item)" class="grid-link" />
 						</template>
 					</div>
 				</row>

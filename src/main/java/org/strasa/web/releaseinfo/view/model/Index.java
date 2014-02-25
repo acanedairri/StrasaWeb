@@ -81,9 +81,9 @@ public class Index {
 	
 
 	@NotifyChange("*")
-	@GlobalCommand("openExtensionDataDetail")
-	public void openExtensionDataDetail(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view,@BindingParam("function") String function, @BindingParam("summaryModel")SummaryModel each, @BindingParam("germplasmName")String germplasmName){
+	@GlobalCommand("openReleaseInfoDetail")
+	public void openReleaseInfoDetail(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view,@BindingParam("function") String function, @BindingParam("summaryModel")ReleaseInfoSummaryModel each, @BindingParam("germplasmName")String germplasmName){
 		
 		Tabpanels tabPanels = (Tabpanels) component.getFellow("tabPanels");
 		Tabs tabs = (Tabs) component.getFellow("tabs");

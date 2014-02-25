@@ -68,7 +68,7 @@ public class ReleaseInfoDetail {
 
 	@AfterCompose
 	public void AfterCompose(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("function") String function, @ExecutionArgParam("summaryModel")SummaryModel each,@ExecutionArgParam("germplasmName")String germplasmName ){
+			@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("function") String function, @ExecutionArgParam("summaryModel")ReleaseInfoSummaryModel each,@ExecutionArgParam("germplasmName")String germplasmName ){
 		setDetailTab(detailTab);
 		mgr= new ReleaseInfoManagerImpl();
 		programMan = new ProgramManagerImpl();
