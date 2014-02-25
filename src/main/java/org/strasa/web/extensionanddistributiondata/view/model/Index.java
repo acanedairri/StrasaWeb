@@ -60,7 +60,7 @@ public class Index {
 		Include studyInformationPage = new Include();
 		studyInformationPage.setParent(newPanel);
 		//		studyInformationPage.setDynamicProperty("detailTab", newTab2);
-		studyInformationPage.setSrc("/user/releaseinfo/releaseinfobrowse.zul");
+		studyInformationPage.setSrc("/user/extensionanddistribution/extensiondatabrowse.zul");
 		tabPanels.appendChild(newPanel);
 		tabs.appendChild(newTab);
 		tabBox.setSelectedPanel(newPanel);
@@ -97,7 +97,7 @@ public class Index {
 		
 		Include studyInformationPage2 = new Include();
 		studyInformationPage2.setParent(newPanel2);
-		studyInformationPage2.setSrc("/user/extension/extensiondatadetail.zul");
+		studyInformationPage2.setSrc("/user/extensionanddistribution/extensiondatadetail.zul");
 		studyInformationPage2.setDynamicProperty("function", function);
 		studyInformationPage2.setDynamicProperty("summaryModel", each);
 		studyInformationPage2.setDynamicProperty("germplasmName", germplasmName);

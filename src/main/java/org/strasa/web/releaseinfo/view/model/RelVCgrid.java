@@ -7,7 +7,7 @@ import java.util.List;
 import org.strasa.middleware.manager.ExtensionDataManagerImpl;
 import org.strasa.middleware.manager.ReleaseInfoManagerImpl;
 import org.strasa.web.extensionanddistributiondata.view.model.SummaryFilter;
-import org.strasa.web.extensionanddistributiondata.view.model.SummaryModel;
+import org.strasa.web.releaseinfo.view.model.ReleaseInfoSummaryModel;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -17,10 +17,10 @@ public class RelVCgrid {
 
 
 	@SuppressWarnings("unused")
-	private List<SummaryModel> noVC=new ArrayList<SummaryModel>();  //vc
+	private List<ReleaseInfoSummaryModel> noVC=new ArrayList<ReleaseInfoSummaryModel>();  //vc
 	private SummaryFilter filter= new SummaryFilter();
-	List<SummaryModel> currentModelVC=  new ArrayList<SummaryModel>();
-	static List<SummaryModel> allDataVC=  new ArrayList<SummaryModel>();
+	List<ReleaseInfoSummaryModel> currentModelVC=  new ArrayList<ReleaseInfoSummaryModel>();
+	static List<ReleaseInfoSummaryModel> allDataVC=  new ArrayList<ReleaseInfoSummaryModel>();
 
 
 	@Init
@@ -38,30 +38,30 @@ public class RelVCgrid {
 		this.filter = filter;
 	}
 
-	public List<SummaryModel> getCurrentModelVC() {
+	public List<ReleaseInfoSummaryModel> getCurrentModelVC() {
 		return currentModelVC;
 	}
 
-	public void setCurrentModelVC(List<SummaryModel> currentModelVC) {
+	public void setCurrentModelVC(List<ReleaseInfoSummaryModel> currentModelVC) {
 		this.currentModelVC = currentModelVC;
 	}
 
-	public List<SummaryModel> getNoVC() {
-		return new ListModelList<SummaryModel>(currentModelVC);
+	public List<ReleaseInfoSummaryModel> getNoVC() {
+		return new ListModelList<ReleaseInfoSummaryModel>(currentModelVC);
 	}
 
 	public void setNoVC(
-			List<SummaryModel> noVC) {
+			List<ReleaseInfoSummaryModel> noVC) {
 		this.noVC = noVC;
 	}
 
-	public static List<SummaryModel> getVC(SummaryFilter vc){
-		List<SummaryModel> someResult = new ArrayList<SummaryModel>();
+	public static List<ReleaseInfoSummaryModel> getVC(SummaryFilter vc){
+		List<ReleaseInfoSummaryModel> someResult = new ArrayList<ReleaseInfoSummaryModel>();
 		String programName = vc.getProgramName().toLowerCase();
 		String counrtyRelease=vc.getCounrtyRelease().toLowerCase();
 
-		for (Iterator<SummaryModel> i = allDataVC.iterator(); i.hasNext();) {
-			SummaryModel tmp = i.next();
+		for (Iterator<ReleaseInfoSummaryModel> i = allDataVC.iterator(); i.hasNext();) {
+			ReleaseInfoSummaryModel tmp = i.next();
 			if (tmp.getProgramName().toLowerCase().contains(programName) && 
 					tmp.getCountryrelease().toLowerCase().contains(counrtyRelease)) {
 				someResult.add(tmp);

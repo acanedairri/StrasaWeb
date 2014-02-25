@@ -7,7 +7,7 @@
 
 	<window id="editExtensionWindow" apply="org.zkoss.bind.BindComposer"
 		style="padding:10px"
-		viewModel="@id('vm') @init('org.strasa.web.extensionanddistributiondata.view.model.EditExtensionData')">
+		viewModel="@id('vm') @init('org.strasa.web.releaseinfo.view.model.EditReleaseInfo')">
 		
 		<style src="../css/main.css" />
 		<panel title="Extension Data" border="normal">

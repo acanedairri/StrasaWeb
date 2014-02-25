@@ -1,8 +1,9 @@
 package org.strasa.web.releaseinfo.view.model;
 
 import org.strasa.middleware.model.ExtensionData;
+import org.strasa.middleware.model.ReleaseInfo;
 
-public class ReleaseInfoListModel extends ExtensionData {
+public class ReleaseInfoListModel extends ReleaseInfo {
 	
 	String programName;
 	String projectName;

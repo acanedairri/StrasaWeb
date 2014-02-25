@@ -1,7 +1,7 @@
 <zk>
 	<window title="Add New Extension Data" border="normal"
 		closable="true" apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.extensiondata.view.model.AddExtensionData')"
+		viewModel="@id('vm') @init('org.strasa.web.releaseinfo.view.model.AddReleaseInfo')"
 		width="35%">
 		<style src="../css/main.css" />
 		<grid sizedByContent="true">

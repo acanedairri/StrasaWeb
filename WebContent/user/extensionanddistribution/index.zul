@@ -4,7 +4,7 @@
 <!-- 	<div style="padding:10px 0px 15px 20px" align="left">
 		<label class="header-menu">Extension Data</label>
 	</div> -->
-	<div id="mainBrowseWindow" apply="org.zkoss.bind.BindComposer"
+	<div id="extensionDataBrowseWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.extensionanddistributiondata.view.model.Index')"
 		height="98%" width="98%">
 <separator height="5px"></separator>

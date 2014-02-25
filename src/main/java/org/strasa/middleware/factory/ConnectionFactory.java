@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.strasa.middleware.mapper.CountryMapper;
 import org.strasa.middleware.mapper.DbUserMapper;
+import org.strasa.middleware.mapper.DistributionAndExtensionMapper;
 import org.strasa.middleware.mapper.EcotypeMapper;
 import org.strasa.middleware.mapper.ExtensionDataMapper;
 import org.strasa.middleware.mapper.GeorefMapper;
@@ -26,6 +27,7 @@ import org.strasa.middleware.mapper.LocationMapper;
 import org.strasa.middleware.mapper.PlantingTypeMapper;
 import org.strasa.middleware.mapper.ProgramMapper;
 import org.strasa.middleware.mapper.ProjectMapper;
+import org.strasa.middleware.mapper.ReleaseInfoMapper;
 import org.strasa.middleware.mapper.StudyAgronomyMapper;
 import org.strasa.middleware.mapper.StudyDataColumnMapper;
 import org.strasa.middleware.mapper.StudyDataSetMapper;
@@ -47,6 +49,7 @@ import org.strasa.middleware.mapper.UserDataFileMapper;
 import org.strasa.middleware.mapper.other.ExtendedStudyDataColumnMapper;
 import org.strasa.middleware.mapper.other.ExtensionDataSummaryMapper;
 import org.strasa.middleware.mapper.other.GermplasmBreederMapper;
+import org.strasa.middleware.mapper.other.ReleaseInfoSummaryMapper;
 import org.strasa.middleware.mapper.other.StudySummaryMapper;
 import org.strasa.middleware.model.StudyGermplasmCharacteristics;
 import org.strasa.middleware.model.StudySiteByStudy;
@@ -68,6 +71,7 @@ public class ConnectionFactory {
 				 if (sqlSessionFactory == null) {
 		                sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
 		                sqlSessionFactory.getConfiguration().addMapper(CountryMapper.class);
+		                sqlSessionFactory.getConfiguration().addMapper(DistributionAndExtensionMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(EcotypeMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(GeorefMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(GermplasmCharacteristicsMapper.class);
@@ -97,9 +101,9 @@ public class ConnectionFactory {
 		                sqlSessionFactory.getConfiguration().addMapper(KeyGrainQualityMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(KeyMajorGenesMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(GermplasmTypeMapper.class);
+		                sqlSessionFactory.getConfiguration().addMapper(ReleaseInfoMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(StudyGermplasmCharacteristics.class);
 		                sqlSessionFactory.getConfiguration().addMapper(StudyGermplasmCharacteristicsMapper.class);
-		                sqlSessionFactory.getConfiguration().addMapper(ExtensionDataMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(StudySummaryMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(UserDataFileMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(StudyDataColumnMapper.class);
@@ -110,9 +114,7 @@ public class ConnectionFactory {
 
 		                sqlSessionFactory.getConfiguration().addMapper(ExtendedStudyDataColumnMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(ExtensionDataSummaryMapper.class);
-//		                sqlSessionFactory.getConfiguration().addMapper(StudyRawDataBatch.class);
-//		                sqlSessionFactory.getConfiguration().addMapper();
-		            
+		                sqlSessionFactory.getConfiguration().addMapper(ReleaseInfoSummaryMapper.class);
 		            }
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

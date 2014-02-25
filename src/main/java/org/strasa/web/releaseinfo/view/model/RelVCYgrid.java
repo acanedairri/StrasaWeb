@@ -7,7 +7,7 @@ import java.util.List;
 import org.strasa.middleware.manager.ExtensionDataManagerImpl;
 import org.strasa.middleware.manager.ReleaseInfoManagerImpl;
 import org.strasa.web.extensionanddistributiondata.view.model.SummaryFilter;
-import org.strasa.web.extensionanddistributiondata.view.model.SummaryModel;
+import org.strasa.web.releaseinfo.view.model.ReleaseInfoSummaryModel;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -17,10 +17,10 @@ public class RelVCYgrid {
 
 
 	@SuppressWarnings("unused")
-	private List<SummaryModel> noVCY=new ArrayList<SummaryModel>();  //gce
+	private List<ReleaseInfoSummaryModel> noVCY=new ArrayList<ReleaseInfoSummaryModel>();  //gce
 	private SummaryFilter filter= new SummaryFilter();
-	List<SummaryModel> currentModelVCY=  new ArrayList<SummaryModel>();
-	static List<SummaryModel> allDataVCY=  new ArrayList<SummaryModel>();
+	List<ReleaseInfoSummaryModel> currentModelVCY=  new ArrayList<ReleaseInfoSummaryModel>();
+	static List<ReleaseInfoSummaryModel> allDataVCY=  new ArrayList<ReleaseInfoSummaryModel>();
 
 
 	@Init
@@ -39,31 +39,31 @@ public class RelVCYgrid {
 		this.filter = filter;
 	}
 
-	public List<SummaryModel> getCurrentModelVCY() {
+	public List<ReleaseInfoSummaryModel> getCurrentModelVCY() {
 		return currentModelVCY;
 	}
 
-	public void setCurrentModelVCY(List<SummaryModel> currentModelVCY) {
+	public void setCurrentModelVCY(List<ReleaseInfoSummaryModel> currentModelVCY) {
 		this.currentModelVCY = currentModelVCY;
 	}
 
-	public List<SummaryModel> getNoVCY() {
-		return new ListModelList<SummaryModel>(currentModelVCY);
+	public List<ReleaseInfoSummaryModel> getNoVCY() {
+		return new ListModelList<ReleaseInfoSummaryModel>(currentModelVCY);
 	}
 
 	public void setNoVCY(
-			List<SummaryModel> noVCY) {
+			List<ReleaseInfoSummaryModel> noVCY) {
 		this.noVCY = noVCY;
 	}
 
-	public static List<SummaryModel> getVCY(SummaryFilter vcy){
-		List<SummaryModel> someResult = new ArrayList<SummaryModel>();
+	public static List<ReleaseInfoSummaryModel> getVCY(SummaryFilter vcy){
+		List<ReleaseInfoSummaryModel> someResult = new ArrayList<ReleaseInfoSummaryModel>();
 		String programName = vcy.getProgramName().toLowerCase();
 		String yearRelease = vcy.getYearRelease().toLowerCase();
 		String counrtyRelease=vcy.getCounrtyRelease().toLowerCase();
 
-		for (Iterator<SummaryModel> i = allDataVCY.iterator(); i.hasNext();) {
-			SummaryModel tmp = i.next();
+		for (Iterator<ReleaseInfoSummaryModel> i = allDataVCY.iterator(); i.hasNext();) {
+			ReleaseInfoSummaryModel tmp = i.next();
 			if (tmp.getProgramName().toLowerCase().contains(programName) && 
 					tmp.getYearrelease().toLowerCase().contains(yearRelease) && 
 					tmp.getCountryrelease().toLowerCase().contains(counrtyRelease)) {

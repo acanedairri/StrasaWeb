@@ -11,6 +11,7 @@ import org.strasa.middleware.manager.ReleaseInfoManagerImpl;
 import org.strasa.middleware.model.ExtensionData;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
+import org.strasa.middleware.model.ReleaseInfo;
 import org.strasa.web.extensionanddistributiondata.view.model.EditExtensionData.RowStatus;
 import org.strasa.web.extensionanddistributiondata.view.model.SummaryModel;
 import org.zkoss.bind.annotation.BindingParam;
@@ -73,12 +74,9 @@ public class ReleaseInfoDetail {
 		programMan = new ProgramManagerImpl();
 		projectMan = new ProjectManagerImpl();
 		
-		if(function.equals("varietyByYear"))makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByYearRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
-		else if(function.equals("varietyByCountry"))makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByCountryRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
-		else if(function.equals("varietyByCountryAndYear")) makeRowStatus(mgr.getExtensionDataByNoOfVarietyReleaseByYearAndCountryRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
-		else if(function.equals("areaByYear")) makeRowStatus(mgr.getProgramGermplasmByYear(each.getYearextension(), each.getProgramid(), germplasmName));
-		else if(function.equals("areaByCountry")) makeRowStatus(mgr.getProgramGermplasmByCountry(each.getCountryextension(), each.getProgramid(), germplasmName));
-		else if(function.equals("areaByCountryAndYear")) makeRowStatus(mgr.getProgramGermplasmByYearandCountry(each.getYearextension(), each.getCountryextension(), each.getProgramid(), germplasmName));
+		if(function.equals("varietyByYear"))makeRowStatus(mgr.getReleaseInfoByNoOfVarietyReleaseByYearRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
+		else if(function.equals("varietyByCountry"))makeRowStatus(mgr.getReleaseInfoByNoOfVarietyReleaseByCountryRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
+		else if(function.equals("varietyByCountryAndYear")) makeRowStatus(mgr.getReleaseInfoByNoOfVarietyReleaseByYearAndCountryRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
 		else if(function.equals("varietyCountByYear"))makeRowStatus(mgr.getVarietyReleaseByYear(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
 		else if(function.equals("varietyCountByCountry"))makeRowStatus(mgr.getVarietyReleaseByCountryRelease(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
 		else if(function.equals("varietyCountByCountryAndYear")) makeRowStatus(mgr.getVarietyReleaseByCountryAndYear(each.getYearrelease(), each.getCountryrelease(), each.getProgramid(), germplasmName));
@@ -95,11 +93,11 @@ public class ReleaseInfoDetail {
 		System.out.println(isSingle());
 	}
 
-	private void makeRowStatus(List<ExtensionData> list) {
+	private void makeRowStatus(List<ReleaseInfo> list) {
 		// TODO Auto-generated method stub
 		rowList.clear();
 		
-		for (ExtensionData p: list){
+		for (ReleaseInfo p: list){
 			Program prog = programMan.getProgramById(p.getProgramid());
 			Project proj = projectMan.getProjectById(p.getProjectid());
 			
@@ -272,24 +270,24 @@ public class ReleaseInfoDetail {
 	public class RowStatus {
 		private  Program program;
 		private Project project;
-		private  ExtensionData value;
+		private  ReleaseInfo value;
 		private boolean editingStatus;
 
-		public RowStatus(ExtensionData p, boolean editingStatus, Program program, Project project) {
+		public RowStatus(ReleaseInfo p, boolean editingStatus, Program program, Project project) {
 			this.setValue(p);
 			this.editingStatus = editingStatus;
 			this.setProgram(program);
 			this.setProject(project);
 		}
 
-		public RowStatus(ExtensionData p, Program prog) {
+		public RowStatus(ReleaseInfo p, Program prog) {
 			// TODO Auto-generated constructor stub
 			this.setValue(p);
 			this.setProgram(prog);
 		}
 
 
-		public RowStatus(ExtensionData p, Project proj, Program prog) {
+		public RowStatus(ReleaseInfo p, Project proj, Program prog) {
 			// TODO Auto-generated constructor stub
 			this.setValue(p);
 			this.setProgram(prog);
@@ -305,12 +303,12 @@ public class ReleaseInfoDetail {
 		}
 
 
-		public ExtensionData getValue() {
+		public ReleaseInfo getValue() {
 			return value;
 		}
 
 
-		public void setValue(ExtensionData p) {
+		public void setValue(ReleaseInfo p) {
 			this.value = p;
 		}
 

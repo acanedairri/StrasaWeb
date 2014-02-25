@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.strasa.middleware.manager.ExtensionDataManagerImpl;
 import org.strasa.middleware.model.ExtensionData;
-import org.strasa.web.extensiondata.view.model.ExtensionDataSummaryModel;
+import org.strasa.web.extensionanddistributiondata.view.model.ExtensionDataSummaryModel;
 import org.zkoss.zul.CategoryModel;
 import org.zkoss.zul.SimpleCategoryModel;
 

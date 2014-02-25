@@ -98,7 +98,7 @@ public class Index {
 		
 		Include studyInformationPage2 = new Include();
 		studyInformationPage2.setParent(newPanel2);
-		studyInformationPage2.setSrc("/user/extension/extensiondatadetail.zul");
+		studyInformationPage2.setSrc("/user/releaseinfo/releaseinfodetail.zul");
 		studyInformationPage2.setDynamicProperty("function", function);
 		studyInformationPage2.setDynamicProperty("summaryModel", each);
 		studyInformationPage2.setDynamicProperty("germplasmName", germplasmName);

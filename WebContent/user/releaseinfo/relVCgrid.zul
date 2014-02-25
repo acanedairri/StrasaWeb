@@ -3,7 +3,7 @@
 	<style src="../css/main.css" />
 
 	<div apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.extensionanddistributiondata.view.model.RelVCgrid')">
+		viewModel="@id('vm') @init('org.strasa.web.releaseinfo.view.model.RelVCgrid')">
 
 
 		<grid id="NumberOfVarietybyCountryRelease" model="@load(vm.noVC)" height="400px"

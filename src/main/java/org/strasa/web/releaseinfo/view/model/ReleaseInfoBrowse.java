@@ -7,7 +7,7 @@ import org.strasa.middleware.manager.ExtensionDataManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.ReleaseInfoManagerImpl;
-import org.strasa.web.extensionanddistributiondata.view.model.SummaryModel;
+import org.strasa.web.releaseinfo.view.model.ReleaseInfoSummaryModel;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
@@ -24,17 +24,17 @@ public class ReleaseInfoBrowse {
 	private ReleaseInfoManagerImpl mgr;
 	
 	private List<String> stringy;
-	private List<SummaryModel> summaryByCountry;
-	private List<SummaryModel> summaryByYear;
+	private List<ReleaseInfoSummaryModel> summaryByCountry;
+	private List<ReleaseInfoSummaryModel> summaryByYear;
 	private List<ReleaseInfoListModel> extensionDataList;
-	private List<SummaryModel> summaryArea;
+	private List<ReleaseInfoSummaryModel> summaryArea;
 	
-	private List<SummaryModel> areaSummaryGermplasmByYearandCountryExtension;
-	private List<SummaryModel> areaSummaryGermplasmByYear;
-	private List<SummaryModel> areaSummaryGermplasmByCountryExtension;
-	private List<SummaryModel> noOfVarietyReleaseByCountryAndYear;
-	private List<SummaryModel> noOfVarietyReleaseByCountryRelease;
-	private List<SummaryModel> noOfVarietyReleaseByYear;
+	private List<ReleaseInfoSummaryModel> areaSummaryGermplasmByYearandCountryExtension;
+	private List<ReleaseInfoSummaryModel> areaSummaryGermplasmByYear;
+	private List<ReleaseInfoSummaryModel> areaSummaryGermplasmByCountryExtension;
+	private List<ReleaseInfoSummaryModel> noOfVarietyReleaseByCountryAndYear;
+	private List<ReleaseInfoSummaryModel> noOfVarietyReleaseByCountryRelease;
+	private List<ReleaseInfoSummaryModel> noOfVarietyReleaseByYear;
 	
 	
 	
@@ -49,7 +49,7 @@ public class ReleaseInfoBrowse {
 		this.noOfVarietyReleaseByCountryRelease=mgr.getNoOfVarietyReleaseByCountryRelease();
 		this.noOfVarietyReleaseByYear=mgr.getNoOfVarietyReleaseByYear();
 		
-//		for(SummaryModel sm : noOfVarietyReleaseByYear){
+//		for(ReleaseInfoSummaryModel sm : noOfVarietyReleaseByYear){
 //			System.out.println("next SM");
 //			for(String s: sm.germplasmNames){
 //				System.out.println(s);
@@ -57,7 +57,7 @@ public class ReleaseInfoBrowse {
 //		}
 	}
 	
-	public List<SummaryModel> getAreaSummaryGermplasmByYearandCountryExtension() {
+	public List<ReleaseInfoSummaryModel> getAreaSummaryGermplasmByYearandCountryExtension() {
 		return areaSummaryGermplasmByYearandCountryExtension;
 	}
 
@@ -66,7 +66,7 @@ public class ReleaseInfoBrowse {
 
 
 	public void setAreaSummaryGermplasmByYearandCountryExtension(
-			List<SummaryModel> areaSummaryGermplasmByYearandCountryExtension) {
+			List<ReleaseInfoSummaryModel> areaSummaryGermplasmByYearandCountryExtension) {
 		this.areaSummaryGermplasmByYearandCountryExtension = areaSummaryGermplasmByYearandCountryExtension;
 	}
 
@@ -74,7 +74,7 @@ public class ReleaseInfoBrowse {
 
 
 
-	public List<SummaryModel> getAreaSummaryGermplasmByYear() {
+	public List<ReleaseInfoSummaryModel> getAreaSummaryGermplasmByYear() {
 		return areaSummaryGermplasmByYear;
 	}
 
@@ -83,7 +83,7 @@ public class ReleaseInfoBrowse {
 
 
 	public void setAreaSummaryGermplasmByYear(
-			List<SummaryModel> areaSummaryGermplasmByYear) {
+			List<ReleaseInfoSummaryModel> areaSummaryGermplasmByYear) {
 		this.areaSummaryGermplasmByYear = areaSummaryGermplasmByYear;
 	}
 
@@ -91,7 +91,7 @@ public class ReleaseInfoBrowse {
 
 
 
-	public List<SummaryModel> getAreaSummaryGermplasmByCountryExtension() {
+	public List<ReleaseInfoSummaryModel> getAreaSummaryGermplasmByCountryExtension() {
 		return areaSummaryGermplasmByCountryExtension;
 	}
 
@@ -100,7 +100,7 @@ public class ReleaseInfoBrowse {
 
 
 	public void setAreaSummaryGermplasmByCountryExtension(
-			List<SummaryModel> areaSummaryGermplasmByCountryExtension) {
+			List<ReleaseInfoSummaryModel> areaSummaryGermplasmByCountryExtension) {
 		this.areaSummaryGermplasmByCountryExtension = areaSummaryGermplasmByCountryExtension;
 	}
 
@@ -108,7 +108,7 @@ public class ReleaseInfoBrowse {
 
 
 
-	public List<SummaryModel> getNoOfVarietyReleaseByCountryAndYear() {
+	public List<ReleaseInfoSummaryModel> getNoOfVarietyReleaseByCountryAndYear() {
 		return noOfVarietyReleaseByCountryAndYear;
 	}
 
@@ -117,7 +117,7 @@ public class ReleaseInfoBrowse {
 
 
 	public void setNoOfVarietyReleaseByCountryAndYear(
-			List<SummaryModel> noOfVarietyReleaseByCountryAndYear) {
+			List<ReleaseInfoSummaryModel> noOfVarietyReleaseByCountryAndYear) {
 		this.noOfVarietyReleaseByCountryAndYear = noOfVarietyReleaseByCountryAndYear;
 	}
 
@@ -125,7 +125,7 @@ public class ReleaseInfoBrowse {
 
 
 
-	public List<SummaryModel> getNoOfVarietyReleaseByCountryRelease() {
+	public List<ReleaseInfoSummaryModel> getNoOfVarietyReleaseByCountryRelease() {
 		return noOfVarietyReleaseByCountryRelease;
 	}
 
@@ -134,7 +134,7 @@ public class ReleaseInfoBrowse {
 
 
 	public void setNoOfVarietyReleaseByCountryRelease(
-			List<SummaryModel> noOfVarietyReleaseByCountryRelease) {
+			List<ReleaseInfoSummaryModel> noOfVarietyReleaseByCountryRelease) {
 		this.noOfVarietyReleaseByCountryRelease = noOfVarietyReleaseByCountryRelease;
 	}
 
@@ -142,7 +142,7 @@ public class ReleaseInfoBrowse {
 
 
 
-	public List<SummaryModel> getNoOfVarietyReleaseByYear() {
+	public List<ReleaseInfoSummaryModel> getNoOfVarietyReleaseByYear() {
 		return noOfVarietyReleaseByYear;
 	}
 
@@ -151,7 +151,7 @@ public class ReleaseInfoBrowse {
 
 
 	public void setNoOfVarietyReleaseByYear(
-			List<SummaryModel> noOfVarietyReleaseByYear) {
+			List<ReleaseInfoSummaryModel> noOfVarietyReleaseByYear) {
 		this.noOfVarietyReleaseByYear = noOfVarietyReleaseByYear;
 	}
 
@@ -159,28 +159,28 @@ public class ReleaseInfoBrowse {
 
 
 
-	public List<SummaryModel> getSummaryArea() {
+	public List<ReleaseInfoSummaryModel> getSummaryArea() {
 		return summaryArea;
 	}
 
 
 
-	public void setSummaryArea(List<SummaryModel> summaryArea) {
+	public void setSummaryArea(List<ReleaseInfoSummaryModel> summaryArea) {
 		this.summaryArea = summaryArea;
 	}
 
 
 
-	public List<SummaryModel> getSummaryByCountry() {
+	public List<ReleaseInfoSummaryModel> getSummaryByCountry() {
 		return summaryByCountry;
 	}
-	public void setSummaryByCountry(List<SummaryModel> summaryByCountry) {
+	public void setSummaryByCountry(List<ReleaseInfoSummaryModel> summaryByCountry) {
 		this.summaryByCountry = summaryByCountry;
 	}
-	public List<SummaryModel> getSummaryByYear() {
+	public List<ReleaseInfoSummaryModel> getSummaryByYear() {
 		return summaryByYear;
 	}
-	public void setSummaryByYear(List<SummaryModel> summaryByYear) {
+	public void setSummaryByYear(List<ReleaseInfoSummaryModel> summaryByYear) {
 		this.summaryByYear = summaryByYear;
 	}
 
@@ -227,10 +227,10 @@ public class ReleaseInfoBrowse {
 	@NotifyChange("*")
 	@Command
 	public void show(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view,@BindingParam("function") String function,@BindingParam("summaryModel") SummaryModel summaryModel){
+			@ContextParam(ContextType.VIEW) Component view,@BindingParam("function") String function,@BindingParam("ReleaseInfoSummaryModel") ReleaseInfoSummaryModel releaseInfoSummaryModel){
 		if(function.equals("varietyByYear")){
-//			mgr.getVarietyNamesOfVarietyReleaseByYear(summaryModel);
-			summaryModel.getGermplasmname();
+//			mgr.getVarietyNamesOfVarietyReleaseByYear(ReleaseInfoSummaryModel);
+			releaseInfoSummaryModel.getGermplasmname();
 			System.out.println("");
 		}
 	}

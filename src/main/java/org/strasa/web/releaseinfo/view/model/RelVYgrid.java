@@ -7,7 +7,7 @@ import java.util.List;
 import org.strasa.middleware.manager.ExtensionDataManagerImpl;
 import org.strasa.middleware.manager.ReleaseInfoManagerImpl;
 import org.strasa.web.extensionanddistributiondata.view.model.SummaryFilter;
-import org.strasa.web.extensionanddistributiondata.view.model.SummaryModel;
+import org.strasa.web.releaseinfo.view.model.ReleaseInfoSummaryModel;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -17,10 +17,10 @@ public class RelVYgrid {
 
 
 	@SuppressWarnings("unused")
-	private List<SummaryModel> noVY=new ArrayList<SummaryModel>();  //vy
+	private List<ReleaseInfoSummaryModel> noVY=new ArrayList<ReleaseInfoSummaryModel>();  //vy
 	private SummaryFilter filter= new SummaryFilter();
-	List<SummaryModel> currentModelVY=  new ArrayList<SummaryModel>();
-	static List<SummaryModel> allDataVY=  new ArrayList<SummaryModel>();
+	List<ReleaseInfoSummaryModel> currentModelVY=  new ArrayList<ReleaseInfoSummaryModel>();
+	static List<ReleaseInfoSummaryModel> allDataVY=  new ArrayList<ReleaseInfoSummaryModel>();
 
 
 	@Init
@@ -39,30 +39,30 @@ public class RelVYgrid {
 		this.filter = filter;
 	}
 
-	public List<SummaryModel> getCurrentModelVY() {
+	public List<ReleaseInfoSummaryModel> getCurrentModelVY() {
 		return currentModelVY;
 	}
 
-	public void setCurrentModelVY(List<SummaryModel> currentModelVY) {
+	public void setCurrentModelVY(List<ReleaseInfoSummaryModel> currentModelVY) {
 		this.currentModelVY = currentModelVY;
 	}
 
-	public List<SummaryModel> getNoVY() {
-		return new ListModelList<SummaryModel>(currentModelVY);
+	public List<ReleaseInfoSummaryModel> getNoVY() {
+		return new ListModelList<ReleaseInfoSummaryModel>(currentModelVY);
 	}
 
 	public void setNoVY(
-			List<SummaryModel> noVY) {
+			List<ReleaseInfoSummaryModel> noVY) {
 		this.noVY = noVY;
 	}
 
-	public static List<SummaryModel> getVY(SummaryFilter filter){
-		List<SummaryModel> someResult = new ArrayList<SummaryModel>();
+	public static List<ReleaseInfoSummaryModel> getVY(SummaryFilter filter){
+		List<ReleaseInfoSummaryModel> someResult = new ArrayList<ReleaseInfoSummaryModel>();
 		String programName = filter.getProgramName().toLowerCase();
 		String yearRelease = filter.getYearRelease().toLowerCase();
 
-		for (Iterator<SummaryModel> i = allDataVY.iterator(); i.hasNext();) {
-			SummaryModel tmp = i.next();
+		for (Iterator<ReleaseInfoSummaryModel> i = allDataVY.iterator(); i.hasNext();) {
+			ReleaseInfoSummaryModel tmp = i.next();
 			if (tmp.getProgramName().toLowerCase().contains(programName) && 
 					tmp.getYearrelease().toLowerCase().contains(yearRelease)) {
 				someResult.add(tmp);
