@@ -1,6 +1,6 @@
 package org.strasa.web.extensionanddistributiondata.view.model;
 
-public class ExtensionDataSummaryModel {
+public class DistributionAndExtensionSummaryModel {
 	
 
 	String data;

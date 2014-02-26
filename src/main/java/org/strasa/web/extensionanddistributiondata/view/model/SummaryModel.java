@@ -2,7 +2,7 @@ package org.strasa.web.extensionanddistributiondata.view.model;
 
 import java.util.List;
 
-public class SummaryModel extends ExtensionDataListModel {
+public class SummaryModel extends DistributionAndExtensionListModel {
 	
 	double sumArea;
 	int countVariety;

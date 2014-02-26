@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.strasa.middleware.manager.ExtensionDataManagerImpl;
+import org.strasa.middleware.manager.DistributionAndExtensionManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
-import org.strasa.middleware.model.ExtensionData;
+import org.strasa.middleware.model.DistributionAndExtension;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
-import org.strasa.web.extensionanddistributiondata.view.model.EditExtensionData.RowStatus;
+import org.strasa.web.extensionanddistributiondata.view.model.EditDistributionAndExtension.RowStatus;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
@@ -29,15 +29,15 @@ import org.zkoss.zul.Tabpanels;
 import org.zkoss.zul.Tabs;
 import org.zkoss.bind.annotation.AfterCompose;
 
-public class ExtensionDataDetail {
+public class DistributionAndExtensionDetail {
 
 	private ProgramManagerImpl programMan;
 	private ProjectManagerImpl projectMan;
-	private ExtensionDataManagerImpl mgr;
+	private DistributionAndExtensionManagerImpl mgr;
 
-	private List<ExtensionDataSummaryModel> summaryByCountry;
-	private List<ExtensionDataSummaryModel> summaryByYear;
-	private List<ExtensionDataListModel> extensionDataList;
+	private List<DistributionAndExtensionSummaryModel> summaryByCountry;
+	private List<DistributionAndExtensionSummaryModel> summaryByYear;
+	private List<DistributionAndExtensionListModel> DistributionAndExtensionList;
 	private List<SummaryModel> summaryArea;
 	private List<RowStatus> rowList = new ArrayList<RowStatus>();
 	private RowStatus row;
@@ -67,7 +67,7 @@ public class ExtensionDataDetail {
 	public void AfterCompose(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("function") String function, @ExecutionArgParam("summaryModel")SummaryModel each,@ExecutionArgParam("germplasmName")String germplasmName ){
 		setDetailTab(detailTab);
-		mgr= new ExtensionDataManagerImpl();
+		mgr= new DistributionAndExtensionManagerImpl();
 		programMan = new ProgramManagerImpl();
 		projectMan = new ProjectManagerImpl();
 		
@@ -87,11 +87,11 @@ public class ExtensionDataDetail {
 		System.out.println(isSingle());
 	}
 
-	private void makeRowStatus(List<ExtensionData> list) {
+	private void makeRowStatus(List<DistributionAndExtension> list) {
 		// TODO Auto-generated method stub
 		rowList.clear();
 		
-		for (ExtensionData p: list){
+		for (DistributionAndExtension p: list){
 			Program prog = programMan.getProgramById(p.getProgramid());
 			Project proj = projectMan.getProjectById(p.getProjectid());
 			
@@ -223,29 +223,29 @@ public class ExtensionDataDetail {
 
 
 
-	public List<ExtensionDataSummaryModel> getSummaryByCountry() {
+	public List<DistributionAndExtensionSummaryModel> getSummaryByCountry() {
 		return summaryByCountry;
 	}
-	public void setSummaryByCountry(List<ExtensionDataSummaryModel> summaryByCountry) {
+	public void setSummaryByCountry(List<DistributionAndExtensionSummaryModel> summaryByCountry) {
 		this.summaryByCountry = summaryByCountry;
 	}
-	public List<ExtensionDataSummaryModel> getSummaryByYear() {
+	public List<DistributionAndExtensionSummaryModel> getSummaryByYear() {
 		return summaryByYear;
 	}
-	public void setSummaryByYear(List<ExtensionDataSummaryModel> summaryByYear) {
+	public void setSummaryByYear(List<DistributionAndExtensionSummaryModel> summaryByYear) {
 		this.summaryByYear = summaryByYear;
 	}
 
 
 
-	public List<ExtensionDataListModel> getExtensionDataList() {
-		return extensionDataList;
+	public List<DistributionAndExtensionListModel> getDistributionAndExtensionList() {
+		return DistributionAndExtensionList;
 	}
 
 
 
-	public void setExtensionDataList(List<ExtensionDataListModel> extensionDataList) {
-		this.extensionDataList = extensionDataList;
+	public void setDistributionAndExtensionList(List<DistributionAndExtensionListModel> DistributionAndExtensionList) {
+		this.DistributionAndExtensionList = DistributionAndExtensionList;
 	}
 	public boolean isSingle() {
 		return single;
@@ -264,24 +264,24 @@ public class ExtensionDataDetail {
 	public class RowStatus {
 		private  Program program;
 		private Project project;
-		private  ExtensionData value;
+		private  DistributionAndExtension value;
 		private boolean editingStatus;
 
-		public RowStatus(ExtensionData p, boolean editingStatus, Program program, Project project) {
+		public RowStatus(DistributionAndExtension p, boolean editingStatus, Program program, Project project) {
 			this.setValue(p);
 			this.editingStatus = editingStatus;
 			this.setProgram(program);
 			this.setProject(project);
 		}
 
-		public RowStatus(ExtensionData p, Program prog) {
+		public RowStatus(DistributionAndExtension p, Program prog) {
 			// TODO Auto-generated constructor stub
 			this.setValue(p);
 			this.setProgram(prog);
 		}
 
 
-		public RowStatus(ExtensionData p, Project proj, Program prog) {
+		public RowStatus(DistributionAndExtension p, Project proj, Program prog) {
 			// TODO Auto-generated constructor stub
 			this.setValue(p);
 			this.setProgram(prog);
@@ -297,12 +297,12 @@ public class ExtensionDataDetail {
 		}
 
 
-		public ExtensionData getValue() {
+		public DistributionAndExtension getValue() {
 			return value;
 		}
 
 
-		public void setValue(ExtensionData p) {
+		public void setValue(DistributionAndExtension p) {
 			this.value = p;
 		}
 

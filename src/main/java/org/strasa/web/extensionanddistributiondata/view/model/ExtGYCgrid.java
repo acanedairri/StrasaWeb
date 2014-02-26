@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.strasa.middleware.manager.ExtensionDataManagerImpl;
+import org.strasa.middleware.manager.DistributionAndExtensionManagerImpl;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -22,7 +22,7 @@ public class ExtGYCgrid {
 
 	@Init
 	public void setData(){
-		ExtensionDataManagerImpl mgr= new ExtensionDataManagerImpl();
+		DistributionAndExtensionManagerImpl mgr= new DistributionAndExtensionManagerImpl();
 		this.areaSummaryGYC=mgr.getAreaSummaryGermplasmByYearandCountryExtension();
 		allDataGYC=mgr.getAreaSummaryGermplasmByYearandCountryExtension();
 		currentModelGYC=mgr.getAreaSummaryGermplasmByYearandCountryExtension();

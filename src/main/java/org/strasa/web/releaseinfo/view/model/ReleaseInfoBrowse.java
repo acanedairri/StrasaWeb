@@ -3,7 +3,7 @@ package org.strasa.web.releaseinfo.view.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.strasa.middleware.manager.ExtensionDataManagerImpl;
+import org.strasa.middleware.manager.DistributionAndExtensionManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.ReleaseInfoManagerImpl;

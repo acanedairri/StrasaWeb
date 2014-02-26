@@ -3,7 +3,7 @@ package org.strasa.web.extensionanddistributiondata.view.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.strasa.middleware.manager.ExtensionDataManagerImpl;
+import org.strasa.middleware.manager.DistributionAndExtensionManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.zkoss.bind.annotation.BindingParam;
@@ -18,13 +18,13 @@ import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Toolbarbutton;
 
-public class ExtensionDataBrowse {
-	private ExtensionDataManagerImpl mgr;
+public class DistributionAndExtensionBrowse {
+	private DistributionAndExtensionManagerImpl mgr;
 	
 	private List<String> stringy;
-	private List<ExtensionDataSummaryModel> summaryByCountry;
-	private List<ExtensionDataSummaryModel> summaryByYear;
-	private List<ExtensionDataListModel> extensionDataList;
+	private List<DistributionAndExtensionSummaryModel> summaryByCountry;
+	private List<DistributionAndExtensionSummaryModel> summaryByYear;
+	private List<DistributionAndExtensionListModel> extensionDataList;
 	private List<SummaryModel> summaryArea;
 	
 	private List<SummaryModel> areaSummaryGermplasmByYearandCountryExtension;
@@ -42,7 +42,7 @@ public class ExtensionDataBrowse {
 //		this.summaryByYear=mgr.getCountOfGermplasmByYear();
 //		this.extensionDataList=mgr.getExtensionDataList();
 		
-		mgr= new ExtensionDataManagerImpl();
+		mgr= new DistributionAndExtensionManagerImpl();
 		this.areaSummaryGermplasmByYearandCountryExtension=mgr.getAreaSummaryGermplasmByCountryExtension();
 		this.areaSummaryGermplasmByYear=mgr.getAreaSummaryGermplasmByYear();
 		this.areaSummaryGermplasmByCountryExtension=mgr.getAreaSummaryGermplasmByCountryExtension();
@@ -169,28 +169,28 @@ public class ExtensionDataBrowse {
 
 
 
-	public List<ExtensionDataSummaryModel> getSummaryByCountry() {
+	public List<DistributionAndExtensionSummaryModel> getSummaryByCountry() {
 		return summaryByCountry;
 	}
-	public void setSummaryByCountry(List<ExtensionDataSummaryModel> summaryByCountry) {
+	public void setSummaryByCountry(List<DistributionAndExtensionSummaryModel> summaryByCountry) {
 		this.summaryByCountry = summaryByCountry;
 	}
-	public List<ExtensionDataSummaryModel> getSummaryByYear() {
+	public List<DistributionAndExtensionSummaryModel> getSummaryByYear() {
 		return summaryByYear;
 	}
-	public void setSummaryByYear(List<ExtensionDataSummaryModel> summaryByYear) {
+	public void setSummaryByYear(List<DistributionAndExtensionSummaryModel> summaryByYear) {
 		this.summaryByYear = summaryByYear;
 	}
 
 
 
-	public List<ExtensionDataListModel> getExtensionDataList() {
+	public List<DistributionAndExtensionListModel> getExtensionDataList() {
 		return extensionDataList;
 	}
 
 
 
-	public void setExtensionDataList(List<ExtensionDataListModel> extensionDataList) {
+	public void setExtensionDataList(List<DistributionAndExtensionListModel> extensionDataList) {
 		this.extensionDataList = extensionDataList;
 	}
 

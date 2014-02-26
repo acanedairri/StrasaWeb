@@ -6,39 +6,37 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.EcotypeMapper;
-import org.strasa.middleware.mapper.ExtensionDataMapper;
+import org.strasa.middleware.mapper.DistributionAndExtensionMapper;
 import org.strasa.middleware.mapper.LocationMapper;
 import org.strasa.middleware.mapper.ProgramMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
-import org.strasa.middleware.mapper.other.ExtensionDataSummaryMapper;
+import org.strasa.middleware.mapper.other.DistributionAndExtensionSummaryMapper;
 import org.strasa.middleware.mapper.other.StudySummaryMapper;
+import org.strasa.middleware.model.DistributionAndExtension;
+import org.strasa.middleware.model.DistributionAndExtensionExample;
 import org.strasa.middleware.model.Ecotype;
-import org.strasa.middleware.model.ExtensionData;
-import org.strasa.middleware.model.ExtensionDataExample;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.StudySite;
 import org.strasa.web.browsestudy.view.model.StudySearchFilterModel;
 import org.strasa.web.browsestudy.view.model.StudySearchResultModel;
 import org.strasa.web.browsestudy.view.model.StudySummaryModel;
-import org.strasa.web.extensionanddistributiondata.view.model.ExtensionDataListModel;
-import org.strasa.web.extensionanddistributiondata.view.model.ExtensionDataSummaryModel;
 import org.strasa.web.extensionanddistributiondata.view.model.SummaryModel;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 
-public class ExtensionDataManagerImpl {
+public class DistributionAndExtensionManagerImpl {
 
 
 	@WireVariable
 	ConnectionFactory connectionFactory;
 
-	public ExtensionDataManagerImpl() {
+	public DistributionAndExtensionManagerImpl() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void addExtensionData(ExtensionData record) {
+	public void addDistributionAndExtension(DistributionAndExtension record) {
 		// TODO Auto-generated method stub
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
+		DistributionAndExtensionMapper mapper = session.getMapper(DistributionAndExtensionMapper.class);
 
 		try{
 			mapper.insert(record);
@@ -50,29 +48,29 @@ public class ExtensionDataManagerImpl {
 
 	}
 
-	public List<ExtensionData> getAllExtensionData(){
+	public List<DistributionAndExtension> getAllDistributionAndExtension(){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
+		DistributionAndExtensionMapper mapper = session.getMapper(DistributionAndExtensionMapper.class);
 
 
 		try{
-			List<ExtensionData> extensionData = mapper.selectByExample(null);
+			List<DistributionAndExtension> distributionAndExtension = mapper.selectByExample(null);
 
-			return extensionData;
+			return distributionAndExtension;
 
 		}finally{
 			session.close();
 		}
 
 	}
-	public ExtensionData getExtensionDataById(int id){
+	public DistributionAndExtension getDistributionAndExtensionById(int id){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
+		DistributionAndExtensionMapper mapper = session.getMapper(DistributionAndExtensionMapper.class);
 
 		try{
-			ExtensionData extensionData = mapper.selectByPrimaryKey(id);
+			DistributionAndExtension distributionAndExtension = mapper.selectByPrimaryKey(id);
 
-			return extensionData;
+			return distributionAndExtension;
 
 		}finally{
 			session.close();
@@ -80,10 +78,10 @@ public class ExtensionDataManagerImpl {
 	}
 	
 	@SuppressWarnings("null")
-	public List<String> getAllExtensionDataAsString() {
+	public List<String> getAllDistributionAndExtensionAsString() {
 		List<String> extData = new ArrayList<String>();;
-		List<ExtensionData> extensionDataList = getAllExtensionData();
-		for(ExtensionData e : extensionDataList){
+		List<DistributionAndExtension> distributionAndExtensionList = getAllDistributionAndExtension();
+		for(DistributionAndExtension e : distributionAndExtensionList){
 			System.out.println(e.getDatasource());
 			extData.add(e.getDatasource());
 		}
@@ -91,11 +89,11 @@ public class ExtensionDataManagerImpl {
 		return extData;
 	}
 
-	public void updateExtensionData(ExtensionData value) {
+	public void updateDistributionAndExtension(DistributionAndExtension value) {
 		// TODO Auto-generated method stub
 
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
+		DistributionAndExtensionMapper mapper = session.getMapper(DistributionAndExtensionMapper.class);
 
 		try{	
 			mapper.updateByPrimaryKey(value);
@@ -110,7 +108,7 @@ public class ExtensionDataManagerImpl {
 	public void deleteById(Integer id) {
 		// TODO Auto-generated method stub
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
-		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
+		DistributionAndExtensionMapper mapper = session.getMapper(DistributionAndExtensionMapper.class);
 		try{
 			mapper.deleteByPrimaryKey(id);
 			session.commit();
@@ -122,7 +120,7 @@ public class ExtensionDataManagerImpl {
 	
 	public List<SummaryModel> getAreaSummaryGermplasmByYearandCountryExtension(){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
+		DistributionAndExtensionSummaryMapper mapper = session.getMapper(DistributionAndExtensionSummaryMapper.class);
 		List<SummaryModel> s= new ArrayList<SummaryModel>();
 		try{
 			List<SummaryModel> toreturn= mapper.selectAreaSummaryGermplasmByYearandCountryExtension();
@@ -136,7 +134,7 @@ public class ExtensionDataManagerImpl {
 	
 	public List<SummaryModel> getAreaSummaryGermplasmByYear(){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
+		DistributionAndExtensionSummaryMapper mapper = session.getMapper(DistributionAndExtensionSummaryMapper.class);
 		List<SummaryModel> s= new ArrayList<SummaryModel>();
 		try{
 			List<SummaryModel> toreturn= mapper.selectAreaSummaryGermplasmByYear();
@@ -150,7 +148,7 @@ public class ExtensionDataManagerImpl {
 	
 	public List<SummaryModel> getAreaSummaryGermplasmByCountryExtension(){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		ExtensionDataSummaryMapper mapper = session.getMapper(ExtensionDataSummaryMapper.class);
+		DistributionAndExtensionSummaryMapper mapper = session.getMapper(DistributionAndExtensionSummaryMapper.class);
 		List<SummaryModel> s= new ArrayList<SummaryModel>();
 		try{
 			List<SummaryModel> toreturn= mapper.selectAreaSummaryGermplasmByCountryExtension();
@@ -163,15 +161,15 @@ public class ExtensionDataManagerImpl {
 	}
 	
 	
-	public List<ExtensionData> getProgramGermplasmByYear(String yearextension,
+	public List<DistributionAndExtension> getProgramGermplasmByYear(String yearextension,
 			Integer programid, String germplasmName) {
 		// TODO Auto-generated method stub
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
+		DistributionAndExtensionMapper mapper = session.getMapper(DistributionAndExtensionMapper.class);
 		try{
-			ExtensionDataExample example = new ExtensionDataExample();
+			DistributionAndExtensionExample example = new DistributionAndExtensionExample();
 			example.createCriteria().andProgramidEqualTo(programid).andGermplasmnameEqualTo(germplasmName).andYearextensionEqualTo(yearextension); 
-			List<ExtensionData> toreturn = mapper.selectByExample(example);
+			List<DistributionAndExtension> toreturn = mapper.selectByExample(example);
 			return toreturn;
 
 		}finally{
@@ -179,15 +177,15 @@ public class ExtensionDataManagerImpl {
 		}
 	}
 
-	public List<ExtensionData> getProgramGermplasmByCountry(
+	public List<DistributionAndExtension> getProgramGermplasmByCountry(
 			String countryxtension, Integer programid, String germplasmName) {
 		// TODO Auto-generated method stub
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
+		DistributionAndExtensionMapper mapper = session.getMapper(DistributionAndExtensionMapper.class);
 		try{
-			ExtensionDataExample example = new ExtensionDataExample();
+			DistributionAndExtensionExample example = new DistributionAndExtensionExample();
 			example.createCriteria().andProgramidEqualTo(programid).andGermplasmnameEqualTo(germplasmName).andCountryextensionEqualTo(countryxtension);
-			List<ExtensionData> toreturn = mapper.selectByExample(example);
+			List<DistributionAndExtension> toreturn = mapper.selectByExample(example);
 			return toreturn;
 
 		}finally{
@@ -195,16 +193,16 @@ public class ExtensionDataManagerImpl {
 		}
 	}
 
-	public List<ExtensionData> getProgramGermplasmByYearandCountry(
+	public List<DistributionAndExtension> getProgramGermplasmByYearandCountry(
 			String yearextension, String countryxtension, Integer programid,
 			String germplasmName) {
 		// TODO Auto-generated method stub
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		ExtensionDataMapper mapper = session.getMapper(ExtensionDataMapper.class);
+		DistributionAndExtensionMapper mapper = session.getMapper(DistributionAndExtensionMapper.class);
 		try{
-			ExtensionDataExample example = new ExtensionDataExample();
+			DistributionAndExtensionExample example = new DistributionAndExtensionExample();
 			example.createCriteria().andProgramidEqualTo(programid).andGermplasmnameEqualTo(germplasmName).andCountryextensionEqualTo(countryxtension).andYearextensionEqualTo(yearextension); 
-			List<ExtensionData> toreturn = mapper.selectByExample(example);
+			List<DistributionAndExtension> toreturn = mapper.selectByExample(example);
 			return toreturn;
 
 		}finally{

@@ -6,11 +6,11 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.strasa.web.browsestudy.view.model.StudySummaryModel;
-import org.strasa.web.extensionanddistributiondata.view.model.ExtensionDataListModel;
-import org.strasa.web.extensionanddistributiondata.view.model.ExtensionDataSummaryModel;
+import org.strasa.web.extensionanddistributiondata.view.model.DistributionAndExtensionListModel;
+import org.strasa.web.extensionanddistributiondata.view.model.DistributionAndExtensionSummaryModel;
 import org.strasa.web.extensionanddistributiondata.view.model.SummaryModel;
 
-public interface ExtensionDataSummaryMapper {
+public interface DistributionAndExtensionSummaryMapper {
 
 	/*	@Select("Select countryrelease as data,count(germplasmname)as totalcount from extensiondata group by countryrelease")
 	List<ExtensionDataSummaryModel> selectExtentionDataSummaryByCountryRelease();

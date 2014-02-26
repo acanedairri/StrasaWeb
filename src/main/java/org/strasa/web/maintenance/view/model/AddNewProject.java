@@ -10,7 +10,7 @@ import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
 import org.strasa.web.common.api.FormValidator;
-import org.strasa.web.extensionanddistributiondata.view.model.AddExtensionData;
+import org.strasa.web.extensionanddistributiondata.view.model.AddDistributionAndExtension;
 import org.strasa.web.uploadstudy.view.model.AddProject;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;

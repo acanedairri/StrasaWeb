@@ -47,7 +47,7 @@ import org.strasa.middleware.mapper.StudyTypeMapper;
 import org.strasa.middleware.mapper.StudyVariableMapper;
 import org.strasa.middleware.mapper.UserDataFileMapper;
 import org.strasa.middleware.mapper.other.ExtendedStudyDataColumnMapper;
-import org.strasa.middleware.mapper.other.ExtensionDataSummaryMapper;
+import org.strasa.middleware.mapper.other.DistributionAndExtensionSummaryMapper;
 import org.strasa.middleware.mapper.other.GermplasmBreederMapper;
 import org.strasa.middleware.mapper.other.ReleaseInfoSummaryMapper;
 import org.strasa.middleware.mapper.other.StudySummaryMapper;
@@ -114,7 +114,7 @@ public class ConnectionFactory {
 		                sqlSessionFactory.getConfiguration().addMapper(StudyDataSetMapper.class);
 
 		                sqlSessionFactory.getConfiguration().addMapper(ExtendedStudyDataColumnMapper.class);
-		                sqlSessionFactory.getConfiguration().addMapper(ExtensionDataSummaryMapper.class);
+		                sqlSessionFactory.getConfiguration().addMapper(DistributionAndExtensionSummaryMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(ReleaseInfoSummaryMapper.class);
 		            }
 			} catch (IOException e) {

@@ -16,14 +16,15 @@
 				<column label="Program" width="125px"/>
 				<column label="Project" width="125px"/>
 				<column label="Germplasm Name" />
-				<column label="Year Extension" width="100px" />
+				<column label="Year" width="100px" />
 				<column label="Location" width="100px" />
 				<column label="Country" width="100px" />
-				<column label="Area" width="100px" />
+				<column label="Planting Area" width="100px" />
 				<column label="Data Source" width="100px" />
-				<column label="Year release" width="100px" />
-				<column label="Country release" width="125px" />
 				<column label="Seed Availability" width="125px" />
+				<column label="Amount of seeds distributed" width="100px" />
+				<column label="Num of farmers who adopted" width="100px" />
+				<column label="Amount of seeds produced" width="100px" />
 			</columns>
 			<template name="model">
 				<row>
@@ -35,8 +36,6 @@
 					<label value="@load(each.value.countryextension)" />
 					<label value="@load(each.value.area)" />
 					<label value="@load(each.value.datasource)" />
-					<label value="@load(each.value.yearrelease)" />
-					<label value="@load(each.value.countryrelease)" />
 					<label value="@load(each.value.seedavailability)" />
 				</row>
 			</template>

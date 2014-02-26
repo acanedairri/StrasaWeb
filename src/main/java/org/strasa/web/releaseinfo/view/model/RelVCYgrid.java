@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.strasa.middleware.manager.ExtensionDataManagerImpl;
+import org.strasa.middleware.manager.DistributionAndExtensionManagerImpl;
 import org.strasa.middleware.manager.ReleaseInfoManagerImpl;
 import org.strasa.web.extensionanddistributiondata.view.model.SummaryFilter;
 import org.strasa.web.releaseinfo.view.model.ReleaseInfoSummaryModel;

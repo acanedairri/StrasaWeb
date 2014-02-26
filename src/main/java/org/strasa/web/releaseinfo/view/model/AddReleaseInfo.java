@@ -7,12 +7,12 @@ import java.util.Map;
 
 import org.strasa.middleware.manager.CountryManagerImpl;
 import org.strasa.middleware.manager.EcotypeManagerImpl;
-import org.strasa.middleware.manager.ExtensionDataManagerImpl;
+import org.strasa.middleware.manager.DistributionAndExtensionManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.model.Country;
 import org.strasa.middleware.model.Ecotype;
-import org.strasa.middleware.model.ExtensionData;
+import org.strasa.middleware.model.DistributionAndExtension;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
 import org.strasa.web.common.api.FormValidator;
@@ -32,12 +32,12 @@ import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Messagebox;
 
 public class AddReleaseInfo {
-	public static String ZUL_PATH = "/user/extension/addextensiondata.zul";
+	public static String ZUL_PATH = "/user/extension/addDistributionAndExtension.zul";
 	
 	ProgramManagerImpl programMan;
 	ProjectManagerImpl projectMan;
 	
-	private ExtensionData model = new ExtensionData();
+	private DistributionAndExtension model = new DistributionAndExtension();
 	private ArrayList<String> cmbCountry = new ArrayList<String>(); 
 	private List<Program> programList= null;
 	private List<Project> projectList= null;
@@ -45,10 +45,10 @@ public class AddReleaseInfo {
 	private Program program= new Program();
 	private Project project= new Project();
 
-	public ExtensionData getModel() {
+	public DistributionAndExtension getModel() {
 		return model;
 	}
-	public void setModel(ExtensionData model) {
+	public void setModel(DistributionAndExtension model) {
 		this.model = model;
 	}
 	private Component mainView;
@@ -81,12 +81,12 @@ public class AddReleaseInfo {
 		Combobox programComboBox = (Combobox) component.getFellow("programComboBox");
 		Combobox projectComboBox = (Combobox) component.getFellow("projectComboBox");
 		
-		ExtensionDataManagerImpl man = new ExtensionDataManagerImpl();
+		DistributionAndExtensionManagerImpl man = new DistributionAndExtensionManagerImpl();
 		
 		model.setProgramid((Integer)programComboBox.getSelectedItem().getValue());
 		model.setProjectid((Integer)projectComboBox.getSelectedItem().getValue());
 		
-		if(man.getAllExtensionDataAsString().contains(model.getDatasource())){
+		if(man.getAllDistributionAndExtensionAsString().contains(model.getDatasource())){
 			Messagebox.show("Extension data already exist! Choose a different name.", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
 			return;
 		}
@@ -101,7 +101,7 @@ public class AddReleaseInfo {
 			e.printStackTrace();
 		}
 		//TODO IMPORTANT!!! Must change this to real UserID
-		man.addExtensionData(model);
+		man.addDistributionAndExtension(model);
 		
 		//TODO Validate!!
 		Messagebox.show("Successfully added to database!", "OK", Messagebox.OK, Messagebox.INFORMATION);
