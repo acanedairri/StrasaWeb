@@ -1,4 +1,4 @@
-package org.strasa.web.extensionanddistributiondata.view.model;
+package org.strasa.web.distributionandextension.view.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.strasa.middleware.manager.DistributionAndExtensionManagerImpl;
 import org.strasa.middleware.manager.ReleaseInfoManagerImpl;
-import org.strasa.web.extensionanddistributiondata.view.model.SummaryFilter;
+import org.strasa.web.distributionandextension.view.model.SummaryFilter;
 import org.strasa.web.releaseinfo.view.model.ReleaseInfoSummaryModel;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;

@@ -20,7 +20,7 @@ import org.strasa.middleware.model.StudySite;
 import org.strasa.web.browsestudy.view.model.StudySearchFilterModel;
 import org.strasa.web.browsestudy.view.model.StudySearchResultModel;
 import org.strasa.web.browsestudy.view.model.StudySummaryModel;
-import org.strasa.web.extensionanddistributiondata.view.model.SummaryModel;
+import org.strasa.web.distributionandextension.view.model.SummaryModel;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class DistributionAndExtensionManagerImpl {

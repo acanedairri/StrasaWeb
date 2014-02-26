@@ -3,14 +3,14 @@
 	<style src="../css/main.css" />
 
 	<div apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.extensionanddistributiondata.view.model.ExtGCgrid')">
+		viewModel="@id('vm') @init('org.strasa.web.distributionandextension.view.model.ExtGYCgrid')">
 
 
-		<grid id="AreaSummaryByCountryExtension" model="@load(vm.areaSummaryGC)" height="400px"
+		<grid id="AreaSummaryByYearAndCountryExtension"
+			model="@load(vm.areaSummaryGYC)" height="400px"
 			sizedByContent="true">
 			<auxhead sclass="category-center">
-				<auxheader label="Area by Country"
-					colspan="4" />
+				<auxheader label="Area by Year and Country" colspan="4" />
 			</auxhead>
 			<auxhead sclass="category-center">
 				<auxheader colspan="1">
@@ -19,6 +19,14 @@
 						value="@bind(vm.filter.programName)"
 						onChange="@command('changeFilter')" />
 				</auxheader>
+
+				<auxheader colspan="1">
+					<image src="/images/filter.png" />
+					<textbox instant="true" width="250px"
+						value="@bind(vm.filter.yearExtention)"
+						onChange="@command('changeFilter')" />
+				</auxheader>
+
 				<auxheader colspan="1">
 					<image src="/images/filter.png" />
 					<textbox instant="true" width="250px"
@@ -34,12 +42,15 @@
 				<auxheader label="" colspan="1">
 					<button id="btnExportId" label="Export to CSV"
 						sclass="btn-blue" image="/images/export16.png"
-						onClick="@global-command('exportGrid', gridId='AreaSummaryByCountryExtension', grid=AreaSummaryByCountryExtension)" />
+						onClick="@global-command('exportGrid', gridId='AreaSummaryByYearAndCountryExtension', grid=AreaSummaryByYearAndCountryExtension)" />
 				</auxheader>
 			</auxhead>
 			<columns menupopup="auto">
 				<column width="300px" sort="auto('programName')"
 					label="Program Name">
+				</column>
+				<column width="300px" sort="auto('yearextension')"
+					label="Year Extension">
 				</column>
 				<column width="300px" sort="auto('countryextension')"
 					label="Country Extension">
@@ -54,16 +65,22 @@
 			<template name="model">
 				<row>
 					<label value="@load(each.programName)" />
+					<label value="@load(each.yearextension)" />
 					<label value="@load(each.countryextension)" />
 					<div>
 						<toolbarbutton label="@load(each.germplasmname)"
-							onClick="@global-command('openExtensionDataDetail', function='areaByCountry', summaryModel=each, germplasmName=each.germplasmname)"
+							onClick="@global-command('openExtensionDataDetail', function='areaByCountryAndYear', summaryModel=each, germplasmName=each.germplasmname)"
 							class="grid-link" />
 					</div>
 					<label value="@load(each.sumArea)" />
 				</row>
 			</template>
+			<!-- 			<foot>
+				<footer span="6" class="footer_right"
+				label="@load(vm.footer)" />
+				</foot> -->
 		</grid>
+
 	</div>
 
 </zk>

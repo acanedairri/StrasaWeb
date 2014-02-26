@@ -1,4 +1,4 @@
-package org.strasa.web.extensionanddistributiondata.view.model;
+package org.strasa.web.distributionandextension.view.model;
 
 import org.strasa.middleware.model.ExtensionData;
 

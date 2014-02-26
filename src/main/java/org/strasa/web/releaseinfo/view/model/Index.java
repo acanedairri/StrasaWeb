@@ -7,7 +7,7 @@ import java.util.List;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.StudyType;
-import org.strasa.web.extensionanddistributiondata.view.model.SummaryModel;
+import org.strasa.web.distributionandextension.view.model.SummaryModel;
 import org.strasa.web.utilities.FileUtilities;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;

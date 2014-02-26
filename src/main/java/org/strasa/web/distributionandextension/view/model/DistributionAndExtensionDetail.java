@@ -1,4 +1,4 @@
-package org.strasa.web.extensionanddistributiondata.view.model;
+package org.strasa.web.distributionandextension.view.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.model.DistributionAndExtension;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
-import org.strasa.web.extensionanddistributiondata.view.model.EditDistributionAndExtension.RowStatus;
+import org.strasa.web.distributionandextension.view.model.EditDistributionAndExtension.RowStatus;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;

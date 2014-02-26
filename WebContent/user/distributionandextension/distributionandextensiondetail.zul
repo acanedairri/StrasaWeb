@@ -7,7 +7,7 @@
 	</style>
 	<window apply="org.zkoss.bind.BindComposer" width="95%"
 		style="padding:10px 0px 15px 20px"
-		viewModel="@id('vm') @init('org.strasa.web.extensionanddistributiondata.view.model.ExtensionDataDetail')">
+		viewModel="@id('vm') @init('org.strasa.web.distributionandextension.view.model.DistributionAndExtensionDetail')">
 		<style src="../css/main.css" />
 		<grid id="multipleGrid" model="@load(vm.rowList)"
 			sizedByContent="true" emptyMessage="No Record Found"
@@ -34,7 +34,7 @@
 					<label value="@load(each.value.yearextension)" />
 					<label value="@load(each.value.locationextension)" />
 					<label value="@load(each.value.countryextension)" />
-					<label value="@load(each.value.area)" />
+					<label value="@load(each.value.plantingarea)" />
 					<label value="@load(each.value.datasource)" />
 					<label value="@load(each.value.seedavailability)" />
 				</row>
@@ -62,7 +62,7 @@
 						width="150px" />
 				</row>
 				<row>
-					<label value="Area" width="150px" sclass="heavier"/>
+					<label value="PLanting Area" width="150px" sclass="heavier"/>
 					<label value='@load(vm.row.value.area)'
 						width="150px" />
 				</row>
@@ -74,41 +74,6 @@
 				<row>
 					<label value="Seed Availability" width="150px" sclass="heavier"/>
 					<label value='@load(vm.row.value.seedavailability)'
-						width="150px" />
-				</row>
-				<row>
-					<label value="Extension" width="150px" sclass="heavier"/>
-					<label value=''
-						width="150px" />
-				</row>
-				<row>
-					<label value="Year" width="150px" sclass="heavy"/>
-					<label value='@load(vm.row.value.yearextension)'
-						width="150px" />
-				</row>
-				<row>
-					<label value="Location" width="150px" sclass="heavy"/>
-					<label value='@load(vm.row.value.locationextension)'
-						width="150px" />
-				</row>
-				<row>
-					<label value="Country" width="150px" sclass="heavy"/>
-					<label value='@load(vm.row.value.countryextension)'
-						width="150px" />
-				</row>
-				<row>
-					<label value="Release" width="150px" sclass="heavier"/>
-					<label value=''
-						width="150px" />
-				</row>
-				<row>
-					<label value="Year" width="150px" sclass="heavy"/>
-					<label value='@load(vm.row.value.yearrelease)'
-						width="150px" />
-				</row>
-				<row>
-					<label value="Country" width="150px" sclass="heavy"/>
-					<label value='@load(vm.row.value.countryrelease)'
 						width="150px" />
 				</row>
 			</rows>

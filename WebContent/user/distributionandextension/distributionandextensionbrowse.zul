@@ -5,13 +5,13 @@
 		<groupbox mold="3d">
 			<vbox>
 				<include self="@define(content)"
-					src="extensionanddistribution/extGCgrid.zul" />
+					src="distributionandextension/extGCgrid.zul" />
 				<separator height="15px"></separator>
 				<include self="@define(content)"
-					src="extensionanddistribution/extGYCgrid.zul" />
+					src="distributionandextension/extGYCgrid.zul" />
 				<separator height="15px"></separator>
 				<include self="@define(content)"
-					src="extensionanddistribution/extGYgrid.zul" />
+					src="distributionandextension/extGYgrid.zul" />
 			</vbox>
 		</groupbox>
 	</window>
