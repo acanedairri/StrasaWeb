@@ -1,0 +1,113 @@
+<zk>
+	<window title="Validate Germplasm Characteristic" border="normal" closable="true"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.managegermplasm.view.model.ValidateGermplasmCharacteristics')"
+		width="15%">
+		<style src="../css/main.css" />
+
+<vlayout>
+	<listbox model = "@load(vm.biotic)">
+      <listhead sizable="true">
+        <listheader width="50%" label="Old Value" sort="auto" />
+        <listheader width="50%" label="New Value" sort="auto" />
+       
+      </listhead>
+   
+   <template name ="model">
+      <listitem >
+      	<listcell label = "@load(each.oldValue)">
+      	</listcell>
+      	<listcell>
+      	<combobox model="@load(vm.lstBiotics)" readonly="true" value="@bind(each.newValue)">
+      		<template name="model">
+      		<comboitem width = "95%" label = "@load(each.value)" value = "@load(each.value)"></comboitem>
+      		</template>
+      	
+      	</combobox>
+     
+      	</listcell>
+      </listitem>
+   
+   </template>
+    </listbox>
+    
+    <listbox model = "@load(vm.abiotic)">
+      <listhead sizable="true">
+        <listheader width="50%" label="Old Value" sort="auto" />
+        <listheader width="50%" label="New Value" sort="auto" />
+       
+      </listhead>
+   
+   <template name ="model">
+      <listitem >
+      	<listcell label = "@load(each.oldValue)">
+      	</listcell>
+      	<listcell>
+      	<combobox model="@load(vm.lstAbiotics)" readonly="true" value="@bind(each.newValue)">
+      		<template name="model">
+      		<comboitem width = "95%" label = "@load(each.value)" value = "@load(each.value)"></comboitem>
+      		</template>
+      	
+      	</combobox>
+     
+      	</listcell>
+      </listitem>
+   
+   </template>
+    </listbox>
+    
+    <listbox model = "@load(vm.grainQuality)">
+      <listhead sizable="true">
+        <listheader width="50%" label="Old Value" sort="auto" />
+        <listheader width="50%" label="New Value" sort="auto" />
+       
+      </listhead>
+   
+   <template name ="model">
+      <listitem >
+      	<listcell label = "@load(each.oldValue)">
+      	</listcell>
+      	<listcell>
+      	<combobox model="@load(vm.lstGrainQualities)" readonly="true" value="@bind(each.newValue)">
+      		<template name="model">
+      		<comboitem width = "95%" label = "@load(each.value)" value = "@load(each.value)"></comboitem>
+      		</template>
+      	
+      	</combobox>
+     
+      	</listcell>
+      </listitem>
+   
+   </template>
+    </listbox>
+    
+    <listbox model = "@load(vm.majorGenes)">
+      <listhead sizable="true">
+        <listheader width="50%" label="Old Value" sort="auto" />
+        <listheader width="50%" label="New Value" sort="auto" />
+       
+      </listhead>
+   
+   <template name ="model">
+      <listitem >
+      	<listcell label = "@load(each.oldValue)">
+      	</listcell>
+      	<listcell>
+      	<combobox model="@load(vm.lstAllMajorGenes)" readonly="true" value="@bind(each.newValue)">
+      		<template name="model">
+      		<comboitem width = "95%" label = "@load(each.value)" value = "@load(each.value)"></comboitem>
+      		</template>
+      	
+      	</combobox>
+     
+      	</listcell>
+      </listitem>
+   
+   </template>
+    </listbox>
+    
+    <button label ="Save" onClick="@command('submit')"></button>
+</vlayout>
+
+	</window>
+</zk>

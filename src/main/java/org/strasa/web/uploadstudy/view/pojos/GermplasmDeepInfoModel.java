@@ -31,6 +31,15 @@ public class GermplasmDeepInfoModel extends Germplasm {
 	public boolean recordExist = false;
 	private boolean isKnown;
 	private String newBreeder;
+	private ArrayList<CharacteristicModel> invalidCharacteristic = new ArrayList<CharacteristicModel>();
+
+	public ArrayList<CharacteristicModel> getInvalidCharacteristic() {
+		return invalidCharacteristic;
+	}
+
+	public void setInvalidCharacteristic(ArrayList<CharacteristicModel> invalidCharacteristic) {
+		this.invalidCharacteristic = invalidCharacteristic;
+	}
 
 	public String getNewBreeder() {
 		return newBreeder;
@@ -174,10 +183,12 @@ public class GermplasmDeepInfoModel extends Germplasm {
 	}
 
 	public List<CharacteristicModel> getKeyBiotic() {
+
 		return keyBiotic;
 	}
 
 	public void setKeyBiotic(List<CharacteristicModel> keyBiotic) {
+
 		this.keyBiotic = keyBiotic;
 	}
 
@@ -209,7 +220,7 @@ public class GermplasmDeepInfoModel extends Germplasm {
 
 		for (KeyBiotic key : list) {
 
-			keyBiotic.add(new CharacteristicModel(key.getValue()));
+			keyBiotic.add(new CharacteristicModel(key.getValue(), BIOTIC));
 
 		}
 	}
@@ -218,7 +229,7 @@ public class GermplasmDeepInfoModel extends Germplasm {
 
 		for (KeyAbiotic key : list) {
 
-			keyAbiotic.add(new CharacteristicModel(key.getValue()));
+			keyAbiotic.add(new CharacteristicModel(key.getValue(), ABIOTIC));
 
 		}
 	}
@@ -227,7 +238,7 @@ public class GermplasmDeepInfoModel extends Germplasm {
 
 		for (KeyMajorGenes key : list) {
 
-			keyMajorGenes.add(new CharacteristicModel(key.getValue()));
+			keyMajorGenes.add(new CharacteristicModel(key.getValue(), MAJORGENES));
 
 		}
 	}
@@ -236,7 +247,7 @@ public class GermplasmDeepInfoModel extends Germplasm {
 
 		for (KeyGrainQuality key : list) {
 
-			keyGrainQuality.add(new CharacteristicModel(key.getValue()));
+			keyGrainQuality.add(new CharacteristicModel(key.getValue(), GRAINQUALITY));
 
 		}
 	}
@@ -406,38 +417,59 @@ public class GermplasmDeepInfoModel extends Germplasm {
 
 	}
 
-	public void setGermplasmExCharacteristic(GermplasmExt data) {
+	public boolean setGermplasmExCharacteristic(GermplasmExt data) {
 		// Biotic
-
+		ArrayList<CharacteristicModel> returnVal = new ArrayList<CharacteristicModel>();
 		for (String key : data.getBiotic().split(",")) {
+			boolean added = false;
 			for (CharacteristicModel ckey : keyBiotic) {
 				if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
 					ckey.setValue(true);
+					added = true;
 				}
+
 			}
+			if (!added)
+				returnVal.add(new CharacteristicModel(key, BIOTIC));
 		}
 
 		for (String key : data.getAbiotic().split(",")) {
+			boolean added = false;
 			for (CharacteristicModel ckey : keyAbiotic) {
 				if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
 					ckey.setValue(true);
+					added = true;
 				}
 			}
+			if (!added)
+				returnVal.add(new CharacteristicModel(key, ABIOTIC));
 		}
 		for (String key : data.getGrainQuality().split(",")) {
+			boolean added = false;
 			for (CharacteristicModel ckey : keyGrainQuality) {
 				if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
 					ckey.setValue(true);
+					added = true;
 				}
 			}
+			if (!added)
+				returnVal.add(new CharacteristicModel(key, GRAINQUALITY));
 		}
 		for (String key : data.getMajorGenes().split(",")) {
+			boolean added = false;
 			for (CharacteristicModel ckey : keyMajorGenes) {
 				if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
 					ckey.setValue(true);
+					added = true;
 				}
 			}
+			if (!added)
+				returnVal.add(new CharacteristicModel(key, MAJORGENES));
 		}
+
+		invalidCharacteristic = returnVal;
+		return returnVal.isEmpty();
+
 	}
 
 	public boolean equalsGermplasmNoBreeder(Germplasm obj) {
@@ -515,5 +547,41 @@ public class GermplasmDeepInfoModel extends Germplasm {
 		} else if (!getUserid().equals(other.getUserid()))
 			return false;
 		return true;
+	}
+
+	public void reprocessInvalidCharacters() {
+
+		for (CharacteristicModel ch : invalidCharacteristic) {
+			if (ch.getAttribute().equals(ABIOTIC)) {
+				for (CharacteristicModel ckey : keyAbiotic) {
+					if (ckey.getName().equals(ch.getName()))
+						ckey.setValue(true);
+				}
+			}
+			if (ch.getAttribute().equals(BIOTIC)) {
+				for (CharacteristicModel ckey : keyBiotic) {
+					if (ckey.getName().equals(ch.getName())) {
+						// System.out.println("*");
+						ckey.setValue(true);
+					} else {
+						// System.out.println("ckey: " + ckey.getName() +
+						// " ch: " + ch.getName());
+					}
+				}
+			}
+			if (ch.getAttribute().equals(MAJORGENES)) {
+				for (CharacteristicModel ckey : keyMajorGenes) {
+					if (ckey.getName().equals(ch.getName()))
+						ckey.setValue(true);
+				}
+			}
+			if (ch.getAttribute().equals(GRAINQUALITY)) {
+				for (CharacteristicModel ckey : keyGrainQuality) {
+					if (ckey.getName().equals(ch.getName()))
+						ckey.setValue(true);
+				}
+			}
+		}
+
 	}
 }
