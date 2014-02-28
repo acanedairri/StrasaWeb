@@ -27,8 +27,10 @@ import org.strasa.middleware.model.KeyBiotic;
 import org.strasa.middleware.model.KeyGrainQuality;
 import org.strasa.middleware.model.KeyMajorGenes;
 import org.strasa.web.common.api.Encryptions;
+import org.strasa.web.managegermplasm.view.model.ValidateGermplasmCharacteristics.CharacterEntity;
 import org.strasa.web.managegermplasm.view.pojos.GermplasmComparator;
 import org.strasa.web.managegermplasm.view.pojos.GermplasmGroupingModel;
+import org.strasa.web.uploadstudy.view.pojos.CharacteristicModel;
 import org.strasa.web.uploadstudy.view.pojos.GermplasmDeepInfoModel;
 import org.strasa.web.uploadstudy.view.pojos.GermplasmExt;
 import org.strasa.web.utilities.FileUtilities;
@@ -44,6 +46,7 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zhtml.Messagebox;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.Selectors;
@@ -53,6 +56,7 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Window;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
@@ -358,12 +362,17 @@ public class Index {
 			List<KeyMajorGenes> lstKeyMajorGenes = keyMan.getAllMajorGenes();
 			List<KeyGrainQuality> lstKeyGrainQuality = keyMan.getAllGrainQuality();
 			ArrayList<GermplasmDeepInfoModel> tempKnown = new ArrayList<GermplasmDeepInfoModel>();
+			ArrayList<GermplasmDeepInfoModel> lstInvalidCharacteristics = new ArrayList<GermplasmDeepInfoModel>();
+
 			for (GermplasmExt germData : lstGermplasm) {
 				if (!StringUtils.isNullOrEmpty(germData.getGermplasmname())) {
 					// System.out.println(germData.toString());
 					if (lstKnownGermplasm.containsKey(germData.getGermplasmname())) {
 
 						tempKnown.add(lstKnownGermplasm.get(germData.getGermplasmname()));
+						if (lstKnownGermplasm.get(germData.getGermplasmname()).setGermplasmExCharacteristic(germData) == false) {
+							lstInvalidCharacteristics.add(lstKnownGermplasm.get(germData.getGermplasmname()));
+						}
 					} else {
 
 						GermplasmDeepInfoModel newData = new GermplasmDeepInfoModel();
@@ -377,8 +386,11 @@ public class Index {
 						newData.setUserid(this.userID);
 						newData.setGrainQuality(lstKeyGrainQuality);
 						newData.setKnown(false);
-						newData.setGermplasmExCharacteristic(germData);
+						if (!newData.setGermplasmExCharacteristic(germData)) {
+							lstInvalidCharacteristics.add(newData);
+						}
 						lstStudyGermplasm.put(newData.getGermplasmname(), newData);
+
 					}
 				}
 			}
@@ -392,12 +404,62 @@ public class Index {
 			gbUnknownGermplasm.setVisible(true);
 			gbKnownGermplasm.setVisible(true);
 			view.getFellow("divUploadOption").setVisible(true);
+
+			if (!lstInvalidCharacteristics.isEmpty()) {
+				Map<String, Object> params = new HashMap<String, Object>();
+
+				params.put("germplasmList", lstInvalidCharacteristics);
+				params.put("parent", view);
+				Window popup = (Window) Executions.createComponents(ValidateGermplasmCharacteristics.ZUL_PATH, view, params);
+
+				popup.doModal();
+			}
+
 			// gbKnownGermplasm.invalidate();
 			// gbUnknownGermplasm.invalidate();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 		}
 
+	}
+
+	@Command
+	public void refreshGermplasmCharacteristics(@BindingParam("newValues") HashMap<String, CharacterEntity> lstHash) {
+		for (GermplasmDeepInfoModel germData : lstKnownGermplasm.values()) {
+			for (CharacteristicModel chr : germData.getInvalidCharacteristic()) {
+
+				if (lstHash.containsKey(chr.getName())) {
+					chr.setName(lstHash.get(chr.getName()).newValue);
+					// System.out.println("-");
+				}
+
+			}
+			germData.reprocessInvalidCharacters();
+		}
+
+		for (GermplasmDeepInfoModel germData : lstStudyGermplasm.values()) {
+			for (CharacteristicModel chr : germData.getInvalidCharacteristic()) {
+
+				if (lstHash.containsKey(chr.getName())) {
+					chr.setName(lstHash.get(chr.getName()).newValue);
+					// System.out.println("-");
+				}
+
+			}
+			germData.reprocessInvalidCharacters();
+		}
+		for (GermplasmDeepInfoModel data : lstKnownGermplasm.values()) {
+			BindUtils.postNotifyChange(null, null, lstKnownGermplasm.get(data.getGermplasmname()), "keyBiotic");
+			BindUtils.postNotifyChange(null, null, lstKnownGermplasm.get(data.getGermplasmname()), "keyAbiotic");
+			BindUtils.postNotifyChange(null, null, lstKnownGermplasm.get(data.getGermplasmname()), "keyGrainQuality");
+			BindUtils.postNotifyChange(null, null, lstKnownGermplasm.get(data.getGermplasmname()), "keyMajorGenes");
+		}
+		for (GermplasmDeepInfoModel data : lstStudyGermplasm.values()) {
+			BindUtils.postNotifyChange(null, null, lstStudyGermplasm.get(data.getGermplasmname()), "keyBiotic");
+			BindUtils.postNotifyChange(null, null, lstStudyGermplasm.get(data.getGermplasmname()), "keyAbiotic");
+			BindUtils.postNotifyChange(null, null, lstStudyGermplasm.get(data.getGermplasmname()), "keyGrainQuality");
+			BindUtils.postNotifyChange(null, null, lstStudyGermplasm.get(data.getGermplasmname()), "keyMajorGenes");
+		}
 	}
 
 	@NotifyChange({ "lstStudyGermplasm" })
