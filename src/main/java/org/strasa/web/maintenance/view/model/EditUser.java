@@ -51,6 +51,8 @@ public class EditUser extends RegistrationModel {
 
 	@Command
 	public void update() {
+		String p = getUser().getPassword();
+//		getUser().setPassword(md5(p));
 		userMan.updateUser(getUser());
 		Messagebox.show("Program successfully added to database!", "OK", Messagebox.OK, Messagebox.INFORMATION);
 	}

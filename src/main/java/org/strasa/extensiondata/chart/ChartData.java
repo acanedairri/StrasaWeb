@@ -2,9 +2,9 @@ package org.strasa.extensiondata.chart;
 
 import java.util.List;
 
-import org.strasa.middleware.manager.ExtensionDataManagerImpl;
+import org.strasa.middleware.manager.DistributionAndExtensionManagerImpl;
 import org.strasa.middleware.model.ExtensionData;
-import org.strasa.web.extensiondata.view.model.ExtensionDataSummaryModel;
+import org.strasa.web.distributionandextension.view.model.DistributionAndExtensionSummaryModel;
 import org.zkoss.zul.CategoryModel;
 import org.zkoss.zul.SimpleCategoryModel;
 
@@ -14,10 +14,10 @@ public class ChartData {
         CategoryModel model = new SimpleCategoryModel();
         String[] category = { "Country"};
         
-        ExtensionDataManagerImpl mgr= new ExtensionDataManagerImpl();
-        List<ExtensionDataSummaryModel> list=null;//mgr.getCountOfGermplasmByCountrRealease();
+        DistributionAndExtensionManagerImpl mgr= new DistributionAndExtensionManagerImpl();
+        List<DistributionAndExtensionSummaryModel> list=null;//mgr.getCountOfGermplasmByCountrRealease();
         
-        for(ExtensionDataSummaryModel d:list){
+        for(DistributionAndExtensionSummaryModel d:list){
         	  model.setValue(category[0], d.getData(),d.getTotalCount());
         }
  
@@ -28,10 +28,10 @@ public class ChartData {
         CategoryModel model = new SimpleCategoryModel();
         String[] category = { "Year"};
         
-        ExtensionDataManagerImpl mgr= new ExtensionDataManagerImpl();
-        List<ExtensionDataSummaryModel> list=null;//mgr.getCountOfGermplasmByYear();
+        DistributionAndExtensionManagerImpl mgr= new DistributionAndExtensionManagerImpl();
+        List<DistributionAndExtensionSummaryModel> list=null;//mgr.getCountOfGermplasmByYear();
         
-        for(ExtensionDataSummaryModel d:list){
+        for(DistributionAndExtensionSummaryModel d:list){
       	  model.setValue(category[0], d.getData(),d.getTotalCount());
       }
 
