@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.strasa.middleware.manager.CountryManagerImpl;
 import org.strasa.middleware.manager.EcotypeManagerImpl;
-import org.strasa.middleware.manager.DistributionAndExtensionManagerImpl;
+import org.strasa.middleware.manager.ReleaseInfoManagerImpl;
 import org.strasa.middleware.manager.GermplasmManagerImpl;
 import org.strasa.middleware.manager.LocationManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
@@ -17,7 +17,7 @@ import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudySiteManagerImpl;
 import org.strasa.middleware.model.Country;
 import org.strasa.middleware.model.Ecotype;
-import org.strasa.middleware.model.DistributionAndExtension;
+import org.strasa.middleware.model.ReleaseInfo;
 import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
@@ -42,7 +42,7 @@ import org.zkoss.zul.Window;
 
 
 public class EditReleaseInfo {
-	DistributionAndExtensionManagerImpl man;
+	ReleaseInfoManagerImpl man;
 	StudySiteManagerImpl studySiteMan;
 	ProgramManagerImpl programMan;
 	ProjectManagerImpl projectMan;
@@ -65,7 +65,7 @@ public class EditReleaseInfo {
 
 	@AfterCompose
 	public void init(@ContextParam(ContextType.VIEW) Component view){
-		man = new DistributionAndExtensionManagerImpl();
+		man = new ReleaseInfoManagerImpl();
 		studySiteMan = new StudySiteManagerImpl();
 		programMan = new ProgramManagerImpl();
 		projectMan = new ProjectManagerImpl();
@@ -76,7 +76,7 @@ public class EditReleaseInfo {
 		}
 		setProjectList(projectMan.getAllProject());
 		
-		makeRowStatus(man.getAllDistributionAndExtension());
+		makeRowStatus(man.getAllReleaseInfo());
 
 		List<Country> lCountries = new CountryManagerImpl().getAllCountry();
 		for (Country data : lCountries) {
@@ -84,12 +84,12 @@ public class EditReleaseInfo {
 		}
 	}
 
-	private void makeRowStatus(List<DistributionAndExtension> list) {
+	private void makeRowStatus(List<ReleaseInfo> list) {
 		// TODO Auto-generated method stub
 		projectKeyList.clear();
 		programKeyList.clear();
 		rowList.clear();
-		for (DistributionAndExtension p: list){
+		for (ReleaseInfo p: list){
 			Program prog = programMan.getProgramById(p.getProgramid());
 			programKeyList.put(prog.getId(),prog.getName());
 
@@ -136,7 +136,7 @@ public class EditReleaseInfo {
 		ps.getValue().setProjectid((Integer)projectComboBox.getSelectedItem().getValue());  
 //		ps.setProject(proj);
 		refreshRowTemplate(ps);
-		man.updateDistributionAndExtension(ps.getValue());
+		man.updateReleaseInfo(ps.getValue());
 		Messagebox.show("Changes saved.");
 		changeEditableStatus(ps);
 	}
@@ -161,7 +161,7 @@ public class EditReleaseInfo {
 			public void onEvent(Event e) {
 				if ("onOK".equals(e.getName())) {
 					man.deleteById(Id);
-					makeRowStatus(man.getAllDistributionAndExtension());
+					makeRowStatus(man.getAllReleaseInfo());
 					BindUtils.postNotifyChange(null, null,
 							EditReleaseInfo.this, "rowList");
 					Messagebox.show("Changes saved.");
@@ -176,7 +176,7 @@ public class EditReleaseInfo {
 	//	@NotifyChange("list")
 	@Command("add")
 	public void add(@ContextParam(ContextType.COMPONENT) Component component) {
-		Window win = (Window) component.getFellow("editExtensionWindow");
+		Window win = (Window) component.getFellow("editReleaseInfo");
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		params.put("oldVar", null);
@@ -190,7 +190,7 @@ public class EditReleaseInfo {
 	@NotifyChange("rowList")
 	@Command("refreshList")
 	public void refreshList() {
-		makeRowStatus(man.getAllDistributionAndExtension());
+		makeRowStatus(man.getAllReleaseInfo());
 	}
 
 	@NotifyChange("projectList")
@@ -238,10 +238,10 @@ public class EditReleaseInfo {
 	public class RowStatus {
 		private  Program program;
 		private Project project;
-		private  DistributionAndExtension value;
+		private  ReleaseInfo value;
 		private boolean editingStatus;
 
-		public RowStatus(DistributionAndExtension p, boolean editingStatus, Program program, Project project) {
+		public RowStatus(ReleaseInfo p, boolean editingStatus, Program program, Project project) {
 			this.setValue(p);
 			this.editingStatus = editingStatus;
 			this.setProgram(program);
@@ -258,12 +258,12 @@ public class EditReleaseInfo {
 		}
 
 
-		public DistributionAndExtension getValue() {
+		public ReleaseInfo getValue() {
 			return value;
 		}
 
 
-		public void setValue(DistributionAndExtension p) {
+		public void setValue(ReleaseInfo p) {
 			this.value = p;
 		}
 

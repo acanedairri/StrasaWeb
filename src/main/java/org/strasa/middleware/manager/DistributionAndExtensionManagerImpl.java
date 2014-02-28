@@ -123,7 +123,7 @@ public class DistributionAndExtensionManagerImpl {
 		DistributionAndExtensionSummaryMapper mapper = session.getMapper(DistributionAndExtensionSummaryMapper.class);
 		List<SummaryModel> s= new ArrayList<SummaryModel>();
 		try{
-			List<SummaryModel> toreturn= mapper.selectAreaSummaryGermplasmByYearandCountryExtension();
+			List<SummaryModel> toreturn= mapper.selectplantingareaSummaryGermplasmByYearandCountryExtension();
 
 			return toreturn;
 
@@ -137,7 +137,7 @@ public class DistributionAndExtensionManagerImpl {
 		DistributionAndExtensionSummaryMapper mapper = session.getMapper(DistributionAndExtensionSummaryMapper.class);
 		List<SummaryModel> s= new ArrayList<SummaryModel>();
 		try{
-			List<SummaryModel> toreturn= mapper.selectAreaSummaryGermplasmByYear();
+			List<SummaryModel> toreturn= mapper.selectplantingareaSummaryGermplasmByYear();
 
 			return toreturn;
 
@@ -151,7 +151,7 @@ public class DistributionAndExtensionManagerImpl {
 		DistributionAndExtensionSummaryMapper mapper = session.getMapper(DistributionAndExtensionSummaryMapper.class);
 		List<SummaryModel> s= new ArrayList<SummaryModel>();
 		try{
-			List<SummaryModel> toreturn= mapper.selectAreaSummaryGermplasmByCountryExtension();
+			List<SummaryModel> toreturn= mapper.selectplantingareaSummaryGermplasmByCountryExtension();
 
 			return toreturn;
 

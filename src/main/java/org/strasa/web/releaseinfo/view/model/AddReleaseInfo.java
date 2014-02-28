@@ -10,11 +10,13 @@ import org.strasa.middleware.manager.EcotypeManagerImpl;
 import org.strasa.middleware.manager.DistributionAndExtensionManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
+import org.strasa.middleware.manager.ReleaseInfoManagerImpl;
 import org.strasa.middleware.model.Country;
 import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.DistributionAndExtension;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
+import org.strasa.middleware.model.ReleaseInfo;
 import org.strasa.web.common.api.FormValidator;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
@@ -32,12 +34,12 @@ import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Messagebox;
 
 public class AddReleaseInfo {
-	public static String ZUL_PATH = "/user/extension/addDistributionAndExtension.zul";
+	public static String ZUL_PATH = "/user/releaseinfo/addReleaseInfo.zul";
 	
 	ProgramManagerImpl programMan;
 	ProjectManagerImpl projectMan;
 	
-	private DistributionAndExtension model = new DistributionAndExtension();
+	private ReleaseInfo model = new ReleaseInfo();
 	private ArrayList<String> cmbCountry = new ArrayList<String>(); 
 	private List<Program> programList= null;
 	private List<Project> projectList= null;
@@ -45,10 +47,10 @@ public class AddReleaseInfo {
 	private Program program= new Program();
 	private Project project= new Project();
 
-	public DistributionAndExtension getModel() {
+	public ReleaseInfo getModel() {
 		return model;
 	}
-	public void setModel(DistributionAndExtension model) {
+	public void setModel(ReleaseInfo model) {
 		this.model = model;
 	}
 	private Component mainView;
@@ -81,12 +83,12 @@ public class AddReleaseInfo {
 		Combobox programComboBox = (Combobox) component.getFellow("programComboBox");
 		Combobox projectComboBox = (Combobox) component.getFellow("projectComboBox");
 		
-		DistributionAndExtensionManagerImpl man = new DistributionAndExtensionManagerImpl();
+		ReleaseInfoManagerImpl man = new ReleaseInfoManagerImpl();
 		
 		model.setProgramid((Integer)programComboBox.getSelectedItem().getValue());
 		model.setProjectid((Integer)projectComboBox.getSelectedItem().getValue());
 		
-		if(man.getAllDistributionAndExtensionAsString().contains(model.getDatasource())){
+		if(man.getAllReleaseInfoAsString().contains(model.getDatasource())){
 			Messagebox.show("Extension data already exist! Choose a different name.", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
 			return;
 		}
@@ -101,12 +103,10 @@ public class AddReleaseInfo {
 			e.printStackTrace();
 		}
 		//TODO IMPORTANT!!! Must change this to real UserID
-		man.addDistributionAndExtension(model);
+		man.addReleaseInfo(model);
 		
 		//TODO Validate!!
 		Messagebox.show("Successfully added to database!", "OK", Messagebox.OK, Messagebox.INFORMATION);
-//		System.out.println("SavePath: "+CsvPath);
-		
 		
 		Binder bind = parBinder;
 		if (bind == null)
@@ -115,7 +115,6 @@ public class AddReleaseInfo {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("selected",model);
 
-		// this.parBinder.postCommand("change", params);
 		bind.postCommand("refreshList", params);
 		mainView.detach();
 	}

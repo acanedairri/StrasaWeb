@@ -43,8 +43,7 @@
 				</row>
 				<row>
 					<label value="Location extension" />
-					<textbox
-						value="@bind(vm.model.locationextension)" />
+					<textbox value="@bind(vm.model.locationextension)" />
 				</row>
 				<row>
 					<label value="Country extension" />
@@ -57,30 +56,31 @@
 					</combobox>
 				</row>
 				<row>
-					<label value="Area" />
-					<decimalbox value="@bind(vm.model.area)" />
+					<label value="PLanting Area" />
+					<decimalbox value="@bind(vm.model.plantingarea)" />
 				</row>
 				<row>
 					<label value="Data Source" />
 					<textbox value="@bind(vm.model.datasource)" />
 				</row>
 				<row>
-					<label value="Year release" />
-					<textbox value="@bind(vm.model.yearrelease)" />
-				</row>
-				<row>
-					<label value="Country release" />
-					<combobox model="@load(vm.cmbCountry)"
-						selectedItem="@bind(vm.model.countryrelease)" width="99%">
-						<template name="model" var="p1">
-							<comboitem value="@load(p1)"
-								label="@load(p1)" />
-						</template>
-					</combobox>
-				</row>
-				<row>
 					<label value="Seed availability" />
 					<intbox value="@bind(vm.model.seedavailability)" />
+				</row>
+				<row>
+					<label value="Amount of seeds distributed" />
+					<textbox
+						value="@load(each.value.amountseeddistributed) @save(each.value.amountseeddistributed, before='confirm')" />
+				</row>
+				<row>
+					<label value="Number of farmers who adopted" />
+					<textbox
+						value="@load(each.value.numfarmersadopted) @save(each.value.numfarmersadopted, before='confirm')" />
+				</row>
+				<row>
+					<label value="Amount of seeds produced" />
+					<textbox
+						value="@load(each.value.amountseedsproduced) @save(each.value.amountseedsproduced, before='confirm')" />
 				</row>
 				<row>
 					<label></label>

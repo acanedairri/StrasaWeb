@@ -2,15 +2,15 @@
 
 	
 	<!-- 	<div style="padding:10px 0px 15px 20px" align="left">
-		<label class="header-menu">Extension Data</label>
+		<label class="header-menu">Release Info</label>
 		</div> -->
 
-	<window id="editExtensionWindow" apply="org.zkoss.bind.BindComposer"
+	<window id="editReleaseInfo" apply="org.zkoss.bind.BindComposer"
 		style="padding:10px"
 		viewModel="@id('vm') @init('org.strasa.web.releaseinfo.view.model.EditReleaseInfo')">
 		
 		<style src="../css/main.css" />
-		<panel title="Extension Data" border="normal">
+		<panel title="Release Info" border="normal">
 			<panelchildren style="overflow: auto;padding:10px">
 				<button label="Add New" onClick="@command('add')"
 					image="/images/add.png" sclass="btn-blue" />
@@ -21,11 +21,6 @@
 						<column label="Program" width="125px" hflex="1" />
 						<column label="Project" width="125px" hflex="1" />
 						<column label="Germplasm Name" />
-						<column label="Year Extension" width="100px" />
-						<column label="Location Extension"
-							width="125px" />
-						<column label="Country Extension" width="100px" />
-						<column label="Area" width="100px" />
 						<column label="Data Source" width="100px" />
 						<column label="Year release" width="100px" />
 						<column label="Country release" width="125px" />
@@ -58,19 +53,6 @@
 							<textbox
 								value="@load(each.value.germplasmname) @save(each.value.germplasmname, before='confirm')" />
 							<textbox
-								value="@load(each.value.yearextension) @save(each.value.yearextension, before='confirm')" />
-							<textbox
-								value="@load(each.value.locationextension) @save(each.value.locationextension, before='confirm')" />
-							<combobox model="@load(vm.cmbCountry)"
-								selectedItem="@bind(each.value.countryextension)" width="99%">
-								<template name="model" var="p1">
-									<comboitem value="@load(p1)"
-										label="@load(p1)" />
-								</template>
-							</combobox>
-							<decimalbox
-								value="@load(each.value.area) @save(each.value.area, before='confirm')" />
-							<textbox
 								value="@load(each.value.datasource) @save(each.value.datasource, before='confirm')" />
 							<textbox
 								value="@load(each.value.yearrelease) @save(each.value.yearrelease, before='confirm')" />
@@ -100,13 +82,6 @@
 							<label value="@load(each.project.name)" />
 							<label
 								value="@load(each.value.germplasmname)" />
-							<label
-								value="@load(each.value.yearextension)" />
-							<label
-								value="@load(each.value.locationextension)" />
-							<label
-								value="@load(each.value.countryextension)" />
-							<label value="@load(each.value.area)" />
 							<label value="@load(each.value.datasource)" />
 							<label
 								value="@load(each.value.yearrelease)" />
@@ -117,12 +92,12 @@
 							<cell>
 								<toolbarbutton src="/images/edit16.png"
 									onClick="@command('changeEditableStatus', RowStatus=each)"
-									orient="vertical" tooltiptext="Edit Extension data" />
+									orient="vertical" tooltiptext="Edit Release Info" />
 								<space />
 								<toolbarbutton
 									src="/images/Delete16.png"
 									onClick="@command('delete', id=each.value.id)"
-									orient="vertical" tooltiptext="Delete Extension data" />
+									orient="vertical" tooltiptext="Delete Release Info" />
 							</cell>
 						</row>
 					</template>

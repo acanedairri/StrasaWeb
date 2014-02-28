@@ -22,9 +22,9 @@
 				<column label="Planting Area" width="100px" />
 				<column label="Data Source" width="100px" />
 				<column label="Seed Availability" width="125px" />
-				<column label="Amount of seeds distributed" width="100px" />
-				<column label="Num of farmers who adopted" width="100px" />
-				<column label="Amount of seeds produced" width="100px" />
+				<column label="Amount of seeds distributed" width="200px" />
+				<column label="Number of farmers who adopted" width="200px" />
+				<column label="Amount of seeds produced" width="200px" />
 			</columns>
 			<template name="model">
 				<row>
@@ -37,6 +37,9 @@
 					<label value="@load(each.value.plantingarea)" />
 					<label value="@load(each.value.datasource)" />
 					<label value="@load(each.value.seedavailability)" />
+					<label value="@load(each.value.amountseeddistributed)" />
+					<label value="@load(each.value.numfarmersadopted)" />
+					<label value="@load(each.value.amountseedsproduced)" />
 				</row>
 			</template>
 		</grid>
@@ -63,7 +66,7 @@
 				</row>
 				<row>
 					<label value="PLanting Area" width="150px" sclass="heavier"/>
-					<label value='@load(vm.row.value.area)'
+					<label value='@load(vm.row.value.plantingarea)'
 						width="150px" />
 				</row>
 				<row>
@@ -74,6 +77,21 @@
 				<row>
 					<label value="Seed Availability" width="150px" sclass="heavier"/>
 					<label value='@load(vm.row.value.seedavailability)'
+						width="150px" />
+				</row>
+				<row>
+					<label value="Amount of seeds distributed" width="150px" sclass="heavier"/>
+					<label value='@load(vm.row.value.amountseeddistributed)'
+						width="150px" />
+				</row>
+				<row>
+					<label value="Number of farmers who adopted" width="150px" sclass="heavier"/>
+					<label value='@load(vm.row.value.numfarmersadopted)'
+						width="150px" />
+				</row>
+				<row>
+					<label value="Amount of seeds produced" width="150px" sclass="heavier"/>
+					<label value='@load(vm.row.value.amountseedsproduced)'
 						width="150px" />
 				</row>
 			</rows>

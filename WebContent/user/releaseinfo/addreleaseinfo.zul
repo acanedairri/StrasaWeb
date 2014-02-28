@@ -38,29 +38,6 @@
 					<textbox value="@bind(vm.model.germplasmname)" />
 				</row>
 				<row>
-					<label value="Year extension" />
-					<textbox value="@bind(vm.model.yearextension)" />
-				</row>
-				<row>
-					<label value="Location extension" />
-					<textbox
-						value="@bind(vm.model.locationextension)" />
-				</row>
-				<row>
-					<label value="Country extension" />
-					<combobox model="@load(vm.cmbCountry)"
-						selectedItem="@bind(vm.model.countryextension)" width="99%">
-						<template name="model" var="p1">
-							<comboitem value="@load(p1)"
-								label="@load(p1)" />
-						</template>
-					</combobox>
-				</row>
-				<row>
-					<label value="Area" />
-					<decimalbox value="@bind(vm.model.area)" />
-				</row>
-				<row>
 					<label value="Data Source" />
 					<textbox value="@bind(vm.model.datasource)" />
 				</row>

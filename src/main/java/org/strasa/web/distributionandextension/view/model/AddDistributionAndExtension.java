@@ -33,7 +33,7 @@ import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Messagebox;
 
 public class AddDistributionAndExtension {
-	public static String ZUL_PATH = "/user/extension/addextensiondata.zul";
+	public static String ZUL_PATH = "/user/distributionandextension/adddistributionandextension.zul";
 	
 	ProgramManagerImpl programMan;
 	ProjectManagerImpl projectMan;

@@ -12,84 +12,84 @@ import org.strasa.web.distributionandextension.view.model.SummaryModel;
 
 public interface DistributionAndExtensionSummaryMapper {
 
-	/*	@Select("Select countryrelease as data,count(germplasmname)as totalcount from extensiondata group by countryrelease")
-	List<ExtensionDataSummaryModel> selectExtentionDataSummaryByCountryRelease();
+	/*	@Select("Select countryrelease as data,count(germplasmname)as totalcount from distributionandextension group by countryrelease")
+	List<distributionandextensionSummaryModel> selectExtentionDataSummaryByCountryRelease();
 
 
-	@Select("Select year as data,count(germplasmname)as totalcount from extensiondata group by year")
-	List<ExtensionDataSummaryModel> selectExtentionDataSummaryByYear();
+	@Select("Select year as data,count(germplasmname)as totalcount from distributionandextension group by year")
+	List<distributionandextensionSummaryModel> selectExtentionDataSummaryByYear();
 
 
-	@Select("select t1.*, t2.name as programName,t3.name as projectName  from extensiondata as t1 left join program as t2 on t1.programid=t2.id left join project as t3 on t1.projectid=t3.id")
-	List<ExtensionDataListModel> selectExtentionDataList();*/
+	@Select("select t1.*, t2.name as programName,t3.name as projectName  from distributionandextension as t1 left join program as t2 on t1.programid=t2.id left join project as t3 on t1.projectid=t3.id")
+	List<distributionandextensionListModel> selectExtentionDataList();*/
 
 	//Extention
 	//Germplasm vs Year and Country
-	//select t2.name,t1.year,t1.countryextension,t1.germplasmname,sum(t1.area) as sumArea from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid,germplasmname order by countryextension,year
-	@Select("select t2.name as programName, t1.programid as programid,yearextension,t1.countryextension,t1.germplasmname,sum(area) as sumArea from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid,germplasmname order by countryextension,yearextension")
-	List<SummaryModel> selectAreaSummaryGermplasmByYearandCountryExtension();
+	//select t2.name,t1.year,t1.countryextension,t1.germplasmname,sum(t1.plantingarea) as sumplantingarea from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid,germplasmname order by countryextension,year
+	@Select("select t2.name as programName, t1.programid as programid,yearextension,t1.countryextension,t1.germplasmname,sum(plantingarea) as sumplantingarea from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid,germplasmname order by countryextension,yearextension")
+	List<SummaryModel> selectplantingareaSummaryGermplasmByYearandCountryExtension();
 
 
 	//Germplasm vs Country
-	//select programid,germplasmname,countryextension,sum(area) as sumArea from extensiondata group by programid,germplasmname,countryextension order by countryrelease,year
-	@Select("select t2.name as programName, t1.programid as programid,t1.germplasmname,t1.countryextension,sum(t1.area) as sumArea from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid,germplasmname,countryextension order by countryextension,yearextension")
-	List<SummaryModel> selectAreaSummaryGermplasmByCountryExtension();
+	//select programid,germplasmname,countryextension,sum(plantingarea) as sumplantingarea from distributionandextension group by programid,germplasmname,countryextension order by countryrelease,year
+	@Select("select t2.name as programName, t1.programid as programid,t1.germplasmname,t1.countryextension,sum(t1.plantingarea) as sumplantingarea from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid,germplasmname,countryextension order by countryextension,yearextension")
+	List<SummaryModel> selectplantingareaSummaryGermplasmByCountryExtension();
 
 
 	//Germplasm vs Year
-	//select programid,germplasmname,year,sum(area) as sumArea from extensiondata group by programid,germplasmname,year order by programid,year,germplasmname
-	@Select("select t2.name as programName, t1.programid as programid,t1.germplasmname,t1.yearextension,sum(t1.area) as sumArea from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid,germplasmname,yearextension order by countryextension,yearextension")
-	List<SummaryModel> selectAreaSummaryGermplasmByYear();
+	//select programid,germplasmname,year,sum(plantingarea) as sumplantingarea from distributionandextension group by programid,germplasmname,year order by programid,year,germplasmname
+	@Select("select t2.name as programName, t1.programid as programid,t1.germplasmname,t1.yearextension,sum(t1.plantingarea) as sumplantingarea from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid,germplasmname,yearextension order by countryextension,yearextension")
+	List<SummaryModel> selectplantingareaSummaryGermplasmByYear();
 
 
 
 
 	//Release Information
 	//No of Variety Release by country and year
-	//select programid,countryrelease,year,count(germplasmname) as noOfVariety from extensiondata group by programid,year order by programid,year,germplasmname
+	//select programid,countryrelease,year,count(germplasmname) as noOfVariety from distributionandextension group by programid,year order by programid,year,germplasmname
 
-	@Select("select t2.name as programName,t1.programid as programid,t1.projectid as projectid, t1.countryrelease as countryrelease, t1.yearrelease as yearrelease,count(t1.germplasmname) as countVariety from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid,yearrelease order by programid,yearrelease,germplasmname")
+	@Select("select t2.name as programName,t1.programid as programid,t1.projectid as projectid, t1.countryrelease as countryrelease, t1.yearrelease as yearrelease,count(t1.germplasmname) as countVariety from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid,yearrelease order by programid,yearrelease,germplasmname")
 	List<SummaryModel> selectNoOfVarietyReleaseByCountryAndYear();
 
 
 	//No of Variety by CountryRelease
-	//select programid,countryrelease,count(germplasmname) as noOfVariety from extensiondata group by programid order by programid,germplasmname
-	@Select("select t2.name as programName, t1.programid as programid,t1.projectid as projectid, t1.countryrelease as countryrelease, count(t1.germplasmname) as countVariety from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid order by programid,germplasmname")
+	//select programid,countryrelease,count(germplasmname) as noOfVariety from distributionandextension group by programid order by programid,germplasmname
+	@Select("select t2.name as programName, t1.programid as programid,t1.projectid as projectid, t1.countryrelease as countryrelease, count(t1.germplasmname) as countVariety from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid order by programid,germplasmname")
 	List<SummaryModel> selectNoOfVarietyReleaseByCountryRelease();
 
 
 	//No of Variety by Year
-	//select programid,year,count(germplasmname) as noOfVariety from extensiondata group by programid,year order by programid,year
-	@Select("select t2.name as programName, t1.programid as programid,t1.projectid as projectid, t1.yearrelease as yearrelease, count(t1.germplasmname) as countVariety from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid,yearrelease order by programid,yearrelease")
+	//select programid,year,count(germplasmname) as noOfVariety from distributionandextension group by programid,year order by programid,year
+	@Select("select t2.name as programName, t1.programid as programid,t1.projectid as projectid, t1.yearrelease as yearrelease, count(t1.germplasmname) as countVariety from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid,yearrelease order by programid,yearrelease")
 	List<SummaryModel> selectNoOfVarietyReleaseByYear();
 
 	//Variety Release by country and year
-	@Select("select t2.name as programName,t1.programid as programid,t1.projectid as projectid, t1.countryrelease as countryrelease, t1.yearrelease as yearrelease,t1.germplasmname as germplasmname from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid,yearrelease order by programid,yearrelease,germplasmname")
+	@Select("select t2.name as programName,t1.programid as programid,t1.projectid as projectid, t1.countryrelease as countryrelease, t1.yearrelease as yearrelease,t1.germplasmname as germplasmname from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid,yearrelease order by programid,yearrelease,germplasmname")
 	List<SummaryModel> selectVarietyReleaseByCountryAndYear();
 
 
 	//Variety by CountryRelease
-	@Select("select t2.name as programName, t1.programid as programid,t1.projectid as projectid, t1.countryrelease as countryrelease, t1.germplasmname as germplasmname from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid order by programid,germplasmname")
+	@Select("select t2.name as programName, t1.programid as programid,t1.projectid as projectid, t1.countryrelease as countryrelease, t1.germplasmname as germplasmname from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid order by programid,germplasmname")
 	List<SummaryModel> selectVarietyReleaseByCountryRelease();
 
 
 	//Variety by Year
-	@Select("select t2.name as programName, t1.programid as programid,t1.projectid as projectid, t1.yearrelease as yearrelease,t1.germplasmname as germplasmname from extensiondata as t1 left join program as t2 on t1.programid=t2.id group by programid,yearrelease order by programid,yearrelease")
+	@Select("select t2.name as programName, t1.programid as programid,t1.projectid as projectid, t1.yearrelease as yearrelease,t1.germplasmname as germplasmname from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid,yearrelease order by programid,yearrelease")
 	List<SummaryModel> selectVarietyReleaseByYear();
 
 	//Names of Variety by Year
-	@Select("select distinct germplasmname from extensiondata where yearrelease=#{year} and programid=#{programid}")
+	@Select("select distinct germplasmname from distributionandextension where yearrelease=#{year} and programid=#{programid}")
 	List<String> selectVarietyNamesOfVarietyReleaseByYear(@Param("year")String year,@Param("programid")Integer programid);
 
 	//Names of Variety by CountryRelease
-	@Select("select distinct germplasmname from extensiondata where countryrelease=#{countryrelease} and programid=#{programid}")
+	@Select("select distinct germplasmname from distributionandextension where countryrelease=#{countryrelease} and programid=#{programid}")
 	List<String> selectVarietyNamesOfVarietyReleaseByCountry(@Param("countryrelease")String countryrelease, @Param("programid") Integer programid);
 
 	//Names of Variety by CountryRelease and Year
-	@Select("select distinct germplasmname from extensiondata where countryrelease=#{countryrelease} and yearrelease=#{year} and programid=#{programid}")
+	@Select("select distinct germplasmname from distributionandextension where countryrelease=#{countryrelease} and yearrelease=#{year} and programid=#{programid}")
 	List<String> selectVarietyNamesOfVarietyReleaseByCountryAndYear(@Param("countryrelease")String countryrelease,@Param("year")String year, @Param("programid") Integer programid);
 
-	//ExtensionData of Germplasm Variety by Year/Country
-	@Select("select distinct germplasmname from extensiondata where countryrelease=#{countryrelease} and yearrelease=#{year} and germplasmname=#{germplasmname} and programid=#{programid} ")
-	List<SummaryModel> selectExtensionDataDetailOfVariety(@Param("year")String year, @Param("countryrelease")String countryrelease, @Param("programid")Integer programid,@Param("germplasmname")String germplasmname);
+	//distributionandextension of Germplasm Variety by Year/Country
+	@Select("select distinct germplasmname from distributionandextension where countryrelease=#{countryrelease} and yearrelease=#{year} and germplasmname=#{germplasmname} and programid=#{programid} ")
+	List<SummaryModel> selectdistributionandextensionDetailOfVariety(@Param("year")String year, @Param("countryrelease")String countryrelease, @Param("programid")Integer programid,@Param("germplasmname")String germplasmname);
 }

@@ -65,22 +65,12 @@
 						width="150px" />
 				</row>
 				<row>
-					<label value="Country" width="150px" sclass="heavy"/>
-					<label value='@load(vm.row.value.countryextension)'
-						width="150px" />
-				</row>
-				<row>
-					<label value="Release" width="150px" sclass="heavier"/>
-					<label value=''
-						width="150px" />
-				</row>
-				<row>
-					<label value="Year" width="150px" sclass="heavy"/>
+					<label value="Year" width="150px" sclass="heavier"/>
 					<label value='@load(vm.row.value.yearrelease)'
 						width="150px" />
 				</row>
 				<row>
-					<label value="Country" width="150px" sclass="heavy"/>
+					<label value="Country" width="150px" sclass="heavier"/>
 					<label value='@load(vm.row.value.countryrelease)'
 						width="150px" />
 				</row>

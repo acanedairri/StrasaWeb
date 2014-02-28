@@ -1,6 +1,6 @@
 <zk>
 
-	
+
 	<!-- 	<div style="padding:10px 0px 15px 20px" align="left">
 		<label class="header-menu">Extension Data</label>
 		</div> -->
@@ -8,7 +8,7 @@
 	<window id="editExtensionWindow" apply="org.zkoss.bind.BindComposer"
 		style="padding:10px"
 		viewModel="@id('vm') @init('org.strasa.web.distributionandextension.view.model.EditDistributionAndExtension')">
-		
+
 		<style src="../css/main.css" />
 		<panel title="Extension Data" border="normal">
 			<panelchildren style="overflow: auto;padding:10px">
@@ -25,11 +25,15 @@
 						<column label="Location Extension"
 							width="125px" />
 						<column label="Country Extension" width="100px" />
-						<column label="Area" width="100px" />
+						<column label="Planting Area" width="100px" />
 						<column label="Data Source" width="100px" />
-						<column label="Year release" width="100px" />
-						<column label="Country release" width="125px" />
 						<column label="Seed Availability" width="125px" />
+						<column label="Amount of seeds distributed"
+							width="200px" />
+						<column label="Number of farmers who adopted"
+							width="200px" />
+						<column label="Amount of seeds produced"
+							width="200px" />
 						<column label="Action" width="125px" />
 					</columns>
 					<template name="editable">
@@ -69,21 +73,18 @@
 								</template>
 							</combobox>
 							<decimalbox
-								value="@load(each.value.area) @save(each.value.area, before='confirm')" />
+								value="@load(each.value.plantingarea) @save(each.value.plantingarea, before='confirm')" />
 							<textbox
 								value="@load(each.value.datasource) @save(each.value.datasource, before='confirm')" />
-							<textbox
-								value="@load(each.value.yearrelease) @save(each.value.yearrelease, before='confirm')" />
-
-							<combobox model="@load(vm.cmbCountry)"
-								selectedItem="@bind(each.value.countryrelease)" width="99%">
-								<template name="model" var="p1">
-									<comboitem value="@load(p1)"
-										label="@load(p1)" />
-								</template>
-							</combobox>
 							<intbox
 								value="@load(each.value.seedavailability) @save(each.value.seedavailability, before='confirm')" />
+							<textbox
+								value="@load(each.value.amountseeddistributed) @save(each.value.amountseeddistributed, before='confirm')" />
+							<textbox
+								value="@load(each.value.numfarmersadopted) @save(each.value.numfarmersadopted, before='confirm')" />
+							<textbox
+								value="@load(each.value.amountseedsproduced) @save(each.value.amountseedsproduced, before='confirm')" />
+
 							<cell>
 								<button image="/images/save.png"
 									onClick="@command('confirm', RowStatus=each)"
@@ -106,14 +107,16 @@
 								value="@load(each.value.locationextension)" />
 							<label
 								value="@load(each.value.countryextension)" />
-							<label value="@load(each.value.area)" />
+							<label value="@load(each.value.plantingarea)" />
 							<label value="@load(each.value.datasource)" />
 							<label
-								value="@load(each.value.yearrelease)" />
-							<label
-								value="@load(each.value.countryrelease)" />
-							<label
 								value="@load(each.value.seedavailability)" />
+							<label
+								value="@load(each.value.amountseeddistributed)" />
+							<label
+								value="@load(each.value.numfarmersadopted)" />
+							<label
+								value="@load(each.value.amountseedsproduced)" />
 							<cell>
 								<toolbarbutton src="/images/edit16.png"
 									onClick="@command('changeEditableStatus', RowStatus=each)"
