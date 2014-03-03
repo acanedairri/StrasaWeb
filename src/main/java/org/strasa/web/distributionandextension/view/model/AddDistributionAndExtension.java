@@ -87,10 +87,6 @@ public class AddDistributionAndExtension {
 		model.setProgramid((Integer)programComboBox.getSelectedItem().getValue());
 		model.setProjectid((Integer)projectComboBox.getSelectedItem().getValue());
 		
-		if(man.getAllDistributionAndExtensionAsString().contains(model.getDatasource())){
-			Messagebox.show("Extension data already exist! Choose a different name.", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
-			return;
-		}
 		try {
 			if(model.getGermplasmname().isEmpty()){
 

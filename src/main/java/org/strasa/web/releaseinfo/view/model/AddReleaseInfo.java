@@ -88,10 +88,6 @@ public class AddReleaseInfo {
 		model.setProgramid((Integer)programComboBox.getSelectedItem().getValue());
 		model.setProjectid((Integer)projectComboBox.getSelectedItem().getValue());
 		
-		if(man.getAllReleaseInfoAsString().contains(model.getDatasource())){
-			Messagebox.show("Extension data already exist! Choose a different name.", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
-			return;
-		}
 		try {
 			if(model.getGermplasmname().isEmpty()){
 
