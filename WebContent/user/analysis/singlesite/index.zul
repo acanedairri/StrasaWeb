@@ -36,6 +36,10 @@
 				<tabpanel />
 			</tabpanels>
 		</tabbox>
-
+<button label="Test"
+						onClick="@command('runRserve')"
+						class="grid-link" />
+						
+		<label  value="@bind(vm.resultRServe)" multiline="true" />
 	</div>
 </zk>

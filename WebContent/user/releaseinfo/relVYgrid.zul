@@ -15,33 +15,33 @@
 			<auxhead sclass="category-center">
 				<auxheader colspan="1">
 					<image src="/images/filter.png" />
-					<textbox instant="true" width="250px"
+					<textbox instant="true" hflex="1"
 						value="@bind(vm.filter.programName)"
 						onChange="@command('changeFilter')" />
 				</auxheader>
 				<auxheader colspan="1">
 					<image src="/images/filter.png" />
-					<textbox instant="true" width="250px"
+					<textbox instant="true" hflex="1"
 						value="@bind(vm.filter.yearRelease)"
 						onChange="@command('changeFilter')" />
 				</auxheader>
-					<auxheader label="" colspan="1">
+					<auxheader label="" colspan="2">
 					<button id="btnExportId" label="Export to CSV"
 						sclass="btn-blue" image="/images/export16.png"
 						onClick="@global-command('exportGrid', gridId='NumberOfVarietybyYearRelease', grid=NumberOfVarietybyYearRelease)" />
 				</auxheader>
 			</auxhead>
 			<columns menupopup="auto">
-				<column width="300px" sort="auto('programName')"
+				<column sort="auto('programName')"
 					label="Program Name">
 				</column>
-				<column width="300px" sort="auto('yearrelease')"
+				<column  sort="auto('yearrelease')"
 					label="Year Release">
 				</column>
-				<column width="300px" sort="auto('countVariety')"
+				<column  sort="auto('countVariety')"
 					label="Total No. of Variety">
 				</column>
-				<column width="300px" label="Variety Names"></column>
+				<column  label="Variety Names" hflex="1"></column>
 			</columns>
 			<template name="model">
 				<row>

@@ -6,6 +6,8 @@ import java.io.Reader;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.rosuda.REngine.Rserve.RConnection;
+import org.rosuda.REngine.Rserve.RserveException;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
@@ -57,12 +59,10 @@ import org.strasa.middleware.model.StudySiteByStudy;
 @Service("connectionFactory")
 @Scope(value="singleton",proxyMode=ScopedProxyMode.TARGET_CLASS)
 public class ConnectionFactory {
- 
-
 
     public static SqlSessionFactory sqlSessionFactory;
-
-    public ConnectionFactory(){
+//    public static RConnection rServerConnection;
+    public ConnectionFactory() throws RserveException{
     
             String resource = "SqlMapConfig.xml";
             Reader reader;
@@ -117,6 +117,9 @@ public class ConnectionFactory {
 		                sqlSessionFactory.getConfiguration().addMapper(DistributionAndExtensionSummaryMapper.class);
 		                sqlSessionFactory.getConfiguration().addMapper(ReleaseInfoSummaryMapper.class);
 		            }
+//				 rServerConnection= new RConnection();
+				
+				 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
