@@ -8,6 +8,9 @@ public class SummaryFilter {
 	String counrtyRelease="";
 	String germplasmName="";
 	String sumArea="";
+	String sumAmountSeedDistributed="";
+	String sumNumFarmersAdopted="";
+	String sumAmountSeedsProduced="";
 	String yearExtention="";
 	String yearRelease="";
 	String countVariety="";
@@ -38,6 +41,24 @@ public class SummaryFilter {
 	}
 	public void setSumArea(String sumArea) {
 		this.sumArea = sumArea==null?"":sumArea.trim();
+	}
+	public String getSumAmountSeedDistributed() {
+		return sumAmountSeedDistributed;
+	}
+	public void setSumAmountSeedDistributed(String sumAmountSeedDistributed) {
+		this.sumAmountSeedDistributed = sumAmountSeedDistributed==null?"":sumAmountSeedDistributed.trim();
+	}
+	public String getSumNumFarmersAdopted() {
+		return sumNumFarmersAdopted;
+	}
+	public void setSumNumFarmersAdopted(String sumNumFarmersAdopted) {
+		this.sumNumFarmersAdopted = sumNumFarmersAdopted==null?"":sumNumFarmersAdopted.trim();
+	}
+	public String getSumAmountSeedsProduced() {
+		return sumAmountSeedsProduced;
+	}
+	public void setSumAmountSeedsProduced(String sumAmountSeedsProduced) {
+		this.sumAmountSeedsProduced = sumAmountSeedsProduced==null?"":sumAmountSeedsProduced.trim();
 	}
 	public String getYearExtention() {
 		return yearExtention;

@@ -4,7 +4,11 @@ import java.util.List;
 
 public class SummaryModel extends DistributionAndExtensionListModel {
 	
-	double sumArea;
+	double sumPlantingArea;
+	double sumAmountSeedDistributed;
+	double sumNumFarmersAdopted;
+	double sumAmountSeedsProduced;
+
 	int countVariety;
 	List<String> germplasmVarietyNames;
 
@@ -16,12 +20,35 @@ public class SummaryModel extends DistributionAndExtensionListModel {
 		this.germplasmVarietyNames = germplasmVarietyNames;
 	}
 
-	public double getSumArea() {
-		return sumArea;
+	public double getSumPlantingArea() {
+		return sumPlantingArea;
 	}
 
-	public void setSumArea(double sumArea) {
-		this.sumArea = sumArea;
+	public void setSumPlantingArea(double sumPlantingArea) {
+		this.sumPlantingArea = sumPlantingArea;
+	}
+	public double getSumAmountSeedDistributed() {
+		return sumAmountSeedDistributed;
+	}
+
+	public void setSumAmountSeedDistributed(double sumAmountSeedDistributed) {
+		this.sumAmountSeedDistributed = sumAmountSeedDistributed;
+	}
+
+	public double getSumNumFarmersAdopted() {
+		return sumNumFarmersAdopted;
+	}
+
+	public void setSumNumFarmersAdopted(double sumNumFarmersAdopted) {
+		this.sumNumFarmersAdopted = sumNumFarmersAdopted;
+	}
+
+	public double getSumAmountSeedsProduced() {
+		return sumAmountSeedsProduced;
+	}
+
+	public void setSumAmountSeedsProduced(double sumAmountSeedsProduced) {
+		this.sumAmountSeedsProduced = sumAmountSeedsProduced;
 	}
 
 	public int getCountVariety() {

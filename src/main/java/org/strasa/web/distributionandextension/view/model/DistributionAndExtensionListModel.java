@@ -1,8 +1,9 @@
 package org.strasa.web.distributionandextension.view.model;
 
+import org.strasa.middleware.model.DistributionAndExtension;
 import org.strasa.middleware.model.ExtensionData;
 
-public class DistributionAndExtensionListModel extends ExtensionData {
+public class DistributionAndExtensionListModel extends DistributionAndExtension {
 	
 	String programName;
 	String projectName;
