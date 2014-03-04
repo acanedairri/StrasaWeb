@@ -4,13 +4,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.strasa.extensiondata.chart.ChartData;
+import org.strasa.extensiondata.chart.LineChartEngine;
 import org.strasa.middleware.manager.DistributionAndExtensionManagerImpl;
 import org.strasa.middleware.manager.ReleaseInfoManagerImpl;
 import org.strasa.web.distributionandextension.view.model.SummaryFilter;
 import org.strasa.web.releaseinfo.view.model.ReleaseInfoSummaryModel;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zul.CategoryModel;
 import org.zkoss.zul.ListModelList;
 
 public class RelVCgrid {
@@ -21,6 +26,12 @@ public class RelVCgrid {
 	private SummaryFilter filter= new SummaryFilter();
 	List<ReleaseInfoSummaryModel> currentModelVC=  new ArrayList<ReleaseInfoSummaryModel>();
 	static List<ReleaseInfoSummaryModel> allDataVC=  new ArrayList<ReleaseInfoSummaryModel>();
+	CategoryModel model;
+	/*	LineChartEngine engine;
+	String message;
+	boolean threeD;*/
+	String type;
+	private String[] category;
 
 
 	@Init
@@ -28,6 +39,10 @@ public class RelVCgrid {
 		ReleaseInfoManagerImpl mgr= new ReleaseInfoManagerImpl();
 		allDataVC=mgr.getNoOfVarietyReleaseByCountryRelease();
 		currentModelVC=mgr.getNoOfVarietyReleaseByCountryRelease();
+		type = "column";
+//		String[] category = { "GSR","Breeding for Irrigated System","Strasa"};
+		category=mgr.getProgramList();
+		model = ChartData.getReleaseInfoByVarietyCountry(currentModelVC,category);
 	}
 
 	public SummaryFilter getFilter() {
@@ -71,9 +86,25 @@ public class RelVCgrid {
 	}	
 
 	@Command
-	@NotifyChange({"noVC"})
+	@NotifyChange({"noVC","model"})
 	public void changeFilter() {
 		currentModelVC = getVC(filter);
+		model = ChartData.getReleaseInfoByVarietyCountry(currentModelVC,category);
 	}
+	public CategoryModel getModel() {
+		return model;
+	}
+
+	public String getType(){
+		return type;
+	}
+
+	@GlobalCommand("configChanged") 
+	@NotifyChange("type")
+	public void onConfigChanged(
+			@BindingParam("type")String type){
+		this.type = type;
+	}
+
 
 }

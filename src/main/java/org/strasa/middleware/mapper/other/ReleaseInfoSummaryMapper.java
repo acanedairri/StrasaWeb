@@ -59,4 +59,12 @@ public interface ReleaseInfoSummaryMapper {
 	@Select("select distinct germplasmname from releaseinfo where countryrelease=#{countryrelease} and yearrelease=#{year} and germplasmname=#{germplasmname} and programid=#{programid} ")
 	List<ReleaseInfoSummaryModel> selectReleaseInfoDetailOfVariety(@Param("year")String year, @Param("countryrelease")String countryrelease, @Param("programid")Integer programid,@Param("germplasmname")String germplasmname);
 
+	//Distinct Program
+	@Select("select t2.name as programName from releaseinfo as t1 left join program as t2 on t1.programid=t2.id group by programid order by programid,yearrelease")
+	List<ReleaseInfoSummaryModel> selectProgramList();
+
+	//Distinct Program
+	@Select("select distinct CONCAT(t2.name,'-',t1.countryrelease) as programName from releaseinfo as t1 left join program as t2 on t1.programid=t2.id group by programid,yearrelease order by programid,yearrelease,germplasmname")
+	List<ReleaseInfoSummaryModel> selectProgramListWithCountry();
+
 }

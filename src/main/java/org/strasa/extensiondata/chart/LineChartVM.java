@@ -20,7 +20,7 @@ public class LineChartVM {
     @Init
     public void init() {
         engine = new LineChartEngine();
-        model = ChartData.getModelByCountry();
+        model = ChartData.getReleaseInfoByVarietyYear(null,null);
     }
  
     public LineChartEngine getEngine() {

@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.strasa.extensiondata.chart.ChartData;
 import org.strasa.middleware.manager.DistributionAndExtensionManagerImpl;
 import org.strasa.middleware.manager.ReleaseInfoManagerImpl;
 import org.strasa.web.distributionandextension.view.model.SummaryFilter;
 import org.strasa.web.releaseinfo.view.model.ReleaseInfoSummaryModel;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zul.CategoryModel;
 import org.zkoss.zul.ListModelList;
 
 public class RelVCYgrid {
@@ -21,7 +25,9 @@ public class RelVCYgrid {
 	private SummaryFilter filter= new SummaryFilter();
 	List<ReleaseInfoSummaryModel> currentModelVCY=  new ArrayList<ReleaseInfoSummaryModel>();
 	static List<ReleaseInfoSummaryModel> allDataVCY=  new ArrayList<ReleaseInfoSummaryModel>();
-
+	String type;
+	private String[] category;
+	CategoryModel model;
 
 	@Init
 	public void setData(){
@@ -29,6 +35,10 @@ public class RelVCYgrid {
 //		this.areaSummaryVCY=mgr.getAreaSummaryGermplasmByYear();
 		allDataVCY=mgr.getNoOfVarietyReleaseByCountryAndYear();
 		currentModelVCY=mgr.getNoOfVarietyReleaseByCountryAndYear();
+		type = "column";
+		category=mgr.getProgramListWithCountry();
+		model = ChartData.getReleaseInfoByVarietyCountryYear(allDataVCY,category);
+		
 	}
 
 	public SummaryFilter getFilter() {
@@ -79,4 +89,19 @@ public class RelVCYgrid {
 		currentModelVCY = getVCY(filter);
 	}
 
+	
+	public CategoryModel getModel() {
+		return model;
+	}
+
+	public String getType(){
+		return type;
+	}
+
+	@GlobalCommand("configChanged") 
+	@NotifyChange("type")
+	public void onConfigChanged(
+			@BindingParam("type")String type){
+		this.type = type;
+	}
 }

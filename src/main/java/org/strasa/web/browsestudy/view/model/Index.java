@@ -50,7 +50,7 @@ private Tab resultTab;
 		
 		Tabpanel newPanel = new Tabpanel();
 		Tab newTab = new Tab();
-		newTab.setLabel("Result");
+		newTab.setLabel("Study List");
 		
 		//initialize view after view construction.
 		Include studyInformationPage = new Include();

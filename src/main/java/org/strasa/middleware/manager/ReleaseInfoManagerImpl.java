@@ -151,6 +151,49 @@ public class ReleaseInfoManagerImpl {
 		}
 	}
 	
+	@SuppressWarnings("null")
+	public String[] getProgramList(){
+		
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ReleaseInfoSummaryMapper mapper = session.getMapper(ReleaseInfoSummaryMapper.class);
+		
+		int i=0;
+		try{
+			List<ReleaseInfoSummaryModel> toreturn= mapper.selectProgramList();
+			String[] program = new String[toreturn.size()];
+			for(ReleaseInfoSummaryModel sm: toreturn){
+				program[i]=sm.getProgramName();
+				System.out.println(sm.getProgramName());
+				i++;
+			}
+			return program;
+
+		}finally{
+			session.close();
+		}
+	}
+	
+	@SuppressWarnings("null")
+	public String[] getProgramListWithCountry(){
+		
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		ReleaseInfoSummaryMapper mapper = session.getMapper(ReleaseInfoSummaryMapper.class);
+		
+		int i=0;
+		try{
+			List<ReleaseInfoSummaryModel> toreturn= mapper.selectProgramListWithCountry();
+			String[] program = new String[toreturn.size()];
+			for(ReleaseInfoSummaryModel sm: toreturn){
+				program[i]=sm.getProgramName();
+				i++;
+			}
+			return program;
+
+		}finally{
+			session.close();
+		}
+	}
+	
 	public List<ReleaseInfoSummaryModel> getNoOfVarietyReleaseByYear(){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ReleaseInfoSummaryMapper mapper = session.getMapper(ReleaseInfoSummaryMapper.class);

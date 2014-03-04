@@ -23,12 +23,12 @@
 				</row>
 				<row>
 					Study Name
-					<textbox width="95%"
+					<textbox hflex="1"
 						value="@bind(vm.searchFilter.studyname)" />
 				</row>
 				<row>
 					Program
-					<combobox model="@load(vm.programList)"
+					<combobox model="@load(vm.programList)" hflex="1"
 						readonly="true"
 						onChange="@command('updateLists', programName=self.value)">
 					<template name="model">
@@ -39,7 +39,7 @@
 				</row>
 				<row>
 					Project
-					<combobox id="projectComboBox" model="@load(vm.projectList)" width="95%"
+					<combobox id="projectComboBox" model="@load(vm.projectList)" hflex="1"
 						readonly="true" 
 						onChange="@command('updateProjectId', projectName=self.value)">
 					<template name="model">
@@ -50,7 +50,7 @@
 				</row>
 				<row>
 					StudyType
-					<combobox model="@load(vm.studyTypeList)" width="95%"
+					<combobox model="@load(vm.studyTypeList)"  hflex="1"
 						readonly="true"
 						selectedIndex="@bind(vm.searchFilter.studytypeid)" >
 					<template name="model">
@@ -71,7 +71,7 @@
 				</row>
 				<row>
 					Country
-					<combobox model="@load(vm.countryList)" width="95%"
+					<combobox model="@load(vm.countryList)" hflex="1"
 						autodrop="true" 
 						value="@bind(vm.searchFilter.country)" >
 					<template name="model">
@@ -82,7 +82,7 @@
 				</row>
 				<row>
 					Location
-					<combobox model="@load(vm.locationList)" width="95%"
+					<combobox model="@load(vm.locationList)"  hflex="1"
 						readonly="true" 
 						selectedIndex="@bind(vm.searchFilter.locationid)" >
 					<template name="model">

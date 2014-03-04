@@ -206,17 +206,17 @@
 					<template name="children">
 						<zk choose="">
 							<zk when="${each == 'Study Name'}">
-								<column id="${each}" hflex="1"
+								<column id="${each}" 
 									label="@load(each)" />
 							</zk>
 							<zk when="${each == 'Germplasm'}">
-								<column id="${each}" hflex="1"
+								<column id="${each}"
 									label="@load(each)" />
 							</zk>
 
 
 							<zk><!-- default -->
-								<column id="${each}" hflex="1"
+								<column id="${each}"
 									label="@load(each)"
 									onClick="@global-command('ShowVariateDescription',variable=each)"
 									image="/images/help-icon.png" />
