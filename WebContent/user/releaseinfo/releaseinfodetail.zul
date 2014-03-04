@@ -1,5 +1,5 @@
 <zk>
-<style>
+	<style>
 		.heavy { font-weight: bold; font-size: 12px;padding:0px 0px 0px
 		25px }
 
@@ -12,14 +12,14 @@
 		<grid id="multipleGrid" model="@load(vm.rowList)"
 			sizedByContent="true" emptyMessage="No Record Found"
 			visible="false">
-			<columns width="200px">
-				<column label="Program" width="125px"/>
-				<column label="Project" width="125px"/>
+			<columns>
+				<column label="Program" />
+				<column label="Project" />
 				<column label="Germplasm Name" />
-				<column label="Data Source" width="100px" />
-				<column label="Year release" width="100px" />
-				<column label="Country release" width="125px" />
-				<column label="Seed Availability" width="125px" />
+				<column label="Data Source" />
+				<column label="Year Release" />
+				<column label="Country Release" />
+				<column label="Seed Availability" hflex="1" />
 			</columns>
 			<template name="model">
 				<row>
@@ -35,44 +35,37 @@
 		</grid>
 		<grid id="singleGrid" vflex="1" oddRowSclass="empty">
 			<columns>
-				<column label="" width="150px" />
-				<column label="" />
+				<column label="" hflex="min" />
+				<column label="" hflex="1" />
 			</columns>
 			<rows>
 				<row>
-					<label value="Program" width="150px" sclass="heavier" />
-					<label value='@load(vm.row.program.name)'
-						width="150px" />
+					<label value="Program" sclass="heavier" />
+					<label value='@load(vm.row.program.name)' />
 				</row>
 				<row>
-					<label value="Project" width="150px" sclass="heavier"/>
-					<label value='@load(vm.row.project.name)'
-						width="150px" />
+					<label value="Project" sclass="heavier" />
+					<label value='@load(vm.row.project.name)' />
 				</row>
 				<row>
-					<label value="Germplasm" width="150px" sclass="heavier"/>
-					<label value='@load(vm.row.value.germplasmname)'
-						width="150px" />
+					<label value="Germplasm" sclass="heavier" />
+					<label value='@load(vm.row.value.germplasmname)' />
 				</row>
 				<row>
-					<label value="Data Source" width="150px" sclass="heavier"/>
-					<label value='@load(vm.row.value.datasource)'
-						width="150px" />
+					<label value="Data Source" sclass="heavier" />
+					<label value='@load(vm.row.value.datasource)' />
 				</row>
 				<row>
-					<label value="Seed Availability" width="150px" sclass="heavier"/>
-					<label value='@load(vm.row.value.seedavailability)'
-						width="150px" />
+					<label value="Seed Availability" sclass="heavier" />
+					<label value='@load(vm.row.value.seedavailability)' />
 				</row>
 				<row>
-					<label value="Year" width="150px" sclass="heavier"/>
-					<label value='@load(vm.row.value.yearrelease)'
-						width="150px" />
+					<label value="Year" sclass="heavier" />
+					<label value='@load(vm.row.value.yearrelease)' />
 				</row>
 				<row>
-					<label value="Country" width="150px" sclass="heavier"/>
-					<label value='@load(vm.row.value.countryrelease)'
-						width="150px" />
+					<label value="Country" sclass="heavier" />
+					<label value='@load(vm.row.value.countryrelease)' />
 				</row>
 			</rows>
 		</grid>

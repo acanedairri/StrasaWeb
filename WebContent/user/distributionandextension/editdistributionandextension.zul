@@ -1,40 +1,32 @@
 <zk>
 
-
-	<!-- 	<div style="padding:10px 0px 15px 20px" align="left">
-		<label class="header-menu">Extension Data</label>
-		</div> -->
-
-	<window id="editExtensionWindow" apply="org.zkoss.bind.BindComposer"
+<!-- 	<window id="editExtensionWindow" apply="org.zkoss.bind.BindComposer"
 		style="padding:10px"
-		viewModel="@id('vm') @init('org.strasa.web.distributionandextension.view.model.EditDistributionAndExtension')">
+		viewModel="@id('vm') @init('org.strasa.web.distributionandextension.view.model.EditDistributionAndExtension')"> -->
 
 		<style src="../css/main.css" />
-		<panel title="Extension Data" border="normal">
-			<panelchildren style="overflow: auto;padding:10px">
+		<panel title="Extension Data" border="normal" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.strasa.web.distributionandextension.view.model.EditDistributionAndExtension')">
+			<panelchildren >
 				<button label="Add New" onClick="@command('add')"
 					image="/images/add.png" sclass="btn-blue" />
-				<grid
+				<vbox>
+				<grid  height="600px" width="80%"
 					model="@load(vm.rowList) @template(each.editingStatus ? 'editable' : 'noneditable')"
-					sizedByContent="true" width="95%" emptyMessage="No Record Found">
-					<columns width="200px">
-						<column label="Program" width="125px" hflex="1" />
-						<column label="Project" width="125px" hflex="1" />
+					sizedByContent="true"  emptyMessage="No Record Found">
+					<columns >
+						<column label="Program"  />
+						<column label="Project" />
 						<column label="Germplasm Name" />
-						<column label="Year Extension" width="100px" />
-						<column label="Location Extension"
-							width="125px" />
-						<column label="Country Extension" width="100px" />
-						<column label="Planting Area" width="100px" />
-						<column label="Data Source" width="100px" />
-						<column label="Seed Availability" width="125px" />
-						<column label="Amount of seeds distributed"
-							width="200px" />
-						<column label="Number of farmers who adopted"
-							width="200px" />
-						<column label="Amount of seeds produced"
-							width="200px" />
-						<column label="Action" width="125px" />
+						<column label="Year Extension" />
+						<column label="Location Extension"/>
+						<column label="Country Extension"  />
+						<column label="Planting Area" />
+						<column label="Data Source"  />
+						<column label="Seed Availability"  />
+						<column label="Amount Seeds Distributed"/>
+						<column label="Number Farmers Adopted"/>
+						<column label="Amount Seeds Produced"/>
+						<column label="Action" width="150px" />
 					</columns>
 					<template name="editable">
 						<row>
@@ -50,7 +42,7 @@
 							</combobox>
 
 							<combobox id="projectComboBox"
-								model="@load(vm.projectList)" width="95%"
+								model="@load(vm.projectList)" 
 								value="@load(each.project.name)" readonly="true"
 								selectedItem="@load(each.project) @save(each.project, before='confirm')">
 								<template name="model">
@@ -130,7 +122,8 @@
 						</row>
 					</template>
 				</grid>
-			</panelchildren>
-		</panel>
-	</window>
+				</vbox>
+		</panelchildren>
+		</panel> 
+	<!-- </window> -->
 </zk>

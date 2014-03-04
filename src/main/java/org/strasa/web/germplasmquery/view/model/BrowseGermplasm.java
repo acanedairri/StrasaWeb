@@ -26,12 +26,10 @@ import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zkmax.zul.Chosenbox;
 import org.zkoss.zul.Combobox;
-import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tab;
@@ -40,7 +38,6 @@ import org.zkoss.zul.Tabpanel;
 import org.zkoss.zul.Tabpanels;
 import org.zkoss.zul.Tabs;
 import org.zkoss.zul.Textbox;
-import org.zkoss.zul.Window;
 
 
 
@@ -356,7 +353,7 @@ public class BrowseGermplasm {
 	}
 
 
-	@NotifyChange("*")
+	@NotifyChange("germplasmList")
 	@Command
 	public void SearchGermplasm(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
@@ -370,24 +367,13 @@ public class BrowseGermplasm {
 			}
 		}else if(cmbSearchKey.getValue().contains("Key")){
 			Chosenbox keyValues= (Chosenbox) component.getFellow("cmbKeyCharValue");
-			//			Combobox cmbKeyChar= (Combobox) component.getFellow("cmbKeyChar");
-			//			Object[] keyCharList = keyValues.getSelectedObjects().toArray();
-			//			if(keyCharList.length > 0){
-			//				ArrayList<String> list= new ArrayList<String>();
-			//				for(Object s: keyCharList){
-			//					list.add(s.toString());
-			//				}
-			//				this.germplasmList=getGermplasmByKeyCharacteristics(list,cmbKeyChar.getValue());
-			//			}else{
-			//				Messagebox.show("Please select values" ,"Warning",null,null,null,null); 
-			//			}
-
 			this.listKeyCharFilter=getKeyCharacteristicsSelected();
-			//			for(String s:listKeyCharFilter){
-			//				System.out.println(s);
-			//			}
-
-			this.germplasmList=getGermplasmByKeyCharacteristics();
+			if(this.listKeyCharFilter.size() > 0){
+				this.germplasmList=getGermplasmByKeyCharacteristics();
+			}else{
+				Messagebox.show("Please select germplasm key characteristics" ,"Warning",null,null,null,null); 
+			}
+			
 
 		}else if(cmbSearchKey.getValue().equals("Type")){
 			Combobox cmbGermplasmType= (Combobox) component.getFellow("cmbGermplasmType");
@@ -500,7 +486,7 @@ public class BrowseGermplasm {
 
 	}
 
-	@NotifyChange("*")
+	/*@NotifyChange("*")*/
 	@Command
 	public void DisplayGermplasmInfo(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view,@BindingParam("germplasmId")Integer id,@BindingParam("gname")String gname){
