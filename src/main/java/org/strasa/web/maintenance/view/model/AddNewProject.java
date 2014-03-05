@@ -39,6 +39,78 @@ public class AddNewProject{
 	private Program program= new Program();
 	private ProgramManagerImpl programMan;	
 	
+	@Init
+	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view) {
+
+		setMainView(view);
+		parBinder = ctx.getBinder();
+
+        programMan = new ProgramManagerImpl();
+    	setProgramList(programMan.getAllProgram());
+	}
+
+	@NotifyChange("*")
+	@Command("add")
+	public void add(){
+		ProjectManagerImpl projectMan = new ProjectManagerImpl();
+		if(projectMan.isProjectExist(projectModel.getName(), userID, programID)){
+			Messagebox.show("Project name already exist! Choose a different name.", "Validation Error", Messagebox.OK, Messagebox.EXCLAMATION);
+			return;
+		}
+try {
+			if(!formValidator.getBlankVariables(projectModel,new String[]{"id","userid","programid"}).isEmpty()){
+				Messagebox.show("All fields are requied.", "Validation Error", Messagebox.OK, Messagebox.EXCLAMATION);
+				return;
+			}
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		//TODO IMPORTANT!!! Must change this to real UserID
+		projectModel.setUserid(userID );
+		projectModel.setProgramid(programID);
+		projectMan.addProject(projectModel);
+
+		//TODO Validate!!
+		Messagebox.show("Program successfully added to database!", "Add", Messagebox.OK, Messagebox.INFORMATION);
+		
+		BindUtils.postGlobalCommand(null, null, "refreshProjectList", null);
+		setProjectModel(new Project());
+//		bind.postCommand("changeProjectList", params);
+	}
+	@Command
+	public void cancel(){
+		mainView.detach();
+	}
+
+	@NotifyChange("projectList")
+	@Command
+	public void updateLists(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view, @BindingParam("program") Comboitem comboProgram){
+		programID=comboProgram.getValue();
+		program.setId(programID);
+	}
+	public List<Program> getProgramList() {
+		return programList;
+	}
+
+	public void setProgramList(List<Program> programList) {
+		this.programList = programList;
+	}
+
+	public Program getProgram() {
+		return program;
+	}
+
+	public void setProgram(Program program) {
+		this.program = program;
+	}
+
+
 	public Integer getUserID() {
 		return userID;
 	}
@@ -80,93 +152,5 @@ public class AddNewProject{
 		this.parBinder = parBinder;
 	}
 
-	//@Init
-	//public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar, @ExecutionArgParam("programID") int pID ) {
-	//
-	//        mainView = view;
-	//        parBinder = (Binder) view.getParent().getAttribute("binder");
-	//        programID = pID;
-	//}
-
-	@Init
-	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar ) {
-
-		setMainView(view);
-		parBinder = (Binder) view.getParent().getAttribute("binder");
-
-        programMan = new ProgramManagerImpl();
-    	setProgramList(programMan.getAllProgram());
-	}
-
-	@Command("add")
-	public void add(){
-		ProjectManagerImpl projectMan = new ProjectManagerImpl();
-		if(projectMan.isProjectExist(projectModel.getName(), userID, programID)){
-			Messagebox.show("Project name already exist! Choose a different name.", "Validation Error", Messagebox.OK, Messagebox.EXCLAMATION);
-			return;
-		}
-
-
-		try {
-			if(!formValidator.getBlankVariables(projectModel,new String[]{"id","userid","programid"}).isEmpty()){
-				Messagebox.show("All fields are requied.", "Validation Error", Messagebox.OK, Messagebox.EXCLAMATION);
-				return;
-			}
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		//TODO IMPORTANT!!! Must change this to real UserID
-		projectModel.setUserid(userID );
-		projectModel.setProgramid(programID);
-		projectMan.addProject(projectModel);
-
-
-		//TODO Validate!!
-		Messagebox.show("Program successfully added to database!", "Add", Messagebox.OK, Messagebox.INFORMATION);
-		//	System.out.println("SavePath: "+CsvPath);
-
-		Binder bind = parBinder;
-		if (bind == null)
-			return;
-
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("selected",null);
-
-		// this.parBinder.postCommand("change", params);
-		bind.postCommand("changeProjectList", params);
-		mainView.detach();
-		
-	}
-	@Command
-	public void cancel(){
-		mainView.detach();
-	}
-
-	@NotifyChange("projectList")
-	@Command
-	public void updateLists(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view, @BindingParam("program") Comboitem comboProgram){
-		programID=comboProgram.getValue();
-		program.setId(programID);
-	}
-	public List<Program> getProgramList() {
-		return programList;
-	}
-
-	public void setProgramList(List<Program> programList) {
-		this.programList = programList;
-	}
-
-	public Program getProgram() {
-		return program;
-	}
-
-	public void setProgram(Program program) {
-		this.program = program;
-	}
+	//	System.out.println("SavePath: "+CsvPath);
 }

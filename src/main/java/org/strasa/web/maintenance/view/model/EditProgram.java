@@ -15,6 +15,7 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
@@ -118,8 +119,8 @@ public class EditProgram {
 	}
 
 	@NotifyChange("programList")
-	@Command("refreshProgramList")
-	public void refreshProgramList(@BindingParam("selected") Program selected) {
+	@GlobalCommand("refreshProgramList")
+	public void refreshProgramList() {
 		makeProgramStatus(programMan.getProgramByUserId());
 	}
 	

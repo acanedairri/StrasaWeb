@@ -26,7 +26,7 @@ public class ProjectManagerImpl {
 	public void addProject(Project record){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ProjectMapper projectMapper = session.getMapper(ProjectMapper.class);
-		
+		record.setUserid(userid);
 		try{
 			projectMapper.insert(record);
 			session.commit();

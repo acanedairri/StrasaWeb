@@ -26,6 +26,7 @@ public class ProgramManagerImpl {
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		ProgramMapper ProgramMapper = session.getMapper(ProgramMapper.class);
 		
+		record.setUserid(userid);
 		try{
 			ProgramMapper.insert(record);
 			session.commit();

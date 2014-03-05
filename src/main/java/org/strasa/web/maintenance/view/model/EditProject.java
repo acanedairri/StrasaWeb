@@ -15,6 +15,7 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
@@ -125,8 +126,8 @@ public class EditProject {
 	}
 	
 	@NotifyChange("projectList")
-	@Command("changeProjectList")
-	public void refreshProjectList(@BindingParam("selected") Project selected) {
+	@GlobalCommand("refreshProjectList")
+	public void refreshProjectList() {
 		makeProjectStatus(projectMan.getProjectByUserId());
 	}
 	

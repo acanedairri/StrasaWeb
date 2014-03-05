@@ -5,15 +5,18 @@ import java.util.Map;
 
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.model.Program;
+import org.strasa.middleware.model.Project;
 import org.strasa.web.common.api.FormValidator;
 import org.strasa.web.uploadstudy.view.model.AddProgram;
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Messagebox;
 
@@ -44,7 +47,8 @@ public class AddNewProgram{
 	        mainView = view;
 	        parBinder = ctx.getBinder();
 	}
-	
+
+	@NotifyChange("*")
 	@Command("add")
 	public void add(){
 		ProgramManagerImpl programMan = new ProgramManagerImpl();
@@ -68,19 +72,8 @@ public class AddNewProgram{
 		
 		//TODO Validate!!
 		Messagebox.show("Program added successfully", "Program Added", Messagebox.OK, Messagebox.INFORMATION);
-//		System.out.println("SavePath: "+CsvPath);
-		
-//		
-//		Binder bind = parBinder;
-//		if (bind == null)
-//			return;
-//		
-//		Map<String, Object> params = new HashMap<String, Object>();
-//		params.put("selected",programModel);
-//
-//		// this.parBinder.postCommand("change", params);
-//		bind.postCommand("refreshProgramList", params);
-		mainView.detach();
+		BindUtils.postGlobalCommand(null, null, "refreshProgramList", null);
+		setProgramModel(new Program());
 	}
 	
 	@Command
