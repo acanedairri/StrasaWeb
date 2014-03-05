@@ -9,12 +9,7 @@
 			<vbox>
 				<hbox>
 					<vlayout>
-						<!-- <chart id="chart" title="" width="520"
-							height="350" paneColor="#FFFFFF" type="bar" yAxis="Total Variety"
-							model="@bind(vm.model)" engine="@bind(vm.engine)"
-							threeD="@bind(vm.threeD)"
-							onClick="@command('showMessage',msg=event.areaComponent.tooltiptext)" /> -->
-						<flashchart id="chart" width="600" height="350"
+						<flashchart id="chart" width="800" height="350"
 							style="font-weight:bold" type="@bind(vm.type)"
 							model="@bind(vm.model)" />
 						<!-- <hlayout

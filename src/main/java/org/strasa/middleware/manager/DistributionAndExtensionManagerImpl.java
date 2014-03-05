@@ -11,6 +11,7 @@ import org.strasa.middleware.mapper.LocationMapper;
 import org.strasa.middleware.mapper.ProgramMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.mapper.other.DistributionAndExtensionSummaryMapper;
+import org.strasa.middleware.mapper.other.ReleaseInfoSummaryMapper;
 import org.strasa.middleware.mapper.other.StudySummaryMapper;
 import org.strasa.middleware.model.DistributionAndExtension;
 import org.strasa.middleware.model.DistributionAndExtensionExample;
@@ -21,6 +22,7 @@ import org.strasa.web.browsestudy.view.model.StudySearchFilterModel;
 import org.strasa.web.browsestudy.view.model.StudySearchResultModel;
 import org.strasa.web.browsestudy.view.model.StudySummaryModel;
 import org.strasa.web.distributionandextension.view.model.SummaryModel;
+import org.strasa.web.releaseinfo.view.model.ReleaseInfoSummaryModel;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class DistributionAndExtensionManagerImpl {
@@ -204,6 +206,26 @@ public class DistributionAndExtensionManagerImpl {
 			example.createCriteria().andProgramidEqualTo(programid).andGermplasmnameEqualTo(germplasmName).andCountryextensionEqualTo(countryxtension).andYearextensionEqualTo(yearextension); 
 			List<DistributionAndExtension> toreturn = mapper.selectByExample(example);
 			return toreturn;
+
+		}finally{
+			session.close();
+		}
+	}
+
+	public String[] getCategoryByCountry() {
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		DistributionAndExtensionSummaryMapper mapper = session.getMapper(DistributionAndExtensionSummaryMapper.class);
+		
+		int i=0;
+		try{
+			List<ReleaseInfoSummaryModel> toreturn= mapper.selectCategoryByCountry();
+			String[] program = new String[toreturn.size()];
+			for(ReleaseInfoSummaryModel sm: toreturn){
+				program[i]=sm.getProgramName();
+				System.out.println(sm.getProgramName());
+				i++;
+			}
+			return program;
 
 		}finally{
 			session.close();

@@ -9,6 +9,7 @@ import org.strasa.web.browsestudy.view.model.StudySummaryModel;
 import org.strasa.web.distributionandextension.view.model.DistributionAndExtensionListModel;
 import org.strasa.web.distributionandextension.view.model.DistributionAndExtensionSummaryModel;
 import org.strasa.web.distributionandextension.view.model.SummaryModel;
+import org.strasa.web.releaseinfo.view.model.ReleaseInfoSummaryModel;
 
 public interface DistributionAndExtensionSummaryMapper {
 
@@ -92,4 +93,7 @@ public interface DistributionAndExtensionSummaryMapper {
 	//distributionandextension of Germplasm Variety by Year/Country
 	@Select("select distinct germplasmname from distributionandextension where countryrelease=#{countryrelease} and yearrelease=#{year} and germplasmname=#{germplasmname} and programid=#{programid} ")
 	List<SummaryModel> selectdistributionandextensionDetailOfVariety(@Param("year")String year, @Param("countryrelease")String countryrelease, @Param("programid")Integer programid,@Param("germplasmname")String germplasmname);
+
+	@Select("select distinct CONCAT(t2.name,'-',t1.countryextension ) as programName from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid,germplasmname,countryextension order by t2.name,countryextension,yearextension")
+	List<ReleaseInfoSummaryModel> selectCategoryByCountry();
 }

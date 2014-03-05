@@ -12,12 +12,12 @@
 			<vbox>
 				<hbox>
 					<vlayout>
-						<flashchart id="chart" width="600" height="350"
+						<flashchart id="chart" width="800" height="350"
 							style="font-weight:bold" type="@bind(vm.type)"
 							model="@bind(vm.model)" />
 
 					</vlayout>
-
+					<splitter id="s1" collapse="after" />
 					<grid id="NumberOfVarietybyCountryAndYearRelease"
 						model="@load(vm.noVCY)" height="400px" sizedByContent="true">
 						<auxhead sclass="category-center">
