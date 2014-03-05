@@ -40,7 +40,7 @@ public class AddNewProgram{
 	}
 
 	@Init
-	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar) {
+	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view) {
 	        mainView = view;
 	        parBinder = ctx.getBinder();
 	}

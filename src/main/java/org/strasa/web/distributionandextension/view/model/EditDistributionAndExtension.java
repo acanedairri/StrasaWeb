@@ -38,6 +38,8 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Panel;
+import org.zkoss.zul.Panelchildren;
 import org.zkoss.zul.Window;
 
 
@@ -90,13 +92,14 @@ public class EditDistributionAndExtension {
 		programKeyList.clear();
 		rowList.clear();
 		for (DistributionAndExtension p: list){
+			boolean owned = man.ownsDistributionAndExtension(p.getUserid());
 			Program prog = programMan.getProgramById(p.getProgramid());
 			programKeyList.put(prog.getId(),prog.getName());
 
 			Project proj = projectMan.getProjectById(p.getProjectid());
 			projectKeyList.put(proj.getId(),proj.getName());
 			
-			RowStatus ps = new RowStatus(p,false, prog, proj);
+			RowStatus ps = new RowStatus(p,false, prog, proj, owned);
 			rowList.add(ps);
 		}
 	}
@@ -176,7 +179,7 @@ public class EditDistributionAndExtension {
 	//	@NotifyChange("list")
 	@Command("add")
 	public void add(@ContextParam(ContextType.COMPONENT) Component component) {
-		Window win = (Window) component.getFellow("editExtensionWindow");
+		Panelchildren win = (Panelchildren) component.getParent();
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		params.put("oldVar", null);
@@ -240,12 +243,14 @@ public class EditDistributionAndExtension {
 		private Project project;
 		private  DistributionAndExtension value;
 		private boolean editingStatus;
+		private boolean owned;
 
-		public RowStatus(DistributionAndExtension p, boolean editingStatus, Program program, Project project) {
+		public RowStatus(DistributionAndExtension p, boolean editingStatus, Program program, Project project,boolean owned ) {
 			this.setValue(p);
 			this.editingStatus = editingStatus;
 			this.setProgram(program);
 			this.setProject(project);
+			this.setOwned(owned);
 		}
 
 
@@ -285,6 +290,16 @@ public class EditDistributionAndExtension {
 
 		public void setProject(Project project) {
 			this.project = project;
+		}
+
+
+		public boolean isOwned() {
+			return owned;
+		}
+
+
+		public void setOwned(boolean owned) {
+			this.owned = owned;
 		}
 
 	}

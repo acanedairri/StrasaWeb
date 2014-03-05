@@ -42,7 +42,7 @@ public class SidebarPageConfigAjaxBasedImpl implements SidebarPageConfig{
 		pageMap.put("decision_menu2",new SidebarPage("decision_menu2","Selection Index","/images/fn.png","/user/home.zul"));
 
 		//		pageMap.put("maintenance_menu1",new SidebarPage("maintenance_menu1","Uploaded Studies","/images/fn.png","/user/maintenance/edituploadedstudies.zul"));
-		pageMap.put("maintenance_menu2",new SidebarPage("maintenance_menu2","Program","/images/fn.png","/user/maintenance/editprogram.zul"));
+		pageMap.put("maintenance_menu2",new SidebarPage("maintenance_menu2","Program","/images/fn.png","/user/maintenance/index.zul"));
 		pageMap.put("maintenance_menu3",new SidebarPage("maintenance_menu3","Project","/images/fn.png","/user/maintenance/editproject.zul"));
 		pageMap.put("maintenance_menu4",new SidebarPage("maintenance_menu4","Profile","/images/user16.png","/user/maintenance/edituser.zul"));
 
