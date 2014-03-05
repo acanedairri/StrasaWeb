@@ -232,4 +232,15 @@ public class DistributionAndExtensionManagerImpl {
 		}
 	}
 
+	public boolean ownsDistributionAndExtension(Integer userid) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		try{
+			 
+			return true;
+
+		}finally{
+			session.close();
+		}
+	}
 }
