@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
+import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.EcotypeMapper;
 import org.strasa.middleware.mapper.DistributionAndExtensionMapper;
@@ -54,8 +55,10 @@ public class DistributionAndExtensionManagerImpl {
 
 
 		try{
-			List<DistributionAndExtension> distributionAndExtension = mapper.selectByExample(null);
-
+			DistributionAndExtensionExample example = new DistributionAndExtensionExample();
+			example.createCriteria().andUseridEqualTo(
+					SecurityUtil.getDbUser().getId());
+					List<DistributionAndExtension> distributionAndExtension = mapper.selectByExample(example);
 			return distributionAndExtension;
 
 		}finally{
@@ -76,7 +79,7 @@ public class DistributionAndExtensionManagerImpl {
 			session.close();
 		}
 	}
-	
+
 	@SuppressWarnings("null")
 	public List<String> getAllDistributionAndExtensionAsString() {
 		List<String> extData = new ArrayList<String>();;
@@ -117,7 +120,7 @@ public class DistributionAndExtensionManagerImpl {
 			session.close();
 		}
 	}
-	
+
 	public List<SummaryModel> getAreaSummaryGermplasmByYearandCountryExtension(){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		DistributionAndExtensionSummaryMapper mapper = session.getMapper(DistributionAndExtensionSummaryMapper.class);
@@ -131,7 +134,7 @@ public class DistributionAndExtensionManagerImpl {
 			session.close();
 		}
 	}
-	
+
 	public List<SummaryModel> getAreaSummaryGermplasmByYear(){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		DistributionAndExtensionSummaryMapper mapper = session.getMapper(DistributionAndExtensionSummaryMapper.class);
@@ -145,7 +148,7 @@ public class DistributionAndExtensionManagerImpl {
 			session.close();
 		}
 	}
-	
+
 	public List<SummaryModel> getAreaSummaryGermplasmByCountryExtension(){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		DistributionAndExtensionSummaryMapper mapper = session.getMapper(DistributionAndExtensionSummaryMapper.class);
@@ -159,8 +162,8 @@ public class DistributionAndExtensionManagerImpl {
 			session.close();
 		}
 	}
-	
-	
+
+
 	public List<DistributionAndExtension> getProgramGermplasmByYear(String yearextension,
 			Integer programid, String germplasmName) {
 		// TODO Auto-generated method stub
@@ -209,5 +212,17 @@ public class DistributionAndExtensionManagerImpl {
 			session.close();
 		}
 	}
+
+		public boolean ownsDistributionAndExtension(Integer userid) {
+			// TODO Auto-generated method stub
+			SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+			try{
+				 
+				return true;
+	
+			}finally{
+				session.close();
+			}
+		}
 
 }

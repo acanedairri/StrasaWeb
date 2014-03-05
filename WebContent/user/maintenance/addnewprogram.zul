@@ -1,12 +1,12 @@
 <zk>
-  <window title="Add Program" border="normal" closable="true"  apply="org.zkoss.bind.BindComposer"
-        viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.AddNewProgram')" width = "35%">
+  <window apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.AddNewProgram')" width="98%">
  
 
-<grid vflex="1">
+<grid vflex="1" hflex="1">
 	<columns>
-		<column label="Type" width="150px" />
-		<column label="Content" />
+		<column label="Add new program" width="150px" />
+		<column label="Detail" />
 	</columns>
 	<rows>
 		<row>
@@ -30,14 +30,9 @@
 			<textbox value='@bind(vm.programModel.collaborator)' constraint="no empty" width="150px" />
 		</row>
 	
-	
 		<row>
 			<label></label>
-			<hbox>
-			<button label="Cancel" onClick="@command('cancel')" mage="/images/Delete16.png" sclass="btn-plain" ></button>
-			<button label="Save Program" onClick="@command('add')" mage="/images/save16.png" sclass="btn-blue"></button>
-			
-			</hbox>
+			<button label="Add" onClick="@command('add')" image="/images/save16.png" sclass="btn-blue"></button>
 		</row>
 	</rows>
 </grid>

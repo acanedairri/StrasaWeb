@@ -7,20 +7,14 @@
 	<window id="editProjectWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditProject')">
 		<separator height="5px"></separator>
-		<panel title="Project" border="normal">
+		<panel border="normal">
 			<panelchildren style="overflow: auto;padding:5px">
-				<div align="center">
-					<div width="98%" align="left"
-						style="padding:10px">
-						<button label="Add New"
-							image="/images/New16.png" sclass="btn-blue"
-							tooltiptext="Add Project" onClick="@command('addProject')" />
-					</div>
-
+				<hbox>
 					<grid
-						model="@load(vm.projectList) @template(each.editingStatus ? 'editable' : 'noneditable')"
-						sizedByContent="true" width="98%"
-						emptyMessage="No study site found.">
+						model="@load(vm.projectList)
+						@template(each.editingStatus ? 'editable' :
+						'noneditable')" sizedByContent="true"
+						width="98%" emptyMessage="No study site found.">
 						<columns>
 							<column hflex="1" label="Project Name"
 								width="250px" />
@@ -86,7 +80,12 @@
 							</row>
 						</template>
 					</grid>
-				</div>
+					<div width="500px">
+						<include
+							src="/user/maintenance/addnewproject.zul" />
+					</div>
+
+				</hbox>
 			</panelchildren>
 		</panel>
 	</window>
