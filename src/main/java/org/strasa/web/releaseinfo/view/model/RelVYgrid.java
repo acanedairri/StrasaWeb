@@ -83,9 +83,10 @@ public class RelVYgrid {
 	}	
 
 	@Command
-	@NotifyChange({"noVY"})
+	@NotifyChange({"noVY","model"})
 	public void changeFilter() {
 		currentModelVY = getVY(filter);
+		model = ChartData.getReleaseInfoByVarietyYear(currentModelVY,category);
 	}
 	
 	public CategoryModel getModel() {

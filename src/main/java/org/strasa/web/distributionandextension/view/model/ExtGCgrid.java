@@ -88,9 +88,10 @@ public class ExtGCgrid {
 	}	
 
 	@Command
-	@NotifyChange({"areaSummaryGC"})
+	@NotifyChange({"areaSummaryGC","model"})
 	public void changeFilter() {
 		currentModelGCE = getGCE(filter);
+		model = ChartData.getAreaSummaryGermplasmByCountry(areaSummaryGC,category);
 	}
 	
 	public CategoryModel getModel() {

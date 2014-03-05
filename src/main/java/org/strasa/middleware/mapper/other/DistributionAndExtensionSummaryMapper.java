@@ -27,7 +27,7 @@ public interface DistributionAndExtensionSummaryMapper {
 	//Extention
 	//Germplasm vs Year and Country
 	//select t2.name,t1.year,t1.countryextension,t1.germplasmname,sum(t1.plantingarea) as sumPlantingArea from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid,germplasmname order by countryextension,year
-	@Select("select t2.name as programName, t1.programid as programid,yearextension,t1.countryextension,t1.germplasmname,sum(plantingarea) as sumPlantingArea, sum(amountseeddistributed) as sumAmountSeedDistributed, sum(numfarmersadopted) as sumNumFarmersAdopted, sum(amountseedsproduced) as sumAmountSeedsProduced from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid,germplasmname order by countryextension,yearextension")
+	@Select("select t2.name as programName, t1.programid as programid,yearextension,t1.countryextension,t1.germplasmname,sum(plantingarea) as sumPlantingArea, sum(amountseeddistributed) as sumAmountSeedDistributed, sum(numfarmersadopted) as sumNumFarmersAdopted, sum(amountseedsproduced) as sumAmountSeedsProduced from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid,germplasmname order by programName,yearextension,countryextension")
 	List<SummaryModel> selectplantingareaSummaryGermplasmByYearandCountryExtension();
 
 

@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.strasa.extensiondata.chart.ChartData;
 import org.strasa.middleware.manager.DistributionAndExtensionManagerImpl;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zul.CategoryModel;
 import org.zkoss.zul.ListModelList;
 
 public class ExtGYCgrid {
@@ -18,6 +22,10 @@ public class ExtGYCgrid {
 	private SummaryFilter filter= new SummaryFilter();
 	List<SummaryModel> currentModelGYC=  new ArrayList<SummaryModel>();
 	static List<SummaryModel> allDataGYC=  new ArrayList<SummaryModel>();
+	CategoryModel model;
+	String type;
+	private String[] category;
+
 
 
 	@Init
@@ -26,6 +34,9 @@ public class ExtGYCgrid {
 		this.areaSummaryGYC=mgr.getAreaSummaryGermplasmByYearandCountryExtension();
 		allDataGYC=mgr.getAreaSummaryGermplasmByYearandCountryExtension();
 		currentModelGYC=mgr.getAreaSummaryGermplasmByYearandCountryExtension();
+		type = "column";
+		category=mgr.getCategoryByCountry();
+		model = ChartData.getAreaSummaryGermplasmByYearCountry(allDataGYC,category);
 	}
 
 	public SummaryFilter getFilter() {
@@ -73,9 +84,25 @@ public class ExtGYCgrid {
 	}	
 
 	@Command
-	@NotifyChange({"areaSummaryGYC"})
+	@NotifyChange({"areaSummaryGYC","model"})
 	public void changeFilter() {
 		currentModelGYC = getGYC(filter);
+		model = ChartData.getAreaSummaryGermplasmByYearCountry(currentModelGYC,category);
+	}
+	
+	public CategoryModel getModel() {
+		return model;
+	}
+
+	public String getType(){
+		return type;
+	}
+
+	@GlobalCommand("configChanged") 
+	@NotifyChange("type")
+	public void onConfigChanged(
+			@BindingParam("type")String type){
+		this.type = type;
 	}
 
 }

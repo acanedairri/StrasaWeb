@@ -107,4 +107,36 @@ public class ChartData {
 		}
 		return model;
 	}
+	
+	public static CategoryModel getAreaSummaryGermplasmByYear(
+			List<SummaryModel> data, String[] category) {
+		CategoryModel model = new SimpleCategoryModel();
+
+		for(int i=0; i < category.length;i++){
+			System.out.println("Category " +category[i]);
+			for(SummaryModel d:data){
+				String progNameTemp=d.getProgramName()+"-"+d.getCountryextension();
+				if(progNameTemp.equals(category[i])){
+					model.setValue(category[i], d.getYearextension(),d.getSumPlantingArea());
+				}
+			}
+		}
+		return model;
+	}
+	
+	public static CategoryModel getAreaSummaryGermplasmByYearCountry(
+			List<SummaryModel> data, String[] category) {
+		CategoryModel model = new SimpleCategoryModel();
+
+		for(int i=0; i < category.length;i++){
+			System.out.println("Category " +category[i]);
+			for(SummaryModel d:data){
+				String progNameTemp=d.getProgramName()+"-"+d.getCountryextension();
+				if(progNameTemp.equals(category[i])){
+					model.setValue(category[i], d.getYearextension(),d.getSumPlantingArea());
+				}
+			}
+		}
+		return model;
+	}
 }

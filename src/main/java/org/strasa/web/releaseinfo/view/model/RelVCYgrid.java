@@ -84,9 +84,10 @@ public class RelVCYgrid {
 	}	
 
 	@Command
-	@NotifyChange({"noVCY"})
+	@NotifyChange({"noVCY","model"})
 	public void changeFilter() {
 		currentModelVCY = getVCY(filter);
+		model = ChartData.getReleaseInfoByVarietyCountryYear(currentModelVCY,category);
 	}
 
 	
