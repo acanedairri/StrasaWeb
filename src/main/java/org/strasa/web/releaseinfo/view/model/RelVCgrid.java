@@ -27,9 +27,6 @@ public class RelVCgrid {
 	List<ReleaseInfoSummaryModel> currentModelVC=  new ArrayList<ReleaseInfoSummaryModel>();
 	static List<ReleaseInfoSummaryModel> allDataVC=  new ArrayList<ReleaseInfoSummaryModel>();
 	CategoryModel model;
-	/*	LineChartEngine engine;
-	String message;
-	boolean threeD;*/
 	String type;
 	private String[] category;
 
@@ -40,7 +37,6 @@ public class RelVCgrid {
 		allDataVC=mgr.getNoOfVarietyReleaseByCountryRelease();
 		currentModelVC=mgr.getNoOfVarietyReleaseByCountryRelease();
 		type = "column";
-//		String[] category = { "GSR","Breeding for Irrigated System","Strasa"};
 		category=mgr.getProgramList();
 		model = ChartData.getReleaseInfoByVarietyCountry(currentModelVC,category);
 	}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.strasa.extensiondata.chart.ChartData;
 import org.strasa.middleware.manager.DistributionAndExtensionManagerImpl;
 import org.strasa.web.utilities.FileUtilities;
 import org.zkoss.bind.annotation.BindingParam;
@@ -14,6 +15,7 @@ import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zul.CategoryModel;
 import org.zkoss.zul.Columns;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.ListModelList;
@@ -27,6 +29,9 @@ public class ExtGCgrid {
 	private SummaryFilter filter= new SummaryFilter();
 	List<SummaryModel> currentModelGCE=  new ArrayList<SummaryModel>();
 	static List<SummaryModel> allDataGC=  new ArrayList<SummaryModel>();
+	CategoryModel model;
+	String type;
+	private String[] category;
 
 
 	@Init
@@ -35,6 +40,9 @@ public class ExtGCgrid {
 		this.areaSummaryGC=mgr.getAreaSummaryGermplasmByCountryExtension();
 		allDataGC=mgr.getAreaSummaryGermplasmByCountryExtension();
 		currentModelGCE=mgr.getAreaSummaryGermplasmByCountryExtension();
+		type = "column";
+		category=mgr.getCategoryByCountry();
+		model = ChartData.getAreaSummaryGermplasmByCountry(allDataGC,category);
 	}
 
 	public SummaryFilter getFilter() {
@@ -84,5 +92,21 @@ public class ExtGCgrid {
 	public void changeFilter() {
 		currentModelGCE = getGCE(filter);
 	}
+	
+	public CategoryModel getModel() {
+		return model;
+	}
+
+	public String getType(){
+		return type;
+	}
+
+	@GlobalCommand("configChanged") 
+	@NotifyChange("type")
+	public void onConfigChanged(
+			@BindingParam("type")String type){
+		this.type = type;
+	}
+
 
 }

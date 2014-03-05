@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
-import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.EcotypeMapper;
 import org.strasa.middleware.mapper.DistributionAndExtensionMapper;
@@ -12,6 +11,7 @@ import org.strasa.middleware.mapper.LocationMapper;
 import org.strasa.middleware.mapper.ProgramMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.mapper.other.DistributionAndExtensionSummaryMapper;
+import org.strasa.middleware.mapper.other.ReleaseInfoSummaryMapper;
 import org.strasa.middleware.mapper.other.StudySummaryMapper;
 import org.strasa.middleware.model.DistributionAndExtension;
 import org.strasa.middleware.model.DistributionAndExtensionExample;
@@ -22,6 +22,7 @@ import org.strasa.web.browsestudy.view.model.StudySearchFilterModel;
 import org.strasa.web.browsestudy.view.model.StudySearchResultModel;
 import org.strasa.web.browsestudy.view.model.StudySummaryModel;
 import org.strasa.web.distributionandextension.view.model.SummaryModel;
+import org.strasa.web.releaseinfo.view.model.ReleaseInfoSummaryModel;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class DistributionAndExtensionManagerImpl {
@@ -55,10 +56,8 @@ public class DistributionAndExtensionManagerImpl {
 
 
 		try{
-			DistributionAndExtensionExample example = new DistributionAndExtensionExample();
-			example.createCriteria().andUseridEqualTo(
-					SecurityUtil.getDbUser().getId());
-					List<DistributionAndExtension> distributionAndExtension = mapper.selectByExample(example);
+			List<DistributionAndExtension> distributionAndExtension = mapper.selectByExample(null);
+
 			return distributionAndExtension;
 
 		}finally{
@@ -79,7 +78,7 @@ public class DistributionAndExtensionManagerImpl {
 			session.close();
 		}
 	}
-
+	
 	@SuppressWarnings("null")
 	public List<String> getAllDistributionAndExtensionAsString() {
 		List<String> extData = new ArrayList<String>();;
@@ -120,7 +119,7 @@ public class DistributionAndExtensionManagerImpl {
 			session.close();
 		}
 	}
-
+	
 	public List<SummaryModel> getAreaSummaryGermplasmByYearandCountryExtension(){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		DistributionAndExtensionSummaryMapper mapper = session.getMapper(DistributionAndExtensionSummaryMapper.class);
@@ -134,7 +133,7 @@ public class DistributionAndExtensionManagerImpl {
 			session.close();
 		}
 	}
-
+	
 	public List<SummaryModel> getAreaSummaryGermplasmByYear(){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		DistributionAndExtensionSummaryMapper mapper = session.getMapper(DistributionAndExtensionSummaryMapper.class);
@@ -148,7 +147,7 @@ public class DistributionAndExtensionManagerImpl {
 			session.close();
 		}
 	}
-
+	
 	public List<SummaryModel> getAreaSummaryGermplasmByCountryExtension(){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		DistributionAndExtensionSummaryMapper mapper = session.getMapper(DistributionAndExtensionSummaryMapper.class);
@@ -162,8 +161,8 @@ public class DistributionAndExtensionManagerImpl {
 			session.close();
 		}
 	}
-
-
+	
+	
 	public List<DistributionAndExtension> getProgramGermplasmByYear(String yearextension,
 			Integer programid, String germplasmName) {
 		// TODO Auto-generated method stub
@@ -213,16 +212,35 @@ public class DistributionAndExtensionManagerImpl {
 		}
 	}
 
-		public boolean ownsDistributionAndExtension(Integer userid) {
-			// TODO Auto-generated method stub
-			SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-			try{
-				 
-				return true;
-	
-			}finally{
-				session.close();
+	public String[] getCategoryByCountry() {
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		DistributionAndExtensionSummaryMapper mapper = session.getMapper(DistributionAndExtensionSummaryMapper.class);
+		
+		int i=0;
+		try{
+			List<ReleaseInfoSummaryModel> toreturn= mapper.selectCategoryByCountry();
+			String[] program = new String[toreturn.size()];
+			for(ReleaseInfoSummaryModel sm: toreturn){
+				program[i]=sm.getProgramName();
+				System.out.println(sm.getProgramName());
+				i++;
 			}
-		}
+			return program;
 
+		}finally{
+			session.close();
+		}
+	}
+
+	public boolean ownsDistributionAndExtension(Integer userid) {
+		// TODO Auto-generated method stub
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		try{
+			 
+			return true;
+
+		}finally{
+			session.close();
+		}
+	}
 }

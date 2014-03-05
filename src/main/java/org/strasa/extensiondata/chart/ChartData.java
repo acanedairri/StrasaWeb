@@ -6,6 +6,7 @@ import org.strasa.middleware.manager.DistributionAndExtensionManagerImpl;
 import org.strasa.middleware.manager.ReleaseInfoManagerImpl;
 import org.strasa.middleware.model.ExtensionData;
 import org.strasa.web.distributionandextension.view.model.DistributionAndExtensionSummaryModel;
+import org.strasa.web.distributionandextension.view.model.SummaryModel;
 import org.strasa.web.releaseinfo.view.model.ReleaseInfoSummaryModel;
 import org.zkoss.zul.CategoryModel;
 import org.zkoss.zul.SimpleCategoryModel;
@@ -85,6 +86,22 @@ public class ChartData {
 				String progNameTemp=d.getProgramName()+"-"+d.getCountryrelease();
 				if(progNameTemp.equals(category[i])){
 					model.setValue(category[i], d.getYearrelease(),d.getCountVariety());
+				}
+			}
+		}
+		return model;
+	}
+
+	public static CategoryModel getAreaSummaryGermplasmByCountry(
+			List<SummaryModel> data, String[] category) {
+		CategoryModel model = new SimpleCategoryModel();
+
+		for(int i=0; i < category.length;i++){
+			System.out.println("Category " +category[i]);
+			for(SummaryModel d:data){
+				String progNameTemp=d.getProgramName()+"-"+d.getCountryextension();
+				if(progNameTemp.equals(category[i])){
+					model.setValue(category[i], d.getCountryextension(),d.getSumPlantingArea());
 				}
 			}
 		}

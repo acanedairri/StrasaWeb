@@ -3,21 +3,15 @@
 	<style src="../css/main.css" />
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.releaseinfo.view.model.RelVYgrid')">
-		<groupbox mold="3d" >
+		<groupbox mold="3d">
 			<caption label="Variety by Year"></caption>
 			<vbox>
 				<hbox>
 					<vlayout>
-						<chart id="chart" title="" width="600"
-							height="350" paneColor="#FFFFFF" type="line" yAxis="Total Variety"
-							model="@bind(vm.model)" engine="@bind(vm.engine)"
-							threeD="@bind(vm.threeD)"
-							onClick="@command('showMessage',msg=event.areaComponent.tooltiptext)" />
-						<hlayout
-							visible="@bind(not empty vm.message)">
-							You clicked on :
-							<label value="@bind(vm.message)" />
-						</hlayout>
+
+						<flashchart id="chart" width="800" height="350"
+							style="font-weight:bold" type="@bind(vm.type)"
+							model="@bind(vm.model)" />
 					</vlayout>
 
 					<grid id="NumberOfVarietybyYearRelease" hflex="1"

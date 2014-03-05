@@ -105,6 +105,12 @@
 	background-image: none
 }
 
+.logUserLabel {
+	font-size: 12px;
+	align: center;
+	background-image: none
+}
+
 .grid-no-highlight tr.z-row-over td.z-row-inner {
 	background: white;
 }
@@ -188,5 +194,3 @@
 	margin-bottom: 20px;
 	padding: 10px 0px 15px 0px";
 }
-
-

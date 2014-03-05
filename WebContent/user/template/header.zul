@@ -27,19 +27,26 @@
 	<zscript>
 	String username = org.spring.security.model.SecurityUtil.getUserName();
 </zscript>
+	<!-- #F0CD45 -->
+	<div>
+<!-- 	<image src="/images/banner.jpg"></image> -->
+		<div hflex="1" vflex="1"
+			style="background:#6A94D4;color:white; vertical-align:middle;padding:25px"
+			height="30px">
+				<vbox hflex="1" vflex="1" align="right">
+					<hlayout valign="middle">
+						<label value="Logged as: "
+							sclass="logUserLabel">
+						</label>
+						<label value="${username}"
+							sclass="logUserLabel">
+						</label>
+						<toolbarbutton label="Sign Out"
+							sclass="grid-link" unless="${empty execution.userPrincipal}"
+							href="/j_spring_security_logout" />
+					</hlayout>
 
-	<div hflex="1" vflex="1" sclass="footer"
-		style="background:#6A94D4;color:white; vertical-align:middle;padding:30px"
-		height="50px">
-		<vbox hflex="1" vflex="1" align="right">
-			<hlayout>
-				<label>Logged as:</label>
-				<label>${username}</label>
-				<button label="Sign Out" sclass="btn-blue" image="/images/logout.png"
-					unless="${empty execution.userPrincipal}"
-					href="/j_spring_security_logout" />
-			</hlayout>
-
-		</vbox>
+				</vbox>
+		</div>
 	</div>
 </zk>

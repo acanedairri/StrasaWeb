@@ -26,10 +26,9 @@ public class RelVYgrid {
 	private SummaryFilter filter= new SummaryFilter();
 	List<ReleaseInfoSummaryModel> currentModelVY=  new ArrayList<ReleaseInfoSummaryModel>();
 	static List<ReleaseInfoSummaryModel> allDataVY=  new ArrayList<ReleaseInfoSummaryModel>();
+	String type;
+	private String[] category;
 	CategoryModel model;
-	LineChartEngine engine;
-	String message;
-	boolean threeD;
 
 	@Init
 	public void setData(){
@@ -38,7 +37,8 @@ public class RelVYgrid {
 		String[] category=mgr.getProgramList();
 		allDataVY=mgr.getNoOfVarietyReleaseByYear();
 		currentModelVY=mgr.getNoOfVarietyReleaseByYear();
-		engine = new LineChartEngine();
+		
+		type = "column";
 		model = ChartData.getReleaseInfoByVarietyYear(allDataVY,category);
 	}
 
@@ -88,51 +88,19 @@ public class RelVYgrid {
 		currentModelVY = getVY(filter);
 	}
 	
-	public LineChartEngine getEngine() {
-        return engine;
-    }
- 
-    public CategoryModel getModel() {
-        return model;
-    }
-     
-    public String getMessage() {
-        return message;
-    }
- 
-    public boolean isThreeD() {
-        return threeD;
-    }
- 
-    @Command("showMessage") 
-    @NotifyChange("message")
-    public void onShowMessage(
-            @BindingParam("msg") String message){
-        this.message = message;
-    }
-     
-    @GlobalCommand("configChanged") 
-    @NotifyChange({"threeD","engine"})
-    public void onConfigChanged(
-            @BindingParam("threeD") Boolean threeD,
-            @BindingParam("showLine") Boolean showLine,
-            @BindingParam("showShape") Boolean showShape,
-            @BindingParam("width") Integer width){
-        if (threeD != null) {
-            this.threeD = threeD;
-        }
- 
-        if (showLine != null) {
-            engine.setShowLine(showLine);
-        }
- 
-        if (showShape != null) {
-            engine.setShowShape(showShape);
-        }
- 
-        if (width != null) {
-            engine.setWidth(width);
-        }
-    }
+	public CategoryModel getModel() {
+		return model;
+	}
+
+	public String getType(){
+		return type;
+	}
+
+	@GlobalCommand("configChanged") 
+	@NotifyChange("type")
+	public void onConfigChanged(
+			@BindingParam("type")String type){
+		this.type = type;
+	}
 
 }
