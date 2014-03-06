@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
+import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.EcotypeMapper;
 import org.strasa.middleware.mapper.DistributionAndExtensionMapper;
@@ -41,6 +42,7 @@ public class DistributionAndExtensionManagerImpl {
 		DistributionAndExtensionMapper mapper = session.getMapper(DistributionAndExtensionMapper.class);
 
 		try{
+			record.setUserid(SecurityUtil.getDbUser().getId());
 			mapper.insert(record);
 			session.commit();
 
