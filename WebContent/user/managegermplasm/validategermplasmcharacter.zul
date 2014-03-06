@@ -6,6 +6,7 @@
 		<style src="../css/main.css" />
 
 <vlayout>
+	<label style="font-size:14px;" value ="Biotic"></label>
 	<listbox model = "@load(vm.biotic)">
       <listhead sizable="true">
         <listheader width="50%" label="Old Value" sort="auto" />
@@ -20,7 +21,7 @@
       	<listcell>
       	<combobox model="@load(vm.lstBiotics)" readonly="true" value="@bind(each.newValue)">
       		<template name="model">
-      		<comboitem width = "95%" label = "@load(each.value)" value = "@load(each.value)"></comboitem>
+      		<comboitem width = "90%" label = "@load(each.value)" value = "@load(each.value)"></comboitem>
       		</template>
       	
       	</combobox>
@@ -30,7 +31,7 @@
    
    </template>
     </listbox>
-    
+    	<label style="font-size:14px;" value ="Abiotic"></label>
     <listbox model = "@load(vm.abiotic)">
       <listhead sizable="true">
         <listheader width="50%" label="Old Value" sort="auto" />
@@ -45,7 +46,7 @@
       	<listcell>
       	<combobox model="@load(vm.lstAbiotics)" readonly="true" value="@bind(each.newValue)">
       		<template name="model">
-      		<comboitem width = "95%" label = "@load(each.value)" value = "@load(each.value)"></comboitem>
+      		<comboitem width = "90%" label = "@load(each.value)" value = "@load(each.value)"></comboitem>
       		</template>
       	
       	</combobox>
@@ -55,6 +56,7 @@
    
    </template>
     </listbox>
+    <label style="font-size:14px;" value ="Grain Quality"></label>
     
     <listbox model = "@load(vm.grainQuality)">
       <listhead sizable="true">
@@ -70,7 +72,7 @@
       	<listcell>
       	<combobox model="@load(vm.lstGrainQualities)" readonly="true" value="@bind(each.newValue)">
       		<template name="model">
-      		<comboitem width = "95%" label = "@load(each.value)" value = "@load(each.value)"></comboitem>
+      		<comboitem width = "90%" label = "@load(each.value)" value = "@load(each.value)"></comboitem>
       		</template>
       	
       	</combobox>
@@ -80,6 +82,7 @@
    
    </template>
     </listbox>
+    <label style="font-size:14px;" value ="Major Genes"></label>
     
     <listbox model = "@load(vm.majorGenes)">
       <listhead sizable="true">
@@ -95,7 +98,7 @@
       	<listcell>
       	<combobox model="@load(vm.lstAllMajorGenes)" readonly="true" value="@bind(each.newValue)">
       		<template name="model">
-      		<comboitem width = "95%" label = "@load(each.value)" value = "@load(each.value)"></comboitem>
+      		<comboitem width = "90%" label = "@load(each.value)" value = "@load(each.value)"></comboitem>
       		</template>
       	
       	</combobox>

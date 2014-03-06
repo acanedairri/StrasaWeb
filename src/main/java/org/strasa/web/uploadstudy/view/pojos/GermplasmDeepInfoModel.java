@@ -420,52 +420,56 @@ public class GermplasmDeepInfoModel extends Germplasm {
 	public boolean setGermplasmExCharacteristic(GermplasmExt data) {
 		// Biotic
 		ArrayList<CharacteristicModel> returnVal = new ArrayList<CharacteristicModel>();
-		for (String key : data.getBiotic().split(",")) {
-			boolean added = false;
-			for (CharacteristicModel ckey : keyBiotic) {
-				if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
-					ckey.setValue(true);
-					added = true;
-				}
+		if (!StringUtils.isEmptyOrWhitespaceOnly(data.getBiotic()))
+			for (String key : data.getBiotic().split(",")) {
+				boolean added = false;
+				for (CharacteristicModel ckey : keyBiotic) {
+					if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
+						ckey.setValue(true);
+						added = true;
+					}
 
+				}
+				if (!added)
+					returnVal.add(new CharacteristicModel(key, BIOTIC));
 			}
-			if (!added)
-				returnVal.add(new CharacteristicModel(key, BIOTIC));
-		}
 
-		for (String key : data.getAbiotic().split(",")) {
-			boolean added = false;
-			for (CharacteristicModel ckey : keyAbiotic) {
-				if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
-					ckey.setValue(true);
-					added = true;
+		if (!StringUtils.isEmptyOrWhitespaceOnly(data.getAbiotic()))
+			for (String key : data.getAbiotic().split(",")) {
+				boolean added = false;
+				for (CharacteristicModel ckey : keyAbiotic) {
+					if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
+						ckey.setValue(true);
+						added = true;
+					}
 				}
+				if (!added)
+					returnVal.add(new CharacteristicModel(key, ABIOTIC));
 			}
-			if (!added)
-				returnVal.add(new CharacteristicModel(key, ABIOTIC));
-		}
-		for (String key : data.getGrainQuality().split(",")) {
-			boolean added = false;
-			for (CharacteristicModel ckey : keyGrainQuality) {
-				if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
-					ckey.setValue(true);
-					added = true;
+		if (!StringUtils.isEmptyOrWhitespaceOnly(data.getGrainQuality()))
+			for (String key : data.getGrainQuality().split(",")) {
+				boolean added = false;
+				for (CharacteristicModel ckey : keyGrainQuality) {
+					if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
+						ckey.setValue(true);
+						added = true;
+					}
 				}
+				if (!added)
+					returnVal.add(new CharacteristicModel(key, GRAINQUALITY));
 			}
-			if (!added)
-				returnVal.add(new CharacteristicModel(key, GRAINQUALITY));
-		}
-		for (String key : data.getMajorGenes().split(",")) {
-			boolean added = false;
-			for (CharacteristicModel ckey : keyMajorGenes) {
-				if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
-					ckey.setValue(true);
-					added = true;
+		if (!StringUtils.isEmptyOrWhitespaceOnly(data.getMajorGenes()))
+			for (String key : data.getMajorGenes().split(",")) {
+				boolean added = false;
+				for (CharacteristicModel ckey : keyMajorGenes) {
+					if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
+						ckey.setValue(true);
+						added = true;
+					}
 				}
+				if (!added)
+					returnVal.add(new CharacteristicModel(key, MAJORGENES));
 			}
-			if (!added)
-				returnVal.add(new CharacteristicModel(key, MAJORGENES));
-		}
 
 		invalidCharacteristic = returnVal;
 		return returnVal.isEmpty();

@@ -1,6 +1,7 @@
 package org.strasa.middleware.mapper.other;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -93,5 +94,7 @@ public interface StudyRawDataBatch {
 			@Result(column = "remarks", property = "remarks", jdbcType = JdbcType.VARCHAR) })
 	@Select(MQL_GermplasmNoDataset)
 	public List<Germplasm> getRawGermplasmNoDataset(int studyid, String tname);
+
+	public int countGermplasmOccurence(Map<String, Object> param);
 
 }

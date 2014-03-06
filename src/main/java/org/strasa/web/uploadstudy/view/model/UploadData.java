@@ -665,7 +665,7 @@ public class UploadData extends ProcessTabViewModel {
 		timer.start();
 		boolean isRawData = studyType.equalsIgnoreCase("rawdata");
 		System.out.println("StudyType: " + studyType + " + " + isRawData);
-		StudyManager studyMan = new StudyManager();
+
 		HashSet noDupSet = new HashSet();
 		noDupSet.addAll(columnList);
 		if (noDupSet.size() != columnList.size()) {

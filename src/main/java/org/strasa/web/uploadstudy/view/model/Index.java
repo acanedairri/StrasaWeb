@@ -36,8 +36,7 @@ public class Index {
 	Tab tab4;
 	@Wire("#tab5")
 	Tab tab5;
-	
-	
+
 	@Wire("#tabpanel1")
 	Tabpanel tabpanel1;
 	@Wire("#tabpanel2")
@@ -48,15 +47,15 @@ public class Index {
 	Tabpanel tabpanel4;
 	@Wire("#tabpanel5")
 	Tabpanel tabpanel5;
-	
+
 	ArrayList<Tabpanel> arrTabPanels = new ArrayList<Tabpanel>();
 	private UploadData uploadData;
 	private int selectedIndex = 1;
-	private boolean[] tabDisabled = {false,true,true,true,true};
+	private boolean[] tabDisabled = { false, true, true, true, true };
 	private long studyID = 7;
 	private boolean isRaw;
 	private ProcessTabViewModel uploadModel;
-	
+
 	public int getSelectedIndex() {
 		return selectedIndex;
 	}
@@ -82,125 +81,119 @@ public class Index {
 	}
 
 	@Init
-	public void init(){
-		//editing mode
+	public void init() {
+		// editing mode
 		uploadModel = new ProcessTabViewModel();
-	
 
-		if(!StringUtils.isNullOrEmpty(Executions.getCurrent().getParameter("studyid")))
-		{
-		uploadModel.setStudyID(Integer.parseInt(Executions.getCurrent().getParameter("studyid")));
-		uploadModel.setUpdateMode(true);
-		 tabDisabled[0] = false;
-		 tabDisabled[1] = false;
-		 tabDisabled[2] = false;
-		 tabDisabled[3] = false;
-		 tabDisabled[4] = false;
+		if (!StringUtils.isNullOrEmpty(Executions.getCurrent().getParameter("studyid"))) {
+			uploadModel.setStudyID(Integer.parseInt(Executions.getCurrent().getParameter("studyid")));
+			uploadModel.setUpdateMode(true);
+			tabDisabled[0] = false;
+			tabDisabled[1] = false;
+			tabDisabled[2] = false;
+			tabDisabled[3] = false;
+			tabDisabled[4] = false;
 		}
 	}
-	  @AfterCompose
-	    public void afterCompose(@ContextParam(ContextType.VIEW) Component view){
-	        
-		  Selectors.wireComponents(view, this, false);
-	
-	        //wire event listener
-//	      Selectors.wireEventListeners(view, this);
-			
-			arrTabPanels.add(tabpanel1);
 
-			arrTabPanels.add(tabpanel2);
+	@AfterCompose
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 
-			arrTabPanels.add(tabpanel3);
+		Selectors.wireComponents(view, this, false);
 
-			arrTabPanels.add(tabpanel4);
+		// wire event listener
+		// Selectors.wireEventListeners(view, this);
 
-			arrTabPanels.add(tabpanel5);
-			Events.sendEvent("onSelect",tab1,tab1);
-			
-		
-	    }
-	
-	 @NotifyChange("*")
-	 @GlobalCommand("disableTabs")
-	 public void disableTabs(){
-		 tabDisabled[0] = false;
-		 tabDisabled[1] = true;
-		 tabDisabled[2] = true;
-		 tabDisabled[3] = true;
-		 tabDisabled[4] = true;
-		 System.out.println("Disabled Tabs Called");
-	 }
-	  
+		arrTabPanels.add(tabpanel1);
+
+		arrTabPanels.add(tabpanel2);
+
+		arrTabPanels.add(tabpanel3);
+
+		arrTabPanels.add(tabpanel4);
+
+		arrTabPanels.add(tabpanel5);
+		Events.sendEvent("onSelect", tab1, tab1);
+
+	}
+
+	@NotifyChange("*")
+	@GlobalCommand("disableTabs")
+	public void disableTabs() {
+		tabDisabled[0] = false;
+		tabDisabled[1] = true;
+		tabDisabled[2] = true;
+		tabDisabled[3] = true;
+		tabDisabled[4] = true;
+		System.out.println("Disabled Tabs Called");
+	}
+
 	@Command("showzulfile")
-	public void showzulfile(@BindingParam("zulFileName") String zulFileName,
-			@BindingParam("target") Tabpanel panel) {
+	public void showzulfile(@BindingParam("zulFileName") String zulFileName, @BindingParam("target") Tabpanel panel) {
 		System.out.println(zulFileName);
 		if (panel != null && panel.getChildren().isEmpty()) {
-			 Map arg = new HashMap();
-		        arg.put("uploadModel", uploadModel);
-		       
+			Map arg = new HashMap();
+			arg.put("uploadModel", uploadModel);
+
 			Executions.createComponents(zulFileName, panel, arg);
-			
+
 		}
 	}
+
 	@NotifyChange("*")
 	@GlobalCommand("nextTab")
 	public void nextTab(@BindingParam("model") ProcessTabViewModel uploadData) {
-		
-		
-		if(!uploadData.validateTab()){
+
+		if (!uploadData.validateTab()) {
 			return;
 		}
-		if(selectedIndex == 0){
+		if (selectedIndex == 0) {
 			isRaw = uploadData.isRaw;
 			studyID = uploadData.getStudyID();
 			uploadModel = uploadData;
 			System.out.println("IsRaw: " + uploadData.isDataReUploaded + " ");
-			
 
 		}
-		if(uploadData.uploadToFolder){
+		if (uploadData.uploadToFolder) {
 			selectedIndex = 3;
 		}
-		
-		if(selectedIndex + 1 < arrTabPanels.size())
-		{
-			
-			arrTabPanels.get(selectedIndex+1).getChildren().clear();
+
+		if (selectedIndex + 1 < arrTabPanels.size()) {
+
+			arrTabPanels.get(selectedIndex + 1).getChildren().clear();
 		}
-		
 
-//		System.out.println("Sample: " + uploadData.getTxtProject());
+		// System.out.println("Sample: " + uploadData.getTxtProject());
 
-//		selectedIndex++;
-		
+		// selectedIndex++;
 
 		tabDisabled[selectedIndex + 1] = false;
-		if(uploadData.uploadToFolder){
+		if (uploadData.uploadToFolder) {
 			selectedIndex = 3;
 		}
-		Tab[] tabs = {tab1,tab2,tab3,tab4,tab5};
-		
-		Events.sendEvent("onSelect",tabs[selectedIndex + 1],tabs[selectedIndex + 1]);
+		Tab[] tabs = { tab1, tab2, tab3, tab4, tab5 };
+
+		Events.sendEvent("onSelect", tabs[selectedIndex + 1], tabs[selectedIndex + 1]);
 		System.out.println("INDEX: " + selectedIndex);
-		if(uploadData.uploadToFolder){
+		if (uploadData.uploadToFolder) {
 			tabDisabled[4] = false;
 			System.out.println("FINISH LOADED: ");
-			Events.sendEvent("onSelect",tab5,tab5);
+			Events.sendEvent("onSelect", tab5, tab5);
 
-			Events.sendEvent("onSelect",tab5,tab5);
+			Events.sendEvent("onSelect", tab5, tab5);
 
-			Events.sendEvent("onSelect",tab5,tab5);
+			Events.sendEvent("onSelect", tab5, tab5);
 			tab5.setDisabled(false);
 			tab5.setSelected(true);
 			Events.sendEvent(new Event("onSelect", tab5, null));
 			return;
 		}
 		selectedIndex++;
-	
+
 	}
+
 	@NotifyChange("*")
-	public void changeTab(){
+	public void changeTab() {
 		System.out.println("Called to change tab");
 		selectedIndex++;
 	}

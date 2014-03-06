@@ -380,6 +380,17 @@ public class RawDataView extends ProcessTabViewModel {
 					isHeaderValid = false;
 				}
 			}
+			List<String[]> dataPrep = reader.readAll();
+			dataPrep.remove(0);
+			if (!new StudyManagerImpl().validateCSVDataForGermplasmComparision(this.studyID, dataPrep, 0, this.isRaw)) {
+				Map<String, Object> arguments = new HashMap<String, Object>();
+				arguments.put("list", new StudyManagerImpl().getUnknownGermplasmFromCSVData(this.studyID, dataPrep, 0, this.isRaw));
+
+				String template = "/user/updatestudy/validategermplasmbox.zul";
+				Window window = (Window) Executions.createComponents(template, null, arguments);
+				window.doModal();
+			}
+			;
 			System.out.println(invalidHeader.size());
 
 		} catch (FileNotFoundException e) {

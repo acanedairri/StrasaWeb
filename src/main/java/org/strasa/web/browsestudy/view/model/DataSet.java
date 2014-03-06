@@ -141,6 +141,7 @@ public class DataSet {
 
 		// System.out.println("StudyId:"+ Integer.toString(studyId)
 		// +" and dataset:" +Integer.toString(dataset));
+		System.out.println("MERGED DATASETTYPE: " + dataType + " - " + dataset);
 		List<HashMap<String, String>> toreturn = browseStudyManagerImpl.getStudyData(studyId, dataType, dataset);
 		System.out.println("Size:" + toreturn.size());
 		List<StudyDataColumn> columns = new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyId, dataType, dataset); // rd

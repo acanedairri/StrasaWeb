@@ -34,7 +34,7 @@ public class StudyDataColumnManagerImpl {
 				if (dataset != null)
 					example.createCriteria().andStudyidEqualTo(studyId).andDatatypeEqualTo("dd").andDatasetEqualTo(dataset);
 				else
-					example.createCriteria().andStudyidEqualTo(studyId).andDatatypeEqualTo("d");
+					example.createCriteria().andStudyidEqualTo(studyId).andDatatypeEqualTo("dd");
 			}
 
 			if (dataset == null) {
