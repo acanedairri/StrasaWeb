@@ -168,10 +168,9 @@
 										label="@load(each.ecotype)" />
 								</template>
 							</combobox>
-							<textbox value="@bind(each.soiltype)"
-								width="99%"
-								onClick="@command('updateDesignInfo', id=forEachStatus.index)" />
-							<textbox value="@bind(each.soilph)"
+							 <combobox model="@load(vm.soilTypes)" width="99%"
+                            value="@bind(each.soiltype)" readonly="true"/>
+					<spinner constraint="no empty,min 4 max 12"  value="@bind(each.soilph)"
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)" />
 						</row>
@@ -241,15 +240,6 @@
 								<column />
 							</columns>
 							<rows>
-
-								<row>
-									<label value="Treatment Structure:"
-										style="color:red" />
-
-									<textbox
-										value="@bind(vm.selectedDesignInfo.treatmentstructure)"
-										width="99%" />
-								</row>
 								<row>
 									<label value="Plot Size:"
 										style="color:red" />
@@ -266,26 +256,88 @@
 										width="99%" />
 								</row>
 								<row>
+									<label value="Treatment Structure:"
+										style="color:red" />
+
+									<combobox id="cmbTreatmentStructure"
+										value="@bind(vm.selectedDesignInfo.treatmentstructure)"
+										width="99%" > 
+										<attribute name="onCreate"><![CDATA[
+        								List list2 = new ArrayList();
+        									 list2.add("One Factor");
+        									 list2.add("Two Factor Factorial");
+        									 list2.add("Three Factor Factorial");
+        								ListModelList lm2 = new ListModelList(list2);
+        									 lm2.addSelection(lm2.get(0));
+       										 cmbTreatmentStructure.setModel(lm2);
+       									  txtDRow2.setValue("");
+        								  txtDRow3.setValue("");
+        								  txtDRow4.setValue("");
+        								
+        								  dRow2.setVisible(false);
+        								  dRow3.setVisible(false);
+        								  dRow4.setVisible(false);
+    							]]></attribute>
+    							
+    							<attribute name = "onChange">
+    							<![CDATA[
+    							
+    							  if(cmbTreatmentStructure.getSelectedIndex() == 0){
+    								  txtDRow2.setValue("");
+    								  txtDRow3.setValue("");
+    								  txtDRow4.setValue("");
+    								
+    								  dRow2.setVisible(false);
+    								  dRow3.setVisible(false);
+    								  dRow4.setVisible(false);
+    								  
+    								  
+    							  }
+    							  else if(cmbTreatmentStructure.getSelectedIndex() == 1){
+    								  txtDRow3.setValue("");
+    								  txtDRow4.setValue("");
+    								  dRow2.setVisible(true);
+    								  dRow3.setVisible(false);
+    								  dRow4.setVisible(false);
+    								
+    								  
+    							  }
+    							  else if(cmbTreatmentStructure.getSelectedIndex() == 2){
+    								  dRow2.setVisible(true);
+    								  dRow3.setVisible(true);
+    								  dRow4.setVisible(true);
+    								  
+    							  }
+    							
+    							
+    							
+    							]]>
+    							</attribute>
+										
+										</combobox>
+								</row>
+								
+								<row>
 									Design Factor 1:
 									<textbox
 										value="@bind(vm.selectedDesignInfo.designfactor1)"
 										width="99%" />
 								</row>
-								<row>
+								<row id="dRow2">
 									Design Factor 2:
-									<textbox
+									<textbox id = "txtDRow2"
 										value="@bind(vm.selectedDesignInfo.designfactor2)"
 										width="99%" />
 								</row>
-								<row>
+								<row id="dRow3">
 									Design Factor 3:
-									<textbox
+									<textbox id = "txtDRow3"
 										value="@bind(vm.selectedDesignInfo.designfactor3)"
 										width="99%" />
 								</row>
-								<row>
+								<row id="dRow4">
 									Design Factor 4:
-									<textbox
+									<textbox id = "txtDRow4"
 										value="@bind(vm.selectedDesignInfo.designfactor4)"
 										width="99%" />
 								</row>

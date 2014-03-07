@@ -72,6 +72,15 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	private boolean hasBeenProcessed = false;
 	private ListModelList<Location> lstLocations = new ListModelList<Location>();
 	private ListModelList<StudySiteInfoModel> previousSites;
+	private ArrayList<String> soilTypes = new ArrayList<String>();
+
+	public ArrayList<String> getSoilTypes() {
+		return soilTypes;
+	}
+
+	public void setSoilTypes(ArrayList<String> soilTypes) {
+		this.soilTypes = soilTypes;
+	}
 
 	public ListModelList<StudySiteInfoModel> getPreviousSites() {
 		return previousSites;
