@@ -5,7 +5,7 @@
 		<style src="../css/main.css" />
 		<grid sizedByContent="true">
 			<columns>
-				<column label="Add new distribution and extension" width="150px" />
+				<column label="Add new distribution and extension" width="250px" />
 				<column label="Detail" hflex="1" />
 			</columns>
 			<rows>

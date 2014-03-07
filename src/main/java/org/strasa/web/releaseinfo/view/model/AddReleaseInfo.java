@@ -77,7 +77,8 @@ public class AddReleaseInfo {
 				cmbCountry.add(data.getIsoabbr());
 			}
 	}
-	
+
+	@NotifyChange("*")
 	@Command("add")
 	public void add(@ContextParam(ContextType.COMPONENT) Component component, @ContextParam(ContextType.VIEW) Component view){
 		Combobox programComboBox = (Combobox) component.getFellow("programComboBox");
@@ -103,16 +104,9 @@ public class AddReleaseInfo {
 		
 		//TODO Validate!!
 		Messagebox.show("Successfully added to database!", "OK", Messagebox.OK, Messagebox.INFORMATION);
-		
-		Binder bind = parBinder;
-		if (bind == null)
-			return;
-		
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("selected",model);
 
-		bind.postCommand("refreshList", params);
-		mainView.detach();
+		BindUtils.postGlobalCommand(null, null, "refreshReleaseInfoList", null);
+		setModel(new ReleaseInfo());
 	}
 	@Command
 	public void cancel(){

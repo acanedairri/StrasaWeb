@@ -76,7 +76,8 @@ public class AddDistributionAndExtension {
 				cmbCountry.add(data.getIsoabbr());
 			}
 	}
-	
+
+	@NotifyChange("*")
 	@Command("add")
 	public void add(@ContextParam(ContextType.COMPONENT) Component component, @ContextParam(ContextType.VIEW) Component view){
 		Combobox programComboBox = (Combobox) component.getFellow("programComboBox");
@@ -102,19 +103,9 @@ public class AddDistributionAndExtension {
 		
 		//TODO Validate!!
 		Messagebox.show("Successfully added to database!", "OK", Messagebox.OK, Messagebox.INFORMATION);
-//		System.out.println("SavePath: "+CsvPath);
-		
-		
-		Binder bind = parBinder;
-		if (bind == null)
-			return;
-		
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("selected",model);
-
-		// this.parBinder.postCommand("change", params);
-		bind.postCommand("refreshDistributionAndExtensionList", params);
-		mainView.detach();
+//		
+		BindUtils.postGlobalCommand(null, null, "refreshDistributionAndExtensionList", null);
+		setModel(new DistributionAndExtension());
 	}
 	@Command
 	public void cancel(){
