@@ -92,14 +92,13 @@ public class EditDistributionAndExtension {
 		programKeyList.clear();
 		rowList.clear();
 		for (DistributionAndExtension p: list){
-			boolean owned = man.ownsDistributionAndExtension(p.getUserid());
 			Program prog = programMan.getProgramById(p.getProgramid());
 			programKeyList.put(prog.getId(),prog.getName());
 
 			Project proj = projectMan.getProjectById(p.getProjectid());
 			projectKeyList.put(proj.getId(),proj.getName());
 			
-			RowStatus ps = new RowStatus(p,false, prog, proj, owned);
+			RowStatus ps = new RowStatus(p,false, prog, proj);
 			rowList.add(ps);
 		}
 	}
@@ -191,25 +190,9 @@ public class EditDistributionAndExtension {
 	}
 
 	@NotifyChange("rowList")
-	@Command("refreshList")
-	public void refreshList() {
+	@Command("refreshDistributionAndExtensionList")
+	public void refreshDistributionAndExtensionList() {
 		makeRowStatus(man.getAllDistributionAndExtension());
-	}
-
-	@NotifyChange("projectList")
-	@Command
-	public void updateLists(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view, @BindingParam("program") Comboitem program){
-		Combobox projectComboBox = (Combobox) component.getFellow("projectComboBox");
-		
-		try{
-		setProjectList(projectMan.getProjectByProgramId((Integer)program.getValue()));
-		projectComboBox.setValue(projectList.get(0).getName());
-		BindUtils.postNotifyChange(null, null,
-				EditDistributionAndExtension.this, "projectList");
-		}catch(RuntimeException re){
-			setProjectList(projectMan.getAllProject());
-		}
 	}
 	
 	public ArrayList<String> getCmbCountry() {
@@ -243,14 +226,12 @@ public class EditDistributionAndExtension {
 		private Project project;
 		private  DistributionAndExtension value;
 		private boolean editingStatus;
-		private boolean owned;
 
-		public RowStatus(DistributionAndExtension p, boolean editingStatus, Program program, Project project,boolean owned ) {
+		public RowStatus(DistributionAndExtension p, boolean editingStatus, Program program, Project project) {
 			this.setValue(p);
 			this.editingStatus = editingStatus;
 			this.setProgram(program);
 			this.setProject(project);
-			this.setOwned(owned);
 		}
 
 
@@ -290,16 +271,6 @@ public class EditDistributionAndExtension {
 
 		public void setProject(Project project) {
 			this.project = project;
-		}
-
-
-		public boolean isOwned() {
-			return owned;
-		}
-
-
-		public void setOwned(boolean owned) {
-			this.owned = owned;
 		}
 
 	}

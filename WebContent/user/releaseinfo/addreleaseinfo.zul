@@ -1,13 +1,12 @@
 <zk>
-	<window title="Add New Extension Data" border="normal"
-		closable="true" apply="org.zkoss.bind.BindComposer"
+	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.releaseinfo.view.model.AddReleaseInfo')"
 		width="35%">
 		<style src="../css/main.css" />
 		<grid sizedByContent="true">
 			<columns>
-				<column label="Type" width="150px" />
-				<column label="Content" hflex="1" />
+				<column label="Add new Release Info" width="150px" />
+				<column label="Detail" hflex="1" />
 			</columns>
 			<rows>
 				<row>
@@ -15,7 +14,7 @@
 					<combobox id="programComboBox"
 						model="@load(vm.programList)" readonly="true"
 						onChange="@command('updateLists', program=self.selectedItem)"
-						value="@bind(vm.program.name)">
+						value="@bind(vm.program.name)"  hflex="1">
 						<template name="model">
 							<comboitem value="@load(each.id)"
 								label="@load(each.name)" />
@@ -35,20 +34,20 @@
 				</row>
 				<row>
 					<label value="Germplasm name" />
-					<textbox value="@bind(vm.model.germplasmname)" />
+					<textbox value="@bind(vm.model.germplasmname)" hflex="1"/>
 				</row>
 				<row>
 					<label value="Data Source" />
-					<textbox value="@bind(vm.model.datasource)" />
+					<textbox value="@bind(vm.model.datasource)" hflex="1"/>
 				</row>
 				<row>
 					<label value="Year release" />
-					<textbox value="@bind(vm.model.yearrelease)" />
+					<textbox value="@bind(vm.model.yearrelease)" hflex="1"/>
 				</row>
 				<row>
 					<label value="Country release" />
 					<combobox model="@load(vm.cmbCountry)"
-						selectedItem="@bind(vm.model.countryrelease)" width="99%">
+						selectedItem="@bind(vm.model.countryrelease)"  hflex="1">
 						<template name="model" var="p1">
 							<comboitem value="@load(p1)"
 								label="@load(p1)" />
@@ -57,17 +56,12 @@
 				</row>
 				<row>
 					<label value="Seed availability" />
-					<intbox value="@bind(vm.model.seedavailability)" />
+					<intbox value="@bind(vm.model.seedavailability)"  hflex="1"/>
 				</row>
 				<row>
 					<label></label>
 					<hbox>
-
-						<button label="Cancel"
-							onClick="@command('cancel')" image="/images/Delete16.png"
-							sclass="btn-plain">
-						</button>
-						<button label="Save" onClick="@command('add')"
+						<button label="Add" onClick="@command('add')"
 							image="/images/save16.png" sclass="btn-blue">
 						</button>
 					</hbox>

@@ -113,7 +113,7 @@ public class AddDistributionAndExtension {
 		params.put("selected",model);
 
 		// this.parBinder.postCommand("change", params);
-		bind.postCommand("refreshList", params);
+		bind.postCommand("refreshDistributionAndExtensionList", params);
 		mainView.detach();
 	}
 	@Command

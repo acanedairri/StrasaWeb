@@ -1,13 +1,12 @@
 <zk>
-	<window title="Add New Extension Data" border="normal"
-		closable="true" apply="org.zkoss.bind.BindComposer"
+	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.distributionandextension.view.model.AddDistributionAndExtension')"
 		width="35%">
 		<style src="../css/main.css" />
 		<grid sizedByContent="true">
 			<columns>
-				<column label="Type" width="150px" />
-				<column label="Content" hflex="1" />
+				<column label="Add new distribution and extension" width="150px" />
+				<column label="Detail" hflex="1" />
 			</columns>
 			<rows>
 				<row>
@@ -15,7 +14,7 @@
 					<combobox id="programComboBox"
 						model="@load(vm.programList)" readonly="true"
 						onChange="@command('updateLists', program=self.selectedItem)"
-						value="@bind(vm.program.name)">
+						value="@bind(vm.program.name)" hflex="1">
 						<template name="model">
 							<comboitem value="@load(each.id)"
 								label="@load(each.name)" />
@@ -35,15 +34,15 @@
 				</row>
 				<row>
 					<label value="Germplasm name" />
-					<textbox value="@bind(vm.model.germplasmname)" />
+					<textbox value="@bind(vm.model.germplasmname)" hflex="1"/>
 				</row>
 				<row>
 					<label value="Year extension" />
-					<textbox value="@bind(vm.model.yearextension)" />
+					<textbox value="@bind(vm.model.yearextension)" hflex="1"/>
 				</row>
 				<row>
 					<label value="Location extension" />
-					<textbox value="@bind(vm.model.locationextension)" />
+					<textbox value="@bind(vm.model.locationextension)" hflex="1"/>
 				</row>
 				<row>
 					<label value="Country extension" />
@@ -57,40 +56,35 @@
 				</row>
 				<row>
 					<label value="PLanting Area" />
-					<decimalbox value="@bind(vm.model.plantingarea)" />
+					<decimalbox value="@bind(vm.model.plantingarea)" hflex="1"/>
 				</row>
 				<row>
 					<label value="Data Source" />
-					<textbox value="@bind(vm.model.datasource)" />
+					<textbox value="@bind(vm.model.datasource)" hflex="1"/>
 				</row>
 				<row>
 					<label value="Seed availability" />
-					<intbox value="@bind(vm.model.seedavailability)" />
+					<intbox value="@bind(vm.model.seedavailability)" hflex="1"/>
 				</row>
 				<row>
 					<label value="Amount of seeds distributed" />
 					<textbox
-						value="@load(each.value.amountseeddistributed) @save(each.value.amountseeddistributed, before='confirm')" />
+						value="@bind(vm.model.amountseeddistributed)" hflex="1"/>
 				</row>
 				<row>
 					<label value="Number of farmers who adopted" />
 					<textbox
-						value="@load(each.value.numfarmersadopted) @save(each.value.numfarmersadopted, before='confirm')" />
+						value="@bind(vm.model.numfarmersadopted)" hflex="1"/>
 				</row>
 				<row>
 					<label value="Amount of seeds produced" />
 					<textbox
-						value="@load(each.value.amountseedsproduced) @save(each.value.amountseedsproduced, before='confirm')" />
+						value="@bind(vm.model.amountseedsproduced)" hflex="1"/>
 				</row>
 				<row>
 					<label></label>
 					<hbox>
-
-						<button label="Cancel"
-							onClick="@command('cancel')" image="/images/Delete16.png"
-							sclass="btn-plain">
-						</button>
-						<button label="Save" onClick="@command('add')"
+						<button label="Add" onClick="@command('add')"
 							image="/images/save16.png" sclass="btn-blue">
 						</button>
 					</hbox>

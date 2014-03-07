@@ -1,20 +1,17 @@
 <zk>
-
-	
-	<!-- 	<div style="padding:10px 0px 15px 20px" align="left">
-		<label class="header-menu">Release Info</label>
-		</div> -->
-
 	<window id="editReleaseInfo" apply="org.zkoss.bind.BindComposer"
 		style="padding:10px"
 		viewModel="@id('vm') @init('org.strasa.web.releaseinfo.view.model.EditReleaseInfo')">
-		
+
 		<style src="../css/main.css" />
-		<panel title="Release Info" border="normal">
-			<panelchildren style="overflow: auto;padding:10px">
-				<button label="Add New" onClick="@command('add')"
-					image="/images/add.png" sclass="btn-blue" />
-				<grid
+		<tabbox id="tb">
+			<tabs>
+				<tab label="Release Info" />
+				<tab label="Add new" />
+			</tabs>
+			<tabpanels width="100%">
+				<tabpanel style="overflow: auto">
+					<grid
 					model="@load(vm.rowList) @template(each.editingStatus ? 'editable' : 'noneditable')"
 					sizedByContent="true" width="95%" emptyMessage="No Record Found">
 					<columns width="200px">
@@ -102,7 +99,12 @@
 						</row>
 					</template>
 				</grid>
-			</panelchildren>
-		</panel>
+				</tabpanel>
+				<tabpanel style="overflow: auto">
+					<include
+						src="/user/releaseinfo/addreleaseinfo.zul" />
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
 	</window>
 </zk>

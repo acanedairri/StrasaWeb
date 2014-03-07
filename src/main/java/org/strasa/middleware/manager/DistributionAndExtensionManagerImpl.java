@@ -58,7 +58,9 @@ public class DistributionAndExtensionManagerImpl {
 
 
 		try{
-			List<DistributionAndExtension> distributionAndExtension = mapper.selectByExample(null);
+			DistributionAndExtensionExample example = new DistributionAndExtensionExample();
+			example.createCriteria().andUseridEqualTo(SecurityUtil.getDbUser().getId());
+			List<DistributionAndExtension> distributionAndExtension = mapper.selectByExample(example);
 
 			return distributionAndExtension;
 
@@ -234,15 +236,4 @@ public class DistributionAndExtensionManagerImpl {
 		}
 	}
 
-	public boolean ownsDistributionAndExtension(Integer userid) {
-		// TODO Auto-generated method stub
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
-		try{
-			 
-			return true;
-
-		}finally{
-			session.close();
-		}
-	}
 }
