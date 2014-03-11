@@ -13,9 +13,12 @@
 					<grid
 						model="@load(vm.projectList)
 						@template(each.editingStatus ? 'editable' :
-						'noneditable')" sizedByContent="true"
-						width="98%" emptyMessage="No study site found.">
+						'noneditable')"
+						sizedByContent="true" width="98%"
+						emptyMessage="No study site found.">
 						<columns>
+							<column hflex="1" label="Program Name"
+								width="250px" />
 							<column hflex="1" label="Project Name"
 								width="250px" />
 							<column label="Objective" width="200px" />
@@ -29,6 +32,15 @@
 						</columns>
 						<template name="editable">
 							<row>
+								<combobox id="programComboBox"
+									model="@load(vm.programList)" readonly="true"
+									value="@load(each.prog.name)"
+									selectedItem="@load(each.prog) @save(each.prog, before='confirm')">
+									<template name="model">
+										<comboitem
+											value="@load(each.id)" label="@load(each.name)" />
+									</template>
+								</combobox>
 								<textbox
 									value="@load(each.project.name) @save(each.project.name, before='confirm')" />
 								<textbox
@@ -56,6 +68,7 @@
 						</template>
 						<template name="noneditable">
 							<row>
+								<label value="@load(each.prog.name)" />
 								<label value="@load(each.project.name)" />
 								<label
 									value="@load(each.project.objective)" />
