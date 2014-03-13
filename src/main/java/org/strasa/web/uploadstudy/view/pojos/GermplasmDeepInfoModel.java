@@ -3,6 +3,7 @@ package org.strasa.web.uploadstudy.view.pojos;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.strasa.middleware.manager.KeyCharacteristicManagerImpl;
 import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.GermplasmCharacteristics;
 import org.strasa.middleware.model.GermplasmType;
@@ -20,10 +21,43 @@ public class GermplasmDeepInfoModel extends Germplasm {
 	public static String MAJORGENES = "Major Genes";
 	public static String GRAINQUALITY = "Grain Quality";
 
-	private List<CharacteristicModel> keyBiotic = new ArrayList<CharacteristicModel>();
-	private List<CharacteristicModel> keyAbiotic = new ArrayList<CharacteristicModel>();
-	private List<CharacteristicModel> keyGrainQuality = new ArrayList<CharacteristicModel>();
-	private List<CharacteristicModel> keyMajorGenes = new ArrayList<CharacteristicModel>();
+	private List<String> lstBiotics = new ArrayList<String>();
+	private List<String> lstAbiotic = new ArrayList<String>();
+	private List<String> lstGrainQuality = new ArrayList<String>();
+	private List<String> lstMajorGenes = new ArrayList<String>();
+
+	public List<String> getLstBiotics() {
+		return lstBiotics;
+	}
+
+	public void setLstBiotics(List<String> lstBiotics) {
+		this.lstBiotics = lstBiotics;
+	}
+
+	public List<String> getLstAbiotic() {
+		return lstAbiotic;
+	}
+
+	public void setLstAbiotic(List<String> lstAbiotic) {
+		this.lstAbiotic = lstAbiotic;
+	}
+
+	public List<String> getLstGrainQuality() {
+		return lstGrainQuality;
+	}
+
+	public void setLstGrainQuality(List<String> lstGrainQuality) {
+		this.lstGrainQuality = lstGrainQuality;
+	}
+
+	public List<String> getLstMajorGenes() {
+		return lstMajorGenes;
+	}
+
+	public void setLstMajorGenes(List<String> lstMajorGenes) {
+		this.lstMajorGenes = lstMajorGenes;
+	}
+
 	private String styleBG = "background-color: #FFF";
 	public int rowIndex;
 	private GermplasmType selectedGermplasmType;
@@ -129,14 +163,6 @@ public class GermplasmDeepInfoModel extends Germplasm {
 		this.setId(data.getId());
 	}
 
-	@Override
-	public String toString() {
-		return "GermplasmDeepInfoModel [keyBiotic=" + keyBiotic + ", keyAbiotic=" + keyAbiotic + ", keyGrainQuality=" + keyGrainQuality + ", keyMajorGenes=" + keyMajorGenes + ", styleBG=" + styleBG + ", rowIndex=" + rowIndex + ", selectedGermplasmType=" + selectedGermplasmType
-				+ ", category=" + category + ", isKnown=" + isKnown + ", getId()=" + getId() + ", getGid()=" + getGid() + ", getGermplasmname()=" + getGermplasmname() + ", getOthername()=" + getOthername() + ", getBreeder()=" + getBreeder() + ", getGermplasmtypeid()="
-				+ getGermplasmtypeid() + ", getIrnumber()=" + getIrnumber() + ", getIrcross()=" + getIrcross() + ", getParentage()=" + getParentage() + ", getFemaleparent()=" + getFemaleparent() + ", getMaleparent()=" + getMaleparent() + ", getSelectionhistory()="
-				+ getSelectionhistory() + ", getSource()=" + getSource() + ", getRemarks()=" + getRemarks() + ", getUserid()=" + getUserid() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
-	}
-
 	public boolean isEditMode() {
 		return isKnown;
 	}
@@ -182,45 +208,11 @@ public class GermplasmDeepInfoModel extends Germplasm {
 		this.rowIndex = rowIndex;
 	}
 
-	public List<CharacteristicModel> getKeyBiotic() {
-
-		return keyBiotic;
-	}
-
-	public void setKeyBiotic(List<CharacteristicModel> keyBiotic) {
-
-		this.keyBiotic = keyBiotic;
-	}
-
-	public List<CharacteristicModel> getKeyAbiotic() {
-		return keyAbiotic;
-	}
-
-	public void setKeyAbiotic(List<CharacteristicModel> keyAbiotic) {
-		this.keyAbiotic = keyAbiotic;
-	}
-
-	public List<CharacteristicModel> getKeyGrainQuality() {
-		return keyGrainQuality;
-	}
-
-	public void setKeyGrainQuality(List<CharacteristicModel> keyGrainQuality) {
-		this.keyGrainQuality = keyGrainQuality;
-	}
-
-	public List<CharacteristicModel> getKeyMajorGenes() {
-		return keyMajorGenes;
-	}
-
-	public void setKeyMajorGenes(List<CharacteristicModel> keyMajorGenes) {
-		this.keyMajorGenes = keyMajorGenes;
-	}
-
 	public void setBiotic(List<KeyBiotic> list) {
 
 		for (KeyBiotic key : list) {
 
-			keyBiotic.add(new CharacteristicModel(key.getValue(), BIOTIC));
+			lstBiotics.add(key.getValue());
 
 		}
 	}
@@ -229,7 +221,7 @@ public class GermplasmDeepInfoModel extends Germplasm {
 
 		for (KeyAbiotic key : list) {
 
-			keyAbiotic.add(new CharacteristicModel(key.getValue(), ABIOTIC));
+			lstAbiotic.add(key.getValue());
 
 		}
 	}
@@ -238,7 +230,7 @@ public class GermplasmDeepInfoModel extends Germplasm {
 
 		for (KeyMajorGenes key : list) {
 
-			keyMajorGenes.add(new CharacteristicModel(key.getValue(), MAJORGENES));
+			lstMajorGenes.add(key.getValue());
 
 		}
 	}
@@ -247,36 +239,8 @@ public class GermplasmDeepInfoModel extends Germplasm {
 
 		for (KeyGrainQuality key : list) {
 
-			keyGrainQuality.add(new CharacteristicModel(key.getValue(), GRAINQUALITY));
+			lstGrainQuality.add(key.getValue());
 
-		}
-	}
-
-	public void setBioticKeyValue(String attr, boolean value) {
-		for (CharacteristicModel key : keyBiotic) {
-			if (key.getName().equals(attr))
-				key.setValue(value);
-		}
-	}
-
-	public void setAbioticKeyValue(String attr, boolean value) {
-		for (CharacteristicModel key : keyAbiotic) {
-			if (key.getName().equals(attr))
-				key.setValue(value);
-		}
-	}
-
-	public void setGrainQualityKeyValue(String attr, boolean value) {
-		for (CharacteristicModel key : keyGrainQuality) {
-			if (key.getName().equals(attr))
-				key.setValue(value);
-		}
-	}
-
-	public void setMajorGenesKeyValue(String attr, boolean value) {
-		for (CharacteristicModel key : keyMajorGenes) {
-			if (key.getName().equals(attr))
-				key.setValue(value);
 		}
 	}
 
@@ -284,25 +248,25 @@ public class GermplasmDeepInfoModel extends Germplasm {
 
 		for (GermplasmCharacteristics germChar : lstChars) {
 			if (germChar.getAttribute().equals(ABIOTIC)) {
-				setAbioticKeyValue(germChar.getKeyvalue(), true);
+				lstAbiotic.add(germChar.getKeyvalue());
 			}
 			if (germChar.getAttribute().equals(BIOTIC)) {
-				setBioticKeyValue(germChar.getKeyvalue(), true);
+				lstBiotics.add(germChar.getKeyvalue());
 			}
 			if (germChar.getAttribute().equals(MAJORGENES)) {
-				setMajorGenesKeyValue(germChar.getKeyvalue(), true);
+				lstMajorGenes.add(germChar.getKeyvalue());
 			}
 			if (germChar.getAttribute().equals(GRAINQUALITY)) {
-				setGrainQualityKeyValue(germChar.getKeyvalue(), true);
+				lstGrainQuality.add(germChar.getKeyvalue());
 			}
 		}
 	}
 
 	public void clearCharactersticValue() {
-		keyAbiotic.clear();
-		keyBiotic.clear();
-		keyGrainQuality.clear();
-		keyMajorGenes.clear();
+		lstAbiotic.clear();
+		lstBiotics.clear();
+		lstGrainQuality.clear();
+		lstMajorGenes.clear();
 	}
 
 	public String validate() {
@@ -340,41 +304,45 @@ public class GermplasmDeepInfoModel extends Germplasm {
 		// TODO Auto-generated method stub
 		ArrayList<GermplasmCharacteristics> returnVal = new ArrayList<GermplasmCharacteristics>();
 
-		for (CharacteristicModel charData : keyAbiotic) {
-			if (charData.isValue()) {
-				GermplasmCharacteristics newData = new GermplasmCharacteristics();
-				newData.setAttribute(ABIOTIC);
-				newData.setGermplasmname(this.getGermplasmname());
-				newData.setKeyvalue(charData.getName());
-				returnVal.add(newData);
-			}
+		for (String charData : lstAbiotic) {
+
+			GermplasmCharacteristics newData = new GermplasmCharacteristics();
+			newData.setAttribute(ABIOTIC);
+			newData.setGermplasmname(this.getGermplasmname());
+			newData.setKeyvalue(charData);
+			returnVal.add(newData);
+
+			System.out.println(charData.toString());
 		}
-		for (CharacteristicModel charData : keyBiotic) {
-			if (charData.isValue()) {
-				GermplasmCharacteristics newData = new GermplasmCharacteristics();
-				newData.setAttribute(BIOTIC);
-				newData.setGermplasmname(this.getGermplasmname());
-				newData.setKeyvalue(charData.getName());
-				returnVal.add(newData);
-			}
+		for (String charData : lstBiotics) {
+
+			GermplasmCharacteristics newData = new GermplasmCharacteristics();
+			newData.setAttribute(BIOTIC);
+			newData.setGermplasmname(this.getGermplasmname());
+			newData.setKeyvalue(charData);
+			returnVal.add(newData);
+
+			System.out.println(charData.toString());
 		}
-		for (CharacteristicModel charData : keyMajorGenes) {
-			if (charData.isValue()) {
-				GermplasmCharacteristics newData = new GermplasmCharacteristics();
-				newData.setAttribute(MAJORGENES);
-				newData.setGermplasmname(this.getGermplasmname());
-				newData.setKeyvalue(charData.getName());
-				returnVal.add(newData);
-			}
+		for (String charData : lstMajorGenes) {
+
+			GermplasmCharacteristics newData = new GermplasmCharacteristics();
+			newData.setAttribute(MAJORGENES);
+			newData.setGermplasmname(this.getGermplasmname());
+			newData.setKeyvalue(charData);
+			returnVal.add(newData);
+
+			System.out.println(charData.toString());
 		}
-		for (CharacteristicModel charData : keyGrainQuality) {
-			if (charData.isValue()) {
-				GermplasmCharacteristics newData = new GermplasmCharacteristics();
-				newData.setAttribute(GRAINQUALITY);
-				newData.setGermplasmname(this.getGermplasmname());
-				newData.setKeyvalue(charData.getName());
-				returnVal.add(newData);
-			}
+		for (String charData : lstGrainQuality) {
+
+			GermplasmCharacteristics newData = new GermplasmCharacteristics();
+			newData.setAttribute(GRAINQUALITY);
+			newData.setGermplasmname(this.getGermplasmname());
+			newData.setKeyvalue(charData);
+			returnVal.add(newData);
+
+			System.out.println(charData.toString());
 		}
 
 		return returnVal;
@@ -418,57 +386,51 @@ public class GermplasmDeepInfoModel extends Germplasm {
 	}
 
 	public boolean setGermplasmExCharacteristic(GermplasmExt data) {
+
+		// TODO: NOT A GOOD APPROACH, REVISED IF HAVE THE TIME
+		KeyCharacteristicManagerImpl keyMan = new KeyCharacteristicManagerImpl();
+		List<String> Abiotics = keyMan.getAllAbioticAsString();
+		List<String> Biotics = keyMan.getAllBioticAsString();
+		List<String> GrainQualities = keyMan.getAllGrainQualityAsString();
+		List<String> MajorGenes = keyMan.getAllMajorGenesAsString();
+		lstBiotics.clear();
+		lstAbiotic.clear();
+		lstGrainQuality.clear();
+		lstMajorGenes.clear();
 		// Biotic
 		ArrayList<CharacteristicModel> returnVal = new ArrayList<CharacteristicModel>();
 		if (!StringUtils.isEmptyOrWhitespaceOnly(data.getBiotic()))
 			for (String key : data.getBiotic().split(",")) {
-				boolean added = false;
-				for (CharacteristicModel ckey : keyBiotic) {
-					if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
-						ckey.setValue(true);
-						added = true;
-					}
-
-				}
-				if (!added)
+				if (Biotics.contains(key)) {
+					// System.out.println("Key : " + key);
+					lstBiotics.add(key);
+				} else
 					returnVal.add(new CharacteristicModel(key, BIOTIC));
 			}
 
 		if (!StringUtils.isEmptyOrWhitespaceOnly(data.getAbiotic()))
 			for (String key : data.getAbiotic().split(",")) {
-				boolean added = false;
-				for (CharacteristicModel ckey : keyAbiotic) {
-					if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
-						ckey.setValue(true);
-						added = true;
-					}
-				}
-				if (!added)
+				if (Abiotics.contains(key)) {
+					lstAbiotic.add(key);
+				} else
 					returnVal.add(new CharacteristicModel(key, ABIOTIC));
+
 			}
 		if (!StringUtils.isEmptyOrWhitespaceOnly(data.getGrainQuality()))
 			for (String key : data.getGrainQuality().split(",")) {
-				boolean added = false;
-				for (CharacteristicModel ckey : keyGrainQuality) {
-					if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
-						ckey.setValue(true);
-						added = true;
-					}
-				}
-				if (!added)
+				if (GrainQualities.contains(key)) {
+					lstGrainQuality.add(key);
+				} else
 					returnVal.add(new CharacteristicModel(key, GRAINQUALITY));
+
 			}
 		if (!StringUtils.isEmptyOrWhitespaceOnly(data.getMajorGenes()))
 			for (String key : data.getMajorGenes().split(",")) {
-				boolean added = false;
-				for (CharacteristicModel ckey : keyMajorGenes) {
-					if (key.trim().toUpperCase().equals(ckey.getName().trim().toUpperCase())) {
-						ckey.setValue(true);
-						added = true;
-					}
-				}
-				if (!added)
+				if (MajorGenes.contains(key)) {
+					lstMajorGenes.add(key);
+				} else
 					returnVal.add(new CharacteristicModel(key, MAJORGENES));
+
 			}
 
 		invalidCharacteristic = returnVal;
@@ -554,36 +516,28 @@ public class GermplasmDeepInfoModel extends Germplasm {
 	}
 
 	public void reprocessInvalidCharacters() {
-
+		// TODO: NOT A GOOD APPROACH, REVISED IF HAVE THE TIME
+		KeyCharacteristicManagerImpl keyMan = new KeyCharacteristicManagerImpl();
+		List<String> Abiotics = keyMan.getAllAbioticAsString();
+		List<String> Biotics = keyMan.getAllBioticAsString();
+		List<String> GrainQualities = keyMan.getAllGrainQualityAsString();
+		List<String> MajorGenes = keyMan.getAllMajorGenesAsString();
 		for (CharacteristicModel ch : invalidCharacteristic) {
 			if (ch.getAttribute().equals(ABIOTIC)) {
-				for (CharacteristicModel ckey : keyAbiotic) {
-					if (ckey.getName().equals(ch.getName()))
-						ckey.setValue(true);
-				}
+				if (Abiotics.contains(ch.getName()))
+					lstAbiotic.add(ch.getName());
 			}
 			if (ch.getAttribute().equals(BIOTIC)) {
-				for (CharacteristicModel ckey : keyBiotic) {
-					if (ckey.getName().equals(ch.getName())) {
-						// System.out.println("*");
-						ckey.setValue(true);
-					} else {
-						// System.out.println("ckey: " + ckey.getName() +
-						// " ch: " + ch.getName());
-					}
-				}
+				if (Biotics.contains(ch.getName()))
+					lstBiotics.add(ch.getName());
 			}
 			if (ch.getAttribute().equals(MAJORGENES)) {
-				for (CharacteristicModel ckey : keyMajorGenes) {
-					if (ckey.getName().equals(ch.getName()))
-						ckey.setValue(true);
-				}
+				if (MajorGenes.contains(ch.getName()))
+					lstMajorGenes.add(ch.getName());
 			}
 			if (ch.getAttribute().equals(GRAINQUALITY)) {
-				for (CharacteristicModel ckey : keyGrainQuality) {
-					if (ckey.getName().equals(ch.getName()))
-						ckey.setValue(true);
-				}
+				if (GrainQualities.contains(ch.getName()))
+					lstGrainQuality.add(ch.getName());
 			}
 		}
 

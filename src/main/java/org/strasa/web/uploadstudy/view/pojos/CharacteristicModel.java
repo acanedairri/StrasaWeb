@@ -2,7 +2,7 @@ package org.strasa.web.uploadstudy.view.pojos;
 
 public class CharacteristicModel {
 	private String name;
-	private boolean value;
+	private boolean value = true;
 	private int primaryid;
 	private boolean exist;
 	private String attribute;

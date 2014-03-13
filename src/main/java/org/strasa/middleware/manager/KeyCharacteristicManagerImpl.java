@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
-import org.strasa.middleware.mapper.EcotypeMapper;
 import org.strasa.middleware.mapper.GermplasmCharacteristicsMapper;
 import org.strasa.middleware.mapper.KeyAbioticMapper;
 import org.strasa.middleware.mapper.KeyBioticMapper;
@@ -16,7 +15,6 @@ import org.strasa.middleware.model.KeyAbiotic;
 import org.strasa.middleware.model.KeyBiotic;
 import org.strasa.middleware.model.KeyGrainQuality;
 import org.strasa.middleware.model.KeyMajorGenes;
-import org.strasa.web.uploadstudy.view.model.Container;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class KeyCharacteristicManagerImpl {
@@ -27,8 +25,7 @@ public class KeyCharacteristicManagerImpl {
 	public void getGermplasmCharacteristicById(GermplasmCharacteristics record) {
 
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
-		GermplasmCharacteristicsMapper GermplasmCharacteristicsMapper = session
-				.getMapper(GermplasmCharacteristicsMapper.class);
+		GermplasmCharacteristicsMapper GermplasmCharacteristicsMapper = session.getMapper(GermplasmCharacteristicsMapper.class);
 
 		try {
 			GermplasmCharacteristicsMapper.insert(record);
@@ -65,8 +62,7 @@ public class KeyCharacteristicManagerImpl {
 	public List<KeyGrainQuality> getAllGrainQuality() {
 
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
-		KeyGrainQualityMapper mapper = session
-				.getMapper(KeyGrainQualityMapper.class);
+		KeyGrainQualityMapper mapper = session.getMapper(KeyGrainQualityMapper.class);
 		try {
 			return mapper.selectByExample(null);
 		} finally {
@@ -74,28 +70,25 @@ public class KeyCharacteristicManagerImpl {
 		}
 	}
 
+	public List<KeyMajorGenes> getAllMajorGenes() {
 
-
-
-	public List<KeyMajorGenes> getAllMajorGenes(){
-
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		KeyMajorGenesMapper mapper = session.getMapper(KeyMajorGenesMapper.class);
-		try{
+		try {
 			return mapper.selectByExample(null);
-		}
-		finally{
+		} finally {
 			session.close();
 		}
 	}
-	public List<Container> getAllAbioticAsString() {
+
+	public List<String> getAllAbioticAsString() {
 
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		KeyAbioticMapper mapper = session.getMapper(KeyAbioticMapper.class);
 		try {
-			ArrayList<Container> strReturn = new ArrayList<Container>();
-			for(KeyAbiotic key : mapper.selectByExample(null)){
-				strReturn.add(new Container(key.getValue(),key.getValue()));
+			ArrayList<String> strReturn = new ArrayList<String>();
+			for (KeyAbiotic key : mapper.selectByExample(null)) {
+				strReturn.add(key.getValue());
 			}
 
 			return strReturn;
@@ -103,30 +96,15 @@ public class KeyCharacteristicManagerImpl {
 			session.close();
 		}
 	}
-	public List<Container> getAllBioticAsString() {
+
+	public List<String> getAllBioticAsString() {
 
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		KeyBioticMapper mapper = session.getMapper(KeyBioticMapper.class);
 		try {
-			List<Container> strReturn = new ArrayList<Container>();
-			for(KeyBiotic key : mapper.selectByExample(null)){
-				strReturn.add(new Container(key.getValue(),key.getValue()));
-			}
-
-			return strReturn;
-		} finally {
-			session.close();
-		}
-	}
-	public List<Container> getAllGrainQualityAsString() {
-
-		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
-		KeyGrainQualityMapper mapper = session
-				.getMapper(KeyGrainQualityMapper.class);
-		try {
-			List<Container> strReturn = new ArrayList<Container>();
-			for(KeyGrainQuality key : mapper.selectByExample(null)){
-				strReturn.add(new Container(key.getValue(),key.getValue()));
+			List<String> strReturn = new ArrayList<String>();
+			for (KeyBiotic key : mapper.selectByExample(null)) {
+				strReturn.add(key.getValue());
 			}
 
 			return strReturn;
@@ -135,15 +113,30 @@ public class KeyCharacteristicManagerImpl {
 		}
 	}
 
-	public List<Container> getAllMajorGenesAsString() {
+	public List<String> getAllGrainQualityAsString() {
 
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
-		KeyMajorGenesMapper mapper = session
-				.getMapper(KeyMajorGenesMapper.class);
+		KeyGrainQualityMapper mapper = session.getMapper(KeyGrainQualityMapper.class);
 		try {
-			List<Container> strReturn = new ArrayList<Container>();
-			for(KeyMajorGenes key : mapper.selectByExample(null)){
-				strReturn.add(new Container(key.getValue(),key.getValue()));
+			List<String> strReturn = new ArrayList<String>();
+			for (KeyGrainQuality key : mapper.selectByExample(null)) {
+				strReturn.add(key.getValue());
+			}
+
+			return strReturn;
+		} finally {
+			session.close();
+		}
+	}
+
+	public List<String> getAllMajorGenesAsString() {
+
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		KeyMajorGenesMapper mapper = session.getMapper(KeyMajorGenesMapper.class);
+		try {
+			List<String> strReturn = new ArrayList<String>();
+			for (KeyMajorGenes key : mapper.selectByExample(null)) {
+				strReturn.add(key.getValue());
 			}
 
 			return strReturn;
@@ -155,13 +148,13 @@ public class KeyCharacteristicManagerImpl {
 	public void updateBiotic(KeyBiotic record) {
 		// TODO Auto-generated method stub
 
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		KeyBioticMapper mapper = session.getMapper(KeyBioticMapper.class);
-		try{	
+		try {
 			mapper.updateByPrimaryKey(record);
 			session.commit();
 
-		}finally{
+		} finally {
 			session.close();
 		}
 
@@ -171,11 +164,10 @@ public class KeyCharacteristicManagerImpl {
 		// TODO Auto-generated method stub
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		KeyBioticMapper mapper = session.getMapper(KeyBioticMapper.class);
-		try{
+		try {
 			mapper.deleteByPrimaryKey(id);
 			session.commit();
-		}
-		finally{
+		} finally {
 			session.close();
 		}
 	}
@@ -183,28 +175,28 @@ public class KeyCharacteristicManagerImpl {
 	public void addBioticKey(KeyBiotic record) {
 		// TODO Auto-generated method stub
 		// TODO Auto-generated method stub
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		KeyBioticMapper mapper = session.getMapper(KeyBioticMapper.class);
 
-		try{
+		try {
 			mapper.insert(record);
 			session.commit();
 
-		}finally{
+		} finally {
 			session.close();
 		}
 	}
 
 	public void addAbioticKey(KeyAbiotic record) {
 		// TODO Auto-generated method stub
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		KeyAbioticMapper mapper = session.getMapper(KeyAbioticMapper.class);
 
-		try{
+		try {
 			mapper.insert(record);
 			session.commit();
 
-		}finally{
+		} finally {
 			session.close();
 		}
 	}
@@ -212,13 +204,13 @@ public class KeyCharacteristicManagerImpl {
 	public void updateAbiotic(KeyAbiotic record) {
 		// TODO Auto-generated method stub
 
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		KeyAbioticMapper mapper = session.getMapper(KeyAbioticMapper.class);
-		try{	
+		try {
 			mapper.updateByPrimaryKey(record);
 			session.commit();
 
-		}finally{
+		} finally {
 			session.close();
 		}
 	}
@@ -227,11 +219,10 @@ public class KeyCharacteristicManagerImpl {
 		// TODO Auto-generated method stub
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		KeyAbioticMapper mapper = session.getMapper(KeyAbioticMapper.class);
-		try{
+		try {
 			mapper.deleteByPrimaryKey(id);
 			session.commit();
-		}
-		finally{
+		} finally {
 			session.close();
 		}
 	}
@@ -240,25 +231,24 @@ public class KeyCharacteristicManagerImpl {
 		// TODO Auto-generated method stub
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		KeyGrainQualityMapper mapper = session.getMapper(KeyGrainQualityMapper.class);
-		try{
+		try {
 			mapper.deleteByPrimaryKey(id);
 			session.commit();
-		}
-		finally{
+		} finally {
 			session.close();
 		}
 	}
 
 	public void addGrainQualityKey(KeyGrainQuality record) {
 		// TODO Auto-generated method stub
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		KeyGrainQualityMapper mapper = session.getMapper(KeyGrainQualityMapper.class);
 
-		try{
+		try {
 			mapper.insert(record);
 			session.commit();
 
-		}finally{
+		} finally {
 			session.close();
 		}
 	}
@@ -267,28 +257,27 @@ public class KeyCharacteristicManagerImpl {
 		// TODO Auto-generated method stub
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		KeyMajorGenesMapper mapper = session.getMapper(KeyMajorGenesMapper.class);
-		try{
+		try {
 			mapper.deleteByPrimaryKey(id);
 			session.commit();
-		}
-		finally{
+		} finally {
 			session.close();
 		}
 	}
 
 	public void addMajorGeneKey(KeyMajorGenes record) {
 		// TODO Auto-generated method stub
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		KeyMajorGenesMapper mapper = session.getMapper(KeyMajorGenesMapper.class);
 
-		try{
+		try {
 			mapper.insert(record);
 			session.commit();
 
-		}finally{
+		} finally {
 			session.close();
 		}
-		
+
 	}
 
 }

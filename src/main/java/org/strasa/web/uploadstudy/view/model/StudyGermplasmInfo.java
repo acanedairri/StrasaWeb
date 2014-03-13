@@ -22,9 +22,6 @@ import org.strasa.middleware.manager.StudyGermplasmManagerImpl;
 import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.GermplasmType;
-import org.strasa.middleware.model.KeyAbiotic;
-import org.strasa.middleware.model.KeyBiotic;
-import org.strasa.middleware.model.KeyGrainQuality;
 import org.strasa.middleware.model.KeyMajorGenes;
 import org.strasa.web.common.api.Encryptions;
 import org.strasa.web.common.api.ProcessTabViewModel;
@@ -129,21 +126,55 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		this.lstKnownGermplasm = lstKnownGermplasm;
 	}
 
-	private List<KeyBiotic> lstBiotics;
+	private List<String> lstBiotics;
 
-	private List<KeyAbiotic> lstAbiotics;
+	public List<String> getLstBiotics() {
+		return lstBiotics;
+	}
 
-	private List<KeyGrainQuality> lstGrainQualities;
+	public void setLstBiotics(List<String> lstBiotics) {
+		this.lstBiotics = lstBiotics;
+	}
+
+	private List<String> lstAbiotics;
+
+	public List<String> getLstAbiotics() {
+		return lstAbiotics;
+	}
+
+	public void setLstAbiotics(List<String> lstAbiotics) {
+		this.lstAbiotics = lstAbiotics;
+	}
+
+	private List<String> lstGrainQualities;
+
+	public List<String> getLstGrainQualities() {
+		return lstGrainQualities;
+	}
+
+	public void setLstGrainQualities(List<String> lstGrainQualities) {
+		this.lstGrainQualities = lstGrainQualities;
+	}
 
 	private List<KeyMajorGenes> lstAllMajorGenes;
 
-	private List<KeyBiotic> lstKeyBiotics;
+	public List<KeyMajorGenes> getLstAllMajorGenes() {
+		return lstAllMajorGenes;
+	}
 
-	private List<KeyAbiotic> lstKeyAbioitc;
+	public void setLstAllMajorGenes(List<KeyMajorGenes> lstAllMajorGenes) {
+		this.lstAllMajorGenes = lstAllMajorGenes;
+	}
 
-	private List<KeyMajorGenes> lstKeyMajorGenes;
+	private List<String> lstMajorGenes;
 
-	private List<KeyGrainQuality> lstKeyGrainQuality;
+	public List<String> getLstMajorGenes() {
+		return lstMajorGenes;
+	}
+
+	public void setLstMajorGenes(List<String> lstMajorGenes) {
+		this.lstMajorGenes = lstMajorGenes;
+	}
 
 	public List<GermplasmType> getLstGermplasmType() {
 		return lstGermplasmType;
@@ -244,11 +275,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 		data.clearCharactersticValue();
 		data.setGermplasmValue(subGermData);
-		data.setBiotic(lstKeyBiotics);
-		data.setAbiotic(lstKeyAbioitc);
-		data.setMajorGenes(lstKeyMajorGenes);
 
-		data.setGrainQuality(lstKeyGrainQuality);
 		data.setCharacteristicValues(new GermplasmCharacteristicMananagerImpl().getGermplasmByGermplasmName(subGermData.getGermplasmname()));
 		data.setSelectedGermplasmType(getGermplasmTypeById(data.getGermplasmtypeid()));
 		data.setKnown(true);
@@ -271,21 +298,18 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 		Runtimer timer = new Runtimer();
 		timer.start();
 		KeyCharacteristicManagerImpl keyMan = new KeyCharacteristicManagerImpl();
-		lstBiotics = keyMan.getAllBiotic();
-		lstAbiotics = keyMan.getAllAbiotic();
-		lstGrainQualities = keyMan.getAllGrainQuality();
-		lstAllMajorGenes = keyMan.getAllMajorGenes();
+
+		lstAbiotics = keyMan.getAllAbioticAsString();
+		lstBiotics = keyMan.getAllBioticAsString();
+		lstGrainQualities = keyMan.getAllGrainQualityAsString();
+		lstMajorGenes = keyMan.getAllMajorGenesAsString();
+
 		GermplasmTypeManagerImpl germMan = new GermplasmTypeManagerImpl();
 
 		lstGermplasmType = germMan.getAllGermplasmType();
 		GermplasmCharacteristicMananagerImpl germCharMan = new GermplasmCharacteristicMananagerImpl();
 		StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
 		List<Germplasm> lst = rawMan.getStudyGermplasmInfo(studyID, dataset.getId());
-
-		lstKeyBiotics = keyMan.getAllBiotic();
-		lstKeyAbioitc = keyMan.getAllAbiotic();
-		lstKeyMajorGenes = keyMan.getAllMajorGenes();
-		lstKeyGrainQuality = keyMan.getAllGrainQuality();
 
 		StudyGermplasmManagerImpl studyGermMan = new StudyGermplasmManagerImpl();
 
@@ -297,11 +321,6 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 				List<Germplasm> germplasmList = germplasmMan.getGermplasmListByName(germData.getGermplasmname());
 				for (Germplasm subGermData : germplasmList) {
 					GermplasmDeepInfoModel newData = new GermplasmDeepInfoModel(subGermData);
-					newData.setBiotic(lstKeyBiotics);
-					newData.setAbiotic(lstKeyAbioitc);
-					newData.setMajorGenes(lstKeyMajorGenes);
-
-					newData.setGrainQuality(lstKeyGrainQuality);
 					newData.setCharacteristicValues(germCharMan.getGermplasmByGermplasmName(germData.getGermplasmname()));
 					newData.setSelectedGermplasmType(getGermplasmTypeById(newData.getGermplasmtypeid()));
 					newData.setKnown(true);
@@ -338,10 +357,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 			} else {
 				GermplasmDeepInfoModel newData = new GermplasmDeepInfoModel(germData);
 				newData.setUserid(this.userID);
-				newData.setBiotic(lstKeyBiotics);
-				newData.setAbiotic(lstKeyAbioitc);
-				newData.setMajorGenes(lstKeyMajorGenes);
-				newData.setGrainQuality(lstKeyGrainQuality);
+
 				newData.setKnown(false);
 				newData.setRowIndex(lstStudyGermplasm.size());
 
