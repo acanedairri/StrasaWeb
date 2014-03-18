@@ -1,7 +1,4 @@
 <zk>
-
-	<style src="../css/main.css" />
-
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.distributionandextension.view.model.ExtGYCgrid')">
 
@@ -14,8 +11,8 @@
 							style="font-weight:bold" type="@bind(vm.type)"
 							model="@bind(vm.model)" />
 					</vlayout>
-					<splitter id="s2" collapse="before" />
-					<grid id="AreaSummaryByYearAndCountryExtension"
+				
+					<grid id="AreaSummaryByYearAndCountryExtension" hflex="1"
 						model="@load(vm.areaSummaryGYC)" height="400px"
 						sizedByContent="true">
 <!-- 						<auxhead sclass="category-center">
@@ -51,7 +48,7 @@
 							</auxheader>
 							<auxheader label="" colspan="4">
 								<button id="btnExportId"
-									label="Export to CSV" sclass="btn-blue"
+									label="Export to CSV" sclass="btn-success"
 									image="/images/export16.png"
 									onClick="@global-command('exportGrid', gridId='AreaSummaryByYearAndCountryExtension', grid=AreaSummaryByYearAndCountryExtension)" />
 							</auxheader>

@@ -8,7 +8,7 @@
 		viewModel="@id('vm') @init('org.strasa.web.distributionandextension.view.model.Index')"
 		height="100%" width="98%">
 <separator height="5px"></separator>
-		<tabbox id="tabBox">
+		<tabbox id="tabBox" sclass="page-content">
 			<tabs id="tabs"/>
 			<tabpanels id="tabPanels"/>
 		</tabbox>

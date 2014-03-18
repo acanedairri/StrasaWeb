@@ -234,11 +234,16 @@
 																	id="lblMsgUpload"
 																	visible="@load(vm.variableDataVisible)"
 																	value="@load(vm.dataFileName)" sclass="label-search" />
+													
 																<button
-																	id="uploadCSV" upload="true" label="Browse" image="/images/find.png"
-																	onUpload="@command('uploadCSV')" />
+																	id="uploadCSV" upload="true" label="Browse"
+																	image="/images/find.png"
+																	onUpload="@command('uploadCSV')" /> 
+
+																
 																<button
-																	label="Remove" onClick="@command('removeUpload') " image="/images/remove.png"
+																	label="Remove" onClick="@command('removeUpload') "
+																	image="/images/remove.png"
 																	visible="@load(vm.variableDataVisible)"
 																	sclass="btn-blue" />
 																<button
@@ -301,8 +306,8 @@
 							<label value=""></label>
 							<!-- 		<hlayout spacing="30px"> -->
 							<!-- <vlayout width="240px"> -->
-							<grid sizedByContent="true" vflex="1" height="100px"
-								model="@bind(vm.genotypeFileList)"
+							<grid sizedByContent="true" vflex="1"
+								height="100px" model="@bind(vm.genotypeFileList)"
 								emptyMessage="No genotype file uploaded...">
 								<columns>
 									<column label="" width="200px"></column>
@@ -322,8 +327,8 @@
 								</template>
 							</grid>
 							<div align="left">
-								<button id="uploadGenotype"
-									upload="true" label="Attach Genotype file..."
+								<button id="uploadGenotype" 
+									upload="true,native" label="Attach Genotype file..."
 									onUpload="@command('uploadGenotypeData')" />
 							</div>
 							<!-- </vlayout> -->

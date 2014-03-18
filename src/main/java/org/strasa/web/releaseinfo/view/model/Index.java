@@ -65,6 +65,7 @@ public class Index {
 		tabPanels.appendChild(newPanel);
 		tabs.appendChild(newTab);
 		tabBox.setSelectedPanel(newPanel);
+	
 
 	}
 

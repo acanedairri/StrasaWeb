@@ -1,3 +1,5 @@
+
+
 <vbox apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.BrowseGermplasm')">
 	<div align="center">
@@ -148,30 +150,30 @@
 				</tabbox>
 			</vbox>
 
-			<button label="Search" sclass="btn-blue" image="/images/find.png"
+			<button label="Search" sclass="btn-success" image="/images/find.png"
 				onClick="@command('SearchGermplasm')" />
 
 		</hlayout>
 	</div>
 
 
-	<groupbox mold="3d" width="98%">
+	<groupbox mold="3d">
 		<caption label="@load(vm.searchResultLabel)" />
-		<grid height="200px" model="@load(vm.germplasmList)" hflex="1"
-			emptyMessage="No Record Found" sizedByContent="true">
+		<grid height="200px" model="@load(vm.germplasmList)" zclass="none"
+			emptyMessage="No Record Found">
 
 			<columns>
-				<column label="Germplasm Name" hflex="1" />
+				<column label="Germplasm Name"  />
 				<column label="Other Name" />
 				<column label="Breeder" />
-				<column label="Germplasm Type" hflex="1" />
+				<column label="Germplasm Type" />
 
 			</columns>
 			<template name="model">
 				<row>
 					<toolbarbutton label="@load(each.germplasmname)"
 						onClick="@global-command('openGermplasmDetailInGermplasm', germplasmId=each.id,gname=each.germplasmname)"
-						class="grid-link" />
+						sclass="grid-link" />
 					<label value="@load(each.othername)" />
 					<label value="@load(each.breeder)" />
 					<label value="@load(each.remarks)" />

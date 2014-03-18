@@ -1,0 +1,55 @@
+<vlayout sclass="page-content" xmlns:n="native" spacing="0">
+	<!-- <div sclass="page-header">
+		<label value="Dashboard"/>
+		<a label="overview &amp; stats" iconSclass="z-icon-angle-double-right" sclass="subtitle"/>
+		</div> -->
+
+
+	<tabbox selectedIndex="@bind(vm.selectedIndex)">
+		<tabs>
+			<tab label="Test">
+
+			</tab>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<button label="Upload Image"
+					upload="true,maxsize=300">
+					<attribute name="onUpload"><![CDATA[
+	org.zkoss.util.media.Media media = event.getMedia();
+	if (media instanceof org.zkoss.image.Image) {
+		org.zkoss.zul.Image image = new org.zkoss.zul.Image();
+		image.setContent(media);
+		image.setParent(pics);
+	} else {
+		Messagebox.show("Not an image: " + media, "Error", Messagebox.OK,
+				Messagebox.ERROR);
+		break;
+	}
+]]></attribute>
+				</button>
+
+			</tabpanel>
+		</tabpanels>
+
+	</tabbox>
+
+
+
+
+	<separator />
+	<vlayout id="pics" height="360px" style="overflow:auto" />
+	<include src="alert.zul" />
+	<separator height="12px" />
+	<hlayout spacing="24px">
+
+	</hlayout>
+	<separator bar="true" />
+	<hlayout spacing="24px">
+
+	</hlayout>
+	<separator bar="true" />
+	<hlayout spacing="24px">
+
+	</hlayout>
+</vlayout>

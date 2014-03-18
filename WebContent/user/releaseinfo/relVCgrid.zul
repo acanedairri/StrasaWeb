@@ -1,7 +1,5 @@
 <zk>
 
-	<style src="../css/main.css" />
-
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.releaseinfo.view.model.RelVCgrid')">
 		<groupbox mold="3d">
@@ -20,7 +18,7 @@
 					</vlayout>
 
 
-					<grid id="NumberOfVarietybyCountryRelease"
+					<grid id="NumberOfVarietybyCountryRelease"  hflex="1"
 						model="@load(vm.noVC)" height="400px" sizedByContent="true">
 						<!-- 			<auxhead sclass="category-center">
 							<auxheader label="Variety by Country "
@@ -41,7 +39,7 @@
 							</auxheader>
 							<auxheader label="" colspan="2">
 								<button id="btnExportId"
-									label="Export to CSV" sclass="btn-blue"
+									label="Export to CSV" sclass="btn-success"
 									image="/images/export16.png"
 									onClick="@global-command('exportGrid', gridId='NumberOfVarietybyCountryRelease', grid=NumberOfVarietybyCountryRelease)" />
 							</auxheader>
