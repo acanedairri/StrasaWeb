@@ -3,6 +3,7 @@ package org.strasa.middleware.manager;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
+import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.factory.ConnectionFactory;
 import org.strasa.middleware.mapper.DbUserMapper;
 import org.strasa.middleware.model.DbUser;
@@ -13,6 +14,7 @@ import org.zkoss.zk.ui.select.annotation.WireVariable;
 public class UserManagerImpl {
 	@WireVariable
 	ConnectionFactory connectionFactory;
+	
 	public void addUser(DbUser record){
 		 
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
@@ -66,11 +68,11 @@ public class UserManagerImpl {
 		}
 		
 	}
-	public DbUser getUserById(int userID){
+	public DbUser getUserById(){
 		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
 		DbUserMapper DbUserMapper = session.getMapper(DbUserMapper.class);
 		try{
-			return  DbUserMapper.selectByPrimaryKey(userID);
+			return  DbUserMapper.selectByPrimaryKey(SecurityUtil.getDbUser().getId());
 			
 		}finally{
 			session.close();
@@ -108,8 +110,6 @@ public class UserManagerImpl {
 		}finally{
 			session.close();
 		}
-
-
 	}
 
 	
