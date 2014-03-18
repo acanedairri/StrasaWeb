@@ -9,7 +9,7 @@
 			<div align="center" apply="org.zkoss.bind.BindComposer"
 				viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditUser')"
 				validationMessages="@id('vmsgs')"
-				form="@id('fx') @load(vm.user) @save(vm.user, before='update') @validator('org.strasa.web.main.view.model.RegistrationValidator', retypedPassword=vm.retypedPassword, captcha=vm.captcha, captchaInput=vm.captchaInput)">
+				form="@id('fx') @load(vm.user) @save(vm.user, before='update') @validator('org.strasa.web.main.view.model.UpdateUserValidator', retypedPassword=vm.retypedPassword)">
 				<grid width="90%" oddRowSclass="false">
 					<columns width="200px">
 						<column label="Edit Profile" width="150px" />

@@ -6,6 +6,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
  
+
+import org.zkoss.bind.annotation.Init;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.IdSpace;
@@ -23,130 +25,139 @@ public class VariableListBoxes extends Div implements IdSpace {
     private static final long serialVersionUID = 5183321186606483396L;
      
     @Wire
-    private Listbox candidateLb;
+    private Listbox numericLb;
     @Wire
-    private Listbox chosenLb;
+    private Listbox responseLb;
+    
+    @Wire
+    private Listbox factorLb;
  
-    private ListModelList<String> candidateModel;
-    private ListModelList<String> chosenDataModel;
+    private ListModelList<String> numericModel;
+    private ListModelList<String> responseDataModel;
  
-    public VariableListBoxes() {
-//        Executions.createComponents("/widgets/listbox/dual_listbox/v_dualListbox.zul", this, null);
-//        Selectors.wireComponents(this, this, false);
-//        Selectors.wireEventListeners(this, this);
-//        chosenLb.setModel(chosenDataModel = new ListModelList<String>());
+    @Init
+    public void init(){
+    	  Selectors.wireComponents(this, this, false);
+    	  Selectors.wireEventListeners(this, this);
+//        typeOfDualBox = kind;
+//        if(list2.size()==0){
+//            // dualListBoxFactory is a spring factory which created the right list of handled objects.
+//            list2.addAll(dualListBoxFactory.findAllForType(kind));
+//        }
     }
- 
-    @Listen("onClick = #chooseBtn")
+    
+    @Listen("onClick = #chooseResponseBtn")
     public void chooseItem() {
         Events.postEvent(new ChooseEvent(this, chooseOne()));
     }
  
-    @Listen("onClick = #removeBtn")
+    @Listen("onClick = #removeResponseBtn")
     public void unchooseItem() {
         Events.postEvent(new ChooseEvent(this, unchooseOne()));
     }
  
     @Listen("onClick = #chooseAllBtn")
     public void chooseAllItem() {
-        for (int i = 0, j = candidateModel.getSize(); i < j; i++) {
-            chosenDataModel.add(candidateModel.getElementAt(i));
+        for (int i = 0, j = numericModel.getSize(); i < j; i++) {
+            responseDataModel.add(numericModel.getElementAt(i));
         }
-        candidateModel.clear();
+        numericModel.clear();
     }
  
     @Listen("onClick = #removeAllBtn")
     public void unchooseAll() {
-        for (int i = 0, j = chosenDataModel.getSize(); i < j; i++) {
-            candidateModel.add(chosenDataModel.getElementAt(i));
+        for (int i = 0, j = responseDataModel.getSize(); i < j; i++) {
+            numericModel.add(responseDataModel.getElementAt(i));
         }
-        chosenDataModel.clear();
+        responseDataModel.clear();
     }
  
     @Listen("onClick = #topBtn")
     public void top() {
         int i = 0;
-        Iterator<String> iterator = new LinkedHashSet<String>(chosenDataModel.getSelection()).iterator();
+        Iterator<String> iterator = new LinkedHashSet<String>(responseDataModel.getSelection()).iterator();
         while (iterator.hasNext()) {
             String selectedItem = iterator.next();
-            chosenDataModel.remove(selectedItem);
-            chosenDataModel.add(i++, selectedItem);
-            chosenDataModel.addToSelection(selectedItem);
+            responseDataModel.remove(selectedItem);
+            responseDataModel.add(i++, selectedItem);
+            responseDataModel.addToSelection(selectedItem);
         }
     }
  
     @Listen("onClick = #upBtn")
     public void up() {
-        Set<String> selected = chosenDataModel.getSelection();
+        Set<String> selected = responseDataModel.getSelection();
         if (selected.isEmpty())
             return;
-        int index = chosenDataModel.indexOf(selected.iterator().next());
+        int index = responseDataModel.indexOf(selected.iterator().next());
         if (index == 0 || index < 0)
             return;
-        String selectedItem = chosenDataModel.get(index);
-        chosenDataModel.remove(selectedItem);
-        chosenDataModel.add(--index, selectedItem);
-        chosenDataModel.addToSelection(selectedItem);
+        String selectedItem = responseDataModel.get(index);
+        responseDataModel.remove(selectedItem);
+        responseDataModel.add(--index, selectedItem);
+        responseDataModel.addToSelection(selectedItem);
  
     }
  
     @Listen("onClick = #downBtn")
     public void down() {
-        Set<String> selected = chosenDataModel.getSelection();
+        Set<String> selected = responseDataModel.getSelection();
         if (selected.isEmpty())
             return;
-        int index = chosenDataModel.indexOf(selected.iterator().next());
-        if (index == chosenDataModel.size() - 1 || index < 0)
+        int index = responseDataModel.indexOf(selected.iterator().next());
+        if (index == responseDataModel.size() - 1 || index < 0)
             return;
-        String selectedItem = chosenDataModel.get(index);
-        chosenDataModel.remove(selectedItem);
-        chosenDataModel.add(++index, selectedItem);
-        chosenDataModel.addToSelection(selectedItem);
+        String selectedItem = responseDataModel.get(index);
+        responseDataModel.remove(selectedItem);
+        responseDataModel.add(++index, selectedItem);
+        responseDataModel.addToSelection(selectedItem);
     }
  
     @Listen("onClick = #bottomBtn")
     public void bottom() {
-        Iterator<String> iterator = new LinkedHashSet<String>(chosenDataModel.getSelection()).iterator();
+        Iterator<String> iterator = new LinkedHashSet<String>(responseDataModel.getSelection()).iterator();
         while (iterator.hasNext()) {
             String selectedItem = iterator.next();
-            chosenDataModel.remove(selectedItem);
-            chosenDataModel.add(selectedItem);
-            chosenDataModel.addToSelection(selectedItem);
+            responseDataModel.remove(selectedItem);
+            responseDataModel.add(selectedItem);
+            responseDataModel.addToSelection(selectedItem);
         }
     }
  
     /**
-     * Set new candidate ListModelList.
+     * Set new numeric ListModelList.
      * 
-     * @param candidate
-     *            is the data of candidate list model
+     * @param numeric
+     *            is the data of numeric list model
      */
-    public void setModel(List<String> candidate) {
-        candidateLb.setModel(this.candidateModel = new ListModelList<String>(candidate));
-        chosenDataModel.clear();
+    public void setModel(List<String> numeric) {
+        numericLb.setModel(this.numericModel = new ListModelList<String>(numeric));
+        responseDataModel.clear();
     }
  
     /**
-     * @return current chosen data list
+     * @return current response data list
      */
-    public List<String> getChosenDataList() {
-        return new ArrayList<String>(chosenDataModel);
+    public List<String> getresponseDataList() {
+        return new ArrayList<String>(responseDataModel);
     }
  
     private Set<String> chooseOne() {
-        Set<String> set = candidateModel.getSelection();
+        Set<String> set = numericModel.getSelection();
+        System.out.println("addResponse");
         for (String selectedItem : set) {
-            chosenDataModel.add(selectedItem);
-            candidateModel.remove(selectedItem);
+            responseDataModel.add(selectedItem);
+            numericModel.remove(selectedItem);
         }
         return set;
     }
  
     private Set<String> unchooseOne() {
-        Set<String> set = chosenDataModel.getSelection();
+        Set<String> set = responseDataModel.getSelection();
+        System.out.println("removeResponse");
         for (String selectedItem : set) {
-            candidateModel.add(selectedItem);
-            chosenDataModel.remove(selectedItem);
+            numericModel.add(selectedItem);
+            responseDataModel.remove(selectedItem);
         }
         return set;
     }

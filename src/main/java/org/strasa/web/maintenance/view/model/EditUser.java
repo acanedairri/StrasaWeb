@@ -1,5 +1,6 @@
 package org.strasa.web.maintenance.view.model;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.UserManagerImpl;
 import org.strasa.web.main.view.model.RegistrationModel;
@@ -18,7 +19,7 @@ public class EditUser extends RegistrationModel {
 	public void init(@ContextParam(ContextType.VIEW) Component view){
 		userMan = new UserManagerImpl();
 		
-		setUser(userMan.getUserById(1));
+		setUser(userMan.getUserById());
 	}
 
 	private String dateFormat;
@@ -51,9 +52,10 @@ public class EditUser extends RegistrationModel {
 
 	@Command
 	public void update() {
-		String p = getUser().getPassword();
-//		getUser().setPassword(md5(p));
+		String passwd = DigestUtils.md5Hex(getUser().getPassword());
+		getUser().setPassword(passwd);
+		System.out.println("Saved Password:"+passwd);
 		userMan.updateUser(getUser());
-		Messagebox.show("Program successfully added to database!", "OK", Messagebox.OK, Messagebox.INFORMATION);
+		Messagebox.show("Program successfully edited profile!", "OK", Messagebox.OK, Messagebox.INFORMATION);
 	}
 }
