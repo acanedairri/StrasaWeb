@@ -1,5 +1,8 @@
 <zk>
-
+	<zscript>
+	String username = org.spring.security.model.SecurityUtil.getUserName();
+	String name=org.spring.security.model.SecurityUtil.getDbUser().getLastname()+" ,"+org.spring.security.model.SecurityUtil.getDbUser().getFirstname();
+</zscript>
 <window>
 	<div sclass="navbar" apply="applications2.NavbarComposer">
 		<!-- Brand Logo -->
@@ -21,15 +24,15 @@
 			</a>
 			<!-- User menu -->
 			<menubar sclass="user-menu light-blue">
-				<menu tooltiptext="John's Avatar" label="Welcome, Jason"
-					image="assets/avatars/user.jpg">
+				<menu tooltiptext="${name}" label="Welcome ${username}"
+					image="/images/user16.png">
 					<menupopup>
 						<menuitem label="Settings"
 							iconSclass="z-icon-cog" />
 						<menuitem label="Profile"
 							iconSclass="z-icon-user" />
 						<menuseparator />
-						<menuitem label="Logout"
+						<menuitem label="Logout" href="/j_spring_security_logout" 
 							iconSclass="z-icon-off" />
 					</menupopup>
 				</menu>
