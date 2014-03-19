@@ -1,6 +1,4 @@
 <zk>
-
-	<style src="../css/main.css" />
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.releaseinfo.view.model.RelVYgrid')">
 		<groupbox mold="3d">
@@ -34,7 +32,7 @@
 							</auxheader>
 							<auxheader label="" colspan="2">
 								<button id="btnExportId"
-									label="Export to CSV" sclass="btn-blue"
+									label="Export to CSV" sclass="btn-success"
 									image="/images/export16.png"
 									onClick="@global-command('exportGrid', gridId='NumberOfVarietybyYearRelease', grid=NumberOfVarietybyYearRelease)" />
 							</auxheader>

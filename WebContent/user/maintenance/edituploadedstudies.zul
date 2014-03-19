@@ -1,17 +1,22 @@
 <zk>
-	<style src="../css/main.css" />
-	<separator height="5px"></separator>
-	<panel title="Study" border="normal">
-		<panelchildren style="overflow: auto;padding:10px">
+
+  <div sclass="page-header">
+    <label value="Upload/Modify Study"/>
+    <!-- <a label="overview &amp; stats" iconSclass="z-icon-angle-double-right" sclass="subtitle"/> -->
+  </div>
+
+<!-- 	<panel title="Study" border="normal" sclass="panel-success">
+		<panelchildren style="overflow: auto;padding:10px"> -->
 			<div apply="org.zkoss.bind.BindComposer"
-				viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditUploadedStudies')">
+				viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditUploadedStudies')" sclass="page-content">
+
 
 				<div width="98%" align="left">
 					<button id="btnBackId" label="Back" visible="true"
-						sclass="btn-blue" src="/images/back.png" orient="horizontal"
+						sclass="btn-success" src="/images/back.png" orient="horizontal"
 						tooltiptext="Add Study" onClick="@command('loadMainDiv')" />
-					<button id="btnUploadId" label="Add New Study"
-						sclass="btn-blue" src="/images/add.png" orient="horizontal"
+					<button id="btnUploadId" label="Upload New Study"
+						sclass="btn-success" src="/images/add.png" orient="horizontal"
 						tooltiptext="Add Study" onClick="@command('addStudy')" />
 
 				</div>
@@ -71,6 +76,6 @@
 				</div>
 
 			</div>
-		</panelchildren>
-	</panel>
+<!--  		</panelchildren>
+</panel>  -->
 </zk>

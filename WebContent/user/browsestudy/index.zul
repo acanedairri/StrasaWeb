@@ -1,16 +1,12 @@
 <zk>
-	<style src="../css/main.css" />
 
-<!-- 	<div style="padding:10px 0px 15px 20px" align="left">
-		<label class="header-menu">Browse Study</label>
-	</div> -->
 	<div id="mainBrowseWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Index')"
-		height="98%" width="98%" align="center">
-	
+		height="98%" width="98%">
+
 		<separator height="5px"></separator>
 
-		<tabbox id="tabBox">
+		<tabbox id="tabBox" sclass="page-content">
 			<tabs id="tabs">
 				<tab label="Browse Study" image="/images/find.png" />
 			</tabs>
@@ -19,24 +15,26 @@
 					<vbox>
 						<div align="center" style="20px 0px 0px 20px">
 							<hlayout spacing="5px">
-								<label value="Study Name" sclass="label-search"/>
+								<label value="Study Name"
+									sclass="label-search" />
 								<textbox id="studyNameBox" />
-								<button label="Search" sclass="btn-blue"
+								<button label="Search" sclass="btn-success"
 									image="/images/find.png"
 									onClick="@global-command('searchByStudyName', studyName=studyNameBox.value)" />
-								<button label="Advanced Search" sclass="btn-blue"
-									image="/images/find2.png" tooltip="advancedSearch" />
+								<button label="Advanced Search"
+									sclass="btn-success" image="/images/find2.png"
+									tooltip="advancedSearch" />
 							</hlayout>
 						</div>
 
 						<tabbox style="overflow: Auto"
 							id="resultTabBox">
 							<tabs id="resultTabs">
-								<tab
-									label="Summary" />
+								<tab label="Summary" />
 							</tabs>
 							<tabpanels id="resultPanels">
 								<tabpanel>
+									<separator></separator>
 									<include
 										src="/user/browsestudy/summary.zul" progressing="true" />
 								</tabpanel>

@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+
+
+
 import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.manager.CrossStudyQueryManagerImpl;
 import org.strasa.middleware.manager.StudyManager;
@@ -23,7 +26,9 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Include;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Popup;
@@ -53,7 +58,7 @@ public class CrossStudyQuery extends StudyVariable {
 	private List<String> operatorStringStudy=Arrays.asList(new String[]{"Equal"});
 	private List<String> operatorNumber=Arrays.asList(new String[]{"Equal","Greater Than","Greater Than Equal","Less Than","Less Than Equal","Range"});
 	private List<String> operators;
-	private List<String> additionalColumns= new ArrayList<String>();
+	private List<StudyVariable> additionalColumns= new ArrayList<StudyVariable>();
 
 
 	public List<StudyVariable> getVariablelist() {
@@ -170,16 +175,16 @@ public class CrossStudyQuery extends StudyVariable {
 	}
 
 
-	public List<String> getAdditionalColumns() {
+
+
+
+	public List<StudyVariable> getAdditionalColumns() {
 		return additionalColumns;
 	}
 
-	public void setAdditionalColumns(List<String> additionalColumns) {
+	public void setAdditionalColumns(List<StudyVariable> additionalColumns) {
 		this.additionalColumns = additionalColumns;
 	}
-
-
-
 
 	public String getDataCategory() {
 		return dataCategory;
@@ -264,7 +269,10 @@ public class CrossStudyQuery extends StudyVariable {
 
 		try{
 			Bandbox variableSelected= (Bandbox) component.getFellow("studyVariable2");
-			additionalColumns.add(variableSelected.getValue());
+			StudyVariable v=new StudyVariable();
+			v.setVariablecode(variableSelected.getValue());
+			v.setDescription("");
+			additionalColumns.add(v);
 			variableSelected.setText("");
 			resetVariableList();
 		}catch(Exception e){
@@ -316,8 +324,9 @@ public class CrossStudyQuery extends StudyVariable {
 	public void reset(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
 		this.crossStudyFilterModelList= new ArrayList<CrossStudyQueryFilterModel>();
-		columnList = new ArrayList<String>();
 		dataList = new ArrayList<String[]>();
+		columnList = new ArrayList<String>();
+		newDataRow= new ArrayList<AcrossStudyData>();
 		Groupbox gridResult = (Groupbox) component.getFellow("crossResultId");
 		gridResult.setVisible(false);
 	}
@@ -379,9 +388,9 @@ public class CrossStudyQuery extends StudyVariable {
 				Groupbox gridResult = (Groupbox) component.getFellow("crossResultId");
 				gridResult.setVisible(true);
 
-				dataList = new ArrayList<String[]>();
-				columnList = new ArrayList<String>();
-				newDataRow= new ArrayList<AcrossStudyData>();
+				dataList.clear();
+				columnList.clear();
+				newDataRow.clear();
 
 
 				final CrossStudyQueryManagerImpl crossStudyQueryManagerImpl= new CrossStudyQueryManagerImpl(); 
@@ -433,8 +442,8 @@ public class CrossStudyQuery extends StudyVariable {
 				// new Field
 				if(additionalColumns.size() > 0){
 					List<String> s2= new ArrayList<String>();
-					for(String column:additionalColumns){
-						s2.add(column);
+					for(StudyVariable column:additionalColumns){
+						s2.add(column.getVariablecode());
 					}
 					Collections.sort(s2);
 					ArrayList<String> newFieldAdded=removeDuplicateField(s);
@@ -577,7 +586,7 @@ public class CrossStudyQuery extends StudyVariable {
 						newDataRow.add(dataRow);
 						//					System.out.print("\n");
 						dataList.add(newRow.toArray(new String[newRow.size()]));
-						//				System.out.println("\n ");
+						System.out.println("Test Across\n ");
 
 					}
 
@@ -586,6 +595,18 @@ public class CrossStudyQuery extends StudyVariable {
 					System.out.println(d.getGname()+ " "+d.getStudyname());
 				}
 					 */
+					
+					
+
+					Div resultGrid= (Div) component.getFellow("resultQuery"); 
+					resultGrid.getFirstChild().detach();
+					
+					Include gridResultQuery = new Include();
+					gridResultQuery.setSrc("/user/crossstudyquery/gridresult.zul");
+					gridResultQuery.setParent(resultGrid);
+					/*resultGrid.getFellows().add(gridResultQuery);*/
+
+
 				}else{
 					btnExport.setVisible(false);
 				}

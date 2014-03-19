@@ -1,17 +1,4 @@
 <zk>
-	<style>
-		.z-button { font-weight: bold; }
-
-		.heavy { font-weight:bold }
-
-		.myLink .z-toolbarbutton-cnt { color: #336633;
-		text-decoration:underline; font-size: 12px;
-		align:center;background-image: none}
-
-		.no-highlight tr.z-row-over td.z-row-inner { background:white; }
-
-
-	</style>
 
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.GermplasmDetail')">
@@ -115,10 +102,10 @@
 			<caption label="Studies where this germplasm is tested" />
 			<grid height="200px" model="@load(vm.studyTested)"
 				emptyMessage="No Record Found" sizedByContent="true"
-				class="no-highlight">
+				zclass="none">
 
 				<columns sizable="true">
-					<column label="Study Name" hflex="1" />
+					<column label="Study Name" width="200px"/>
 					<column label="Program" />
 					<column label="Project" />
 					<column label="Study Type" />

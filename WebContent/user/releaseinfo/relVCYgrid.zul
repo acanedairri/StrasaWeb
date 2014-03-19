@@ -1,9 +1,5 @@
 <zk>
 
-	<style src="../css/main.css" />
-
-
-
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.releaseinfo.view.model.RelVCYgrid')">
 
@@ -17,8 +13,8 @@
 							model="@bind(vm.model)" />
 
 					</vlayout>
-					<splitter id="s1" collapse="after" />
-					<grid id="NumberOfVarietybyCountryAndYearRelease"
+				
+					<grid id="NumberOfVarietybyCountryAndYearRelease"  hflex="1"
 						model="@load(vm.noVCY)" height="400px" sizedByContent="true">
 						<auxhead sclass="category-center">
 							<auxheader
@@ -45,7 +41,7 @@
 							</auxheader>
 							<auxheader label="" colspan="2">
 								<button id="btnExportId"
-									label="Export to CSV" sclass="btn-blue"
+									label="Export to CSV" sclass="btn-success"
 									image="/images/export16.png"
 									onClick="@global-command('exportGrid', gridId='NumberOfVarietybyCountryAndYearRelease', grid=NumberOfVarietybyCountryAndYearRelease)" />
 							</auxheader>

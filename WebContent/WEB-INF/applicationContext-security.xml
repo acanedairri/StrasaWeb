@@ -18,7 +18,8 @@
 		<intercept-url pattern="/index.zul" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<!-- secure pages -->
 		<intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
-		<intercept-url pattern="/user/**" access="ROLE_USER,ROLE_GUEST" />
+		<intercept-url pattern="/user/**" access="ROLE_USER" />
+		<intercept-url pattern="/newuser/**" access="ROLE_USER,ROLE_GUEST" />
 
 		<form-login login-page="/index.zul"
 			authentication-failure-url="/index.zul?login_error=1" />

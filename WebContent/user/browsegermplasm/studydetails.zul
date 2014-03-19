@@ -1,12 +1,8 @@
-<?page title="new page title" contentType="text/html;charset=UTF-8"?>
-<?link rel="stylesheet" type="text/css" href="css/main.css"?>
 <zk>
 
-	<window title="StudyInfo" visible="false"
-		position="center,center" closable="true"
+	<window title="StudyInfo" visible="false" closable="true"
 		action="show: slideDown;hide: slideUp" border="normal"
 		width="98%" height="98%">
-
 	</window>
 
 

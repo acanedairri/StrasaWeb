@@ -16,11 +16,14 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Tab;
+import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tabpanel;
+import org.zkoss.zul.Timer;
 
 import com.mysql.jdbc.StringUtils;
 
@@ -52,8 +55,7 @@ public class Index {
 	private UploadData uploadData;
 	private int selectedIndex = 1;
 	private boolean[] tabDisabled = { false, true, true, true, true };
-	private long studyID = 7;
-	private boolean isRaw;
+
 	private ProcessTabViewModel uploadModel;
 
 	public int getSelectedIndex() {
@@ -97,14 +99,14 @@ public class Index {
 	}
 
 	@AfterCompose
-	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
+	public void afterCompose(@ContextParam(ContextType.VIEW) final Component view) {
 
 		Selectors.wireComponents(view, this, false);
 
 		// wire event listener
 		// Selectors.wireEventListeners(view, this);
 
-		arrTabPanels.add(tabpanel1);
+//		arrTabPanels.add(tabpanel1); 
 
 		arrTabPanels.add(tabpanel2);
 
@@ -113,7 +115,20 @@ public class Index {
 		arrTabPanels.add(tabpanel4);
 
 		arrTabPanels.add(tabpanel5);
-		Events.sendEvent("onSelect", tab1, tab1);
+//		selectedIndex = 0;
+		
+		Timer timer = new Timer(10);
+		timer.setRepeats(false);
+		timer.setPage(view.getPage());
+		timer.addEventListener("onTimer", new EventListener() {
+			public void onEvent(Event event) throws Exception {
+				Events.sendEvent("onSelect", view.getFellow("tab6"), view.getFellow("tab6"));
+				System.out.println("SELECT");
+				selectedIndex = 0;
+
+			}
+		});
+		
 
 	}
 
@@ -148,8 +163,7 @@ public class Index {
 			return;
 		}
 		if (selectedIndex == 0) {
-			isRaw = uploadData.isRaw;
-			studyID = uploadData.getStudyID();
+			
 			uploadModel = uploadData;
 			System.out.println("IsRaw: " + uploadData.isDataReUploaded + " ");
 
