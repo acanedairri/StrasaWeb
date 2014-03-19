@@ -41,15 +41,13 @@
 				</rows>
 			</grid>
 			<separator width="200px"></separator>
-			<div align="right" width="300px">
+			<div align="center" width="300px">
 				<hbox>
 					<button type="reset" label="Reset" sclass="btn-danger"
 						 image="images/reset.png" />
 					<button type="submit" label="Login"
 						image="images/login.png" sclass="btn-success" />
 				</hbox>
-			</div>
-			<div align="right" width="300px">
 
 				<toolbarbutton label="Create an account"
 					style="color:#336633; font-size: 12px;" href="registration.zul" />
