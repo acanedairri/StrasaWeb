@@ -1,5 +1,5 @@
 <zk>
-	<window id="editReleaseInfo" apply="org.zkoss.bind.BindComposer"
+	<window id="editReleaseInfo" apply="org.zkoss.bind.BindComposer" sclass="page-content"
 		style="padding:10px"
 		viewModel="@id('vm') @init('org.strasa.web.releaseinfo.view.model.EditReleaseInfo')">
 
@@ -7,7 +7,7 @@
 		<tabbox id="tb">
 			<tabs>
 				<tab label="Release Info" />
-				<tab label="Add new" />
+				<tab label="Add New Record" />
 			</tabs>
 			<tabpanels width="100%">
 				<tabpanel style="overflow: auto">

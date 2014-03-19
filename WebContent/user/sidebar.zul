@@ -35,7 +35,7 @@
 							iconSclass="z-icon-leaf" />
 						<navitem label="Extension" id="uploadextension"
 							iconSclass="z-icon-leaf" />
-						<navitem label="Release"
+						<navitem label="Release" id="uploadrelease"
 							iconSclass="z-icon-leaf" />
 					</nav>
 					<nav label="Browse"

@@ -1,19 +1,19 @@
 <zk xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:zk="http://www.zkoss.org/2005/zk">
 
-	<window id="editExtensionWindow" apply="org.zkoss.bind.BindComposer"
+	<window id="editExtensionWindow" apply="org.zkoss.bind.BindComposer" sclass="page-content"
 		style="padding:10px"
 		viewModel="@id('vm') @init('org.strasa.web.distributionandextension.view.model.EditDistributionAndExtension')">
 
 		<style src="../css/main.css" />
 		<tabbox id="tb">
 			<tabs>
-				<tab label="Distribution and Extension" />
-				<tab label="Add new" />
+				<tab label="Distribution and Extension List" />
+				<tab label="Add New Record" />
 			</tabs>
 			<tabpanels width="100%">
 				<tabpanel style="overflow: auto">
-							<grid height="600px" width="95%"
+							<grid height="600px" hflex="1"
 								model="@load(vm.rowList) @template(each.editingStatus ? 'editable' : 'noneditable')"
 								sizedByContent="true" emptyMessage="No Record Found">
 								<columns>
@@ -27,13 +27,13 @@
 									<column label="Data Source" />
 									<column label="Seed Availability" />
 									<column label="ASD"
-										tooltip="Amount Seeds Distributed" />
+										tooltiptext="Amount Seeds Distributed" />
 									<column label="ASP"
 										tooltiptext="Amount Seeds Produced" />
 									<column label="No. Farmers Adopted"
 										tooltiptext="Number Farmers Adopted" />
 									<column label="Action"
-										width="150px" />
+										hflex="1" />
 								</columns>
 								<template name="editable">
 									<row>

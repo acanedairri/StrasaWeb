@@ -45,6 +45,9 @@ public class SidebarComposer extends SelectorComposer<Component>  {
 	
 	@Wire
 	Navitem uploadextension;
+	
+	@Wire
+	Navitem uploadrelease;
 
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
@@ -133,6 +136,15 @@ public class SidebarComposer extends SelectorComposer<Component>  {
 		Div d=(Div) sidebar.getRoot().query("#contentui");
 		d.getChildren().clear();
 		Executions.createComponents("../user/distributionandextension/editdistributionandextension.zul", d, null);
+		
+	}
+	
+	
+	@Listen("onClick = #uploadrelease")
+	public void uploadrelease(){
+		Div d=(Div) sidebar.getRoot().query("#contentui");
+		d.getChildren().clear();
+		Executions.createComponents("../user/releaseinfo/editreleaseinfo.zul", d, null);
 		
 	}
 

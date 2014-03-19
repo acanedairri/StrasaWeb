@@ -6,7 +6,7 @@
 <window>
 	<div sclass="navbar" apply="applications2.NavbarComposer">
 		<!-- Brand Logo -->
-		<a label="Data Management and Analysis System"
+		<a label="Data Management and Analysis System (DMAS) v1.0"
 			sclass="pull-left navbar-brand" iconSclass="z-icon-leaf" />
 			<!-- Navbar -->
 		<hlayout sclass="nav-user pull-right" spacing="0">
