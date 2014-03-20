@@ -1,8 +1,6 @@
 package org.strasa.web.uploadstudy.view.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.strasa.web.common.api.ProcessTabViewModel;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -20,8 +18,8 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Include;
 import org.zkoss.zul.Tab;
-import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tabpanel;
 import org.zkoss.zul.Timer;
 
@@ -106,7 +104,7 @@ public class Index {
 		// wire event listener
 		// Selectors.wireEventListeners(view, this);
 
-//		arrTabPanels.add(tabpanel1); 
+		// arrTabPanels.add(tabpanel1);
 
 		arrTabPanels.add(tabpanel2);
 
@@ -115,8 +113,8 @@ public class Index {
 		arrTabPanels.add(tabpanel4);
 
 		arrTabPanels.add(tabpanel5);
-//		selectedIndex = 0;
-		
+		// selectedIndex = 0;
+
 		Timer timer = new Timer(10);
 		timer.setRepeats(false);
 		timer.setPage(view.getPage());
@@ -128,7 +126,6 @@ public class Index {
 
 			}
 		});
-		
 
 	}
 
@@ -147,10 +144,18 @@ public class Index {
 	public void showzulfile(@BindingParam("zulFileName") String zulFileName, @BindingParam("target") Tabpanel panel) {
 		System.out.println(zulFileName);
 		if (panel != null && panel.getChildren().isEmpty()) {
-			Map arg = new HashMap();
-			arg.put("uploadModel", uploadModel);
 
-			Executions.createComponents(zulFileName, panel, arg);
+			Include include = new Include();
+			include.setDynamicProperty("uploadModel", uploadModel);
+			include.setSrc(zulFileName);
+			// include.setMode("defer");
+			/*
+			 * Map arg = new HashMap(); arg.put("uploadModel", uploadModel);
+			 * 
+			 * Executions.createComponents(zulFileName, panel, arg);
+			 */
+
+			include.setParent(panel);
 
 		}
 	}
@@ -163,7 +168,7 @@ public class Index {
 			return;
 		}
 		if (selectedIndex == 0) {
-			
+
 			uploadModel = uploadData;
 			System.out.println("IsRaw: " + uploadData.isDataReUploaded + " ");
 

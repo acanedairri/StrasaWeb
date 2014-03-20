@@ -61,6 +61,7 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Include;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tabpanel;
 import org.zkoss.zul.Window;
@@ -76,6 +77,9 @@ public class RawDataView extends ProcessTabViewModel {
 
 	@Wire("#divRawData")
 	Div divRawData;
+
+	@Wire("#datagrid")
+	Div divDatagrid;
 	private List<String> columnList = new ArrayList<String>();
 	public String dataFileName;
 	private List<String[]> dataList = new ArrayList<String[]>();
@@ -183,7 +187,7 @@ public class RawDataView extends ProcessTabViewModel {
 		this.activePage = activePage;
 	}
 
-	public boolean isVariableDataVisible = false;
+	public boolean isVariableDataVisible = true;
 
 	private Study study;
 
@@ -480,6 +484,7 @@ public class RawDataView extends ProcessTabViewModel {
 			Executions.createComponents("/user/browsestudy/data.zul", divRawData, arg);
 
 		}
+		isVariableDataVisible = false;
 	}
 
 	@GlobalCommand
@@ -653,6 +658,12 @@ public class RawDataView extends ProcessTabViewModel {
 		}
 		activePage = 0;
 		CSVReader reader;
+
+		if (!divDatagrid.getChildren().isEmpty())
+			divDatagrid.getFirstChild().detach();
+		Include incCSVData = new Include();
+		incCSVData.setSrc("/user/updatestudy/csvdata.zul");
+		incCSVData.setParent(divDatagrid);
 		try {
 			reader = new CSVReader(new FileReader(tempFile.getAbsolutePath()));
 			List<String[]> rawData = reader.readAll();

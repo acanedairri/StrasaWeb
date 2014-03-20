@@ -282,9 +282,19 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	}
 
 	@AfterCompose
-	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
+	public void afterCompose(@ContextParam(ContextType.VIEW) final Component view) {
 		Selectors.wireComponents(view, this, false);
-		BindUtils.postNotifyChange(null, null, this, "*");
+		// BindUtils.postNotifyChange(null, null, this, "*");
+
+		/*
+		 * Timer timer = new Timer(0); timer.setRepeats(false);
+		 * timer.setPage(view.getPage()); timer.addEventListener("onTimer", new
+		 * EventListener() { public void onEvent(Event event) throws Exception {
+		 * 
+		 * (Combobox)view.getFellow("dRow2").setEnabled(false);
+		 * view.getFellow("dRow3").setVisible(false);
+		 * view.getFellow("dRow4").setVisible(false); } });
+		 */
 	}
 
 	public String getLabelDate() {

@@ -26,7 +26,7 @@
 
 					<tab label="Data" id="tab1"
 						disabled="@load(vm.tabDisabled[self.index])"
-						onSelect="@command('showzulfile', zulFileName='/user/updatestudy/modifydata.zul', target=self.linkedPanel)" />
+					 />
 
 					<tab label="Study Site" id="tab2"
 						disabled="@bind(vm.tabDisabled[self.index])"
@@ -45,7 +45,8 @@
 				</tabs>
 				<tabpanels>
 					<tabpanel id="tabpanel1">
-
+<include mode="defer"
+							src="/user/updatestudy/modifydata.zul" uploadModel = "@bind(vm.uploadModel)"/>
 					</tabpanel>
 					<tabpanel id="tabpanel2"></tabpanel>
 					<tabpanel id="tabpanel3"></tabpanel>
