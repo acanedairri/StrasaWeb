@@ -1,3 +1,22 @@
+/*
+ * Data Management and Analysis (DMAS) - International Rice Research Institute 2013-2015
+ * 
+ *   DMAS is an opensource Data management and statistical analysis mainly for STRASA Project: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *  DMAS is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *   along with DMAS.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * 
+ * 
+ */
 package org.strasa.web.uploadstudy.view.model;
 
 import java.util.ArrayList;
@@ -18,6 +37,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabpanel;
@@ -164,7 +184,11 @@ public class Index {
 	@GlobalCommand("nextTab")
 	public void nextTab(@BindingParam("model") ProcessTabViewModel uploadData) {
 
-		if (!uploadData.validateTab()) {
+		Clients.showBusy("Processing... Please wait.");
+		boolean valid = !uploadData.validateTab();
+		Clients.clearBusy();
+
+		if (!valid) {
 			return;
 		}
 		if (selectedIndex == 0) {
