@@ -630,6 +630,7 @@ public class UploadData extends ProcessTabViewModel {
 		Include incCSVData = new Include();
 		incCSVData.setSrc("/user/updatestudy/csvdata.zul");
 		incCSVData.setParent(divDatagrid);
+		gbUploadData.invalidate();
 		try {
 			reader = new CSVReader(new FileReader(tempFile.getAbsolutePath()));
 			List<String[]> rawData = reader.readAll();
