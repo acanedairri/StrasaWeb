@@ -244,7 +244,7 @@ public class DataSetTabView {
 		}
 
 		Clients.showBusy("Processing... Please wait.");
-		boolean valid = !uploadData.validateTab();
+		boolean valid = uploadData.validateTab();
 		Clients.clearBusy();
 
 		if (!valid) {

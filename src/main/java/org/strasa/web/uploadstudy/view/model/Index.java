@@ -185,7 +185,7 @@ public class Index {
 	public void nextTab(@BindingParam("model") ProcessTabViewModel uploadData) {
 
 		Clients.showBusy("Processing... Please wait.");
-		boolean valid = !uploadData.validateTab();
+		boolean valid = uploadData.validateTab();
 		Clients.clearBusy();
 
 		if (!valid) {
