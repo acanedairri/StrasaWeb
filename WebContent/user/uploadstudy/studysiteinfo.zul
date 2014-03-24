@@ -169,8 +169,14 @@
 								</template>
 							</combobox>
 							 <combobox model="@load(vm.soilTypes)" width="99%"
-                            value="@bind(each.soiltype)" readonly="true"/>
-					<spinner constraint="no empty,min 4 max 12"  value="@bind(each.soilph)"
+                            value="@bind(each.soiltype)" readonly="true"> 
+                            <template name="model">
+												<comboitem
+													value="@load(each)" label="@load(each)" />
+											</template>
+                            
+                            </combobox>
+					<doublespinner constraint="no empty,min 4 max 12"  value="@bind(each.soilph)"
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)" />
 						</row>

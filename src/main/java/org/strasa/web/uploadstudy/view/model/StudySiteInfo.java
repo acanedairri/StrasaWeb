@@ -27,6 +27,7 @@ import java.util.Map;
 import org.strasa.middleware.manager.EcotypeManagerImpl;
 import org.strasa.middleware.manager.LocationManagerImpl;
 import org.strasa.middleware.manager.PlantingTypeManagerImpl;
+import org.strasa.middleware.manager.SoilTypeManagerImpl;
 import org.strasa.middleware.manager.StudyAgronomyManagerImpl;
 import org.strasa.middleware.manager.StudyDesignManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
@@ -57,6 +58,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Grid;
@@ -580,6 +582,8 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	@Init
 	public void init(@ExecutionArgParam("uploadModel") ProcessTabViewModel uploadModel) {
 
+		Clients.showBusy("Loading data please wait...");
+
 		this.initValues(uploadModel);
 		studySiteMan = new StudySiteManagerImpl(isRaw);
 		studyAgroMan = new StudyAgronomyManagerImpl();
@@ -688,6 +692,8 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 		updateDesignInfo(0);
 
+		soilTypes = new SoilTypeManagerImpl().getAllSoilType();
+		Clients.clearBusy();
 	}
 
 	@Command
