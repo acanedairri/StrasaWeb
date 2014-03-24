@@ -6,21 +6,22 @@ import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
 import org.strasa.web.utilities.InputTransform;
+import org.zkoss.zk.ui.Sessions;
 public class TestRServeManager {
 
 	private InputTransform inputTransform;
 	
 	private static String BSLASH = "\\";
 	private static String FSLASH = "/";
-	private static String PATH1 = System.getProperty("user.dir")+ System.getProperty("file.separator") + "sample_datasets" + System.getProperty("file.separator");
-	public static String DATA_PATH = PATH1.replace(BSLASH, FSLASH);
+	private static String OUTPUTFOLDER_PATH =  Sessions.getCurrent().getWebApp().getRealPath("outputfolder")+ System.getProperty("file.separator");
+	public static String DATA_PATH = System.getProperty("user.dir")+ System.getProperty("file.separator") + "sample_datasets" + System.getProperty("file.separator");
 	
 	public void testSingleEnvironment(RConnection c) {
 		
-		String outFileName = DATA_PATH + "SEA_output.txt";
-		String resultFolderPath = DATA_PATH;
+		String resultFolderPath = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH);
+		String outFileName = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH) + "SEA_output.txt";
 		
-		String dataFileName = DATA_PATH + "RCB_ME.csv";
+		String dataFileName = DATA_PATH.replace(BSLASH, FSLASH) + "RCB_ME.csv";
 		int design = 0;
 		String[] respvars = {"Yield"};
 		String environment = "Env";
@@ -49,7 +50,7 @@ public class TestRServeManager {
 		boolean excludeControls = false;
 		boolean genoPhenoCorrelation = false;
 		
-		System.out.println(PATH1);
+		System.out.println(OUTPUTFOLDER_PATH);
 	    doSingleEnvironmentAnalysis(dataFileName, outFileName, resultFolderPath, design, respvars, environment, environmentLevels,
 				genotype, block, rep, row, column, descriptiveStat, varianceComponents, boxplotRawData, histogramRawData, heatmapResiduals, heatmapRow, 
 				heatmapColumn, diagnosticPlot, genotypeFixed, performPairwise, pairwiseAlpha, genotypeLevels, controlLevels, compareControl, performAllPairwise,

@@ -18,6 +18,8 @@ public class Specifications {
 	
 	private String resultRServe;
 	private List<String> typeOfDesignList;
+	private boolean isVariableDataVisible;
+	private String dataFileName;
 
 	public String getResultRServe() {
 		return resultRServe;
@@ -26,13 +28,25 @@ public class Specifications {
 	public void setResultRServe(String resultRServe) {
 		this.resultRServe = resultRServe;
 	}
+	
+	public String getDataFileName() {
+		return dataFileName;
+	}
+	
+	public boolean isVariableDataVisible() {
+		return isVariableDataVisible;
+	}
+
+	public void setVariableDataVisible(boolean isVariableDataVisible) {
+		this.isVariableDataVisible = isVariableDataVisible;
+	}
 
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
 		typeOfDesignList = getTypeOfDesignList();
 	}
-	
+
 	@NotifyChange("*")
 	@Command("runRserve")
 	public void DisplayGermplasmInfo(@ContextParam(ContextType.COMPONENT) Component component,
