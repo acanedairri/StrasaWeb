@@ -203,6 +203,7 @@ public class RawDataView extends ProcessTabViewModel {
 	@NotifyChange("*")
 	public void setActivePage(int activePage) {
 		System.out.println("pageSize");
+		reloadCsvGrid();
 		this.activePage = activePage;
 	}
 
@@ -660,29 +661,40 @@ public class RawDataView extends ProcessTabViewModel {
 
 	}
 
+	public void reloadCsvGrid() {
+
+		System.out.println("RELOAD CSV CALLED");
+		if (!divDatagrid.getChildren().isEmpty())
+			divDatagrid.getFirstChild().detach();
+		if (this.isUpdateMode) {
+			Include incCSVData = new Include();
+			incCSVData.setSrc("/user/browsestudy/data.zul");
+			incCSVData.setParent(divDatagrid);
+			incCSVData.setDynamicProperty("studyId", this.studyID);
+			incCSVData.setDynamicProperty("dataset", this.dataset.getId());
+			incCSVData.setDynamicProperty("dataType", (this.isRaw) ? "rd" : "dd");
+
+		}
+
+		else {
+			Include incCSVData = new Include();
+			incCSVData.setSrc("/user/updatestudy/csvdata.zul");
+			incCSVData.setParent(divDatagrid);
+		}
+
+		gbUploadData.invalidate();
+	}
+
 	@NotifyChange("*")
 	@Command("refreshCsv")
 	public void refreshCsv() {
-		if (this.isUpdateMode) {
-			Map arg = new HashMap();
-			arg.put("studyId", this.studyID);
-			arg.put("dataset", this.dataset.getId());
-			divRawData.getChildren().clear();
-			if (this.isRaw)
-				Executions.createComponents("/user/browsestudy/rawdata.zul", divRawData, arg);
-			else {
-				Executions.createComponents("/user/browsestudy/deriveddata.zul", divRawData, arg);
-			}
-			return;
-		}
+
 		activePage = 0;
 		CSVReader reader;
 
-		if (!divDatagrid.getChildren().isEmpty())
-			divDatagrid.getFirstChild().detach();
-		Include incCSVData = new Include();
-		incCSVData.setSrc("/user/updatestudy/csvdata.zul");
-		incCSVData.setParent(divDatagrid);
+		reloadCsvGrid();
+		if (this.isUpdateMode)
+			return;
 		try {
 			reader = new CSVReader(new FileReader(tempFile.getAbsolutePath()));
 			List<String[]> rawData = reader.readAll();

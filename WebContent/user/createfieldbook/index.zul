@@ -14,11 +14,66 @@
 				<rows>
 					<row>
 						<label value="Site Name"></label>
-						<textbox></textbox>
+						<textbox value="@bind(vm.site.sitename)"></textbox>
 					</row>
 					<row>
 						<label value="Site Location"></label>
-						<textbox></textbox>
+						<bandbox  id = "bbox_location" 
+								value="@bind(vm.site.location.locationname)"
+								onChange="@command('doLocationSearch',id=forEachStatus.index)"
+								instant="true" autodrop="true"
+								onOpen="@command('autoFillBandbox', id=forEachStatus.index) "
+								onClick="@command('openBandbox', id=forEachStatus.index)" width = "80%">
+								<bandpopup>
+									<vbox width="40%">
+									
+										<grid
+											model="@load(each.filteredLocations)"
+											emptyMessage="No location is available. Please add your location."
+											sizedByContent="true" hflex="true">
+											<columns>
+												<column
+													label="Location" />
+												<column label="Country" />
+												<column
+													label="Province" />
+												<column label="Region" />
+												<column
+													label="Altitude" />
+												<column
+													label="Latitude" />
+												<column
+													label="Weather Station" />
+											</columns>
+											<template name="model">
+												<row>
+													<toolbarbutton
+														label="@load(each.locationname)" width="99%"
+														onClick="@command('setLocationRow', id = each.id)" />
+													<label
+														value="@bind(each.country)" />
+
+													<label
+														value="@bind(each.province)" />
+
+													<label
+														value="@bind(each.region)" />
+
+													<label
+														value="@bind(each.altitude)" />
+
+													<label
+														value="@bind(each.latitude)" />
+
+													<label
+														value="@bind(each.weatherstation)" />
+
+												</row>
+											</template>
+										</grid>
+									</vbox>
+								</bandpopup>
+							</bandbox>
 					</row>
 					<row>
 						<label value="Year"></label>
