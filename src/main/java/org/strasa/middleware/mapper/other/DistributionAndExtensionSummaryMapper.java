@@ -95,5 +95,5 @@ public interface DistributionAndExtensionSummaryMapper {
 	List<SummaryModel> selectdistributionandextensionDetailOfVariety(@Param("year")String year, @Param("countryrelease")String countryrelease, @Param("programid")Integer programid,@Param("germplasmname")String germplasmname);
 
 	@Select("select distinct CONCAT(t2.name,'-',t1.countryextension ) as programName from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid,germplasmname,countryextension order by t2.name,countryextension,yearextension")
-	List<ReleaseInfoSummaryModel> selectCategoryByCountry();
+	List<SummaryModel> selectCategoryByCountry();
 }

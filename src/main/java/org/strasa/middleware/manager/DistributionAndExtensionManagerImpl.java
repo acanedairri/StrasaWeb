@@ -222,11 +222,11 @@ public class DistributionAndExtensionManagerImpl {
 		
 		int i=0;
 		try{
-			List<ReleaseInfoSummaryModel> toreturn= mapper.selectCategoryByCountry();
+			List<SummaryModel> toreturn= mapper.selectCategoryByCountry();
 			String[] program = new String[toreturn.size()];
-			for(ReleaseInfoSummaryModel sm: toreturn){
-				program[i]=sm.getProgramName();
+			for(SummaryModel sm: toreturn){
 				System.out.println(sm.getProgramName());
+				program[i]=sm.getProgramName();
 				i++;
 			}
 			return program;
