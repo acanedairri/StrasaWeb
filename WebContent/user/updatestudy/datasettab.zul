@@ -10,11 +10,11 @@
 				<textbox value="@bind(vm.uploadModel.dataset.title)"></textbox>
 				<button id="btnSaveDataset" label="Rename"
 					onClick="@command('saveDataset')" image="/images/save16.png"
-					sclass="btn-blue">
+					sclass="btn-success">
 				</button>
 				<button id="btnDeleteDataset" label="Delete Dataset"
 					onClick="@command('deleteDataset')" image="/images/Delete16.png"
-					sclass="btn-plain">
+					sclass="btn-danger">
 				</button>
 			
 			</hlayout>

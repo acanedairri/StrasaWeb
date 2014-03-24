@@ -5,12 +5,8 @@
 	<div width="100%" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.updatestudy.view.RawDataView')">
 
-
-		<vlayout spacing="15px">
-			
-	
-			<groupbox id="gbUploadRawData" mold="3d" width="100%">
-				<caption label="" />
+			<groupbox id="gbUploadRawData" width="100%">
+				<!-- <caption label="" /> -->
 				<hlayout spacing="30px" height="" width="" vflex="true" hflex="true">
 
 					<vlayout width="100%" hflex="true" vflex="true">
@@ -83,16 +79,16 @@
 			
 	
 
-		</vlayout>
+	
 		<separator spacing="20px" />
-		<hlayout style="float:center;">
+		<div align="center">
 
 			<button label="Save"
-				onClick="@global-command('nextTab',model=vm)" image="/images/save16.png" sclass="btn-blue">
+				onClick="@global-command('nextTab',model=vm)" image="/images/save16.png" sclass="btn-warning" height="40px"
+								width="150px">
 			</button>
 
-		</hlayout>
-		<separator spacing="40px" />
+		</div>
 	</div>
 
 </zk>

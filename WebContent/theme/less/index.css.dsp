@@ -952,15 +952,17 @@ a:focus {
   color: #6fb3e0;
   line-height: 24px;
 }
-.z-button {
+.theme-button .z-button {
   position: relative;
   padding: 3px 12px;
    ${ t:borderRadius('0') };
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   min-height: 0;
   color: #FFF !important;
+  font-weight:normal;
    ${ t:applyCSS3('transition', 'all ease 0.15s 0') };
 }
+
 .z-button:active {
   top: 1px;
   left: 1px;
@@ -1020,6 +1022,14 @@ a:focus {
 .btn-info:focus {
   background-color: #6fb3e0 !important;
   border-color: #6fb3e0;
+  position: relative;
+  padding: 3px 12px;
+   ${ t:borderRadius('0') };
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  min-height: 0;
+  color: #FFF !important;
+  font-weight:bold;
+   ${ t:applyCSS3('transition', 'all ease 0.15s 0') };
 }
 .btn-info:hover,
 .btn-info.open {
@@ -1036,6 +1046,14 @@ a:focus {
 .btn-success:focus {
   background-color: #87b87f !important;
   border-color: #87b87f;
+ 	position: relative;
+  padding: 3px 12px;
+   ${ t:borderRadius('0') };
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  min-height: 0;
+  color: #FFF !important;
+   font-weight:bold;
+   ${ t:applyCSS3('transition', 'all ease 0.15s 0') };
 }
 .btn-success:hover,
 .btn-success.open {
@@ -1052,6 +1070,14 @@ a:focus {
 .btn-warning:focus {
   background-color: #ffb752 !important;
   border-color: #ffb752;
+  position: relative;
+  padding: 3px 12px;
+   ${ t:borderRadius('0') };
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  min-height: 0;
+  color: #FFF !important;
+   font-weight:bold;
+   ${ t:applyCSS3('transition', 'all ease 0.15s 0') };
 }
 .btn-warning:hover,
 .btn-warning.open {
@@ -1073,6 +1099,14 @@ a:focus {
 .btn-danger.open {
   background-color: #b74635 !important;
   border-color: #d15b47;
+  position: relative;
+  padding: 3px 12px;
+   ${ t:borderRadius('0') };
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  min-height: 0;
+  color: #FFF !important;
+  font-weight:bold;
+   ${ t:applyCSS3('transition', 'all ease 0.15s 0') };
 }
 .btn-danger.no-border:hover {
   border-color: #b74635;
@@ -2822,3 +2856,7 @@ body {
 .page-header .subtitle:focus {
   color: #8089A0;
 }
+
+
+
+  

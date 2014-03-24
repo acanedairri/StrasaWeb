@@ -169,6 +169,7 @@ public class EditUploadedStudies {
 	@NotifyChange("editStudyList")
 	@Command("deleteStudy")
 	public void deleteStudy(@BindingParam("studyId") final Integer studyId){	
+
 		Messagebox.show("Are you sure to delete this Study?", "Confirm Dialog", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 			public void onEvent(Event evt) throws InterruptedException {
 				if (evt.getName().equals("onOK")) {
@@ -176,10 +177,13 @@ public class EditUploadedStudies {
 					populateEditStudyList();
 					BindUtils.postNotifyChange(null, null,
 							EditUploadedStudies.this, "editStudyList");
-					Messagebox.show("Changes saved.");
+					
 				} 
 			}
 		});
+		
+
+	
 	}
 
 	@NotifyChange("*")

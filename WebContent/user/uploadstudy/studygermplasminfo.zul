@@ -26,7 +26,7 @@
 						<caption
 							label="@load(vm.totalUnknownGermplasm)" />
 						<vlayout vflex="1">
-							<listbox id="tblStudyGerm"
+							<listbox id="tblStudyGerm"  oddRowSclass="odd"
 								sizedByContent="true" hflex="1"
 								model="@load(vm.lstStudyGermplasm) @template(each.templateMode)"
 								rows="10" selectedItem="@bind(vm.selectedGermplasm)">
@@ -179,7 +179,7 @@
 					</groupbox>
 					<groupbox id="gbKnownGermplasm" mold="3d">
 						<caption label="@load(vm.totalKnownGermplasm)" />
-						<listbox id="tblKnownGerm" sizedByContent="true"
+						<listbox id="tblKnownGerm" sizedByContent="true" multiple="false" checkmark="true" oddRowSclass="odd"
 							hflex="1"
 							model="@load(vm.lstKnownGermplasm) @template((each.known) ? 'display' : 'editable')"
 							sclass="gridMaxBodyHeight550" rows="10"
@@ -224,7 +224,7 @@
 											value="@bind(each.maleparent)" />
 									</listcell>
 									<listcell>
-										<button
+										<toolbarbutton tooltiptext="Edit Germplasm"
 											image="/images/pencil.png"
 											onClick="@command('modifyGermplasm', gname=each.germplasmname)" />
 									</listcell>
