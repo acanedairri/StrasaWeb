@@ -1,8 +1,25 @@
+/*
+ * Data Management and Analysis (DMAS) - International Rice Research Institute 2013-2015
+ * 
+ *   DMAS is an opensource Data management and statistical analysis mainly for STRASA Project: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *  DMAS is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *   along with DMAS.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * 
+ * 
+ */
 package org.strasa.web.uploadstudy.view.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.strasa.web.common.api.ProcessTabViewModel;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -20,8 +37,9 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Include;
 import org.zkoss.zul.Tab;
-import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tabpanel;
 import org.zkoss.zul.Timer;
 
@@ -106,7 +124,7 @@ public class Index {
 		// wire event listener
 		// Selectors.wireEventListeners(view, this);
 
-//		arrTabPanels.add(tabpanel1); 
+		// arrTabPanels.add(tabpanel1);
 
 		arrTabPanels.add(tabpanel2);
 
@@ -115,8 +133,8 @@ public class Index {
 		arrTabPanels.add(tabpanel4);
 
 		arrTabPanels.add(tabpanel5);
-//		selectedIndex = 0;
-		
+		// selectedIndex = 0;
+
 		Timer timer = new Timer(10);
 		timer.setRepeats(false);
 		timer.setPage(view.getPage());
@@ -128,7 +146,6 @@ public class Index {
 
 			}
 		});
-		
 
 	}
 
@@ -147,10 +164,18 @@ public class Index {
 	public void showzulfile(@BindingParam("zulFileName") String zulFileName, @BindingParam("target") Tabpanel panel) {
 		System.out.println(zulFileName);
 		if (panel != null && panel.getChildren().isEmpty()) {
-			Map arg = new HashMap();
-			arg.put("uploadModel", uploadModel);
 
-			Executions.createComponents(zulFileName, panel, arg);
+			Include include = new Include();
+			include.setDynamicProperty("uploadModel", uploadModel);
+			include.setSrc(zulFileName);
+			// include.setMode("defer");
+			/*
+			 * Map arg = new HashMap(); arg.put("uploadModel", uploadModel);
+			 * 
+			 * Executions.createComponents(zulFileName, panel, arg);
+			 */
+
+			include.setParent(panel);
 
 		}
 	}
@@ -159,11 +184,15 @@ public class Index {
 	@GlobalCommand("nextTab")
 	public void nextTab(@BindingParam("model") ProcessTabViewModel uploadData) {
 
-		if (!uploadData.validateTab()) {
+		Clients.showBusy("Processing... Please wait.");
+		boolean valid = !uploadData.validateTab();
+		Clients.clearBusy();
+
+		if (!valid) {
 			return;
 		}
 		if (selectedIndex == 0) {
-			
+
 			uploadModel = uploadData;
 			System.out.println("IsRaw: " + uploadData.isDataReUploaded + " ");
 

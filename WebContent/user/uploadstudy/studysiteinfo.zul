@@ -2,7 +2,7 @@
 
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudySiteInfo')">
-			<style src="../css/main.css" />
+		
 		<columnlayout>
 			<columnchildren width="65%" vflex="1">
 				<grid id="mainGrid"
@@ -274,9 +274,9 @@
         								  txtDRow3.setValue("");
         								  txtDRow4.setValue("");
         								
-        								  dRow2.setVisible(false);
-        								  dRow3.setVisible(false);
-        								  dRow4.setVisible(false);
+        								  txtDRow2.setDisabled(true);
+        								  txtDRow3.setDisabled(true);
+        								  txtDRow4.setDisabled(true);
     							]]></attribute>
     							
     							<attribute name = "onChange">
@@ -287,26 +287,26 @@
     								  txtDRow3.setValue("");
     								  txtDRow4.setValue("");
     								
-    								  dRow2.setVisible(false);
-    								  dRow3.setVisible(false);
-    								  dRow4.setVisible(false);
-    								  
+    								  txtDRow2.setDisabled(true);
+    								  txtDRow3.setDisabled(true);
+    								  txtDRow4.setDisabled(true);
+								  
     								  
     							  }
     							  else if(cmbTreatmentStructure.getSelectedIndex() == 1){
     								  txtDRow3.setValue("");
     								  txtDRow4.setValue("");
-    								  dRow2.setVisible(true);
-    								  dRow3.setVisible(false);
-    								  dRow4.setVisible(false);
-    								
+    								  txtDRow2.setDisabled(false);
+    								  txtDRow3.setDisabled(true);
+    								  txtDRow4.setDisabled(true);
+									
     								  
     							  }
     							  else if(cmbTreatmentStructure.getSelectedIndex() == 2){
-    								  dRow2.setVisible(true);
-    								  dRow3.setVisible(true);
-    								  dRow4.setVisible(true);
-    								  
+    								  txtDRow2.setDisabled(false);
+    								  txtDRow3.setDisabled(false);
+    								  txtDRow4.setDisabled(false);
+					  
     							  }
     							
     							

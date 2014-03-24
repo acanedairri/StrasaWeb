@@ -1,11 +1,15 @@
 package org.strasa.web.common.api;
 
 import org.spring.security.model.SecurityUtil;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 import org.strasa.middleware.model.StudyDataSet;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabpanel;
 
+@Service
+@Scope("prototype")
 public class ProcessTabViewModel {
 	public boolean isRaw = true;
 	public int studyID;

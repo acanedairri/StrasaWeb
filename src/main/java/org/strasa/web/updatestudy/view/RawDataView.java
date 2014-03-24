@@ -1,3 +1,22 @@
+/*
+ * Data Management and Analysis (DMAS) - International Rice Research Institute 2013-2015
+ * 
+ *   DMAS is an opensource Data management and statistical analysis mainly for STRASA Project: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *  DMAS is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *   along with DMAS.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * 
+ * 
+ */
 package org.strasa.web.updatestudy.view;
 
 import java.io.File;
@@ -61,6 +80,7 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Include;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tabpanel;
 import org.zkoss.zul.Window;
@@ -76,6 +96,9 @@ public class RawDataView extends ProcessTabViewModel {
 
 	@Wire("#divRawData")
 	Div divRawData;
+
+	@Wire("#datagrid")
+	Div divDatagrid;
 	private List<String> columnList = new ArrayList<String>();
 	public String dataFileName;
 	private List<String[]> dataList = new ArrayList<String[]>();
@@ -183,7 +206,7 @@ public class RawDataView extends ProcessTabViewModel {
 		this.activePage = activePage;
 	}
 
-	public boolean isVariableDataVisible = false;
+	public boolean isVariableDataVisible = true;
 
 	private Study study;
 
@@ -480,6 +503,7 @@ public class RawDataView extends ProcessTabViewModel {
 			Executions.createComponents("/user/browsestudy/data.zul", divRawData, arg);
 
 		}
+		isVariableDataVisible = false;
 	}
 
 	@GlobalCommand
@@ -653,6 +677,12 @@ public class RawDataView extends ProcessTabViewModel {
 		}
 		activePage = 0;
 		CSVReader reader;
+
+		if (!divDatagrid.getChildren().isEmpty())
+			divDatagrid.getFirstChild().detach();
+		Include incCSVData = new Include();
+		incCSVData.setSrc("/user/updatestudy/csvdata.zul");
+		incCSVData.setParent(divDatagrid);
 		try {
 			reader = new CSVReader(new FileReader(tempFile.getAbsolutePath()));
 			List<String[]> rawData = reader.readAll();

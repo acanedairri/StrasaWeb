@@ -1,3 +1,22 @@
+/*
+ * Data Management and Analysis (DMAS) - International Rice Research Institute 2013-2015
+ * 
+ *   DMAS is an opensource Data management and statistical analysis mainly for STRASA Project: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *  DMAS is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *   along with DMAS.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * 
+ * 
+ */
 package org.strasa.web.uploadstudy.view.model;
 
 import java.util.ArrayList;
@@ -282,9 +301,19 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	}
 
 	@AfterCompose
-	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
+	public void afterCompose(@ContextParam(ContextType.VIEW) final Component view) {
 		Selectors.wireComponents(view, this, false);
-		BindUtils.postNotifyChange(null, null, this, "*");
+		// BindUtils.postNotifyChange(null, null, this, "*");
+
+		/*
+		 * Timer timer = new Timer(0); timer.setRepeats(false);
+		 * timer.setPage(view.getPage()); timer.addEventListener("onTimer", new
+		 * EventListener() { public void onEvent(Event event) throws Exception {
+		 * 
+		 * (Combobox)view.getFellow("dRow2").setEnabled(false);
+		 * view.getFellow("dRow3").setVisible(false);
+		 * view.getFellow("dRow4").setVisible(false); } });
+		 */
 	}
 
 	public String getLabelDate() {

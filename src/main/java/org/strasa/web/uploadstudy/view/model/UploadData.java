@@ -1,3 +1,22 @@
+/*
+ * Data Management and Analysis (DMAS) - International Rice Research Institute 2013-2015
+ * 
+ *   DMAS is an opensource Data management and statistical analysis mainly for STRASA Project: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *  DMAS is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *   along with DMAS.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * 
+ * 
+ */
 package org.strasa.web.uploadstudy.view.model;
 
 import java.io.File;
@@ -57,6 +76,7 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Include;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tabpanel;
 import org.zkoss.zul.Window;
@@ -84,6 +104,9 @@ public class UploadData extends ProcessTabViewModel {
 	private Program txtProgram = new Program();
 	private Project txtProject = new Project();
 	private boolean isDataUploaded = false;
+
+	@Wire("#datagrid")
+	Div divDatagrid;
 
 	public boolean isDataUploaded() {
 		return isDataUploaded;
@@ -276,6 +299,8 @@ public class UploadData extends ProcessTabViewModel {
 	}
 
 	public List<String[]> getDataList() {
+		System.out.println("DaALIST GEt");
+
 		if (true)
 			return dataList;
 		ArrayList<String[]> pageData = new ArrayList<String[]>();
@@ -595,11 +620,16 @@ public class UploadData extends ProcessTabViewModel {
 
 	}
 
-	@NotifyChange("*")
 	@Command("refreshCsv")
 	public void refreshCsv() {
 		activePage = 0;
 		CSVReader reader;
+
+		if (!divDatagrid.getChildren().isEmpty())
+			divDatagrid.getFirstChild().detach();
+		Include incCSVData = new Include();
+		incCSVData.setSrc("/user/updatestudy/csvdata.zul");
+		incCSVData.setParent(divDatagrid);
 		try {
 			reader = new CSVReader(new FileReader(tempFile.getAbsolutePath()));
 			List<String[]> rawData = reader.readAll();
@@ -610,7 +640,7 @@ public class UploadData extends ProcessTabViewModel {
 			dataList = new ArrayList<String[]>(rawData);
 			System.out.println(Arrays.toString(dataList.get(0)));
 			if (!this.isDataReUploaded)
-				gbUploadData.invalidate();
+				System.out.println("gbUploadData.invalidate()");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -761,7 +791,7 @@ public class UploadData extends ProcessTabViewModel {
 		this.isRaw = isRawData;
 		this.setUploadMode(true);
 		System.out.println("Timer ends in: " + timer.end());
-
+		refreshCsv();
 		return true;
 
 	}
