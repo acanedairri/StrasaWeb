@@ -75,7 +75,6 @@ import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Div;
-import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tabpanel;
@@ -198,6 +197,7 @@ public class UploadData extends ProcessTabViewModel {
 	@NotifyChange("*")
 	public void setActivePage(int activePage) {
 		System.out.println("pageSize");
+		reloadCsvGrid();
 		this.activePage = activePage;
 	}
 
@@ -620,17 +620,21 @@ public class UploadData extends ProcessTabViewModel {
 
 	}
 
-	@Command("refreshCsv")
-	public void refreshCsv() {
-		activePage = 0;
-		CSVReader reader;
-
+	public void reloadCsvGrid() {
 		if (!divDatagrid.getChildren().isEmpty())
 			divDatagrid.getFirstChild().detach();
 		Include incCSVData = new Include();
 		incCSVData.setSrc("/user/updatestudy/csvdata.zul");
 		incCSVData.setParent(divDatagrid);
 		gbUploadData.invalidate();
+	}
+
+	@Command("refreshCsv")
+	public void refreshCsv() {
+		activePage = 0;
+		CSVReader reader;
+		reloadCsvGrid();
+
 		try {
 			reader = new CSVReader(new FileReader(tempFile.getAbsolutePath()));
 			List<String[]> rawData = reader.readAll();
