@@ -7,8 +7,8 @@
 
 
 		<vlayout spacing="15px">
-			<groupbox mold="3d" width="100%">
-				<caption label="Study Information" />
+			<!-- <groupbox mold="3d" width="100%">
+				<caption label="Study Information" /> -->
 				<vlayout spacing="7px">
 					<grid zclass="none">
 						<columns>
@@ -44,7 +44,7 @@
 										</listbox>
 									</bandpopup>
 								</bandbox>
-								<button label="Add" sclass="btn-blue"
+								<button label="Add" sclass="btn-success"
 									image="/images/add2.png" onClick="@command('addProgram')" />
 							</row>
 							<row>
@@ -73,7 +73,7 @@
 										</listbox>
 									</bandpopup>
 								</bandbox>
-								<button label="Add" sclass="btn-blue"
+								<button label="Add" sclass="btn-success"
 									image="/images/add2.png" onClick="@command('addProject')" />
 							</row>
 							<row>
@@ -118,7 +118,7 @@
 					</grid>
 
 				</vlayout>
-			</groupbox>
+	<!-- 		</groupbox> -->
 			<groupbox id="gbData" mold="3d" width="100%"
 				visible="@bind(vm.updateMode)">
 				<caption label="Uploaded Data" />
@@ -145,8 +145,8 @@
 					</panelchildren>
 				</panel>
 			</groupbox>
-			<groupbox id="gbUploadData" mold="3d" width="100%">
-				<caption label="Upload Data" />
+			<div id="gbUploadData" width="100%">
+				  
 				<hlayout spacing="30px" height="" width="" vflex="true"
 					hflex="true">
 
@@ -236,7 +236,7 @@
 																	value="@load(vm.dataFileName)" sclass="label-search" />
 													
 																<button
-																	id="uploadCSV" upload="true" label="Browse"
+																	id="uploadCSV" upload="true" label="Browse" sclass="btn-success"
 																	image="/images/find.png"
 																	onUpload="@command('uploadCSV')" /> 
 
@@ -245,12 +245,12 @@
 																	label="Remove" onClick="@command('removeUpload') "
 																	image="/images/remove.png"
 																	visible="@load(vm.variableDataVisible)"
-																	sclass="btn-blue" />
+																	sclass="btn-danger" />
 																<button
 																	label="Modify Header" image="/images/modify.png"
 																	onClick="@command('modifyDataHeader')"
 																	visible="@load(vm.variableDataVisible)"
-																	sclass="btn-blue" />
+																	sclass="btn-info" />
 															</hlayout>
 														</div>
 													</vlayout>
@@ -304,66 +304,29 @@
 								</template>
 							</grid>
 							<div align="left">
-								<button id="uploadGenotype" 
+								<button id="uploadGenotype"  sclass="btn-success"
 									upload="true,native" label="Attach Genotype file..."
 									onUpload="@command('uploadGenotypeData')" />
 							</div>
-							<!-- </vlayout> -->
-
-							<!-- 		</hlayout> -->
+	
 						</groupbox>
 
 					</vlayout>
 
 				</hlayout>
 
-			</groupbox>
+			</div>
 
-
-
-
-
-			<!-- 			<groupbox id="grpUploadGenotypeData" width="100%"
-				mold="3d">
-				<caption label="Select Genotype Data" />
-				<label value=""></label>
-				<hlayout spacing="30px">
-				<vlayout width="240px">
-				<grid width="99%"
-				model="@bind(vm.genotypeFileList)" height="160px" vflex="true"
-				emptyMessage="No genotype file uploaded...">
-				
-				<template name="model" var="item">
-				<row>
-				
-				<label value="@bind(item.name)" />
-				<hbox>
-				
-				<button label="Remove"
-				onClick="@command('removeGenotypeFile', index=itemStatus.index)" />
-				</hbox>
-				</row>
-				</template>
-				</grid>
-				<button id="uploadGenotype" upload="true"
-				label="Attach Genotype file..."
-				onUpload="@command('uploadGenotypeData')" />
-				
-				</vlayout>
-				
-				</hlayout>
-				</groupbox> -->
 
 		</vlayout>
 		<separator spacing="20px" />
-		<hlayout style="float:center;">
-
+		
+<div align="center">
 			<button label="Save" image="/images/save16.png"
-				onClick="@global-command('nextTab',model=vm)" sclass="btn-blue">
+				onClick="@global-command('nextTab',model=vm)" sclass="btn-warning" height="40px" width="150px">
 			</button>
+		</div>
 
-		</hlayout>
-		<separator spacing="40px" />
 	</div>
 
 </zk>

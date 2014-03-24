@@ -25,7 +25,7 @@
                         <caption label="@load(vm.totalUnknownGermplasm)" />
                         <vlayout vflex="1">
                             <button label="Submit" onClick="@command('saveData')" sclass="btn-blue" image="/images/save16.png" />
-                            <listbox zclass="none" id="tblStudyGerm" sizedByContent="true" hflex="1" model="@load(vm.lstStudyGermplasm) @template(each.templateMode)" rows="10" selectedItem="@bind(vm.selectedGermplasm)">
+                            <listbox zclass="none" oddRowSclass="odd" id="tblStudyGerm" sizedByContent="true" hflex="1" model="@load(vm.lstStudyGermplasm) @template(each.templateMode)" rows="10" selectedItem="@bind(vm.selectedGermplasm)">
                                 <auxhead sclass="category-center">
                                     <auxheader colspan="1">
                                         <image src="/images/filter.png" />
@@ -141,7 +141,7 @@
                     </groupbox>
                     <groupbox id="gbKnownGermplasm" mold="3d">
                         <caption label="@load(vm.totalKnownGermplasm)" />
-                        <listbox id="tblKnownGerm" sizedByContent="true" hflex="1" model="@load(vm.lstKnownGermplasm) @template((each.known) ? 'display' : 'editable')" sclass="gridMaxBodyHeight550" rows="10" selectedItem="@bind(vm.selectedGermplasm)">
+                        <listbox id="tblKnownGerm" oddRowSclass="odd"  sizedByContent="true" hflex="1" model="@load(vm.lstKnownGermplasm) @template((each.known) ? 'display' : 'editable')" sclass="gridMaxBodyHeight550" rows="10" selectedItem="@bind(vm.selectedGermplasm)">
                                <auxhead sclass="category-center">
                                     <auxheader colspan="1">
                                         <image src="/images/filter.png" />
@@ -236,7 +236,7 @@
                 <vlayout vflex="1">
                     <groupbox width="100%" mold="3d">
                         <caption label="Germplasm Information" />
-                        <grid vflex="1">
+                        <grid vflex="1" oddRowSclass="odd">
                             <columns>
                                 <column />
                                 <column />

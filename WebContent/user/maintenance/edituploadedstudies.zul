@@ -1,81 +1,80 @@
 <zk>
 
-  <div sclass="page-header">
-    <label value="Upload/Modify Study"/>
-    <!-- <a label="overview &amp; stats" iconSclass="z-icon-angle-double-right" sclass="subtitle"/> -->
-  </div>
+	<div sclass="page-header">
+		<label value="Upload/Modify Study" />
+		<!-- <a label="overview &amp; stats" iconSclass="z-icon-angle-double-right" sclass="subtitle"/> -->
+	</div>
 
-<!-- 	<panel title="Study" border="normal" sclass="panel-success">
+	<!-- 	<panel title="Study" border="normal" sclass="panel-success">
 		<panelchildren style="overflow: auto;padding:10px"> -->
-			<div apply="org.zkoss.bind.BindComposer"
-				viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditUploadedStudies')" sclass="page-content">
+	<div apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditUploadedStudies')"
+		sclass="page-content">
 
 
-				<div width="98%" align="left">
-					<button id="btnBackId" label="Back" visible="true"
-						sclass="btn-success" src="/images/back.png" orient="horizontal"
-						tooltiptext="Add Study" onClick="@command('loadMainDiv')" />
-					<button id="btnUploadId" label="Upload New Study"
-						sclass="btn-success" src="/images/add.png" orient="horizontal"
-						tooltiptext="Add Study" onClick="@command('addStudy')" />
+		<div width="98%" align="left">
+			<button id="btnBackId" label="Back" visible="true"
+				sclass="btn-success" src="/images/back.png" orient="horizontal"
+				tooltiptext="Add Study" onClick="@command('loadMainDiv')" />
+			<button id="btnUploadId" label="Upload New Study"
+				sclass="btn-success" src="/images/add.png" orient="horizontal"
+				tooltiptext="Add Study" onClick="@command('addStudy')" />
+
+		</div>
+		<separator height="5px"></separator>
+		<div id="divMain">
+			<grid model="@load(vm.editStudyList)" zclass="none" 
+				oddRowSclass="odd" sizedByContent="true" width="98%">
+
+				<columns width="200px">
+					<column hflex="1" label="Study Name" />
+					<column label="Program Name" />
+					<column label="Project Name" />
+					<column label="Date Created" />
+					<column label="Last Modified" />
+					<column label="Privacy" />
+					<column label="Actions" width="100px" />
+				</columns>
+				<template name="model">
+					<row>
+						<label value="@load(each.study.name)" />
+						<label value="@load(each.program.name)" />
+						<label value="@load(each.project.name)" />
+						<label
+							value="@load(vm.formatDate(each.study.datecreated))" />
+						<label
+							value="@load(vm.formatDate(each.study.datelastmodified))" />
+						<checkbox
+							label="@load(each.study.shared ?'Shared':'Not Shared')"
+							checked="@bind(each.study.shared)"
+							onCheck='@command("changeStudyPrivacy", study=each.study)' />
+						<cell>
+							<toolbarbutton src="/images/edit16.png"
+								orient="vertical" tooltiptext="Edit Study"
+								onClick="@command('editStudy',studyID=each.study.id)" />
+							<space />
+							<toolbarbutton src="/images/Delete16.png"
+								orient="vertical" tooltiptext="Delete Study"
+								onClick="@command('deleteStudy', studyId=each.study.id)" />
+						</cell>
+					</row>
+				</template>
+			</grid>
+		</div>
+		<div id="divUpdateStudy">
+
+			<vlayout>
+
+				<!-- 			<button label="Go Back"
+					onClick="@command('loadMainDiv')" />  -->
+
+				<div id="divUpdateStudyContainer">
 
 				</div>
-				<separator height="5px"></separator>
-				<div id="divMain">
-					<grid model="@load(vm.editStudyList)"
-						sizedByContent="true" width="98%">
+			</vlayout>
+		</div>
 
-						<columns width="200px">
-							<column hflex="1" label="Study Name" />
-							<column label="Program Name" />
-							<column label="Project Name" />
-							<column label="Date Created" />
-							<column label="Last Modified" />
-							<column label="Privacy" />
-							<column label="Actions" width="100px" />
-						</columns>
-						<template name="model">
-							<row>
-								<label value="@load(each.study.name)" />
-								<label value="@load(each.program.name)" />
-								<label value="@load(each.project.name)" />
-								<label
-									value="@load(vm.formatDate(each.study.datecreated))" />
-								<label
-									value="@load(vm.formatDate(each.study.datelastmodified))" />
-								<checkbox
-									label="@load(each.study.shared ?'Shared':'Not Shared')"
-									checked="@bind(each.study.shared)"
-									onCheck='@command("changeStudyPrivacy", study=each.study)' />
-								<cell>
-									<toolbarbutton
-										src="/images/edit16.png" orient="vertical"
-										tooltiptext="Edit Study"
-										onClick="@command('editStudy',studyID=each.study.id)" />
-									<space />
-									<toolbarbutton
-										src="/images/Delete16.png" orient="vertical"
-										tooltiptext="Delete Study"
-										onClick="@command('deleteStudy', studyId=each.study.id)" />
-								</cell>
-							</row>
-						</template>
-					</grid>
-				</div>
-				<div id="divUpdateStudy">
-
-					<vlayout>
-
-						<!-- 			<button label="Go Back"
-							onClick="@command('loadMainDiv')" />  -->
-
-						<div id="divUpdateStudyContainer">
-
-						</div>
-					</vlayout>
-				</div>
-
-			</div>
-<!--  		</panelchildren>
-</panel>  -->
+	</div>
+	<!--  		</panelchildren>
+		</panel>  -->
 </zk>

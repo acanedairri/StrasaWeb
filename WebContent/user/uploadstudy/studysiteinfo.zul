@@ -2,22 +2,24 @@
 
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.StudySiteInfo')">
-		
+
 		<columnlayout>
 			<columnchildren width="65%" vflex="1">
-				<grid id="mainGrid"
-					model="@load(vm.sites)" emptyMessage="No study site found.">
+				<grid id="mainGrid" model="@load(vm.sites)"
+					emptyMessage="No study site found.">
 					<columns>
-						<column label="Site Name" style="color:red;" width = "16%"/>
-						<column label="Site Location"
-							style="color:red;" width = "23%"/>
-						<column label="Year" width = "8%"
+						<column label="Site Name" style="color:red;"
+							width="16%" />
+						<column label="Site Location" style="color:red;"
+							width="23%" />
+						<column label="Year" width="8%"
 							style="color:red;" />
-						<column label="Season" width = "8%"
+						<column label="Season" width="8%"
 							style="color:red;" />
-						<column label="Eco System" style="color:red;" width = "16%"/>
-						<column label="Soil Type" width = "16%"/>
-						<column label="Soil PH" width = "13%"/>
+						<column label="Eco System" style="color:red;"
+							width="16%" />
+						<column label="Soil Type" width="16%" />
+						<column label="Soil PH" width="13%" />
 					</columns>
 					<template name="model">
 						<row>
@@ -27,9 +29,8 @@
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
 								if="${vm.uploadMode}" />
-						<bandbox value="@bind(each.sitename)"
-								instant="true" autodrop="true"
-								unless="${vm.uploadMode}">
+							<bandbox value="@bind(each.sitename)"
+								instant="true" autodrop="true" unless="${vm.uploadMode}">
 								<bandpopup>
 									<vbox width="40%">
 
@@ -55,14 +56,16 @@
 											<template name="model">
 												<row>
 													<toolbarbutton
-														label="@load(each.sitename)" width="99%" sclass="grid-link"
+														label="@load(each.sitename)" width="99%"
+														sclass="grid-link"
 														onClick="@command('setSiteRow', model = each)" />
 													<label
 														value="@bind(each.sitelocation)"
 														onClick="@command('setSiteRow', model = each)" />
 
 													<label
-														value="@bind(each.year)" 	onClick="@command('setSiteRow', model = each)"/>
+														value="@bind(each.year)"
+														onClick="@command('setSiteRow', model = each)" />
 
 													<label
 														value="@bind(each.selectedEcotype.ecotype)"
@@ -86,66 +89,72 @@
 
 
 
-							<div width = "100%">
-							<bandbox  id = "bbox_${forEachStatus.index}" 
-								value="@bind(each.selectedLocation.locationname)"
-								onChange="@command('doLocationSearch',id=forEachStatus.index)"
-								instant="true" autodrop="true"
-								onOpen="@command('autoFillBandbox', id=forEachStatus.index) "
-								onClick="@command('openBandbox', id=forEachStatus.index)" width = "80%">
-								<bandpopup>
-									<vbox width="40%">
-									
-										<grid
-											model="@load(each.filteredLocations)"
-											emptyMessage="No location is available. Please add your location."
-											sizedByContent="true" hflex="true">
-											<columns>
-												<column
-													label="Location" />
-												<column label="Country" />
-												<column
-													label="Province" />
-												<column label="Region" />
-												<column
-													label="Altitude" />
-												<column
-													label="Latitude" />
-												<column
-													label="Weather Station" />
-											</columns>
-											<template name="model">
-												<row>
-													<toolbarbutton
-														label="@load(each.locationname)" width="99%"
-														onClick="@command('setLocationRow', id = each.id)" />
-													<label
-														value="@bind(each.country)" />
+							<div width="100%">
+								<bandbox
+									id="bbox_${forEachStatus.index}"
+									value="@bind(each.selectedLocation.locationname)"
+									onChange="@command('doLocationSearch',id=forEachStatus.index)"
+									instant="true" autodrop="true"
+									onOpen="@command('autoFillBandbox', id=forEachStatus.index) "
+									onClick="@command('openBandbox', id=forEachStatus.index)"
+									width="80%">
+									<bandpopup>
+										<vbox width="40%">
 
-													<label
-														value="@bind(each.province)" />
+											<grid
+												model="@load(each.filteredLocations)"
+												emptyMessage="No location is available. Please add your location."
+												sizedByContent="true" hflex="true">
+												<columns>
+													<column
+														label="Location" />
+													<column
+														label="Country" />
+													<column
+														label="Province" />
+													<column
+														label="Region" />
+													<column
+														label="Altitude" />
+													<column
+														label="Latitude" />
+													<column
+														label="Weather Station" />
+												</columns>
+												<template
+													name="model">
+													<row>
+														<toolbarbutton
+															label="@load(each.locationname)" width="99%"
+															onClick="@command('setLocationRow', id = each.id)" />
+														<label
+															value="@bind(each.country)" />
 
-													<label
-														value="@bind(each.region)" />
+														<label
+															value="@bind(each.province)" />
 
-													<label
-														value="@bind(each.altitude)" />
+														<label
+															value="@bind(each.region)" />
 
-													<label
-														value="@bind(each.latitude)" />
+														<label
+															value="@bind(each.altitude)" />
 
-													<label
-														value="@bind(each.weatherstation)" />
+														<label
+															value="@bind(each.latitude)" />
 
-												</row>
-											</template>
-										</grid>
-									</vbox>
-								</bandpopup>
-							</bandbox>
-							<button id = "btnadd_${forEachStatus.index}" image="/images/plus.png"
-											onClick="@command('addLocation',loc = each)" width = "30px"/>
-                           </div>
+														<label
+															value="@bind(each.weatherstation)" />
+
+													</row>
+												</template>
+											</grid>
+										</vbox>
+									</bandpopup>
+								</bandbox>
+								<button
+									id="btnadd_${forEachStatus.index}" image="/images/plus.png"
+									onClick="@command('addLocation',loc = each)" width="30px" />
+							</div>
 							<textbox value="@bind(each.year)"
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
@@ -168,21 +177,22 @@
 										label="@load(each.ecotype)" />
 								</template>
 							</combobox>
-							 <combobox model="@load(vm.soilTypes)" width="99%"
-                            value="@bind(each.soiltype)" readonly="true"> 
-                            <template name="model">
-												<comboitem
-													value="@load(each)" label="@load(each)" />
-											</template>
-                            
-                            </combobox>
-					<doublespinner constraint="no empty,min 4 max 12"  value="@bind(each.soilph)"
+							<combobox model="@load(vm.soilTypes)"
+								width="99%" value="@bind(each.soiltype)" readonly="true">
+								<template name="model">
+									<comboitem value="@load(each)"
+										label="@load(each)" />
+								</template>
+
+							</combobox>
+							<doublespinner
+								constraint="no empty,min 4 max 12" value="@bind(each.soilph)"
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)" />
 						</row>
 					</template>
 				</grid>
-			<!-- 	<label value="Red labels are mandatory fields" style="color:red"></label> -->
+				<!-- 	<label value="Red labels are mandatory fields" style="color:red"></label> -->
 			</columnchildren>
 			<columnchildren width="35%">
 				<vlayout>
@@ -267,62 +277,54 @@
 
 									<combobox id="cmbTreatmentStructure"
 										value="@bind(vm.selectedDesignInfo.treatmentstructure)"
-										width="99%" > 
+										width="99%">
 										<attribute name="onCreate"><![CDATA[
-        								List list2 = new ArrayList();
-        									 list2.add("One Factor");
-        									 list2.add("Two Factor Factorial");
-        									 list2.add("Three Factor Factorial");
-        								ListModelList lm2 = new ListModelList(list2);
-        									 lm2.addSelection(lm2.get(0));
-       										 cmbTreatmentStructure.setModel(lm2);
-       									  txtDRow2.setValue("");
-        								  txtDRow3.setValue("");
-        								  txtDRow4.setValue("");
-        								
-        								  txtDRow2.setDisabled(true);
-        								  txtDRow3.setDisabled(true);
-        								  txtDRow4.setDisabled(true);
-    							]]></attribute>
-    							
-    							<attribute name = "onChange">
+	List list2 = new ArrayList();
+	list2.add("One Factor");
+	list2.add("Two Factor Factorial");
+	list2.add("Three Factor Factorial");
+	ListModelList lm2 = new ListModelList(list2);
+	lm2.addSelection(lm2.get(0));
+	cmbTreatmentStructure.setModel(lm2);
+	txtDRow2.setValue("");
+	txtDRow3.setValue("");
+	txtDRow4.setValue("");
+
+	txtDRow2.setDisabled(true);
+	txtDRow3.setDisabled(true);
+	txtDRow4.setDisabled(true);
+]]></attribute>
+
+										<attribute name = "onChange">
     							<![CDATA[
-    							
-    							  if(cmbTreatmentStructure.getSelectedIndex() == 0){
-    								  txtDRow2.setValue("");
-    								  txtDRow3.setValue("");
-    								  txtDRow4.setValue("");
-    								
-    								  txtDRow2.setDisabled(true);
-    								  txtDRow3.setDisabled(true);
-    								  txtDRow4.setDisabled(true);
-								  
-    								  
-    							  }
-    							  else if(cmbTreatmentStructure.getSelectedIndex() == 1){
-    								  txtDRow3.setValue("");
-    								  txtDRow4.setValue("");
-    								  txtDRow2.setDisabled(false);
-    								  txtDRow3.setDisabled(true);
-    								  txtDRow4.setDisabled(true);
-									
-    								  
-    							  }
-    							  else if(cmbTreatmentStructure.getSelectedIndex() == 2){
-    								  txtDRow2.setDisabled(false);
-    								  txtDRow3.setDisabled(false);
-    								  txtDRow4.setDisabled(false);
-					  
-    							  }
-    							
-    							
-    							
-    							]]>
+	if (cmbTreatmentStructure.getSelectedIndex() == 0) {
+		txtDRow2.setValue("");
+		txtDRow3.setValue("");
+		txtDRow4.setValue("");
+
+		txtDRow2.setDisabled(true);
+		txtDRow3.setDisabled(true);
+		txtDRow4.setDisabled(true);
+
+	} else if (cmbTreatmentStructure.getSelectedIndex() == 1) {
+		txtDRow3.setValue("");
+		txtDRow4.setValue("");
+		txtDRow2.setDisabled(false);
+		txtDRow3.setDisabled(true);
+		txtDRow4.setDisabled(true);
+
+	} else if (cmbTreatmentStructure.getSelectedIndex() == 2) {
+		txtDRow2.setDisabled(false);
+		txtDRow3.setDisabled(false);
+		txtDRow4.setDisabled(false);
+
+	}
+]]>
     							</attribute>
-										
-										</combobox>
+
+									</combobox>
 								</row>
-								
+
 								<row>
 									Design Factor 1:
 									<textbox
@@ -331,19 +333,19 @@
 								</row>
 								<row id="dRow2">
 									Design Factor 2:
-									<textbox id = "txtDRow2"
+									<textbox id="txtDRow2"
 										value="@bind(vm.selectedDesignInfo.designfactor2)"
 										width="99%" />
 								</row>
 								<row id="dRow3">
 									Design Factor 3:
-									<textbox id = "txtDRow3"
+									<textbox id="txtDRow3"
 										value="@bind(vm.selectedDesignInfo.designfactor3)"
 										width="99%" />
 								</row>
 								<row id="dRow4">
 									Design Factor 4:
-									<textbox id = "txtDRow4"
+									<textbox id="txtDRow4"
 										value="@bind(vm.selectedDesignInfo.designfactor4)"
 										width="99%" />
 								</row>
@@ -366,14 +368,15 @@
 			</columnchildren>
 		</columnlayout>
 		<separator spacing="20px" />
-		<hlayout style="float:center">
+
+		<div align="center">
 
 			<button label="Save" image="/images/save16.png"
-				onClick="@global-command('nextTab',model=vm)" sclass="btn-blue">
+				onClick="@global-command('nextTab',model=vm)" sclass="btn-warning"
+				height="40px" width="150px">
 			</button>
+		</div>
 
-		</hlayout>
 	</window>
 
-	<separator spacing="40px" />
 </zk>

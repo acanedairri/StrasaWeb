@@ -230,3 +230,5 @@
 	font-weight: bold;
 	font-size: 12px;
 }
+
+.odd, .odd > td { color:black; background-color:#F5F5F5 !important;

@@ -88,7 +88,7 @@ public class UploadData extends ProcessTabViewModel {
 	// Wired Components
 
 	@Wire("#gbUploadData")
-	Groupbox gbUploadData;
+	Div gbUploadData;
 
 	@Wire("#divRawData")
 	Div divRawData;

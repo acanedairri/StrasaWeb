@@ -1,10 +1,11 @@
 <zk>
-	<style src="../css/main.css" />
+	<!-- <style src="../css/main.css" /> -->
 	<style>
 		.gridMaxBodyHeight550 .z-grid-body {
 			max-height: 550px;
 			height: 350px;
 			overflow: auto;
+		.odd, .odd > td { color:black; background-color:#F5F5F5 !important;
 		}
 	</style>
 	 <script src="http://stanlemon.net/javascript/jquery.jgrowl.js" />
@@ -29,7 +30,7 @@
 						<caption label="@load(vm.totalUnknownGermplasm)"></caption>
 						<vlayout>
 
-							<grid id="tblStudyGerm"
+							<grid id="tblStudyGerm" oddRowSclass="odd" 
 								model="@load(vm.lstStudyGermplasm)"
 								emptyMessage="No Unknown Genotype..." sizedByContent="true" vflex="1"  sclass="gridMaxBodyHeight550">
 								<auxhead width="100%">
@@ -91,7 +92,7 @@
 					</groupbox>
 					<groupbox id="gbKnownGermplasm" mold="3d">
 						<caption label="@load(vm.totalKnownGermplasm)"></caption>
-						<grid id="tblKnownGerm" sizedByContent="true"
+						<grid id="tblKnownGerm" sizedByContent="true" oddRowSclass="odd" 
 							hflex="1" model="@load(vm.lstKnownGermplasm) @template((each.known) ? 'display' : 'editable')" sclass="gridMaxBodyHeight550" >
 							<columns menupopup="auto"
 								columnsgroup="false">
@@ -271,7 +272,7 @@
 				<vlayout vflex="1">
 					<groupbox width="100%" mold="3d">
 						<caption label="Other Information" />
-						<grid vflex="1">
+						<grid vflex="1" oddRowSclass="odd" zclass="none" >
 							<columns>
 								<column />
 								<column />

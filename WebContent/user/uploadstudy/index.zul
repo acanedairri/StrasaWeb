@@ -1,6 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<window title="Upload New Study" border="normal"
+	<window border="none"
 		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.Index')">
 
@@ -8,7 +8,7 @@
 			<tabs>
 
 			
-				<tab label="Study Information" id="tab6" selected="true">
+				<tab label="Study Information" id="tab6" selected="true" vflex="1" hflex="1">
 				
 				</tab>
 				
