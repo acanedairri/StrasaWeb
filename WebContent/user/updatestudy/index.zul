@@ -172,10 +172,11 @@
 
 					</tabpanel>
 					<tabpanel>
-
-						<button label="Add New Dataset"
-							image="/images/New16.png" sclass="btn-success"
-							onClick="@command('addNewDataset',datatype=true)" />
+						<div align="right">
+							<button label="Upload New Dataset"
+								image="/images/New16.png" sclass="btn-success"
+								onClick="@command('addNewDataset',datatype=true)" />
+						</div>
 						<tabbox id="rawDataTab">
 
 							<tabs>
@@ -188,10 +189,11 @@
 						</tabbox>
 					</tabpanel>
 					<tabpanel>
-
-						<button label="Add new Dataset"
-							image="/images/New16.png" sclass="btn-success"
-							onClick="@command('addNewDataset',datatype=false)" />
+						<div align="right">
+							<button label="Upload New Dataset"
+								image="/images/New16.png" sclass="btn-success"
+								onClick="@command('addNewDataset',datatype=false)" />
+						</div>
 						<tabbox id="derivedDataTab">
 
 							<tabs></tabs>

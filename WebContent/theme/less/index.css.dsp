@@ -1,4 +1,4 @@
-<%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+F<%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/theme" prefix="t" %>
 a:hover,
@@ -1027,8 +1027,9 @@ a:focus {
    ${ t:borderRadius('0') };
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   min-height: 0;
+  height:30px;
   color: #FFF !important;
-  font-weight:bold;
+  font-weight:normal;
    ${ t:applyCSS3('transition', 'all ease 0.15s 0') };
 }
 .btn-info:hover,
@@ -1050,9 +1051,11 @@ a:focus {
   padding: 3px 12px;
    ${ t:borderRadius('0') };
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+   height:30px;
   min-height: 0;
+ 
   color: #FFF !important;
-   font-weight:bold;
+ font-weight:normal;
    ${ t:applyCSS3('transition', 'all ease 0.15s 0') };
 }
 .btn-success:hover,
@@ -1072,11 +1075,12 @@ a:focus {
   border-color: #ffb752;
   position: relative;
   padding: 3px 12px;
-   ${ t:borderRadius('0') };
+       ${ t:borderRadius('0') };
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   min-height: 0;
+     height:30px;
   color: #FFF !important;
-   font-weight:bold;
+   font-weight:normal;
    ${ t:applyCSS3('transition', 'all ease 0.15s 0') };
 }
 .btn-warning:hover,
@@ -1094,19 +1098,22 @@ a:focus {
 .btn-danger:focus {
   background-color: #d15b47 !important;
   border-color: #d15b47;
+  position: relative;
+  padding: 3px 12px;
+      ${ t:borderRadius('0') };
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  min-height: 0;
+  height:30px;
+
+  color: #FFF !important;
+font-weight:normal;
+   ${ t:applyCSS3('transition', 'all ease 0.15s 0') };
 }
 .btn-danger:hover,
 .btn-danger.open {
   background-color: #b74635 !important;
   border-color: #d15b47;
-  position: relative;
-  padding: 3px 12px;
-   ${ t:borderRadius('0') };
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-  min-height: 0;
-  color: #FFF !important;
-  font-weight:bold;
-   ${ t:applyCSS3('transition', 'all ease 0.15s 0') };
+  
 }
 .btn-danger.no-border:hover {
   border-color: #b74635;

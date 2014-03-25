@@ -1,16 +1,16 @@
 <zk>
   <window title="Variable List" border="normal" closable="true"  apply="org.zkoss.bind.BindComposer"
-        viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.DataColumnChanged')" width = "35%" height = "45%">
-           <listbox 
-            model="@load(vm.varList)" selectedItem="@bind(vm.selectedVar)" height = "100%" vflex="1">
+        viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.DataColumnChanged')" width = "50%" height = "45%">
+           <listbox  multiple="false" checkmark="true" oddRowSclass="odd"
+            model="@load(vm.varList)" selectedItem="@bind(vm.selectedVar)" vflex="1" sizedByContent="true">
          <auxhead>
                 <auxheader colspan="3" class="topic">Filter: <textbox value="@bind(vm.filter)" onChange="@command('updatefilter',filterValue=event.value)" onChanging="@command('updatefilter', filterValue=event.value)" instant="true" onOK="@command('updatefilter')"></textbox></auxheader>
             </auxhead>
             <listhead>
-                <listheader label="Variable" width="80px" align="center" />
-                <listheader label="Property" align="center" />
-                <listheader label="Scale" width="80px" align="center" />
-                <listheader label="Method" width="80px" align="center" />
+                <listheader label="Variable"  />
+                <listheader label="Property" />
+                <listheader label="Scale"  />
+                <listheader label="Method" hflex="1" />
             </listhead>
             <template name="model" >
                 <listitem>

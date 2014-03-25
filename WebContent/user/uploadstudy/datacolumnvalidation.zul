@@ -9,8 +9,8 @@
 			<grid height="50%" width="99%" model="@load(vm.varData)"
 				hflex="true" vflex="1">
 				<columns>
-					<column label="Variable" width="40%" />
-					<column label="Selected" width="30%"
+					<column label="Column" width="40%" />
+					<column label="Changed To" width="30%"
 					 />
 					<column label="Action" width="30%" />
 				</columns>
@@ -28,9 +28,9 @@
 <separator spacing="5px" />
 		<hlayout style="float:right;">
 		<button label="Cancel"
-						onClick="@command('cancel')"  sclass="btn-plain" image="/images/cancel16.png" />
+						onClick="@command('cancel')"  sclass="btn-danger" image="/images/cancel16.png" />
 					<button label="Save"
-						onClick="@command('saveHeader')" sclass="btn-blue" image="/images/save16.png" />
+						onClick="@command('saveHeader')" sclass="btn-success" image="/images/save16.png" />
 					
 				</hlayout>
 
