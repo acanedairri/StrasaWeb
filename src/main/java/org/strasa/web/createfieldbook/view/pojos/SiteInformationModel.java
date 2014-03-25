@@ -17,7 +17,7 @@
  * 
  * 
  */
-package org.strasa.web.createfieldbook.view.api;
+package org.strasa.web.createfieldbook.view.pojos;
 
 import java.io.File;
 import java.util.ArrayList;

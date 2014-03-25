@@ -56,7 +56,7 @@
 								</vlayout>
 							</hlayout>
 						</groupbox>
-						<groupbox id="grpRawData" hflex="true"
+						<groupbox id="gbUploadData" hflex="true"
 							vflex="true" visible="@bind(!vm.dataReUploaded)">
 							<vlayout>
 <!-- 									<button label="Remove"
