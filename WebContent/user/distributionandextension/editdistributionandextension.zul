@@ -13,7 +13,7 @@
 			</tabs>
 			<tabpanels width="100%">
 				<tabpanel style="overflow: auto">
-							<grid height="600px" hflex="1"
+							<grid height="600px" hflex="1" oddRowSclass="odd"
 								model="@load(vm.rowList) @template(each.editingStatus ? 'editable' : 'noneditable')"
 								sizedByContent="true" emptyMessage="No Record Found">
 								<columns>
@@ -132,7 +132,7 @@
 												orient="vertical" tooltiptext="Edit Extension data" />
 											<space />
 											<toolbarbutton
-												src="/images/Delete16.png"
+												src="/images/delete.png"
 												onClick="@command('delete', id=each.value.id)"
 												orient="vertical" tooltiptext="Delete Extension data" />
 										</cell>

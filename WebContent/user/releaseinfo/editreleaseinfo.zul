@@ -6,12 +6,12 @@
 		<style src="../css/main.css" />
 		<tabbox id="tb">
 			<tabs>
-				<tab label="Release Info" />
+				<tab label="Release Information List" />
 				<tab label="Add New Record" />
 			</tabs>
 			<tabpanels width="100%">
 				<tabpanel style="overflow: auto">
-					<grid
+					<grid oddRowSclass="odd"
 					model="@load(vm.rowList) @template(each.editingStatus ? 'editable' : 'noneditable')"
 					sizedByContent="true" width="95%" emptyMessage="No Record Found">
 					<columns width="200px">
@@ -92,7 +92,7 @@
 									orient="vertical" tooltiptext="Edit Release Info" />
 								<space />
 								<toolbarbutton
-									src="/images/Delete16.png"
+									src="/images/delete.png"
 									onClick="@command('delete', id=each.value.id)"
 									orient="vertical" tooltiptext="Delete Release Info" />
 							</cell>

@@ -5,8 +5,8 @@
 		<style src="../css/main.css" />
 		<grid sizedByContent="true">
 			<columns>
-				<column label="Add new Release Info" width="150px" />
-				<column label="Detail" hflex="1" />
+				<column label="" width="150px" />
+				<column label="" hflex="1" />
 			</columns>
 			<rows>
 				<row>
@@ -61,8 +61,8 @@
 				<row>
 					<label></label>
 					<hbox>
-						<button label="Add" onClick="@command('add')"
-							image="/images/save16.png" sclass="btn-blue">
+						<button label="Save" onClick="@command('add')"
+							image="/images/save16.png" sclass="btn-warning">
 						</button>
 					</hbox>
 				</row>

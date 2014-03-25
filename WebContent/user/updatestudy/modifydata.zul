@@ -22,17 +22,17 @@
 										<vlayout width="100%"
 											spacing="10px">
 											<hlayout>
-												<button id="uploadCSV"
+												<button id="uploadCSV" sclass="btn-success"
 													upload="true" label="Browse" image="/images/add.png"
 													onUpload="@command('uploadCSV')" />
 												<label id="lblMsgUpload"
 													visible="@load(vm.variableDataVisible)"
 													value="@load(vm.dataFileName)" style="font-size:14pt;" />
-												<button label="Remove" sclass="btn-blue" image="/images/remove.png"
+												<button label="Remove" sclass="btn-danger" image="/images/remove.png"
 													onClick="@command('removeUpload') "
 													visible="@load(vm.variableDataVisible)" />
 												<button
-													label="Modify Header" sclass="btn-blue" image="/images/modify.png"
+													label="Modify Header" sclass="btn-info" image="/images/modify.png"
 													onClick="@command('modifyDataHeader')"
 													visible="@load(vm.variableDataVisible)" />
 											</hlayout>
@@ -46,7 +46,7 @@
 						<groupbox id="grpVariableData" mold="3d"
 							width="100%" height="450px"
 							visible="@bind(vm.dataReUploaded)"  zclass="none">
-							<caption label="CSV Data Preview"  zclass="none"/>
+						<!-- 	<caption label="CSV Data Preview"  zclass="none"/> -->
 							<hlayout spacing="50px">
 								<vlayout  zclass="none">
 									<div id="datagrid">
@@ -73,14 +73,6 @@
 				</hlayout>
 			</groupbox>
 			
-
-
-
-			
-	
-
-	
-		<separator spacing="20px" />
 		<div align="center">
 
 			<button label="Save"

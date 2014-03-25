@@ -54,7 +54,7 @@
 								orient="vertical" tooltiptext="Edit Study"
 								onClick="@command('editStudy',studyID=each.study.id)" />
 							<space />
-							<toolbarbutton src="/images/Delete16.png" 
+							<toolbarbutton src="/images/delete.png" 
 								orient="vertical" tooltiptext="Delete Study"
 								onClick="@command('deleteStudy', studyId=each.study.id)" />
 

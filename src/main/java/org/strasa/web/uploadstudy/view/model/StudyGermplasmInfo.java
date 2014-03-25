@@ -246,11 +246,11 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 	}
 
 	public String getTotalUnknownGermplasm() {
-		return "List of total unknown germplasm (total: " + lstStudyGermplasm.size() + ")";
+		return "List of new germplasm (" + lstStudyGermplasm.size() + " records)";
 	}
 
 	public String getTotalKnownGermplasm() {
-		return "List of total of uploaded germplasm (total: " + lstKnownGermplasm.size() + ")";
+		return "List of uploaded germplasm ("+lstKnownGermplasm.size() + " records )";
 	}
 
 	@Command

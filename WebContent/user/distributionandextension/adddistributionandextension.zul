@@ -85,7 +85,7 @@
 					<label></label>
 					<hbox>
 						<button label="Save" onClick="@command('add')"
-							image="/images/save16.png" sclass="btn-success">
+							image="/images/save16.png" sclass="btn-warning">
 						</button>
 					</hbox>
 				</row>
