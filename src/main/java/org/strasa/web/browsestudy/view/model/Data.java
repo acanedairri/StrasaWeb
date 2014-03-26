@@ -72,6 +72,7 @@ public class Data {
 
 	public void setColumnList(List<String> columnList) {
 		this.columnList = columnList;
+		includeDataGrid();
 	}
 
 	public ArrayList<ArrayList<String>> getRowData() {

@@ -814,6 +814,7 @@ public class RawDataView extends ProcessTabViewModel {
 			BindUtils.postNotifyChange(null, null, this, "*");
 
 		}
+		refreshCsv();
 		processComplete = true;
 		return true;
 

@@ -22,7 +22,9 @@ package org.strasa.web.createfieldbook.view.pojos;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.Location;
+import org.strasa.middleware.model.PlantingType;
 import org.strasa.middleware.model.StudyAgronomy;
 import org.strasa.middleware.model.StudyDesign;
 import org.strasa.middleware.model.StudySite;
@@ -51,6 +53,18 @@ public class SiteInformationModel extends StudySite {
 
 	/** The lst variable. */
 	private ArrayList<StudyVariable> lstVariable;
+
+	private Ecotype ecotype;
+	private PlantingType plantingtype;
+
+	public Ecotype getEcotype() {
+		return ecotype;
+	}
+
+	public void setEcotype(Ecotype ecotype) {
+		this.ecotype = ecotype;
+		this.setEcotypeid(ecotype.getId());
+	}
 
 	/**
 	 * Gets the design.
@@ -107,6 +121,7 @@ public class SiteInformationModel extends StudySite {
 	 */
 	public void setLocation(Location location) {
 		this.location = location;
+		this.setLocationid(location.getId());
 	}
 
 	/**
@@ -164,6 +179,14 @@ public class SiteInformationModel extends StudySite {
 	 */
 	public void setLstVariable(ArrayList<StudyVariable> lstVariable) {
 		this.lstVariable = lstVariable;
+	}
+
+	public PlantingType getPlantingtype() {
+		return plantingtype;
+	}
+
+	public void setPlantingtype(PlantingType plantingtype) {
+		this.plantingtype = plantingtype;
 	}
 
 }
