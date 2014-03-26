@@ -6,10 +6,10 @@
 	<!-- 			<label value="Dashboard" /> -->
 			</div>
 			<!-- Search input-->
-			<div sclass="nav-search">
+<!-- 			<div sclass="nav-search">
 				<bandbox placeholder="Search ..."
 					sclass="input-prepend" />
-			</div>
+			</div> -->
 		</div>
 
 </zk>

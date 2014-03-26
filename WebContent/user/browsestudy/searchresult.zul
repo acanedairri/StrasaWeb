@@ -7,7 +7,7 @@
 		<label value="@load(vm.searchResultLabel)" />
 		<!-- <groupbox mold="3d">
 			<caption label="@load(vm.searchResultLabel)" /> -->
-			<grid model="@load(vm.searchResult)" class="no-highlight" id="gridResultID"
+			<grid model="@load(vm.searchResult)" class="no-highlight" id="gridResultID" oddRowSclass="odd" zclass="none"
 				sizedByContent="true" emptyMessage="No study site found.">
 				<columns>
 					<column label="Study Name" width="250px"/>

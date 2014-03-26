@@ -1006,6 +1006,15 @@ a:focus {
 .btn-primary:focus {
   background-color: #428bca !important;
   border-color: #428bca;
+   position: relative;
+  padding: 3px 12px;
+   ${ t:borderRadius('0') };
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  min-height: 0;
+  height:30px;
+  color: #FFF !important;
+  font-weight:normal;
+   ${ t:applyCSS3('transition', 'all ease 0.15s 0') };
 }
 .btn-primary:hover,
 .btn-primary.open {

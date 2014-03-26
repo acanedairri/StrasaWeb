@@ -1,4 +1,7 @@
 <zk>
+	<zscript><![CDATA[
+	String selectedPosition = "after_end";
+]]></zscript>
 
 	<div id="mainBrowseWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Index')"
@@ -17,15 +20,21 @@
 							<hlayout spacing="5px">
 								<label value="Study Name"
 									sclass="label-search" />
-								<textbox id="studyNameBox" />
-								<button label="Search" sclass="btn-success"
-									image="/images/find.png"
+								<textbox id="studyNameBox"
+									placeholder="Search..." sclass="input-prepend" />
+								<button label="Search"
+									sclass="btn-success" image="/images/find.png"
 									onClick="@global-command('searchByStudyName', studyName=studyNameBox.value)" />
 								<button label="Advanced Search"
-									sclass="btn-success" image="/images/find2.png"
-									tooltip="advancedSearch" />
+									sclass="btn-primary" image="/images/find2.png"
+									onClick='advancedSearch.open(self,selectedPosition)' />
+
+								<!--  tooltip="advancedSearch" -->
+
 							</hlayout>
 						</div>
+						<separator spacing="10px"></separator>
+
 
 						<tabbox style="overflow: Auto"
 							id="resultTabBox">
@@ -40,10 +49,14 @@
 								</tabpanel>
 							</tabpanels>
 						</tabbox>
-						<popup id="advancedSearch" width="400px">
-							<include
-								src="/user/browsestudy/searchfilter.zul" />
+						<popup id="advancedSearch" width="400px"  sclass="page-content">
+							<groupbox sclass="z-demo-config"
+								closable="false">
+								<include
+									src="/user/browsestudy/searchfilter.zul" />
+							</groupbox>
 						</popup>
+
 					</vbox>
 
 				</tabpanel>
