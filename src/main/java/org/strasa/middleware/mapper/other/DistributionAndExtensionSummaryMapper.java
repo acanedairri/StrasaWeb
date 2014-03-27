@@ -39,7 +39,7 @@ public interface DistributionAndExtensionSummaryMapper {
 
 	//Germplasm vs Year
 	//select programid,germplasmname,year,sum(plantingarea) as sumPlantingArea from distributionandextension group by programid,germplasmname,year order by programid,year,germplasmname
-	@Select("select t2.name as programName, t1.programid as programid,t1.germplasmname,t1.yearextension,sum(t1.plantingarea) as sumPlantingArea, sum(amountseeddistributed) as sumAmountSeedDistributed, sum(numfarmersadopted) as sumNumFarmersAdopted, sum(amountseedsproduced) as sumAmountSeedsProduced from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid,germplasmname,yearextension order by countryextension,yearextension")
+	@Select("select t2.name as programName, t1.programid as programid,t1.germplasmname,t1.yearextension,sum(t1.plantingarea) as sumPlantingArea, sum(amountseeddistributed) as sumAmountSeedDistributed, sum(numfarmersadopted) as sumNumFarmersAdopted, sum(amountseedsproduced) as sumAmountSeedsProduced from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid,germplasmname,yearextension order by yearextension,programName")
 	List<SummaryModel> selectplantingareaSummaryGermplasmByYear();
 
 
@@ -96,4 +96,7 @@ public interface DistributionAndExtensionSummaryMapper {
 
 	@Select("select distinct CONCAT(t2.name,'-',t1.countryextension ) as programName from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid,germplasmname,countryextension order by t2.name,countryextension,yearextension")
 	List<SummaryModel> selectCategoryByCountry();
+	
+	@Select("select distinct CONCAT(t2.name) as programName from distributionandextension as t1 left join program as t2 on t1.programid=t2.id group by programid,germplasmname,yearextension order by yearextension")
+	List<SummaryModel> selectCategoryByYear();
 }

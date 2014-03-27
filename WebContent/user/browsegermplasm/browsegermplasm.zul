@@ -1,10 +1,8 @@
-
-
 <vbox apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('org.strasa.web.germplasmquery.view.model.BrowseGermplasm')">
 	<div align="center">
 		<hlayout>
-			<label value="Search By" style="font-weight: bold;"/>
+			<label value="Search By" style="font-weight: bold;" />
 			<combobox id="cmbSearchKey" autodrop="true"
 				selectedIndex="@bind(vm.searchKey)"
 				onChange="@command('SetSearchUI')">
@@ -57,7 +55,7 @@
 					</tabs>
 					<tabpanels>
 						<tabpanel height="300px">
-							<listbox model="@load(vm.keyAbioticList)"
+							<listbox model="@load(vm.keyAbioticList)"  id="listboxAbioticId"
 								width="200px" vflex="1" sizedByContent="true">
 								<listhead>
 									<listheader label="Select" />
@@ -68,7 +66,7 @@
 									<listitem>
 
 										<listcell>
-											<checkbox
+											<checkbox 
 												checked="@bind(each.value)">
 											</checkbox>
 										</listcell>
@@ -90,7 +88,7 @@
 									<listitem>
 
 										<listcell>
-											<checkbox
+											<checkbox 
 												checked="@bind(each.value)">
 											</checkbox>
 										</listcell>
@@ -135,7 +133,7 @@
 								<template name="model">
 									<listitem>
 										<listcell>
-											<checkbox
+											<checkbox 
 												checked="@bind(each.value)">
 											</checkbox>
 										</listcell>
@@ -150,8 +148,10 @@
 				</tabbox>
 			</vbox>
 
-			<button label="Search" sclass="btn-success" image="/images/find.png"
-				onClick="@command('SearchGermplasm')" />
+			<button label="Search" sclass="btn-success"
+				image="/images/find.png" onClick="@command('SearchGermplasm')" />
+			<button label="Reset" sclass="btn-danger" visible="false" id="resetKeyCharId"
+				image="/images/reset.png" onClick="@command('ResetKeyChar')" />
 
 		</hlayout>
 	</div>
@@ -159,11 +159,11 @@
 
 	<groupbox mold="3d">
 		<caption label="@load(vm.searchResultLabel)" />
-		<grid height="200px" model="@load(vm.germplasmList)" zclass="none"
-			emptyMessage="No Record Found">
+		<grid height="200px" model="@load(vm.germplasmList)" oddRowSclass="odd"
+			zclass="none" emptyMessage="No Record Found">
 
 			<columns>
-				<column label="Germplasm Name"  />
+				<column label="Germplasm Name" />
 				<column label="Other Name" />
 				<column label="Breeder" />
 				<column label="Germplasm Type" />

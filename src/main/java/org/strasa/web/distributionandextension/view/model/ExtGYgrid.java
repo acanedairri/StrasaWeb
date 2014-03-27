@@ -33,8 +33,9 @@ public class ExtGYgrid {
 		allDataGY=mgr.getAreaSummaryGermplasmByYear();
 		currentModelGY=mgr.getAreaSummaryGermplasmByYear();
 		type = "column";
-		category=mgr.getCategoryByCountry();
+		category=mgr.getCategoryByYear();
 		model = ChartData.getAreaSummaryGermplasmByYear(allDataGY,category);
+		
 	}
 
 	public SummaryFilter getFilter() {

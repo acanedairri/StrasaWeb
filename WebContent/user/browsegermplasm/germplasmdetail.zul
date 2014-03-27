@@ -100,7 +100,7 @@
 
 		<groupbox id="StudyTestedId" mold="3d">
 			<caption label="Studies where this germplasm is tested" />
-			<grid height="200px" model="@load(vm.studyTested)"
+			<grid height="200px" model="@load(vm.studyTested)" oddRowSclass="odd"
 				emptyMessage="No Record Found" sizedByContent="true"
 				zclass="none">
 

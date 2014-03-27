@@ -81,7 +81,7 @@ public class ChartData {
 		CategoryModel model = new SimpleCategoryModel();
 
 		for(int i=0; i < category.length;i++){
-			System.out.println("Category " +category[i]);
+//			System.out.println("Category " +category[i]);
 			for(ReleaseInfoSummaryModel d:data){
 				String progNameTemp=d.getProgramName()+"-"+d.getCountryrelease();
 				if(progNameTemp.equals(category[i])){
@@ -97,7 +97,7 @@ public class ChartData {
 		CategoryModel model = new SimpleCategoryModel();
 
 		for(int i=0; i < category.length;i++){
-			System.out.println("Category " +category[i]);
+//			System.out.println("Category " +category[i]);
 			for(SummaryModel d:data){
 				String progNameTemp=d.getProgramName()+"-"+d.getCountryextension();
 				if(progNameTemp.equals(category[i])){
@@ -113,11 +113,11 @@ public class ChartData {
 		CategoryModel model = new SimpleCategoryModel();
 
 		for(int i=0; i < category.length;i++){
-			System.out.println("Category " +category[i]);
 			for(SummaryModel d:data){
-				String progNameTemp=d.getProgramName()+"-"+d.getCountryextension();
+				String progNameTemp=d.getProgramName();
 				if(progNameTemp.equals(category[i])){
 					model.setValue(category[i], d.getYearextension(),d.getSumPlantingArea());
+					System.out.println("Alex" +category[i] +"  "+ d.getYearextension()+ " "+d.getSumPlantingArea());
 				}
 			}
 		}
@@ -129,7 +129,7 @@ public class ChartData {
 		CategoryModel model = new SimpleCategoryModel();
 
 		for(int i=0; i < category.length;i++){
-			System.out.println("Category " +category[i]);
+//			System.out.println("Category " +category[i]);
 			for(SummaryModel d:data){
 				String progNameTemp=d.getProgramName()+"-"+d.getCountryextension();
 				if(progNameTemp.equals(category[i])){

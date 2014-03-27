@@ -236,4 +236,24 @@ public class DistributionAndExtensionManagerImpl {
 		}
 	}
 
+	public String[] getCategoryByYear() {
+		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		DistributionAndExtensionSummaryMapper mapper = session.getMapper(DistributionAndExtensionSummaryMapper.class);
+		
+		int i=0;
+		try{
+			List<SummaryModel> toreturn= mapper.selectCategoryByYear();
+			String[] program = new String[toreturn.size()];
+			for(SummaryModel sm: toreturn){
+				System.out.println(sm.getProgramName());
+				program[i]=sm.getProgramName();
+				i++;
+			}
+			return program;
+
+		}finally{
+			session.close();
+		}
+	}
+
 }

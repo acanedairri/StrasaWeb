@@ -2,6 +2,8 @@
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.distributionandextension.view.model.ExtGYgrid')">
 		<hbox>
+
+
 			<vlayout>
 				<flashchart id="chart" width="800" height="350"
 					style="font-weight:bold" type="@bind(vm.type)"
@@ -60,8 +62,7 @@
 					<column sort="auto('sumNumFarmersAdopted')"
 						label="Total Num of Famers who adopted">
 					</column>
-					<column 
-						sort="auto('sumAmountSeedsProduced')"
+					<column sort="auto('sumAmountSeedsProduced')"
 						label="Total Seeds Produced">
 					</column>
 				</columns>

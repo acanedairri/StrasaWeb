@@ -12,10 +12,10 @@
 					<row>
 						Data
 
-						<radiogroup onCreate="self.setSelectedIndex(2)"
+						<radiogroup onCreate="self.setSelectedIndex(2)" 
 							selectedItem="@bind(vm.searchFilter.shared)">
-							<radio label="My Data" value="private" />
-							<radio label="Shared Data" value="public" />
+							<radio label="My Data" value="private" style="padding:10px" /> 
+							<radio label="Shared Data" value="public"  style="padding:10px" />
 							<radio label="Both" value="both" />
 						</radiogroup>
 

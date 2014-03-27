@@ -498,19 +498,23 @@ public class Index {
 
 	public void relaunchMergeTab(boolean isRaw) {
 		if (isRaw) {
-
-			tabMergedRaw.close();
-			tabMergedRaw.detach();
-			tabMergedRaw = null;
-			// System.out.println;
+			if(tabMergedRaw != null)
+			{
+				tabMergedRaw.close();
+				tabMergedRaw.detach();
+				tabMergedRaw = null;
+			
+			}// System.out.println;
 
 			initializeDataSetTab(new StudyDataSet(), true, true, false, true);
 		} else {
 
-			tabMergedDerived.close();
-			tabMergedRaw.detach();
-			tabMergedDerived = null;
-
+			if(tabMergedDerived != null)
+			{
+				tabMergedDerived.close();
+				tabMergedDerived.detach();
+				tabMergedDerived = null;
+			}
 			initializeDataSetTab(new StudyDataSet(), true, false, false, true);
 		}
 	}
