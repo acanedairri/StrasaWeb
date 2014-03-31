@@ -47,17 +47,6 @@ public class Specifications {
 		typeOfDesignList = getTypeOfDesignList();
 	}
 
-	@NotifyChange("*")
-	@Command("runRserve")
-	public void DisplayGermplasmInfo(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view) throws RserveException, REXPMismatchException{
-		
-		TestRServeManager r= new TestRServeManager();
-		resultRServe=r.testRServe();
-		
-		
-	}
-
 	public List<String> getTypeOfDesignList() {
 		// TODO Auto-generated method stub
 		List<String> designs = new ArrayList<String>();

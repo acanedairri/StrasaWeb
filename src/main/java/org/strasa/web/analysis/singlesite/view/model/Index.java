@@ -56,7 +56,7 @@ private Tab resultTab;
 		Include studyInformationPage = new Include();
 		studyInformationPage.setParent(newPanel);
 		studyInformationPage.setDynamicProperty("resultTab", newTab);
-		studyInformationPage.setSrc("/user/browsestudy/searchresult.zul");
+		studyInformationPage.setSrc("/user/analysis/textviewer.zul");
 		
 		tabPanels.appendChild(newPanel);
 		tabs.appendChild(newTab);

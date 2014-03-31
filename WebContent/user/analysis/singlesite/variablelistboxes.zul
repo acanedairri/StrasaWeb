@@ -14,7 +14,7 @@
 				<image style="cursor:pointer" id="removeResponseBtn"
 					src="/images/leftarrow_g.png" tooltip="Remove response variable"/>
 			</vbox>
-			<listbox id="chosenLb" hflex="1" vflex="true"
+			<listbox id="responseLb" hflex="1" vflex="true"
 				multiple="true" rows="4">
 				<listhead>
 					<listheader label="First Name" />

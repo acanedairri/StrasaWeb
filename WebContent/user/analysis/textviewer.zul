@@ -1,0 +1,4 @@
+<window id="textViewerHtml" apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.strasa.web.analysis.view.TextViewer')"
+	height="98%" width="98%" >
+</window>

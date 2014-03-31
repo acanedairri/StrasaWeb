@@ -79,7 +79,7 @@
 					<tabpanel />
 				</tabpanels>
 			</tabbox>
-			<button label="Test" onClick="@command('runRserve')"
+			<button label="Test" onClick="@global-command('displayTextFileContent')"
 				class="grid-link" />
 
 			<label value="@bind(vm.resultRServe)" multiline="true" />
