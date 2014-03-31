@@ -349,6 +349,7 @@ public class CrossStudyQuery extends StudyVariable {
 	public void ShowVariateDescription(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view,@BindingParam("variable") String variable){
 		System.out.println(variable);
+		Div resultGrid= (Div) component.getFellow("resultQuery"); 
 		StudyVariableManagerImpl studyVariableMngr= new StudyVariableManagerImpl();
 		StudyVariable newVariableInfo= studyVariableMngr.getVariableInfoByName(variable);
 
@@ -364,7 +365,7 @@ public class CrossStudyQuery extends StudyVariable {
 		params.put("datatype",newVariableInfo.getDatatype());
 		Executions.createComponents("/user/crossstudyquery/variabledetail.zul",popVariableDescription, params);
 
-		popVariableDescription.open(view.getFellow(variable),"after_start");
+		popVariableDescription.open(resultGrid.getFirstChild().getFellowIfAny(variable),"after_end");
 
 
 	}

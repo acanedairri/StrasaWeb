@@ -207,7 +207,7 @@
 
 	
 			<div id="resultQuery">
-			<label value="grid"></label>
+			<label value="No record found"></label>
 			
 			</div>
 				<paging pageSize="@load(vm.pageSize)"
