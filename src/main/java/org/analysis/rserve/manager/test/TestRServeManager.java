@@ -1,6 +1,7 @@
 package org.analysis.rserve.manager.test;
 
 import org.strasa.web.utilities.InputTransform;
+import org.zkoss.zk.ui.Sessions;
 public class TestRServeManager {
 
 	private InputTransform inputTransform;

@@ -8,10 +8,10 @@
 			<hbox align="center" spacing="10px">
 				<label value="Select" sclass="label-search" />
 				<radiogroup id="dataCategoryId"
-					onCreate="self.setSelectedIndex(1)" vflex="1"
+					 vflex="1" 
 					selectedItem="@bind(vm.dataCategory)">
-					<radio label="Raw Data" value="rd" />
-					<radio label="Derived Data" value="dd" />
+					<radio label="Raw Data" value="rd"  style="padding:15px" />
+					<radio label="Derived Data" value="dd"  checked="true" selected="true"/>
 				</radiogroup>
 				<space width="10px" />
 				<label value="Variable" sclass="label-search" />

@@ -141,7 +141,14 @@
 				#{item.variable}
 				from studyrawdata as t1
 				left join study as t2 on t1.studyid=t2.id where (t1.userid=#{item.userid} or
-				t1.shared=1) group
+				t1.shared=1) 
+				
+				<if test="item.studyid != 0" >
+				    and t1.studyid=#{item.studyid} 
+				</if>
+				
+				
+				group
 				by t1.studyid,t1.datarow having
 
 			</if>

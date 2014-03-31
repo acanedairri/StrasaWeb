@@ -2,8 +2,12 @@ package org.analysis.rserve.manager;
 
 import java.util.ArrayList;
 
+import org.rosuda.REngine.REXPMismatchException;
+import org.rosuda.REngine.Rserve.RConnection;
+import org.rosuda.REngine.Rserve.RserveException;
 import org.strasa.web.analysis.view.model.SingleSiteAnalysisModel;
 import org.strasa.web.utilities.InputTransform;
+import org.zkoss.zk.ui.Sessions;
 public class RServeManager {
 	private RConnection rConnection;
 

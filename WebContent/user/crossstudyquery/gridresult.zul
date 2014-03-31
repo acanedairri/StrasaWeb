@@ -13,7 +13,7 @@
 						<column id="${each}" label="@load(each)" />
 					</zk>
 					<zk>
-						<column id="${each}" label="@load(each)"
+						<column id="${each}" label="@load(each)" hflex="1"
 							onClick="@global-command('ShowVariateDescription',variable=each)"
 							image="/images/help-icon.png" />
 					</zk>
