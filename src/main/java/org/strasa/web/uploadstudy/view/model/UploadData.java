@@ -103,6 +103,7 @@ public class UploadData extends ProcessTabViewModel {
 	private Program txtProgram = new Program();
 	private Project txtProject = new Project();
 	private boolean isDataUploaded = false;
+	private boolean gridReUploaded = false;
 
 	@Wire("#datagrid")
 	Div divDatagrid;
@@ -267,6 +268,7 @@ public class UploadData extends ProcessTabViewModel {
 	}
 
 	public String getTxtStudyName() {
+		System.out.println("SET____________________________________");
 		return txtStudyName;
 	}
 
@@ -291,16 +293,18 @@ public class UploadData extends ProcessTabViewModel {
 	}
 
 	public List<String> getColumnList() {
+
 		return columnList;
 	}
 
 	public void setColumnList(List<String> columnList) {
+		reloadCsvGrid();
 		this.columnList = columnList;
 	}
 
 	public List<String[]> getDataList() {
 		System.out.println("DaALIST GEt");
-
+		reloadCsvGrid();
 		if (true)
 			return dataList;
 		ArrayList<String[]> pageData = new ArrayList<String[]>();
@@ -327,6 +331,7 @@ public class UploadData extends ProcessTabViewModel {
 	}
 
 	public void setDataList(List<String[]> dataList) {
+		reloadCsvGrid();
 		this.dataList = dataList;
 	}
 
@@ -534,7 +539,11 @@ public class UploadData extends ProcessTabViewModel {
 			dataFileName = "";
 			isNewDataset = true;
 			varData.clear();
+			dataList.clear();
+			columnList.clear();
 			isDataUploaded = false;
+
+			divDatagrid.getFirstChild().detach();
 			return;
 		}
 		Messagebox.show("Are you sure you want to delete the previous uploaded data? WARNING! This cannot be undone.", "Delete all data?", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener() {
@@ -544,7 +553,12 @@ public class UploadData extends ProcessTabViewModel {
 					dataFileName = "";
 					isNewDataset = true;
 					varData.clear();
+					dataList.clear();
+					columnList.clear();
+
 					isDataUploaded = false;
+
+					divDatagrid.getFirstChild().detach();
 					BindUtils.postGlobalCommand(null, null, "disableTabs", null);
 					BindUtils.postNotifyChange(null, null, UploadData.this, "*");
 					new StudyRawDataManagerImpl(studyType.equalsIgnoreCase("rawdata")).deleteByStudyId(study.getId());
@@ -582,9 +596,13 @@ public class UploadData extends ProcessTabViewModel {
 					dataFileName = "";
 					isNewDataset = true;
 					varData.clear();
+					dataList.clear();
+					columnList.clear();
 					isDataUploaded = false;
+					divDatagrid.getFirstChild().detach();
 					BindUtils.postGlobalCommand(null, null, "disableTabs", null);
 					BindUtils.postNotifyChange(null, null, UploadData.this, "*");
+
 					new StudyRawDataManagerImpl(studyType.equalsIgnoreCase("rawdata")).deleteByStudyId(study.getId());
 					new StudyDataColumnManagerImpl().removeStudyDataColumnByStudyId(UploadData.this.studyID, "rd", dataset.getId());
 
@@ -621,12 +639,17 @@ public class UploadData extends ProcessTabViewModel {
 	}
 
 	public void reloadCsvGrid() {
+		if (gridReUploaded) {
+			gridReUploaded = false;
+			return;
+		}
 		if (!divDatagrid.getChildren().isEmpty())
 			divDatagrid.getFirstChild().detach();
 		Include incCSVData = new Include();
 		incCSVData.setSrc("/user/updatestudy/csvdata.zul");
 		incCSVData.setParent(divDatagrid);
 		gbUploadData.invalidate();
+		gridReUploaded = true;
 	}
 
 	@Command("refreshCsv")

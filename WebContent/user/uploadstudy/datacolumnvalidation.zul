@@ -1,7 +1,7 @@
 <zk>
 
 	<window title="Data Column Header Validation" border="normal"
-		closable="true" apply="org.zkoss.bind.BindComposer"
+		closable="true" apply="org.zkoss.bind.BindComposer" 
 		viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.DataColumnValidation')"
 		width="360px" height="475px">
 		<style src="/css/main.css"></style>

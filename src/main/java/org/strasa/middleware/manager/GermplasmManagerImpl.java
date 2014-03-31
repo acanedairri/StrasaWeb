@@ -1,6 +1,7 @@
 package org.strasa.middleware.manager;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.ExecutorType;
@@ -42,6 +43,26 @@ public class GermplasmManagerImpl {
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
 		try {
 			return mapper.selectByPrimaryKey(id);
+		} finally {
+			session.close();
+		}
+
+	}
+
+	public HashMap<String, Germplasm> getGermplasmBatchAsMap(List<String> germplasmList) {
+
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+
+		try {
+			GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
+			GermplasmExample example = new GermplasmExample();
+			HashMap<String, Germplasm> returnVal = new HashMap<String, Germplasm>();
+			example.createCriteria().andGermplasmnameIn(germplasmList);
+			List<Germplasm> lst = mapper.selectByExample(example);
+			for (Germplasm germ : lst) {
+				returnVal.put(germ.getGermplasmname(), germ);
+			}
+			return returnVal;
 		} finally {
 			session.close();
 		}

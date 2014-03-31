@@ -36,6 +36,8 @@ import org.strasa.middleware.model.StudyVariable;
  */
 public class SiteInformationModel extends StudySite {
 
+	public ArrayList<StudyVariable> lstStudyVariable = new ArrayList<StudyVariable>();
+
 	/** The file layout. */
 	private File fileLayout;
 
@@ -43,19 +45,22 @@ public class SiteInformationModel extends StudySite {
 	private File fileGenotype;
 
 	/** The design. */
-	private StudyDesign design;
+	private StudyDesign design = new StudyDesign();
 
 	/** The agronomy. */
-	private StudyAgronomy agronomy;
+	private StudyAgronomy agronomy = new StudyAgronomy();
 
 	/** The location. */
-	private Location location;
+	private Location location = new Location();;
 
 	/** The lst variable. */
 	private ArrayList<StudyVariable> lstVariable;
 
 	private Ecotype ecotype;
-	private PlantingType plantingtype;
+	private PlantingType plantingtype = new PlantingType();
+	private boolean headerAutoMatch = true;
+	private String headerLayout;
+	private String headerGenotype;
 
 	public Ecotype getEcotype() {
 		return ecotype;
@@ -187,6 +192,38 @@ public class SiteInformationModel extends StudySite {
 
 	public void setPlantingtype(PlantingType plantingtype) {
 		this.plantingtype = plantingtype;
+	}
+
+	public ArrayList<StudyVariable> getLstStudyVariable() {
+		return lstStudyVariable;
+	}
+
+	public void setLstStudyVariable(ArrayList<StudyVariable> lstStudyVariable) {
+		this.lstStudyVariable = lstStudyVariable;
+	}
+
+	public boolean isHeaderAutoMatch() {
+		return headerAutoMatch;
+	}
+
+	public void setHeaderAutoMatch(boolean headerAutoMatch) {
+		this.headerAutoMatch = headerAutoMatch;
+	}
+
+	public String getHeaderLayout() {
+		return headerLayout;
+	}
+
+	public void setHeaderLayout(String headerLayout) {
+		this.headerLayout = headerLayout;
+	}
+
+	public String getHeaderGenotype() {
+		return headerGenotype;
+	}
+
+	public void setHeaderGenotype(String headerGenotype) {
+		this.headerGenotype = headerGenotype;
 	}
 
 }

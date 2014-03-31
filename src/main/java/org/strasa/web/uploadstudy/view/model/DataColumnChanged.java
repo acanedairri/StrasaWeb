@@ -18,6 +18,7 @@
  * 
  */
 package org.strasa.web.uploadstudy.view.model;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,41 +48,41 @@ public class DataColumnChanged {
 	private Component mainView;
 	private StudyVariable selectedVar;
 	private String filter = new String();
-	
-	 
+
 	public String getFilter() {
 		return filter;
 	}
+
 	@NotifyChange("*")
 	public void setFilter(String filter) {
 		this.filter = filter;
-		   StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
-		   varList.clear();
-	        varList.addAll(studyVarMan.getVariables(filter));
-	        System.out.print(filter);
+		StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
+		varList.clear();
+		varList.addAll(studyVarMan.getVariables(filter));
+		System.out.print(filter);
 	}
+
 	@Command
-	public void updatefilter(@BindingParam("filterValue") String filterValue){
-		
-		   StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
-		   varList.clear();
-	        varList.addAll(studyVarMan.getVariables(filterValue));
-	        System.out.print(filter);
+	public void updatefilter(@BindingParam("filterValue") String filterValue) {
+
+		StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
+		varList.clear();
+		varList.addAll(studyVarMan.getVariables(filterValue));
+		System.out.print(filter);
 	}
 
+	private List<StudyVariable> varList = new ArrayList<StudyVariable>();
 
-	private List<StudyVariable> varList = new ArrayList<StudyVariable>(); 
-	
 	@Init
-	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view ,@ExecutionArgParam("oldVar")  String oldVar) {
+	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("oldVar") String oldVar) {
 
-	        StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
-	        varList = studyVarMan.getVariables();
-	        this.oldVar = oldVar;
-	        System.out.println(oldVar);
-	        mainView = view;
-	        parBinder = (Binder) view.getParent().getAttribute("binder");
-	    }
+		StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
+		varList = studyVarMan.getVariables();
+		this.oldVar = oldVar;
+		System.out.println(oldVar);
+		mainView = view;
+		parBinder = (Binder) view.getParent().getAttribute("binder");
+	}
 
 	public String getOldVar() {
 		return oldVar;
@@ -97,14 +98,14 @@ public class DataColumnChanged {
 		Binder bind = parBinder;
 		if (bind == null)
 			return;
-		
+
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("newValue", selectedVar.getVariablecode());
 		params.put("oldVar", oldVar);
-
+		params.put("variable", selectedVar);
 		// this.parBinder.postCommand("change", params);
 		bind.postCommand("refreshVarList", params);
-		
+
 		mainView.detach();
 	}
 
@@ -119,33 +120,33 @@ public class DataColumnChanged {
 	public void setVarList(List<StudyVariable> varList) {
 		this.varList = varList;
 	}
+
 	@Command("selectVar")
 	public void change(@ContextParam(ContextType.VIEW) Component view, @BindingParam("selVar") String selectedVar) {
-		
+
 		Binder bind = parBinder;
 		if (bind == null)
 			return;
-		
+
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("newValue", selectedVar);
 
 		// this.parBinder.postCommand("change", params);
 		bind.postCommand("change", params);
-		
+
 		view.detach();
 	}
-	
-	
+
 	public void onItemClicked(Event ev) throws Exception {
 		Event origin;
 		// get event target
 		if (ev instanceof ForwardEvent) {
-			origin = Events.getRealOrigin((ForwardEvent)ev);
+			origin = Events.getRealOrigin((ForwardEvent) ev);
 		} else {
 			origin = ev;
 		}
 		Component target = origin.getTarget();
-		System.out.print(((Row)target).getValue());
+		System.out.print(((Row) target).getValue());
 	}
-	
+
 }

@@ -1,6 +1,6 @@
 <zk>
   <window title="Variable List" border="normal" closable="true"  apply="org.zkoss.bind.BindComposer"
-        viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.DataColumnChanged')" width = "50%" height = "45%">
+        viewModel="@id('vm') @init('org.strasa.web.uploadstudy.view.model.DataColumnChanged')" width = "50%" height = "45%" position="center,top">
            <listbox  multiple="false" checkmark="true" oddRowSclass="odd"
             model="@load(vm.varList)" selectedItem="@bind(vm.selectedVar)" vflex="1" sizedByContent="true">
          <auxhead>

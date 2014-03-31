@@ -1,6 +1,9 @@
 package org.strasa.web.createfieldbook.view.model;
 
+import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.strasa.middleware.manager.EcotypeManagerImpl;
 import org.strasa.middleware.manager.LocationManagerImpl;
@@ -9,17 +12,29 @@ import org.strasa.middleware.manager.SoilTypeManagerImpl;
 import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.PlantingType;
+import org.strasa.middleware.model.StudyVariable;
 import org.strasa.web.createfieldbook.view.pojos.SiteInformationModel;
+import org.strasa.web.uploadstudy.view.model.DataColumnChanged;
+import org.strasa.web.utilities.FileUtilities;
+import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
+import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.UploadEvent;
+import org.zkoss.zk.ui.select.Selectors;
+import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Tab;
+import org.zkoss.zul.Window;
 
 import com.mysql.jdbc.StringUtils;
 
@@ -29,13 +44,14 @@ public class FieldBookSite {
 	 * INITS
 	 */
 	@Init
-	public void init() {
+	public void init(@ExecutionArgParam("SiteModel") SiteInformationModel siteModel, @ExecutionArgParam("SiteTab") Tab siteTab) {
 		lstLocations = getAllLocations();
+		this.site = siteModel;
 	}
 
-	public void afterCompose(@ContextParam(ContextType.VIEW) final Component view) {
-
-		bboxLocation = (Bandbox) view.getAttribute("bbox_location");
+	@AfterCompose
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
+		Selectors.wireComponents(view, this, false);
 	}
 
 	/*
@@ -45,20 +61,43 @@ public class FieldBookSite {
 	List<Ecotype> ecotypes = new EcotypeManagerImpl().getAllEcotypes();
 	List<String> soiltypes = new SoilTypeManagerImpl().getAllSoilType();
 	List<PlantingType> plantingtypes = new PlantingTypeManagerImpl().getAllPlantingTypes();
+
 	SiteInformationModel site;
+	@Wire("#bbox_location")
 	Bandbox bboxLocation;
 	List<Location> lstLocations;
 	private String labelDate;
+	private String lblLayoutFileName;
+	private String lblGenotypeFileName;
 
 	/*
 	 * COMMANDS
 	 */
 
 	@Command
+	public void addTrait(@ContextParam(ContextType.VIEW) Component view) {
+		Map<String, Object> params = new HashMap<String, Object>();
+
+		params.put("parent", view);
+
+		Window popup = (Window) Executions.createComponents(DataColumnChanged.ZUL_PATH, view, params);
+		popup.doModal();
+	}
+
+	@NotifyChange("lstStudyVariable")
+	@Command("refreshVarList")
+	public void refreshList(@BindingParam("variable") StudyVariable newVariable) {
+
+		site.lstStudyVariable.add(newVariable);
+	}
+
+	@NotifyChange("filteredLocations")
+	@Command
 	public void doLocationSearch() {
 		toggleBandBox(true);
-
-		BindUtils.postNotifyChange(null, null, this.site, "*");
+		System.out.println("WORK");
+		// BindUtils.postNotifyChange(null, null, FieldBookSite.this,
+		// "filteredLocations");
 		site.getLocation().setId(null);
 	}
 
@@ -74,7 +113,7 @@ public class FieldBookSite {
 	}
 
 	@Command
-	public void autoFillBandbox(@BindingParam("id") int lstId) {
+	public void autoFillBandbox() {
 
 		if (!bboxLocation.isOpen()) {
 			if (getFilteredLocations().isEmpty() && getFilteredLocations().getSize() != lstLocations.size()) {
@@ -97,6 +136,32 @@ public class FieldBookSite {
 		site.setLocation(location);
 		BindUtils.postNotifyChange(null, null, this.site, "*");
 		toggleBandBox(false);
+	}
+
+	@NotifyChange("lblGenotypeFileName")
+	@Command("uploadGenotype")
+	public void uploadGenotype(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view) {
+
+		File tempFile = FileUtilities.getFileFromUpload(ctx, view);
+		if (tempFile == null)
+			return;
+
+		site.setFileGenotype(tempFile);
+		UploadEvent event = (UploadEvent) ctx.getTriggerEvent();
+		lblGenotypeFileName = event.getMedia().getName();
+	}
+
+	@NotifyChange("lblLayoutFileName")
+	@Command("uploadLayout")
+	public void uploadLayout(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view) {
+
+		File tempFile = FileUtilities.getFileFromUpload(ctx, view);
+		if (tempFile == null)
+			return;
+
+		site.setFileLayout(tempFile);
+		UploadEvent event = (UploadEvent) ctx.getTriggerEvent();
+		lblLayoutFileName = event.getMedia().getName();
 	}
 
 	/*
@@ -193,6 +258,22 @@ public class FieldBookSite {
 
 	public void setLabelDate(String labelDate) {
 		this.labelDate = labelDate;
+	}
+
+	public String getLblLayoutFileName() {
+		return lblLayoutFileName;
+	}
+
+	public void setLblLayoutFileName(String lblLayoutFileName) {
+		this.lblLayoutFileName = lblLayoutFileName;
+	}
+
+	public String getLblGenotypeFileName() {
+		return lblGenotypeFileName;
+	}
+
+	public void setLblGenotypeFileName(String lblGenotypeFileName) {
+		this.lblGenotypeFileName = lblGenotypeFileName;
 	}
 
 }

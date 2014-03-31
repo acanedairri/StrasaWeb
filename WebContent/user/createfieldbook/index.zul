@@ -1,331 +1,132 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<div 
-		apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.createfieldbook.view.model.FieldBookSite')"
-	>
-		<style src="../css/main.css" />
-
-	<vlayout>
-	<hlayout>
-
-		<groupbox vflex="1" hflex="1" mold="3d">
-			<caption label="Site Information"></caption>
-			<grid>
+	<div apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.createfieldbook.view.model.Index')" height="100%">
+		<groupbox mold="3d">
+			<caption label="Study Information"></caption>
+			<grid zclass="none">
+				<columns>
+					<column label="" width="120px" />
+					<column label="" width="350px" />
+					<column label="" width="100px" />
+				</columns>
 				<rows>
 					<row>
-						<label value="Site Name"></label>
-						<textbox value="@bind(vm.site.sitename)"></textbox>
+						<label class="name" value="Program:" />
+						<bandbox id="bdProgram" mold="rounded"
+							autodrop="true" value="@bind(vm.txtProgram.name)" readonly="true"
+							width="330px">
+							<bandpopup>
+								<listbox height="250px" width="650px"
+									mold="paging" autopaging="true" model="@load(vm.programList)"
+									selectedItem="@bind(vm.txtProgram)"
+									onSelect="bdProgram.value=self.selectedItem.label;bdProgram.close();">
+									<listhead>
+										<listheader
+											label="Select Program" />
+									</listhead>
+									<template name="model" var="item"
+										status="s">
+										<listitem>
+
+											<listcell
+												label="@bind(item.name)" />
+										</listitem>
+									</template>
+
+								</listbox>
+							</bandpopup>
+						</bandbox>
+						<button label="Add" image="/images/New16.png"
+							sclass="btn-success" onClick="@command('addProgram')" />
 					</row>
 					<row>
-						<label value="Site Location"></label>
-						<bandbox  id = "bbox_location" 
-								value="@bind(vm.site.location.locationname)"
-								onChange="@command('doLocationSearch')"
-								instant="true" autodrop="true"
-								onOpen="@command('autoFillBandbox')"
-								onClick="@command('openBandbox')" width = "80%">
-								<bandpopup>
-									<vbox width="40%">
-									
-										<grid
-											model="@load(vm.filteredLocations)"
-											emptyMessage="No location is available. Please add your location."
-											sizedByContent="true" hflex="true">
-											<columns>
-												<column
-													label="Location" />
-												<column label="Country" />
-												<column
-													label="Province" />
-												<column label="Region" />
-												<column
-													label="Altitude" />
-												<column
-													label="Latitude" />
-												<column
-													label="Weather Station" />
-											</columns>
-											<template name="model">
-												<row>
-													<toolbarbutton
-														label="@load(each.locationname)" width="99%"
-														onClick="@command('setLocationRow',location = each)" />
-													<label
-														value="@bind(each.country)" />
+						<label class="name" value="Project:" />
+						<bandbox id="bdProject" mold="rounded"
+							width="330px" autodrop="true" value="@bind(vm.txtProject.name)"
+							readonly="true">
+							<bandpopup>
+								<listbox height="250px" width="450px"
+									mold="paging" autopaging="true" model="@load(vm.projectList)"
+									selectedItem="@bind(vm.txtProject)"
+									onSelect="bdProject.value=self.selectedItem.label;bdProject.close();">
+									<listhead>
+										<listheader
+											label="Select Project" />
+									</listhead>
+									<template name="model" var="item"
+										status="s">
+										<listitem>
 
-													<label
-														value="@bind(each.province)" />
-
-													<label
-														value="@bind(each.region)" />
-
-													<label
-														value="@bind(each.altitude)" />
-
-													<label
-														value="@bind(each.latitude)" />
-
-													<label
-														value="@bind(each.weatherstation)" />
-
-												</row>
-											</template>
-										</grid>
-									</vbox>
-								</bandpopup>
-							</bandbox>
+											<listcell
+												label="@bind(item.name)" />
+										</listitem>
+									</template>
+								</listbox>
+							</bandpopup>
+						</bandbox>
+						<button label="Add" image="/images/New16.png"
+							sclass="btn-success" onClick="@command('addProject')" />
 					</row>
 					<row>
-						<label value="Year"></label>
-						<textbox value = "@bind(vm.site.year)"></textbox>
+						<label class="name" value="Study Name:" />
+						<textbox width='173px'
+							value="@bind(vm.txtStudyName)" />
+					</row>
+
+					<row>
+						<label class="name" value="Study Type:" />
+						<bandbox id="bdStudyType" mold="rounded"
+							autodrop="true" value="@load(vm.txtStudyType)" readonly="true">
+							<bandpopup>
+								<listbox height="250px" width="450px"
+									mold="paging" autopaging="true" model="@load(vm.studyTypeList)"
+									selectedItem="@bind(vm.txtStudyType)"
+									onSelect="bdStudyType.value=self.selectedItem.label;bdStudyType.close();">
+									<listhead>
+										<listheader
+											label="Select Study types" />
+									</listhead>
+									<listitem label="${each}"
+										forEach="${languages}" />
+								</listbox>
+							</bandpopup>
+						</bandbox>
+					</row>
+
+					<row>
+						<label class="name" value="Start Year:" />
+						<spinner width='190px'
+							value="@bind(vm.startYear)" />
 					</row>
 					<row>
-						<label value="Season"></label>
-						<textbox value = "@bind(vm.site.season)"></textbox>
+						<label class="name" value="End Year:" />
+						<spinner width='190px'
+							value="@bind(vm.endYear)" />
 					</row>
 					<row>
-						<label value="Eco System"></label>
-						<combobox model="@load(vm.ecotypes)"
-								readonly="true" width="99%"
-								selectedItem="@bind(vm.site.ecotype)"
-								>
-								<template name="model">
-									<comboitem value="@load(each.id)"
-										label="@load(each.ecotype)" />
-								</template>
-							</combobox>
-					</row>
-					<row>
-						<label value="Soil Type"></label>
-							<combobox model="@load(vm.soiltypes)"
-								width="99%" value="@bind(vm.site.soiltype)" readonly="true">
-								<template name="model">
-									<comboitem value="@load(each)"
-										label="@load(each)" />
-								</template>
-					</row>
-					<row>
-						<label value="Soil PH"></label>
-						<doublespinner
-								constraint="no empty,min 4 max 12" value="@bind(vm.site.soilph)"
-								width="99%"
-								 />
+						<!-- 											<button label="Save"
+							image="im" onClick="@command('saveStudyInformation')">
+							</button> -->
+
 					</row>
 				</rows>
 			</grid>
+
 		</groupbox>
-		<groupbox hflex="1" vflex="1" mold="3d"><caption label="Agronomy"></caption>
-		<grid>
-							<columns>
-								<column />
-								<column />
-							</columns>
-							<rows>
-								<row>
-									<label value="Planting Type:"
-										style="color:red" />
-									<hlayout>
-										<combobox
-											model="@load(vm.plantingtypes)" readonly="true"
-											selectedItem="@bind(vm.site.plantingtype)" onSelect="@command('updateLabelDate')"
-											width="99%">
-											<template name="model">
-												<comboitem
-													value="@load(each.planting)" label="@load(each.planting)" />
-											</template>
-										</combobox>
-									</hlayout>
-								</row>
-								<row>
-									<label value="@load(vm.labelDate)"
-										style="color:red">
-									</label>
-									<datebox
-										value="@bind(vm.site.agronomy.sowingdate)" width="99%"
-										format="MM/dd/yyyy" />
-								</row>
-								<row>
-									<label value="Harvest Date:"
-										style="color:red" />
-									<datebox
-										value="@bind(vm.site.agronomy.harvestdate)" width="99%"
-										format="MM/dd/yyyy" />
-								</row>
-								<row>
-									Fertilization:
-									<textbox
-										value="@bind(vm.site.agronomy.fertilization)" width="99%" />
-								</row>
-								<row>
-									Density:
-									<textbox
-										value="@bind(vm.site.agronomy.density)" width="99%" />
-								</row>
-							</rows>
-
-						</grid>
 		
-		
+		<separator></separator>
+		<groupbox height="100%"  mold="3d">
+			<caption label="Site Information" height=""></caption>
+			<button label="Add Site" onClick="@command('addSite')"></button>
+			<tabbox id="tabboxSites">
+				<tabs>
+				</tabs>
+				<tabpanels>
+				</tabpanels>
+			</tabbox>
 		</groupbox>
-		<groupbox hflex="1" vflex="1" mold="3d"><caption label="Design Information"></caption>
-		<grid vflex="1">
-							<columns>
-								<column />
-								<column />
-							</columns>
-							<rows>
-								<row>
-									<label value="Plot Size:"
-										style="color:red" />
-
-									<textbox
-										value="@bind(vm.site.agronomy.plotsize)" width="99%" />
-								</row>
-								<row>
-
-									<label value="Design Structure:"
-										style="color:red" />
-									<combobox id = "cmbDesignStructure"
-										value="@bind(vm.site.agronomy.designstructure)"
-										width="99%" > 
-												<attribute name="onCreate"><![CDATA[
-        								List list2 = new ArrayList();
-        									 list2.add("CRD");
-        									 list2.add("RCBD");
-        									 list2.add("LSD");
-        								ListModelList lm2 = new ListModelList(list2);
-        									 lm2.addSelection(lm2.get(0));
-        									 cmbDesignStructure.setModel(lm2);
-										
-										
-									]]></attribute>
-										
-										</combobox>
-								</row>
-								<row>
-									<label value="Treatment Structure:"
-										style="color:red" />
-
-									<combobox id="cmbTreatmentStructure"
-										value="@bind(vm.site.agronomy.treatmentstructure)"
-										width="99%" > 
-										<attribute name="onCreate"><![CDATA[
-        								List list2 = new ArrayList();
-        									 list2.add("One Factor");
-        									 list2.add("Two Factor Factorial");
-        									 list2.add("Three Factor Factorial");
-        								ListModelList lm2 = new ListModelList(list2);
-        									 lm2.addSelection(lm2.get(0));
-       										 cmbTreatmentStructure.setModel(lm2);
-       									  txtDRow2.setValue("");
-        								  txtDRow3.setValue("");
-        								  txtDRow4.setValue("");
-        								
-        								  dRow2.setVisible(false);
-        								  dRow3.setVisible(false);
-        								  dRow4.setVisible(false);
-    							]]></attribute>
-    							
-    							<attribute name = "onChange">
-    							<![CDATA[
-    							
-    							  if(cmbTreatmentStructure.getSelectedIndex() == 0){
-    								  txtDRow2.setValue("");
-    								  txtDRow3.setValue("");
-    								  txtDRow4.setValue("");
-    								
-    								  dRow2.setVisible(false);
-    								  dRow3.setVisible(false);
-    								  dRow4.setVisible(false);
-    								  
-    								  
-    							  }
-    							  else if(cmbTreatmentStructure.getSelectedIndex() == 1){
-    								  txtDRow3.setValue("");
-    								  txtDRow4.setValue("");
-    								  dRow2.setVisible(true);
-    								  dRow3.setVisible(false);
-    								  dRow4.setVisible(false);
-    								
-    								  
-    							  }
-    							  else if(cmbTreatmentStructure.getSelectedIndex() == 2){
-    								  dRow2.setVisible(true);
-    								  dRow3.setVisible(true);
-    								  dRow4.setVisible(true);
-    								  
-    							  }
-    							
-    							
-    							
-    							]]>
-    							</attribute>
-										
-										</combobox>
-								</row>
-								
-								<row>
-									Design Factor 1:
-									<textbox
-										value="@bind(vm.site.agronomy.designfactor1)"
-										width="99%" />
-								</row>
-								<row id="dRow2">
-									Design Factor 2:
-									<textbox id = "txtDRow2"
-										value="@bind(vm.site.agronomy.designfactor2)"
-										width="99%" />
-								</row>
-								<row id="dRow3">
-									Design Factor 3:
-									<textbox id = "txtDRow3"
-										value="@bind(vm.site.agronomy.designfactor3)"
-										width="99%" />
-								</row>
-								<row id="dRow4">
-									Design Factor 4:
-									<textbox id = "txtDRow4"
-										value="@bind(vm.site.agronomy.designfactor4)"
-										width="99%" />
-								</row>
-
-							</rows>
-						</grid>
 		
-		
-		</groupbox>
-		<groupbox hflex="1" vflex="1" mold="3d">
-			<caption label="Genotype"></caption>
-			
-			<vlayout>
-				<groupbox>
-					<caption label="Genotype:"></caption>
-					<vlayout>
-						<div>
-							<label value="GenFile.csv"></label>
-						</div>
-						<div>
-							<button label="Browse" onClick="" upload="true"></button>
-							<button label="Remove" onClick=""></button>
-						</div>
-					</vlayout>
-				</groupbox>
-				<groupbox>
-					<caption label="Layout:"></caption>
-					<vlayout>
-						<div>
-							<label value="GenFile.csv"></label>
-						</div>
-						<div>
-							<button label="Browse" onClick="" upload="true"></button>
-							<button label="Remove" onClick=""></button>
-						</div>
-					</vlayout>
-				</groupbox>
-			
-			</vlayout>
-		</groupbox>
-	</hlayout>
-
-	</vlayout>
+			<button label="Add Site" onClick="@command('generateFieldBook')"></button>
+	</div>
 </zk>

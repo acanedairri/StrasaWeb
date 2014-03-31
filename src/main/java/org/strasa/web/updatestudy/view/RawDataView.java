@@ -572,6 +572,7 @@ public class RawDataView extends ProcessTabViewModel {
 	@NotifyChange("*")
 	@Command("removeUpload")
 	public void removeUpload() {
+		reloadCsvGrid();
 		if (!isDataUploaded) {
 			isVariableDataVisible = false;
 			dataFileName = "";
@@ -580,6 +581,7 @@ public class RawDataView extends ProcessTabViewModel {
 			dataList.clear();
 			columnList.clear();
 			isDataUploaded = false;
+
 			return;
 		}
 		Messagebox.show("Are you sure you want to delete the previous uploaded data? WARNING! This cannot be undone.", "Delete all data?", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener() {
