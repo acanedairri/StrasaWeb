@@ -8,14 +8,18 @@
 	</style>
 	<script src="http://stanlemon.net/javascript/jquery.jgrowl.js" />
 	<style src="http://stanlemon.net/stylesheet/jquery.jgrowl.css" />
-	<separator height="15px"></separator>
+
+	<div sclass="page-header">
+		<label value="Upload/Modify Germplasm" />
+		<!-- <a label="overview &amp; stats" iconSclass="z-icon-angle-double-right" sclass="subtitle"/> -->
+	</div>
 	<div id="mainDiv" width="100%" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.managegermplasm.view.model.Index')"
 		sclass="page-content">
 		<div align="left">
 			<hlayout>
 				<button id="uploadGenotypeData" upload="true"
-					label="Upload Germplasm Table"
+					label="Import Germplasm List"
 					onUpload="@command('uploadGenotypeData')" sclass="btn-success" />
 				<div id="divUploadOption">
 					<label value="" id="lblFileName"
@@ -31,22 +35,25 @@
 				<vlayout id="tableLayout" height="1000px">
 					<groupbox mold="3d" id="gbUnknownGermplasm"
 						hflex="1" height="100%">
-						<caption
-							label="@load(vm.totalUnknownGermplasm)" />
+<!-- 						<caption
+							label="@load(vm.totalUnknownGermplasm)" /> -->
+													<caption
+							label="List of Germplasm To  Import" />
 						<vlayout vflex="1">
-						<!-- 	<button label="Submit"
+							<!-- 	<button label="Submit"
 								onClick="@command('saveData')" sclass="btn-blue"
 								image="/images/save16.png" /> -->
 
-<!-- 							<div align="center">
+							<!-- 							<div align="center">
 								<button label="Save"
-									image="/images/save16.png"
-									onClick="@command('saveData')"
-									sclass="btn-warning" height="40px" width="150px">
+								image="/images/save16.png"
+								onClick="@command('saveData')"
+								sclass="btn-warning" height="40px" width="150px">
 								</button>
-							</div> -->
-							<listbox zclass="none" oddRowSclass="odd" checkmark="true" multiple="false"
-								id="tblStudyGerm" sizedByContent="true" hflex="1"
+								</div> -->
+							<listbox zclass="none" oddRowSclass="odd"
+								checkmark="true" multiple="false" id="tblStudyGerm"
+								sizedByContent="true" hflex="1"
 								model="@load(vm.lstStudyGermplasm) @template(each.templateMode)"
 								rows="10" selectedItem="@bind(vm.selectedGermplasm)">
 								<auxhead sclass="category-center">
@@ -223,22 +230,24 @@
 									</listitem>
 								</template>
 								<listfoot>
-									<listfooter />
-								</listfoot>
+								<listfooter>
+									<label value="@load(vm.totalUnknownGermplasm)"  style="font-weight:bold" />
+								</listfooter>
+								
+							</listfoot>
 							</listbox>
 
 						</vlayout>
-						
-							<div align="center">
-								<button label="Save"
-									image="/images/save16.png"
-									onClick="@command('saveData')"
-									sclass="btn-warning" height="40px" width="150px">
-								</button>
-							</div>
+					<separator height="10px"></separator>
+						<div align="center">
+							<button label="Save"
+								image="/images/save16.png" onClick="@command('saveData')"
+								sclass="btn-warning" height="40px" width="150px">
+							</button>
+						</div>
 					</groupbox>
-					<groupbox id="gbKnownGermplasm" mold="3d">
-						<caption label="@load(vm.totalKnownGermplasm)" />
+					<groupbox id="gbKnownGermplasm">
+						<!-- <caption label="@load(vm.totalKnownGermplasm)" /> -->
 						<listbox id="tblKnownGerm" oddRowSclass="odd"
 							sizedByContent="true" hflex="1"
 							model="@load(vm.lstKnownGermplasm) @template((each.known) ? 'display' : 'editable')"
@@ -278,6 +287,7 @@
 										value="@bind(vm.knownGermplasmFilter.maleParent)"
 										width="100px" />
 								</auxheader>
+								<auxheader colspan="1"></auxheader>
 							</auxhead>
 							<listhead menupopup="auto"
 								columnsgroup="false">
@@ -380,6 +390,12 @@
 									</listcell>
 								</listitem>
 							</template>
+							<listfoot>
+								<listfooter>
+									<label value="@load(vm.totalKnownGermplasm)"  style="font-weight:bold" />
+								</listfooter>
+								
+							</listfoot>
 						</listbox>
 					</groupbox>
 					<separator spacing="20px" />
@@ -388,7 +404,7 @@
 			<columnchildren width="30%">
 				<vlayout vflex="1">
 					<groupbox width="100%" mold="3d">
-						<caption label="Germplasm Information" />
+						<caption label="Other Information" />
 						<grid vflex="1" oddRowSclass="odd">
 							<columns>
 								<column />

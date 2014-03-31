@@ -8,6 +8,10 @@
 		viewModel="@id('vm') @init('org.strasa.web.releaseinfo.view.model.Index')"
 		height="98%" width="98%">
 <separator height="5px"></separator>
+		<div sclass="page-header">
+			<label value="Release Information" />
+			<!-- <a label="overview &amp; stats" iconSclass="z-icon-angle-double-right" sclass="subtitle"/> -->
+		</div>
 		<tabbox id="tabBox" sclass="page-content">
 			<tabs id="tabs"/>
 			<tabpanels id="tabPanels"/>

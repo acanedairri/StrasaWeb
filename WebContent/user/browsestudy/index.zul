@@ -7,11 +7,14 @@
 		viewModel="@id('vm') @init('org.strasa.web.browsestudy.view.model.Index')"
 		height="98%" width="98%">
 
-		<separator height="5px"></separator>
+		<div sclass="page-header">
+			<label value="Browse Study" />
+			<!-- <a label="overview &amp; stats" iconSclass="z-icon-angle-double-right" sclass="subtitle"/> -->
+		</div>
 
 		<tabbox id="tabBox" sclass="page-content">
 			<tabs id="tabs">
-				<tab label="Browse Study" image="/images/find.png" />
+				<tab label="Search" image="/images/find.png" />
 			</tabs>
 			<tabpanels id="tabPanels">
 				<tabpanel>
@@ -49,7 +52,8 @@
 								</tabpanel>
 							</tabpanels>
 						</tabbox>
-						<popup id="advancedSearch" width="400px"  sclass="page-content">
+						<popup id="advancedSearch" width="400px"
+							sclass="page-content">
 							<groupbox sclass="z-demo-config"
 								closable="false">
 								<include

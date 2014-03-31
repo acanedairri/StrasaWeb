@@ -60,10 +60,10 @@
 					<label></label>
 					<hlayout>
 
-						<button label="Cancel" sclass="btn-plain"
+						<button label="Cancel" sclass="btn-danger"
 							image="/images/cancel16.png" onClick="@command('cancel')">
 						</button>
-						<button label="Save" sclass="btn-blue"
+						<button label="Save" sclass="btn-warning"
 							image="/images/save16.png" onClick="@command('add')">
 						</button>
 					</hlayout>

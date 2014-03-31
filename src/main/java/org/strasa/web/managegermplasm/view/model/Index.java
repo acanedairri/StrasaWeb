@@ -294,11 +294,13 @@ public class Index {
 	}
 
 	public String getTotalUnknownGermplasm() {
-		return "List of germplasm not existing in the database : "+ lstStudyGermplasm.size() + " row(s) returned";
+//		return "List of germplasm not existing in the database : "+ lstStudyGermplasm.size() + " row(s) returned";
+		return "Count:"+ lstStudyGermplasm.size() + " rows";
 	}
 
 	public String getTotalKnownGermplasm() {
-		return "List of germplasm already exist in the database : "+lstKnownGermplasm.size() + " row(s) returned";
+//		return "List of germplasm already exist in the database : "+lstKnownGermplasm.size() + " row(s) returned";
+		return "Count: "+lstKnownGermplasm.size() + " rows";
 	}
 
 	public void resetSize() {

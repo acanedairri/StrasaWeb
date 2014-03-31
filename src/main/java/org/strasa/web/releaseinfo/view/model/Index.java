@@ -54,7 +54,7 @@ public class Index {
 
 		Tabpanel newPanel = new Tabpanel();
 		Tab newTab = new Tab();
-		newTab.setLabel("Summary of Release Information");
+		newTab.setLabel("Summary");
 		newTab.setImage("/images/summary.png");
 
 		//initialize view after view construction.
