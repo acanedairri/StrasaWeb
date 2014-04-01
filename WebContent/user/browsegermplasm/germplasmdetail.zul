@@ -70,26 +70,31 @@
 						<label sclass="searchLabel"
 							value="@load(vm.germplasm.source)" />
 					</row>
+					<row spans="">
+						<label value="Key Characteristics"
+							sclass="heavy" />
+						<label value="" />
+					</row>
 					<row>
-						<label value="Abiotic Characteristics"
+						<label value="Abiotic" style="padding:0px 0px 0px 50px"
 							sclass="heavy" />
 						<label sclass="searchLabel"
 							value="@load(vm.abioticCharacteristics)" />
 					</row>
 					<row>
-						<label value="Biotic Characteristics"
+						<label value="Biotic" style="padding:0px 0px 0px 50px"
 							sclass="heavy" />
 						<label sclass="searchLabel"
 							value="@load(vm.bioticCharacteristics)" />
 					</row>
 					<row>
-						<label value="Grain Quality Characteristics"
+						<label value="Grain Quality" style="padding:0px 0px 0px 50px"
 							sclass="heavy" />
 						<label sclass="searchLabel"
 							value="@load(vm.grainQualityCharacteristics)" />
 					</row>
 					<row>
-						<label value="Major Characteristics"
+						<label value="Major Genes" style="padding:0px 0px 0px 50px"
 							sclass="heavy" />
 						<label sclass="searchLabel"
 							value="@load(vm.majorGenesCharacteristics)" />

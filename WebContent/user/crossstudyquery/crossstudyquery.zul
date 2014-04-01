@@ -85,7 +85,7 @@
 		<!-- Criteria -->
 
 		<groupbox mold="3d" width="98%" sclass="groupbox-label">
-			<caption label="Query Criteria" />
+			<caption label="Criteria" />
 			<hbox>
 				<grid vflex="1" height="185px"
 					model="@load(vm.crossStudyFilterModelList)"
