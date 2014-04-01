@@ -24,11 +24,11 @@
 		</div>
 		<separator height="5px"></separator>
 		<div id="divMain">
-			<grid model="@load(vm.editStudyList)" zclass="none"
-				oddRowSclass="odd" sizedByContent="true" width="98%">
+			<grid model="@load(vm.editStudyList)" zclass="none" id="gridStudyListId"
+				oddRowSclass="odd" sizedByContent="true">
 
 				<columns>
-					<column hflex="1" label="Study Name" />
+					<column label="Study Name" />
 					<column label="Program Name" />
 					<column label="Project Name" />
 					<column label="Date Created" />
