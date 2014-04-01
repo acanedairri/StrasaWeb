@@ -7,13 +7,13 @@
 
 		<grid vflex="1">
 			<columns>
-				<column label="Type" width="150px" />
-				<column label="Content" />
+				<column label="" width="150px" />
+				<column label="" />
 			</columns>
 			<rows>
 				<row>
 					<label value="Location Name" />
-					<label
+					<label style="font-weight:bold"
 						value='@bind(vm.locationModel.locationname)' 
 						 width="99%" />
 				</row>
