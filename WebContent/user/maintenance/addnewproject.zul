@@ -5,9 +5,12 @@
 		<style src="../css/main.css" />
 
 		<grid vflex="1" hflex="1">
+			<auxhead>
+				<auxheader label="Add New Project" colspan="2"></auxheader>
+			</auxhead>
 			<columns>
-				<column label="Add new project" width="150px" />
-				<column label="Detail" />
+				<column label="Field" />
+				<column label="Value" />
 			</columns>
 			<rows>
 				<row>
@@ -58,8 +61,8 @@
 
 				<row>
 					<label></label>
-					<button label="Add" image="../images/save16.png"
-						sclass="btn-blue" onClick="@command('add')">
+					<button label="Save" image="../images/save16.png"
+						sclass="btn-warning" onClick="@command('add')">
 					</button>
 				</row>
 			</rows>

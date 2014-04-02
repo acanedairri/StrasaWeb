@@ -7,27 +7,25 @@
 	<window id="editProjectWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.maintenance.view.model.EditProject')">
 		<separator height="5px"></separator>
-		<panel border="normal">
-			<panelchildren style="overflow: auto;padding:5px">
 				<hbox>
 					<grid
 						model="@load(vm.projectList)
 						@template(each.editingStatus ? 'editable' :
 						'noneditable')"
-						sizedByContent="true" width="98%"
+						sizedByContent="true" zclass="none" oddRowSclass="odd"
 						emptyMessage="No study site found.">
 						<columns>
-							<column hflex="1" label="Program Name"
-								width="250px" />
+							<column  label="Program Name"
+								 />
 							<column hflex="1" label="Project Name"
-								width="250px" />
-							<column label="Objective" width="200px" />
-							<column label="PI" width="100px" />
+								 />
+							<column label="Objective"  />
+							<column label="PI"  />
 							<column label="Leading Institute"
-								width="200px" />
-							<column label="Collaborator" width="100px" />
+								 />
+							<column label="Collaborator"  />
 							<column label="Funding Agency"
-								width="150px" />
+								/>
 							<column label="Action" width="100px" />
 						</columns>
 						<template name="editable">
@@ -93,13 +91,12 @@
 							</row>
 						</template>
 					</grid>
-					<div width="500px">
+					<div width="500px" style="padding:0px 0px 0px 50px;">
 						<include
 							src="/user/maintenance/addnewproject.zul" />
 					</div>
 
 				</hbox>
-			</panelchildren>
-		</panel>
+
 	</window>
 </zk>

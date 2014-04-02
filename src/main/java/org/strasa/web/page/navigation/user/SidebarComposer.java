@@ -48,6 +48,15 @@ public class SidebarComposer extends SelectorComposer<Component>  {
 	
 	@Wire
 	Navitem uploadrelease;
+	
+	@Wire
+	Navitem singlesite;
+	
+	@Wire
+	Navitem settings;
+	
+	@Wire
+	Navitem createfieldbook;
 
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
@@ -148,5 +157,29 @@ public class SidebarComposer extends SelectorComposer<Component>  {
 		
 	}
 
+	@Listen("onClick = #singlesite")
+	public void singlesite(){
+		Div d=(Div) sidebar.getRoot().query("#contentui");
+		d.getChildren().clear();
+		Executions.createComponents("../user/analysis/singlesite/index.zul", d, null);
+		
+	}
+	
+	@Listen("onClick = #settings")
+	public void settings(){
+		Div d=(Div) sidebar.getRoot().query("#contentui");
+		d.getChildren().clear();
+		Executions.createComponents("../user/maintenance/index.zul", d, null);
+		
+	}
+	
+	
+	@Listen("onClick = #createfieldbook")
+	public void createfieldbook(){
+		Div d=(Div) sidebar.getRoot().query("#contentui");
+		d.getChildren().clear();
+		Executions.createComponents("../user/createfieldbook/index.zul", d, null);
+		
+	}
 
 }
