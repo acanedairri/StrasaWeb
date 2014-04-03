@@ -57,6 +57,9 @@ public class SidebarComposer extends SelectorComposer<Component>  {
 	
 	@Wire
 	Navitem createfieldbook;
+	
+	@Wire
+	Navitem browseanalysisresult;
 
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
@@ -179,6 +182,14 @@ public class SidebarComposer extends SelectorComposer<Component>  {
 		Div d=(Div) sidebar.getRoot().query("#contentui");
 		d.getChildren().clear();
 		Executions.createComponents("../user/createfieldbook/index.zul", d, null);
+		
+	}
+	
+	@Listen("onClick = #browseanalysisresult")
+	public void browseanalysisresult(){
+		Div d=(Div) sidebar.getRoot().query("#contentui");
+		d.getChildren().clear();
+		Executions.createComponents("../user/analysis/resultanalysistree.zul", d, null);
 		
 	}
 

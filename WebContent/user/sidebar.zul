@@ -30,7 +30,8 @@
 					iconSclass="z-icon-desktop">
 					<nav label="Upload/Modify"
 						iconSclass="z-icon-angle-double-right">
-						<navitem label="Study" iconSclass="z-icon-leaf" id="uploadstudy" />
+						<navitem label="Study" iconSclass="z-icon-leaf"
+							id="uploadstudy" />
 						<navitem label="Germplasm" id="uploadgermplasm"
 							iconSclass="z-icon-leaf" />
 						<navitem label="Extension" id="uploadextension"
@@ -40,21 +41,24 @@
 					</nav>
 					<nav label="Browse"
 						iconSclass="z-icon-angle-double-right">
-						<navitem label="Study" iconSclass="z-icon-leaf" id="browsestudy"/>
+						<navitem label="Study" iconSclass="z-icon-leaf"
+							id="browsestudy" />
 						<navitem label="Germplasm" id="browsegermplasm"
 							iconSclass="z-icon-leaf" />
 						<navitem label="Across Study" id="across"
 							iconSclass="z-icon-leaf" />
-						<navitem label="Extension" id="extension" 
+						<navitem label="Extension" id="extension"
 							iconSclass="z-icon-leaf" />
-						<navitem label="Release"
-							id="releaseinfo" iconSclass="z-icon-leaf" />
+						<navitem label="Release" id="releaseinfo"
+							iconSclass="z-icon-leaf" />
 					</nav>
-					<navitem id="createfieldbook" label="Create Study Template" 
-					iconSclass="z-icon-picture-o" />
+					<navitem id="createfieldbook"
+						label="Create Study Template" iconSclass="z-icon-picture-o" />
 				</nav>
 
 				<nav label="Analysis" iconSclass="z-icon-edit">
+					<navitem label="Browse Result" id="browseanalysisresult"
+						iconSclass="z-icon-angle-double-right" />
 					<navitem label="Single-Site" id="singlesite"
 						iconSclass="z-icon-angle-double-right" />
 					<navitem label="Multi-Site"
@@ -69,7 +73,7 @@
 					<navitem label="Cross Designer"
 						iconSclass="z-icon-angle-double-right" />
 				</nav>
-				<navitem id="settings" label="Settings" 
+				<navitem id="settings" label="Settings"
 					iconSclass="z-icon-picture-o" />
 
 			</navbar>
