@@ -19,7 +19,7 @@ public class FileList {
 
 		
 		Set<String> foldername;
-		foldername=Executions.getCurrent().getDesktop().getWebApp().getResourcePaths("/resultanalysis/user1/Single-Site");
+		foldername=Executions.getCurrent().getDesktop().getWebApp().getResourcePaths("/resultanalysis/"+SecurityUtil.getUserName()+"/Single-Site");
 		
 		root = new FileModelTreeNode(null,new FileModelTreeNode[] {
 				new FileModelTreeNode(new FileModel("Single-Site"),getFolderList(foldername),true),
