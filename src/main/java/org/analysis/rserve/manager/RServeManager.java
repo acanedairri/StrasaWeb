@@ -15,35 +15,48 @@ public class RServeManager {
 
 	private static String BSLASH = "\\";
 	private static String FSLASH = "/";
-	private static String OUTPUTFOLDER_PATH =  Sessions.getCurrent().getWebApp().getRealPath("outputfolder")+ System.getProperty("file.separator");
+	private static String OUTPUTFOLDER_PATH =  Sessions.getCurrent().getWebApp().getRealPath("resultanalysis")+ System.getProperty("file.separator");
 	public static String DATA_PATH = System.getProperty("user.dir")+ System.getProperty("file.separator") + "sample_datasets" + System.getProperty("file.separator");
 
 	public RServeManager() {
 		try {
 			rConnection	= new RConnection();
+			System.out.println("started rserve connection");
 			rConnection.eval("library(PBTools)");
 		} catch (RserveException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
-	public ArrayList<String> getVariableInfo(String fileName, String tempFileName, int fileFormat,String separator) {
+	
+	private void readData(String dataFileName){
+		String readData = "dataRead <- read.csv(\"" + dataFileName + "\", header = TRUE, na.strings = c(\"NA\",\".\",\"\"), blank.lines.skip=TRUE, sep = \",\")";
+		System.out.println(readData);
+		try {
+			rConnection.eval(readData);
+		} catch (RserveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		rConnection.close();
+	}
+	
+	public ArrayList<String> getVariableInfo(String fileName, int fileFormat,String separator) {
 		String funcGetVarInfo;
 		ArrayList<String> toreturn=new ArrayList<String>();
 		if (fileFormat == 2)  
 			funcGetVarInfo = "varsAndTypes <- getVarInfo(fileName = \"" + fileName + "\", fileFormat = 2, separator = \"" + separator + "\")";
 		else funcGetVarInfo = "varsAndTypes <- getVarInfo(fileName = \"" + fileName + "\", fileFormat = " + fileFormat + ", separator = NULL)"; 
-		String writeTempData = "tryCatch(write.table(varsAndTypes,file =\"" + tempFileName + "\",sep=\":\",row.names=FALSE), error=function(err) \"notRun\")";
+//		String writeTempData = "tryCatch(write.table(varsAndTypes,file =\"" + tempFileName + "\",sep=\":\",row.names=FALSE), error=function(err) \"notRun\")";
 
 		System.out.println(funcGetVarInfo);
-		System.out.println(writeTempData);
+//		System.out.println(writeTempData);
 
 		String[] vars;
 		
 		try {
 			rConnection.eval(funcGetVarInfo);
-			rConnection.eval(writeTempData);
+//			rConnection.eval(writeTempData);
 			vars = rConnection.eval("as.vector(varsAndTypes$Variable)").asStrings();
 			String[] types = rConnection.eval("as.vector(varsAndTypes$Type)").asStrings();
 			for (int i = 0; i < vars.length; i++){
@@ -59,7 +72,7 @@ public class RServeManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		rConnection.close();
 		return toreturn;
 	}
 
@@ -1495,7 +1508,7 @@ public class RServeManager {
 					}
 				}
 			}
-
+	
 			//optional output: boxplot and histogram
 			String withBox = "FALSE";
 			if (boxplotRawData) withBox = "TRUE";
@@ -1514,6 +1527,7 @@ public class RServeManager {
 			System.out.println(boxHistFunc);
 			rConnection.eval(boxHistFunc);
 
+			rConnection.eval("dev.off()");
 			String runSuccessBoxHist = rConnection.eval("class(boxHist)").toString();
 			if (runSuccessBoxHist != null && runSuccessBoxHist.equals("try-error")) {	
 				System.out.println("boxplot/histogram: error");
@@ -1528,10 +1542,25 @@ public class RServeManager {
 			}
 			rConnection.eval(outspace);
 			rConnection.eval(sep2);
+//			
+		
+			rConnection.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void test() {
+		// TODO Auto-generated method stub
+		try {
+			rConnection.eval("cars <- c(1, 3, 6, 4, 9)");
+			rConnection.eval("pdf(\"E:/cars3.pdf\")");
+			rConnection.eval("plot(cars)");
+//			rConnection.eval("dev.off()");
 
 			rConnection.close();
-			//			rConnectionEnd();
-		} catch (Exception e) {
+		} catch (RserveException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
