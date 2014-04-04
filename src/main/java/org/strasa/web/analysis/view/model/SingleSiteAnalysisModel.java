@@ -5,7 +5,7 @@ import org.zkoss.zk.ui.Sessions;
 public class SingleSiteAnalysisModel {
 	private static String BSLASH = "\\";
 	private static String FSLASH = "/";
-	private static String OUTPUTFOLDER_PATH =  Sessions.getCurrent().getWebApp().getRealPath("outputfolder")+ System.getProperty("file.separator");
+	private static String OUTPUTFOLDER_PATH =  Sessions.getCurrent().getWebApp().getRealPath("resultanalysis")+ System.getProperty("file.separator");
 	public static String DATA_PATH = System.getProperty("user.dir")+ System.getProperty("file.separator") + "sample_datasets" + System.getProperty("file.separator");
 	
 	private String resultFolderPath;
@@ -58,12 +58,12 @@ public class SingleSiteAnalysisModel {
 		this.column = "NULL";
 		this.descriptiveStat = true; 
 		this.varianceComponents = true;
-		this.boxplotRawData = false;
+		this.boxplotRawData = true;
 		this.histogramRawData = false;
 		this.heatmapResiduals = false;
 		this.heatmapRow = "NULL";
 		this.heatmapColumn = "NULL";
-		this.diagnosticPlot = false;
+		this.diagnosticPlot = true;
 		this.genotypeFixed = true;
 		this.performPairwise = true;
 		this.pairwiseAlpha = "0.05";

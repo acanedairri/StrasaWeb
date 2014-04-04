@@ -6,126 +6,124 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-
+import org.analysis.rserve.manager.RServeManager;
+import org.strasa.web.utilities.AnalysisUtils;
+import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.ContextParam;
+import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.MouseEvent;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.Include;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Tab;
+import org.zkoss.zul.Tabbox;
+import org.zkoss.zul.Tabpanel;
 
 
-public class VariableListBoxes extends Div implements IdSpace {
-	private static final long serialVersionUID = 5183321186606483396L;
-
+public class VariableListBoxes{
+	
+	//Managers
+	private RServeManager rServeMgr;
+	
+	//Zul file components
 	@Wire
+	private Button chooseResponseBtn;
+	
 	private Listbox numericLb;
-	@Wire
 	private Listbox responseLb;
-
-	@Wire
 	private Listbox factorLb;
+	
 
+	//DataModels
 	private ListModelList<String> numericModel;
-	private ListModelList<String> responseDataModel;
+	private ListModelList<String> responseModel;
+	private ListModelList<String> factorModel;
 
-	@Init
-	public void init(){
-//		numericModel = ;
-//		responseDataModel = ;
+	//Rserve Parameters
+	private int fileFormat=1;
+	private String separator="NULL";;
+	private String tempFileName;
+	private String fileName=System.getProperty("user.dir")+ System.getProperty("file.separator") + "sample_datasets" + System.getProperty("file.separator") + "RCB_ME.csv";
+
+	//Class Variables
+	private ArrayList<String> varInfo;
+
+	@AfterCompose
+	public void init(@ContextParam(ContextType.COMPONENT) Component component,@ContextParam(ContextType.VIEW) Component view){
+		Selectors.wireEventListeners(view, this);
+		
+		numericLb = (Listbox) component.getFellow("numericLb");
+		responseLb = (Listbox) component.getFellow("responseLb");
+		factorLb = (Listbox) component.getFellow("factorLb");
+		
+		Div otherVarsDiv = (Div) component.getFellow("othervariables");
 //		
-//		Selectors.wireComponents(this, this, false);
-//		Selectors.wireEventListeners(this, this);
-
-		//        typeOfDualBox = kind;
-		//        if(list2.size()==0){
-			//            // dualListBoxFactory is a spring factory which created the right list of handled objects.
-		//            list2.addAll(dualListBoxFactory.findAllForType(kind));
-		//        }
+//		Tabpanel newPanel = new Tabpanel();
+//		Tab newTab = new Tab();
+//		newTab.setLabel("Study List");
+		
+		//initialize view after view construction.
+		Include includeOtherVars = new Include();
+		includeOtherVars.setParent(otherVarsDiv);
+		includeOtherVars.setDynamicProperty("factorModel", factorModel);
+		includeOtherVars.setSrc("/user/analysis/singlesite/othervars.zul");
+		
 	}
+	
+	@GlobalCommand("setSsaListvariables")
+	@NotifyChange("*")
+	public void setSsaListvariables(@BindingParam("filePath")String filepath){
+	    //...
 
+		rServeMgr = new RServeManager();
+		varInfo = rServeMgr.getVariableInfo(filepath.replace("\\", "/"), fileFormat, separator);
+		
+		numericModel= AnalysisUtils.getNumericAsListModel(varInfo);
+		factorModel= AnalysisUtils.getFactorsAsListModel(varInfo);
+		responseModel = new ListModelList<String>();
+		
+		numericLb.setModel(numericModel);
+		factorLb.setModel(factorModel);
+		responseLb.setModel(responseModel);
+		
+	}
+	
 	@Listen("onClick = #chooseResponseBtn")
-	public void chooseItem() {
-		Events.postEvent(new ChooseEvent(this, chooseOne()));
+	@NotifyChange("*")
+	public void addResponse(MouseEvent event) {
+		chooseResponseVariable();
 	}
 
 	@Listen("onClick = #removeResponseBtn")
-	public void unchooseItem() {
-		Events.postEvent(new ChooseEvent(this, unchooseOne()));
+	@NotifyChange("*")
+	public void removeResponse(MouseEvent event) {
+		unchooseResponseVariable();
 	}
 
-	@Listen("onClick = #chooseAllBtn")
-	public void chooseAllItem() {
-		for (int i = 0, j = numericModel.getSize(); i < j; i++) {
-			responseDataModel.add(numericModel.getElementAt(i));
-		}
-		numericModel.clear();
-	}
-
-	@Listen("onClick = #removeAllBtn")
-	public void unchooseAll() {
-		for (int i = 0, j = responseDataModel.getSize(); i < j; i++) {
-			numericModel.add(responseDataModel.getElementAt(i));
-		}
-		responseDataModel.clear();
-	}
-
-	@Listen("onClick = #topBtn")
-	public void top() {
-		int i = 0;
-		Iterator<String> iterator = new LinkedHashSet<String>(responseDataModel.getSelection()).iterator();
-		while (iterator.hasNext()) {
-			String selectedItem = iterator.next();
-			responseDataModel.remove(selectedItem);
-			responseDataModel.add(i++, selectedItem);
-			responseDataModel.addToSelection(selectedItem);
-		}
-	}
-
-	@Listen("onClick = #upBtn")
+	@Listen("onClick = #toNumericBtn")
+	@NotifyChange("*")
 	public void up() {
-		Set<String> selected = responseDataModel.getSelection();
-		if (selected.isEmpty())
-			return;
-		int index = responseDataModel.indexOf(selected.iterator().next());
-		if (index == 0 || index < 0)
-			return;
-		String selectedItem = responseDataModel.get(index);
-		responseDataModel.remove(selectedItem);
-		responseDataModel.add(--index, selectedItem);
-		responseDataModel.addToSelection(selectedItem);
-
+		toNumeric();
 	}
-
-	@Listen("onClick = #downBtn")
+	@Listen("onClick = #toFactorBtn")
+	@NotifyChange("*")
 	public void down() {
-		Set<String> selected = responseDataModel.getSelection();
-		if (selected.isEmpty())
-			return;
-		int index = responseDataModel.indexOf(selected.iterator().next());
-		if (index == responseDataModel.size() - 1 || index < 0)
-			return;
-		String selectedItem = responseDataModel.get(index);
-		responseDataModel.remove(selectedItem);
-		responseDataModel.add(++index, selectedItem);
-		responseDataModel.addToSelection(selectedItem);
-	}
-
-	@Listen("onClick = #bottomBtn")
-	public void bottom() {
-		Iterator<String> iterator = new LinkedHashSet<String>(responseDataModel.getSelection()).iterator();
-		while (iterator.hasNext()) {
-			String selectedItem = iterator.next();
-			responseDataModel.remove(selectedItem);
-			responseDataModel.add(selectedItem);
-			responseDataModel.addToSelection(selectedItem);
-		}
+		toFactor();
 	}
 
 	/**
@@ -136,34 +134,80 @@ public class VariableListBoxes extends Div implements IdSpace {
 	 */
 	public void setModel(List<String> numeric) {
 		numericLb.setModel(this.numericModel = new ListModelList<String>(numeric));
-		responseDataModel.clear();
+		responseModel.clear();
 	}
 
 	/**
 	 * @return current response data list
 	 */
 	public List<String> getresponseDataList() {
-		return new ArrayList<String>(responseDataModel);
+		return new ArrayList<String>(responseModel);
 	}
 
-	private Set<String> chooseOne() {
+
+	private void toFactor() {
+		// TODO Auto-generated method stub
+		
 		Set<String> set = numericModel.getSelection();
-		System.out.println("addResponse");
 		for (String selectedItem : set) {
-			responseDataModel.add(selectedItem);
+			factorModel.add(selectedItem);
 			numericModel.remove(selectedItem);
 		}
-		return set;
+		
+//		if (selected.isEmpty())
+//			return;
+//		int index = numericModel.indexOf(selected.iterator().next());
+//		if (index == numericModel.size() - 1 || index < 0)
+//			return;
+//		String selectedItem = numericModel.get(index);
+//		numericModel.remove(selectedItem);
+//		factorModel.add(++index, selectedItem);
+//		factorModel.addToSelection(selectedItem);
 	}
 
-	private Set<String> unchooseOne() {
-		Set<String> set = responseDataModel.getSelection();
-		System.out.println("removeResponse");
+	private void toNumeric() {
+		// TODO Auto-generated method stub
+		Set<String> set = factorModel.getSelection();
+		fileName = fileName.replace("\\", "/");
+		for (String selectedItem : set) {
+			if (AnalysisUtils.isColumnNumeric(varInfo, selectedItem)){
+			numericModel.add(selectedItem);
+			factorModel.remove(selectedItem);
+			}
+			else{
+				Messagebox.show("Can't move variable.\n"+selectedItem+ " is not Numeric.");
+				System.out.println("Not Numeric");
+			}
+		}
+//		if (selected.isEmpty())
+//			return;
+//		int index = factorModel.indexOf(selected.iterator().next());
+//		if (index == 0 || index < 0)
+//			return;
+//		String selectedItem = factorModel.get(index);
+//		factorModel.remove(selectedItem);
+//		numericModel.add(--index, selectedItem);
+//		numericModel.addToSelection(selectedItem);
+
+	}
+
+	
+	private void chooseResponseVariable() {
+		Set<String> set = numericModel.getSelection();
+//		System.out.println("addResponse");
+		for (String selectedItem : set) {
+			responseModel.add(selectedItem);
+			numericModel.remove(selectedItem);
+		}
+	}
+
+	private void unchooseResponseVariable() {
+		Set<String> set = responseModel.getSelection();
+//		System.out.println("removeResponse");
 		for (String selectedItem : set) {
 			numericModel.add(selectedItem);
-			responseDataModel.remove(selectedItem);
+			responseModel.remove(selectedItem);
 		}
-		return set;
 	}
 
 	// Customized Event
@@ -174,4 +218,5 @@ public class VariableListBoxes extends Div implements IdSpace {
 			super("onChoose", target, data);
 		}
 	}
+	
 }

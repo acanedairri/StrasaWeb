@@ -1,12 +1,11 @@
 <zk>
 
 	<div id="mainSingleSiteWindow" apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.analysis.singlesite.view.model.Index')"
-		height="98%" width="98%">
+		viewModel="@id('vm') @init('org.strasa.web.analysis.singlesite.view.model.Index')">
 
 		<separator height="5px"></separator>
 
-		<tabbox id="tabBox" sclass="page-content">
+		<tabbox id="tabBox" sclass="page-content" height="100%">
 			<tabs id="tabs">
 				<tab label="Single-site Analysis"
 					image="/images/find.png" />
