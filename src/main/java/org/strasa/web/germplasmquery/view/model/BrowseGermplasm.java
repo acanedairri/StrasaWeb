@@ -258,6 +258,7 @@ public class BrowseGermplasm {
 		this.keyMajorGenesList = keyMajorGenesList;
 	}
 
+	
 
 	@NotifyChange("keyAbioticList,keyBioticList,keyGrainQualityList,keyMajorGenesList")
 	@Command
@@ -364,7 +365,7 @@ public class BrowseGermplasm {
 	}
 
 
-	@NotifyChange("germplasmList")
+	@NotifyChange("*")
 	@Command
 	public void SearchGermplasm(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
@@ -514,6 +515,7 @@ public class BrowseGermplasm {
 		populateKeyCharacteristics();
 		list.invalidate();
 		germplasmList.clear();
+		searchResultLabel="";
 
 
 	}
