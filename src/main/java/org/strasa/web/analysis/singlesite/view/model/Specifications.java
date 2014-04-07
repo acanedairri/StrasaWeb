@@ -154,7 +154,7 @@ public class Specifications {
 				dataFileName = name;
 
 		        Map<String,Object> args = new HashMap<String,Object>();
-		        args.put("filePath", "tempFile.getAbsolutePath()");
+		        args.put("filePath", tempFile.getAbsolutePath());
 				BindUtils.postGlobalCommand(null, null, "setSsaListvariables", args);
 				
 				if (this.isUpdateMode)

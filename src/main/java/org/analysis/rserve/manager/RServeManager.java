@@ -1527,7 +1527,6 @@ public class RServeManager {
 			System.out.println(boxHistFunc);
 			rConnection.eval(boxHistFunc);
 
-			rConnection.eval("dev.off()");
 			String runSuccessBoxHist = rConnection.eval("class(boxHist)").toString();
 			if (runSuccessBoxHist != null && runSuccessBoxHist.equals("try-error")) {	
 				System.out.println("boxplot/histogram: error");
