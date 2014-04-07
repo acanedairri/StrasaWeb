@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.apache.commons.io.input.ReaderInputStream;
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zul.Column;
@@ -18,6 +19,8 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Rows;
@@ -51,27 +54,6 @@ public class AnalysisUtils {
 			if(s.split(":")[0].equals(selectedItem) && s.contains("Numeric")) return true;
 		}
 		return false;
-	}
-
-	public static boolean chooseVariable(ListModelList<String> factorModel,
-			Textbox varTextBox ) {
-		
-		Set<String> set = factorModel.getSelection();
-		//				System.out.println("removeResponse");
-
-		if(varTextBox.getValue().isEmpty() && !set.isEmpty()){
-			for (String selectedItem : set) {
-				varTextBox.setValue(selectedItem);
-				factorModel.remove(selectedItem);
-			}
-			return true;
-			//nag add
-		}else if(!varTextBox.getValue().isEmpty()){
-			factorModel.add(varTextBox.getValue());
-			varTextBox.setValue(null);
-		}
-		return false;
-		// TODO Auto-generated method stub
 	}
 
 }

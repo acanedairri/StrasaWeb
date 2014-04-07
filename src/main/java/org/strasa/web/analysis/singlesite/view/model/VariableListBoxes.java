@@ -26,28 +26,31 @@ import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.Image;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tabpanel;
+import org.zkoss.zul.Textbox;
 
 
 public class VariableListBoxes{
-	
+
 	//Managers
 	private RServeManager rServeMgr;
-	
+
 	//Zul file components
 	@Wire
 	private Button chooseResponseBtn;
-	
+
 	private Listbox numericLb;
 	private Listbox responseLb;
 	private Listbox factorLb;
-	
+
 
 	//DataModels
 	private ListModelList<String> numericModel;
@@ -63,46 +66,74 @@ public class VariableListBoxes{
 	//Class Variables
 	private ArrayList<String> varInfo;
 
+	//textBoxes
+	private Textbox envTextBox;
+	private Textbox genotypeTextBox;
+	private Textbox blockTextBox;
+	private Textbox replicateTextBox;
+	private Textbox rowTextBox;
+	private Textbox columnTextBox;
+
+	//imageButtons
+	private Image addEnvButton;
+	private Image addGenotypeButton;
+	private Image addBlockButton;
+	private Image addReplicateButton;
+	private Image addRowButton;
+	private Image addColumnButton;
+
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,@ContextParam(ContextType.VIEW) Component view){
 		Selectors.wireEventListeners(view, this);
-		
+
 		numericLb = (Listbox) component.getFellow("numericLb");
 		responseLb = (Listbox) component.getFellow("responseLb");
 		factorLb = (Listbox) component.getFellow("factorLb");
-		
-		Div otherVarsDiv = (Div) component.getFellow("othervariables");
-//		
-//		Tabpanel newPanel = new Tabpanel();
-//		Tab newTab = new Tab();
-//		newTab.setLabel("Study List");
-		
-		//initialize view after view construction.
-		Include includeOtherVars = new Include();
-		includeOtherVars.setParent(otherVarsDiv);
-		includeOtherVars.setDynamicProperty("factorModel", factorModel);
-		includeOtherVars.setSrc("/user/analysis/singlesite/othervars.zul");
-		
+
+
+		//wire textboxes
+		envTextBox = (Textbox) component.getFellow("envTextBox");
+		genotypeTextBox = (Textbox) component.getFellow("genotypeTextBox");
+		blockTextBox = (Textbox) component.getFellow("blockTextBox");
+		replicateTextBox = (Textbox) component.getFellow("replicateTextBox");
+		rowTextBox = (Textbox) component.getFellow("rowTextBox");
+		columnTextBox = (Textbox) component.getFellow("columnTextBox");
+
+		//wire image buttons
+		addEnvButton = (Image) component.getFellow("addEnvButton");
+		addGenotypeButton = (Image) component.getFellow("addGenotypeButton");
+		addBlockButton = (Image) component.getFellow("addBlockButton");
+		addReplicateButton = (Image) component.getFellow("addReplicateButton");
+		addRowButton = (Image) component.getFellow("addRowButton");
+		addColumnButton = (Image) component.getFellow("addColumnButton");
+
+		//		Div otherVarsDiv = (Div) component.getFellow("othervariables");
+		//		//initialize view after view construction.
+		//		Include includeOtherVars = new Include();
+		//		includeOtherVars.setParent(otherVarsDiv);
+		//		includeOtherVars.setDynamicProperty("factorLb", factorLb);
+		//		includeOtherVars.setSrc("/user/analysis/singlesite/othervars.zul");
+
 	}
-	
+
 	@GlobalCommand("setSsaListvariables")
 	@NotifyChange("*")
 	public void setSsaListvariables(@BindingParam("filePath")String filepath){
-	    //...
+		//...
 
 		rServeMgr = new RServeManager();
 		varInfo = rServeMgr.getVariableInfo(filepath.replace("\\", "/"), fileFormat, separator);
-		
+
 		numericModel= AnalysisUtils.getNumericAsListModel(varInfo);
 		factorModel= AnalysisUtils.getFactorsAsListModel(varInfo);
 		responseModel = new ListModelList<String>();
-		
+
 		numericLb.setModel(numericModel);
 		factorLb.setModel(factorModel);
 		responseLb.setModel(responseModel);
-		
+
 	}
-	
+
 	@Listen("onClick = #chooseResponseBtn")
 	@NotifyChange("*")
 	public void addResponse(MouseEvent event) {
@@ -126,6 +157,67 @@ public class VariableListBoxes{
 		toFactor();
 	}
 
+	@Listen("onClick = #addEnvButton")
+	@NotifyChange("*")
+	public void addEnvVariable(MouseEvent event) {
+		if(chooseVariable(envTextBox)){//nag add ng variable
+			addEnvButton.setSrc("/images/leftarrow_g.png");
+		}else {
+			addEnvButton.setSrc("/images/rightarrow_g.png");
+		}
+	}
+
+	@Listen("onClick = #addGenotypeButton")
+	@NotifyChange("*")
+	public void addGenotypeVariable(MouseEvent event) {
+		if(chooseVariable(genotypeTextBox)){//nag add ng variable
+			addGenotypeButton.setSrc("/images/leftarrow_g.png");
+		}else {
+			addGenotypeButton.setSrc("/images/rightarrow_g.png");
+		}
+	}
+
+	@Listen("onClick = #addBlockButton")
+	@NotifyChange("*")
+	public void addBlockVariable(MouseEvent event) {
+		if(chooseVariable(blockTextBox)){//nag add ng variable
+			addBlockButton.setSrc("/images/leftarrow_g.png");
+		}else {
+			addBlockButton.setSrc("/images/rightarrow_g.png");
+		}
+	}
+
+
+	@Listen("onClick = #addReplicateButton")
+	@NotifyChange("*")
+	public void addReplicateVariable(MouseEvent event) {
+		if(chooseVariable(replicateTextBox)){//nag add ng variable
+			addReplicateButton.setSrc("/images/leftarrow_g.png");
+		}else {
+			addReplicateButton.setSrc("/images/rightarrow_g.png");
+		}
+	}
+
+	@Listen("onClick = #addRowButton")
+	@NotifyChange("*")
+	public void addRowVariable(MouseEvent event) {
+		if(chooseVariable(rowTextBox)){//nag add ng variable
+			addRowButton.setSrc("/images/leftarrow_g.png");
+		}else {
+			addRowButton.setSrc("/images/rightarrow_g.png");
+		}
+	}
+
+	@Listen("onClick = #addColumnButton")
+	@NotifyChange("*")
+	public void addColumnVariable(MouseEvent event) {
+		if(chooseVariable(columnTextBox)){//nag add ng variable
+			addColumnButton.setSrc("/images/leftarrow_g.png");
+		}else {
+			addColumnButton.setSrc("/images/rightarrow_g.png");
+		}
+	}
+
 	/**
 	 * Set new numeric ListModelList.
 	 * 
@@ -147,22 +239,13 @@ public class VariableListBoxes{
 
 	private void toFactor() {
 		// TODO Auto-generated method stub
-		
+
 		Set<String> set = numericModel.getSelection();
 		for (String selectedItem : set) {
 			factorModel.add(selectedItem);
 			numericModel.remove(selectedItem);
 		}
-		
-//		if (selected.isEmpty())
-//			return;
-//		int index = numericModel.indexOf(selected.iterator().next());
-//		if (index == numericModel.size() - 1 || index < 0)
-//			return;
-//		String selectedItem = numericModel.get(index);
-//		numericModel.remove(selectedItem);
-//		factorModel.add(++index, selectedItem);
-//		factorModel.addToSelection(selectedItem);
+
 	}
 
 	private void toNumeric() {
@@ -171,30 +254,40 @@ public class VariableListBoxes{
 		fileName = fileName.replace("\\", "/");
 		for (String selectedItem : set) {
 			if (AnalysisUtils.isColumnNumeric(varInfo, selectedItem)){
-			numericModel.add(selectedItem);
-			factorModel.remove(selectedItem);
+				numericModel.add(selectedItem);
+				factorModel.remove(selectedItem);
 			}
 			else{
 				Messagebox.show("Can't move variable.\n"+selectedItem+ " is not Numeric.");
 				System.out.println("Not Numeric");
 			}
 		}
-//		if (selected.isEmpty())
-//			return;
-//		int index = factorModel.indexOf(selected.iterator().next());
-//		if (index == 0 || index < 0)
-//			return;
-//		String selectedItem = factorModel.get(index);
-//		factorModel.remove(selectedItem);
-//		numericModel.add(--index, selectedItem);
-//		numericModel.addToSelection(selectedItem);
-
 	}
 
-	
+
+	private boolean chooseVariable(Textbox varTextBox ) {
+		Set<String> set = factorModel.getSelection();
+		//				System.out.println("removeResponse");
+
+		if(varTextBox.getValue().isEmpty() && !set.isEmpty()){
+			for (String selectedItem : set) {
+				varTextBox.setValue(selectedItem);
+				factorModel.remove(selectedItem);
+			}
+			return true;
+			//nag add
+		}else if(!varTextBox.getValue().isEmpty()){
+			factorModel.add(varTextBox.getValue());
+			varTextBox.setValue(null);
+		}
+		return false;
+		// TODO Auto-generated method stub
+	}
+
+
 	private void chooseResponseVariable() {
 		Set<String> set = numericModel.getSelection();
-//		System.out.println("addResponse");
+		//		System.out.println("addResponse");
 		for (String selectedItem : set) {
 			responseModel.add(selectedItem);
 			numericModel.remove(selectedItem);
@@ -203,7 +296,7 @@ public class VariableListBoxes{
 
 	private void unchooseResponseVariable() {
 		Set<String> set = responseModel.getSelection();
-//		System.out.println("removeResponse");
+		//		System.out.println("removeResponse");
 		for (String selectedItem : set) {
 			numericModel.add(selectedItem);
 			responseModel.remove(selectedItem);
@@ -218,5 +311,5 @@ public class VariableListBoxes{
 			super("onChoose", target, data);
 		}
 	}
-	
+
 }

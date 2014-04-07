@@ -39,12 +39,8 @@ import org.zkoss.zul.Textbox;
 public class OtherVars{
 
 	//Managers
-
-	//Zul file components
-
-
 	//DataModels
-	private ListModelList<String> factorModel;
+	private Listbox factorLb;
 	
 	//textBoxes
 	private Textbox envTextBox;
@@ -63,10 +59,10 @@ public class OtherVars{
 	private Image addColumnButton;
 	
 	@AfterCompose
-	public void init(@ContextParam(ContextType.COMPONENT) Component component,@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("factorModel")  ListModelList<String> factorModel){
+	public void init(@ContextParam(ContextType.COMPONENT) Component component,@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("factorLb")Listbox factorLb){
+		
 		Selectors.wireEventListeners(view, this);
-
-		this.factorModel=factorModel;
+		this.factorLb=factorLb;
 		
 		//wire textboxes
 		envTextBox = (Textbox) component.getFellow("envTextBox");
@@ -88,62 +84,62 @@ public class OtherVars{
 	@Listen("onClick = #addEnvButton")
 	@NotifyChange("*")
 	public void addEnvVariable(MouseEvent event) {
-		if(AnalysisUtils.chooseVariable(factorModel, envTextBox)){//nag add ng variable
-			addEnvButton.setSrc("/images/leftarrow_g.png");
-		}else {
-			addEnvButton.setSrc("/images/rightarrow_g.png");
-		}
+//		if(AnalysisUtils.chooseVariable(factorLb, envTextBox)){//nag add ng variable
+//			addEnvButton.setSrc("/images/leftarrow_g.png");
+//		}else {
+//			addEnvButton.setSrc("/images/rightarrow_g.png");
+//		}
 	}
 	
 	@Listen("onClick = #addGenotypeButton")
 	@NotifyChange("*")
 	public void addGenotypeVariable(MouseEvent event) {
-		if(AnalysisUtils.chooseVariable(factorModel, genotypeTextBox)){//nag add ng variable
-			addGenotypeButton.setSrc("/images/leftarrow_g.png");
-		}else {
-			addGenotypeButton.setSrc("/images/rightarrow_g.png");
-		}
+//		if(AnalysisUtils.chooseVariable(factorLb, genotypeTextBox)){//nag add ng variable
+//			addGenotypeButton.setSrc("/images/leftarrow_g.png");
+//		}else {
+//			addGenotypeButton.setSrc("/images/rightarrow_g.png");
+//		}
 	}
 	
 	@Listen("onClick = #addBlockButton")
 	@NotifyChange("*")
 	public void addBlockVariable(MouseEvent event) {
-		if(AnalysisUtils.chooseVariable(factorModel, blockTextBox)){//nag add ng variable
-			addBlockButton.setSrc("/images/leftarrow_g.png");
-		}else {
-			addBlockButton.setSrc("/images/rightarrow_g.png");
-		}
+//		if(AnalysisUtils.chooseVariable(factorLb, blockTextBox)){//nag add ng variable
+//			addBlockButton.setSrc("/images/leftarrow_g.png");
+//		}else {
+//			addBlockButton.setSrc("/images/rightarrow_g.png");
+//		}
 	}
 
 
 	@Listen("onClick = #addReplicateButton")
 	@NotifyChange("*")
 	public void addReplicateVariable(MouseEvent event) {
-		if(AnalysisUtils.chooseVariable(factorModel, replicateTextBox)){//nag add ng variable
-			addReplicateButton.setSrc("/images/leftarrow_g.png");
-		}else {
-			addReplicateButton.setSrc("/images/rightarrow_g.png");
-		}
+//		if(AnalysisUtils.chooseVariable(factorLb, replicateTextBox)){//nag add ng variable
+//			addReplicateButton.setSrc("/images/leftarrow_g.png");
+//		}else {
+//			addReplicateButton.setSrc("/images/rightarrow_g.png");
+//		}
 	}
 	
 	@Listen("onClick = #addRowButton")
 	@NotifyChange("*")
 	public void addRowVariable(MouseEvent event) {
-		if(AnalysisUtils.chooseVariable(factorModel, rowTextBox)){//nag add ng variable
-			addRowButton.setSrc("/images/leftarrow_g.png");
-		}else {
-			addRowButton.setSrc("/images/rightarrow_g.png");
-		}
+//		if(AnalysisUtils.chooseVariable(factorLb, rowTextBox)){//nag add ng variable
+//			addRowButton.setSrc("/images/leftarrow_g.png");
+//		}else {
+//			addRowButton.setSrc("/images/rightarrow_g.png");
+//		}
 	}
 
 	@Listen("onClick = #addColumnButton")
 	@NotifyChange("*")
 	public void addColumnVariable(MouseEvent event) {
-		if(AnalysisUtils.chooseVariable(factorModel, columnTextBox)){//nag add ng variable
-			addColumnButton.setSrc("/images/leftarrow_g.png");
-		}else {
-			addColumnButton.setSrc("/images/rightarrow_g.png");
-		}
+//		if(AnalysisUtils.chooseVariable(factorLb, columnTextBox)){//nag add ng variable
+//			addColumnButton.setSrc("/images/leftarrow_g.png");
+//		}else {
+//			addColumnButton.setSrc("/images/rightarrow_g.png");
+//		}
 	}
 	
 	// Customized Event
