@@ -6,14 +6,14 @@
 		<vlayout>
 			<hlayout>
 
-				<groupbox vflex="1" hflex="1" mold="3d">
+				<groupbox  hflex="1" mold="3d">
 					<caption label="Site Information"></caption>
 					<grid>
 						<rows>
 							<row>
 								<label value="Site Name"></label>
 								<textbox
-									value="@bind(vm.site.sitename)">
+									value="@bind(vm.site.sitename)" onBlur="@command('updateTab')" >
 								</textbox>
 							</row>
 							<row>
@@ -323,7 +323,7 @@
 				<caption label="Variate List"></caption>
 				<button label ="Add Trait" onClick="@command('addTrait')" />
 			      <listbox  multiple="false" checkmark="true" oddRowSclass="odd"
-            model="@load(vm.site.lstStudyVariable)"   emptyMessage="No Trait code yet...">
+            model="@load(vm.site.lstStudyVariable)"   emptyMessage="No Trait code yet..." rows="10" >
               <auxhead>
                 <auxheader colspan="3" class="topic"> </auxheader>
             </auxhead>
@@ -334,7 +334,7 @@
                 <listheader label="Scale"   hflex ="1"/>
                 <listheader label="Method"  hflex ="1"/>
                  <listheader label="Trait Code"  hflex ="1"/>
-                 <listheader label="Trait Code" width="30px"/>
+                 <listheader label="" width="30px"/>
             </listhead>
             <template name="model" >
                 <listitem>
@@ -344,7 +344,7 @@
                        <listcell label="@load(each.method)" />
                           <listcell label="@load(each.datatype)" />
                           <listcell>
-                          	<button label = "X" onClick="@command('removeTrait')"></button>
+                          	<button label = "X" onClick="@command('removeTrait',trait=each)"></button>
                           </listcell>
                 </listitem>
             </template>

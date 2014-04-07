@@ -40,6 +40,8 @@ import com.mysql.jdbc.StringUtils;
 
 public class FieldBookSite {
 
+	Tab siteTab;
+
 	/*
 	 * INITS
 	 */
@@ -47,6 +49,7 @@ public class FieldBookSite {
 	public void init(@ExecutionArgParam("SiteModel") SiteInformationModel siteModel, @ExecutionArgParam("SiteTab") Tab siteTab) {
 		lstLocations = getAllLocations();
 		this.site = siteModel;
+		this.siteTab = siteTab;
 	}
 
 	@AfterCompose
@@ -84,11 +87,22 @@ public class FieldBookSite {
 		popup.doModal();
 	}
 
-	@NotifyChange("lstStudyVariable")
+	@NotifyChange("site")
 	@Command("refreshVarList")
 	public void refreshList(@BindingParam("variable") StudyVariable newVariable) {
 
 		site.lstStudyVariable.add(newVariable);
+	}
+
+	@NotifyChange("site")
+	@Command
+	public void removeTrait(@BindingParam("trait") StudyVariable var) {
+		site.lstStudyVariable.remove(var);
+	}
+
+	@Command
+	public void updateTab() {
+		siteTab.setLabel(site.getSitename());
 	}
 
 	@NotifyChange("filteredLocations")

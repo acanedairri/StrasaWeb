@@ -1,15 +1,22 @@
 package org.strasa.web.createfieldbook.view.model;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.strasa.middleware.manager.CreateFieldBookManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
+import org.strasa.middleware.manager.StudyManager;
+import org.strasa.middleware.manager.StudyTypeManagerImpl;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.Study;
+import org.strasa.middleware.model.StudyType;
 import org.strasa.web.createfieldbook.view.pojos.SiteInformationModel;
 import org.strasa.web.updatestudy.view.Index.tabObject;
 import org.strasa.web.uploadstudy.view.model.AddProgram;
@@ -21,8 +28,12 @@ import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zhtml.Filedownload;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Include;
@@ -68,10 +79,13 @@ public class Index {
 			System.out.println("TABBOX NULL!!");
 			siteTabBox = (Tabbox) view.getFellow("tabboxSites");
 		}
+
 		Tab newTab = new Tab();
 		newTab.setClosable(true);
 		newTab.setLabel("New Site");
 		newTab.setParent(siteTabBox.getTabs());
+		newTab.setSelected(true);
+
 		Tabpanel newTabPanel = new Tabpanel();
 		newTabPanel.setParent(siteTabBox.getTabpanels());
 		Include inc = new Include();
@@ -82,6 +96,17 @@ public class Index {
 		inc.setParent(newTabPanel);
 		lstSiteInfo.add(newSiteModel);
 
+		newTab.setAttribute("site", newSiteModel);
+		newTab.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+			public void onEvent(Event event) throws Exception {
+				// event.stopPropagation();
+				lstSiteInfo.remove(event.getTarget().getAttribute("site"));
+				return;
+			}
+
+		});
+
+		view.getFellow("gbSiteInfo").invalidate();
 	}
 
 	@Command("addProgram")
@@ -149,7 +174,65 @@ public class Index {
 	@Command
 	public void generateFieldBook() {
 
+		if (txtProgram == null || txtProject == null || txtStudyName == null || txtStudyType == null) {
+			Messagebox.show("Error: All fields are required", " Error", Messagebox.OK, Messagebox.ERROR);
+			System.out.println("1 + " + txtProgram);
+			System.out.println("2 + " + txtProject);
+			System.out.println("3 + " + txtStudyName);
+			System.out.println("4 + " + txtStudyType);
+
+			// TODO: must have message DIalog
+			return;
+		}
+
+		if (txtProgram == null || txtProject == null || txtStudyName.isEmpty() || txtStudyType.isEmpty()) {
+			Messagebox.show("Error: All fields are requiredx", "Upload Error", Messagebox.OK, Messagebox.ERROR);
+
+			// TODO: must have message DIalog
+			return;
+		}
+
+		if (startYear < Calendar.getInstance().get(Calendar.YEAR)) {
+			Messagebox.show("Error: Invalid start year. Year must be greater or equal than the present year(" + Calendar.getInstance().get(Calendar.YEAR) + " )", "Upload Error", Messagebox.OK, Messagebox.ERROR);
+
+			return;
+		}
+		if (endYear < Calendar.getInstance().get(Calendar.YEAR)) {
+			Messagebox.show("Error: Invalid end year. Year must be greater or equal than the present year(" + Calendar.getInstance().get(Calendar.YEAR) + " )", "Upload Error", Messagebox.OK, Messagebox.ERROR);
+
+			return;
+		}
+
+		if (study == null) {
+			study = new Study();
+		}
+		study.setName(txtStudyName);
+		study.setStudytypeid(new StudyTypeManagerImpl().getStudyTypeByName(txtStudyType).getId());
+		study.setProgramid(txtProgram.getId());
+		study.setProjectid(txtProject.getId());
+		study.setStartyear(String.valueOf(startYear));
+		study.setEndyear(String.valueOf(String.valueOf(endYear)));
+		study.setUserid(1);
+		study.setShared(false);
+		study.setDatecreated(new Date());
+		study.setDatelastmodified(new Date());
+		if (study.getId() == null && new StudyManager().isProjectExist(study, 1)) {
+			Messagebox.show("Error: Study name already exist! Please choose a different name.", "Upload Error", Messagebox.OK, Messagebox.ERROR);
+
+			return;
+		}
+
 		System.out.println("lstTest : " + lstSiteInfo.get(0).getSitename());
+		File outputFolder = new File(Executions.getCurrent().getDesktop().getWebApp().getRealPath("/") + "ExcelOutput/");
+		if (!outputFolder.exists())
+			outputFolder.mkdirs();
+		CreateFieldBookManagerImpl createFieldBookMan = new CreateFieldBookManagerImpl(lstSiteInfo, study, outputFolder);
+		try {
+			Filedownload.save(new FileInputStream(createFieldBookMan.generateFieldBook().getAbsolutePath()), "application/vnd.ms-excel", study.getName() + ".xls");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@NotifyChange("*")
@@ -226,6 +309,12 @@ public class Index {
 	}
 
 	public ArrayList<String> getStudyTypeList() {
+		studyTypeList.clear();
+
+		for (StudyType studyType : new StudyTypeManagerImpl().getAllStudyType()) {
+			studyTypeList.add(studyType.getStudytype());
+		}
+		;
 		return studyTypeList;
 	}
 

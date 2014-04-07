@@ -7,6 +7,8 @@
 
 
 <zk xmlns:n="native">
+
+<script src="../js/button-bs.js" />
 	<include src="navbar.zul" />
 	<hlayout id="main" spacing="0">
 		<include src="sidebar.zul" />

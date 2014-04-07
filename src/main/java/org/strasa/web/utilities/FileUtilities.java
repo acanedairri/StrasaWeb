@@ -15,7 +15,6 @@ import org.zkoss.zul.Columns;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Label;
-import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Rows;
 import org.zkoss.zul.Toolbarbutton;
@@ -55,10 +54,11 @@ public class FileUtilities {
 			e1.printStackTrace();
 		}
 
-		if (!name.endsWith(".csv")) {
-			Messagebox.show("Error: File must be a text-based csv format", "Upload Error", Messagebox.OK, Messagebox.ERROR);
-			return null;
-		}
+		// if (!name.endsWith(".csv")) {
+		// Messagebox.show("Error: File must be a text-based csv format",
+		// "Upload Error", Messagebox.OK, Messagebox.ERROR);
+		// return null;
+		// }
 
 		InputStream in = event.getMedia().isBinary() ? event.getMedia().getStreamData() : new ReaderInputStream(event.getMedia().getReaderData());
 		FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
