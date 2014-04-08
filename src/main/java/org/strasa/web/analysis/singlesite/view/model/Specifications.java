@@ -127,29 +127,6 @@ public class Specifications {
 				FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
 				BindUtils.postNotifyChange(null, null, this, "*");
 
-				ArrayList<String> invalidHeader = new ArrayList<String>();
-				boolean isHeaderValid = true;
-				try {
-					StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
-					CSVReader reader = new CSVReader(new FileReader(
-							tempFile.getAbsolutePath()));
-					String[] header = reader.readNext();
-					for (String column : header) {
-						if (!studyVarMan.hasVariable(column)) {
-							invalidHeader.add(column);
-							isHeaderValid = false;
-						}
-					}
-					System.out.println(invalidHeader.size());
-
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
 				isVariableDataVisible = true;
 				dataFileName = name;
 
@@ -157,8 +134,8 @@ public class Specifications {
 		        args.put("filePath", tempFile.getAbsolutePath());
 				BindUtils.postGlobalCommand(null, null, "setSsaListvariables", args);
 				
-				if (this.isUpdateMode)
-					isNewDataSet = true;
+//				if (this.isUpdateMode)
+//					isNewDataSet = true;
 
 	}
 
