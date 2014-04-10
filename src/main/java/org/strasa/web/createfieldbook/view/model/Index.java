@@ -17,15 +17,18 @@ import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyType;
+import org.strasa.middleware.model.StudyVariable;
 import org.strasa.web.createfieldbook.view.pojos.SiteInformationModel;
 import org.strasa.web.updatestudy.view.Index.tabObject;
 import org.strasa.web.uploadstudy.view.model.AddProgram;
 import org.strasa.web.uploadstudy.view.model.AddProject;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zhtml.Filedownload;
@@ -36,6 +39,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tab;
@@ -68,21 +72,21 @@ public class Index {
 	private Program txtProgram = new Program();
 	private Project txtProject = new Project();
 	private ArrayList<SiteInformationModel> lstSiteInfo = new ArrayList<SiteInformationModel>();
-
+	private ArrayList<SiteInformationModel> lstSelectedSites = new ArrayList<SiteInformationModel>();
+	private Integer siteInc = 1;
 	@Wire("#tabboxSites")
 	private Tabbox siteTabBox;
 
-	@Command
-	public void addSite(@ContextParam(ContextType.VIEW) Component view) {
-		if (siteTabBox == null) {
+	@Wire("#gbSiteInfo")
+	private Groupbox gbSiteInfo;
 
-			System.out.println("TABBOX NULL!!");
-			siteTabBox = (Tabbox) view.getFellow("tabboxSites");
-		}
+	@GlobalCommand
+	@Command
+	public void addSite(@BindingParam("siteModel") SiteInformationModel siteModel) {
 
 		Tab newTab = new Tab();
 		newTab.setClosable(true);
-		newTab.setLabel("New Site");
+		newTab.setLabel("Site" + siteInc);
 		newTab.setParent(siteTabBox.getTabs());
 		newTab.setSelected(true);
 
@@ -90,23 +94,38 @@ public class Index {
 		newTabPanel.setParent(siteTabBox.getTabpanels());
 		Include inc = new Include();
 		inc.setSrc("/user/createfieldbook/fieldbooksitetab.zul");
-		SiteInformationModel newSiteModel = new SiteInformationModel();
+		SiteInformationModel newSiteModel;
+		if (siteModel == null)
+			newSiteModel = new SiteInformationModel();
+		else {
+			newSiteModel = (SiteInformationModel) siteModel.clone();
+
+			newSiteModel.lstStudyVariable = new ArrayList<StudyVariable>();
+			newSiteModel.lstStudyVariable.addAll(siteModel.lstStudyVariable);
+		}
 		inc.setDynamicProperty("SiteModel", newSiteModel);
 		inc.setDynamicProperty("SiteTab", newTab);
 		inc.setParent(newTabPanel);
+		newSiteModel.setSitename("Site" + siteInc);
 		lstSiteInfo.add(newSiteModel);
-
+		lstSelectedSites.add(newSiteModel);
 		newTab.setAttribute("site", newSiteModel);
 		newTab.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
 			public void onEvent(Event event) throws Exception {
 				// event.stopPropagation();
 				lstSiteInfo.remove(event.getTarget().getAttribute("site"));
+				BindUtils.postNotifyChange(null, null, Index.this, "lstSiteInfo");
 				return;
 			}
 
 		});
 
-		view.getFellow("gbSiteInfo").invalidate();
+		gbSiteInfo.invalidate();
+		BindUtils.postNotifyChange(null, null, Index.this, "lstSiteInfo");
+		// Menuitem menuItem = new Menuitem();
+		// menuItem.setChecked(true);
+		// menuItem.set
+		siteInc++;
 	}
 
 	@Command("addProgram")
@@ -171,6 +190,12 @@ public class Index {
 		txtProject = null;
 	}
 
+	@GlobalCommand
+	public void refreshSiteList() {
+		BindUtils.postNotifyChange(null, null, Index.this, "lstSiteInfo");
+
+	}
+
 	@Command
 	public void generateFieldBook() {
 
@@ -226,7 +251,8 @@ public class Index {
 		File outputFolder = new File(Executions.getCurrent().getDesktop().getWebApp().getRealPath("/") + "ExcelOutput/");
 		if (!outputFolder.exists())
 			outputFolder.mkdirs();
-		CreateFieldBookManagerImpl createFieldBookMan = new CreateFieldBookManagerImpl(lstSiteInfo, study, outputFolder);
+
+		CreateFieldBookManagerImpl createFieldBookMan = new CreateFieldBookManagerImpl(lstSelectedSites, study, outputFolder);
 		try {
 			Filedownload.save(new FileInputStream(createFieldBookMan.generateFieldBook().getAbsolutePath()), "application/vnd.ms-excel", study.getName() + ".xls");
 		} catch (Exception e) {
@@ -336,6 +362,22 @@ public class Index {
 
 	public Project getTxtProject() {
 		return txtProject;
+	}
+
+	public ArrayList<SiteInformationModel> getLstSiteInfo() {
+		return lstSiteInfo;
+	}
+
+	public void setLstSiteInfo(ArrayList<SiteInformationModel> lstSiteInfo) {
+		this.lstSiteInfo = lstSiteInfo;
+	}
+
+	public ArrayList<SiteInformationModel> getLstSelectedSites() {
+		return lstSelectedSites;
+	}
+
+	public void setLstSelectedSites(ArrayList<SiteInformationModel> lstSelectedSites) {
+		this.lstSelectedSites = lstSelectedSites;
 	}
 
 }

@@ -38,7 +38,6 @@ import org.strasa.web.common.api.ProcessTabViewModel;
 import org.strasa.web.uploadstudy.view.pojos.UploadCSVDataVariableModel;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
-import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
@@ -68,48 +67,45 @@ public class DataColumnValidation {
 
 	private boolean isHeaderClear = true;
 	public boolean showAll;
-	public boolean isShowAll(){
+
+	public boolean isShowAll() {
 		return !showAll;
 	}
+
 	@Init
-	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,
-			@ContextParam(ContextType.VIEW) Component view,
-			@ExecutionArgParam("CSVPath") String CSVPath,
-			@ExecutionArgParam("showAll") boolean showAll, 
-			@ExecutionArgParam("tabModel") ProcessTabViewModel model) {
+	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("CSVPath") String CSVPath, @ExecutionArgParam("showAll") boolean showAll, @ExecutionArgParam("tabModel") ProcessTabViewModel model) {
 		mainView = view;
 		this.model = model;
 		parBinder = (Binder) view.getParent().getAttribute("binder");
 		CsvPath = CSVPath;
 		this.showAll = showAll;
 		ArrayList<String> invalidHeader = new ArrayList<String>();
-		if(model != null && model.isUpdateMode ){
+		if (model != null && model.isUpdateMode) {
 			StudyDataColumnManagerImpl columnMan = new StudyDataColumnManagerImpl();
 			List<StudyDataColumn> lstColumns = columnMan.getStudyDataColumnByStudyId(model.getStudyID(), (model.isRaw) ? "rd" : "dd", model.dataset.getId());
-			for(StudyDataColumn colVar : lstColumns){
+			for (StudyDataColumn colVar : lstColumns) {
 				invalidHeader.add(colVar.getColumnheader());
 			}
 			this.showAll = true;
-		}
-		else{
-		try {
-			StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
-			CSVReader reader = new CSVReader(new FileReader(CsvPath));
-			String[] header = reader.readNext();
-			for (String column : header) {
+		} else {
+			try {
+				StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
+				CSVReader reader = new CSVReader(new FileReader(CsvPath));
+				String[] header = reader.readNext();
+				for (String column : header) {
 
-				invalidHeader.add(column);
+					invalidHeader.add(column);
 
+				}
+				System.out.println(invalidHeader.size());
+
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			System.out.println(invalidHeader.size());
-
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		}
 		populateVarData(invalidHeader);
 	}
@@ -129,53 +125,48 @@ public class DataColumnValidation {
 		String[] newHeader = new String[varData.size()];
 		for (int i = 0; i < varData.size(); i++) {
 			if (varData.get(i).getNewVariable().equals("-")) {
-				Messagebox.show("Error: Headers must be matched accordingly.",
-						"Save Error", Messagebox.OK, Messagebox.ERROR);
+				Messagebox.show("Error: Headers must be matched accordingly.", "Save Error", Messagebox.OK, Messagebox.ERROR);
 				return;
 			}
 			newHeader[i] = varData.get(i).getNewVariable();
 		}
 		HashSet noDupSet = new HashSet();
 		noDupSet.addAll(Arrays.asList(newHeader));
-		if(noDupSet.size() != newHeader.length){
-			Messagebox.show("Error: Column duplication detected. Columns should be unique", "Upload Error",
-					Messagebox.OK, Messagebox.ERROR);
+		if (noDupSet.size() != newHeader.length) {
+			Messagebox.show("Error: Column duplication detected. Columns should be unique", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 
-			return ;
+			return;
 		}
-		if(model != null && model.isUpdateMode){
-			
+		if (model != null && model.isUpdateMode) {
+
 			StudyRawDataManagerImpl dataMan = new StudyRawDataManagerImpl(this.model.isRaw);
 			StudyDataColumnManagerImpl columnMan = new StudyDataColumnManagerImpl();
-			for(UploadCSVDataVariableModel var : varData){
-				if(var.modified){
-					dataMan.changeDataColumn(model.studyID, model.dataset.getId(), var.getCurrentVariable(),var.getNewVariable());
-					columnMan.updateStudyDataColumnByStudyId(model.studyID, model.dataset.getId(), var.getCurrentVariable(),var.getNewVariable());
+			for (UploadCSVDataVariableModel var : varData) {
+				if (var.modified) {
+					dataMan.changeDataColumn(model.studyID, model.dataset.getId(), var.getCurrentVariable(), var.getNewVariable());
+					columnMan.updateStudyDataColumnByStudyId(model.studyID, model.dataset.getId(), var.getCurrentVariable(), var.getNewVariable());
 				}
 			}
 
-			Messagebox.show(" Data successfully updated!", "Save",
-					Messagebox.OK, Messagebox.INFORMATION);
-		}
-		else {
+			Messagebox.show(" Data successfully updated!", "Save", Messagebox.OK, Messagebox.INFORMATION);
+		} else {
 			FileWriter mFileWriter;
-		
-		try {
-			CSVReader reader = new CSVReader(new FileReader(CsvPath));
-			List<String[]> currDataSet = reader.readAll();
-			currDataSet.set(0, newHeader);
-			mFileWriter = new FileWriter(CsvPath);
-			CSVWriter mCsvWriter = new CSVWriter(mFileWriter);
-			mCsvWriter.writeAll(currDataSet);
-			mCsvWriter.flush();
-			mCsvWriter.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
-		Messagebox.show("CSV Data successfully updated!", "Save",
-				Messagebox.OK, Messagebox.INFORMATION);
+			try {
+				CSVReader reader = new CSVReader(new FileReader(CsvPath));
+				List<String[]> currDataSet = reader.readAll();
+				currDataSet.set(0, newHeader);
+				mFileWriter = new FileWriter(CsvPath);
+				CSVWriter mCsvWriter = new CSVWriter(mFileWriter);
+				mCsvWriter.writeAll(currDataSet);
+				mCsvWriter.flush();
+				mCsvWriter.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			Messagebox.show("CSV Data successfully updated!", "Save", Messagebox.OK, Messagebox.INFORMATION);
 		}
 		System.out.println("SavePath: " + CsvPath);
 
@@ -195,16 +186,15 @@ public class DataColumnValidation {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Command
-	public void cancel(){
+	public void cancel() {
 		mainView.detach();
 	}
 
 	@NotifyChange("*")
 	@Command("refreshVarList")
-	public void refreshList(@BindingParam("newValue") String newValue,
-			@BindingParam("oldVar") String oldVar) {
+	public void refreshList(@BindingParam("newValue") String newValue, @BindingParam("oldVar") String oldVar) {
 		for (int i = 0; i < varData.size(); i++) {
 
 			if (varData.get(i).getCurrentVariable().equals(oldVar)) {
@@ -219,18 +209,15 @@ public class DataColumnValidation {
 
 	@Command("changeVar")
 	@NotifyChange("variableData")
-	public void changeVar(
-			@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,
-			@ContextParam(ContextType.VIEW) Component view,
-			@BindingParam("oldVar") String oldVar) {
+	public void changeVar(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view, @BindingParam("oldVar") String oldVar) {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 		System.out.println(oldVar);
 		params.put("oldVar", oldVar);
 		params.put("parent", view);
+		params.put("multiselect", false);
 
-		Window popup = (Window) Executions.createComponents(
-				DataColumnChanged.ZUL_PATH, view, params);
+		Window popup = (Window) Executions.createComponents(DataColumnChanged.ZUL_PATH, view, params);
 
 		popup.doModal();
 	}
@@ -249,7 +236,7 @@ public class DataColumnValidation {
 					isHeaderClear = false;
 				} else {
 					varData.add(new UploadCSVDataVariableModel(var, var));
-					
+
 				}
 			}
 		}

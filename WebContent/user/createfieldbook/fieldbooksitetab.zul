@@ -4,10 +4,12 @@
 		<style src="../css/main.css" />
 
 		<vlayout>
+		<button label="Copy this Site"  class="btn btn-info" onClick="@global-command('addSite', siteModel = vm.site)"></button>
 			<hlayout>
 
 				<groupbox  hflex="1" mold="3d">
 					<caption label="Site Information"></caption>
+					
 					<grid>
 						<rows>
 							<row>
@@ -291,13 +293,13 @@
 							<caption label="Genotype:"></caption>
 							<vlayout>
 								<div>
-									<label value="@load(vm.lblGenotypeFileName)"></label>
+									<label value="@load(vm.site.lblGenotypeFileName)"></label>
 								</div>
 								<div>
 									<button label="Browse" onUpload="@command('uploadGenotype')"
-										upload="true">
+										upload="true" class="btn btn-primary">
 									</button>
-									<button label="Remove" onClick=""></button>
+									<button label="Remove" onClick="@command('removeGenotype')"  class="btn"></button>
 								</div>
 							</vlayout>
 						</groupbox>
@@ -305,13 +307,13 @@
 							<caption label="Layout:"></caption>
 							<vlayout>
 								<div>
-									<label value="@bind(vm.lblLayoutFileName)"></label>
+									<label value="@bind(vm.site.lblLayoutFileName)"></label>
 								</div>
 								<div>
 									<button label="Browse" onUpload="@command('uploadLayout')"
-										upload="true">
+										upload="true"  class="btn btn-primary">
 									</button>
-									<button label="Remove" onClick=""></button>
+									<button label="Remove" onClick="@command('removeLayout')"  class="btn"></button>
 								</div>
 							</vlayout>
 						</groupbox>
@@ -320,8 +322,8 @@
 				</groupbox>
 			</hlayout>
 			<groupbox mold="3d">
-				<caption label="Variate List"></caption>
-				<button label ="Add Trait" onClick="@command('addTrait')" />
+				<caption label="Variate List"> 	<button label ="Add Trait" class="btn btn-info pull-right" onClick="@command('addTrait')" /></caption>
+			
 			      <listbox  multiple="false" checkmark="true" oddRowSclass="odd"
             model="@load(vm.site.lstStudyVariable)"   emptyMessage="No Trait code yet..." rows="10" >
               <auxhead>

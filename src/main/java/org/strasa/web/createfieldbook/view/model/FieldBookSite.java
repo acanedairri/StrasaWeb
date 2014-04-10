@@ -1,6 +1,7 @@
 package org.strasa.web.createfieldbook.view.model;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,16 +83,17 @@ public class FieldBookSite {
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		params.put("parent", view);
-
+		params.put("multiselect", true);
+		params.put("filter", site.lstStudyVariable);
 		Window popup = (Window) Executions.createComponents(DataColumnChanged.ZUL_PATH, view, params);
 		popup.doModal();
 	}
 
 	@NotifyChange("site")
 	@Command("refreshVarList")
-	public void refreshList(@BindingParam("variable") StudyVariable newVariable) {
+	public void refreshList(@BindingParam("variable") ArrayList<StudyVariable> newVariable) {
 
-		site.lstStudyVariable.add(newVariable);
+		site.lstStudyVariable.addAll(newVariable);
 	}
 
 	@NotifyChange("site")
@@ -103,6 +105,7 @@ public class FieldBookSite {
 	@Command
 	public void updateTab() {
 		siteTab.setLabel(site.getSitename());
+		BindUtils.postGlobalCommand(null, null, "refreshSiteList", null);
 	}
 
 	@NotifyChange("filteredLocations")
@@ -152,7 +155,27 @@ public class FieldBookSite {
 		toggleBandBox(false);
 	}
 
-	@NotifyChange("lblGenotypeFileName")
+	@Command
+	public void removeGenotype() {
+		if (StringUtils.isNullOrEmpty(site.getLblGenotypeFileName()))
+			return;
+		site.setLblGenotypeFileName("");
+		site.getFileGenotype().delete();
+		BindUtils.postNotifyChange(null, null, site, "lblGenotypeFileName");
+
+	}
+
+	@Command
+	public void removeLayout() {
+
+		if (StringUtils.isNullOrEmpty(site.getLblLayoutFileName()))
+			return;
+		site.setLblLayoutFileName("");
+		site.getFileLayout().delete();
+		BindUtils.postNotifyChange(null, null, site, "lblLayoutFileName");
+
+	}
+
 	@Command("uploadGenotype")
 	public void uploadGenotype(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view) {
 
@@ -162,10 +185,10 @@ public class FieldBookSite {
 
 		site.setFileGenotype(tempFile);
 		UploadEvent event = (UploadEvent) ctx.getTriggerEvent();
-		lblGenotypeFileName = event.getMedia().getName();
+		site.setLblGenotypeFileName(event.getMedia().getName());
+		BindUtils.postNotifyChange(null, null, site, "lblGenotypeFileName");
 	}
 
-	@NotifyChange("lblLayoutFileName")
 	@Command("uploadLayout")
 	public void uploadLayout(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view) {
 
@@ -175,7 +198,8 @@ public class FieldBookSite {
 
 		site.setFileLayout(tempFile);
 		UploadEvent event = (UploadEvent) ctx.getTriggerEvent();
-		lblLayoutFileName = event.getMedia().getName();
+
+		BindUtils.postNotifyChange(null, null, site, "lblLayoutFileName");
 	}
 
 	/*

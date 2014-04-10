@@ -57,6 +57,22 @@ public class StudyVariableManagerImpl {
 
 	}
 
+	public List<StudyVariable> getVariables(List<StudyVariable> filter) {
+
+		try {
+			ArrayList<Integer> lstFilterIds = new ArrayList<Integer>();
+			for (StudyVariable var : filter) {
+				lstFilterIds.add(var.getId());
+			}
+			StudyVariableExample example = new StudyVariableExample();
+			example.createCriteria().andIdNotIn(lstFilterIds);
+			return getMapper().selectByExample(example);
+		} finally {
+			session.close();
+		}
+
+	}
+
 	public List<StudyVariable> getVariables(String sort) {
 
 		try {

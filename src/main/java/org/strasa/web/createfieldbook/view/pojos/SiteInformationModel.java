@@ -34,7 +34,13 @@ import org.strasa.middleware.model.StudyVariable;
 /**
  * The Class SiteInformationModel.
  */
-public class SiteInformationModel extends StudySite {
+public class SiteInformationModel extends StudySite implements Cloneable {
+
+	public SiteInformationModel() {
+
+	}
+
+	private boolean selected = true;
 
 	public ArrayList<StudyVariable> lstStudyVariable = new ArrayList<StudyVariable>();
 
@@ -54,6 +60,7 @@ public class SiteInformationModel extends StudySite {
 	private Location location = new Location();;
 
 	/** The lst variable. */
+
 	private ArrayList<StudyVariable> lstVariable;
 
 	private Ecotype ecotype;
@@ -61,6 +68,10 @@ public class SiteInformationModel extends StudySite {
 	private boolean headerAutoMatch = true;
 	private String headerLayout;
 	private String headerGenotype;
+
+	private String lblGenotypeFileName;
+
+	private String lblLayoutFileName;
 
 	public Ecotype getEcotype() {
 		return ecotype;
@@ -224,6 +235,74 @@ public class SiteInformationModel extends StudySite {
 
 	public void setHeaderGenotype(String headerGenotype) {
 		this.headerGenotype = headerGenotype;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public SiteInformationModel(SiteInformationModel site) {
+
+		this.selected = site.selected;
+		this.lstStudyVariable = site.lstStudyVariable;
+		this.fileLayout = site.fileLayout;
+		this.fileGenotype = site.fileGenotype;
+		this.design = site.design;
+		this.agronomy = site.agronomy;
+		this.location = site.location;
+		this.lstVariable = site.lstVariable;
+		this.ecotype = site.ecotype;
+		this.plantingtype = site.plantingtype;
+		this.headerAutoMatch = site.headerAutoMatch;
+		this.headerLayout = site.headerLayout;
+		this.headerGenotype = site.headerGenotype;
+		this.setSitename(site.getSitename());
+		// this.setSitelocation(site.getSiteLocation());
+
+	}
+
+	/**
+	 * @return the lblGenotypeFileName
+	 */
+	public String getLblGenotypeFileName() {
+		return lblGenotypeFileName;
+	}
+
+	/**
+	 * @param lblGenotypeFileName
+	 *            the lblGenotypeFileName to set
+	 */
+	public void setLblGenotypeFileName(String lblGenotypeFileName) {
+		this.lblGenotypeFileName = lblGenotypeFileName;
+	}
+
+	/**
+	 * @return the lblLayoutFileName
+	 */
+	public String getLblLayoutFileName() {
+		return lblLayoutFileName;
+	}
+
+	/**
+	 * @param lblLayoutFileName
+	 *            the lblLayoutFileName to set
+	 */
+	public void setLblLayoutFileName(String lblLayoutFileName) {
+		this.lblLayoutFileName = lblLayoutFileName;
 	}
 
 }

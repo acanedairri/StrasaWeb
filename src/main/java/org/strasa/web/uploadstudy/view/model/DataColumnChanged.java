@@ -46,7 +46,7 @@ public class DataColumnChanged {
 	private Binder parBinder;
 	private String oldVar;
 	private Component mainView;
-	private StudyVariable selectedVar;
+	private ArrayList<StudyVariable> selectedVar = new ArrayList<StudyVariable>();
 	private String filter = new String();
 
 	public String getFilter() {
@@ -72,41 +72,26 @@ public class DataColumnChanged {
 	}
 
 	private List<StudyVariable> varList = new ArrayList<StudyVariable>();
+	private boolean multiselect;
 
 	@Init
-	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("oldVar") String oldVar) {
+	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("oldVar") String oldVar, @ExecutionArgParam("multiselect") boolean multiselect,
+			@ExecutionArgParam("filter") ArrayList<StudyVariable> lstFilters) {
 
 		StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
-		varList = studyVarMan.getVariables();
+		if (lstFilters == null || lstFilters.isEmpty())
+			varList = studyVarMan.getVariables();
+		else
+			varList = studyVarMan.getVariables(lstFilters);
 		this.oldVar = oldVar;
 		System.out.println(oldVar);
 		mainView = view;
 		parBinder = (Binder) view.getParent().getAttribute("binder");
+		this.multiselect = multiselect;
 	}
 
 	public String getOldVar() {
 		return oldVar;
-	}
-
-	public StudyVariable getSelectedVar() {
-		return selectedVar;
-	}
-
-	public void setSelectedVar(StudyVariable selectedVar) {
-		System.out.println(selectedVar.getDescription());
-		this.selectedVar = selectedVar;
-		Binder bind = parBinder;
-		if (bind == null)
-			return;
-
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("newValue", selectedVar.getVariablecode());
-		params.put("oldVar", oldVar);
-		params.put("variable", selectedVar);
-		// this.parBinder.postCommand("change", params);
-		bind.postCommand("refreshVarList", params);
-
-		mainView.detach();
 	}
 
 	public void setOldVar(String oldVar) {
@@ -147,6 +132,74 @@ public class DataColumnChanged {
 		}
 		Component target = origin.getTarget();
 		System.out.print(((Row) target).getValue());
+	}
+
+	/**
+	 * @return the multiselect
+	 */
+	public boolean isMultiselect() {
+		return multiselect;
+	}
+
+	/**
+	 * @param multiselect
+	 *            the multiselect to set
+	 */
+	public void setMultiselect(boolean multiselect) {
+		this.multiselect = multiselect;
+	}
+
+	/**
+	 * @return the selectedVar
+	 */
+	public ArrayList<StudyVariable> getSelectedVar() {
+		return selectedVar;
+	}
+
+	@Command
+	public void submitVariables() {
+
+		Binder bind = parBinder;
+		if (bind == null)
+			return;
+
+		Map<String, Object> params = new HashMap<String, Object>();
+
+		params.put("oldVar", oldVar);
+		params.put("variable", selectedVar);
+		// this.parBinder.postCommand("change", params);
+		bind.postCommand("refreshVarList", params);
+
+		mainView.detach();
+	}
+
+	/**
+	 * @param selectedVar
+	 *            the selectedVar to set
+	 */
+
+	public void setSelectedVar(ArrayList<StudyVariable> selectedVar) {
+		this.selectedVar = selectedVar;
+
+		if (!multiselect) {
+
+			StudyVariable selVar = selectedVar.get(0);
+			System.out.println(selVar.getDescription());
+
+			Binder bind = parBinder;
+			if (bind == null)
+				return;
+
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("newValue", selVar.getVariablecode());
+			params.put("oldVar", oldVar);
+			params.put("variable", selVar);
+			// this.parBinder.postCommand("change", params);
+			bind.postCommand("refreshVarList", params);
+
+			mainView.detach();
+		}
+
 	}
 
 }
