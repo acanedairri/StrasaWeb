@@ -104,7 +104,7 @@ public class CreateFieldBookManagerImpl {
 		generateFactor(descriptionSheet, lstSiteInfo);
 		generateVariate(descriptionSheet, lstSiteInfo);
 		setColumnSize(descriptionSheet, 7000);
-		workbook.setSh observationSheet = workbook.createSheet("Observation");
+		observationSheet = workbook.createSheet("Observation");
 
 		for (SiteInformationModel siteInfo : lstSiteInfo) {
 			populateSheetFromSite(siteInfo, observationSheet);
