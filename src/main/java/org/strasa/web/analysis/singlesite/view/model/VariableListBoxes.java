@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.analysis.rserve.manager.RServeManager;
+import org.strasa.web.analysis.view.model.SingleSiteAnalysisModel;
 import org.strasa.web.utilities.AnalysisUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.GlobalCommand;
@@ -82,6 +84,10 @@ public class VariableListBoxes{
 	private Image addRowButton;
 	private Image addColumnButton;
 
+	private RServeManager rServeManager;
+
+	private SingleSiteAnalysisModel ssaModel;
+
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,@ContextParam(ContextType.VIEW) Component view){
 		Selectors.wireEventListeners(view, this);
@@ -106,32 +112,6 @@ public class VariableListBoxes{
 		addReplicateButton = (Image) component.getFellow("addReplicateButton");
 		addRowButton = (Image) component.getFellow("addRowButton");
 		addColumnButton = (Image) component.getFellow("addColumnButton");
-
-		//		Div otherVarsDiv = (Div) component.getFellow("othervariables");
-		//		//initialize view after view construction.
-		//		Include includeOtherVars = new Include();
-		//		includeOtherVars.setParent(otherVarsDiv);
-		//		includeOtherVars.setDynamicProperty("factorLb", factorLb);
-		//		includeOtherVars.setSrc("/user/analysis/singlesite/othervars.zul");
-
-	}
-
-	@GlobalCommand("setSsaListvariables")
-	@NotifyChange("*")
-	public void setSsaListvariables(@BindingParam("filePath")String filepath){
-		//...
-
-		rServeMgr = new RServeManager();
-		varInfo = rServeMgr.getVariableInfo(filepath.replace("\\", "/"), fileFormat, separator);
-
-		numericModel= AnalysisUtils.getNumericAsListModel(varInfo);
-		factorModel= AnalysisUtils.getFactorsAsListModel(varInfo);
-		responseModel = new ListModelList<String>();
-
-		numericLb.setModel(numericModel);
-		factorLb.setModel(factorModel);
-		responseLb.setModel(responseModel);
-
 	}
 
 	@Listen("onClick = #chooseResponseBtn")
@@ -310,6 +290,14 @@ public class VariableListBoxes{
 		public ChooseEvent(Component target, Set<String> data) {
 			super("onChoose", target, data);
 		}
+	}
+	
+	public SingleSiteAnalysisModel getSsaModel() {
+		return ssaModel;
+	}
+
+	public void setSsaModel(SingleSiteAnalysisModel ssaModel) {
+		this.ssaModel = ssaModel;
 	}
 
 }

@@ -71,7 +71,7 @@
 									</template>
 								</combobox>
 							</hbox>
-							<include
+							<include id="includeVariableList"
 								src="/user/analysis/singlesite/variablelistboxes.zul" />
 						</vbox>
 					</tabpanel>
