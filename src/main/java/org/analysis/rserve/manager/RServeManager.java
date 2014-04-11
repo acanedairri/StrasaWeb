@@ -117,10 +117,9 @@ public class RServeManager {
 	public void doSingleEnvironmentAnalysis(SingleSiteAnalysisModel ssaModel) {
 		inputTransform = new InputTransform();
 
-		String resultFolderPath = ssaModel.getResultFolderPath();
-		String outFileName = ssaModel.getOutFileName();
-		String dataFileName = ssaModel.getDataFileName();
-		System.out.println(ssaModel.toString());
+		String resultFolderPath = ssaModel.getResultFolderPath().replace(BSLASH, FSLASH);
+		String outFileName = ssaModel.getOutFileName().replace(BSLASH, FSLASH);
+		String dataFileName = ssaModel.getDataFileName().replace(BSLASH, FSLASH);
 		int designIndex = ssaModel.getDesign();
 		String[] respvars = ssaModel.getRespvars();
 		String environment = ssaModel.getEnvironment();
@@ -148,6 +147,8 @@ public class RServeManager {
 		boolean genotypeRandom = ssaModel.isGenotypeRandom();
 		boolean excludeControls = ssaModel.isExcludeControls();
 		boolean genoPhenoCorrelation = ssaModel.isGenoPhenoCorrelation();
+		
+		System.out.println(ssaModel.toString());
 
 		String respvarVector= inputTransform.createRVector(respvars);
 		//		String genotypeLevelsVector= inputTransform.createRVector(genotypeLevels);

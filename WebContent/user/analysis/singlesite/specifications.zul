@@ -64,7 +64,8 @@
 							<hbox>
 								<label value="Type of design" />
 								<combobox
-									model="@load(vm.typeOfDesignList)" readonly="true">
+									model="@load(vm.typeOfDesignList)" readonly="true"
+									selectedIndex="@bind(vm.ssaModel.design)">
 									<template name="model">
 										<comboitem value="@load(each)"
 											label="@load(each)" />
@@ -80,13 +81,42 @@
 							src="/user/analysis/singlesite/otheroptions.zul" />
 					</tabpanel>
 					<tabpanel>
-						<include
-							src="/user/analysis/singlesite/graphoptions.zul" />
+						<listbox id="listbox" width="100%">
+							<listhead>
+								<listheader hflex="1" />
+							</listhead>
+							<listitem>
+								<listcell>
+									<checkbox id="boxplotCheckBox"
+										label="Boxplot of the raw data" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<checkbox id="histogramCheckBox"
+										label="Histogram of the raw data" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<checkbox id="heatmapCheckBox"
+										label="Heatmap of the residuals" />
+									<space spacing="20px" />
+									<button
+										label="Specify field row/column" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<checkbox
+										id="diagnosticplotCheckBox" label="Diagnostic plots" />
+								</listcell>
+							</listitem>
+						</listbox>
 					</tabpanel>
 				</tabpanels>
 			</tabbox>
-			<button label="Test"
-				onClick="@global-command('displayTextFileContent')"
+			<button label="Test" onClick="@command('validateSsaInputs')"
 				class="grid-link" />
 
 			<label value="@bind(vm.resultRServe)" multiline="true" />

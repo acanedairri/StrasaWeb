@@ -40,6 +40,7 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.ListModelList;
@@ -105,13 +106,21 @@ public class Specifications {
 	private String fileName=System.getProperty("user.dir")+ System.getProperty("file.separator") + "sample_datasets" + System.getProperty("file.separator") + "RCB_ME.csv";
 	private RServeManager rServeManager;
 
+	private Checkbox boxplotCheckBox;
+
+	private Checkbox histogramCheckBox;
+
+	private Checkbox heatmapCheckBox;
+
+	private Checkbox diagnosticplotCheckBox;
+
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
-		
+
 		typeOfDesignList = getTypeOfDesignList();
 		ssaModel=new SingleSiteAnalysisModel();
-		
+
 		Include inc = (Include) component.getFellow("includeVariableList");
 		numericLb = (Listbox) inc.getFellow("numericLb");
 		responseLb = (Listbox) inc.getFellow("responseLb");
@@ -132,6 +141,13 @@ public class Specifications {
 		addBlockButton = (Image) inc.getFellow("addBlockButton");
 		addReplicateButton = (Image) inc.getFellow("addReplicateButton");
 		addRowButton = (Image) inc.getFellow("addRowButton");
+		
+		//wire graph checkboxes
+		boxplotCheckBox = (Checkbox) component.getFellow("boxplotCheckBox");
+		histogramCheckBox = (Checkbox) component.getFellow("histogramCheckBox");
+		heatmapCheckBox = (Checkbox) component.getFellow("heatmapCheckBox");
+		diagnosticplotCheckBox = (Checkbox) component.getFellow("diagnosticplotCheckBox");
+		
 
 		Selectors.wireEventListeners(view, this);
 	}
@@ -157,7 +173,9 @@ public class Specifications {
 	public void setSsaListvariables(@BindingParam("filePath")String filepath){
 		//...
 
+		ssaModel.setDataFileName(filepath.replace("\\", "/"));
 		rServeManager = new RServeManager();
+		fileName = new File(filepath).getName();
 		varInfo = rServeManager.getVariableInfo(filepath.replace("\\", "/"), fileFormat, separator);
 
 		numericModel= AnalysisUtils.getNumericAsListModel(varInfo);
@@ -169,7 +187,7 @@ public class Specifications {
 		responseLb.setModel(responseModel);
 
 	}
-	
+
 	@NotifyChange("*")
 	@Command("uploadCSV")
 	public void uploadCSV(
@@ -220,9 +238,7 @@ public class Specifications {
 			@ContextParam(ContextType.VIEW) Component view){
 		setSsaModel(new SingleSiteAnalysisModel());
 
-		System.out.println("call rserve");
 		rServeManager = new RServeManager();
-		System.out.println("call rserve ssa");
 		rServeManager.doSingleEnvironmentAnalysis(new SingleSiteAnalysisModel());
 
 		System.out.println("end rserve ssa");
@@ -294,6 +310,49 @@ public class Specifications {
 	}
 
 
+	@Command()
+	public void validateSsaInputs() {
+		// TODO Auto-generated method stub
+
+		//set Paths
+		ssaModel.setResultFolderPath(AnalysisUtils.createOutputFolder(fileName, "ssa"));
+		ssaModel.setOutFileName(ssaModel.getResultFolderPath()+  System.getProperty("file.separator") +"SEA_output.txt");
+		
+		//set Vars
+		ssaModel.setEnvironment(envTextBox.getValue());
+		ssaModel.setGenotype(genotypeTextBox.getValue());
+		ssaModel.setBlock(blockTextBox.getValue());
+		ssaModel.setRep(replicateTextBox.getValue());
+		ssaModel.setRow(rowTextBox.getValue());
+		ssaModel.setColumn(columnTextBox.getValue());
+		
+//		ssaModel.setDescriptiveStat(descriptiveStat);
+//		this.descriptiveStat = true; 
+//		this.varianceComponents = true;
+		
+		ssaModel.setBoxplotRawData(boxplotCheckBox.isChecked());
+		ssaModel.setHistogramRawData(histogramCheckBox.isChecked());
+		ssaModel.setHeatmapResiduals(heatmapCheckBox.isChecked());
+		ssaModel.setDiagnosticPlot(diagnosticplotCheckBox.isChecked());
+		
+//		this.heatmapRow = "NULL";
+//		this.heatmapColumn = "NULL";
+//		this.diagnosticPlot = true;
+//		this.genotypeFixed = true;
+//		this.performPairwise = true;
+//		this.pairwiseAlpha = "0.05";
+//		this.compareControl = true;
+//		this.performAllPairwise = false;
+//		this.genotypeRandom = false;
+//		this.excludeControls = false;
+//		this.genoPhenoCorrelation = false;
+		
+		
+		Map<String,Object> args = new HashMap<String,Object>();
+		args.put("ssaModel", ssaModel);
+		BindUtils.postGlobalCommand(null, null, "displaySsaResult", args);
+	}
+
 	@GlobalCommand("chooseVariable")
 	@NotifyChange("*")
 	public boolean chooseVariable(@BindingParam("varTextBox") Textbox varTextBox, @BindingParam("imgButton") Image imgButton ) {
@@ -322,7 +381,7 @@ public class Specifications {
 
 	private void chooseResponseVariable() {
 		Set<String> set = numericModel.getSelection();
-				System.out.println("addResponse");
+		System.out.println("addResponse");
 		for (String selectedItem : set) {
 			responseModel.add(selectedItem);
 			numericModel.remove(selectedItem);
@@ -331,21 +390,12 @@ public class Specifications {
 
 	private void unchooseResponseVariable() {
 		Set<String> set = responseModel.getSelection();
-				System.out.println("removeResponse");
+		System.out.println("removeResponse");
 		for (String selectedItem : set) {
 			numericModel.add(selectedItem);
 			responseModel.remove(selectedItem);
 		}
 	}
-
-//	// Customized Event
-//	public class ChooseEvent extends Event {
-//		private static final long serialVersionUID = -7334906383953342976L;
-//
-//		public ChooseEvent(Component target, Set<String> data) {
-//			super("onChoose", target, data);
-//		}
-//	}
 
 	public SingleSiteAnalysisModel getSsaModel() {
 		return ssaModel;
@@ -354,7 +404,7 @@ public class Specifications {
 	public void setSsaModel(SingleSiteAnalysisModel ssaModel) {
 		this.ssaModel = ssaModel;
 	}
-	
+
 	public String getResultRServe() {
 		return resultRServe;
 	}
