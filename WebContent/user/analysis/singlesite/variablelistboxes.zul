@@ -45,7 +45,7 @@
 				</listitem>
 			</template>
 		</listbox>
-		<grid width="90%" oddRowSclass="false" zclass="none"
+		<grid oddRowSclass="false" zclass="none"
 			style="overflow:auto">
 			<columns width="200px">
 				<column label="" width="150px" />
@@ -81,9 +81,9 @@
 				<row>
 					<label />
 					<cell>
-						<checkbox id="fixedCheckBox" label="Random" />
+						<checkbox id="fixedCheckBox" label="Fixed" onClick="@global-command('updateFixedOptions', selected=self.checked)"/>
 						<space spacing="20px" />
-						<checkbox id="randomCheckBox" label="Fixed" />
+						<checkbox id="randomCheckBox" label="Random" onClick="@global-command('updateRandomOptions', selected=self.checked)"/>
 					</cell>
 				</row>
 
@@ -93,7 +93,7 @@
 					<label />
 				</row>
 
-				<row>
+				<row id="blockRow">
 					<cell>
 						<image style="cursor:pointer"
 							id="addBlockButton" src="/images/rightarrow_g.png"
@@ -105,7 +105,7 @@
 							readonly="true" tabindex="7" />
 					</hlayout>
 				</row>
-				<row>
+				<row id="replicateRow">
 					<cell>
 						<image style="cursor:pointer"
 							id="addReplicateButton" src="/images/rightarrow_g.png"
@@ -117,7 +117,7 @@
 							readonly="true" tabindex="7" />
 					</hlayout>
 				</row>
-				<row>
+				<row id="rowRow">
 					<cell>
 						<image style="cursor:pointer" id="addRowButton"
 							src="/images/rightarrow_g.png" tooltip="Add Row variable"  onClick="@global-command('chooseVariable', varTextBox=rowTextBox, imgButton=self)" />
@@ -128,7 +128,7 @@
 							readonly="true" tabindex="7" />
 					</hlayout>
 				</row>
-				<row>
+				<row id="columnRow">
 					<cell>
 						<image style="cursor:pointer"
 							id="addColumnButton" src="/images/rightarrow_g.png"

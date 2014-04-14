@@ -83,7 +83,7 @@ public class AnalysisUtils {
 		dataFileName = dataFileName.replaceAll(".tmp", "");
 		
 		String userFolderPath =  Sessions.getCurrent().getWebApp().getRealPath("resultanalysis")+ FILE_SEPARATOR +
-				SecurityUtil.getDbUser().getUsername();
+				SecurityUtil.getDbUser().getUsername()+ FILE_SEPARATOR+ "Single-Site";
 
 		String outputStudyPath = userFolderPath+ FILE_SEPARATOR + getOutputFolderName(dataFileName, analysisType) +FILE_SEPARATOR;
 		
@@ -98,5 +98,14 @@ public class AnalysisUtils {
 		
 		if(outputFolder.exists()) return true;
 		return outputFolder.mkdir();
+	}
+
+	public static ArrayList<String> getVarNames(ArrayList<String> varInfo) {
+		// TODO Auto-generated method stub
+		ArrayList<String> modelList = new ArrayList<String>();
+		for(String s : varInfo){
+			modelList.add(s.split(":")[0]);
+		}
+		return modelList;
 	}
 }

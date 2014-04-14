@@ -50,8 +50,6 @@ public class Index {
 	@NotifyChange("*")
 	public void displaySsaResult(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view, @BindingParam("ssaModel") SingleSiteAnalysisModel ssaModel) {
-		
-
 		rServeManager = new RServeManager();
 		rServeManager.doSingleEnvironmentAnalysis(ssaModel);
 		

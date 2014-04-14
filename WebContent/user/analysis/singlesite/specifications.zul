@@ -46,7 +46,6 @@
 										</vlayout>
 									</radiogroup>
 								</vlayout>
-
 							</hlayout>
 						</row>
 					</rows>
@@ -65,7 +64,7 @@
 								<label value="Type of design" />
 								<combobox
 									model="@load(vm.typeOfDesignList)" readonly="true"
-									selectedIndex="@bind(vm.ssaModel.design)">
+									selectedIndex="@bind(vm.ssaModel.design)" onChange="@command('updateVariableList', selectedIndex=self.selectedIndex)">
 									<template name="model">
 										<comboitem value="@load(each)"
 											label="@load(each)" />
@@ -77,7 +76,7 @@
 						</vbox>
 					</tabpanel>
 					<tabpanel>
-						<include
+						<include  id="includeOtherOptions"
 							src="/user/analysis/singlesite/otheroptions.zul" />
 					</tabpanel>
 					<tabpanel>
@@ -99,11 +98,37 @@
 							</listitem>
 							<listitem>
 								<listcell>
-									<checkbox id="heatmapCheckBox"
+									
+									<vbox>
+										<checkbox id="heatmapCheckBox"
 										label="Heatmap of the residuals" />
-									<space spacing="20px" />
-									<button
-										label="Specify field row/column" />
+										<hbox>
+											<space spacing="20px" />
+											<label
+												value="Field row variable:" />
+											<combobox id="fieldRowComboBox"
+												model="@load(vm.varNames)" readonly="true">
+												<template
+													name="model">
+													<comboitem
+														value="@load(each)" label="@load(each)" />
+												</template>
+											</combobox>
+										</hbox>
+										<hbox>
+											<space spacing="20px" />
+											<label
+												value="Field column variable:" />
+											<combobox id="fieldColumnComboBox"
+												model="@load(vm.varNames)" readonly="true">
+												<template
+													name="model">
+													<comboitem
+														value="@load(each)" label="@load(each)" />
+												</template>
+											</combobox>
+										</hbox>
+									</vbox>
 								</listcell>
 							</listitem>
 							<listitem>

@@ -1,36 +1,39 @@
-<div align="left" apply="org.zkoss.bind.BindComposer"
-	viewModel="@id('vm') @init('org.strasa.web.analysis.singlesite.view.model.OtherOptions')">
-
+<div align="left">
 	<vlayout>
 		<radiogroup id="performPairwiseGroup" />
 
-		<groupbox hflex="1">
+		<groupbox hflex="1" id="groupGenotypeFixed" visible="false">
 			<caption>Options for genotype as fixed</caption>
-			<vbox>
-				<checkbox id="cb" checked="true"
-					label="Perform pairwise mean comparisons" />
-				<radio id="ra1" label="Compare with control(s)"
-					radiogroup="performPairwiseGroup" />
+			<checkbox id="cbPerformPairwise" checked="true"
+						label="Perform pairwise mean comparisons"  onClick="@global-command('updatePairwiseOptions', selected=self.checked)"/>
+			<groupbox contentStyle="border:0" id="groupPerformPairwise" visible="false">
+				<vbox style="margin:5px 5px 5px 25px" >
+					<radio id="compareWithControlsBtn"
+						label="Compare with control(s)" radiogroup="performPairwiseGroup" />
 
-				<radio id="ra2" label="Perform all comparisons"
-					radiogroup="performPairwiseGroup" />
-				<hbox>Level of significance: <textbox /></hbox>
-			</vbox>
+					<radio id="ra2" label="Perform all comparisons"
+						radiogroup="performPairwiseGroup" />
+					<hbox  style="margin:0px 0px 0px 25px" >
+						Level of significance:
+						<textbox />
+					</hbox>
+				</vbox>
+			</groupbox>
 		</groupbox>
 
 		<separator />
 
-		<groupbox hflex="1">
+		<groupbox hflex="1" id="groupGenotypeRandom" visible="false">
 			<caption>Options for genotype as random</caption>
 			<vbox>
-				<checkbox
+				<checkbox id="excludeControlsCheckBox"
 					label="Exclude controls in the estimation of genotypic variance" />
-				<checkbox
+				<checkbox id="estimateGenotypeCheckBox"
 					label="Estimate genotypic and phenotypic corelations" />
 			</vbox>
 		</groupbox>
 
-		<groupbox hflex="1">
+		<groupbox hflex="1" id="groupLevelOfControls" visible="false">
 			<caption>Specify control(s):</caption>
 			<hbox>
 				<listbox id="genotypeLevelsLb" hflex="1" rows="4">
@@ -43,9 +46,10 @@
 						</listitem>
 					</template>
 				</listbox>
-				
+
 				<image style="cursor:pointer" id="addBlockButton"
-					src="/images/rightarrow_g.png" tooltip="Add Block variable" align="center"/>
+					src="/images/rightarrow_g.png" tooltip="Add Block variable"
+					align="center" />
 				<listbox id="controlsLb" hflex="1" rows="4">
 					<listhead>
 						<listheader label="Control(s):" />
@@ -61,8 +65,10 @@
 		<groupbox hflex="1">
 			<caption>Display:</caption>
 			<vbox>
-				<checkbox label="Descriptive Statistics" />
-				<checkbox label="Variance Components" />
+				<checkbox label="Descriptive Statistics"
+					id="descriptiveStatCheckBox" />
+				<checkbox label="Variance Components"
+					id="varComponentsCheckBox" />
 			</vbox>
 		</groupbox>
 	</vlayout>
