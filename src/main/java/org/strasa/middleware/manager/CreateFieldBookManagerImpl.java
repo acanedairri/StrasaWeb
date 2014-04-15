@@ -33,11 +33,14 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.strasa.middleware.model.Study;
+import org.strasa.middleware.model.StudyAgronomy;
 import org.strasa.middleware.model.StudyDataSet;
+import org.strasa.middleware.model.StudyDesign;
 import org.strasa.middleware.model.StudyVariable;
 import org.strasa.web.common.api.ExcelHelper;
 import org.strasa.web.createfieldbook.view.model.CreateFieldBookException;
 import org.strasa.web.createfieldbook.view.pojos.SiteInformationModel;
+import org.strasa.web.uploadstudy.view.pojos.StudySiteInfoModel;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -62,8 +65,6 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 
 	/** The lst site info. */
 	private ArrayList<SiteInformationModel> lstSiteInfo = new ArrayList<SiteInformationModel>();
-
-	private Workbook workbook;
 
 	/**
 	 * Instantiates a new CreateFieldBookManageImpl.
@@ -92,6 +93,9 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 	 */
 	public File generateFieldBook() throws CreateFieldBookException, Exception {
 		// Create excel
+
+		workbook = createExcel(study.getName() + ".xls");
+
 		Sheet descriptionSheet = workbook.createSheet("Description");
 		generateMetaInfo(descriptionSheet);
 		generateCondition(descriptionSheet);
@@ -374,35 +378,73 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 
 	}
 
-	public void populateStudyFromTemplate(File template, Integer userID, boolean isRaw) {
+	public void populateStudyFromTemplate(File template, Integer userID, boolean isRaw) throws CreateFieldBookException, Exception {
 		Sheet observationSheet = getExcelSheet(template, 1);
 		Sheet siteInfoSheet = getExcelSheet(template, 2);
 		Sheet systemInfoSheet = getExcelSheet(template, 3);
 		Integer studyId = Integer.valueOf(systemInfoSheet.getRow(0).getCell(0).getStringCellValue());
-
-	}
-
-	public void populateObservation(Sheet observation, Study study, Integer userID, boolean isRaw) throws CreateFieldBookException, Exception {
-		ArrayList<String[]> lstData = readExcelSheetAsArray(observation, 0);
-		String[] header = lstData.get(0);
-		lstData.remove((int) 0);
-
+		Study study = new StudyManagerImpl().getStudyById(studyId);
 		StudyDataSet dataSet = new StudyDataSet();
 		dataSet.setDatatype((isRaw) ? "rd" : "dd");
 		dataSet.setStudyid(study.getId());
 		dataSet.setTitle("Dataset 1");
+
+		populateObservation(observationSheet, dataSet, userID, isRaw);
+		populateSiteInformationSheet(siteInfoSheet, study, dataSet.getId());
+	}
+
+	public void populateObservation(Sheet observation, StudyDataSet dataSet, Integer userID, boolean isRaw) throws CreateFieldBookException, Exception {
+		ArrayList<String[]> lstData = readExcelSheetAsArray(observation, 0);
+		String[] header = lstData.get(0);
+		lstData.remove((int) 0);
+
 		new StudyDataSetManagerImpl().addDataSet(dataSet);
 		new StudyRawDataManagerImpl().addStudyRawData(study, header, lstData, dataSet.getId(), isRaw, userID);
 
 	}
 
-	public void populateSiteInformationSheet(Sheet informationSheet, Study study, Integer userID, boolean datasetID) throws Exception {
+	public void populateSiteInformationSheet(Sheet informationSheet, Study study, Integer datasetID) throws Exception {
+		ArrayList<ArrayList<String>> rawSite = readRowsByColumn(informationSheet, 0, 1, informationSheet.getRow(0).getPhysicalNumberOfCells());
+		ArrayList<StudySiteInfoModel> lstSites = new ArrayList<StudySiteInfoModel>();
 
-		ArrayList<ArrayList<String>> lstSiteRaw = readExcelSheet(informationSheet, 1);
+		LocationManagerImpl locMan = new LocationManagerImpl();
+		EcotypeManagerImpl ecoMan = new EcotypeManagerImpl();
+		PlantingTypeManagerImpl plantMan = new PlantingTypeManagerImpl();
+		for (ArrayList<String> x : rawSite) {
+			StudySiteInfoModel s = new StudySiteInfoModel();
+			int i = 0;
+			s.setSitename(x.get(i++));
+			s.setSelectedLocation(locMan.getLocationById(Integer.valueOf(x.get(i++))));
+			i++;
+			s.setYear(x.get(i++));
+			s.setEcotypeid(ecoMan.getEcotypeByName(x.get(i++)).getId());
+			s.setSoiltype(x.get(i++));
+			s.setSoilph(x.get(i++));
+			s.setSelectedSitePlantingType(plantMan.getPlantingTypeById(Integer.valueOf(x.get(i++))));
 
-		for (ArrayList<String> row : lstSiteRaw) {
+			StudyAgronomy ag = new StudyAgronomy();
+			ag.setSowingdate(new SimpleDateFormat("MM/dd/yyyy").parse(x.get(i++)));
+			ag.setHarvestdate(new SimpleDateFormat("MM/dd/yyyy").parse(x.get(i++)));
+			ag.setFertilization(x.get(i++));
+			ag.setDensity(x.get(i++));
+			s.setSelectedAgroInfo(ag);
+			StudyDesign des = new StudyDesign();
+			des.setPlotsize(x.get(i++));
+			des.setDesignstructure(x.get(i++));
+			des.setTreatmentstructure(x.get(i++));
+			des.setDesignfactor1(x.get(i++));
+			des.setDesignfactor2(x.get(i++));
+			des.setDesignfactor3(x.get(i++));
+			des.setDesignfactor4(x.get(i++));
+			s.setSelectedDesignInfo(des);
 
+			s.setStudyid(study.getId());
+			s.setDataset(datasetID);
+
+			lstSites.add(s);
 		}
+
+		new StudySiteManagerImpl().addSiteBatch(lstSites);
 	}
 
 }

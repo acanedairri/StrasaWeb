@@ -26,7 +26,6 @@ public class ExcelHelper {
 	public ExcelHelper() {
 
 		try {
-			workbook = createExcel("something.xls");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -309,7 +308,7 @@ public class ExcelHelper {
 		throw new Exception("Unknown cell format");
 	}
 
-	public ArrayList<ArrayList<String>> getRowsByColumn(Sheet sheet, Integer start, Integer... cols) throws Exception {
+	public ArrayList<ArrayList<String>> readRowsByColumn(Sheet sheet, Integer start, Integer... cols) throws Exception {
 
 		HashMap<Integer, ArrayList<String>> returnVal = new HashMap<Integer, ArrayList<String>>();
 		Iterator<Row> rowIterator = sheet.iterator();
@@ -322,6 +321,26 @@ public class ExcelHelper {
 			Row row = rowIterator.next();
 			if (row.getRowNum() >= start) {
 				for (Integer col : cols) {
+					returnVal.get(col).add(getCellValueToString(row.getCell(col)));
+				}
+			}
+		}
+		return new ArrayList<ArrayList<String>>(returnVal.values());
+	}
+
+	public ArrayList<ArrayList<String>> readRowsByColumn(Sheet sheet, Integer start, Integer rangeStart, Integer rangeEnd) throws Exception {
+
+		HashMap<Integer, ArrayList<String>> returnVal = new HashMap<Integer, ArrayList<String>>();
+		Iterator<Row> rowIterator = sheet.iterator();
+		for (int col = rangeStart; col <= rangeEnd; col++) {
+			ArrayList<String> colVal = new ArrayList<String>();
+			returnVal.put(col, colVal);
+		}
+
+		while (rowIterator.hasNext()) {
+			Row row = rowIterator.next();
+			if (row.getRowNum() >= start) {
+				for (int col = rangeStart; col <= rangeEnd; col++) {
 					returnVal.get(col).add(getCellValueToString(row.getCell(col)));
 				}
 			}

@@ -293,4 +293,32 @@ public class StudySiteManagerImpl {
 			session.close();
 		}
 	}
+
+	public void addSiteBatch(ArrayList<StudySiteInfoModel> lstSites) {
+
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
+		StudyDesignMapper design = session.getMapper(StudyDesignMapper.class);
+		StudyAgronomyMapper agro = session.getMapper(StudyAgronomyMapper.class);
+		try {
+			for (StudySite record : lstSites) {
+				studySiteMapper.insert(record);
+			}
+			session.commit();
+			for (StudySiteInfoModel record : lstSites) {
+				record.getSelectedDesignInfo().setStudyid(record.getStudyid());
+				record.getSelectedDesignInfo().setStudysiteid(record.getId());
+				record.getSelectedAgroInfo().setStudysiteid(record.getId());
+
+				design.insert(record.getSelectedDesignInfo());
+				agro.insert(record.getSelectedAgroInfo());
+
+			}
+			session.commit();
+
+		} finally {
+			session.close();
+		}
+
+	}
 }
