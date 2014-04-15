@@ -36,7 +36,8 @@ public class StudyVariableManagerImpl {
 
 		try {
 			StudyVariableExample query = new StudyVariableExample();
-			query.createCriteria().andVariablecodeEqualTo(variable);
+
+			query.createCriteria().andVariablecodeLikeInsensitive(variable);
 			if (getMapper().selectByExample(query).isEmpty())
 				return false;
 
@@ -45,6 +46,41 @@ public class StudyVariableManagerImpl {
 		}
 
 		return true;
+	}
+
+	public ArrayList<String> hasVariableInArray(List<String> list) {
+
+		ArrayList<String> returnVal = new ArrayList<String>();
+		try {
+			StudyVariableExample query = new StudyVariableExample();
+			for (String variable : list) {
+				query.createCriteria().andVariablecodeLikeInsensitive(variable);
+				if (getMapper().selectByExample(query).isEmpty())
+					returnVal.add(variable);
+			}
+
+		} finally {
+			session.close();
+		}
+
+		return returnVal;
+	}
+
+	public ArrayList<String> correctVariableCase(List<String> lstVar) {
+		ArrayList<String> returnVal = new ArrayList<String>();
+		try {
+			StudyVariableExample query = new StudyVariableExample();
+			for (String variable : lstVar) {
+				query.createCriteria().andVariablecodeLikeInsensitive(variable);
+
+				returnVal.add(getMapper().selectByExample(query).get(0).getVariablecode());
+			}
+
+		} finally {
+			session.close();
+		}
+
+		return returnVal;
 	}
 
 	public List<StudyVariable> getVariables() {

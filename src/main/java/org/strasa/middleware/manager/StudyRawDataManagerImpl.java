@@ -160,27 +160,32 @@ public class StudyRawDataManagerImpl {
 
 		List<StudyRawData> lstBaseRaw = mapper.selectByExample(example);
 		ArrayList<ArrayList<String>> returnVal = new ArrayList<ArrayList<String>>();
-		for (StudyRawData rowData : lstBaseRaw) {
-			ArrayList<String> rowConstructed = new ArrayList<String>();
-			for (String col : columns) {
-				example.clear();
-				// System.out.println("StudyID: " + studyid + " DataCol:  " +
-				// col + " Row: " + rowData.getDatarow() );
-				example.createCriteria().andDatacolumnEqualTo(col).andStudyidEqualTo(studyid).andDatarowEqualTo(rowData.getDatarow());
-				List<StudyRawData> subList = mapper.selectByExample(example);
-				if (subList.isEmpty())
-					rowConstructed.add("");
-				else
-					rowConstructed.add(subList.get(0).getDatavalue());
-			}
-			if (isDistinct) {
-				if (!returnVal.contains(rowConstructed))
+		try {
+			for (StudyRawData rowData : lstBaseRaw) {
+				ArrayList<String> rowConstructed = new ArrayList<String>();
+				for (String col : columns) {
+					example.clear();
+					// System.out.println("StudyID: " + studyid + " DataCol:  "
+					// +
+					// col + " Row: " + rowData.getDatarow() );
+					example.createCriteria().andDatacolumnEqualTo(col).andStudyidEqualTo(studyid).andDatarowEqualTo(rowData.getDatarow());
+					List<StudyRawData> subList = mapper.selectByExample(example);
+					if (subList.isEmpty())
+						rowConstructed.add("");
+					else
+						rowConstructed.add(subList.get(0).getDatavalue());
+				}
+				if (isDistinct) {
+					if (!returnVal.contains(rowConstructed))
+						returnVal.add(rowConstructed);
+				} else
 					returnVal.add(rowConstructed);
-			} else
-				returnVal.add(rowConstructed);
 
+			}
+			return returnVal;
+		} finally {
+			session.close();
 		}
-		return returnVal;
 
 	}
 

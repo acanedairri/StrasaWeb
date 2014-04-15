@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
 <generatorConfiguration>
-	<context id="context1">
+
+	<context id="context1"  targetRuntime="MyBatis3">
+	<plugin type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin"></plugin>
+	
+	
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
 			connectionURL="jdbc:mysql://localhost:3306/strasa" userId="root"
 			password="root" />
@@ -11,6 +15,10 @@
 		<javaClientGenerator targetPackage="org.strasa.middleware.mapper"
 			targetProject="StrasaWeb/src/main/java" type="ANNOTATEDMAPPER" />
 
+
+	
+	
+	
 		<!-- <table schema="MYSCHEMA" tableName="country" domainObjectName="Country">
 		</table>
 
@@ -117,12 +125,12 @@
 			domainObjectName="StudyGermplasm">
 			<generatedKey column="id" sqlStatement="JDBC" />
 		</table>
-
+ -->
 		<table schema="MYSCHEMA" tableName="studyvariable"
 			domainObjectName="StudyVariable">
 			<generatedKey column="id" sqlStatement="JDBC" />
 		</table>
-
+<!-- 
 		<table schema="MYSCHEMA" tableName="user" domainObjectName="DbUser">
 			<generatedKey column="id" sqlStatement="JDBC" />
 		</table>
@@ -177,14 +185,15 @@
 			domainObjectName="SoilType">
 			<generatedKey column="id" sqlStatement="JDBC" />
 		</table> -->
-		<table schema="MYSCHEMA" tableName="distributionandextension"
+<!-- 		<table schema="MYSCHEMA" tableName="distributionandextension"
 			domainObjectName="DistributionAndExtension">
 			<generatedKey column="id" sqlStatement="JDBC" />
 		</table>
 				<table schema="MYSCHEMA" tableName="releaseinfo"
 			domainObjectName="ReleaseInfo">
 			<generatedKey column="id" sqlStatement="JDBC" />
-		</table>
+		</table> -->
+
 
 
 	</context>

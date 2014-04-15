@@ -16,7 +16,7 @@
 						<groupbox width="150px">
 							<listbox 
 								oddRowSclass="odd" model="@load(vm.lstSiteInfo)"
-								emptyMessage="No Site yet..." rows="4" selectedItems="@load(vm.lstSelectedSites)" multiple="true"  checkmark="true">
+								emptyMessage="No Site yet..." rows="4" selectedItems="@bind(vm.lstSelectedSites)" multiple="true"  checkmark="true">
 								<listhead>
 									<listheader label="Site Name" />
 								</listhead>

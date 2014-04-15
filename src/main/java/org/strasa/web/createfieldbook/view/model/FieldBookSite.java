@@ -198,7 +198,7 @@ public class FieldBookSite {
 
 		site.setFileLayout(tempFile);
 		UploadEvent event = (UploadEvent) ctx.getTriggerEvent();
-
+		site.setLblLayoutFileName(event.getMedia().getName());
 		BindUtils.postNotifyChange(null, null, site, "lblLayoutFileName");
 	}
 

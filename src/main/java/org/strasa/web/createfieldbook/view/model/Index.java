@@ -197,7 +197,7 @@ public class Index {
 	}
 
 	@Command
-	public void generateFieldBook() {
+	public void generateFieldbook() {
 
 		if (txtProgram == null || txtProject == null || txtStudyName == null || txtStudyType == null) {
 			Messagebox.show("Error: All fields are required", " Error", Messagebox.OK, Messagebox.ERROR);
@@ -247,7 +247,7 @@ public class Index {
 			return;
 		}
 
-		System.out.println("lstTest : " + lstSiteInfo.get(0).getSitename());
+		System.out.println("lstTest : " + lstSelectedSites.size());
 		File outputFolder = new File(Executions.getCurrent().getDesktop().getWebApp().getRealPath("/") + "ExcelOutput/");
 		if (!outputFolder.exists())
 			outputFolder.mkdirs();
