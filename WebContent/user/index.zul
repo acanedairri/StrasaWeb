@@ -13,7 +13,7 @@
 	<hlayout id="main" spacing="0">
 		<include src="sidebar.zul" />
 		<vlayout spacing="0" hflex="1">
-			<include src="breadcrumbs.zul" />
+		 <include src="breadcrumbs.zul" /> 
 			<div id="contentui" sclass="none">
 				<include src="page.zul" />
 			</div>
