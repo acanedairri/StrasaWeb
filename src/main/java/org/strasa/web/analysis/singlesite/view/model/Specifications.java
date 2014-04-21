@@ -18,6 +18,7 @@ import org.apache.commons.io.input.ReaderInputStream;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.Rserve.RserveException;
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
+import org.strasa.middleware.model.Study;
 import org.strasa.web.analysis.view.model.SingleSiteAnalysisModel;
 import org.strasa.web.uploadstudy.view.model.DataColumnValidation;
 import org.strasa.web.utilities.AnalysisUtils;
@@ -42,6 +43,7 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.Include;
@@ -61,6 +63,8 @@ public class Specifications {
 	//Zul file components
 	@Wire
 	private Button chooseResponseBtn;
+
+	private Div divDatagrid;
 
 	private Listbox numericLb;
 	private Listbox responseLb;
@@ -146,6 +150,15 @@ public class Specifications {
 
 	private Groupbox groupPerformPairwise;
 
+	private String[] environmentLevels;
+
+	private List<String> columnList = new ArrayList<String>();
+	private List<String[]> dataList = new ArrayList<String[]>();
+	public boolean isDataReUploaded = false;
+	private boolean gridReUploaded = false;
+	private int pageSize = 10;
+	private int activePage = 0;
+	
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
@@ -153,10 +166,13 @@ public class Specifications {
 		typeOfDesignList = getTypeOfDesignList();
 		ssaModel=new SingleSiteAnalysisModel();
 
+		divDatagrid = (Div) component.getFellow("datagrid");
+		
 		Include incVariableList = (Include) component.getFellow("includeVariableList");
 		numericLb = (Listbox) incVariableList.getFellow("numericLb");
 		responseLb = (Listbox) incVariableList.getFellow("responseLb");
 		factorLb = (Listbox) incVariableList.getFellow("factorLb");
+		
 		//wire textboxes
 		envTextBox = (Textbox) incVariableList.getFellow("envTextBox");
 		genotypeTextBox = (Textbox) incVariableList.getFellow("genotypeTextBox");
@@ -207,6 +223,7 @@ public class Specifications {
 		groupGenotypeRandom = (Groupbox) includeOtherOptions.getFellow("groupGenotypeRandom");
 		excludeControlsCheckBox = (Checkbox) includeOtherOptions.getFellow("excludeControlsCheckBox");
 		estimateGenotypeCheckBox = (Checkbox) includeOtherOptions.getFellow("estimateGenotypeCheckBox");
+		
 		Selectors.wireEventListeners(view, this);
 	}
 
@@ -475,11 +492,65 @@ public class Specifications {
 				args.put("filePath", tempFile.getAbsolutePath());
 				BindUtils.postGlobalCommand(null, null, "setSsaListvariables", args);
 
-				//				if (this.isUpdateMode)
-				//					isNewDataSet = true;
+				isVariableDataVisible = true;
+				dataFileName = name;
+				refreshCsv();
+				if (this.isUpdateMode) isNewDataSet = true;
 
 	}
 
+	@Command("refreshCsv")
+	public void refreshCsv() {
+		activePage = 0;
+		CSVReader reader;
+		reloadCsvGrid();
+
+		try {
+			reader = new CSVReader(new FileReader(tempFile.getAbsolutePath()));
+			List<String[]> rawData = reader.readAll();
+			columnList.clear();
+			dataList.clear();
+			columnList = new ArrayList<String>(Arrays.asList(rawData.get(0)));
+			rawData.remove(0);
+			dataList = new ArrayList<String[]>(rawData);
+			System.out.println(Arrays.toString(dataList.get(0)));
+			if (!this.isDataReUploaded)
+				System.out.println("gbUploadData.invalidate()");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public ArrayList<ArrayList<String>> getCsvData() {
+		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
+		if (dataList.isEmpty())
+			return result;
+		for (int i = activePage * pageSize; i < activePage * pageSize + pageSize && i < dataList.size(); i++) {
+			ArrayList<String> row = new ArrayList<String>();
+			row.addAll(Arrays.asList(dataList.get(i)));
+			result.add(row);
+			row.add(0, "  ");
+			System.out.println(Arrays.toString(dataList.get(i)) + "ROW: " + row.get(0));
+		}
+		return result;
+	}
+	
+	public void reloadCsvGrid() {
+		if (gridReUploaded) {
+			gridReUploaded = false;
+			return;
+		}
+		if (!divDatagrid.getChildren().isEmpty())
+			divDatagrid.getFirstChild().detach();
+		Include incCSVData = new Include();
+		incCSVData.setSrc("/user/updatestudy/csvdata.zul");
+		incCSVData.setParent(divDatagrid);
+		gridReUploaded = true;
+	}
 
 	@NotifyChange("*")
 	@Command()
@@ -572,6 +643,7 @@ public class Specifications {
 	private boolean validateSsaModel() {
 		// TODO Auto-generated method stub
 
+		rServeManager = new RServeManager();
 		//set Paths
 		ssaModel.setResultFolderPath(AnalysisUtils.createOutputFolder(fileName, "ssa"));
 		ssaModel.setOutFileName(ssaModel.getResultFolderPath()+  System.getProperty("file.separator") +"SEA_output.txt");
@@ -589,29 +661,29 @@ public class Specifications {
 			return false;
 		}
 
-		if(!blockTextBox.getValue().isEmpty())ssaModel.setBlock(blockTextBox.getValue());
+		if(blockTextBox.isVisible() && !blockTextBox.getValue().isEmpty())ssaModel.setBlock(blockTextBox.getValue());
 		else{
 			errorMessage = "block cannot be empty";
 			return false;
 		}
 
-//		if(!replicateTextBox.getValue().isEmpty())ssaModel.setRep(replicateTextBox.getValue());
-//		else{
-//			errorMessage = "replicate cannot be empty";
-//			return false;
-//		}
-//
-//		if(!rowTextBox.getValue().isEmpty()) ssaModel.setRow(rowTextBox.getValue());
-//		else{
-//			errorMessage = "row cannot be empty";
-//			return false;
-//		}
-//
-//		if(!columnTextBox.getValue().isEmpty()) ssaModel.setColumn(columnTextBox.getValue());
-//		else{
-//			errorMessage = "column cannot be empty";
-//			return false;
-//		}
+		if(replicateTextBox.isVisible() && !replicateTextBox.getValue().isEmpty())ssaModel.setRep(replicateTextBox.getValue());
+		else{
+			errorMessage = "replicate cannot be empty";
+			return false;
+		}
+
+		if(rowTextBox.isVisible() && !rowTextBox.getValue().isEmpty()) ssaModel.setRow(rowTextBox.getValue());
+		else{
+			errorMessage = "row cannot be empty";
+			return false;
+		}
+
+		if(columnTextBox.isVisible() && !columnTextBox.getValue().isEmpty()) ssaModel.setColumn(columnTextBox.getValue());
+		else{
+			errorMessage = "column cannot be empty";
+			return false;
+		}
 
 		//Graph Options
 		ssaModel.setBoxplotRawData(boxplotCheckBox.isChecked());
@@ -638,6 +710,10 @@ public class Specifications {
 		ssaModel.setDescriptiveStat(descriptiveStatCheckBox.isChecked());
 		ssaModel.setVarianceComponents(varComponentsCheckBox.isChecked());
 
+//		environmentLevels = rServeManager.getLevels(selectedStrings, file);
+//		private String[] genotypeLevels = {"GEN1", "GEN2", "GEN3", "GEN4", "GEN5", "GEN6", "GEN7", "GEN8", "GEN9", "GEN10", "GEN11", "GEN12", "GEN13", "GEN14", "GEN15"};
+//		private String[] controlLevels = {"GEN14"};
+		
 		//		this.performPairwise = true;
 		//		this.pairwiseAlpha = "0.05";
 		//		this.compareControl = true;
@@ -736,5 +812,72 @@ public class Specifications {
 	public void setVarNames(ArrayList<String> varNames) {
 		this.varNames = varNames;
 	}
+	
+	public List<String[]> getDataList() {
+		System.out.println("DaALIST GEt");
+		reloadCsvGrid();
+		if (true)
+			return dataList;
+		ArrayList<String[]> pageData = new ArrayList<String[]>();
+		for (int i = activePage * pageSize; i < activePage * pageSize + pageSize; i++) {
+			pageData.add(dataList.get(i));
+			System.out.println(Arrays.toString(dataList.get(i)));
+		}
 
+		return pageData;
+	}
+
+	public void setDataList(List<String[]> dataList) {
+		this.dataList = dataList;
+	}
+
+	public boolean isGridReUploaded() {
+		return gridReUploaded;
+	}
+
+	public void setGridReUploaded(boolean gridReUploaded) {
+		this.gridReUploaded = gridReUploaded;
+	}
+
+	public boolean isDataReUploaded() {
+		return isDataReUploaded;
+	}
+
+	public void setDataReUploaded(boolean isDataReUploaded) {
+		this.isDataReUploaded = isDataReUploaded;
+	}
+
+	public List<String> getColumnList() {
+		return columnList;
+	}
+
+	public void setColumnList(List<String> columnList) {
+		this.columnList = columnList;
+	}
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	@NotifyChange("*")
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	@NotifyChange("*")
+	public int getActivePage() {
+
+		return activePage;
+	}
+
+	@NotifyChange("*")
+	public void setActivePage(int activePage) {
+		System.out.println("pageSize");
+		reloadCsvGrid();
+		this.activePage = activePage;
+	}
+	
+	public int getTotalSize() {
+		return dataList.size();
+	}
 }

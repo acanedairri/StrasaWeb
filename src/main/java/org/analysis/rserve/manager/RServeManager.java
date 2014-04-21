@@ -1,5 +1,6 @@
 package org.analysis.rserve.manager;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.rosuda.REngine.REXPMismatchException;
@@ -1550,6 +1551,33 @@ public class RServeManager {
 		}
 	}
 
+	public static String[] getEnvtLevels(String facEnvt, File file) {
+		int envtColumn = 0;
+////		Table table = DataManipulationManager.getActiveTable(file.getAbsolutePath());
+//		for (int i = 0; i < table.getColumnCount(); i++) {
+//			if (table.getColumn(i).getText()
+//					.equals(facEnvt)) {
+//				envtColumn = i;
+//			}
+//		}
+//
+//		ArrayList<String> envts = new ArrayList<String>();
+//		for (int j = 0; j < table.getItemCount(); j++) {
+//			String level = table.getItem(j).getText(
+//					envtColumn);
+//			if (!envts.contains(level)&& !level.isEmpty()) {
+//				envts.add(level);
+//			}
+//		}
+//
+//		String[] envtLevels = new String[envts.size()];
+//		for (int k = 0; k < envts.size(); k++) {
+//			envtLevels[k] = (String) envts.get(k);
+//		}
+
+		return null;
+	}
+	
 	public void test() {
 		// TODO Auto-generated method stub
 		try {

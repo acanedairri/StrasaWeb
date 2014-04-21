@@ -16,7 +16,7 @@ public class SingleSiteAnalysisModel {
 	private int design;
 	private String[] respvars = {"Yield"};
 	private String environment;
-	private String[] environmentLevels = {"E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10", "E11"};
+	private String[] environmentLevels = {};
 	private String genotype;
 	private String block;
 	private String rep;
@@ -43,7 +43,6 @@ public class SingleSiteAnalysisModel {
 	private boolean genoPhenoCorrelation;
 	
 
-	
 	public SingleSiteAnalysisModel() {
 		this.resultFolderPath = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH);
 		this.outFileName = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH) + "SEA_output.txt";
