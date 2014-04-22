@@ -1,6 +1,4 @@
 <zk>
-	<div>
-
 		<div id="sidebar" sclass="sidebar"
 			apply="org.strasa.web.page.navigation.user.SidebarComposer">
 			<!-- Shortcuts Button-->
@@ -79,9 +77,9 @@
 			</navbar>
 			<!-- Toggler -->
 			<div sclass="sidebar-collapse">
-				<a id="toggler" iconSclass="z-icon-angle-double-left" />
+				<a id="toggler2" iconSclass="z-icon-angle-double-left" />
 			</div>
 
 		</div>
-	</div>
+	
 </zk>
