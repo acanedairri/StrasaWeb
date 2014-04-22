@@ -7,7 +7,7 @@
         _display: inline;
     }
     </style>
-    <tree id="tree" width="800px" >
+    <tree id="tree" width="500px" >
         <treecols>
             <treecol label="Analysis Results" />       
         </treecols>
