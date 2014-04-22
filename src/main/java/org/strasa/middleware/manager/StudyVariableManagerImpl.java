@@ -16,29 +16,23 @@ public class StudyVariableManagerImpl {
 	@WireVariable
 	ConnectionFactory connectionFactory;
 
-	private SqlSession session;
+	private StudyVariableMapper getMapper(SqlSession session) {
 
-	private StudyVariableMapper getMapper() {
-		return getSqlSession().getMapper(StudyVariableMapper.class);
-	}
-
-	private SqlSession getSqlSession() {
-		return session;
-
+		return session.getMapper(StudyVariableMapper.class);
 	}
 
 	public StudyVariableManagerImpl() {
-		session = connectionFactory.sqlSessionFactory.openSession();
 
 	}
 
 	public boolean hasVariable(String variable) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 
 		try {
 			StudyVariableExample query = new StudyVariableExample();
 
 			query.createCriteria().andVariablecodeLikeInsensitive(variable);
-			if (getMapper().selectByExample(query).isEmpty())
+			if (getMapper(session).selectByExample(query).isEmpty())
 				return false;
 
 		} finally {
@@ -49,13 +43,14 @@ public class StudyVariableManagerImpl {
 	}
 
 	public ArrayList<String> hasVariableInArray(List<String> list) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 
 		ArrayList<String> returnVal = new ArrayList<String>();
 		try {
 			StudyVariableExample query = new StudyVariableExample();
 			for (String variable : list) {
 				query.createCriteria().andVariablecodeLikeInsensitive(variable);
-				if (getMapper().selectByExample(query).isEmpty())
+				if (getMapper(session).selectByExample(query).isEmpty())
 					returnVal.add(variable);
 			}
 
@@ -68,12 +63,18 @@ public class StudyVariableManagerImpl {
 
 	public ArrayList<String> correctVariableCase(List<String> lstVar) {
 		ArrayList<String> returnVal = new ArrayList<String>();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+
 		try {
 			StudyVariableExample query = new StudyVariableExample();
 			for (String variable : lstVar) {
 				query.createCriteria().andVariablecodeLikeInsensitive(variable);
+				if (!getMapper(session).selectByExample(query).isEmpty())
+					returnVal.add(getMapper(session).selectByExample(query).get(0).getVariablecode());
+				else
+					returnVal.add(variable);
+				query.clear();
 
-				returnVal.add(getMapper().selectByExample(query).get(0).getVariablecode());
 			}
 
 		} finally {
@@ -84,9 +85,10 @@ public class StudyVariableManagerImpl {
 	}
 
 	public List<StudyVariable> getVariables() {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 
 		try {
-			return getMapper().selectByExample(null);
+			return getMapper(session).selectByExample(null);
 		} finally {
 			session.close();
 		}
@@ -94,6 +96,7 @@ public class StudyVariableManagerImpl {
 	}
 
 	public List<StudyVariable> getVariables(List<StudyVariable> filter) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 
 		try {
 			ArrayList<Integer> lstFilterIds = new ArrayList<Integer>();
@@ -102,7 +105,7 @@ public class StudyVariableManagerImpl {
 			}
 			StudyVariableExample example = new StudyVariableExample();
 			example.createCriteria().andIdNotIn(lstFilterIds);
-			return getMapper().selectByExample(example);
+			return getMapper(session).selectByExample(example);
 		} finally {
 			session.close();
 		}
@@ -110,11 +113,12 @@ public class StudyVariableManagerImpl {
 	}
 
 	public List<StudyVariable> getVariables(String sort) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 
 		try {
 			StudyVariableExample example = new StudyVariableExample();
 			example.createCriteria().andVariablecodeLike(sort + "%");
-			return getMapper().selectByExample(example);
+			return getMapper(session).selectByExample(example);
 		} finally {
 			session.close();
 		}
@@ -122,11 +126,12 @@ public class StudyVariableManagerImpl {
 	}
 
 	public List<StudyVariable> getVariablesLike(String sort) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 
 		try {
 			StudyVariableExample example = new StudyVariableExample();
 			example.createCriteria().andVariablecodeLike(sort + "%");
-			return getMapper().selectByExample(example);
+			return getMapper(session).selectByExample(example);
 		} finally {
 			session.close();
 		}
@@ -134,20 +139,24 @@ public class StudyVariableManagerImpl {
 	}
 
 	public StudyVariable getVariableByName(String var) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+
 		try {
 			StudyVariableExample query = new StudyVariableExample();
 			query.createCriteria().andApplytofilterEqualTo(var);
-			return getMapper().selectByExample(query).get(0);
+			return getMapper(session).selectByExample(query).get(0);
 		} finally {
 			session.close();
 		}
 	}
 
 	public StudyVariable getVariableInfoByName(String var) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+
 		try {
 			StudyVariableExample query = new StudyVariableExample();
 			query.createCriteria().andVariablecodeEqualTo(var);
-			return getMapper().selectByExample(query).get(0);
+			return getMapper(session).selectByExample(query).get(0);
 		} finally {
 			session.close();
 		}
@@ -158,9 +167,11 @@ public class StudyVariableManagerImpl {
 	}
 
 	public void deleteById(Integer id) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+
 		// TODO Auto-generated method stub
 		try {
-			getMapper().deleteByPrimaryKey(id);
+			getMapper(session).deleteByPrimaryKey(id);
 
 			session.commit();
 
@@ -171,12 +182,13 @@ public class StudyVariableManagerImpl {
 	}
 
 	public HashMap<String, StudyVariable> getConditionVariable(ArrayList<String> varNames) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 
 		try {
 			StudyVariableExample example = new StudyVariableExample();
 			example.createCriteria().andCategoryEqualTo("CONDITION").andVariablecodeIn(varNames);
 
-			List<StudyVariable> lstVar = getMapper().selectByExample(example);
+			List<StudyVariable> lstVar = getMapper(session).selectByExample(example);
 			HashMap<String, StudyVariable> returnVal = new HashMap<String, StudyVariable>();
 			for (StudyVariable var : lstVar) {
 				returnVal.put(var.getVariablecode(), var);
@@ -189,12 +201,13 @@ public class StudyVariableManagerImpl {
 	}
 
 	public List<StudyVariable> getFactorVariable(List<String> list) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 
 		try {
 			StudyVariableExample example = new StudyVariableExample();
 			example.createCriteria().andCategoryEqualTo("FACTOR").andVariablecodeIn(list);
 
-			return getMapper().selectByExample(example);
+			return getMapper(session).selectByExample(example);
 		} finally {
 
 			session.close();
@@ -202,13 +215,15 @@ public class StudyVariableManagerImpl {
 	}
 
 	public List<StudyVariable> getVariateVariable(List<String> asList) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+
 		// TODO Auto-generated method stub
 
 		try {
 			StudyVariableExample example = new StudyVariableExample();
 			example.createCriteria().andCategoryEqualTo("VARIATE").andVariablecodeIn(asList);
 
-			return getMapper().selectByExample(example);
+			return getMapper(session).selectByExample(example);
 		} finally {
 
 			session.close();

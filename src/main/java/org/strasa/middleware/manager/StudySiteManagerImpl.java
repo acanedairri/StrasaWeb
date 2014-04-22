@@ -309,7 +309,7 @@ public class StudySiteManagerImpl {
 				record.getSelectedDesignInfo().setStudyid(record.getStudyid());
 				record.getSelectedDesignInfo().setStudysiteid(record.getId());
 				record.getSelectedAgroInfo().setStudysiteid(record.getId());
-
+				record.getSelectedAgroInfo().setPlantingtypeid(record.getSelectedSitePlantingType().getId());
 				design.insert(record.getSelectedDesignInfo());
 				agro.insert(record.getSelectedAgroInfo());
 

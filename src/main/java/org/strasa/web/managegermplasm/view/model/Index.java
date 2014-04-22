@@ -137,7 +137,7 @@ public class Index {
 
 	HashMap<String, GermplasmDeepInfoModel> lstStudyGermplasm = new HashMap<String, GermplasmDeepInfoModel>();
 
-	private GermplasmDeepInfoModel selectedGermplasm;
+	private GermplasmDeepInfoModel selectedGermplasm = new GermplasmDeepInfoModel();
 
 	public GermplasmDeepInfoModel getSelectedGermplasm() {
 
@@ -294,13 +294,16 @@ public class Index {
 	}
 
 	public String getTotalUnknownGermplasm() {
-//		return "List of germplasm not existing in the database : "+ lstStudyGermplasm.size() + " row(s) returned";
-		return "Count:"+ lstStudyGermplasm.size() + " rows";
+		// return "List of germplasm not existing in the database : "+
+		// lstStudyGermplasm.size() + " row(s) returned";
+		return "Count:" + lstStudyGermplasm.size() + " rows";
 	}
 
 	public String getTotalKnownGermplasm() {
-//		return "List of germplasm already exist in the database : "+lstKnownGermplasm.size() + " row(s) returned";
-		return "Count: "+lstKnownGermplasm.size() + " rows";
+		// return
+		// "List of germplasm already exist in the database : "+lstKnownGermplasm.size()
+		// + " row(s) returned";
+		return "Count: " + lstKnownGermplasm.size() + " rows";
 	}
 
 	public void resetSize() {

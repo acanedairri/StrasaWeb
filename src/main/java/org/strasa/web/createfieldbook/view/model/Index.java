@@ -8,10 +8,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.manager.CreateFieldBookManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyManager;
+import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudyTypeManagerImpl;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
@@ -48,6 +50,7 @@ import org.zkoss.zul.Tabpanel;
 import org.zkoss.zul.Window;
 
 public class Index {
+	public int userID = SecurityUtil.getDbUser().getId();
 
 	@Init
 	public void init() {
@@ -241,7 +244,7 @@ public class Index {
 		study.setShared(false);
 		study.setDatecreated(new Date());
 		study.setDatelastmodified(new Date());
-		if (study.getId() == null && new StudyManager().isProjectExist(study, 1)) {
+		if (study.getId() == null && new StudyManager().isProjectExist(study, userID)) {
 			Messagebox.show("Error: Study name already exist! Please choose a different name.", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 
 			return;
@@ -251,6 +254,8 @@ public class Index {
 		File outputFolder = new File(Executions.getCurrent().getDesktop().getWebApp().getRealPath("/") + "ExcelOutput/");
 		if (!outputFolder.exists())
 			outputFolder.mkdirs();
+
+		new StudyManagerImpl().insertStudy(study);
 
 		CreateFieldBookManagerImpl createFieldBookMan = new CreateFieldBookManagerImpl(lstSelectedSites, study, outputFolder);
 		try {

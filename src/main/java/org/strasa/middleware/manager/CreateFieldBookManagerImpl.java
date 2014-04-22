@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -82,6 +83,10 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 		this.lstSiteInfo = lstSiteInfo;
 		this.study = study;
 		this.outputFolder = outputFolder;
+
+	}
+
+	public CreateFieldBookManagerImpl() {
 
 	}
 
@@ -263,32 +268,30 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 
 		}
 
-		// writeRowFromList(lstColumnFields.get(0), sheet, 0,
-		// formatCell(IndexedColors.GREEN.getIndex(),
-		// IndexedColors.WHITE.getIndex(), (short) 200, true));
-		//
-		// for (int i = 1; i < lstColumnFields.size(); i++) {
-		//
-		// writeRowFromList(lstColumnFields.get(i), sheet, i, null);
-		//
-		// }
+		writeRowFromList(lstColumnFields.get(0), sheet, 0, formatCell(IndexedColors.GREEN.getIndex(), IndexedColors.WHITE.getIndex(), (short) 200, true));
 
-		ArrayList<String> lstHeader = new ArrayList<String>();
-		for (ArrayList<String> col : lstColumnFields) {
-			lstHeader.add(col.get(0).toUpperCase());
+		for (int i = 1; i < lstColumnFields.size(); i++) {
+
+			writeRowFromList(lstColumnFields.get(i), sheet, i, null);
+
 		}
-		int rowCol = 0;
-		writeRowFromList(lstHeader, sheet, rowCol++, formatCell(IndexedColors.GREEN.getIndex(), IndexedColors.WHITE.getIndex(), (short) 200, true));
 
-		for (int i = 1; i < lstColumnFields.get(0).size(); i++) {
-			ArrayList<String> newcol = new ArrayList<String>();
-			for (ArrayList<String> col : lstColumnFields) {
-				newcol.add(col.get(i));
-			}
-			writeRowFromList(newcol, sheet, rowCol++, null);
-
-			sheet.getRow(i).getCell(0).setCellStyle(formatCell(IndexedColors.GREEN.getIndex(), IndexedColors.WHITE.getIndex(), (short) 200, true));
-		}
+		/*
+		 * ArrayList<String> lstHeader = new ArrayList<String>(); for
+		 * (ArrayList<String> col : lstColumnFields) {
+		 * lstHeader.add(col.get(0).toUpperCase()); } int rowCol = 0;
+		 * writeRowFromList(lstHeader, sheet, rowCol++,
+		 * formatCell(IndexedColors.GREEN.getIndex(),
+		 * IndexedColors.WHITE.getIndex(), (short) 200, true));
+		 * 
+		 * for (int i = 1; i < lstColumnFields.get(0).size(); i++) {
+		 * ArrayList<String> newcol = new ArrayList<String>(); for
+		 * (ArrayList<String> col : lstColumnFields) { newcol.add(col.get(i)); }
+		 * writeRowFromList(newcol, sheet, rowCol++, null);
+		 * 
+		 * sheet.getRow(i).getCell(0).setCellStyle(formatCell(IndexedColors.GREEN
+		 * .getIndex(), IndexedColors.WHITE.getIndex(), (short) 200, true)); }
+		 */
 
 	}
 
@@ -388,12 +391,14 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 		dataSet.setDatatype((isRaw) ? "rd" : "dd");
 		dataSet.setStudyid(study.getId());
 		dataSet.setTitle("Dataset 1");
+		System.out.println("Processing Observation...");
+		populateObservation(study, observationSheet, dataSet, userID, isRaw);
 
-		populateObservation(observationSheet, dataSet, userID, isRaw);
+		System.out.println("Processing Site...");
 		populateSiteInformationSheet(siteInfoSheet, study, dataSet.getId());
 	}
 
-	public void populateObservation(Sheet observation, StudyDataSet dataSet, Integer userID, boolean isRaw) throws CreateFieldBookException, Exception {
+	public void populateObservation(Study study, Sheet observation, StudyDataSet dataSet, Integer userID, boolean isRaw) throws CreateFieldBookException, Exception {
 		ArrayList<String[]> lstData = readExcelSheetAsArray(observation, 0);
 		String[] header = lstData.get(0);
 		lstData.remove((int) 0);
@@ -410,17 +415,21 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 		LocationManagerImpl locMan = new LocationManagerImpl();
 		EcotypeManagerImpl ecoMan = new EcotypeManagerImpl();
 		PlantingTypeManagerImpl plantMan = new PlantingTypeManagerImpl();
+
 		for (ArrayList<String> x : rawSite) {
+			System.out.println(StringUtils.join(x, ","));
 			StudySiteInfoModel s = new StudySiteInfoModel();
 			int i = 0;
 			s.setSitename(x.get(i++));
 			s.setSelectedLocation(locMan.getLocationById(Integer.valueOf(x.get(i++))));
 			i++;
 			s.setYear(x.get(i++));
+			System.out.println("Eco: " + x.get(i));
+			s.setSeason(x.get(i++));
 			s.setEcotypeid(ecoMan.getEcotypeByName(x.get(i++)).getId());
 			s.setSoiltype(x.get(i++));
 			s.setSoilph(x.get(i++));
-			s.setSelectedSitePlantingType(plantMan.getPlantingTypeById(Integer.valueOf(x.get(i++))));
+			s.setSelectedSitePlantingType(plantMan.getPlantingTypeByName(x.get(i++)));
 
 			StudyAgronomy ag = new StudyAgronomy();
 			ag.setSowingdate(new SimpleDateFormat("MM/dd/yyyy").parse(x.get(i++)));

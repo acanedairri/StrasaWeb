@@ -1,6 +1,7 @@
 package org.strasa.middleware.manager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -293,6 +294,9 @@ public class StudyRawDataManagerImpl {
 
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
 		StudyRawDataBatch studyRawBatch = session.getMapper(StudyRawDataBatch.class);
+		ArrayList<String> lstTemp = new StudyVariableManagerImpl().correctVariableCase(Arrays.asList(header));
+		header = lstTemp.toArray(new String[lstTemp.size()]);
+
 		try {
 			addStudy(study);
 			Integer lastRow = getLastDataRow(study.getId(), isRawData);
@@ -322,7 +326,10 @@ public class StudyRawDataManagerImpl {
 				studyRawBatch.insertBatchRaw(lstData);
 			else
 				studyRawBatch.insertBatchDerived(lstData);
+
 			session.commit();
+
+			new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), header, isRaw, dataset);
 
 		} finally {
 			session.close();
