@@ -317,6 +317,20 @@ public class StudyManagerImpl {
 		}
 	}
 
+	public void insertStudy(Study record) {
+		// TODO Auto-generated method stub
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudyMapper mapper = session.getMapper(StudyMapper.class);
+
+		try {
+			mapper.insert(record);
+			session.commit();
+			// mapper.updateByExample(record, example);
+		} finally {
+			session.close();
+		}
+	}
+
 	public void updateStudyById(Study record) {
 		// TODO Auto-generated method stub
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();

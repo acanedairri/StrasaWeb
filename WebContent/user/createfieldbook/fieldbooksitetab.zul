@@ -78,6 +78,10 @@
 										</vbox>
 									</bandpopup>
 								</bandbox>
+										<toolbarbutton
+									id="btnadd_${forEachStatus.index}" image="/images/plus.png"
+									tooltiptext="Add New Location"
+									onClick="@command('addLocation')" />
 							</row>
 							<row>
 								<label value="Year"></label>

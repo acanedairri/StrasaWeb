@@ -41,6 +41,7 @@ public class StudySiteInfoModel extends StudySite {
 	public Location selectedLocation = new Location();
 	public Binder binder;
 	public boolean isUpdateMode;
+	private String ecoSystem;
 
 	public boolean isUpdateMode() {
 		return isUpdateMode;
@@ -258,6 +259,14 @@ public class StudySiteInfoModel extends StudySite {
 	public void setSelectedSitePlantingType(PlantingType selectedSitePlantingType) {
 		this.selectedSitePlantingType = selectedSitePlantingType;
 		this.selectedAgroInfo.setPlantingtypeid(selectedSitePlantingType.getId());
+	}
+
+	public String getEcoSystem() {
+		return ecoSystem;
+	}
+
+	public void setEcoSystem(String ecoSystem) {
+		this.ecoSystem = ecoSystem;
 	}
 
 }

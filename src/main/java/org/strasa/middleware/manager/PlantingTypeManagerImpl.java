@@ -5,52 +5,54 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
-import org.strasa.middleware.mapper.EcotypeMapper;
 import org.strasa.middleware.mapper.PlantingTypeMapper;
 import org.strasa.middleware.model.PlantingType;
+import org.strasa.middleware.model.PlantingTypeExample;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 public class PlantingTypeManagerImpl {
 
-	
 	@WireVariable
 	ConnectionFactory connectionFactory;
+
 	public PlantingTypeManagerImpl() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public List<PlantingType> getAllPlantingTypes(){
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+	public List<PlantingType> getAllPlantingTypes() {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		PlantingTypeMapper PlantingTypeMapper = session.getMapper(PlantingTypeMapper.class);
-		
-		try{
+
+		try {
 			List<PlantingType> PlantingTypes = PlantingTypeMapper.selectByExample(null);
-			
+
 			return PlantingTypes;
-			
-		}finally{
+
+		} finally {
 			session.close();
 		}
-		
+
 	}
-	public PlantingType getPlantingTypeById(int id){
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+
+	public PlantingType getPlantingTypeById(int id) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		PlantingTypeMapper PlantingTypeMapper = session.getMapper(PlantingTypeMapper.class);
-		
-		try{
+
+		try {
 			return PlantingTypeMapper.selectByPrimaryKey(id);
-			
-		}finally{
+
+		} finally {
 			session.close();
 		}
-		
+
 	}
 
 	@SuppressWarnings("null")
 	public List<String> getAllPlantingTypesAsString() {
-		List<String> PlantingTypes = new ArrayList<String>();;
+		List<String> PlantingTypes = new ArrayList<String>();
+		;
 		List<PlantingType> PlantingTypeList = getAllPlantingTypes();
-		for(PlantingType e : PlantingTypeList){
+		for (PlantingType e : PlantingTypeList) {
 			System.out.println(e.getPlanting());
 			PlantingTypes.add(e.getPlanting());
 		}
@@ -59,28 +61,46 @@ public class PlantingTypeManagerImpl {
 	}
 
 	public PlantingType getPlantingTypeById(Integer plantingtypeid) {
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		PlantingTypeMapper PlantingTypeMapper = session.getMapper(PlantingTypeMapper.class);
-		
-		try{
+
+		try {
 			PlantingType PlantingType = PlantingTypeMapper.selectByPrimaryKey(plantingtypeid);
-			
+
 			return PlantingType;
-			
-		}finally{
+
+		} finally {
+			session.close();
+		}
+	}
+
+	public PlantingType getPlantingTypeByName(String plantingtype) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		PlantingTypeMapper PlantingTypeMapper = session.getMapper(PlantingTypeMapper.class);
+
+		try {
+			PlantingTypeExample example = new PlantingTypeExample();
+			example.createCriteria().andPlantingEqualTo(plantingtype);
+			List<PlantingType> lstPlantingType = PlantingTypeMapper.selectByExample(example);
+			if (lstPlantingType.isEmpty())
+				return null;
+
+			return lstPlantingType.get(0);
+
+		} finally {
 			session.close();
 		}
 	}
 
 	public void update(PlantingType value) {
 		// TODO Auto-generated method stub
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		PlantingTypeMapper mapper = session.getMapper(PlantingTypeMapper.class);
-		try{	
+		try {
 			mapper.updateByPrimaryKey(value);
 			session.commit();
 
-		}finally{
+		} finally {
 			session.close();
 		}
 	}
@@ -89,24 +109,23 @@ public class PlantingTypeManagerImpl {
 		// TODO Auto-generated method stub
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		PlantingTypeMapper mapper = session.getMapper(PlantingTypeMapper.class);
-		try{
+		try {
 			mapper.deleteByPrimaryKey(id);
 			session.commit();
-		}
-		finally{
+		} finally {
 			session.close();
 		}
 	}
 
 	public void addPlantingType(PlantingType record) {
 		// TODO Auto-generated method stub
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		PlantingTypeMapper mapper = session.getMapper(PlantingTypeMapper.class);
-		try{	
+		try {
 			mapper.insert(record);
 			session.commit();
 
-		}finally{
+		} finally {
 			session.close();
 		}
 	}

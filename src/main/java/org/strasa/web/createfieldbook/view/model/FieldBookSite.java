@@ -1,11 +1,20 @@
 package org.strasa.web.createfieldbook.view.model;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jxls.reader.ReaderBuilder;
+import net.sf.jxls.reader.XLSReadStatus;
+import net.sf.jxls.reader.XLSReader;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.strasa.middleware.manager.EcotypeManagerImpl;
 import org.strasa.middleware.manager.LocationManagerImpl;
 import org.strasa.middleware.manager.PlantingTypeManagerImpl;
@@ -14,9 +23,12 @@ import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.PlantingType;
 import org.strasa.middleware.model.StudyVariable;
+import org.strasa.web.createfieldbook.view.pojos.CreateFieldbookTemplateParser;
 import org.strasa.web.createfieldbook.view.pojos.SiteInformationModel;
+import org.strasa.web.uploadstudy.view.model.AddLocation;
 import org.strasa.web.uploadstudy.view.model.DataColumnChanged;
 import org.strasa.web.utilities.FileUtilities;
+import org.xml.sax.SAXException;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -51,6 +63,31 @@ public class FieldBookSite {
 		lstLocations = getAllLocations();
 		this.site = siteModel;
 		this.siteTab = siteTab;
+
+		InputStream inputXML;
+		try {
+			inputXML = Resources.getResourceAsStream("CreateFieldBookConfig.xml");
+			XLSReader mainReader = ReaderBuilder.buildFromXML(inputXML);
+			InputStream inputXLS = new FileInputStream(new File("SampleTemplateStudy.xls"));
+
+			CreateFieldbookTemplateParser templateParser = new CreateFieldbookTemplateParser();
+
+			Map beans = new HashMap();
+			beans.put("fbparser", templateParser);
+			XLSReadStatus readStatus = mainReader.read(inputXLS, beans);
+
+			System.out.println(templateParser.getSites().size());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	@AfterCompose
@@ -200,6 +237,26 @@ public class FieldBookSite {
 		UploadEvent event = (UploadEvent) ctx.getTriggerEvent();
 		site.setLblLayoutFileName(event.getMedia().getName());
 		BindUtils.postNotifyChange(null, null, site, "lblLayoutFileName");
+	}
+
+	@Command("addLocation")
+	public void addLocation(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view) {
+
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("parent", view);
+		params.put("locname", site.getLocation().getLocationname());
+
+		Window popup = (Window) Executions.createComponents(AddLocation.ZUL_PATH, view, params);
+
+		popup.doModal();
+
+	}
+
+	@NotifyChange("site")
+	@Command("newLocationModel")
+	public void refreshLocation(@BindingParam("locationModel") Location newValue) {
+		site.setLocation(newValue);
+
 	}
 
 	/*

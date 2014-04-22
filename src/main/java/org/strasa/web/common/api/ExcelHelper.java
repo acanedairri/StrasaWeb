@@ -193,6 +193,9 @@ public class ExcelHelper {
 		for (int i = startToRow; i <= totalRows; i++) {
 			String[] row = new String[totalColumns];
 			for (int j = 0; j < totalColumns; j++) {
+				if (sheet.getRow(i).getCell(j) == null) {
+					System.out.println("CELL NULL At row: " + i + " col:" + j);
+				}
 				row[j] = getCellValueToString(sheet.getRow(i).getCell(j));
 			}
 			returnVal.add(row);
@@ -291,6 +294,8 @@ public class ExcelHelper {
 	 *             the exception
 	 */
 	public String getCellValueToString(Cell cell) throws Exception {
+		if (cell == null)
+			return "";
 		switch (cell.getCellType()) {
 		case Cell.CELL_TYPE_BOOLEAN:
 			return String.valueOf(cell.getBooleanCellValue());
@@ -332,7 +337,7 @@ public class ExcelHelper {
 
 		HashMap<Integer, ArrayList<String>> returnVal = new HashMap<Integer, ArrayList<String>>();
 		Iterator<Row> rowIterator = sheet.iterator();
-		for (int col = rangeStart; col <= rangeEnd; col++) {
+		for (int col = rangeStart; col < rangeEnd; col++) {
 			ArrayList<String> colVal = new ArrayList<String>();
 			returnVal.put(col, colVal);
 		}
@@ -340,7 +345,7 @@ public class ExcelHelper {
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
 			if (row.getRowNum() >= start) {
-				for (int col = rangeStart; col <= rangeEnd; col++) {
+				for (int col = rangeStart; col < rangeEnd; col++) {
 					returnVal.get(col).add(getCellValueToString(row.getCell(col)));
 				}
 			}
