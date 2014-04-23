@@ -17,6 +17,7 @@ import org.analysis.rserve.manager.test.TestRServeManager;
 import org.apache.commons.io.input.ReaderInputStream;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.Rserve.RserveException;
+import org.strasa.middleware.filesystem.manager.UserFileManager;
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.Study;
 import org.strasa.web.analysis.view.model.SingleSiteAnalysisModel;
@@ -44,6 +45,7 @@ import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.Include;
@@ -112,7 +114,7 @@ public class Specifications {
 	private int fileFormat=1;
 	private String separator="NULL";;
 	private String tempFileName;
-	private String fileName=System.getProperty("user.dir")+ System.getProperty("file.separator") + "sample_datasets" + System.getProperty("file.separator") + "RCB_ME.csv";
+	private String fileName;
 	private RServeManager rServeManager;
 
 	private Checkbox boxplotCheckBox;
@@ -124,33 +126,31 @@ public class Specifications {
 	private String errorMessage;
 	private Checkbox randomCheckBox;
 	private Checkbox fixedCheckBox;
-	
+
 	private Row blockRow;
 	private Row replicateRow;
 	private Row rowRow;
 	private Row columnRow;
 
+	//otheroptions UI
 	private Groupbox groupLevelOfControls;
-
 	private Checkbox performPairwiseCheckBox;
-
 	private Groupbox groupGenotypeFixed;
-
 	private Groupbox groupGenotypeRandom;
-
 	private Checkbox excludeControlsCheckBox;
-
 	private Checkbox estimateGenotypeCheckBox;
-
+	private Radio performAllPairwiseBtn;
 	private Radio compareWithControlsBtn;
-
 	private Checkbox descriptiveStatCheckBox;
-
 	private Checkbox varComponentsCheckBox;
-
 	private Groupbox groupPerformPairwise;
+	private Listbox controlsLb;
+	private Doublebox pairwiseAlphaTextBox;
 
+	
 	private String[] environmentLevels;
+	private List<String> respvars = new ArrayList<String>();
+	private List<String> controls = new ArrayList<String>();
 
 	private List<String> columnList = new ArrayList<String>();
 	private List<String[]> dataList = new ArrayList<String[]>();
@@ -158,7 +158,7 @@ public class Specifications {
 	private boolean gridReUploaded = false;
 	private int pageSize = 10;
 	private int activePage = 0;
-	
+
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
@@ -167,12 +167,16 @@ public class Specifications {
 		ssaModel=new SingleSiteAnalysisModel();
 
 		divDatagrid = (Div) component.getFellow("datagrid");
-		
+
 		Include incVariableList = (Include) component.getFellow("includeVariableList");
 		numericLb = (Listbox) incVariableList.getFellow("numericLb");
 		responseLb = (Listbox) incVariableList.getFellow("responseLb");
 		factorLb = (Listbox) incVariableList.getFellow("factorLb");
 		
+		numericModel = new ListModelList<String>();
+	    responseModel = new ListModelList<String>();
+		factorModel = new ListModelList<String>();
+			
 		//wire textboxes
 		envTextBox = (Textbox) incVariableList.getFellow("envTextBox");
 		genotypeTextBox = (Textbox) incVariableList.getFellow("genotypeTextBox");
@@ -180,50 +184,58 @@ public class Specifications {
 		replicateTextBox = (Textbox) incVariableList.getFellow("replicateTextBox");
 		rowTextBox = (Textbox) incVariableList.getFellow("rowTextBox");
 		columnTextBox = (Textbox) incVariableList.getFellow("columnTextBox");
+		
 		//wire image buttons
 		addEnvButton = (Image) incVariableList.getFellow("addEnvButton");
 		addGenotypeButton = (Image) incVariableList.getFellow("addGenotypeButton");
 		addBlockButton = (Image) incVariableList.getFellow("addBlockButton");
 		addReplicateButton = (Image) incVariableList.getFellow("addReplicateButton");
 		addRowButton = (Image) incVariableList.getFellow("addRowButton");
+		
 		//wire variable checkboxes
 		randomCheckBox = (Checkbox) incVariableList.getFellow("randomCheckBox");
 		fixedCheckBox = (Checkbox) incVariableList.getFellow("fixedCheckBox");	
+		
 		//wire variable
 		blockRow = (Row) incVariableList.getFellow("blockRow");
 		replicateRow = (Row) incVariableList.getFellow("replicateRow");
 		rowRow = (Row) incVariableList.getFellow("rowRow");
 		columnRow = (Row) incVariableList.getFellow("columnRow");
-		
+
 		replicateRow.setVisible(false);
 		rowRow.setVisible(false);
 		columnRow.setVisible(false);
-				
+
 		//wire graph checkboxes
 		boxplotCheckBox = (Checkbox) component.getFellow("boxplotCheckBox");
 		histogramCheckBox = (Checkbox) component.getFellow("histogramCheckBox");
 		heatmapCheckBox = (Checkbox) component.getFellow("heatmapCheckBox");
 		diagnosticplotCheckBox = (Checkbox) component.getFellow("diagnosticplotCheckBox");
+		
 		//wire comboboxes
 		fieldRowComboBox = (Combobox) component.getFellow("fieldRowComboBox");
 		fieldColumnComboBox = (Combobox) component.getFellow("fieldColumnComboBox");
 
-		
+
 		Include includeOtherOptions = (Include) component.getFellow("includeOtherOptions");
-		descriptiveStatCheckBox = (Checkbox) includeOtherOptions.getFellow("descriptiveStatCheckBox");
-		varComponentsCheckBox = (Checkbox) includeOtherOptions.getFellow("varComponentsCheckBox");
 		groupLevelOfControls = (Groupbox) includeOtherOptions.getFellow("groupLevelOfControls");
 		
 		groupGenotypeFixed = (Groupbox) includeOtherOptions.getFellow("groupGenotypeFixed");
-		groupPerformPairwise = (Groupbox) includeOtherOptions.getFellow("groupPerformPairwise");
-		
 		compareWithControlsBtn = (Radio) includeOtherOptions.getFellow("compareWithControlsBtn");
+		performAllPairwiseBtn = (Radio) includeOtherOptions.getFellow("performAllPairwiseBtn");
+		pairwiseAlphaTextBox = (Doublebox) includeOtherOptions.getFellow("pairwiseAlphaTextBox");
+		groupPerformPairwise = (Groupbox) includeOtherOptions.getFellow("groupPerformPairwise");
 		performPairwiseCheckBox = (Checkbox) includeOtherOptions.getFellow("cbPerformPairwise");
-		
+
 		groupGenotypeRandom = (Groupbox) includeOtherOptions.getFellow("groupGenotypeRandom");
 		excludeControlsCheckBox = (Checkbox) includeOtherOptions.getFellow("excludeControlsCheckBox");
 		estimateGenotypeCheckBox = (Checkbox) includeOtherOptions.getFellow("estimateGenotypeCheckBox");
-		
+
+		descriptiveStatCheckBox = (Checkbox) includeOtherOptions.getFellow("descriptiveStatCheckBox");
+		varComponentsCheckBox = (Checkbox) includeOtherOptions.getFellow("varComponentsCheckBox");
+
+		controlsLb = (Listbox)  includeOtherOptions.getFellow("controlsLb");
+
 		Selectors.wireEventListeners(view, this);
 	}
 
@@ -243,8 +255,8 @@ public class Specifications {
 	public void updateFixedOptions(@BindingParam("selected") Boolean selected){
 		System.out.println("activate Fixed");
 		if(selected){//if checked
-				activateFixedOptions(true);
-				if(compareWithControlsBtn.isSelected() && performPairwiseCheckBox.isChecked()) activateLevelOfConrolsOptions(true);
+			activateFixedOptions(true);
+			if(compareWithControlsBtn.isSelected() && performPairwiseCheckBox.isChecked()) activateLevelOfConrolsOptions(true);
 		}
 		else{//if unchecked
 			activateFixedOptions(false);
@@ -253,7 +265,7 @@ public class Specifications {
 
 		}
 	}
-	
+
 	@GlobalCommand("updateRandomOptions")
 	@NotifyChange("*")
 	public void updateRandomOptions(@BindingParam("selected") Boolean selected){
@@ -269,10 +281,10 @@ public class Specifications {
 		else{//if unchecked
 			activateRandomOptions(false);
 			if((!compareWithControlsBtn.isSelected() || !compareWithControlsBtn.isVisible())) activateLevelOfConrolsOptions(false);
-			
+
 		}
 	}
-	
+
 	private void activateRandomOptions(boolean state) {
 		// TODO Auto-generated method stub
 		groupGenotypeRandom.setVisible(state);
@@ -286,32 +298,32 @@ public class Specifications {
 
 		if(!state && !excludeControlsCheckBox.isChecked()) activateLevelOfConrolsOptions(false);
 	}
-	
+
 	@GlobalCommand("updatePairwiseOptions")
 	@NotifyChange("*")
 	public void updatePairwiseOptions(@BindingParam("selected") Boolean selected){
 		System.out.println("activate updatePairwiseOptions");
 		activatePerformPairwiseOptions(selected);
 	}
-	
+
 	protected void activatePerformPairwiseOptions(boolean state) {
 		// TODO Auto-generated method stub
 		groupPerformPairwise.setVisible(state);
 		compareWithControlsBtn.setSelected(true);
 
-//		if(state){
-//			if(genotypeLevels.length>15){
-//				compareWithControlsBtn.setSelection(true);
-//				activateLevelOfConrolsOptions(true);
-//				performAllComparisonsBtn.setSelection(false);
-//				performAllComparisonsBtn.setEnabled(false);
-//				//			performAllComparisonsBtn.setSelection(false);
-//			}
-//			else{
-//				performAllComparisonsBtn.setEnabled(true);
-//				if(performAllComparisonsBtn.getSelection()) compareWithControlsBtn.setSelection(false);
-//			}
-//		}
+		//		if(state){
+		//			if(genotypeLevels.length>15){
+		//				compareWithControlsBtn.setSelection(true);
+		//				activateLevelOfConrolsOptions(true);
+		//				performAllComparisonsBtn.setSelection(false);
+		//				performAllComparisonsBtn.setEnabled(false);
+		//				//			performAllComparisonsBtn.setSelection(false);
+		//			}
+		//			else{
+		//				performAllComparisonsBtn.setEnabled(true);
+		//				if(performAllComparisonsBtn.getSelection()) compareWithControlsBtn.setSelection(false);
+		//			}
+		//		}
 	}
 
 	@Command("updateVariableList")
@@ -324,7 +336,7 @@ public class Specifications {
 			if(performPairwiseCheckBox.isChecked()){
 				activateLevelOfConrolsOptions(true);
 			}else activateLevelOfConrolsOptions(false);
-			
+
 			blockRow.setVisible(true);
 			replicateRow.setVisible(false);
 			rowRow.setVisible(false);
@@ -339,7 +351,7 @@ public class Specifications {
 
 			rowRow.setVisible(true);
 			columnRow.setVisible(true);
-			
+
 			blockRow.setVisible(false);
 			replicateRow.setVisible(false);
 			break;
@@ -352,10 +364,10 @@ public class Specifications {
 
 			blockRow.setVisible(true);
 			replicateRow.setVisible(true);
-			
+
 			rowRow.setVisible(false);
 			columnRow.setVisible(false);
-			
+
 			break;
 		}
 		case 4: {//Row Column
@@ -377,7 +389,7 @@ public class Specifications {
 			}else activateLevelOfConrolsOptions(false);
 			blockRow.setVisible(true);
 			replicateRow.setVisible(true);
-			
+
 			rowRow.setVisible(false);
 			columnRow.setVisible(false);
 			break;
@@ -400,7 +412,7 @@ public class Specifications {
 			if(performPairwiseCheckBox.isChecked()){
 				activateLevelOfConrolsOptions(true);
 			}else activateLevelOfConrolsOptions(false);
-			
+
 			blockRow.setVisible(true);
 			replicateRow.setVisible(false);
 			rowRow.setVisible(false);
@@ -409,7 +421,7 @@ public class Specifications {
 		}
 		}
 	}
-	
+
 	private void activateLevelOfConrolsOptions(boolean state) {
 		// TODO Auto-generated method stub
 		groupLevelOfControls.setVisible(state);
@@ -419,7 +431,7 @@ public class Specifications {
 		// TODO Auto-generated method stub
 		if(randomCheckBox.isChecked()){
 			groupGenotypeRandom.setVisible(true);
-		
+
 			if(!responseModel.isEmpty())estimateGenotypeCheckBox.setChecked(true);
 			activateLevelOfConrolsOptions(!state);
 			if(!state){
@@ -440,7 +452,6 @@ public class Specifications {
 		//...
 		ssaModel.setDataFileName(filepath.replace("\\", "/"));
 		rServeManager = new RServeManager();
-		fileName = new File(filepath).getName();
 		varInfo = rServeManager.getVariableInfo(filepath.replace("\\", "/"), fileFormat, separator);
 
 		setVarNames(AnalysisUtils.getVarNames(varInfo));
@@ -464,16 +475,16 @@ public class Specifications {
 
 		// System.out.println(event.getMedia().getStringData());
 
-		String name = event.getMedia().getName();
+		fileName = event.getMedia().getName();
 		if (tempFile == null)
 			try {
-				tempFile = File.createTempFile(name, ".tmp");
+				tempFile = File.createTempFile(fileName, ".tmp");
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
-		if (!name.endsWith(".csv")) {
+		if (!fileName.endsWith(".csv")) {
 			Messagebox.show("Error: File must be a text-based csv format",
 					"Upload Error", Messagebox.OK, Messagebox.ERROR);
 			return;
@@ -485,15 +496,24 @@ public class Specifications {
 				FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
 				BindUtils.postNotifyChange(null, null, this, "*");
 
+
+				File uploadedFile = FileUtilities.getFileFromUpload(ctx, view);
+
+				UserFileManager userFileManager = new UserFileManager();
+				String filePath = userFileManager.uploadFileForAnalysis(fileName, uploadedFile);
+
+				if (tempFile == null)
+					return;
+
 				isVariableDataVisible = true;
-				dataFileName = name;
+				dataFileName = fileName;
 
 				Map<String,Object> args = new HashMap<String,Object>();
-				args.put("filePath", tempFile.getAbsolutePath());
+				args.put("filePath", filePath);
 				BindUtils.postGlobalCommand(null, null, "setSsaListvariables", args);
 
 				isVariableDataVisible = true;
-				dataFileName = name;
+				dataFileName = fileName;
 				refreshCsv();
 				if (this.isUpdateMode) isNewDataSet = true;
 
@@ -524,7 +544,7 @@ public class Specifications {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public ArrayList<ArrayList<String>> getCsvData() {
 		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
 		if (dataList.isEmpty())
@@ -538,7 +558,7 @@ public class Specifications {
 		}
 		return result;
 	}
-	
+
 	public void reloadCsvGrid() {
 		if (gridReUploaded) {
 			gridReUploaded = false;
@@ -634,6 +654,7 @@ public class Specifications {
 	public void validateSsaInputs() {
 		// TODO Auto-generated method stub
 		if(validateSsaModel()){
+			System.out.println("pasing variables");
 			Map<String,Object> args = new HashMap<String,Object>();
 			args.put("ssaModel", ssaModel);
 			BindUtils.postGlobalCommand(null, null, "displaySsaResult", args);
@@ -643,10 +664,11 @@ public class Specifications {
 	private boolean validateSsaModel() {
 		// TODO Auto-generated method stub
 
-		rServeManager = new RServeManager();
+		System.out.println("validating ssaModels");
+		//		rServeManager = new RServeManager();
 		//set Paths
 		ssaModel.setResultFolderPath(AnalysisUtils.createOutputFolder(fileName, "ssa"));
-		ssaModel.setOutFileName(ssaModel.getResultFolderPath()+  System.getProperty("file.separator") +"SEA_output.txt");
+		ssaModel.setOutFileName(ssaModel.getResultFolderPath()+ "SEA_output.txt");
 
 		//set Vars
 		if(!envTextBox.getValue().isEmpty()) ssaModel.setEnvironment(envTextBox.getValue());
@@ -661,26 +683,26 @@ public class Specifications {
 			return false;
 		}
 
-		if(blockTextBox.isVisible() && !blockTextBox.getValue().isEmpty())ssaModel.setBlock(blockTextBox.getValue());
-		else{
+		if(!blockTextBox.getValue().isEmpty())ssaModel.setBlock(blockTextBox.getValue());
+		else if(blockRow.isVisible() ){
 			errorMessage = "block cannot be empty";
 			return false;
 		}
 
-		if(replicateTextBox.isVisible() && !replicateTextBox.getValue().isEmpty())ssaModel.setRep(replicateTextBox.getValue());
-		else{
+		if(!replicateTextBox.getValue().isEmpty())ssaModel.setRep(replicateTextBox.getValue());
+		else if(replicateRow.isVisible()){
 			errorMessage = "replicate cannot be empty";
 			return false;
 		}
 
-		if(rowTextBox.isVisible() && !rowTextBox.getValue().isEmpty()) ssaModel.setRow(rowTextBox.getValue());
-		else{
+		if(!rowTextBox.getValue().isEmpty()) ssaModel.setRow(rowTextBox.getValue());
+		else if(rowRow.isVisible()){
 			errorMessage = "row cannot be empty";
 			return false;
 		}
 
-		if(columnTextBox.isVisible() && !columnTextBox.getValue().isEmpty()) ssaModel.setColumn(columnTextBox.getValue());
-		else{
+		if(!columnTextBox.getValue().isEmpty()) ssaModel.setColumn(columnTextBox.getValue());
+		else if(columnRow.isVisible()){
 			errorMessage = "column cannot be empty";
 			return false;
 		}
@@ -696,31 +718,69 @@ public class Specifications {
 				errorMessage = "select heatmap field row";
 				return false;
 			}
-			else if	(fieldRowComboBox.getValue().isEmpty()){ errorMessage = "select heatmap field column";
-				return false;
+			else if	(fieldColumnComboBox.getValue().isEmpty()){
+				errorMessage = "select heatmap field column";
+			return false;
 			}
 			else{
 				ssaModel.setHeatmapRow(fieldRowComboBox.getValue());
-				ssaModel.setHeatmapRow(fieldColumnComboBox.getValue());
+				ssaModel.setHeatmapColumn(fieldColumnComboBox.getValue());
 			}
 		}
-		
-		//Other Options
-		ssaModel.setGenotypeFixed(fixedCheckBox.isChecked());
+
+
 		ssaModel.setDescriptiveStat(descriptiveStatCheckBox.isChecked());
 		ssaModel.setVarianceComponents(varComponentsCheckBox.isChecked());
 
-//		environmentLevels = rServeManager.getLevels(selectedStrings, file);
-//		private String[] genotypeLevels = {"GEN1", "GEN2", "GEN3", "GEN4", "GEN5", "GEN6", "GEN7", "GEN8", "GEN9", "GEN10", "GEN11", "GEN12", "GEN13", "GEN14", "GEN15"};
-//		private String[] controlLevels = {"GEN14"};
+		ssaModel.setRespvars(respvars.toArray(new String[respvars.size()]));
+
+		if(!ssaModel.getEnvironment().isEmpty()) ssaModel.setEnvironmentLevels(rServeManager.getLevels(columnList, dataList, ssaModel.getEnvironment()));
+		else ssaModel.setEnvironment("NULL");
 		
-		//		this.performPairwise = true;
-		//		this.pairwiseAlpha = "0.05";
-		//		this.compareControl = true;
-		//		this.performAllPairwise = false;
-		//		this.genotypeRandom = false;
-		//		this.excludeControls = false;
-		//		this.genoPhenoCorrelation = false;
+		ssaModel.setGenotypeLevels(rServeManager.getLevels(columnList, dataList, ssaModel.getGenotype()));
+
+		ssaModel.setGenotypeRandom(randomCheckBox.isChecked());
+		ssaModel.setGenotypeFixed(fixedCheckBox.isChecked());
+		
+		if(!ssaModel.isGenotypeFixed() && !ssaModel.isGenotypeRandom()){
+			errorMessage = "Please specify whether the genotype variable is fixed or random.";
+			return false;
+		}
+		
+		if(ssaModel.isGenotypeFixed()){//if fixed is checked
+			ssaModel.setPerformPairwise(performPairwiseCheckBox.isChecked());
+			if(ssaModel.isPerformPairwise()){
+				ssaModel.setPairwiseAlpha(Double.toString(pairwiseAlphaTextBox.getValue()));
+				if(ssaModel.getPairwiseAlpha().isEmpty()){
+					errorMessage = "Please add a value for the pairwise level of significance.";
+					return false;
+				}
+				else{
+					ssaModel.setCompareControl(compareWithControlsBtn.isChecked());
+					ssaModel.setPerformAllPairwise(performAllPairwiseBtn.isChecked());
+					if(ssaModel.isCompareControl()){
+						ssaModel.setControlLevels(controls.toArray(new String[controls.size()]));
+						if(ssaModel.getControlLevels().length<1){
+							errorMessage = "Please specify control variables from the genotype levels.";
+							return false;
+						}
+					}
+				}
+			}
+		}
+
+		if(ssaModel.isGenotypeRandom()){//if random is checked
+			ssaModel.setExcludeControls(excludeControlsCheckBox.isChecked());
+			ssaModel.setGenoPhenoCorrelation(estimateGenotypeCheckBox.isChecked());
+			
+			if(excludeControlsCheckBox.isChecked() && !(compareWithControlsBtn.isChecked() && compareWithControlsBtn.isChecked())){
+				ssaModel.setControlLevels(controls.toArray(new String[controls.size()]));
+				if(controls.size()<1 && !(ssaModel.getDesign()== 1 || ssaModel.getDesign() == 2 )){
+					errorMessage = "Please specify control variables from the genotype levels.";
+					return false;
+				}
+			}
+		}
 
 		return true;
 	}
@@ -755,6 +815,7 @@ public class Specifications {
 		Set<String> set = numericModel.getSelection();
 		System.out.println("addResponse");
 		for (String selectedItem : set) {
+			respvars.add(selectedItem);
 			responseModel.add(selectedItem);
 			numericModel.remove(selectedItem);
 		}
@@ -764,6 +825,7 @@ public class Specifications {
 		Set<String> set = responseModel.getSelection();
 		System.out.println("removeResponse");
 		for (String selectedItem : set) {
+			respvars.remove(selectedItem);
 			numericModel.add(selectedItem);
 			responseModel.remove(selectedItem);
 		}
@@ -812,7 +874,7 @@ public class Specifications {
 	public void setVarNames(ArrayList<String> varNames) {
 		this.varNames = varNames;
 	}
-	
+
 	public List<String[]> getDataList() {
 		System.out.println("DaALIST GEt");
 		reloadCsvGrid();
@@ -876,7 +938,7 @@ public class Specifications {
 		reloadCsvGrid();
 		this.activePage = activePage;
 	}
-	
+
 	public int getTotalSize() {
 		return dataList.size();
 	}

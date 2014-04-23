@@ -2,6 +2,7 @@ package org.analysis.rserve.manager;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.Rserve.RConnection;
@@ -266,6 +267,7 @@ public class RServeManager {
 					}
 				}
 				String fixedHead = "capture.output(cat(\"GENOTYPE AS: Fixed\n\"),file=\""+ outFileName + "\",append = TRUE)";
+				System.out.println("funcSsaFixed:"+funcSsaFixed);
 				rConnection.eval(funcSsaFixed);
 				rConnection.eval(sep2);
 				rConnection.eval(fixedHead);
@@ -1434,6 +1436,7 @@ public class RServeManager {
 						String checkError2 = "msg <- trimStrings(paste(strsplit(msg, \"\\n\")[[length(msg)]], collapse = \" \"))";
 						String checkError3 ="msg <- gsub(\"\\\"\", \"\", msg)";
 						String checkError4 = "capture.output(cat(\"*** \nERROR in ssa.resid function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\"" + outFileName + "\",append = TRUE)";
+						
 						rConnection.eval(checkError);
 						rConnection.eval(checkError2);
 						rConnection.eval(checkError3);
@@ -1545,39 +1548,13 @@ public class RServeManager {
 			rConnection.eval(sep2);
 //			
 		
-			rConnection.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally{
+			rConnection.close();
 		}
 	}
 
-	public static String[] getEnvtLevels(String facEnvt, File file) {
-		int envtColumn = 0;
-////		Table table = DataManipulationManager.getActiveTable(file.getAbsolutePath());
-//		for (int i = 0; i < table.getColumnCount(); i++) {
-//			if (table.getColumn(i).getText()
-//					.equals(facEnvt)) {
-//				envtColumn = i;
-//			}
-//		}
-//
-//		ArrayList<String> envts = new ArrayList<String>();
-//		for (int j = 0; j < table.getItemCount(); j++) {
-//			String level = table.getItem(j).getText(
-//					envtColumn);
-//			if (!envts.contains(level)&& !level.isEmpty()) {
-//				envts.add(level);
-//			}
-//		}
-//
-//		String[] envtLevels = new String[envts.size()];
-//		for (int k = 0; k < envts.size(); k++) {
-//			envtLevels[k] = (String) envts.get(k);
-//		}
-
-		return null;
-	}
-	
 	public void test() {
 		// TODO Auto-generated method stub
 		try {
@@ -1591,6 +1568,32 @@ public class RServeManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public String[] getLevels(List<String> columnList, List<String[]> dataList,
+			String environment) {
+		// TODO Auto-generated method stub
+		int envtColumn = 0;
+		for (int i = 0; i < columnList.size(); i++) {
+			if (columnList.get(i).equals(environment)) {
+				envtColumn = i;
+			}
+		}
+
+		ArrayList<String> envts = new ArrayList<String>();
+		for (int j = 0; j <dataList.size(); j++) {
+			String level = dataList.get(j)[envtColumn];
+			if (!envts.contains(level)&& !level.isEmpty()) {
+				envts.add(level);
+			}
+		}
+
+		String[] envtLevels = new String[envts.size()];
+		for (int k = 0; k < envts.size(); k++) {
+			envtLevels[k] = (String) envts.get(k);
+		}
+
+		return envtLevels;
 	}
 
 }
