@@ -3,18 +3,19 @@
 
 	<vlayout>
 		<radiogroup id="performPairwiseGroup" />
-
 		<groupbox hflex="1">
 			<caption>Options for genotype as fixed</caption>
 			<vbox>
 				<checkbox id="cb" checked="true"
 					label="Perform pairwise mean comparisons" />
-				<radio id="ra1" label="Compare with control(s)"
+					
+				<radio id="compareWithControlsBtn" label="Compare with control(s)"
+					radiogroup="performPairwiseGroup" />
+					
+				<radio id="performAllPairwiseBtn" label="Perform all comparisons"
 					radiogroup="performPairwiseGroup" />
 
-				<radio id="ra2" label="Perform all comparisons"
-					radiogroup="performPairwiseGroup" />
-				<hbox>Level of significance: <textbox /></hbox>
+				<hbox>Level of significance: <doublebox id="pairwiseAlphaTextBox"/></hbox>
 			</vbox>
 		</groupbox>
 
@@ -45,7 +46,7 @@
 				</listbox>
 				
 				<image style="cursor:pointer" id="addBlockButton"
-					src="/images/rightarrow_g.png" tooltip="Add Block variable" align="center"/>
+					src="/images/rightarrow_g.png" tooltip="Add control levels" align="center"/>
 				<listbox id="controlsLb" hflex="1" rows="4">
 					<listhead>
 						<listheader label="Control(s):" />
@@ -58,6 +59,7 @@
 				</listbox>
 			</hbox>
 		</groupbox>
+		
 		<groupbox hflex="1">
 			<caption>Display:</caption>
 			<vbox>
@@ -65,5 +67,6 @@
 				<checkbox label="Variance Components" />
 			</vbox>
 		</groupbox>
+		
 	</vlayout>
 </div>

@@ -62,13 +62,9 @@ public class AnalysisUtils {
 	}
 
 
-	public static String getOutputFolderName(String fileName, String analysisType) {
+	public static String getOutputFolderName(String fileName) {
 		// TODO Auto-generated method stub
-		String outputFolderName;
-		if(analysisType.equals("ssa")) outputFolderName = "SingleSiteAnalysis" ;
-		else outputFolderName = "unknown analysis";
-
-		return new File(fileName).getName()+"("+ outputFolderName+"_"+getTimeStamp()+")";
+		return new File(fileName).getName()+"("+getTimeStamp()+")";
 	}
 	
 	public static String getTimeStamp() {
@@ -85,7 +81,7 @@ public class AnalysisUtils {
 		String userFolderPath =  Sessions.getCurrent().getWebApp().getRealPath("resultanalysis")+ FILE_SEPARATOR +
 				SecurityUtil.getDbUser().getUsername()+ FILE_SEPARATOR+ "Single-Site";
 
-		String outputStudyPath = userFolderPath+ FILE_SEPARATOR + getOutputFolderName(dataFileName, analysisType) +FILE_SEPARATOR;
+		String outputStudyPath = userFolderPath+ FILE_SEPARATOR + getOutputFolderName(dataFileName) +FILE_SEPARATOR;
 		
 		if(createFolder(userFolderPath)){
 			createFolder(outputStudyPath);

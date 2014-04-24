@@ -11,11 +11,11 @@
 					<radio id="compareWithControlsBtn"
 						label="Compare with control(s)" radiogroup="performPairwiseGroup" />
 
-					<radio id="ra2" label="Perform all comparisons"
+					<radio id="performAllPairwiseBtn" label="Perform all comparisons"
 						radiogroup="performPairwiseGroup" />
 					<hbox  style="margin:0px 0px 0px 25px" >
 						Level of significance:
-						<textbox />
+						 <doublebox id="pairwiseAlphaTextBox"/>
 					</hbox>
 				</vbox>
 			</groupbox>
