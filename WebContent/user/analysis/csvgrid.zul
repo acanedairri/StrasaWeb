@@ -1,6 +1,6 @@
 <zk>
-	<grid model="@bind(vm.dataList)" zclass="none" height="360px"
-		vflex="true" emptyMessage="No data loaded...">
+	<grid model="@bind(vm.dataList)" zclass="none" vflex="1" hflex="1"
+		emptyMessage="No data loaded...">
 		<columns children="@load(vm.columnList)">
 			<template name="children">
 				<column hflex="1" label="@load(each)" />
@@ -14,7 +14,5 @@
 			</template>
 		</rows>
 	</grid>
-	<paging pageSize="@load(vm.pageSize)"
-		totalSize="@load(vm.totalSize)" activePage="@bind(vm.activePage)" />
-
+	
 </zk>

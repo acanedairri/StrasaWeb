@@ -1,6 +1,7 @@
 package org.strasa.web.analysis.result.view.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -54,7 +55,9 @@ public class FileList {
 		FileModelTreeNode[] tmp=new FileModelTreeNode[files.size()];
 		List<FileModelTreeNode> fm= new ArrayList<FileModelTreeNode>();
 		
-		for(String name : files){
+		List<String> myList = new ArrayList(files);
+		Collections.sort(myList);
+		for(String name : myList){
 			String icons="text.png";
 			if (name.contains("png")){
 				icons="graph.png";

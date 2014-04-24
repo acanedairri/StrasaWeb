@@ -3,16 +3,14 @@
 
 
 
-	<window border="none" sizable="true" maximizable="true"  minheight="500" minwidth="500" position="center" apply="org.zkoss.bind.BindComposer" 
+	<window border="none" sizable="true" maximizable="true"  width="800px" height="800px" position="center" apply="org.zkoss.bind.BindComposer" id="windowGridId"
 		viewModel="@id('vm') @init('org.strasa.web.analysis.result.view.model.CsvDataViewer')">
-		<style src="../css/main.css" />
-		<div align="left">
+ 		<div align="left">
 			<button label="Export to CSV" visible="true"
 				sclass="btn-success" image="/images/export16.png"
-				unless="${vm.rowData==null}"
 				onClick="@command('exportRowData', columns=vm.columnList, rows=vm.dataList)" />
-		</div>
-		<div id="datagrid">
+		</div> 
+		<div id="datagrid" vflex="1">
 		
 		
 		</div>

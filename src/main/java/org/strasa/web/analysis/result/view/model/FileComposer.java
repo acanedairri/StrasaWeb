@@ -4,9 +4,13 @@ package org.strasa.web.analysis.result.view.model;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.InputStream;
 import java.util.HashMap;
 
+import org.apache.commons.io.input.ReaderInputStream;
 import org.spring.security.model.SecurityUtil;
+import org.strasa.web.utilities.FileUtilities;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -16,7 +20,6 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Wire;
-import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.DefaultTreeNode;
 import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Image;
@@ -27,6 +30,8 @@ import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.TreeitemRenderer;
 import org.zkoss.zul.Treerow;
 import org.zkoss.zul.Window;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 public class FileComposer extends SelectorComposer<Component> {
 	private static final long serialVersionUID = 3814570327995355261L;
@@ -101,15 +106,19 @@ public class FileComposer extends SelectorComposer<Component> {
 				dataRow.setDraggable("true");
 				dataRow.appendChild(treeCell);
 				dataRow.addEventListener(Events.ON_DOUBLE_CLICK, new EventListener<Event>() {
+					private File tempFile;
+
 					@Override
 					public void onEvent(Event event) throws Exception {
 						FileModelTreeNode clickedNodeValue = (FileModelTreeNode) ((Treeitem) event.getTarget().getParent())
 								.getValue();
 
 						FileModel f=(FileModel) clickedNodeValue.getParent().getData();
-						String foldername=f.getFoldername();
-						String rootFolder=clickedNodeValue.getParent().getParent().getData().getFoldername();
-						String filenamepath=RESULT_ANALYSIS_PATH+rootFolder+"/"+foldername+"/"+clickedNodeValue.getData().getFilename();
+						String rootAnalysisFolder=clickedNodeValue.getParent().getParent().getData().getFoldername();
+						String fileFolderName=f.getFoldername();
+						String filenamePath=RESULT_ANALYSIS_PATH+rootAnalysisFolder+"/"+fileFolderName+"/"+clickedNodeValue.getData().getFilename();
+						String webFolderPath = Executions.getCurrent().getDesktop().getWebApp().getRealPath("/");
+						File fileToCreate = new File(webFolderPath+filenamePath);
 
 						Window w = new Window(((FileModel) clickedNodeValue.getData()).getFilename(), "normal",
 								true);
@@ -119,6 +128,11 @@ public class FileComposer extends SelectorComposer<Component> {
 						w.setMinheight(500);
 						w.setMinwidth(500);
 						w.setPosition("center");
+						
+						String dType=filenamePath;
+						dType=dType.substring(dType.length()-3, dType.length());
+						System.out.println(dType);
+						
 
 
 						HashMap<String, String> dataArgs = new HashMap<String, String>();
@@ -126,18 +140,15 @@ public class FileComposer extends SelectorComposer<Component> {
 
 						if(clickedNodeValue.getData().getFilename().contains(".png")){
 
-							System.out.println(filenamepath);
-							dataArgs.put("imageName", filenamepath);
+							System.out.println(filenamePath);
+							dataArgs.put("imageName", filenamePath);
 							Executions.createComponents("analysis/imgviewer.zul",w, dataArgs);
 							w.doOverlapped();
 
 						}else if(clickedNodeValue.getData().getFilename().contains(".pdf")){
 
-							String filePath = Executions.getCurrent().getDesktop().getWebApp().getRealPath("/");
-							File fpdf = new File(filePath+filenamepath);
-
-							byte[] buffer = new byte[(int) fpdf.length()];
-							FileInputStream fs = new FileInputStream(fpdf);
+							byte[] buffer = new byte[(int) fileToCreate.length()];
+							FileInputStream fs = new FileInputStream(fileToCreate);
 							fs.read(buffer);
 							fs.close();
 							ByteArrayInputStream is = new ByteArrayInputStream(buffer);
@@ -150,41 +161,41 @@ public class FileComposer extends SelectorComposer<Component> {
 
 
 						}else if(clickedNodeValue.getData().getFilename().contains(".txt")){
-							String filePath = Executions.getCurrent().getDesktop().getWebApp().getRealPath("/");
 
-							File fpdf = new File(filePath+filenamepath);
 
-							byte[] buffer = new byte[(int) fpdf.length()];
-							FileInputStream fs = new FileInputStream(fpdf);
+							byte[] buffer = new byte[(int) fileToCreate.length()];
+							FileInputStream fs = new FileInputStream(fileToCreate);
 							fs.read(buffer);
 							fs.close();
 							ByteArrayInputStream is = new ByteArrayInputStream(buffer);
 							fileContent = new AMedia("report", "text", "text/plain", is);
 							HashMap<String, AMedia> dataArgsTxt = new HashMap<String, AMedia>();
 							dataArgsTxt.put("txtFile", fileContent);
-
-							//							Executions.getCurrent().sendRedirect(urlName,"_blank");
-							//							Executions.createComponents("textviewer.zul", w, dataArgsTxt);
 							String port = ( Executions.getCurrent().getServerPort() == 80 ) ? "" : (":" + Executions.getCurrent().getServerPort());
-							//							String url = Executions.getCurrent().getScheme() + "://" + Executions.getCurrent().getServerName() + port + Executions.getCurrent().getContextPath() +  Executions.getCurrent().getDesktop().getRequestPath();
-							String url = Executions.getCurrent().getScheme() + "://" + Executions.getCurrent().getServerName() + port + Executions.getCurrent().getContextPath() + filenamepath;
+							String url = Executions.getCurrent().getScheme() + "://" + Executions.getCurrent().getServerName() + port + Executions.getCurrent().getContextPath() + filenamePath;
 							System.out.println(url);
 							Executions.getCurrent().sendRedirect(url,"_blank");
 							w.detach();
 
 						}else if(clickedNodeValue.getData().getFilename().contains(".csv")){
-							
-							String filePath = Executions.getCurrent().getDesktop().getWebApp().getRealPath("/");
 
-							File csvFile = new File(filePath+filenamepath);
-							System.out.println(csvFile.getAbsolutePath());
-							
-							HashMap<String, File> datacsv = new HashMap<String, File>();
-							datacsv.put("csvFile", csvFile);
+							byte[] buffer = new byte[(int) fileToCreate.length()];
+							FileInputStream fs = new FileInputStream(fileToCreate);
+							fs.read(buffer);
+							fs.close();
+							ByteArrayInputStream is = new ByteArrayInputStream(buffer);
+							fileContent = new AMedia("report", "text", "text/plain", is);
+							tempFile = File.createTempFile("csvdata", ".tmp");
+							InputStream in = fileContent.isBinary() ? fileContent.getStreamData() : new ReaderInputStream(fileContent.getReaderData());
+							FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
+						
+							CSVReader reader = new CSVReader(new FileReader(tempFile.getAbsolutePath()));
+							HashMap<String, CSVReader> dataArgsCsvReader = new HashMap<String, CSVReader>();
+							dataArgsCsvReader.put("csvReader", reader);
 
-							Executions.createComponents("analysis/csvviewer.zul", w, datacsv);
+							Executions.createComponents("analysis/csvviewer.zul", w, dataArgsCsvReader);
 							w.doOverlapped();
-
+							
 
 						}
 
@@ -235,5 +246,10 @@ public class FileComposer extends SelectorComposer<Component> {
 		private boolean isFolder(FileModel filename) {
 			return filename.getFilename() == null;
 		}
+		
+
+
 	}
+	
+	
 }
