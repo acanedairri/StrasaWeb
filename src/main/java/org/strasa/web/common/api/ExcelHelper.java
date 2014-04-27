@@ -194,7 +194,7 @@ public class ExcelHelper {
 			String[] row = new String[totalColumns];
 			for (int j = 0; j < totalColumns; j++) {
 				if (sheet.getRow(i).getCell(j) == null) {
-					System.out.println("CELL NULL At row: " + i + " col:" + j);
+//					System.out.println("CELL NULL At row: " + i + " col:" + j);
 				}
 				row[j] = getCellValueToString(sheet.getRow(i).getCell(j));
 			}

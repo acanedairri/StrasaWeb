@@ -91,6 +91,7 @@ public class GermplasmManagerImpl {
 
 		for (Germplasm germ : lstGerm) {
 			returnVal.add(germ.getGermplasmname());
+			if(germ.getGermplasmname().equals("DR017x")) System.out.println("FOUND: DR017x");
 		}
 		return returnVal;
 	}

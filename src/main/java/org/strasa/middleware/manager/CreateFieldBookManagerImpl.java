@@ -439,13 +439,16 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 
 		HashSet<String> uniqueGerm = new HashSet<String>();
 		uniqueGerm.addAll(lstGermplasm);
-
 		ArrayList<String> lstUnknownGerm = new ArrayList<String>();
-
+		lstUnknownGerm.addAll(uniqueGerm);
 		lstUnknownGerm.removeAll(new GermplasmManagerImpl().getGermplasmBatchAsString(new ArrayList<String>(uniqueGerm)));
+
+//		System.out.println("GEMR: " + lstGermplasm.get(0));
 		if (!lstUnknownGerm.isEmpty()) {
-			throw new CreateFieldBookException("Error: Unknown Germplasm detected {" + StringUtils.join(lstUnknownGerm.toArray(new String[lstUnknownGerm.size()]), ", "));
-		}
+			System.out.println("Error: Unknown Germplasm detected {" + StringUtils.join(lstUnknownGerm.toArray(new String[lstUnknownGerm.size()]), ", "));
+
+			throw new CreateFieldBookException("Error: Unknown Germplasm detected {" + StringUtils.join(lstUnknownGerm.toArray(new String[lstUnknownGerm.size()]), ", ") + "}");
+				}
 	}
 
 	public void validateSite(Sheet shObservation, Sheet shSiteInfo) throws Exception {

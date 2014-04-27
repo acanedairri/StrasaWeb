@@ -109,7 +109,7 @@
 					</row>
 					<row>
 						<label class="name" value="Study Name:" />
-						<combobox model="@load(vm.lstStudies)" width = "173px"
+						<combobox model="@load(vm.lstStudies)" value = "@bind(vm.txtStudyName)" width = "173px"
 							
 							selectedItem="@bind(vm.study)">
 							<template name="model">

@@ -51,6 +51,8 @@ import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tabpanel;
 import org.zkoss.zul.Window;
 
+import com.mysql.jdbc.StringUtils;
+
 public class Index {
 	public int userID = SecurityUtil.getDbUser().getId();
 
@@ -233,9 +235,12 @@ public class Index {
 
 			return;
 		}
+		
+		
 
 		for (SiteInformationModel site : lstSiteInfo) {
-			if (!site.validateAll().isEmpty()) {
+			if(site == null) System.out.println("it has...");
+			if (!StringUtils.isNullOrEmpty(site.validateAll())) {
 				Messagebox.show(site.validateAll(), "Information", Messagebox.OK, Messagebox.EXCLAMATION);
 				return;
 			}
@@ -251,7 +256,7 @@ public class Index {
 		study.setProjectid(txtProject.getId());
 		study.setStartyear(String.valueOf(startYear));
 		study.setEndyear(String.valueOf(String.valueOf(endYear)));
-		study.setUserid(1);
+		study.setUserid(userID);
 		study.setShared(false);
 		study.setDatecreated(new Date());
 		study.setDatelastmodified(new Date());
@@ -340,7 +345,7 @@ public class Index {
 	@NotifyChange("*")
 	public void setStudy(Study study) {
 		this.study = study;
-
+		if(study == null) return;
 		this.txtStudyName = study.getName();
 		this.txtStudyType = new StudyTypeManagerImpl().getStudyTypeById(study.getStudytypeid()).getStudytype();
 		this.txtProgram = new ProgramManagerImpl().getProgramById(study.getProgramid());
