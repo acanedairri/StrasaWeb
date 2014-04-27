@@ -323,7 +323,11 @@ public class StudyManagerImpl {
 		StudyMapper mapper = session.getMapper(StudyMapper.class);
 
 		try {
-			mapper.insert(record);
+
+			if (record.getId() == null)
+				mapper.insert(record);
+			else
+				mapper.updateByPrimaryKey(record);
 			session.commit();
 			// mapper.updateByExample(record, example);
 		} finally {

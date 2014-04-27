@@ -2,10 +2,12 @@ package org.strasa.web.createfieldbook.view.model;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.spring.security.model.SecurityUtil;
@@ -63,6 +65,7 @@ public class Index {
 		Selectors.wireComponents(view, this, false);
 	}
 
+	private List<Study> lstStudies = new StudyManagerImpl().getStudiesByUserID(userID);
 	private String txtStudyName = new String();
 	private String txtStudyType = new String();
 	private int startYear = Calendar.getInstance().get(Calendar.YEAR);
@@ -231,6 +234,14 @@ public class Index {
 			return;
 		}
 
+		for (SiteInformationModel site : lstSiteInfo) {
+			if (!site.validateAll().isEmpty()) {
+				Messagebox.show(site.validateAll(), "Information", Messagebox.OK, Messagebox.EXCLAMATION);
+				return;
+			}
+
+		}
+
 		if (study == null) {
 			study = new Study();
 		}
@@ -260,6 +271,13 @@ public class Index {
 		CreateFieldBookManagerImpl createFieldBookMan = new CreateFieldBookManagerImpl(lstSelectedSites, study, outputFolder);
 		try {
 			Filedownload.save(new FileInputStream(createFieldBookMan.generateFieldBook().getAbsolutePath()), "application/vnd.ms-excel", study.getName() + ".xls");
+		} catch (CreateFieldBookException e) {
+
+			Messagebox.show(e.getMessage(), "Error", Messagebox.OK, Messagebox.ERROR);
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -319,8 +337,16 @@ public class Index {
 		return study;
 	}
 
+	@NotifyChange("*")
 	public void setStudy(Study study) {
 		this.study = study;
+
+		this.txtStudyName = study.getName();
+		this.txtStudyType = new StudyTypeManagerImpl().getStudyTypeById(study.getStudytypeid()).getStudytype();
+		this.txtProgram = new ProgramManagerImpl().getProgramById(study.getProgramid());
+		this.txtProject = new ProjectManagerImpl().getProjectById(study.getProjectid());
+		this.startYear = Integer.parseInt(study.getStartyear());
+		this.endYear = Integer.parseInt(study.getEndyear());
 	}
 
 	public ArrayList<Program> getProgramList() {
@@ -383,6 +409,14 @@ public class Index {
 
 	public void setLstSelectedSites(ArrayList<SiteInformationModel> lstSelectedSites) {
 		this.lstSelectedSites = lstSelectedSites;
+	}
+
+	public List<Study> getLstStudies() {
+		return lstStudies;
+	}
+
+	public void setLstStudies(List<Study> lstStudies) {
+		this.lstStudies = lstStudies;
 	}
 
 }

@@ -7,23 +7,24 @@
 	</style>
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.createfieldbook.view.model.Index')"
-		height="100%"  width = "99%">
+		height="100%" width="99%">
 		<groupbox mold="3d">
 			<caption label="Study Information">
-				
+
 				<div class="btn-group dropdown pull-right">
 					<popup id="puGenerateFieldbook">
 						<groupbox width="150px">
-							<listbox 
-								oddRowSclass="odd" model="@load(vm.lstSiteInfo)"
-								emptyMessage="No Site yet..." rows="4" selectedItems="@bind(vm.lstSelectedSites)" multiple="true"  checkmark="true">
+							<listbox oddRowSclass="odd"
+								model="@load(vm.lstSiteInfo)" emptyMessage="No Site yet..."
+								rows="4" selectedItems="@bind(vm.lstSelectedSites)"
+								multiple="true" checkmark="true">
 								<listhead>
 									<listheader label="Site Name" />
 								</listhead>
 
 								<template name="model">
 									<listitem>
-									
+
 										<listcell
 											label="@load(each.sitename)" />
 
@@ -32,7 +33,8 @@
 							</listbox>
 						</groupbox>
 					</popup>
-					<button class="btn-success btn-lg " onClick="@command('generateFieldbook')">
+					<button class="btn-success btn-lg "
+						onClick="@command('generateFieldbook')">
 						Generate Fieldbook
 					</button>
 					<button class="btn-success btn-lg dropdown-toggle"
@@ -107,8 +109,15 @@
 					</row>
 					<row>
 						<label class="name" value="Study Name:" />
-						<textbox width='173px'
-							value="@bind(vm.txtStudyName)" />
+						<combobox model="@load(vm.lstStudies)" width = "173px"
+							
+							selectedItem="@bind(vm.study)">
+							<template name="model">
+								<comboitem
+									label="@bind(each.name)"
+									value="@bind(each)" />
+							</template>
+						</combobox>
 					</row>
 
 					<row>
@@ -154,8 +163,12 @@
 
 		<separator></separator>
 		<groupbox mold="3d" vflex="true" id="gbSiteInfo">
-			<caption label="Site Information" height=""><button label="Add Site"  class="btn btn-info pull-right" onClick="@command('addSite', siteModel = null)"></button></caption>
-			
+			<caption label="Site Information" height="">
+				<button label="Add Site" class="btn btn-info pull-right"
+					onClick="@command('addSite', siteModel = null)">
+				</button>
+			</caption>
+
 			<tabbox id="tabboxSites">
 				<tabs></tabs>
 				<tabpanels></tabpanels>

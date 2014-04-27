@@ -11,12 +11,14 @@ import org.strasa.middleware.mapper.PlantingTypeMapper;
 import org.strasa.middleware.mapper.StudyAgronomyMapper;
 import org.strasa.middleware.mapper.StudyDerivedDataMapper;
 import org.strasa.middleware.mapper.StudyDesignMapper;
+import org.strasa.middleware.mapper.StudyLocationMapper;
 import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.model.StudyAgronomy;
 import org.strasa.middleware.model.StudyAgronomyExample;
 import org.strasa.middleware.model.StudyDerivedDataExample;
 import org.strasa.middleware.model.StudyDesignExample;
+import org.strasa.middleware.model.StudyLocation;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudyRawDataExample;
 import org.strasa.middleware.model.StudySite;
@@ -300,6 +302,7 @@ public class StudySiteManagerImpl {
 		StudySiteMapper studySiteMapper = session.getMapper(StudySiteMapper.class);
 		StudyDesignMapper design = session.getMapper(StudyDesignMapper.class);
 		StudyAgronomyMapper agro = session.getMapper(StudyAgronomyMapper.class);
+		StudyLocationMapper loc = session.getMapper(StudyLocationMapper.class);
 		try {
 			for (StudySite record : lstSites) {
 				studySiteMapper.insert(record);
@@ -312,6 +315,12 @@ public class StudySiteManagerImpl {
 				record.getSelectedAgroInfo().setPlantingtypeid(record.getSelectedSitePlantingType().getId());
 				design.insert(record.getSelectedDesignInfo());
 				agro.insert(record.getSelectedAgroInfo());
+
+				StudyLocation newloc = new StudyLocation();
+
+				newloc.setDataset(record.getDataset());
+				newloc.setLocationid(record.getLocationid());
+				newloc.setStudyid(record.getStudyid());
 
 			}
 			session.commit();

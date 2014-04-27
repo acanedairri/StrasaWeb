@@ -1,5 +1,6 @@
 package org.strasa.middleware.manager;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +68,31 @@ public class GermplasmManagerImpl {
 			session.close();
 		}
 
+	}
+
+	public List<Germplasm> getGermplasmBatch(List<String> germList) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+
+		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
+		GermplasmExample example = new GermplasmExample();
+
+		try {
+			example.createCriteria().andGermplasmnameIn(germList);
+			return mapper.selectByExample(example);
+
+		} finally {
+
+		}
+	}
+
+	public ArrayList<String> getGermplasmBatchAsString(List<String> germList) {
+		List<Germplasm> lstGerm = getGermplasmBatch(germList);
+		ArrayList<String> returnVal = new ArrayList<String>();
+
+		for (Germplasm germ : lstGerm) {
+			returnVal.add(germ.getGermplasmname());
+		}
+		return returnVal;
 	}
 
 	public List<Germplasm> getGermplasmListByName(String value) {
@@ -280,6 +306,13 @@ public class GermplasmManagerImpl {
 			session.close();
 
 		}
+	}
+
+	public ArrayList<String> getUnknownGermplasmList(ArrayList<String> arrayList) {
+		// TODO Auto-generated method stub
+		ArrayList<String> returnVal = new ArrayList<String>();
+
+		return returnVal;
 	}
 
 }

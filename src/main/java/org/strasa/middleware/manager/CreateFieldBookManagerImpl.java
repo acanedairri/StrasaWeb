@@ -20,26 +20,36 @@
 package org.strasa.middleware.manager;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import net.sf.jxls.reader.ReaderBuilder;
+import net.sf.jxls.reader.XLSReadStatus;
+import net.sf.jxls.reader.XLSReader;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.io.Resources;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.Study;
-import org.strasa.middleware.model.StudyAgronomy;
 import org.strasa.middleware.model.StudyDataSet;
-import org.strasa.middleware.model.StudyDesign;
+import org.strasa.middleware.model.StudyGermplasm;
 import org.strasa.middleware.model.StudyVariable;
 import org.strasa.web.common.api.ExcelHelper;
 import org.strasa.web.createfieldbook.view.model.CreateFieldBookException;
+import org.strasa.web.createfieldbook.view.pojos.CreateFieldbookTemplateParser;
+import org.strasa.web.createfieldbook.view.pojos.ExtSiteInformationModel;
 import org.strasa.web.createfieldbook.view.pojos.SiteInformationModel;
 import org.strasa.web.uploadstudy.view.pojos.StudySiteInfoModel;
 
@@ -367,6 +377,23 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 
 	}
 
+	public void validateGermplasmFromGenotype(File genotype) throws Exception {
+		Sheet shGenotype = getExcelSheet(genotype, 0);
+
+		int colGenotype = getHeaderColumnNumber("GName", shGenotype);
+		ArrayList<String> lstGenotype = readRowsByColumn(shGenotype, 1, colGenotype).get(0);
+		GermplasmManagerImpl germMan = new GermplasmManagerImpl();
+		HashMap<String, Germplasm> lstGerm = germMan.getGermplasmBatchAsMap(lstGenotype);
+		ArrayList<String> lstErrors = new ArrayList<String>();
+		for (String key : lstGerm.keySet()) {
+			if (!lstGenotype.contains(key))
+				lstErrors.add(key);
+		}
+		if (!lstErrors.isEmpty())
+			throw new CreateFieldBookException("Unknown germplasm detected", lstErrors);
+
+	}
+
 	public void populateVariateHeader(Sheet sheet, List<SiteInformationModel> lstSiteInfo) {
 		ArrayList<String> variateHeader = new ArrayList<String>();
 		HashSet<String> noDup = new HashSet<String>();
@@ -385,6 +412,10 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 		Sheet observationSheet = getExcelSheet(template, 1);
 		Sheet siteInfoSheet = getExcelSheet(template, 2);
 		Sheet systemInfoSheet = getExcelSheet(template, 3);
+
+		validateGermplasm(observationSheet);
+		validateSite(observationSheet, siteInfoSheet);
+
 		Integer studyId = Integer.valueOf(systemInfoSheet.getRow(0).getCell(0).getStringCellValue());
 		Study study = new StudyManagerImpl().getStudyById(studyId);
 		StudyDataSet dataSet = new StudyDataSet();
@@ -395,7 +426,51 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 		populateObservation(study, observationSheet, dataSet, userID, isRaw);
 
 		System.out.println("Processing Site...");
-		populateSiteInformationSheet(siteInfoSheet, study, dataSet.getId());
+		populateSiteInformationSheet(template, siteInfoSheet, study, dataSet.getId());
+		System.out.println("Processing Germplasm...");
+		populateGermplasm(studyId, dataSet.getId(), isRaw);
+	}
+
+	public void validateGermplasm(Sheet sheet) throws Exception {
+
+		Integer colNum = getHeaderColumnNumber("Gname", sheet);
+
+		ArrayList<String> lstGermplasm = readRowsByColumn(sheet, 1, colNum).get(0);
+
+		HashSet<String> uniqueGerm = new HashSet<String>();
+		uniqueGerm.addAll(lstGermplasm);
+
+		ArrayList<String> lstUnknownGerm = new ArrayList<String>();
+
+		lstUnknownGerm.removeAll(new GermplasmManagerImpl().getGermplasmBatchAsString(new ArrayList<String>(uniqueGerm)));
+		if (!lstUnknownGerm.isEmpty()) {
+			throw new CreateFieldBookException("Error: Unknown Germplasm detected {" + StringUtils.join(lstUnknownGerm.toArray(new String[lstUnknownGerm.size()]), ", "));
+		}
+	}
+
+	public void validateSite(Sheet shObservation, Sheet shSiteInfo) throws Exception {
+
+		Integer colSite = getHeaderColumnNumber("Site", shObservation);
+		HashSet<String> uniqueSite = new HashSet<String>();
+		uniqueSite.addAll(readRowsByColumn(shObservation, 1, colSite).get(0));
+		System.out.println(readRowsByColumn(shObservation, 1, colSite).get(0).get(0));
+		ArrayList<String> lstUnknownSite = readRowsByColumn(shSiteInfo, 1, 0).get(0);
+		if (lstUnknownSite.size() > uniqueSite.size()) {
+
+			lstUnknownSite.removeAll(uniqueSite);
+			throw new CreateFieldBookException("Invalid list of sites detected. Could not find {" + StringUtils.join(lstUnknownSite.toArray(new String[lstUnknownSite.size()]), ",") + "} in Observation sheet.");
+		}
+		if (uniqueSite.size() > lstUnknownSite.size()) {
+			uniqueSite.removeAll(lstUnknownSite);
+			throw new CreateFieldBookException("Invalid list of sites detected. Could not find {" + StringUtils.join(uniqueSite.toArray(new String[uniqueSite.size()]), ",") + "} in Site Information sheet.");
+
+		}
+		lstUnknownSite.removeAll(uniqueSite);
+		if (!lstUnknownSite.isEmpty()) {
+			throw new CreateFieldBookException("Invalid list of sites detected. Could not find {" + StringUtils.join(lstUnknownSite.toArray(new String[lstUnknownSite.size()]), ",") + "} in Site Information sheet.");
+
+		}
+
 	}
 
 	public void populateObservation(Study study, Sheet observation, StudyDataSet dataSet, Integer userID, boolean isRaw) throws CreateFieldBookException, Exception {
@@ -408,52 +483,58 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 
 	}
 
-	public void populateSiteInformationSheet(Sheet informationSheet, Study study, Integer datasetID) throws Exception {
-		ArrayList<ArrayList<String>> rawSite = readRowsByColumn(informationSheet, 0, 1, informationSheet.getRow(0).getPhysicalNumberOfCells());
+	public void populateSiteInformationSheet(File excelFile, Sheet informationSheet, Study study, Integer datasetID) throws Exception {
 		ArrayList<StudySiteInfoModel> lstSites = new ArrayList<StudySiteInfoModel>();
 
 		LocationManagerImpl locMan = new LocationManagerImpl();
 		EcotypeManagerImpl ecoMan = new EcotypeManagerImpl();
 		PlantingTypeManagerImpl plantMan = new PlantingTypeManagerImpl();
 
-		for (ArrayList<String> x : rawSite) {
-			System.out.println(StringUtils.join(x, ","));
-			StudySiteInfoModel s = new StudySiteInfoModel();
-			int i = 0;
-			s.setSitename(x.get(i++));
-			s.setSelectedLocation(locMan.getLocationById(Integer.valueOf(x.get(i++))));
-			i++;
-			s.setYear(x.get(i++));
-			System.out.println("Eco: " + x.get(i));
-			s.setSeason(x.get(i++));
-			s.setEcotypeid(ecoMan.getEcotypeByName(x.get(i++)).getId());
-			s.setSoiltype(x.get(i++));
-			s.setSoilph(x.get(i++));
-			s.setSelectedSitePlantingType(plantMan.getPlantingTypeByName(x.get(i++)));
+		InputStream inputXML = Resources.getResourceAsStream("CreateFieldBookConfig.xml");
+		XLSReader mainReader = ReaderBuilder.buildFromXML(inputXML);
+		InputStream inputXLS = new FileInputStream(excelFile.getAbsoluteFile());
 
-			StudyAgronomy ag = new StudyAgronomy();
-			ag.setSowingdate(new SimpleDateFormat("MM/dd/yyyy").parse(x.get(i++)));
-			ag.setHarvestdate(new SimpleDateFormat("MM/dd/yyyy").parse(x.get(i++)));
-			ag.setFertilization(x.get(i++));
-			ag.setDensity(x.get(i++));
-			s.setSelectedAgroInfo(ag);
-			StudyDesign des = new StudyDesign();
-			des.setPlotsize(x.get(i++));
-			des.setDesignstructure(x.get(i++));
-			des.setTreatmentstructure(x.get(i++));
-			des.setDesignfactor1(x.get(i++));
-			des.setDesignfactor2(x.get(i++));
-			des.setDesignfactor3(x.get(i++));
-			des.setDesignfactor4(x.get(i++));
-			s.setSelectedDesignInfo(des);
+		CreateFieldbookTemplateParser templateParser = new CreateFieldbookTemplateParser();
 
-			s.setStudyid(study.getId());
-			s.setDataset(datasetID);
+		Map beans = new HashMap();
+		beans.put("fbparser", templateParser);
+		XLSReadStatus readStatus = mainReader.read(inputXLS, beans);
+		templateParser.getSites().remove(0);
+		for (ExtSiteInformationModel site : templateParser.getSites()) {
 
-			lstSites.add(s);
+			site.setStudyid(study.getId());
+			site.setDataset(datasetID);
+
+			site.setSelectedLocation(locMan.getLocationById(Integer.valueOf(site.getStr_locationid())));
+			site.setEcotypeid(ecoMan.getEcotypeByName(site.getEcoSystem()).getId());
+			site.setSelectedSitePlantingType(plantMan.getPlantingTypeByName(site.getSelectedSitePlantingType().getPlanting()));
+			site.getSelectedAgroInfo().setSowingdate(new SimpleDateFormat("MM/dd/yyyy").parse(site.getStr_sowingdate()));
+			site.getSelectedAgroInfo().setHarvestdate(new SimpleDateFormat("MM/dd/yyyy").parse(site.getStr_harvestdate()));
+
+			lstSites.add(site);
 		}
 
 		new StudySiteManagerImpl().addSiteBatch(lstSites);
+	}
+
+	public void populateGermplasm(Integer studyid, Integer dataset, boolean isRaw) {
+		StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
+		List<Germplasm> lst = rawMan.getStudyGermplasmInfo(studyid, dataset);
+		StudyGermplasmManagerImpl studyGermMan = new StudyGermplasmManagerImpl();
+		ArrayList<StudyGermplasm> lstStudyGermplasms = new ArrayList<StudyGermplasm>();
+		GermplasmManagerImpl germMan = new GermplasmManagerImpl();
+		for (Germplasm germ : lst) {
+			if (germMan.isGermplasmExisting(germ.getGermplasmname())) {
+
+				StudyGermplasm studyGerm = new StudyGermplasm();
+				studyGerm.setDataset(dataset);
+				studyGerm.setStudyid(studyid);
+				studyGerm.setGref(germMan.getGermplasmByName(germ.getGermplasmname()).getId());
+
+				lstStudyGermplasms.add(studyGerm);
+			}
+		}
+		studyGermMan.addStudyGermplasm(lstStudyGermplasms);
 	}
 
 }

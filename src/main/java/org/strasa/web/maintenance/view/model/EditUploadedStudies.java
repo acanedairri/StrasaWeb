@@ -181,7 +181,7 @@ public class EditUploadedStudies {
 			new CreateFieldBookManagerImpl().populateStudyFromTemplate(tempFile, SecurityUtil.getDbUser().getId(), true);
 		} catch (CreateFieldBookException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Messagebox.show(e.getMessage(), "Error in Fieldbook", Messagebox.OK, org.zkoss.zul.Messagebox.EXCLAMATION);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

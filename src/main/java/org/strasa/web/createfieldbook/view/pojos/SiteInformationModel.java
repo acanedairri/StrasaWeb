@@ -30,6 +30,8 @@ import org.strasa.middleware.model.StudyDesign;
 import org.strasa.middleware.model.StudySite;
 import org.strasa.middleware.model.StudyVariable;
 
+import com.mysql.jdbc.StringUtils;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class SiteInformationModel.
@@ -303,6 +305,72 @@ public class SiteInformationModel extends StudySite implements Cloneable {
 	 */
 	public void setLblLayoutFileName(String lblLayoutFileName) {
 		this.lblLayoutFileName = lblLayoutFileName;
+	}
+
+	public String validateAll() {
+		if (StringUtils.isNullOrEmpty(this.getSitename())) {
+			return "Error: Site Name  must not be empty! ";
+		}
+		if (StringUtils.isNullOrEmpty(this.location.getLocationname())) {
+			return "Error: Location in " + this.getSitename() + " must not be empty! ";
+		}
+		if (this.location.getId() == null) {
+			return "Error: Location in " + this.getSitename() + " does not exist in the database. Please add your location first or select any existing location.";
+		}
+		if (StringUtils.isNullOrEmpty(this.getYear())) {
+			return "Error: Year in " + this.getSitename() + " must not be empty! ";
+		}
+		if (StringUtils.isNullOrEmpty(this.getSeason())) {
+			return "Error: Season in " + this.getSitename() + " must not be empty! ";
+		}
+		System.out.println("EcotypeID: " + this.getEcotypeid());
+		if (this.getEcotypeid() == null) {
+			return "Error: Eco System in " + this.getSitename() + " must not be empty! ";
+		}
+
+		if (plantingtype.getId() == -1) {
+			return "Error: Planting Type in " + this.getSitename() + " must not be empty! ";
+		}
+		if (agronomy.getHarvestdate() == null) {
+			return "Error: Harvest Date Type in " + this.getSitename() + " must not be empty! ";
+		}
+		if (agronomy.getSowingdate() == null) {
+			return "Error: Sowing Date Type in " + this.getSitename() + " must not be empty! ";
+		}
+
+		if (StringUtils.isNullOrEmpty(design.getTreatmentstructure())) {
+
+			return "Treatment Structure in " + this.getSitename() + "must not be empty!";
+		}
+		if (StringUtils.isNullOrEmpty(design.getDesignstructure())) {
+			return "Design Structure in " + this.getSitename() + "must not be empty!";
+		}
+		if (StringUtils.isNullOrEmpty(design.getPlotsize())) {
+			return "Plot size in " + this.getSitename() + "must not be empty!";
+
+		}
+		if (this.agronomy.getSowingdate().compareTo(this.agronomy.getHarvestdate()) > 0) {
+
+			return "Error: Havest date must be greater than Transplanting/Sowing date in " + this.getSitename();
+		}
+
+		if (getFileGenotype() == null || !getFileGenotype().exists()) {
+
+			return "Must have a genotype file uploaded in " + this.getSitename();
+
+		}
+		if (getFileLayout() == null || !getFileLayout().exists()) {
+
+			return "Must have a layout file uploaded in " + this.getSitename();
+
+		}
+
+		if (lstStudyVariable.isEmpty()) {
+			return "Must have atleast one variate selected in " + this.getSitename();
+		}
+
+		return null;
+
 	}
 
 }
