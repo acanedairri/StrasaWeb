@@ -104,4 +104,9 @@ public class AnalysisUtils {
 		}
 		return modelList;
 	}
+
+	public static String getoutputFolderPath(String filenamePath) {
+		// TODO Auto-generated method stub
+		return  Sessions.getCurrent().getWebApp().getRealPath("StrasaWeb")+filenamePath;
+	}
 }

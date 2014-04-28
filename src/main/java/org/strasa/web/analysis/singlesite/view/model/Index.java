@@ -80,12 +80,11 @@ public class Index {
 		Tab newTab = new Tab();
 		newTab.setLabel(new File(ssaModel.getOutFileName()).getParentFile().getName());
 		newTab.setClosable(true);
-
 		
 		//initialize view after view construction.
 		Include studyInformationPage = new Include();
 		studyInformationPage.setParent(newPanel);
-		studyInformationPage.setDynamicProperty("ssaModel", ssaModel);
+		studyInformationPage.setDynamicProperty("outputFolderPath", ssaModel.getResultFolderPath().replaceAll("\\\\", "/"));
 		studyInformationPage.setSrc("/user/analysis/resultviewer.zul");
 
 		tabPanels.appendChild(newPanel);

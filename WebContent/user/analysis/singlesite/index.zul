@@ -5,8 +5,8 @@
 
 		<separator height="5px"></separator>
 
-		<tabbox id="tabBox" sclass="page-content" height="100%">
-		<tabs id="tabs">
+			<tabbox id="tabBox" sclass="page-content" height="100%">
+			<tabs id="tabs">
 				<tab label="Single-site Analysis"
 					image="/images/find.png" />
 			</tabs>
