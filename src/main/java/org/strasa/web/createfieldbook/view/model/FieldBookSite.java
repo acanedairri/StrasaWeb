@@ -30,12 +30,17 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Bandbox;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Tab;
+import org.zkoss.zul.Textbox;
+import org.zkoss.zul.Timer;
 import org.zkoss.zul.Window;
 
 import com.mysql.jdbc.StringUtils;
@@ -43,6 +48,14 @@ import com.mysql.jdbc.StringUtils;
 public class FieldBookSite {
 
 	Tab siteTab;
+
+	/*
+	 * DECLARATIONS
+	 */
+
+	List<Ecotype> ecotypes = new EcotypeManagerImpl().getAllEcotypes();
+	List<String> soiltypes = new SoilTypeManagerImpl().getAllSoilType();
+	List<PlantingType> plantingtypes = new PlantingTypeManagerImpl().getAllPlantingTypes();
 
 	/*
 	 * INITS
@@ -53,20 +66,63 @@ public class FieldBookSite {
 		this.site = siteModel;
 		this.siteTab = siteTab;
 
+		if (!StringUtils.isNullOrEmpty(site.getPlantingtype().getPlanting())) {
+			if (site.getPlantingtype().getPlanting().equals("Transplanting"))
+				labelDate = "Transplanting Date";
+			else if (site.getPlantingtype().getId() == -1)
+				labelDate = "Transplanting/Sowing Date";
+			else
+				labelDate = "Sowing Date";
+		}
+
 	}
 
+	@SuppressWarnings("unchecked")
 	@AfterCompose
-	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
+	public void afterCompose(@ContextParam(ContextType.VIEW) final Component view) {
 		Selectors.wireComponents(view, this, false);
+		Timer timer = new Timer(10);
+		timer.setRepeats(false);
+		timer.setPage(view.getPage());
+		timer.addEventListener("onTimer", new EventListener() {
+			public void onEvent(Event event) throws Exception {
+
+				Combobox cmbTreatmentStructure = (Combobox) view.getFellow("cmbTreatmentStructure");
+				if (!StringUtils.isNullOrEmpty(site.getDesign().getTreatmentstructure())) {
+					if (site.getDesign().getTreatmentstructure().equals("One Factor"))
+						cmbTreatmentStructure.setSelectedIndex(0);
+					if (site.getDesign().getTreatmentstructure().equals("Two Factor Factorial"))
+						cmbTreatmentStructure.setSelectedIndex(1);
+					if (site.getDesign().getTreatmentstructure().equals("Three Factor Factorial"))
+						cmbTreatmentStructure.setSelectedIndex(2);
+				}
+				if (cmbTreatmentStructure.getSelectedIndex() == 0) {
+					((Textbox) view.getFellow("txtDRow2")).setValue("");
+					((Textbox) view.getFellow("txtDRow3")).setValue("");
+					((Textbox) view.getFellow("txtDRow4")).setValue("");
+
+					view.getFellow("dRow2").setVisible(false);
+					view.getFellow("dRow3").setVisible(false);
+					view.getFellow("dRow4").setVisible(false);
+
+				} else if (cmbTreatmentStructure.getSelectedIndex() == 1) {
+					((Textbox) view.getFellow("txtDRow3")).setValue("");
+					((Textbox) view.getFellow("txtDRow4")).setValue("");
+					view.getFellow("dRow2").setVisible(true);
+					view.getFellow("dRow3").setVisible(false);
+					view.getFellow("dRow4").setVisible(false);
+
+				} else if (cmbTreatmentStructure.getSelectedIndex() == 2) {
+					view.getFellow("dRow2").setVisible(true);
+					view.getFellow("dRow3").setVisible(true);
+					view.getFellow("dRow4").setVisible(true);
+
+				}
+
+			}
+		});
+
 	}
-
-	/*
-	 * DECLARATIONS
-	 */
-
-	List<Ecotype> ecotypes = new EcotypeManagerImpl().getAllEcotypes();
-	List<String> soiltypes = new SoilTypeManagerImpl().getAllSoilType();
-	List<PlantingType> plantingtypes = new PlantingTypeManagerImpl().getAllPlantingTypes();
 
 	SiteInformationModel site;
 	@Wire("#bbox_location")
