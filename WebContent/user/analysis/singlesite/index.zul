@@ -6,13 +6,13 @@
 		<separator height="5px"></separator>
 
 		<tabbox id="tabBox" sclass="page-content" height="100%">
-			<tabs id="tabs">
+		<tabs id="tabs">
 				<tab label="Single-site Analysis"
 					image="/images/find.png" />
 			</tabs>
 			<tabpanels id="tabPanels">
-				<tabpanel>
-					<include src="/user/analysis/singlesite/specifications.zul" />
+				<tabpanel id="specificationsPanel">
+					<include id="includeSpecifications" src="/user/analysis/singlesite/specifications.zul" />
 				</tabpanel>
 			</tabpanels>
 		</tabbox>
