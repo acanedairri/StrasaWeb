@@ -145,8 +145,8 @@
 					</tabpanel>
 				</tabpanels>
 			</tabbox>
-			<button label="Test" onClick="@command('validateSsaInputs')"
-				class="grid-link" />
+			<button label="Run" onClick="@command('validateSsaInputs')"
+				sclass="btn-danger" />
 
 			<label value="@bind(vm.resultRServe)" multiline="true" />
 		</vlayout>
