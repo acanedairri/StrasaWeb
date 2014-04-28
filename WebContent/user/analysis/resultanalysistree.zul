@@ -1,16 +1,23 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-<window id="demoWindow" apply="org.strasa.web.analysis.result.view.model.FileComposer">
-    <style>
-    .h-inline-block {
-        display: inline-block;
-        _display: inline;
-    }
-    </style>
-    <tree id="tree" width="500px" >
-        <treecols>
-            <treecol label="Analysis Results" />       
-        </treecols>
-    </tree>
-</window>
+	<window
+		apply="org.strasa.web.analysis.result.view.model.FileComposer">
+		<style>
+			.h-inline-block { display: inline-block; _display: inline; }
+		</style>
+		<tabbox id="tabBox" sclass="page-content" height="100%">
+			<tabs id="treeTabs">
+				<tab label="Analysis Results" image="/images/find.png" />
+			</tabs>
+			<tabpanels id="treeTabPanels">
+				<tabpanel id="treePanel">
+					<tree id="tree" width="500px">
+						<treecols>
+							<treecol />
+						</treecols>
+					</tree>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
 </zk>

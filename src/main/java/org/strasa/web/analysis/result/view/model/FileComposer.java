@@ -4,13 +4,26 @@ package org.strasa.web.analysis.result.view.model;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.input.ReaderInputStream;
 import org.spring.security.model.SecurityUtil;
+import org.strasa.web.analysis.view.model.SingleSiteAnalysisModel;
+import org.strasa.web.utilities.AnalysisUtils;
 import org.strasa.web.utilities.FileUtilities;
+import org.zkoss.bind.BindUtils;
+import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.ContextParam;
+import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
+import org.zkoss.bind.annotation.GlobalCommand;
+import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -23,7 +36,12 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.DefaultTreeNode;
 import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Image;
+import org.zkoss.zul.Include;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Tab;
+import org.zkoss.zul.Tabpanel;
+import org.zkoss.zul.Tabpanels;
+import org.zkoss.zul.Tabs;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treecell;
 import org.zkoss.zul.Treeitem;
@@ -40,7 +58,13 @@ public class FileComposer extends SelectorComposer<Component> {
 	private Window demoWindow;
 	@Wire
 	private Tree tree;
-	private static String RESULT_ANALYSIS_PATH="/resultanalysis/"+SecurityUtil.getUserName()+"/";
+	@Wire
+	private Tabpanels treeTabPanels;
+	@Wire
+	private Tabs treeTabs;
+
+	private static final String FILE_SEPARATOR  = System.getProperty("file.separator");
+	private static String RESULT_ANALYSIS_PATH=FILE_SEPARATOR+"resultanalysis"+FILE_SEPARATOR+SecurityUtil.getUserName()+FILE_SEPARATOR;
 
 	private AdvancedFileTreeModel fileTreeModel;
 	AMedia fileContent;
@@ -80,16 +104,18 @@ public class FileComposer extends SelectorComposer<Component> {
 					FileModelTreeNode clickedNodeValue = (FileModelTreeNode) ((Treeitem) event.getTarget().getParent())
 							.getValue();
 					FileModel fm=clickedNodeValue.getData();
+					
 					if(isFolder(fm)){
-						Window w = new Window(((FileModel) clickedNodeValue.getData()).getFoldername(), "normal",
-								true);
-						w.setPosition("parent");
-						w.setParent(demoWindow);
-						HashMap<String, String> dataArgs = new HashMap<String, String>();
-						dataArgs.put("name", clickedNodeValue.getData().getFilename());
-						//                    String pathFile="/resultanalysis/"
-
-						w.doOverlapped();
+						System.out.println("heyy");
+						addResultViewer(clickedNodeValue.getData().getFoldername(),RESULT_ANALYSIS_PATH+"Single-Site"+FILE_SEPARATOR+clickedNodeValue.getData().getFoldername()+FILE_SEPARATOR);
+//						Window w = new Window(((FileModel) clickedNodeValue.getData()).getFoldername(), "normal",
+//								true);
+//						w.setPosition("parent");
+//						w.setParent(demoWindow);
+//						HashMap<String, String> dataArgs = new HashMap<String, String>();
+//						dataArgs.put("name", clickedNodeValue.getData().getFilename());
+//
+//						w.doOverlapped();
 					}
 				}
 			});
@@ -128,11 +154,11 @@ public class FileComposer extends SelectorComposer<Component> {
 						w.setMinheight(500);
 						w.setMinwidth(500);
 						w.setPosition("center");
-						
+
 						String dType=filenamePath;
 						dType=dType.substring(dType.length()-3, dType.length());
 						System.out.println(dType);
-						
+
 
 
 						HashMap<String, String> dataArgs = new HashMap<String, String>();
@@ -140,10 +166,15 @@ public class FileComposer extends SelectorComposer<Component> {
 
 						if(clickedNodeValue.getData().getFilename().contains(".png")){
 
+//							Map<String,Object> args = new HashMap<String,Object>();
 							System.out.println(filenamePath);
-							dataArgs.put("imageName", filenamePath);
-							Executions.createComponents("analysis/imgviewer.zul",w, dataArgs);
-							w.doOverlapped();
+							addImageViewer(clickedNodeValue.getData().getFilename(), filenamePath);
+//							args.put("imageName", filenamePath);
+//							BindUtils.postGlobalCommand(null, null, "addImageViewer", args);
+
+//							dataArgs.put("imageName", filenamePath);
+//							Executions.createComponents("analysis/imgviewer.zul",w, dataArgs);asd
+//							w.doOverlapped();
 
 						}else if(clickedNodeValue.getData().getFilename().contains(".pdf")){
 
@@ -162,7 +193,6 @@ public class FileComposer extends SelectorComposer<Component> {
 
 						}else if(clickedNodeValue.getData().getFilename().contains(".txt")){
 
-
 							byte[] buffer = new byte[(int) fileToCreate.length()];
 							FileInputStream fs = new FileInputStream(fileToCreate);
 							fs.read(buffer);
@@ -170,12 +200,13 @@ public class FileComposer extends SelectorComposer<Component> {
 							ByteArrayInputStream is = new ByteArrayInputStream(buffer);
 							fileContent = new AMedia("report", "text", "text/plain", is);
 							HashMap<String, AMedia> dataArgsTxt = new HashMap<String, AMedia>();
-							dataArgsTxt.put("txtFile", fileContent);
-							String port = ( Executions.getCurrent().getServerPort() == 80 ) ? "" : (":" + Executions.getCurrent().getServerPort());
-							String url = Executions.getCurrent().getScheme() + "://" + Executions.getCurrent().getServerName() + port + Executions.getCurrent().getContextPath() + filenamePath;
-							System.out.println(url);
-							Executions.getCurrent().sendRedirect(url,"_blank");
-							w.detach();
+							
+							addTxtViewer(clickedNodeValue.getData().getFilename(), fileContent);
+//							String port = ( Executions.getCurrent().getServerPort() == 80 ) ? "" : (":" + Executions.getCurrent().getServerPort());
+//							String url = Executions.getCurrent().getScheme() + "://" + Executions.getCurrent().getServerName() + port + Executions.getCurrent().getContextPath() + filenamePath;
+//							System.out.println(url);
+//							Executions.getCurrent().sendRedirect(url,"_blank");
+//							w.detach();
 
 						}else if(clickedNodeValue.getData().getFilename().contains(".csv")){
 
@@ -188,18 +219,19 @@ public class FileComposer extends SelectorComposer<Component> {
 							tempFile = File.createTempFile("csvdata", ".tmp");
 							InputStream in = fileContent.isBinary() ? fileContent.getStreamData() : new ReaderInputStream(fileContent.getReaderData());
 							FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
-						
+
 							CSVReader reader = new CSVReader(new FileReader(tempFile.getAbsolutePath()));
 							HashMap<String, CSVReader> dataArgsCsvReader = new HashMap<String, CSVReader>();
 							dataArgsCsvReader.put("csvReader", reader);
 
 							Executions.createComponents("analysis/csvviewer.zul", w, dataArgsCsvReader);
 							w.doOverlapped();
-							
+
 
 						}
 
 						else{
+							
 							/*							HashMap<String, String> dataArgsTxt2 = new HashMap<String, String>();
 							dataArgsTxt2.put("txtFile", "Test");
 							Executions.createComponents("testprint.zul", w, dataArgsTxt2);
@@ -246,10 +278,66 @@ public class FileComposer extends SelectorComposer<Component> {
 		private boolean isFolder(FileModel filename) {
 			return filename.getFilename() == null;
 		}
+	}
+
+//	@GlobalCommand("addImageViewer")
+	@NotifyChange("*")
+	public void addImageViewer(String name, String filenamePath){
 		
+		//outputTextViewer
+//		Tabpanels treeTabPanels = (Tabpanels) component.getFellow("treeTabPanels");
+		Tabpanel tabPanel = new Tabpanel();
+		Tab newTab = new Tab();
+		newTab.setLabel(name);
+		newTab.setClosable(true);
 
-
+		Include studyInformationPage = new Include();
+		studyInformationPage.setDynamicProperty("imageName", filenamePath.replaceAll("\\\\", "//"));
+		studyInformationPage.setSrc("/user/analysis/imgviewer.zul");
+		studyInformationPage.setParent(tabPanel);
+		
+		treeTabPanels.appendChild(tabPanel);
+		treeTabs.appendChild(newTab);
+		
 	}
 	
-	
+	@NotifyChange("*")
+	public void addTxtViewer(String name, AMedia fileContent){
+		//outputTextViewer
+//		Tabpanels treeTabPanels = (Tabpanels) component.getFellow("treeTabPanels");
+		Tabpanel tabPanel = new Tabpanel();
+		Tab newTab = new Tab();
+		newTab.setLabel(name);
+		newTab.setClosable(true);
+
+		Include studyInformationPage = new Include();
+		studyInformationPage.setDynamicProperty("txtFile", fileContent);
+		studyInformationPage.setSrc("/user/analysis/txtviewer.zul");
+		studyInformationPage.setParent(tabPanel);
+		
+		treeTabPanels.appendChild(tabPanel);
+		treeTabs.appendChild(newTab);
+		
+		//outputGrphViewer
+	}
+
+	@NotifyChange("*")
+	public void addResultViewer(String name, String filenamePath){
+		String getoutputFolderPath = AnalysisUtils.getoutputFolderPath(filenamePath);
+		System.out.println(getoutputFolderPath);
+		Tabpanel tabPanel = new Tabpanel();
+		Tab newTab = new Tab();
+		newTab.setLabel(name);
+		newTab.setClosable(true);
+
+		Include studyInformationPage = new Include();
+		studyInformationPage.setDynamicProperty("outputFolderPath", getoutputFolderPath);
+		studyInformationPage.setSrc("/user/analysis/resultviewer.zul");
+		studyInformationPage.setParent(tabPanel);
+		
+		treeTabPanels.appendChild(tabPanel);
+		treeTabs.appendChild(newTab);
+		
+		//outputGrphViewer
+	}
 }
