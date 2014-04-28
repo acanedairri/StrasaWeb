@@ -3,18 +3,18 @@
 <style src="/css/grid.css" />
 	<include id="mainHeader" self="@define(content)"
 		src="/admin/header.zul" />
-	<div apply="org.zkoss.bind.BindComposer"
+	<div apply="org.zkoss.bind.BindComposer" 
 		viewModel="@id('vm') @init('org.strasa.web.admin.view.model.UserManagement')"
 		align="center" style="padding:10px">
 		<grid id="grid" model="@load(vm.user)" mold="paging"
-			pageSize="6" sizedByContent="true" width="90%">
+			pageSize="6" sizedByContent="true">
 			<auxhead>
-				<auxheader label="User Management" colspan="8"
+				<auxheader label="User Management" colspan="9"
 					style="background:#424040;color:white;padding:2px" />
 			</auxhead>
 			<columns>
 				<column label="id" align="left" visible="false" />
-				<column  hflex="1"  label="Name(Lastname,Firstname)" align="left"
+				<column  label="Name(Lastname,Firstname)" align="left"
 					sort="auto(lastname)" />
 				<column label="Agency" align="center"
 					sort="auto(agency)" />
@@ -23,9 +23,9 @@
 				<column label="Email Address" align="center" />
 				<column label="Username" align="center" />
 				<column label="Date Registered" align="center"
-					sort="auto(dateregistered)" width="200px"/>
+					sort="auto(dateregistered)" />
 				<column label="Status" align="center" />
-				<column label="Action" align="center" />
+				<column label="Action" align="center" width="100px"/>
 			</columns>
 			<template name="model">
 				<row>

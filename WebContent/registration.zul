@@ -21,8 +21,7 @@
 		viewModel="@id('vm') @init('org.strasa.web.main.view.model.Registration')"
 		validationMessages="@id('vmsgs')"
 		form="@id('fx') @load(vm.user) @save(vm.user, before='submit') @validator('org.strasa.web.main.view.model.RegistrationValidator', retypedPassword=vm.retypedPassword, captcha=vm.captcha, captchaInput=vm.captchaInput)">
-<label visible="@load(empty vmsgs)"
-								value="@load(empty vmsgs ? 'Form successfully submitted! The administrator will informed you that your account has been validated and activated' : '', before='submit')" /> 
+<!-- <label visible="@load(empty vmsgs)" value="@load(empty vmsgs ? 'Form successfully submitted! The administrator will informed you that your account has been validated and activated' : '', before='submit')" />  -->
 
 		<div align="left" width="60%">
 		<label value="Registration" class="myRegistration"></label>
@@ -48,7 +47,7 @@
 
 				<row>
 					MI
-					<textbox value="@bind(fx.mi)" width="10px"
+					<textbox value="@bind(fx.mi)" width="30px"
 						tabindex="3" />
 				</row>
 
@@ -59,7 +58,7 @@
 				</row>
 				<row>
 					Address
-					<textbox value="@bind(fx.address)" width="150px"
+					<textbox value="@bind(fx.address)" width="350px"
 						tabindex="5" />
 				</row>
 
@@ -77,7 +76,7 @@
 				<row>
 					Email
 					<cell>
-						<textbox value="@bind(fx.email)" width="150px"
+						<textbox value="@bind(fx.email)" width="300px"
 							tabindex="6" />
 						<label class="error"
 							value="@load(vmsgs['email'])" />

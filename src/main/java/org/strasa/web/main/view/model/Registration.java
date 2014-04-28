@@ -1,8 +1,10 @@
 package org.strasa.web.main.view.model;
 
 import org.strasa.middleware.manager.UserManagerImpl;
+import org.strasa.middleware.model.DbUser;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Executions;
 
 public class Registration extends RegistrationModel {
 
@@ -34,11 +36,15 @@ public class Registration extends RegistrationModel {
 		this.regenerateCaptcha();
 	}
 
+	@NotifyChange("*")
 	@Command
 	public void submit() {
 
 		UserManagerImpl userManger= new UserManagerImpl();
 		userManger.addUser(this.getUser());
+		Executions.sendRedirect("registrationmsg.zul");
+		
+		
 	}
 
 }

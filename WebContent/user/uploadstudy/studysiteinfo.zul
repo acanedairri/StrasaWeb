@@ -156,21 +156,21 @@
 									tooltiptext="Add New Location"
 									onClick="@command('addLocation',loc = each)" />
 							</div>
-							<intbox value="@bind(each.year)"
-								maxlength="4" width="99%"
+							<textbox value="@bind(each.year)"
+								 width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
 								inplace="@bind(each.updateMode)" />
 
-<!-- 							<textbox value="@bind(each.season)"
+						<textbox value="@bind(each.season)"
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-								inplace="@bind(each.seasonEditable)" /> -->
+								inplace="@bind(each.seasonEditable)" /> 
 
-							<combobox autodrop="true" onChange="@command('updateDesignInfo', id=forEachStatus.index)" inplace="@bind(each.seasonEditable)"
+							<!-- <combobox autodrop="true" onChange="@command('updateDesignInfo', id=forEachStatus.index)" inplace="@bind(each.seasonEditable)"
 								selectedItem="@bind(each.season)" width="60px" >
 								<comboitem value="DS" label="DS" />
 								<comboitem value="WS" label="WS" />
-							</combobox>
+							</combobox> -->
 
 
 
