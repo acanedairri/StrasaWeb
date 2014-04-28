@@ -2,7 +2,7 @@
 	<vlayout>
 		<radiogroup id="performPairwiseGroup" />
 
-		<groupbox hflex="1" id="groupGenotypeFixed" visible="false">
+		<groupbox hflex="1" id="groupGenotypeFixed" open="false">
 			<caption>Options for genotype as fixed</caption>
 			<checkbox id="cbPerformPairwise" checked="true"
 						label="Perform pairwise mean comparisons"  onClick="@global-command('updatePairwiseOptions', selected=self.checked)"/>
@@ -23,7 +23,7 @@
 
 		<separator />
 
-		<groupbox hflex="1" id="groupGenotypeRandom" visible="false">
+		<groupbox hflex="1" id="groupGenotypeRandom" open="false">
 			<caption>Options for genotype as random</caption>
 			<vbox>
 				<checkbox id="excludeControlsCheckBox"
@@ -33,7 +33,7 @@
 			</vbox>
 		</groupbox>
 
-		<groupbox hflex="1" id="groupLevelOfControls" visible="false">
+		<groupbox hflex="1" id="groupLevelOfControls" open="false">
 			<caption>Specify control(s):</caption>
 			<hbox>
 				<listbox id="genotypeLevelsLb" hflex="1" rows="4">

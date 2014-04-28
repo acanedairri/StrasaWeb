@@ -138,10 +138,10 @@
 									<combobox
 										model="@load(vm.plantingtypes)" readonly="true"
 										selectedItem="@bind(vm.site.plantingtype)"
-										onSelect="@command('updateLabelDate')" width="99%">
+										onSelect="@command('updateLabelDate')" width="99%" value = "@bind(vm.site.plantingtype.planting)">
 										<template name="model">
 											<comboitem
-												value="@load(each.planting)" label="@load(each.planting)" />
+												value="@load(each)" label="@load(each.planting)" />
 										</template>
 									</combobox>
 								</hlayout>
@@ -233,7 +233,7 @@
 	dRow4.setVisible(false);
 ]]></attribute>
 
-									<attribute name = "onChange">
+									<attribute name = "onSelect">
     							<![CDATA[
 	if (cmbTreatmentStructure.getSelectedIndex() == 0) {
 		txtDRow2.setValue("");
