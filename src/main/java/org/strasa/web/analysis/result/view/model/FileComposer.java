@@ -106,9 +106,9 @@ public class FileComposer extends SelectorComposer<Component> {
 					FileModel fm=clickedNodeValue.getData();
 					
 					if(isFolder(fm)){
-						System.out.println("heyy");
-						addResultViewer(clickedNodeValue.getData().getFoldername(),RESULT_ANALYSIS_PATH+"Single-Site"+FILE_SEPARATOR+clickedNodeValue.getData().getFoldername()+FILE_SEPARATOR);
-//						Window w = new Window(((FileModel) clickedNodeValue.getData()).getFoldername(), "normal",
+//						System.out.println("heyy");
+//						addResultViewer(clickedNodeValue.getData().getFoldername(),RESULT_ANALYSIS_PATH+"Single-Site"+FILE_SEPARATOR+clickedNodeValue.getData().getFoldername()+FILE_SEPARATOR);
+////						Window w = new Window(((FileModel) clickedNodeValue.getData()).getFoldername(), "normal",
 //								true);
 //						w.setPosition("parent");
 //						w.setParent(demoWindow);

@@ -810,7 +810,7 @@ public class RawDataView extends ProcessTabViewModel {
 
 			studyRawData.addStudy(study);
 
-			new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), columnList.toArray(new String[columnList.size()]), isRawData, this.dataset.getId());
+//			new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), columnList.toArray(new String[columnList.size()]), isRawData, this.dataset.getId());
 
 			isDataUploaded = true;
 			BindUtils.postNotifyChange(null, null, this, "*");

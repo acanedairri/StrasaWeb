@@ -247,7 +247,7 @@ public class Specifications {
 	public List<String> getTypeOfDesignList() {
 		// TODO Auto-generated method stub
 		List<String> designs = new ArrayList<String>();
-		designs.add("CRD");
+		designs.add("RCB");
 		designs.add("RCBD");
 		designs.add("Alpha-Lattice");
 		designs.add("Row-Column");
