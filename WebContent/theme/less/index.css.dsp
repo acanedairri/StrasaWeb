@@ -985,7 +985,7 @@ a:focus {
   padding: 0;
 }
 .btn {
-  color: #FFF !important;
+  /*color: #FFF !important; */
 }
 .btn-sm {
   border-width: 4px;
