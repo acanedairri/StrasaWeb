@@ -22,6 +22,7 @@ package org.strasa.web.uploadstudy.view.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.model.Project;
 import org.strasa.web.common.api.FormValidator;
@@ -44,7 +45,7 @@ public class AddProject {
 	private FormValidator formValidator;
 	private Project projectModel = new Project();
 	public int programID;
-	private Integer userID = 1;
+	private Integer userID = SecurityUtil.getDbUser().getId();
 
 	public Project getProjectModel() {
 		return projectModel;

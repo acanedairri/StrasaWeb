@@ -15,77 +15,79 @@ public class StudyAgronomyManagerImpl {
 
 	@WireVariable
 	ConnectionFactory connectionFactory;
-	
-	public void addStudyAgronomy(StudyAgronomy record){
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+
+	public void addStudyAgronomy(StudyAgronomy record) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyAgronomyMapper studyAgronomyMapper = session.getMapper(StudyAgronomyMapper.class);
 
-		try{
+		try {
 			studyAgronomyMapper.insert(record);
 			session.commit();
 
-		}finally{
+		} finally {
 			session.close();
 		}
 
 	}
 
-	public void addStudyAgronomy(ArrayList<StudyAgronomy> records){
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+	public void addStudyAgronomy(ArrayList<StudyAgronomy> records) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyAgronomyMapper studyAgronomyMapper = session.getMapper(StudyAgronomyMapper.class);
 
-		try{
-			for(StudyAgronomy record:records){
+		try {
+			for (StudyAgronomy record : records) {
 				studyAgronomyMapper.insert(record);
 			}
 			session.commit();
 
-		}finally{
+		} finally {
 			session.close();
 		}
 
 	}
 
-	public void updateStudyAgronomy(List<StudyAgronomy> agroInfo){
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+	public void updateStudyAgronomy(List<StudyAgronomy> agroInfo) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyAgronomyMapper studyAgronomyMapper = session.getMapper(StudyAgronomyMapper.class);
 
-		try{
-			for(StudyAgronomy record:agroInfo){
-				if(record.getId() == null) studyAgronomyMapper.insert(record);
-				else studyAgronomyMapper.updateByPrimaryKey(record);
+		try {
+			for (StudyAgronomy record : agroInfo) {
+				if (record.getId() == null)
+					studyAgronomyMapper.insert(record);
+				else
+					studyAgronomyMapper.updateByPrimaryKey(record);
 			}
 			session.commit();
 
-		}finally{
+		} finally {
 			session.close();
 		}
 
 	}
-	public void updateStudyAgronomy(StudyAgronomy record){
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+
+	public void updateStudyAgronomy(StudyAgronomy record) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyAgronomyMapper studyAgronomyMapper = session.getMapper(StudyAgronomyMapper.class);
 
-		try{
+		try {
 			studyAgronomyMapper.updateByPrimaryKey(record);
-			
+
 			session.commit();
 
-		}finally{
+		} finally {
 			session.close();
 		}
 
 	}
-
 
 	public List<StudyAgronomy> getAllStudyAgronomy() {
 		// TODO Auto-generated method stub
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyAgronomyMapper studyAgronomyMapper = session.getMapper(StudyAgronomyMapper.class);
-		try{
+		try {
 			List<StudyAgronomy> studyAgronomy = studyAgronomyMapper.selectByExample(null);
 			return studyAgronomy;
-		}finally{
+		} finally {
 			session.close();
 		}
 	}
@@ -99,17 +101,16 @@ public class StudyAgronomyManagerImpl {
 		System.out.println("added empty record to studySiteId " + Integer.toString(studySiteId));
 	}
 
-
 	public StudyAgronomy getStudyAgronomy(int studyid) {
 		// TODO Auto-generated method stub
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyAgronomyMapper studyAgronomyMapper = session.getMapper(StudyAgronomyMapper.class);
-		try{
+		try {
 			StudyAgronomyExample example = new StudyAgronomyExample();
 			example.createCriteria().andStudysiteidEqualTo(studyid);
 			List<StudyAgronomy> studyAgronomy = studyAgronomyMapper.selectByExample(null);
 			return (studyAgronomy.isEmpty()) ? null : studyAgronomy.get(0);
-		}finally{
+		} finally {
 			session.close();
 		}
 	}
@@ -118,8 +119,8 @@ public class StudyAgronomyManagerImpl {
 		// TODO Auto-generated method stub
 		try {
 			List<StudyAgronomy> studyAgroInfoList = getAllStudyAgronomy();
-			if(studyAgroInfoList.isEmpty()){
-				for(StudySite site:sites){//for each site
+			if (studyAgroInfoList.isEmpty()) {
+				for (StudySite site : sites) {// for each site
 					addEmptyRecordOnStudyAgronomy(site.getId());
 				}
 				studyAgroInfoList = getAllStudyAgronomy();
@@ -133,13 +134,13 @@ public class StudyAgronomyManagerImpl {
 
 	public List<StudyAgronomy> getStudyAgronomyByPLantingTypeId(Integer id) {
 		// TODO Auto-generated method stub
-		SqlSession session =connectionFactory.sqlSessionFactory.openSession();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyAgronomyMapper studyAgronomyMapper = session.getMapper(StudyAgronomyMapper.class);
-		try{
+		try {
 			StudyAgronomyExample example = new StudyAgronomyExample();
 			example.createCriteria().andPlantingtypeidEqualTo(id);
 			return studyAgronomyMapper.selectByExample(example);
-		}finally{
+		} finally {
 			session.close();
 		}
 	}

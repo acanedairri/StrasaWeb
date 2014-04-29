@@ -811,7 +811,7 @@ public class UploadData extends ProcessTabViewModel {
 
 		} else {
 			studyRawData.addStudy(study);
-			fileMan.createNewFileFromUpload(1, study.getId(), dataFileName, tempFile, (isRawData) ? "rd" : "dd");
+			fileMan.createNewFileFromUpload(userID, study.getId(), dataFileName, tempFile, (isRawData) ? "rd" : "dd");
 			this.uploadToFolder = true;
 
 		}
