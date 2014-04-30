@@ -408,6 +408,14 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 
 	}
 
+	public Study getStudyFromTemplate(File template) throws CreateFieldBookException {
+		Sheet systemInfoSheet = getExcelSheet(template, 3);
+		String strStudyId = systemInfoSheet.getRow(0).getCell(0).getStringCellValue();
+		if (strStudyId == null)
+			throw new CreateFieldBookException("Invalid Fieldbook template.");
+		return new StudyManagerImpl().getStudyById(Integer.valueOf(strStudyId));
+	}
+
 	public void populateStudyFromTemplate(File template, Integer userID, boolean isRaw) throws CreateFieldBookException, Exception {
 		Sheet observationSheet = getExcelSheet(template, 1);
 		Sheet siteInfoSheet = getExcelSheet(template, 2);
@@ -443,12 +451,12 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 		lstUnknownGerm.addAll(uniqueGerm);
 		lstUnknownGerm.removeAll(new GermplasmManagerImpl().getGermplasmBatchAsString(new ArrayList<String>(uniqueGerm)));
 
-//		System.out.println("GEMR: " + lstGermplasm.get(0));
+		// System.out.println("GEMR: " + lstGermplasm.get(0));
 		if (!lstUnknownGerm.isEmpty()) {
 			System.out.println("Error: Unknown Germplasm detected {" + StringUtils.join(lstUnknownGerm.toArray(new String[lstUnknownGerm.size()]), ", "));
 
 			throw new CreateFieldBookException("Error: Unknown Germplasm detected {" + StringUtils.join(lstUnknownGerm.toArray(new String[lstUnknownGerm.size()]), ", ") + "}");
-				}
+		}
 	}
 
 	public void validateSite(Sheet shObservation, Sheet shSiteInfo) throws Exception {
