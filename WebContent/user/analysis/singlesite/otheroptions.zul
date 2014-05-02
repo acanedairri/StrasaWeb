@@ -4,9 +4,9 @@
 
 		<groupbox hflex="1" id="groupGenotypeFixed" open="false">
 			<caption>Options for genotype as fixed</caption>
-			<checkbox id="cbPerformPairwise" checked="true"
+			<checkbox id="cbPerformPairwise" checked="false"
 						label="Perform pairwise mean comparisons"  onClick="@global-command('updatePairwiseOptions', selected=self.checked)"/>
-			<groupbox contentStyle="border:0" id="groupPerformPairwise" visible="false">
+			<groupbox contentStyle="border:0" id="groupPerformPairwise" open="false">
 				<vbox style="margin:5px 5px 5px 25px" >
 					<radio id="compareWithControlsBtn"
 						label="Compare with control(s)" radiogroup="performPairwiseGroup" />

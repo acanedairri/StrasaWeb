@@ -106,9 +106,9 @@ public class FileComposer extends SelectorComposer<Component> {
 					FileModel fm=clickedNodeValue.getData();
 					
 					if(isFolder(fm)){
-//						System.out.println("heyy");
-//						addResultViewer(clickedNodeValue.getData().getFoldername(),RESULT_ANALYSIS_PATH+"Single-Site"+FILE_SEPARATOR+clickedNodeValue.getData().getFoldername()+FILE_SEPARATOR);
-////						Window w = new Window(((FileModel) clickedNodeValue.getData()).getFoldername(), "normal",
+						System.out.println("folder double clicked");
+						addResultViewer(clickedNodeValue.getData().getFoldername(),RESULT_ANALYSIS_PATH+"Single-Site"+FILE_SEPARATOR+clickedNodeValue.getData().getFoldername()+FILE_SEPARATOR);
+////					Window w = new Window(((FileModel) clickedNodeValue.getData()).getFoldername(), "normal",
 //								true);
 //						w.setPosition("parent");
 //						w.setParent(demoWindow);
@@ -166,15 +166,8 @@ public class FileComposer extends SelectorComposer<Component> {
 
 						if(clickedNodeValue.getData().getFilename().contains(".png")){
 
-//							Map<String,Object> args = new HashMap<String,Object>();
 							System.out.println(filenamePath);
 							addImageViewer(clickedNodeValue.getData().getFilename(), filenamePath);
-//							args.put("imageName", filenamePath);
-//							BindUtils.postGlobalCommand(null, null, "addImageViewer", args);
-
-//							dataArgs.put("imageName", filenamePath);
-//							Executions.createComponents("analysis/imgviewer.zul",w, dataArgs);asd
-//							w.doOverlapped();
 
 						}else if(clickedNodeValue.getData().getFilename().contains(".pdf")){
 
@@ -184,11 +177,12 @@ public class FileComposer extends SelectorComposer<Component> {
 							fs.close();
 							ByteArrayInputStream is = new ByteArrayInputStream(buffer);
 							fileContent = new AMedia("report", "pdf", "application/pdf", is);
-							HashMap<String, AMedia> dataArgsPdf = new HashMap<String, AMedia>();
-							dataArgsPdf.put("pdfFile", fileContent);
-
-							Executions.createComponents("analysis/pdfviewer.zul", w, dataArgsPdf);
-							w.doOverlapped();
+//							HashMap<String, AMedia> dataArgsPdf = new HashMap<String, AMedia>();
+//							dataArgsPdf.put("pdfFile", fileContent);
+//
+//							Executions.createComponents("analysis/pdfviewer.zul", w, dataArgsPdf);
+//							w.doOverlapped();
+							addPdfViewer(clickedNodeValue.getData().getFilename(), fileContent);
 
 
 						}else if(clickedNodeValue.getData().getFilename().contains(".txt")){
@@ -202,11 +196,7 @@ public class FileComposer extends SelectorComposer<Component> {
 							HashMap<String, AMedia> dataArgsTxt = new HashMap<String, AMedia>();
 							
 							addTxtViewer(clickedNodeValue.getData().getFilename(), fileContent);
-//							String port = ( Executions.getCurrent().getServerPort() == 80 ) ? "" : (":" + Executions.getCurrent().getServerPort());
-//							String url = Executions.getCurrent().getScheme() + "://" + Executions.getCurrent().getServerName() + port + Executions.getCurrent().getContextPath() + filenamePath;
-//							System.out.println(url);
-//							Executions.getCurrent().sendRedirect(url,"_blank");
-//							w.detach();
+//							
 
 						}else if(clickedNodeValue.getData().getFilename().contains(".csv")){
 
@@ -221,12 +211,12 @@ public class FileComposer extends SelectorComposer<Component> {
 							FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
 
 							CSVReader reader = new CSVReader(new FileReader(tempFile.getAbsolutePath()));
-							HashMap<String, CSVReader> dataArgsCsvReader = new HashMap<String, CSVReader>();
-							dataArgsCsvReader.put("csvReader", reader);
+//							HashMap<String, CSVReader> dataArgsCsvReader = new HashMap<String, CSVReader>();
+//							dataArgsCsvReader.put("csvReader", reader);
 
-							Executions.createComponents("analysis/csvviewer.zul", w, dataArgsCsvReader);
-							w.doOverlapped();
-
+							addCsvViewer(clickedNodeValue.getData().getFilename(), reader);
+//							Executions.createComponents("analysis/csvviewer.zul", w, dataArgsCsvReader);
+//							w.doOverlapped();
 
 						}
 
@@ -243,6 +233,7 @@ public class FileComposer extends SelectorComposer<Component> {
 
 
 					}
+
 				});
 			} else { // Category Row
 				dataRow.appendChild(new Treecell(filename.getFoldername()));
@@ -290,6 +281,7 @@ public class FileComposer extends SelectorComposer<Component> {
 		Tab newTab = new Tab();
 		newTab.setLabel(name);
 		newTab.setClosable(true);
+		newTab.setImage("/images/graph.png");
 
 		Include studyInformationPage = new Include();
 		studyInformationPage.setDynamicProperty("imageName", filenamePath.replaceAll("\\\\", "//"));
@@ -301,12 +293,32 @@ public class FileComposer extends SelectorComposer<Component> {
 		
 	}
 	
+
+	protected void addPdfViewer(String name, AMedia fileContent) {
+		// TODO Auto-generated method stub
+		Tabpanel tabPanel = new Tabpanel();
+		Tab newTab = new Tab();
+		newTab.setImage("/images/pdf.png");
+		newTab.setLabel(name);
+		newTab.setClosable(true);
+
+		Include studyInformationPage = new Include();
+		studyInformationPage.setDynamicProperty("pdfFile", fileContent);
+		studyInformationPage.setSrc("/user/analysis/pdfviewer.zul");
+		studyInformationPage.setParent(tabPanel);
+		
+		treeTabPanels.appendChild(tabPanel);
+		treeTabs.appendChild(newTab);
+	}
+
+	
 	@NotifyChange("*")
 	public void addTxtViewer(String name, AMedia fileContent){
 		//outputTextViewer
 //		Tabpanels treeTabPanels = (Tabpanels) component.getFellow("treeTabPanels");
 		Tabpanel tabPanel = new Tabpanel();
 		Tab newTab = new Tab();
+		newTab.setImage("/images/text.png");
 		newTab.setLabel(name);
 		newTab.setClosable(true);
 
@@ -319,6 +331,25 @@ public class FileComposer extends SelectorComposer<Component> {
 		treeTabs.appendChild(newTab);
 		
 		//outputGrphViewer
+	}
+	
+
+	private void addCsvViewer(String name, CSVReader reader) {
+		// TODO Auto-generated method stub
+		Tabpanel tabPanel = new Tabpanel();
+		Tab newTab = new Tab();
+		newTab.setImage("/images/csv.png");
+		newTab.setLabel(name);
+		newTab.setClosable(true);
+		
+		Include studyInformationPage = new Include();
+		studyInformationPage.setDynamicProperty("csvReader", reader);
+		studyInformationPage.setDynamicProperty("name", name.replaceAll(".csv", ""));
+		studyInformationPage.setSrc("/user/analysis/csvviewer.zul");
+		studyInformationPage.setParent(tabPanel);
+		
+		treeTabPanels.appendChild(tabPanel);
+		treeTabs.appendChild(newTab);
 	}
 
 	@NotifyChange("*")

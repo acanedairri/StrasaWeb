@@ -1,12 +1,14 @@
 package org.strasa.web.utilities;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
 import org.apache.commons.io.input.ReaderInputStream;
+import org.strasa.middleware.filesystem.manager.UserFileManager;
 import org.zkoss.bind.BindContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.UploadEvent;
@@ -142,6 +144,49 @@ public class FileUtilities {
 
 		System.out.println("downloading File...");
 		Filedownload.save(sb.toString().getBytes(), "text/plain", fileName + ".csv");
+	}
+
+	public static String createFileFromDatabase(List<String> columns,
+			List<String[]> rows, String filePath) {
+		// TODO Auto-generated method stub
+		List<String[]> grid = rows;
+
+		StringBuffer sb = new StringBuffer();
+
+		System.out.println("creating File...");
+		int ctr = 0;
+		for (String s : columns) {
+			ctr++;
+			sb.append(s);
+			if (ctr != columns.size())
+				sb.append(",");
+		}
+		sb.append("\n");
+
+		for (String[] row : grid) {
+			ctr = 0;
+			for (String s : row) {
+				ctr++;
+				sb.append(s);
+				if (ctr != row.length)
+					sb.append(",");
+			}
+			sb.append("\n");
+		}
+
+		
+		FileWriter writer = null;
+		try {
+			writer = new FileWriter(filePath);
+			writer.write(sb.toString());
+			if (writer != null){
+				writer.close();
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		return filePath;
 	}
 
 }

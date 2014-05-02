@@ -24,15 +24,43 @@
 											spacing="10px">
 											<div align="left">
 												<hlayout>
+													<combobox id="studiesCombo" visible="false"
+														model="@load(vm.studies)" readonly="true"
+														selectedItem="@bind(vm.selectedStudy)"
+														onChange="@command('updateDataSetList')">
+														<template
+															name="model">
+															<comboitem value="@load(each)" label="@load(each.name)" />
+														</template>
+													</combobox>
+													<combobox  id="dataSetCombo" visible="false"
+														model="@load(vm.studyDataSets)" readonly="true"
+														selectedItem="@bind(vm.selectedDataSet)"
+														onChange="@command('displaySelectDataSet')">
+														<template
+															name="model">
+															<comboitem
+																value="@load(each)" label="@load(each.title)" />
+														</template>
+													</combobox>
 													<label
 														id="lblMsgUpload" visible="@load(vm.variableDataVisible)"
 														value="@load(vm.dataFileName)" sclass="label-search" />
 													<button
-														id="uploadCSVbtn" upload="true" label="Browse"
-														image="/images/find.png" onUpload="@command('uploadCSV')" />
+														sclass="btn-danger" id="selectDataBtn"
+														label="Select study from database"
+														image="/images/find.png"
+														onClick="@command('selectFromDatabase')" />
 
-													<button id="resetBtn"
-														label="Reset" onClick="@global-command('launchSingleSite')" visible="false" sclass="btn-blue" />
+													<button
+														sclass="btn-danger" id="uploadCSVbtn" upload="true"
+														label="Upload data" image="/images/find.png"
+														onUpload="@command('uploadCSV')" />
+
+													<button
+														id="resetBtn" label="Reset"
+														onClick="@global-command('launchSingleSite')"
+														visible="false" sclass="btn-danger" />
 												</hlayout>
 											</div>
 										</vlayout>

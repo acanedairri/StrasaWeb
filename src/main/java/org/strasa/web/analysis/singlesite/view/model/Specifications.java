@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +18,16 @@ import org.analysis.rserve.manager.test.TestRServeManager;
 import org.apache.commons.io.input.ReaderInputStream;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.Rserve.RserveException;
+import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.filesystem.manager.UserFileManager;
+import org.strasa.middleware.manager.BrowseStudyManagerImpl;
+import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
+import org.strasa.middleware.manager.StudyDataSetManagerImpl;
+import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.StudyVariableManagerImpl;
 import org.strasa.middleware.model.Study;
+import org.strasa.middleware.model.StudyDataColumn;
+import org.strasa.middleware.model.StudyDataSet;
 import org.strasa.web.analysis.view.model.SingleSiteAnalysisModel;
 import org.strasa.web.uploadstudy.view.model.DataColumnValidation;
 import org.strasa.web.utilities.AnalysisUtils;
@@ -62,12 +70,18 @@ import au.com.bytecode.opencsv.CSVReader;
 
 public class Specifications {	
 
+	//Managers
+	private RServeManager rServeManager;
+	private StudyManagerImpl studyMgr;
+	private StudyDataSetManagerImpl studyDataSetMgr;
+	private BrowseStudyManagerImpl browseStudyManagerImpl;
+
 	//Zul file components
 	@Wire
 	private Button chooseResponseBtn;
 	private Button resetBtn;
 	private Button uploadCSVbtn;
-
+	private Button selectDataBtn;
 	private Div divDatagrid;
 
 	private Listbox numericLb;
@@ -76,6 +90,10 @@ public class Specifications {
 
 
 	//DataModels
+	private Study selectedStudy;
+	private StudyDataSet selectedDataSet;
+	private List<Study> studies;
+	private List<StudyDataSet> studyDataSets;
 	private ListModelList<String> numericModel;
 	private ListModelList<String> responseModel;
 	private ListModelList<String> factorModel;
@@ -117,7 +135,6 @@ public class Specifications {
 	private String separator="NULL";;
 	private String tempFileName;
 	private String fileName;
-	private RServeManager rServeManager;
 
 	private Checkbox boxplotCheckBox;
 	private Checkbox histogramCheckBox;
@@ -133,6 +150,8 @@ public class Specifications {
 	private Row replicateRow;
 	private Row rowRow;
 	private Row columnRow;
+	private Combobox studiesCombo;
+	private Combobox dataSetCombo;
 
 	//otheroptions UI
 	private Groupbox groupLevelOfControls;
@@ -161,10 +180,16 @@ public class Specifications {
 	private boolean gridReUploaded = false;
 	private int pageSize = 10;
 	private int activePage = 0;
+	private Include incVariableList;
 
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
+		studyMgr = new StudyManagerImpl();
+		studyDataSetMgr = new StudyDataSetManagerImpl();
+
+		studies = studyMgr.getStudiesByUserID(SecurityUtil.getDbUser().getId());
+
 		//init vars
 		typeOfDesignList = getTypeOfDesignList();
 		ssaModel=new SingleSiteAnalysisModel();
@@ -172,8 +197,9 @@ public class Specifications {
 		divDatagrid = (Div) component.getFellow("datagrid");
 		resetBtn = (Button) component.getFellow("resetBtn");
 		uploadCSVbtn = (Button) component.getFellow("uploadCSVbtn");
+		selectDataBtn = (Button) component.getFellow("selectDataBtn");
 
-		Include incVariableList = (Include) component.getFellow("includeVariableList");
+		incVariableList = (Include) component.getFellow("includeVariableList");
 		numericLb = (Listbox) incVariableList.getFellow("numericLb");
 		responseLb = (Listbox) incVariableList.getFellow("responseLb");
 		factorLb = (Listbox) incVariableList.getFellow("factorLb");
@@ -216,6 +242,9 @@ public class Specifications {
 		histogramCheckBox = (Checkbox) component.getFellow("histogramCheckBox");
 		heatmapCheckBox = (Checkbox) component.getFellow("heatmapCheckBox");
 		diagnosticplotCheckBox = (Checkbox) component.getFellow("diagnosticplotCheckBox");
+
+		studiesCombo = (Combobox) component.getFellow("studiesCombo");
+		dataSetCombo = (Combobox) component.getFellow("dataSetCombo");
 
 		//wire comboboxes
 		fieldRowComboBox = (Combobox) component.getFellow("fieldRowComboBox");
@@ -271,6 +300,32 @@ public class Specifications {
 		}
 	}
 
+	@Command("updateDataSetList")
+	@NotifyChange("*")
+	public void updateDataSetList(){
+
+		dataSetCombo.setSelectedItem(null);
+		dataSetCombo.setVisible(false);
+		
+		if(!columnList.isEmpty()){
+		columnList.clear();
+		dataList.clear();
+		refreshCsv();
+		}
+
+		List<StudyDataSet> dataSet = studyDataSetMgr.getDataSetsByStudyId(selectedStudy.getId());
+
+		if(!dataSet.isEmpty()){
+			dataSetCombo.setVisible(true);
+			setStudyDataSets(dataSet);
+			BindUtils.postNotifyChange(null, null, this, "*");
+		}
+		else{
+			Messagebox.show("Please choose a different study","Study has no data", Messagebox.OK, Messagebox.ERROR);
+		}
+
+	}
+
 	@GlobalCommand("updateRandomOptions")
 	@NotifyChange("*")
 	public void updateRandomOptions(@BindingParam("selected") Boolean selected){
@@ -313,28 +368,29 @@ public class Specifications {
 
 	protected void activatePerformPairwiseOptions(boolean state) {
 		// TODO Auto-generated method stub
-		if(performPairwiseCheckBox.isChecked() && state) groupPerformPairwise.setVisible(true);
-		else groupPerformPairwise.setVisible(false);
+		if(performPairwiseCheckBox.isChecked() && state) groupPerformPairwise.setOpen(true);
+		else groupPerformPairwise.setOpen(false);
 		compareWithControlsBtn.setSelected(true);
 
-//		if(state){
-//			genotypeLevels = rServeManager.getLevels(columnList, dataList, ssaModel.getGenotype());
-//			try{
-//				if(genotypeLevels.length>15){
-//					compareWithControlsBtn.setSelected(true);
-//					activateLevelOfConrolsOptions(true);
-//					performAllPairwiseBtn.setSelected(false);
-//					performAllPairwiseBtn.setVisible(false);
-//					//			performAllComparisonsBtn.setSelection(false);
-//				}
-//				else{
-//					performAllPairwiseBtn.setSelected(true);
-//					if(performAllPairwiseBtn.isSelected()) compareWithControlsBtn.setSelected(false);
-//				}
-//			}catch(NullPointerException npe){
-//				
-//			}
-//		}
+		if(state){
+			try{
+				genotypeLevels = rServeManager.getLevels(columnList, dataList, ssaModel.getGenotype());
+				if(genotypeLevels.length>15){
+					compareWithControlsBtn.setSelected(true);
+					activateLevelOfConrolsOptions(true);
+					performAllPairwiseBtn.setSelected(false);
+					performAllPairwiseBtn.setVisible(false);
+					//			performAllComparisonsBtn.setSelection(false);
+				}
+				else{
+					performAllPairwiseBtn.setSelected(true);
+					if(performAllPairwiseBtn.isSelected()) compareWithControlsBtn.setSelected(false);
+				}
+			}catch(NullPointerException npe){
+				Messagebox.show("Please select a genotype variable",
+						"Error", Messagebox.OK, Messagebox.ERROR);
+			}
+		}
 	}
 
 	@Command("updateVariableList")
@@ -478,6 +534,68 @@ public class Specifications {
 	}
 
 	@NotifyChange("*")
+	@Command("selectFromDatabase")
+	public void selectFromDatabase(	@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,
+			@ContextParam(ContextType.VIEW) Component view) {
+		selectDataBtn.setVisible(false);
+		studiesCombo.setVisible(true);
+		resetBtn.setVisible(true);
+		uploadCSVbtn.setVisible(false);
+	}
+
+	@NotifyChange("*")
+	@Command("displaySelectDataSet")
+	public void displaySelectDataSet(	@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,
+			@ContextParam(ContextType.VIEW) Component view) {
+
+		selectDataBtn.setVisible(false);
+		studiesCombo.setVisible(true);
+		resetBtn.setVisible(true);
+		uploadCSVbtn.setVisible(false);
+
+		browseStudyManagerImpl = new BrowseStudyManagerImpl();
+
+		List<HashMap<String, String>> toreturn = browseStudyManagerImpl.getStudyData(selectedStudy.getId(), selectedDataSet.getDatatype(), selectedDataSet.getId());
+		//		System.out.println("Size:" + toreturn.size());
+		List<StudyDataColumn> columns = new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(selectedStudy.getId(), selectedDataSet.getDatatype(), selectedDataSet.getId()); 
+
+		for (StudyDataColumn d : columns) {
+			columnList.add(d.getColumnheader());
+			//			System.out.print(d.getColumnheader() + "\t");
+		}
+		//		System.out.println("\n ");
+		for (HashMap<String, String> rec : toreturn) {
+			ArrayList<String> newRow = new ArrayList<String>();
+			for (StudyDataColumn d : columns) {
+				String value = rec.get(d.getColumnheader());
+				newRow.add(value);
+				//				System.out.print(value + "\t");
+			}
+			//			System.out.println("\n ");
+			dataList.add(newRow.toArray(new String[newRow.size()]));
+		}
+
+		fileName= selectedStudy.getName()+"_"+selectedDataSet.getTitle();
+		File BASE_FOLDER = new File(UserFileManager.buildUserPath(selectedStudy.getUserid(), selectedStudy.getId()));
+		if(!BASE_FOLDER.exists()) BASE_FOLDER.mkdirs();
+		String createPath = BASE_FOLDER.getAbsolutePath()+ File.separator+ String.valueOf( Calendar.getInstance().getTimeInMillis()+ fileName.replace(" ", "") + ".csv");
+		
+		System.out.println("created path "+createPath);
+		String filePath = FileUtilities.createFileFromDatabase(columnList, dataList, createPath);
+
+		if (filePath == null)
+			return;
+
+		Map<String,Object> args = new HashMap<String,Object>();
+		args.put("filePath", filePath);
+		BindUtils.postGlobalCommand(null, null, "setSsaListvariables", args);
+
+		isVariableDataVisible = true;
+//		dataFileName = fileName;
+		refreshCsv();
+	}
+
+	@NotifyChange("*")
 	@Command("uploadCSV")
 	public void uploadCSV(
 			@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,
@@ -529,6 +647,7 @@ public class Specifications {
 
 				resetBtn.setVisible(true);
 				uploadCSVbtn.setVisible(false);
+				selectDataBtn.setVisible(false);
 
 	}
 
@@ -553,6 +672,9 @@ public class Specifications {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -666,12 +788,16 @@ public class Specifications {
 	@Command()
 	public void validateSsaInputs() {
 		// TODO Auto-generated method stub
-		if(validateSsaModel()){
-			System.out.println("pasing variables");
-			Map<String,Object> args = new HashMap<String,Object>();
-			args.put("ssaModel", ssaModel);
-			BindUtils.postGlobalCommand(null, null, "displaySsaResult", args);
-		} else Messagebox.show(errorMessage);
+		try{
+			if(validateSsaModel()){
+				System.out.println("pasing variables");
+				Map<String,Object> args = new HashMap<String,Object>();
+				args.put("ssaModel", ssaModel);
+				BindUtils.postGlobalCommand(null, null, "displaySsaResult", args);
+			} else Messagebox.show(errorMessage);
+		} catch(NullPointerException npe){
+			
+		}
 	}
 
 	private boolean validateSsaModel() {
@@ -762,22 +888,23 @@ public class Specifications {
 
 		if(ssaModel.isGenotypeFixed()){//if fixed is checked
 			ssaModel.setPerformPairwise(performPairwiseCheckBox.isChecked());
+			ssaModel.setPerformAllPairwise(performAllPairwiseBtn.isChecked());
+			ssaModel.setCompareControl(compareWithControlsBtn.isChecked());
+
 			if(ssaModel.isPerformPairwise()){
-				ssaModel.setPairwiseAlpha(Double.toString(pairwiseAlphaTextBox.getValue()));
-				if(ssaModel.getPairwiseAlpha().isEmpty()){
-					errorMessage = "Please add a value for the pairwise level of significance.";
-					return false;
+				if(ssaModel.isPerformAllPairwise()){
+					if(pairwiseAlphaTextBox.getValue().toString().isEmpty()){
+						errorMessage = "Please add a value for the pairwise level of significance.";
+						return false;
+					}else ssaModel.setPairwiseAlpha(Double.toString(pairwiseAlphaTextBox.getValue()));
 				}
 				else{
-					ssaModel.setCompareControl(compareWithControlsBtn.isChecked());
-					ssaModel.setPerformAllPairwise(performAllPairwiseBtn.isChecked());
-					if(ssaModel.isCompareControl()){
-						ssaModel.setControlLevels(controls.toArray(new String[controls.size()]));
-						if(ssaModel.getControlLevels().length<1){
-							errorMessage = "Please specify control variables from the genotype levels.";
-							return false;
-						}
+					ssaModel.setControlLevels(controls.toArray(new String[controls.size()]));
+					if(ssaModel.getControlLevels().length<1){
+						errorMessage = "Please specify control variables from the genotype levels.";
+						return false;
 					}
+
 				}
 			}
 		}
@@ -805,6 +932,7 @@ public class Specifications {
 		//				System.out.println("removeResponse");
 
 		if(varTextBox.getValue().isEmpty() && !set.isEmpty()){
+			//			if(varTextBox.getl)
 			for (String selectedItem : set) {
 				varTextBox.setValue(selectedItem);
 				factorModel.remove(selectedItem);
@@ -934,6 +1062,30 @@ public class Specifications {
 		return pageSize;
 	}
 
+	public Study getSelectedStudy() {
+		return selectedStudy;
+	}
+
+	public void setSelectedStudy(Study selectedStudy) {
+		this.selectedStudy = selectedStudy;
+	}
+
+	public StudyDataSet getSelectedDataSet() {
+		return selectedDataSet;
+	}
+
+	public void setSelectedDataSet(StudyDataSet selectedDataSet) {
+		this.selectedDataSet = selectedDataSet;
+	}
+
+	public List<Study> getStudies() {
+		return studies;
+	}
+
+	public void setStudies(List<Study> studies) {
+		this.studies = studies;
+	}
+
 	@NotifyChange("*")
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
@@ -943,6 +1095,14 @@ public class Specifications {
 	public int getActivePage() {
 
 		return activePage;
+	}
+
+	public List<StudyDataSet> getStudyDataSets() {
+		return studyDataSets;
+	}
+
+	public void setStudyDataSets(List<StudyDataSet> studyDataSets) {
+		this.studyDataSets = studyDataSets;
 	}
 
 	@NotifyChange("*")

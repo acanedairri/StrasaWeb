@@ -65,7 +65,6 @@ public class Index {
 		specificationPage.setSrc("/user/analysis/singlesite/specifications.zul");
 	}
 
-
 	@GlobalCommand("displaySsaResult")
 	@NotifyChange("*")
 	public void displaySsaResult(@ContextParam(ContextType.COMPONENT) Component component,

@@ -39,6 +39,14 @@ public class CsvDataViewer {
 	private CSVReader reader;
 	private List<String[]> rawData;
 
+
+
+	private Object na;
+
+
+
+	private String name;
+
 	public CsvDataViewer() {
 		// TODO Auto-generated constructor stub
 	}
@@ -83,7 +91,8 @@ public class CsvDataViewer {
 
 
 	@Init
-	public void init(@ExecutionArgParam("csvReader") CSVReader reader) throws IOException {
+	public void init(@ExecutionArgParam("csvReader") CSVReader reader, @ExecutionArgParam("name") String name) throws IOException {
+		this.name = name;
 		populateCsvData(reader);
 	}
 
@@ -103,11 +112,6 @@ public class CsvDataViewer {
 
 	@Command
 	public void exportRowData(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view) {
-		Window win= (Window) view.getParent();
-		String name=win.getTitle();
-		name=name.substring(0,name.length()-4);
-		
-		System.out.println("Window Title"+name);
 		FileUtilities.exportData(getColumnList(),getDataList(),name);
 
 	}

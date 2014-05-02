@@ -63,7 +63,7 @@ public class UserFileManager {
 		return renamedFile.getAbsolutePath();
 
 	}
-	public String buildUserPath(int userid, int studyid){
+	public static String buildUserPath(int userid, int studyid){
 
 		String userBasePath =  userid + "_" + studyid;//Encryptions.encryptStringToNumber(new UserManagerImpl().getUserById(userid).getUsername(),userid); 
 		String studyBasePath;
