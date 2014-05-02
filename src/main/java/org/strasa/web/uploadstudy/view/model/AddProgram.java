@@ -22,6 +22,7 @@ package org.strasa.web.uploadstudy.view.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.model.Program;
 import org.strasa.web.common.api.FormValidator;
@@ -41,7 +42,7 @@ public class AddProgram {
 	private Program programModel = new Program();
 	private Component mainView;
 	private Binder parBinder;
-	private int userID = 1;
+	private int userID = SecurityUtil.getDbUser().getId();
 
 	public Program getProgramModel() {
 		return programModel;

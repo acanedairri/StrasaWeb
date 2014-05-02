@@ -262,29 +262,31 @@ public class StudyRawDataManagerImpl {
 	}
 
 	public Integer getLastDataRow(Integer studyid, boolean isRaw) {
-
-		if (isRaw) {
-			SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
-			StudyRawDataMapper mapper = session.getMapper(StudyRawDataMapper.class);
-			StudyRawDataExample example = new StudyRawDataExample();
-			example.createCriteria().andStudyidEqualTo(studyid);
-			example.createCriteria().andStudyidEqualTo(studyid);
-			if (mapper.countByExample(example) > 0) {
-				return mapper.selectByExample(example).get(mapper.selectByExample(example).size() - 1).getDatarow();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
+		try {
+			if (isRaw) {
+				StudyRawDataMapper mapper = session.getMapper(StudyRawDataMapper.class);
+				StudyRawDataExample example = new StudyRawDataExample();
+				example.createCriteria().andStudyidEqualTo(studyid);
+				example.createCriteria().andStudyidEqualTo(studyid);
+				if (mapper.countByExample(example) > 0) {
+					return mapper.selectByExample(example).get(mapper.selectByExample(example).size() - 1).getDatarow();
+				} else {
+					return 0;
+				}
 			} else {
-				return 0;
-			}
-		} else {
 
-			SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
-			StudyDerivedDataMapper mapper = session.getMapper(StudyDerivedDataMapper.class);
-			StudyDerivedDataExample example = new StudyDerivedDataExample();
-			example.createCriteria().andStudyidEqualTo(studyid);
-			if (mapper.countByExample(example) > 0) {
-				return mapper.selectByExample(example).get(mapper.selectByExample(example).size() - 1).getDatarow();
-			} else {
-				return 0;
+				StudyDerivedDataMapper mapper = session.getMapper(StudyDerivedDataMapper.class);
+				StudyDerivedDataExample example = new StudyDerivedDataExample();
+				example.createCriteria().andStudyidEqualTo(studyid);
+				if (mapper.countByExample(example) > 0) {
+					return mapper.selectByExample(example).get(mapper.selectByExample(example).size() - 1).getDatarow();
+				} else {
+					return 0;
+				}
+
 			}
+		} finally {
 
 		}
 

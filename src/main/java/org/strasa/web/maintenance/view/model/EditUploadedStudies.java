@@ -68,7 +68,6 @@ public class EditUploadedStudies {
 
 	@Init
 	public void init() {
-		Integer studyId = 1;
 
 		studyMan = new StudyManagerImpl();
 		studyRawMan = new StudyRawDataManagerImpl();

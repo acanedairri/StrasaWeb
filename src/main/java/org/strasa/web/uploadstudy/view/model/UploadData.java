@@ -97,7 +97,7 @@ public class UploadData extends ProcessTabViewModel {
 	private ArrayList<Program> programList = new ArrayList<Program>();
 	private ArrayList<Project> projectList = new ArrayList<Project>();
 	private ArrayList<String> studyTypeList = new ArrayList<String>();
-
+	private String studyDescription;
 	private ArrayList<String> dataTypeList = new ArrayList<String>();
 	private ArrayList<GenotypeFileModel> genotypeFileList = new ArrayList<GenotypeFileModel>();
 	private Program txtProgram = new Program();
@@ -801,14 +801,17 @@ public class UploadData extends ProcessTabViewModel {
 
 			}
 
-//			new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), columnList.toArray(new String[columnList.size()]), isRawData, this.dataset.getId());
+			// new
+			// StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(),
+			// columnList.toArray(new String[columnList.size()]), isRawData,
+			// this.dataset.getId());
 
 			isDataUploaded = true;
 			BindUtils.postNotifyChange(null, null, this, "*");
 
 		} else {
 			studyRawData.addStudy(study);
-			fileMan.createNewFileFromUpload(1, study.getId(), dataFileName, tempFile, (isRawData) ? "rd" : "dd");
+			fileMan.createNewFileFromUpload(userID, study.getId(), dataFileName, tempFile, (isRawData) ? "rd" : "dd");
 			this.uploadToFolder = true;
 
 		}
@@ -879,6 +882,14 @@ public class UploadData extends ProcessTabViewModel {
 			return (endTime - startTime) / 1000000000.0;
 		}
 
+	}
+
+	public String getStudyDescription() {
+		return studyDescription;
+	}
+
+	public void setStudyDescription(String studyDescription) {
+		this.studyDescription = studyDescription;
 	}
 
 }

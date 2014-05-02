@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.manager.CountryManagerImpl;
 import org.strasa.middleware.manager.LocationManagerImpl;
 import org.strasa.middleware.model.Country;
@@ -46,7 +47,7 @@ public class AddLocation {
 	private FormValidator formValidator;
 	private Location locationModel = new Location();
 	public int selectedID;
-	private Integer userID = 1;
+	private Integer userID = SecurityUtil.getDbUser().getId();
 	private ArrayList<String> cmbCountry = new ArrayList<String>();
 
 	public ArrayList<String> getCmbCountry() {

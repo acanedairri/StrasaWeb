@@ -83,8 +83,8 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 	 * @param lstSiteInfo
 	 *            the List<SiteInformationModel> that contains all the
 	 *            SiteInformation
-	 * @param Study
-	 *            Object for the
+	 * @param study
+	 *            the study
 	 * @param outputFolder
 	 *            the output folder
 	 */
@@ -96,6 +96,9 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 
 	}
 
+	/**
+	 * Instantiates a new creates the field book manager impl.
+	 */
 	public CreateFieldBookManagerImpl() {
 
 	}
@@ -103,6 +106,9 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 	/**
 	 * Generate field book.
 	 * 
+	 * @return the file
+	 * @throws CreateFieldBookException
+	 *             the create field book exception
 	 * @throws Exception
 	 *             the exception
 	 */
@@ -145,11 +151,9 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 	/**
 	 * Creates the excel.
 	 * 
-	 * @param excelFileName
-	 *            the excel file name
+	 * @param sheet
+	 *            the sheet
 	 * @return the workbook
-	 * @throws Exception
-	 *             the exception
 	 */
 
 	/*
@@ -170,10 +174,28 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 
 	}
 
+	/**
+	 * Generate system info sheet.
+	 * 
+	 * @param sheet
+	 *            the sheet
+	 */
 	public void generateSystemInfoSheet(Sheet sheet) {
 		writeRowFromList(Arrays.asList(String.valueOf(study.getId())), sheet, 0, formatCell(IndexedColors.WHITE.getIndex(), IndexedColors.WHITE.getIndex(), (short) 1, false));
 	}
 
+	/**
+	 * Generate variate.
+	 * 
+	 * @param sheet
+	 *            the sheet
+	 * @param lstSiteInfo
+	 *            the lst site info
+	 * @throws CreateFieldBookException
+	 *             the create field book exception
+	 * @throws Exception
+	 *             the exception
+	 */
 	public void generateVariate(Sheet sheet, List<SiteInformationModel> lstSiteInfo) throws CreateFieldBookException, Exception {
 
 		HashSet<String> lstSet = new HashSet<String>();
@@ -193,6 +215,18 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 		}
 	}
 
+	/**
+	 * Generate factor.
+	 * 
+	 * @param sheet
+	 *            the sheet
+	 * @param lstSiteInfo
+	 *            the lst site info
+	 * @throws CreateFieldBookException
+	 *             the create field book exception
+	 * @throws Exception
+	 *             the exception
+	 */
 	public void generateFactor(Sheet sheet, List<SiteInformationModel> lstSiteInfo) throws CreateFieldBookException, Exception {
 
 		HashSet<String> lstSet = new HashSet<String>();
@@ -222,6 +256,12 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 	 * CONDITION
 	 */
 
+	/**
+	 * Generate condition.
+	 * 
+	 * @param sheet
+	 *            the sheet
+	 */
 	public void generateCondition(Sheet sheet) {
 
 		int col = sheet.getLastRowNum() + 2;
@@ -243,6 +283,14 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 
 	}
 
+	/**
+	 * Generate site information sheet.
+	 * 
+	 * @param sheet
+	 *            the sheet
+	 * @param lstSiteInfo
+	 *            the lst site info
+	 */
 	public void generateSiteInformationSheet(Sheet sheet, List<SiteInformationModel> lstSiteInfo) {
 
 		ArrayList<ArrayList<String>> lstColumnFields = new ArrayList<ArrayList<String>>();
@@ -312,6 +360,8 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 	 *            the site info
 	 * @param sheet
 	 *            the sheet
+	 * @throws CreateFieldBookException
+	 *             the create field book exception
 	 * @throws Exception
 	 *             the exception
 	 */
@@ -377,6 +427,14 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 
 	}
 
+	/**
+	 * Validate germplasm from genotype.
+	 * 
+	 * @param genotype
+	 *            the genotype
+	 * @throws Exception
+	 *             the exception
+	 */
 	public void validateGermplasmFromGenotype(File genotype) throws Exception {
 		Sheet shGenotype = getExcelSheet(genotype, 0);
 
@@ -394,6 +452,14 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 
 	}
 
+	/**
+	 * Populate variate header.
+	 * 
+	 * @param sheet
+	 *            the sheet
+	 * @param lstSiteInfo
+	 *            the lst site info
+	 */
 	public void populateVariateHeader(Sheet sheet, List<SiteInformationModel> lstSiteInfo) {
 		ArrayList<String> variateHeader = new ArrayList<String>();
 		HashSet<String> noDup = new HashSet<String>();
@@ -408,7 +474,41 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 
 	}
 
-	public void populateStudyFromTemplate(File template, Integer userID, boolean isRaw) throws CreateFieldBookException, Exception {
+	/**
+	 * Gets the study from template.
+	 * 
+	 * @param template
+	 *            the template
+	 * @return the study from template
+	 * @throws CreateFieldBookException
+	 *             the create field book exception
+	 */
+	public Study getStudyFromTemplate(File template) throws CreateFieldBookException {
+		Sheet systemInfoSheet = getExcelSheet(template, 3);
+		String strStudyId = systemInfoSheet.getRow(0).getCell(0).getStringCellValue();
+		if (strStudyId == null)
+			throw new CreateFieldBookException("Invalid Fieldbook template.");
+		return new StudyManagerImpl().getStudyById(Integer.valueOf(strStudyId));
+	}
+
+	/**
+	 * Populate study from a fieldbook template file.
+	 * 
+	 * @param template
+	 *            - File of the template
+	 * @param userID
+	 *            the user id - the current UserID
+	 * @param isRaw
+	 *            - if the data is raw;
+	 * @param datasetname
+	 *            the datasetname - name of the dataset
+	 * @throws CreateFieldBookException
+	 *             the create field book exception - use a messagebox to promp
+	 *             the error
+	 * @throws Exception
+	 *             the exception
+	 */
+	public void populateStudyFromTemplate(File template, Integer userID, boolean isRaw, String datasetname) throws CreateFieldBookException, Exception {
 		Sheet observationSheet = getExcelSheet(template, 1);
 		Sheet siteInfoSheet = getExcelSheet(template, 2);
 		Sheet systemInfoSheet = getExcelSheet(template, 3);
@@ -421,7 +521,7 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 		StudyDataSet dataSet = new StudyDataSet();
 		dataSet.setDatatype((isRaw) ? "rd" : "dd");
 		dataSet.setStudyid(study.getId());
-		dataSet.setTitle("Dataset 1");
+		dataSet.setTitle(datasetname);
 		System.out.println("Processing Observation...");
 		populateObservation(study, observationSheet, dataSet, userID, isRaw);
 
@@ -431,6 +531,14 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 		populateGermplasm(studyId, dataSet.getId(), isRaw);
 	}
 
+	/**
+	 * Validate germplasm.
+	 * 
+	 * @param sheet
+	 *            the sheet
+	 * @throws Exception
+	 *             the exception
+	 */
 	public void validateGermplasm(Sheet sheet) throws Exception {
 
 		Integer colNum = getHeaderColumnNumber("Gname", sheet);
@@ -443,14 +551,24 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 		lstUnknownGerm.addAll(uniqueGerm);
 		lstUnknownGerm.removeAll(new GermplasmManagerImpl().getGermplasmBatchAsString(new ArrayList<String>(uniqueGerm)));
 
-//		System.out.println("GEMR: " + lstGermplasm.get(0));
+		// System.out.println("GEMR: " + lstGermplasm.get(0));
 		if (!lstUnknownGerm.isEmpty()) {
 			System.out.println("Error: Unknown Germplasm detected {" + StringUtils.join(lstUnknownGerm.toArray(new String[lstUnknownGerm.size()]), ", "));
 
 			throw new CreateFieldBookException("Error: Unknown Germplasm detected {" + StringUtils.join(lstUnknownGerm.toArray(new String[lstUnknownGerm.size()]), ", ") + "}");
-				}
+		}
 	}
 
+	/**
+	 * Validate site.
+	 * 
+	 * @param shObservation
+	 *            the sh observation
+	 * @param shSiteInfo
+	 *            the sh site info
+	 * @throws Exception
+	 *             the exception
+	 */
 	public void validateSite(Sheet shObservation, Sheet shSiteInfo) throws Exception {
 
 		Integer colSite = getHeaderColumnNumber("Site", shObservation);
@@ -476,6 +594,24 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 
 	}
 
+	/**
+	 * Populate observation.
+	 * 
+	 * @param study
+	 *            the study
+	 * @param observation
+	 *            the observation
+	 * @param dataSet
+	 *            the data set
+	 * @param userID
+	 *            the user id
+	 * @param isRaw
+	 *            the is raw
+	 * @throws CreateFieldBookException
+	 *             the create field book exception
+	 * @throws Exception
+	 *             the exception
+	 */
 	public void populateObservation(Study study, Sheet observation, StudyDataSet dataSet, Integer userID, boolean isRaw) throws CreateFieldBookException, Exception {
 		ArrayList<String[]> lstData = readExcelSheetAsArray(observation, 0);
 		String[] header = lstData.get(0);
@@ -486,6 +622,20 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 
 	}
 
+	/**
+	 * Populate site information sheet.
+	 * 
+	 * @param excelFile
+	 *            the excel file
+	 * @param informationSheet
+	 *            the information sheet
+	 * @param study
+	 *            the study
+	 * @param datasetID
+	 *            the dataset id
+	 * @throws Exception
+	 *             the exception
+	 */
 	public void populateSiteInformationSheet(File excelFile, Sheet informationSheet, Study study, Integer datasetID) throws Exception {
 		ArrayList<StudySiteInfoModel> lstSites = new ArrayList<StudySiteInfoModel>();
 
@@ -520,6 +670,16 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 		new StudySiteManagerImpl().addSiteBatch(lstSites);
 	}
 
+	/**
+	 * Populate germplasm.
+	 * 
+	 * @param studyid
+	 *            the studyid
+	 * @param dataset
+	 *            the dataset
+	 * @param isRaw
+	 *            the is raw
+	 */
 	public void populateGermplasm(Integer studyid, Integer dataset, boolean isRaw) {
 		StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
 		List<Germplasm> lst = rawMan.getStudyGermplasmInfo(studyid, dataset);
