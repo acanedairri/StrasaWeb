@@ -176,15 +176,15 @@ public class EditUploadedStudies {
 		if (tempFile == null)
 			return;
 
-		try {
-			new CreateFieldBookManagerImpl().populateStudyFromTemplate(tempFile, SecurityUtil.getDbUser().getId(), true);
-		} catch (CreateFieldBookException e) {
-			// TODO Auto-generated catch block
-			Messagebox.show(e.getMessage(), "Error in Fieldbook", Messagebox.OK, org.zkoss.zul.Messagebox.EXCLAMATION);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+////			new CreateFieldBookManagerImpl().populateStudyFromTemplate(tempFile, SecurityUtil.getDbUser().getId(), true);
+//		} catch (CreateFieldBookException e) {
+//			// TODO Auto-generated catch block
+//			Messagebox.show(e.getMessage(), "Error in Fieldbook", Messagebox.OK, org.zkoss.zul.Messagebox.EXCLAMATION);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	@NotifyChange("editStudyList")

@@ -3,7 +3,7 @@
 
 
 
-	<window border="none" sizable="true" maximizable="true"  width="800px" height="800px" position="center" apply="org.zkoss.bind.BindComposer" id="windowGridId"
+	<window border="none" sizable="true" maximizable="true" position="center" apply="org.zkoss.bind.BindComposer" id="windowGridId"
 		viewModel="@id('vm') @init('org.strasa.web.analysis.result.view.model.CsvDataViewer')">
  		<div align="left">
 			<button label="Export to CSV" visible="true"

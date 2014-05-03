@@ -3,12 +3,16 @@
 
 	<tabbox sclass="page-content" vflex="1" hflex="1">
 		<tabs >
-			<tab label="Result" />
-			<tab label="Graphs" />
+			<tab label="RESULT" />
+			<tab label="GRAPHS" />
+			<tab label="CSV" />
+			<tab label="PDF" />
 		</tabs>
 		<tabpanels>
 			<tabpanel id="txtResultTab" />
 			<tabpanel id="graphResultTab" />
+			<tabpanel id="csvResultTab" />
+			<tabpanel id="pdfResultTab" />
 		</tabpanels>
 	</tabbox>
 </window>

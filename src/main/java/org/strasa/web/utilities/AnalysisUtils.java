@@ -107,6 +107,7 @@ public class AnalysisUtils {
 
 	public static String getoutputFolderPath(String filenamePath) {
 		// TODO Auto-generated method stub
-		return  Sessions.getCurrent().getWebApp().getRealPath("StrasaWeb")+filenamePath;
+		System.out.println("path:"+filenamePath);
+		return  Sessions.getCurrent().getWebApp().getRealPath("")+filenamePath;
 	}
 }

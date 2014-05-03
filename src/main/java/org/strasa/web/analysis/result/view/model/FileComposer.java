@@ -34,6 +34,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.DefaultTreeNode;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.Include;
@@ -62,6 +63,8 @@ public class FileComposer extends SelectorComposer<Component> {
 	private Tabpanels treeTabPanels;
 	@Wire
 	private Tabs treeTabs;
+	@Wire
+	private Div viewPanel;
 
 	private static final String FILE_SEPARATOR  = System.getProperty("file.separator");
 	private static String RESULT_ANALYSIS_PATH=FILE_SEPARATOR+"resultanalysis"+FILE_SEPARATOR+SecurityUtil.getUserName()+FILE_SEPARATOR;
@@ -131,7 +134,7 @@ public class FileComposer extends SelectorComposer<Component> {
 				treeCell.appendChild(hl);
 				dataRow.setDraggable("true");
 				dataRow.appendChild(treeCell);
-				dataRow.addEventListener(Events.ON_DOUBLE_CLICK, new EventListener<Event>() {
+				dataRow.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 					private File tempFile;
 
 					@Override
@@ -274,82 +277,53 @@ public class FileComposer extends SelectorComposer<Component> {
 //	@GlobalCommand("addImageViewer")
 	@NotifyChange("*")
 	public void addImageViewer(String name, String filenamePath){
-		
-		//outputTextViewer
-//		Tabpanels treeTabPanels = (Tabpanels) component.getFellow("treeTabPanels");
-		Tabpanel tabPanel = new Tabpanel();
-		Tab newTab = new Tab();
-		newTab.setLabel(name);
-		newTab.setClosable(true);
-		newTab.setImage("/images/graph.png");
 
+		if(viewPanel.getChildren().size()>0) viewPanel.getChildren().get(0).detach();
 		Include studyInformationPage = new Include();
 		studyInformationPage.setDynamicProperty("imageName", filenamePath.replaceAll("\\\\", "//"));
 		studyInformationPage.setSrc("/user/analysis/imgviewer.zul");
-		studyInformationPage.setParent(tabPanel);
-		
-		treeTabPanels.appendChild(tabPanel);
-		treeTabs.appendChild(newTab);
+		studyInformationPage.setParent(viewPanel);
+		viewPanel.appendChild(studyInformationPage);
 		
 	}
 	
 
 	protected void addPdfViewer(String name, AMedia fileContent) {
-		// TODO Auto-generated method stub
-		Tabpanel tabPanel = new Tabpanel();
-		Tab newTab = new Tab();
-		newTab.setImage("/images/pdf.png");
-		newTab.setLabel(name);
-		newTab.setClosable(true);
 
+		if(viewPanel.getChildren().size()>0) viewPanel.getChildren().get(0).detach();
 		Include studyInformationPage = new Include();
 		studyInformationPage.setDynamicProperty("pdfFile", fileContent);
 		studyInformationPage.setSrc("/user/analysis/pdfviewer.zul");
-		studyInformationPage.setParent(tabPanel);
-		
-		treeTabPanels.appendChild(tabPanel);
-		treeTabs.appendChild(newTab);
+		studyInformationPage.setParent(viewPanel);
+		viewPanel.appendChild(studyInformationPage);
 	}
 
 	
 	@NotifyChange("*")
 	public void addTxtViewer(String name, AMedia fileContent){
 		//outputTextViewer
-//		Tabpanels treeTabPanels = (Tabpanels) component.getFellow("treeTabPanels");
-		Tabpanel tabPanel = new Tabpanel();
-		Tab newTab = new Tab();
-		newTab.setImage("/images/text.png");
-		newTab.setLabel(name);
-		newTab.setClosable(true);
+		if(viewPanel.getChildren().size()>0) viewPanel.getChildren().get(0).detach();
 
 		Include studyInformationPage = new Include();
 		studyInformationPage.setDynamicProperty("txtFile", fileContent);
 		studyInformationPage.setSrc("/user/analysis/txtviewer.zul");
-		studyInformationPage.setParent(tabPanel);
-		
-		treeTabPanels.appendChild(tabPanel);
-		treeTabs.appendChild(newTab);
-		
+		studyInformationPage.setParent(viewPanel);
+		viewPanel.appendChild(studyInformationPage);
 		//outputGrphViewer
 	}
 	
 
 	private void addCsvViewer(String name, CSVReader reader) {
 		// TODO Auto-generated method stub
-		Tabpanel tabPanel = new Tabpanel();
-		Tab newTab = new Tab();
-		newTab.setImage("/images/csv.png");
-		newTab.setLabel(name);
-		newTab.setClosable(true);
+		if(viewPanel.getChildren().size()>0) viewPanel.getChildren().get(0).detach();
 		
 		Include studyInformationPage = new Include();
 		studyInformationPage.setDynamicProperty("csvReader", reader);
 		studyInformationPage.setDynamicProperty("name", name.replaceAll(".csv", ""));
 		studyInformationPage.setSrc("/user/analysis/csvviewer.zul");
-		studyInformationPage.setParent(tabPanel);
 		
-		treeTabPanels.appendChild(tabPanel);
-		treeTabs.appendChild(newTab);
+		studyInformationPage.setParent(viewPanel);
+		viewPanel.appendChild(studyInformationPage);
 	}
 
 	@NotifyChange("*")
@@ -360,7 +334,7 @@ public class FileComposer extends SelectorComposer<Component> {
 		Tab newTab = new Tab();
 		newTab.setLabel(name);
 		newTab.setClosable(true);
-
+		
 		Include studyInformationPage = new Include();
 		studyInformationPage.setDynamicProperty("outputFolderPath", getoutputFolderPath);
 		studyInformationPage.setSrc("/user/analysis/resultviewer.zul");
@@ -368,7 +342,5 @@ public class FileComposer extends SelectorComposer<Component> {
 		
 		treeTabPanels.appendChild(tabPanel);
 		treeTabs.appendChild(newTab);
-		
-		//outputGrphViewer
 	}
 }

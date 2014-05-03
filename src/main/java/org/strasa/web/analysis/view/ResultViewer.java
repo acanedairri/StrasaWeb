@@ -35,6 +35,8 @@ public class ResultViewer {
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("outputFolderPath") String outputFolderPath){
 
+		System.out.println("outputFolder REsult Analysis:" + outputFolderPath);
+		
 		//outputTextViewer
 		File outputFolder = new File(outputFolderPath);
 		if(outputFolder.isDirectory()){
@@ -67,10 +69,10 @@ public class ResultViewer {
 				}
 				
 				if(file.endsWith(".png")){
-					System.out.println("display image:" + RESULT_ANALYSIS_PATH+outputFolder.getName()+file);
+					System.out.println("display image:" + outputFolderPath+file);
 					Tabpanel tabPanel = (Tabpanel) component.getFellow("graphResultTab");
 
-					String path = RESULT_ANALYSIS_PATH+outputFolder.getName()+FILE_SEPARATOR+file;
+					String path = outputFolderPath+file;
 					Include studyInformationPage = new Include();
 					studyInformationPage.setDynamicProperty("imageName", path.replaceAll("\\\\", "//"));
 					studyInformationPage.setSrc("/user/analysis/imgviewer.zul");
