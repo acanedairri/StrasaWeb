@@ -181,6 +181,8 @@ public class Specifications {
 	private int pageSize = 10;
 	private int activePage = 0;
 	private Include incVariableList;
+	private File uploadedFile;
+	private UserFileManager userFileManager;
 
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
@@ -276,11 +278,13 @@ public class Specifications {
 	public List<String> getTypeOfDesignList() {
 		// TODO Auto-generated method stub
 		List<String> designs = new ArrayList<String>();
-		designs.add("RCB");
-		designs.add("RCBD");
+		designs.add("Randomized Complete Block(RCB)"); 
+		designs.add("Augmented RCB");
+		designs.add("Augmented Latin Square");
 		designs.add("Alpha-Lattice");
 		designs.add("Row-Column");
-		designs.add("Augmented RCBD");
+		designs.add("Latinized Alpha-Lattice");
+		designs.add("Latinized Row-Column");
 		return designs;
 	}
 
@@ -574,11 +578,11 @@ public class Specifications {
 			//			System.out.println("\n ");
 			dataList.add(newRow.toArray(new String[newRow.size()]));
 		}
-
+		
 		fileName= selectedStudy.getName()+"_"+selectedDataSet.getTitle();
 		File BASE_FOLDER = new File(UserFileManager.buildUserPath(selectedStudy.getUserid(), selectedStudy.getId()));
 		if(!BASE_FOLDER.exists()) BASE_FOLDER.mkdirs();
-		String createPath = BASE_FOLDER.getAbsolutePath()+ File.separator+ String.valueOf( Calendar.getInstance().getTimeInMillis()+ fileName.replace(" ", "") + ".csv");
+		String createPath = BASE_FOLDER.getAbsolutePath()+ File.separator+ String.valueOf(Calendar.getInstance().getTimeInMillis()+ fileName.replaceAll(" ", "") + ".csv");
 		
 		System.out.println("created path "+createPath);
 		String filePath = FileUtilities.createFileFromDatabase(columnList, dataList, createPath);
@@ -586,13 +590,15 @@ public class Specifications {
 		if (filePath == null)
 			return;
 
+		uploadedFile = new File(filePath);
 		Map<String,Object> args = new HashMap<String,Object>();
 		args.put("filePath", filePath);
 		BindUtils.postGlobalCommand(null, null, "setSsaListvariables", args);
 
 		isVariableDataVisible = true;
+		activePage = 0;
 //		dataFileName = fileName;
-		refreshCsv();
+		reloadCsvGrid();
 	}
 
 	@NotifyChange("*")
@@ -624,10 +630,9 @@ public class Specifications {
 				FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
 				BindUtils.postNotifyChange(null, null, this, "*");
 
+				uploadedFile = FileUtilities.getFileFromUpload(ctx, view);
 
-				File uploadedFile = FileUtilities.getFileFromUpload(ctx, view);
-
-				UserFileManager userFileManager = new UserFileManager();
+				userFileManager = new UserFileManager();
 				String filePath = userFileManager.uploadFileForAnalysis(fileName, uploadedFile);
 
 				if (tempFile == null)
@@ -803,10 +808,10 @@ public class Specifications {
 	private boolean validateSsaModel() {
 		// TODO Auto-generated method stub
 
-		System.out.println("validating ssaModels");
-		//		rServeManager = new RServeManager();
+		
 		//set Paths
-		ssaModel.setResultFolderPath(AnalysisUtils.createOutputFolder(fileName, "ssa"));
+		ssaModel.setResultFolderPath(AnalysisUtils.createOutputFolder(fileName.replaceAll(" ", ""), "ssa"));
+		String filePath = userFileManager.moveUploadedFileToOutputFolder(ssaModel.getResultFolderPath(), fileName.replaceAll(" ", ""), uploadedFile);
 		ssaModel.setOutFileName(ssaModel.getResultFolderPath()+ "SEA_output.txt");
 
 		//set Vars

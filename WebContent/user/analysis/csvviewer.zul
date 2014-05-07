@@ -10,7 +10,7 @@
 				sclass="btn-success" image="/images/export16.png"
 				onClick="@command('exportRowData', columns=vm.columnList, rows=vm.dataList)" />
 		</div> 
-		<div id="datagrid" vflex="1">
+		<div id="datagrid">
 		
 		
 		</div>
