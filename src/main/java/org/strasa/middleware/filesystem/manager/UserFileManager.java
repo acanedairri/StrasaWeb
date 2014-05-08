@@ -51,7 +51,7 @@ public class UserFileManager {
 		if(!BASE_FOLDER.exists()) BASE_FOLDER.mkdirs();
 		try {
 			FileUtils.copyFileToDirectory(dataFile, new File(BASE_FOLDER.getAbsolutePath() + File.separator ),true);
-			movedFile = new File(BASE_FOLDER.getAbsolutePath() + File.separator + dataFile.getName() );
+			movedFile = new File(BASE_FOLDER.getAbsolutePath() + File.separator + dataFile.getName());
 			renamedFile = new File(BASE_FOLDER.getAbsolutePath() + File.separator + String.valueOf(Calendar.getInstance().getTimeInMillis()+ realName));
 			movedFile.renameTo(renamedFile);
 		} catch (IOException e) {
@@ -60,6 +60,33 @@ public class UserFileManager {
 		}
 		//		dataFile.renameTo(new File(BASE_FOLDER.getAbsolutePath() + dataFile.getName())); 
 		System.out.println("File moved to: " + BASE_FOLDER.getAbsolutePath());
+		return renamedFile.getAbsolutePath();
+
+	}
+	
+	public String moveUploadedFileToOutputFolder(String resultFolderPath, String realName,File dataFile){
+
+		System.out.println("move uploadedFile");
+		File movedFile= null;
+		File renamedFile = null;
+		try {
+			System.out.println("resultFolderPath to:"+resultFolderPath);
+			System.out.println("realname:"+realName);
+			System.out.println("datafile to:"+dataFile);
+			
+			FileUtils.copyFileToDirectory(dataFile, new File(resultFolderPath + File.separator ),true);
+			movedFile = new File(resultFolderPath + File.separator + dataFile.getName() );
+			String filePath = resultFolderPath + File.separator + realName;
+			renamedFile = new File(filePath.replaceAll(".csv", "(dataset).csv"));
+			movedFile.renameTo(renamedFile);
+			System.out.println("renamed to:"+filePath);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//		dataFile.renameTo(new File(BASE_FOLDER.getAbsolutePath() + dataFile.getName())); 
+		System.out.println("File moved to: " + resultFolderPath);
 		return renamedFile.getAbsolutePath();
 
 	}

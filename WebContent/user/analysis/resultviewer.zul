@@ -1,18 +1,17 @@
 <window id="textViewerHtml" apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('org.strasa.web.analysis.view.ResultViewer')"  height="98%">
-
 	<tabbox sclass="page-content" vflex="1" hflex="1">
 		<tabs >
 			<tab label="RESULT" />
 			<tab label="GRAPHS" />
 			<tab label="CSV" />
-			<tab label="PDF" />
+			<tab label="DATASET" />
 		</tabs>
 		<tabpanels>
-			<tabpanel id="txtResultTab" />
-			<tabpanel id="graphResultTab" />
-			<tabpanel id="csvResultTab" />
-			<tabpanel id="pdfResultTab" />
+			<tabpanel id="txtResultTab"  style="overflow: auto"/>
+			<tabpanel id="graphResultTab"  style="overflow: auto"/>
+			<tabpanel id="csvResultTab"  style="overflow: auto"/>
+			<tabpanel id="dataSetTab"  style="overflow: auto"/>
 		</tabpanels>
 	</tabbox>
 </window>
