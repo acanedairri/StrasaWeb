@@ -6,9 +6,9 @@
 		align="center" height="98%">
 
 		<vlayout>
-			<groupbox id="grpUpload" mold="3d" width="100%">
+<!-- 			<groupbox id="grpUpload" mold="3d" width="100%">
 				<caption label="Select Data" />
-				<label value=""></label>
+				<label value=""></label> -->
 				<grid zclass="none">
 					<columns>
 						<column label="" width="120px" />
@@ -16,7 +16,7 @@
 					</columns>
 					<rows>
 						<row>
-							<label value="Select Data File" />
+							<label value="Select Data" />
 							<hlayout spacing="50px">
 								<vlayout width="100%">
 									<radiogroup>
@@ -48,13 +48,13 @@
 														value="@load(vm.dataFileName)" sclass="label-search" />
 													<button
 														sclass="btn-danger" id="selectDataBtn"
-														label="Select study from database"
+														label="From a Study"
 														image="/images/find.png"
 														onClick="@command('selectFromDatabase')" />
 
 													<button
 														sclass="btn-danger" id="uploadCSVbtn" upload="true"
-														label="Upload data" image="/images/find.png"
+														label="From External File(.csv)" image="/images/find.png"
 														onUpload="@command('uploadCSV')" />
 
 													<button
@@ -70,7 +70,7 @@
 						</row>
 					</rows>
 				</grid>
-			</groupbox>
+	<!-- 		</groupbox> -->
 			<groupbox id="grpVariableData" mold="3d" width="100%"
 				hflex="1">
 				<caption label="Data Preview" />
@@ -82,12 +82,12 @@
 			</groupbox>
 			<tabbox id="tabBox" height="700px" mold="accordion">
 				<tabs id="tabs">
-					<tab label="Model specifications" />
+					<tab label="Model specifications"/>
 					<tab label="Other options" />
 					<tab label="Graph options" />
 				</tabs>
 				<tabpanels id="tabPanels">
-					<tabpanel>
+					<tabpanel vflex="1">
 						<vbox>
 							<hbox>
 								<label value="Type of design" />

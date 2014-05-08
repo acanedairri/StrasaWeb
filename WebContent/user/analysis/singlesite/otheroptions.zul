@@ -5,17 +5,19 @@
 		<groupbox hflex="1" id="groupGenotypeFixed" open="false">
 			<caption>Options for genotype as fixed</caption>
 			<checkbox id="cbPerformPairwise" checked="false"
-						label="Perform pairwise mean comparisons"  onClick="@global-command('updatePairwiseOptions', selected=self.checked)"/>
-			<groupbox contentStyle="border:0" id="groupPerformPairwise" open="false">
-				<vbox style="margin:5px 5px 5px 25px" >
+				label="Perform pairwise mean comparisons"
+				onClick="@global-command('updatePairwiseOptions', selected=self.checked)" />
+			<groupbox contentStyle="border:0" id="groupPerformPairwise"
+				open="false">
+				<vbox style="margin:5px 5px 5px 25px">
 					<radio id="compareWithControlsBtn"
 						label="Compare with control(s)" radiogroup="performPairwiseGroup" />
 
-					<radio id="performAllPairwiseBtn" label="Perform all comparisons"
-						radiogroup="performPairwiseGroup" />
-					<hbox  style="margin:0px 0px 0px 25px" >
+					<radio id="performAllPairwiseBtn"
+						label="Perform all comparisons" radiogroup="performPairwiseGroup" />
+					<hbox style="margin:0px 0px 0px 25px">
 						Level of significance:
-						 <doublebox id="pairwiseAlphaTextBox"/>
+						<doublebox id="pairwiseAlphaTextBox" />
 					</hbox>
 				</vbox>
 			</groupbox>
@@ -36,7 +38,8 @@
 		<groupbox hflex="1" id="groupLevelOfControls" open="false">
 			<caption>Specify control(s):</caption>
 			<hbox>
-				<listbox id="genotypeLevelsLb" hflex="1" rows="4">
+				<listbox id="genotypeLevelsLb" hflex="1" rows="4"
+					width="300px">
 					<listhead>
 						<listheader label="Levels of Genotype:" />
 					</listhead>
@@ -46,11 +49,13 @@
 						</listitem>
 					</template>
 				</listbox>
-
+				<space width="10px"></space>
 				<image style="cursor:pointer" id="addBlockButton"
 					src="/images/rightarrow_g.png" tooltip="Add Block variable"
 					align="center" />
-				<listbox id="controlsLb" hflex="1" rows="4">
+				<space width="10px"></space>
+				<listbox id="controlsLb" hflex="1" rows="4"
+					width="300px">
 					<listhead>
 						<listheader label="Control(s):" />
 					</listhead>
