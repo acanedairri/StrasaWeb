@@ -1,10 +1,10 @@
 <vlayout style="padding:10px">
 	<hbox>
-		<groupbox width="300px" height="300px">
+	<!-- 	<groupbox width="300px" height="300px"> -->
 <!-- 			<caption label="Numeric Variable"
 				style="font-weight:bold;font-size:15px">
 			</caption> -->
-			<listbox id="numericLb" hflex="1" vflex="true"
+			<listbox id="numericLb" hflex="1" vflex="true"  width="300px"
 				checkmark="true" multiple="true">
 				<listhead>
 					<listheader label="Numeric Variables" />
@@ -17,7 +17,7 @@
 			</listbox>
 
 
-		</groupbox>
+	<!-- 	</groupbox> -->
 		<space width="10px"></space>
 		<vlayout spacing="10px" width="24px" height="300px" >
 			<separator height="100px"></separator>
@@ -29,8 +29,8 @@
 				onClick="@global-command('removeResponse')" />
 		</vlayout>
 		<space width="10px"></space>
-		<groupbox width="300px" height="300px">
-		<listbox id="responseLb" hflex="1" multiple="true" rows="4" checkmark="true">
+	<!-- 	<groupbox width="300px" height="300px"> -->
+		<listbox id="responseLb" hflex="1" multiple="true" rows="4" checkmark="true"  width="300px"> 
 			<listhead>
 				<listheader label="Response Variable" />
 			</listhead>
@@ -40,7 +40,7 @@
 				</listitem>
 			</template>
 		</listbox>
-		</groupbox>
+	<!-- 	</groupbox> -->
 	</hbox>
 	<hbox spacing="10px" width="24px">
 		<image style="cursor:pointer" id="toNumericBtn"
@@ -51,8 +51,8 @@
 			onClick="@global-command('toFactor')" />
 	</hbox>
 	<hbox>
-	<groupbox width="300px" height="300px">
-		<listbox id="factorLb" hflex="1" rows="4" checkmark="true">
+	<!-- <groupbox width="300px" height="300px"> -->
+		<listbox id="factorLb" hflex="1" rows="4" checkmark="true" width="300px">
 			<listhead>
 				<listheader label="Factor Variables" />
 			</listhead>
@@ -62,7 +62,7 @@
 				</listitem>
 			</template>
 		</listbox>
-	</groupbox>
+<!-- 	</groupbox> -->
 	
 		<grid oddRowSclass="false" zclass="none"
 			style="overflow:auto">

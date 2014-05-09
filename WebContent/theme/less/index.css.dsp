@@ -2075,7 +2075,7 @@ font-weight:normal;
 }
 .z-grid,
 .z-listbox {
-  border: 0;
+  border: 1;
 }
 .z-listbox-odd.z-listitem,
 .z-listbox-odd.z-listitem:hover {
@@ -2087,7 +2087,7 @@ font-weight:normal;
 }
 .z-listitem,
 .z-listitem:hover {
-  background-color: transparent;
+  //background-color: transparent;
   background-image: none;
 }
 .z-listitem > .z-listcell,
