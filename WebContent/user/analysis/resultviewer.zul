@@ -2,10 +2,10 @@
 	viewModel="@id('vm') @init('org.strasa.web.analysis.view.ResultViewer')"  height="98%">
 	<tabbox sclass="page-content" vflex="1" hflex="1">
 		<tabs >
-			<tab label="RESULT" />
-			<tab label="GRAPHS" />
-			<tab label="CSV" />
-			<tab label="DATASET" />
+			<tab id="txtResult"  label="RESULT" />
+			<tab id="graphResult"  label="GRAPHS" />
+			<tab id="csvResult"  label="CSV" />
+			<tab id="dataSet"  label="DATASET" />
 		</tabs>
 		<tabpanels>
 			<tabpanel id="txtResultTab"  style="overflow: auto"/>

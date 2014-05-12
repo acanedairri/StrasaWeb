@@ -84,7 +84,7 @@ public class CsvDataViewer {
 			row.addAll(Arrays.asList(dataList.get(i)));
 			result.add(row);
 			row.add(0, "  ");
-			System.out.println(Arrays.toString(dataList.get(i)) + "ROW: " + row.get(0));
+//			System.out.println(Arrays.toString(dataList.get(i)) + "ROW: " + row.get(0));
 		}
 		return result;
 	}
@@ -131,7 +131,7 @@ public class CsvDataViewer {
 			columnList = new ArrayList<String>(Arrays.asList(rawData.get(0)));
 			rawData.remove(0);
 			dataList = new ArrayList<String[]>(rawData);
-			System.out.println(Arrays.toString(dataList.get(0)));
+//			System.out.println(Arrays.toString(dataList.get(0)));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

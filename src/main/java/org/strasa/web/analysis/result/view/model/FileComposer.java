@@ -312,8 +312,6 @@ public class FileComposer extends SelectorComposer<Component> {
 		viewPanel.appendChild(studyInformationPage);
 		//outputGrphViewer
 	}
-	
-
 	private void addCsvViewer(String name, CSVReader reader) {
 		// TODO Auto-generated method stub
 		if(viewPanel.getChildren().size()>0) viewPanel.getChildren().get(0).detach();
