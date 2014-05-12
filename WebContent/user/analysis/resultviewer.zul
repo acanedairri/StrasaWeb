@@ -9,7 +9,9 @@
 		</tabs>
 		<tabpanels>
 			<tabpanel id="txtResultTab"  style="overflow: auto"/>
-			<tabpanel id="graphResultTab"  style="overflow: auto"/>
+			<tabpanel id="graphResultTab"  style="overflow: auto">
+				<div id="graphResultDiv" vflex="1" />
+			</tabpanel>
 			<tabpanel id="csvResultTab"  style="overflow: auto"/>
 			<tabpanel id="dataSetTab"  style="overflow: auto"/>
 		</tabpanels>

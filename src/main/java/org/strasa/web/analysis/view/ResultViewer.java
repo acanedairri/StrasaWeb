@@ -23,6 +23,8 @@ import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Separator;
@@ -79,17 +81,20 @@ public class ResultViewer {
 					studyInformationPage.setSrc("/user/analysis/txtviewer.zul");
 				}
 				if(file.endsWith(".png")){
-					System.out.println("display image:" + outputFolderPath+file);
-					Tabpanel tabPanel = (Tabpanel) component.getFellow("graphResultTab");
-
-					String path = outputFolderPath+file;
+//					System.out.println("display image:" + outputFolderPath+file);
+					Div div = (Div) component.getFellow("graphResultDiv");
+//					String webAppPath =  Sessions.getCurrent().getWebApp().getRealPath("").toString();
+					String path = RESULT_ANALYSIS_PATH+outputFolder.getName()+"/"+file;
 					Include studyInformationPage = new Include();
 					studyInformationPage.setDynamicProperty("imageName", path.replaceAll("\\\\", "//"));
 					studyInformationPage.setSrc("/user/analysis/imgviewer.zul");
-					studyInformationPage.setParent(tabPanel);
-					
-					tabPanel.appendChild(studyInformationPage);
-//					treeTabs.appendChild(newTab);
+					studyInformationPage.setParent(div);
+
+					System.out.println("imgPath "+path);
+					div.appendChild(studyInformationPage);
+					Separator sep = new Separator();
+					sep.setHeight("30px");
+					div.appendChild(sep);
 				}
 				if(file.endsWith(".csv")){
 					System.out.println("display image:" + outputFolderPath+file);
@@ -164,7 +169,7 @@ public class ResultViewer {
 						studyInformationPage.setDynamicProperty("csvReader", reader);
 						studyInformationPage.setDynamicProperty("name", file.replaceAll(".csv", ""));
 						studyInformationPage.setSrc("/user/analysis/csvviewer.zul");
-						
+					
 						studyInformationPage.setParent(newGroupBox);
 						tabPanel.appendChild(newGroupBox);
 						

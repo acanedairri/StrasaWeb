@@ -60,8 +60,6 @@
 							<toolbarbutton src="/images/delete.png" 
 								orient="vertical" tooltiptext="Delete Study"
 								onClick="@command('deleteStudy', studyId=each.study.id)" />
-
-
 						</cell>
 					</row>
 				</template>

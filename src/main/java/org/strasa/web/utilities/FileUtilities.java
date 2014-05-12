@@ -146,7 +146,7 @@ public class FileUtilities {
 		Filedownload.save(sb.toString().getBytes(), "text/plain", fileName + ".csv");
 	}
 
-	public static String createFileFromDatabase(List<String> columns,
+	public static File createFileFromDatabase(List<String> columns,
 			List<String[]> rows, String filePath) {
 		// TODO Auto-generated method stub
 		List<String[]> grid = rows;
@@ -186,7 +186,7 @@ public class FileUtilities {
 			System.out.println(e);
 		}
 		
-		return filePath;
+		return new File(filePath);
 	}
 
 }

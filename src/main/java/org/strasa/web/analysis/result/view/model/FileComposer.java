@@ -283,6 +283,7 @@ public class FileComposer extends SelectorComposer<Component> {
 		studyInformationPage.setDynamicProperty("imageName", filenamePath.replaceAll("\\\\", "//"));
 		studyInformationPage.setSrc("/user/analysis/imgviewer.zul");
 		studyInformationPage.setParent(viewPanel);
+		System.out.println("imgPath "+filenamePath);
 		viewPanel.appendChild(studyInformationPage);
 		
 	}

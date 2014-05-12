@@ -64,21 +64,22 @@ public class UserFileManager {
 
 	}
 	
-	public String moveUploadedFileToOutputFolder(String resultFolderPath, String realName,File dataFile){
+	public void moveUploadedFileToOutputFolder(String resultFolderPath, String realName,File dataFile){
 
 		System.out.println("move uploadedFile");
 		File movedFile= null;
 		File renamedFile = null;
 		try {
-			System.out.println("resultFolderPath to:"+resultFolderPath);
-			System.out.println("realname:"+realName);
-			System.out.println("datafile to:"+dataFile);
-			
 			FileUtils.copyFileToDirectory(dataFile, new File(resultFolderPath + File.separator ),true);
-			movedFile = new File(resultFolderPath + File.separator + dataFile.getName() );
-			String filePath = resultFolderPath + File.separator + realName;
+			movedFile = new File(resultFolderPath + File.separator + realName+ ".csv" );
+			String filePath = resultFolderPath + File.separator + realName+ "(dataset).csv" ;
 			renamedFile = new File(filePath.replaceAll(".csv", "(dataset).csv"));
 			movedFile.renameTo(renamedFile);
+
+
+			System.out.println("resultFolderPath to:"+resultFolderPath);
+			System.out.println("realname:"+realName);
+			System.out.println("movedFile to:"+movedFile);
 			System.out.println("renamed to:"+filePath);
 			
 		} catch (IOException e) {
@@ -87,8 +88,6 @@ public class UserFileManager {
 		}
 		//		dataFile.renameTo(new File(BASE_FOLDER.getAbsolutePath() + dataFile.getName())); 
 		System.out.println("File moved to: " + resultFolderPath);
-		return renamedFile.getAbsolutePath();
-
 	}
 	public static String buildUserPath(int userid, int studyid){
 

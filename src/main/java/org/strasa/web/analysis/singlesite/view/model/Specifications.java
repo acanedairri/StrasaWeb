@@ -273,6 +273,7 @@ public class Specifications {
 		controlsLb = (Listbox)  includeOtherOptions.getFellow("controlsLb");
 
 		Selectors.wireEventListeners(view, this);
+		userFileManager = new UserFileManager();
 	}
 
 	public List<String> getTypeOfDesignList() {
@@ -579,20 +580,19 @@ public class Specifications {
 			dataList.add(newRow.toArray(new String[newRow.size()]));
 		}
 		
-		fileName= selectedStudy.getName()+"_"+selectedDataSet.getTitle();
+		fileName= selectedStudy.getName()+"_"+selectedDataSet.getTitle().replaceAll(" ", "");
 		File BASE_FOLDER = new File(UserFileManager.buildUserPath(selectedStudy.getUserid(), selectedStudy.getId()));
 		if(!BASE_FOLDER.exists()) BASE_FOLDER.mkdirs();
-		String createPath = BASE_FOLDER.getAbsolutePath()+ File.separator+ String.valueOf(Calendar.getInstance().getTimeInMillis()+ fileName.replaceAll(" ", "") + ".csv");
+		String createPath = BASE_FOLDER.getAbsolutePath()+ File.separator+ fileName + "(dataset).csv";
 		
 		System.out.println("created path "+createPath);
-		String filePath = FileUtilities.createFileFromDatabase(columnList, dataList, createPath);
-
-		if (filePath == null)
+		uploadedFile = FileUtilities.createFileFromDatabase(columnList, dataList, createPath);
+		
+		if (uploadedFile == null)
 			return;
 
-		uploadedFile = new File(filePath);
 		Map<String,Object> args = new HashMap<String,Object>();
-		args.put("filePath", filePath);
+		args.put("filePath", uploadedFile.getAbsolutePath());
 		BindUtils.postGlobalCommand(null, null, "setSsaListvariables", args);
 
 		isVariableDataVisible = true;
@@ -632,7 +632,6 @@ public class Specifications {
 
 				uploadedFile = FileUtilities.getFileFromUpload(ctx, view);
 
-				userFileManager = new UserFileManager();
 				String filePath = userFileManager.uploadFileForAnalysis(fileName, uploadedFile);
 
 				if (tempFile == null)
@@ -717,10 +716,8 @@ public class Specifications {
 	public void displayTextFileContent(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
 		setSsaModel(new SingleSiteAnalysisModel());
-
 		rServeManager = new RServeManager();
 		rServeManager.doSingleEnvironmentAnalysis(new SingleSiteAnalysisModel());
-
 		System.out.println("end rserve ssa");
 
 	}
@@ -793,25 +790,28 @@ public class Specifications {
 	@Command()
 	public void validateSsaInputs() {
 		// TODO Auto-generated method stub
-		try{
+//		try{
 			if(validateSsaModel()){
 				System.out.println("pasing variables");
 				Map<String,Object> args = new HashMap<String,Object>();
 				args.put("ssaModel", ssaModel);
 				BindUtils.postGlobalCommand(null, null, "displaySsaResult", args);
 			} else Messagebox.show(errorMessage);
-		} catch(NullPointerException npe){
-			
-		}
+//		} catch(NullPointerException npe){
+//			
+//		}
 	}
 
 	private boolean validateSsaModel() {
 		// TODO Auto-generated method stub
 
-		
+		String folderPath = AnalysisUtils.createOutputFolder(fileName.replaceAll(" ", ""), "ssa");
 		//set Paths
-		ssaModel.setResultFolderPath(AnalysisUtils.createOutputFolder(fileName.replaceAll(" ", ""), "ssa"));
-		String filePath = userFileManager.moveUploadedFileToOutputFolder(ssaModel.getResultFolderPath(), fileName.replaceAll(" ", ""), uploadedFile);
+		ssaModel.setResultFolderPath(folderPath);
+		
+		
+		userFileManager.moveUploadedFileToOutputFolder(folderPath, fileName.replaceAll(" ", ""), uploadedFile);
+		
 		ssaModel.setOutFileName(ssaModel.getResultFolderPath()+ "SEA_output.txt");
 
 		//set Vars
@@ -1106,7 +1106,7 @@ public class Specifications {
 		return studyDataSets;
 	}
 
-	public void setStudyDataSets(List<StudyDataSet> studyDataSets) {
+	public void setStudyDataSets(List<StudyDataSet> studyDataSets){
 		this.studyDataSets = studyDataSets;
 	}
 
