@@ -12,6 +12,9 @@ import java.util.List;
 import org.analysis.rserve.manager.RServeManager;
 import org.apache.commons.io.input.ReaderInputStream;
 import org.spring.security.model.SecurityUtil;
+import org.strasa.web.analysis.result.view.model.FileComposer;
+import org.strasa.web.analysis.result.view.model.FileModel;
+import org.strasa.web.analysis.result.view.model.FileModelTreeNode;
 import org.strasa.web.analysis.view.model.SingleSiteAnalysisModel;
 import org.strasa.web.utilities.FileUtilities;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -24,6 +27,9 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Include;
@@ -32,6 +38,7 @@ import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabpanel;
 import org.zkoss.zul.Tabpanels;
 import org.zkoss.zul.Tabs;
+import org.zkoss.zul.Treeitem;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -41,10 +48,12 @@ public class ResultViewer {
 	private AMedia fileContent;
 	private File tempFile;
 	private static final String FILE_SEPARATOR  = System.getProperty("file.separator");
+	private static final String IMAGE_THUMBNAIL_HEIGHT = "150px";
+	private static final String IMAGE_THUMBNAIL_WIDTH = "150px";
 	private static String RESULT_ANALYSIS_PATH=FILE_SEPARATOR+"resultanalysis"+FILE_SEPARATOR+SecurityUtil.getUserName()+FILE_SEPARATOR+"Single-Site"+FILE_SEPARATOR;
 
 	@AfterCompose
-	public void init(@ContextParam(ContextType.COMPONENT) Component component,
+	public void init(@ContextParam(ContextType.COMPONENT) final Component component,
 			@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("outputFolderPath") String outputFolderPath){
 		StringBuilder sb = new StringBuilder();
 		System.out.println("outputFolder REsult Analysis:" + outputFolderPath);
@@ -84,15 +93,29 @@ public class ResultViewer {
 				if(file.endsWith(".png")){
 					//					System.out.println("display image:" + outputFolderPath+file);
 					Div div = (Div) component.getFellow("graphResultDiv");
-					//					String webAppPath =  Sessions.getCurrent().getWebApp().getRealPath("").toString();
-					String path = RESULT_ANALYSIS_PATH+outputFolder.getName()+"/"+file;
+					final String path = RESULT_ANALYSIS_PATH+outputFolder.getName()+"/"+file;
+					final Groupbox newGroupBox = new Groupbox();
+					//					newGroupBox.setStyle("overflow: auto");
+					newGroupBox.setTitle(file.replaceAll(".csv", ""));
+					newGroupBox.setHeight(IMAGE_THUMBNAIL_HEIGHT);
+					newGroupBox.setWidth(IMAGE_THUMBNAIL_WIDTH);
+					newGroupBox.setClosable(false);
+					
+					newGroupBox.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+						@Override
+						public void onEvent(Event event) throws Exception {
+							zoomImage(path.replaceAll("\\\\", "//"), component);
+						}
+					});
+					
 					Include studyInformationPage = new Include();
+					studyInformationPage.setDynamicProperty("height", IMAGE_THUMBNAIL_HEIGHT);
+					studyInformationPage.setDynamicProperty("width", IMAGE_THUMBNAIL_WIDTH);
 					studyInformationPage.setDynamicProperty("imageName", path.replaceAll("\\\\", "//"));
 					studyInformationPage.setSrc("/user/analysis/imgviewer.zul");
-					studyInformationPage.setParent(div);
-
+					studyInformationPage.setParent(newGroupBox);
 					System.out.println("imgPath "+path);
-					div.appendChild(studyInformationPage);
+					div.appendChild(newGroupBox);
 					Separator sep = new Separator();
 					sep.setHeight("30px");
 					div.appendChild(sep);
@@ -208,6 +231,20 @@ public class ResultViewer {
 			tab = (Tab) component.getFellow("graphResult");
 			detach(tabanel,tab);
 		}
+	}
+
+	protected void zoomImage(String dynamicProperty, Component component) {
+		// TODO Auto-generated method stub
+		Div div = (Div) component.getFellow("zoomDiv");
+		if(div.getChildren().size()>0) div.getChildren().get(0).detach();
+		
+		Include studyInformationPage = new Include();
+		studyInformationPage.setDynamicProperty("height", FileComposer.IMAGE_HEIGHT);
+		studyInformationPage.setDynamicProperty("width", FileComposer.IMAGE_WIDTH);
+		studyInformationPage.setDynamicProperty("imageName", dynamicProperty);
+		studyInformationPage.setSrc("/user/analysis/imgviewer.zul");
+		studyInformationPage.setParent(div);
+		div.appendChild(studyInformationPage);
 	}
 
 	private void detach(Tabpanel tabanel, Tab tab) {

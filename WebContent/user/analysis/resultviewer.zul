@@ -9,8 +9,11 @@
 		</tabs>
 		<tabpanels>
 			<tabpanel id="txtResultTab"  style="overflow: auto"/>
-			<tabpanel id="graphResultTab"  style="overflow: auto">
-				<div id="graphResultDiv" vflex="1" />
+			<tabpanel id="graphResultTab">
+			<hlayout>
+				<div id="graphResultDiv" width="250px" height="800px" style="overflow: auto"/>
+				<div id="zoomDiv" style="overflow: auto" hflex="1" vflex="1" />
+			</hlayout>
 			</tabpanel>
 			<tabpanel id="csvResultTab"  style="overflow: auto"/>
 			<tabpanel id="dataSetTab"  style="overflow: auto"/>

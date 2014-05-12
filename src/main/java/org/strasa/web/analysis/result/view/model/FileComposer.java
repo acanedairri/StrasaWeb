@@ -67,6 +67,9 @@ public class FileComposer extends SelectorComposer<Component> {
 	private Div viewPanel;
 
 	private static final String FILE_SEPARATOR  = System.getProperty("file.separator");
+	public static final String IMAGE_HEIGHT = "800px";
+	public static final String IMAGE_WIDTH = "800px";
+	
 	private static String RESULT_ANALYSIS_PATH=FILE_SEPARATOR+"resultanalysis"+FILE_SEPARATOR+SecurityUtil.getUserName()+FILE_SEPARATOR;
 
 	private AdvancedFileTreeModel fileTreeModel;
@@ -281,6 +284,8 @@ public class FileComposer extends SelectorComposer<Component> {
 		if(viewPanel.getChildren().size()>0) viewPanel.getChildren().get(0).detach();
 		Include studyInformationPage = new Include();
 		studyInformationPage.setDynamicProperty("imageName", filenamePath.replaceAll("\\\\", "//"));
+		studyInformationPage.setDynamicProperty("height", IMAGE_HEIGHT);
+		studyInformationPage.setDynamicProperty("width", IMAGE_WIDTH);
 		studyInformationPage.setSrc("/user/analysis/imgviewer.zul");
 		studyInformationPage.setParent(viewPanel);
 		System.out.println("imgPath "+filenamePath);
