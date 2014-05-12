@@ -6,10 +6,7 @@
 				sclass="btn-success" image="/images/export16.png"
 				onClick="@command('exportRowData', columns=vm.columnList, rows=vm.dataList)" />
 		</div> 
-		<div id="datagrid">
-		
-		
-		</div>
+		<div id="datagrid" />
 
 	</window>
 
