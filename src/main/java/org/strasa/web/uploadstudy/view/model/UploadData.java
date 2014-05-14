@@ -783,6 +783,7 @@ public class UploadData extends ProcessTabViewModel {
 		study.setShared(false);
 		study.setDatecreated(new Date());
 		study.setDatelastmodified(new Date());
+		study.setDescription(studyDescription);
 		if (study.getId() == null && new StudyManager().isProjectExist(study, userID)) {
 			Messagebox.show("Error: Study name already exist! Please choose a different name.", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 

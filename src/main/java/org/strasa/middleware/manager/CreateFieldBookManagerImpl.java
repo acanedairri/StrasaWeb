@@ -21,7 +21,9 @@ package org.strasa.middleware.manager;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,6 +50,7 @@ import org.strasa.middleware.model.StudyGermplasm;
 import org.strasa.middleware.model.StudyVariable;
 import org.strasa.web.common.api.ExcelHelper;
 import org.strasa.web.createfieldbook.view.model.CreateFieldBookException;
+import org.strasa.web.createfieldbook.view.pojos.CreateFieldBookThread;
 import org.strasa.web.createfieldbook.view.pojos.CreateFieldbookTemplateParser;
 import org.strasa.web.createfieldbook.view.pojos.ExtSiteInformationModel;
 import org.strasa.web.createfieldbook.view.pojos.SiteInformationModel;
@@ -74,6 +77,8 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 	/** The output file. */
 	File outputFile;
 
+	CreateFieldBookThread mainThread;
+
 	/** The lst site info. */
 	private ArrayList<SiteInformationModel> lstSiteInfo = new ArrayList<SiteInformationModel>();
 
@@ -88,11 +93,12 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 	 * @param outputFolder
 	 *            the output folder
 	 */
-	public CreateFieldBookManagerImpl(ArrayList<SiteInformationModel> lstSiteInfo, Study study, File outputFolder) {
+	public CreateFieldBookManagerImpl(ArrayList<SiteInformationModel> lstSiteInfo, Study study, File outputFolder, CreateFieldBookThread thread) {
 
 		this.lstSiteInfo = lstSiteInfo;
 		this.study = study;
 		this.outputFolder = outputFolder;
+		this.mainThread = thread;
 
 	}
 
@@ -112,40 +118,70 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 	 * @throws Exception
 	 *             the exception
 	 */
-	public File generateFieldBook() throws CreateFieldBookException, Exception {
+	public void generateFieldBook() throws CreateFieldBookException, Exception {
 		// Create excel
+		mainThread.onStart();
+		try {
 
-		workbook = createExcel(study.getName() + ".xls");
+			mainThread.updateUI("Creating Workbook...");
+			workbook = createExcel(study.getName() + ".xls");
 
-		Sheet descriptionSheet = workbook.createSheet("Description");
-		generateMetaInfo(descriptionSheet);
-		generateCondition(descriptionSheet);
-		generateFactor(descriptionSheet, lstSiteInfo);
-		generateVariate(descriptionSheet, lstSiteInfo);
-		setColumnSize(descriptionSheet, 7000);
-		observationSheet = workbook.createSheet("Observation");
+			Sheet descriptionSheet = workbook.createSheet("Description");
 
-		for (SiteInformationModel siteInfo : lstSiteInfo) {
-			generateSheetFromSite(siteInfo, observationSheet);
+			mainThread.updateUI("Generating Metadata information...");
+			generateMetaInfo(descriptionSheet);
+
+			mainThread.updateUI("Generating Condition information...");
+			generateCondition(descriptionSheet);
+
+			mainThread.updateUI("Generating Factor information...");
+			generateFactor(descriptionSheet, lstSiteInfo);
+			mainThread.updateUI("Generating Variate information...");
+			generateVariate(descriptionSheet, lstSiteInfo);
+			setColumnSize(descriptionSheet, 7000);
+			observationSheet = workbook.createSheet("Observation");
+
+			mainThread.updateUI("Generating Observation data sheet...");
+
+			for (SiteInformationModel siteInfo : lstSiteInfo) {
+				generateSheetFromSite(siteInfo, observationSheet);
+			}
+			populateVariateHeader(observationSheet, lstSiteInfo);
+
+			setColumnAutoResize(observationSheet);
+
+			Sheet siteInformationSheet = workbook.createSheet("Site Information");
+
+			mainThread.updateUI("Generating Site information...");
+
+			generateSiteInformationSheet(siteInformationSheet, lstSiteInfo);
+			setColumnAutoResize(siteInformationSheet);
+
+			Sheet systemInformationSheet = workbook.createSheet("SYSTEM INFORMATION");
+			generateSystemInfoSheet(systemInformationSheet);
+			workbook.setSheetHidden(3, Workbook.SHEET_STATE_VERY_HIDDEN);
+
+			outputFile = new File(outputFolder.getAbsolutePath() + "/" + study.getName() + ".xls");
+			FileOutputStream fos = new FileOutputStream(outputFile);
+			mainThread.updateUI("Writing Fieldbook Template to excel...");
+			workbook.write(fos);
+			fos.close();
+
+			mainThread.onFinish(outputFile);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CreateFieldBookException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		populateVariateHeader(observationSheet, lstSiteInfo);
 
-		setColumnAutoResize(observationSheet);
-
-		Sheet siteInformationSheet = workbook.createSheet("Site Information");
-
-		generateSiteInformationSheet(siteInformationSheet, lstSiteInfo);
-		setColumnAutoResize(siteInformationSheet);
-
-		Sheet systemInformationSheet = workbook.createSheet("SYSTEM INFORMATION");
-		generateSystemInfoSheet(systemInformationSheet);
-		workbook.setSheetHidden(3, Workbook.SHEET_STATE_VERY_HIDDEN);
-
-		outputFile = new File(outputFolder.getAbsolutePath() + "/" + study.getName() + ".xls");
-		FileOutputStream fos = new FileOutputStream(outputFile);
-		workbook.write(fos);
-		fos.close();
-		return outputFile;
 	}
 
 	/**

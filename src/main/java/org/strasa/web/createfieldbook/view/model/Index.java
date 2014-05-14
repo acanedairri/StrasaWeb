@@ -3,6 +3,7 @@ package org.strasa.web.createfieldbook.view.model;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.manager.CreateFieldBookManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
@@ -22,6 +24,7 @@ import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyType;
 import org.strasa.middleware.model.StudyVariable;
+import org.strasa.web.createfieldbook.view.pojos.CreateFieldBookThread;
 import org.strasa.web.createfieldbook.view.pojos.SiteInformationModel;
 import org.strasa.web.updatestudy.view.Index.tabObject;
 import org.strasa.web.uploadstudy.view.model.AddProgram;
@@ -43,6 +46,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Messagebox;
@@ -81,6 +85,7 @@ public class Index {
 	private Project txtProject = new Project();
 	private ArrayList<SiteInformationModel> lstSiteInfo = new ArrayList<SiteInformationModel>();
 	private ArrayList<SiteInformationModel> lstSelectedSites = new ArrayList<SiteInformationModel>();
+	private String studyDescription;
 	private Integer siteInc = 1;
 	@Wire("#tabboxSites")
 	private Tabbox siteTabBox;
@@ -110,6 +115,18 @@ public class Index {
 
 			newSiteModel.lstStudyVariable = new ArrayList<StudyVariable>();
 			newSiteModel.lstStudyVariable.addAll(siteModel.lstStudyVariable);
+			try {
+				newSiteModel.setFileGenotype(File.createTempFile(siteModel.getFileGenotype().getName() + "_" + Calendar.getInstance().getTimeInMillis(), ".xls"));
+				FileUtils.copyFile(siteModel.getFileGenotype(), newSiteModel.getFileGenotype());
+
+				newSiteModel.setFileLayout(File.createTempFile(siteModel.getFileLayout().getName() + "_" + Calendar.getInstance().getTimeInMillis(), ".xls"));
+				FileUtils.copyFile(siteModel.getFileLayout(), newSiteModel.getFileLayout());
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 		inc.setDynamicProperty("SiteModel", newSiteModel);
 		inc.setDynamicProperty("SiteTab", newTab);
@@ -205,7 +222,7 @@ public class Index {
 	}
 
 	@Command
-	public void generateFieldbook() {
+	public void generateFieldbook(@ContextParam(ContextType.VIEW) final Component view) {
 
 		if (txtProgram == null || txtProject == null || txtStudyName == null || txtStudyType == null) {
 			Messagebox.show("Error: All fields are required", " Error", Messagebox.OK, Messagebox.ERROR);
@@ -235,11 +252,10 @@ public class Index {
 
 			return;
 		}
-		
-		
 
 		for (SiteInformationModel site : lstSiteInfo) {
-			if(site == null) System.out.println("it has...");
+			if (site == null)
+				System.out.println("it has...");
 			if (!StringUtils.isNullOrEmpty(site.validateAll())) {
 				Messagebox.show(site.validateAll(), "Information", Messagebox.OK, Messagebox.EXCLAMATION);
 				return;
@@ -260,6 +276,7 @@ public class Index {
 		study.setShared(false);
 		study.setDatecreated(new Date());
 		study.setDatelastmodified(new Date());
+		study.setDescription(studyDescription);
 		if (study.getId() == null && new StudyManager().isProjectExist(study, userID)) {
 			Messagebox.show("Error: Study name already exist! Please choose a different name.", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 
@@ -273,20 +290,65 @@ public class Index {
 
 		new StudyManagerImpl().insertStudy(study);
 
-		CreateFieldBookManagerImpl createFieldBookMan = new CreateFieldBookManagerImpl(lstSelectedSites, study, outputFolder);
-		try {
-			Filedownload.save(new FileInputStream(createFieldBookMan.generateFieldBook().getAbsolutePath()), "application/vnd.ms-excel", study.getName() + ".xls");
-		} catch (CreateFieldBookException e) {
+		CreateFieldBookThread cfThread = new CreateFieldBookThread() {
 
-			Messagebox.show(e.getMessage(), "Error", Messagebox.OK, Messagebox.ERROR);
+			@Override
+			public void updateUI(String msg) {
+				// TODO Auto-generated method stub
+				System.out.println(msg);
+				// ((Label) view.getFellow("lblbusybox")).setValue(msg);
+				;
 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			}
+
+			@Override
+			public void onError(String errorMsg) {
+				// TODO Auto-generated method stub
+				System.out.println(errorMsg);
+				Messagebox.show(errorMsg, "Error in creating Fieldbook", Messagebox.OK, Messagebox.EXCLAMATION);
+			}
+
+			@Override
+			public void onFinish(File outputFile) {
+				// TODO Auto-generated method stub
+
+				try {
+					Filedownload.save(new FileInputStream(outputFile.getAbsolutePath()), "application/vnd.ms-excel", study.getName() + ".xls");
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				Clients.clearBusy();
+
+			}
+
+			@Override
+			public void onStart() {
+
+			}
+		};
+		final CreateFieldBookManagerImpl createFieldBookMan = new CreateFieldBookManagerImpl(lstSelectedSites, study, outputFolder, cfThread);
+
+		Clients.showBusy("Generating Fieldbook please wait...");
+		view.addEventListener(Events.ON_CLIENT_INFO, new EventListener<Event>() {
+
+			@Override
+			public void onEvent(Event arg0) throws Exception {
+				try {
+					createFieldBookMan.generateFieldBook();
+				} catch (CreateFieldBookException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		});
+		Events.echoEvent("onClientInfo", view, null);
+
 	}
 
 	@NotifyChange("*")
@@ -345,12 +407,14 @@ public class Index {
 	@NotifyChange("*")
 	public void setStudy(Study study) {
 		this.study = study;
-		if(study == null) return;
+		if (study == null)
+			return;
 		this.txtStudyName = study.getName();
 		this.txtStudyType = new StudyTypeManagerImpl().getStudyTypeById(study.getStudytypeid()).getStudytype();
 		this.txtProgram = new ProgramManagerImpl().getProgramById(study.getProgramid());
 		this.txtProject = new ProjectManagerImpl().getProjectById(study.getProjectid());
 		this.startYear = Integer.parseInt(study.getStartyear());
+		this.studyDescription = study.getDescription();
 		this.endYear = Integer.parseInt(study.getEndyear());
 	}
 
@@ -422,6 +486,14 @@ public class Index {
 
 	public void setLstStudies(List<Study> lstStudies) {
 		this.lstStudies = lstStudies;
+	}
+
+	public String getStudyDescription() {
+		return studyDescription;
+	}
+
+	public void setStudyDescription(String studyDescription) {
+		this.studyDescription = studyDescription;
 	}
 
 }

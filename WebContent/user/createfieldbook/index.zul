@@ -4,7 +4,9 @@
 <zk>
 	<style>
 		.z-menupopup .z-menuitem-icon { left: 10px; !important }
+	
 	</style>
+	
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.createfieldbook.view.model.Index')"
 		height="100%" width="99%">
@@ -119,7 +121,11 @@
 							</template>
 						</combobox>
 					</row>
-
+			   <row>
+								<label class="name" value="Study Description:" />
+								<textbox width='173px'
+									value="@bind(vm.studyDescription)" />
+							</row>
 					<row>
 						<label class="name" value="Study Type:" />
 						<bandbox id="bdStudyType" mold="rounded"

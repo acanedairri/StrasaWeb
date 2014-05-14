@@ -123,7 +123,7 @@ public class Index {
 	private Program txtProgram = new Program();
 	private Project txtProject = new Project();
 	private boolean isDataUploaded = false;
-
+	private String studyDescription;
 	private boolean hasRawTabLoaded, hasDerivedLoaded, hasGenotypeLoaded;
 
 	public boolean isDataUploaded() {
@@ -361,7 +361,7 @@ public class Index {
 		}
 
 		if (txtProgram == null || txtProject == null || txtStudyName.isEmpty() || txtStudyType.isEmpty()) {
-			Messagebox.show("Error: All fields are requiredx", "Upload Error", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show("Error: All fields are required", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 
 			// TODO: must have message DIalog
 			return;
@@ -381,20 +381,25 @@ public class Index {
 		if (study == null) {
 			study = new Study();
 		}
+		if (new StudyManager().isProjectExist(txtStudyName, txtProgram.getId(), txtProject.getId(), study.getUserid())) {
+			if (!txtStudyName.equals(study.getName())) {
+				Messagebox.show("Error: Study name already exist! Please choose a different name.", "Upload Error", Messagebox.OK, Messagebox.ERROR);
+				return;
+
+			}
+
+		}
 		study.setName(txtStudyName);
 		study.setStudytypeid(new StudyTypeManagerImpl().getStudyTypeByName(txtStudyType).getId());
 		study.setProgramid(txtProgram.getId());
 		study.setProjectid(txtProject.getId());
 		study.setStartyear(String.valueOf(startYear));
 		study.setEndyear(String.valueOf(String.valueOf(endYear)));
+		study.setDescription(studyDescription);
 
 		study.setId(uploadModel.studyID);
 		study.setDatelastmodified(new Date());
-		if (new StudyManager().isProjectExist(study, study.getUserid())) {
-			Messagebox.show("Error: Study name already exist! Please choose a different name.", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 
-			return;
-		}
 		new StudyManagerImpl().updateStudyById(study);
 		Messagebox.show("Study information has been successfully updated.", "Information", Messagebox.OK, Messagebox.INFORMATION);
 
@@ -427,6 +432,7 @@ public class Index {
 			this.txtProject = new ProjectManagerImpl().getProjectById(study.getProjectid());
 			this.startYear = Integer.parseInt(study.getStartyear());
 			this.endYear = Integer.parseInt(study.getEndyear());
+			this.studyDescription = study.getDescription();
 			isNewDataSet = false;
 
 		}
@@ -498,19 +504,17 @@ public class Index {
 
 	public void relaunchMergeTab(boolean isRaw) {
 		if (isRaw) {
-			if(tabMergedRaw != null)
-			{
+			if (tabMergedRaw != null) {
 				tabMergedRaw.close();
 				tabMergedRaw.detach();
 				tabMergedRaw = null;
-			
+
 			}// System.out.println;
 
 			initializeDataSetTab(new StudyDataSet(), true, true, false, true);
 		} else {
 
-			if(tabMergedDerived != null)
-			{
+			if (tabMergedDerived != null) {
 				tabMergedDerived.close();
 				tabMergedDerived.detach();
 				tabMergedDerived = null;
@@ -753,6 +757,14 @@ public class Index {
 			this.tab = arg2;
 			this.isRaw = raw;
 		}
+	}
+
+	public String getStudyDescription() {
+		return studyDescription;
+	}
+
+	public void setStudyDescription(String studyDescription) {
+		this.studyDescription = studyDescription;
 	}
 
 }

@@ -114,7 +114,11 @@
 									<textbox width='173px'
 										value="@bind(vm.txtStudyName)" />
 								</row>
-
+ 						    <row>
+								<label class="name" value="Study Description:" />
+								<textbox width='173px'
+									value="@bind(vm.studyDescription)" />
+							</row>
 								<row>
 									<label class="name"
 										value="Study Type:" />
