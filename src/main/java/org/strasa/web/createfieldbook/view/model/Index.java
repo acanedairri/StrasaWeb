@@ -116,12 +116,16 @@ public class Index {
 			newSiteModel.lstStudyVariable = new ArrayList<StudyVariable>();
 			newSiteModel.lstStudyVariable.addAll(siteModel.lstStudyVariable);
 			try {
+				if(siteModel.getFileGenotype() != null) {
 				newSiteModel.setFileGenotype(File.createTempFile(siteModel.getFileGenotype().getName() + "_" + Calendar.getInstance().getTimeInMillis(), ".xls"));
 				FileUtils.copyFile(siteModel.getFileGenotype(), newSiteModel.getFileGenotype());
+				}
 
+				if(siteModel.getFileLayout() != null){
 				newSiteModel.setFileLayout(File.createTempFile(siteModel.getFileLayout().getName() + "_" + Calendar.getInstance().getTimeInMillis(), ".xls"));
 				FileUtils.copyFile(siteModel.getFileLayout(), newSiteModel.getFileLayout());
 
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

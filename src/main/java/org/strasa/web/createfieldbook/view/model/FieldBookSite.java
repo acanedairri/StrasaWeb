@@ -128,7 +128,7 @@ public class FieldBookSite {
 	@Wire("#bbox_location")
 	Bandbox bboxLocation;
 	List<Location> lstLocations;
-	private String labelDate;
+	private String labelDate = "Transplating/Sowing";
 	private String lblLayoutFileName;
 	private String lblGenotypeFileName;
 

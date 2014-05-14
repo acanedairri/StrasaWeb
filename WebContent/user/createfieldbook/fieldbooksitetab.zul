@@ -4,18 +4,27 @@
 		<style src="../css/main.css" />
 
 		<vlayout>
-		<button label="Copy this Site"  class="btn btn-info" onClick="@global-command('addSite', siteModel = vm.site)"></button>
+			<button label="Copy this Site" class="btn btn-info"
+				onClick="@global-command('addSite', siteModel = vm.site)">
+			</button>
 			<hlayout>
 
-				<groupbox  hflex="1" mold="3d">
+				<groupbox hflex="1" mold="3d">
 					<caption label="Site Information"></caption>
-					
+
 					<grid>
+						<columns>
+							<column label="" width="45%"></column>
+
+							<column label="" width="45%"></column>
+
+							<column label="" width="10%"></column>
+						</columns>
 						<rows>
 							<row>
 								<label value="Site Name"></label>
-								<textbox
-									value="@bind(vm.site.sitename)" onBlur="@command('updateTab')" >
+								<textbox value="@bind(vm.site.sitename)"
+									onBlur="@command('updateTab')">
 								</textbox>
 							</row>
 							<row>
@@ -24,7 +33,7 @@
 									value="@bind(vm.site.location.locationname)"
 									onChange="@command('doLocationSearch')" instant="true"
 									autodrop="true" onOpen="@command('autoFillBandbox')"
-									onClick="@command('openBandbox')" width="80%">
+									onClick="@command('openBandbox')" width="100%">
 									<bandpopup>
 										<vbox width="40%">
 
@@ -78,7 +87,7 @@
 										</vbox>
 									</bandpopup>
 								</bandbox>
-										<toolbarbutton
+								<toolbarbutton
 									id="btnadd_${forEachStatus.index}" image="/images/plus.png"
 									tooltiptext="Add New Location"
 									onClick="@command('addLocation')" />
@@ -127,8 +136,8 @@
 					<caption label="Agronomy"></caption>
 					<grid>
 						<columns>
-							<column />
-							<column />
+							<column width="40%" />
+							<column width="60%" />
 						</columns>
 						<rows>
 							<row>
@@ -138,7 +147,8 @@
 									<combobox
 										model="@load(vm.plantingtypes)" readonly="true"
 										selectedItem="@bind(vm.site.plantingtype)"
-										onSelect="@command('updateLabelDate')" width="99%" value = "@bind(vm.site.plantingtype.planting)">
+										onSelect="@command('updateLabelDate')" width="100%"
+										value="@bind(vm.site.plantingtype.planting)">
 										<template name="model">
 											<comboitem
 												value="@load(each)" label="@load(each.planting)" />
@@ -216,22 +226,9 @@
 
 								<combobox id="cmbTreatmentStructure"
 									value="@bind(vm.site.design.treatmentstructure)" width="99%">
-									<attribute name="onCreate"><![CDATA[
-	List list2 = new ArrayList();
-	list2.add("One Factor");
-	list2.add("Two Factor Factorial");
-	list2.add("Three Factor Factorial");
-	ListModelList lm2 = new ListModelList(list2);
-	lm2.addSelection(lm2.get(0));
-	cmbTreatmentStructure.setModel(lm2);
-	txtDRow2.setValue("");
-	txtDRow3.setValue("");
-	txtDRow4.setValue("");
-
-	dRow2.setVisible(false);
-	dRow3.setVisible(false);
-	dRow4.setVisible(false);
-]]></attribute>
+					<comboitem label="One Factor" value = "One Factor"/>
+									<comboitem label="Two Factor Factorial" value = "Two Factor Factorial"/>
+										<comboitem label="Three Factor Factorial" value = "Three Factor Factorial"/>
 
 									<attribute name = "onSelect">
     							<![CDATA[
@@ -297,13 +294,18 @@
 							<caption label="Genotype:"></caption>
 							<vlayout>
 								<div>
-									<label value="@load(vm.site.lblGenotypeFileName)"></label>
+									<label
+										value="@load(vm.site.lblGenotypeFileName)">
+									</label>
 								</div>
 								<div>
-									<button label="Browse" onUpload="@command('uploadGenotype')"
-										upload="true" class="btn btn-primary">
+									<button label="Browse"
+										onUpload="@command('uploadGenotype')" upload="true"
+										class="btn btn-primary">
 									</button>
-									<button label="Remove" onClick="@command('removeGenotype')"  class="btn"></button>
+									<button label="Remove"
+										onClick="@command('removeGenotype')" class="btn">
+									</button>
 								</div>
 							</vlayout>
 						</groupbox>
@@ -311,13 +313,18 @@
 							<caption label="Layout:"></caption>
 							<vlayout>
 								<div>
-									<label value="@bind(vm.site.lblLayoutFileName)"></label>
+									<label
+										value="@bind(vm.site.lblLayoutFileName)">
+									</label>
 								</div>
 								<div>
-									<button label="Browse" onUpload="@command('uploadLayout')"
-										upload="true"  class="btn btn-primary">
+									<button label="Browse"
+										onUpload="@command('uploadLayout')" upload="true"
+										class="btn btn-primary">
 									</button>
-									<button label="Remove" onClick="@command('removeLayout')"  class="btn"></button>
+									<button label="Remove"
+										onClick="@command('removeLayout')" class="btn">
+									</button>
 								</div>
 							</vlayout>
 						</groupbox>
@@ -326,35 +333,42 @@
 				</groupbox>
 			</hlayout>
 			<groupbox mold="3d">
-				<caption label="Variate List"> 	<button label ="Add Trait" class="btn btn-info pull-right" onClick="@command('addTrait')" /></caption>
-			
-			      <listbox  multiple="false" checkmark="true" oddRowSclass="odd"
-            model="@load(vm.site.lstStudyVariable)"   emptyMessage="No Trait code yet..." rows="10" >
-              <auxhead>
-                <auxheader colspan="3" class="topic"> </auxheader>
-            </auxhead>
-            <listhead>
-           
-                <listheader label="Trait Code"  hflex ="1"/>
-                <listheader label="Property"  hflex ="1"/>
-                <listheader label="Scale"   hflex ="1"/>
-                <listheader label="Method"  hflex ="1"/>
-                 <listheader label="Trait Code"  hflex ="1"/>
-                 <listheader label="" width="30px"/>
-            </listhead>
-            <template name="model" >
-                <listitem>
-                    <listcell label="@load(each.variablecode)" />
-                    <listcell label="@load(each.property)" />
-                    <listcell label="@load(each.scale)" />
-                       <listcell label="@load(each.method)" />
-                          <listcell label="@load(each.datatype)" />
-                          <listcell>
-                          	<button label = "X" onClick="@command('removeTrait',trait=each)"></button>
-                          </listcell>
-                </listitem>
-            </template>
-        </listbox>
+				<caption label="Variate List">
+					<button label="Add Trait"
+						class="btn btn-info pull-right" onClick="@command('addTrait')" />
+				</caption>
+
+				<listbox multiple="false" checkmark="true"
+					oddRowSclass="odd" model="@load(vm.site.lstStudyVariable)"
+					emptyMessage="No Trait code yet..." rows="10">
+					<auxhead>
+						<auxheader colspan="3" class="topic">
+						</auxheader>
+					</auxhead>
+					<listhead>
+
+						<listheader label="Trait Code" hflex="1" />
+						<listheader label="Property" hflex="1" />
+						<listheader label="Scale" hflex="1" />
+						<listheader label="Method" hflex="1" />
+						<listheader label="Trait Code" hflex="1" />
+						<listheader label="" width="30px" />
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(each.variablecode)" />
+							<listcell label="@load(each.property)" />
+							<listcell label="@load(each.scale)" />
+							<listcell label="@load(each.method)" />
+							<listcell label="@load(each.datatype)" />
+							<listcell>
+								<button image="/images/cross.png"
+									onClick="@command('removeTrait',trait=each)">
+								</button>
+							</listcell>
+						</listitem>
+					</template>
+				</listbox>
 			</groupbox>
 		</vlayout>
 	</div>
