@@ -61,8 +61,10 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import com.mysql.jdbc.StringUtils;
@@ -85,7 +87,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	private StudyDesign selectedDesignInfo = new StudyDesign();;
 	private PlantingType selectedSitePlantingType = new PlantingType(); // .getPlantingTypeById(selectedAgroInfo.getPlantingtypeid());
 	private int selectedID = 0;
-
+	private boolean pageLoaded = false;
 	protected boolean goToNextPage = true;
 	private int selectedPlantingIndex = 0;
 	private boolean applyToAll = false;
@@ -113,6 +115,8 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 	@Wire("#mainGrid")
 	Grid mainGrid;
+	@Wire("#cmbTreatmentStructure")
+	Combobox cmbTreatmentStructure;
 	private int x;
 
 	@Command
@@ -316,6 +320,9 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		 * view.getFellow("dRow3").setVisible(false);
 		 * view.getFellow("dRow4").setVisible(false); } });
 		 */
+
+		Events.echoEvent("onChange", view.getFellow("cmbTreatmentStructure"), null);
+		pageLoaded = true;
 	}
 
 	public String getLabelDate() {
@@ -357,6 +364,13 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		BindUtils.postNotifyChange(null, null, StudySiteInfo.this, "selectedDesignInfo");
 		BindUtils.postNotifyChange(null, null, StudySiteInfo.this, "selectedSitePlantingType");
 		BindUtils.postNotifyChange(null, null, StudySiteInfo.this, "labelDate");
+
+		if (pageLoaded) {
+			Events.echoEvent("onChange", cmbTreatmentStructure, null);
+			System.out.println("onChange called");
+			cmbTreatmentOnChange(cmbTreatmentStructure);
+		}
+
 	}
 
 	@Command("updateSelectedSitePlantingType")
@@ -705,6 +719,40 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			sites.get(i).selectedPlantingIndex = selectedPlantingIndex;
 			sites.get(i).selectedSitePlantingType = selectedSitePlantingType;
 
+		}
+	}
+
+	@Command
+	public void cmbTreatmentOnChange(@ContextParam(ContextType.VIEW) Component view) {
+		System.out.println("Called");
+		Combobox cmbTreatmentStructure = (Combobox) view.getFellow("cmbTreatmentStructure");
+		Textbox txtDRow2 = (Textbox) view.getFellow("txtDRow2");
+		Textbox txtDRow3 = (Textbox) view.getFellow("txtDRow3");
+		Textbox txtDRow4 = (Textbox) view.getFellow("txtDRow4");
+
+		if (selectedDesignInfo.getTreatmentstructure().equals("One Factor")) {
+			txtDRow2.setValue("");
+			txtDRow3.setValue("");
+			txtDRow4.setValue("");
+
+			txtDRow2.setDisabled(true);
+			txtDRow3.setDisabled(true);
+			txtDRow4.setDisabled(true);
+
+		} else if (selectedDesignInfo.getTreatmentstructure().equals("Two Factor Factorial")) {
+			txtDRow3.setValue("");
+			txtDRow4.setValue("");
+			txtDRow2.setDisabled(false);
+			txtDRow3.setDisabled(true);
+			txtDRow4.setDisabled(true);
+
+		} else if (selectedDesignInfo.getTreatmentstructure().equals("Three Factor Factorial")) {
+			txtDRow2.setDisabled(false);
+			txtDRow3.setDisabled(false);
+			txtDRow4.setDisabled(false);
+
+		} else {
+			System.out.println("TEST NONE" + selectedDesignInfo.getTreatmentstructure());
 		}
 	}
 
