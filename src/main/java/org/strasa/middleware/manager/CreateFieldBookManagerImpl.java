@@ -109,10 +109,6 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 
 	}
 
-	public void createFunction() {
-
-	}
-
 	/**
 	 * Generate field book.
 	 * 
