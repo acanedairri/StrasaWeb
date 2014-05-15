@@ -410,11 +410,10 @@ public class Index {
 		// editing mode
 		uploadModel = new ProcessTabViewModel();
 
-		refreshProgramList(null);
-		refreshProjectList(null);
 		// Integer studyIDFromURL = Integer.parseInt(Executions.getCurrent()
 		// .getParameter("studyid"));
 		//
+		refreshProgramList(null);
 		if (true) {
 			uploadModel.setStudyID(studyID);
 			uploadModel.setUpdateMode(true);
@@ -436,6 +435,8 @@ public class Index {
 			isNewDataSet = false;
 
 		}
+		refreshProjectList(new ProgramManagerImpl().getProgramById(study.getProgramid()));
+		this.txtProject = new ProjectManagerImpl().getProjectById(study.getProjectid());
 
 	}
 

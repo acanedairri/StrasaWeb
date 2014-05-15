@@ -19,6 +19,7 @@ import org.strasa.middleware.model.Study;
 import org.strasa.web.createfieldbook.view.model.CreateFieldBookException;
 import org.strasa.web.utilities.FileUtilities;
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -31,6 +32,7 @@ import org.zkoss.zhtml.Messagebox;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
@@ -146,7 +148,7 @@ public class EditUploadedStudies {
 		btnUploadNewStudy.setVisible(true);
 		divUpdateStudy.setVisible(true);
 		System.out.println("studyids: " + studyid);
-		Map arg = new HashMap();
+		Map<String, Integer> arg = new HashMap<String, Integer>();
 		arg.put("studyID", studyid);
 		List<Component> list = Selectors.find(view, "#divUpdateStudyContainer");
 		Components.removeAllChildren(list.get(0));
@@ -161,7 +163,7 @@ public class EditUploadedStudies {
 		btnUploadNewStudy.setVisible(false);
 		// divUpdateStudy.detach();
 		divUpdateStudy.setVisible(true);
-		Map arg = new HashMap();
+		Map<?, ?> arg = new HashMap<Object, Object>();
 		List<Component> list = Selectors.find(view, "#divUpdateStudyContainer");
 		Components.removeAllChildren(list.get(0));
 		Executions.createComponents("/user/uploadstudy/index.zul", list.get(0), arg);
@@ -185,39 +187,21 @@ public class EditUploadedStudies {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@NotifyChange("editStudyList")
 	@Command("deleteStudy")
 	public void deleteStudy(@BindingParam("studyId") final Integer studyId) {
 
-		/*
-		 * Messagebox.show("Are you sure to delete this Study?",
-		 * "Confirm Dialog", Messagebox.OK | Messagebox.CANCEL,
-		 * Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
-		 * public void onEvent(Event evt) throws InterruptedException { if
-		 * (evt.getName().equals("onOK")) { studyMan.deleteStudyById(studyId);
-		 * populateEditStudyList(); BindUtils.postNotifyChange(null, null,
-		 * EditUploadedStudies.this, "editStudyList");
-		 * 
-		 * } } });
-		 */
+		Messagebox.show("Are you sure to delete this Study?", "Confirm Dialog", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+			public void onEvent(Event evt) throws InterruptedException {
+				if (evt.getName().equals("onOK")) {
+					studyMan.deleteStudyById(studyId);
+					populateEditStudyList();
+					BindUtils.postNotifyChange(null, null, EditUploadedStudies.this, "editStudyList");
 
-		Thread myThread = new Thread() {
-			public void run() {
-				try {
-					for (int i = 0; i <= 100; i += 10) {
-						// Do something
-						// percent = i;
-						System.out.println("El otro thread " + i);
-						// que.publish(new
-						// Event("onActualizaProgreso",null,percent));
-						Thread.sleep(1000);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
 			}
-		};
-		myThread.start();
+		});
 
 	}
 

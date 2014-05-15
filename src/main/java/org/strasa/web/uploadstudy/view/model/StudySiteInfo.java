@@ -537,10 +537,9 @@ public class StudySiteInfo extends ProcessTabViewModel {
 	}
 
 	@Command
-	public void setLocationRow(@BindingParam("id") int lstId) {
+	public void setLocationRow(@BindingParam("loc") Location loc) {
 
-		System.out.println("selectedRow: " + selectedID);
-		sites.get(selectedID).setSelectedLocation(getLocationById(lstId));
+		sites.get(selectedID).setSelectedLocation(loc);
 		BindUtils.postNotifyChange(null, null, this.sites.get(selectedID), "*");
 		toggleBandBox(false, selectedID, 1);
 	}
@@ -729,7 +728,8 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		Textbox txtDRow2 = (Textbox) view.getFellow("txtDRow2");
 		Textbox txtDRow3 = (Textbox) view.getFellow("txtDRow3");
 		Textbox txtDRow4 = (Textbox) view.getFellow("txtDRow4");
-
+		if (StringUtils.isNullOrEmpty(selectedDesignInfo.getTreatmentstructure()))
+			return;
 		if (selectedDesignInfo.getTreatmentstructure().equals("One Factor")) {
 			txtDRow2.setValue("");
 			txtDRow3.setValue("");

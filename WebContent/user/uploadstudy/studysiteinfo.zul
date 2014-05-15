@@ -126,7 +126,7 @@
 													<row>
 														<toolbarbutton
 															label="@load(each.locationname)" width="99%"
-															onClick="@command('setLocationRow', id = each.id)" />
+															onClick="@command('setLocationRow', loc = each)" />
 														<label
 															value="@bind(each.country)" />
 
