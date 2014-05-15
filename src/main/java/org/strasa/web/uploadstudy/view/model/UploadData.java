@@ -792,7 +792,7 @@ public class UploadData extends ProcessTabViewModel {
 		studyRawData.addStudy(study);
 		if (uploadTo.equals("database")) {
 
-			if (isNewDataset) {
+			if (!this.isDataUploaded) {
 				System.out.println("DATA UPLOADING! ");
 				this.dataset.setStudyid(study.getId());
 				this.dataset.setDatatype((isRawData) ? "rd" : "dd");

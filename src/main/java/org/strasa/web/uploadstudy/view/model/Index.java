@@ -22,6 +22,7 @@ package org.strasa.web.uploadstudy.view.model;
 import java.util.ArrayList;
 
 import org.strasa.web.common.api.ProcessTabViewModel;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -181,20 +182,9 @@ public class Index {
 		}
 		if (panel != null && !panel.getChildren().isEmpty() && siteReloaded) {
 
-			panel.getChildren().get(0).detach();
-			Include include = new Include();
-			include.setDynamicProperty("uploadModel", uploadModel);
-			include.setSrc(zulFileName);
-			// include.setMode("defer");
-			/*
-			 * Map arg = new HashMap(); arg.put("uploadModel", uploadModel);
-			 * 
-			 * Executions.createComponents(zulFileName, panel, arg);
-			 */
-			System.out.println("reloading...");
+			BindUtils.postGlobalCommand(null, null, "refreshLocationList", null);
 
-			include.setParent(panel);
-			siteReloaded = false;
+			System.out.println("reloading...");
 		}
 	}
 

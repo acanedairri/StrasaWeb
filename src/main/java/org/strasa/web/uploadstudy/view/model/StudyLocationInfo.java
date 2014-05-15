@@ -30,6 +30,7 @@ import org.strasa.middleware.model.Location;
 import org.strasa.web.common.api.FormValidator;
 import org.strasa.web.common.api.ProcessTabViewModel;
 import org.strasa.web.utilities.GridValidationUtility;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -158,6 +159,14 @@ public class StudyLocationInfo extends ProcessTabViewModel {
 
 		lstLocations.addAll(studyLocationManager.getLocationsFromStudySite(studyID, this.dataset.getId()));
 
+	}
+
+	@GlobalCommand
+	public void refreshLocationList() {
+		lstLocations.clear();
+		lstLocations.addAll(studyLocationManager.getLocationsFromStudySite(studyID, this.dataset.getId()));
+		BindUtils.postNotifyChange(null, null, StudyLocationInfo.this, "*");
+		System.out.println("Location list Refreshed");
 	}
 
 	@AfterCompose
