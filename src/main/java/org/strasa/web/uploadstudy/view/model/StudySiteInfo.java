@@ -533,6 +533,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 		}
 
 		// hasBeenProcessed = false;
+		this.reloadNext = true;
 		return goToNextPage;
 	}
 

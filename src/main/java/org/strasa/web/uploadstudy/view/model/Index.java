@@ -73,7 +73,7 @@ public class Index {
 	private UploadData uploadData;
 	private int selectedIndex = 1;
 	private boolean[] tabDisabled = { false, true, true, true, true };
-
+	private boolean siteReloaded = false;
 	private ProcessTabViewModel uploadModel;
 
 	public int getSelectedIndex() {
@@ -163,6 +163,7 @@ public class Index {
 	@Command("showzulfile")
 	public void showzulfile(@BindingParam("zulFileName") String zulFileName, @BindingParam("target") Tabpanel panel) {
 		System.out.println(zulFileName);
+		System.out.println((panel != null) + " " + !panel.getChildren().isEmpty() + " " + siteReloaded);
 		if (panel != null && panel.getChildren().isEmpty()) {
 
 			Include include = new Include();
@@ -178,6 +179,23 @@ public class Index {
 			include.setParent(panel);
 
 		}
+		if (panel != null && !panel.getChildren().isEmpty() && siteReloaded) {
+
+			panel.getChildren().get(0).detach();
+			Include include = new Include();
+			include.setDynamicProperty("uploadModel", uploadModel);
+			include.setSrc(zulFileName);
+			// include.setMode("defer");
+			/*
+			 * Map arg = new HashMap(); arg.put("uploadModel", uploadModel);
+			 * 
+			 * Executions.createComponents(zulFileName, panel, arg);
+			 */
+			System.out.println("reloading...");
+
+			include.setParent(panel);
+			siteReloaded = false;
+		}
 	}
 
 	@NotifyChange("*")
@@ -187,7 +205,8 @@ public class Index {
 		Clients.showBusy("Processing... Please wait.");
 		boolean valid = uploadData.validateTab();
 		Clients.clearBusy();
-
+		System.out.println("ReloadPage: " + uploadData.reloadNext);
+		siteReloaded = uploadData.reloadNext;
 		if (!valid) {
 			return;
 		}
@@ -218,6 +237,7 @@ public class Index {
 
 		Events.sendEvent("onSelect", tabs[selectedIndex + 1], tabs[selectedIndex + 1]);
 		System.out.println("INDEX: " + selectedIndex);
+
 		if (uploadData.uploadToFolder) {
 			tabDisabled[4] = false;
 			System.out.println("FINISH LOADED: ");

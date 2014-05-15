@@ -116,14 +116,14 @@ public class Index {
 			newSiteModel.lstStudyVariable = new ArrayList<StudyVariable>();
 			newSiteModel.lstStudyVariable.addAll(siteModel.lstStudyVariable);
 			try {
-				if(siteModel.getFileGenotype() != null) {
-				newSiteModel.setFileGenotype(File.createTempFile(siteModel.getFileGenotype().getName() + "_" + Calendar.getInstance().getTimeInMillis(), ".xls"));
-				FileUtils.copyFile(siteModel.getFileGenotype(), newSiteModel.getFileGenotype());
+				if (siteModel.getFileGenotype() != null) {
+					newSiteModel.setFileGenotype(File.createTempFile(siteModel.getFileGenotype().getName() + "_" + Calendar.getInstance().getTimeInMillis(), ".xls"));
+					FileUtils.copyFile(siteModel.getFileGenotype(), newSiteModel.getFileGenotype());
 				}
 
-				if(siteModel.getFileLayout() != null){
-				newSiteModel.setFileLayout(File.createTempFile(siteModel.getFileLayout().getName() + "_" + Calendar.getInstance().getTimeInMillis(), ".xls"));
-				FileUtils.copyFile(siteModel.getFileLayout(), newSiteModel.getFileLayout());
+				if (siteModel.getFileLayout() != null) {
+					newSiteModel.setFileLayout(File.createTempFile(siteModel.getFileLayout().getName() + "_" + Calendar.getInstance().getTimeInMillis(), ".xls"));
+					FileUtils.copyFile(siteModel.getFileLayout(), newSiteModel.getFileLayout());
 
 				}
 			} catch (IOException e) {
@@ -143,6 +143,8 @@ public class Index {
 			public void onEvent(Event event) throws Exception {
 				// event.stopPropagation();
 				lstSiteInfo.remove(event.getTarget().getAttribute("site"));
+				lstSelectedSites.remove(event.getTarget().getAttribute("site"));
+
 				BindUtils.postNotifyChange(null, null, Index.this, "lstSiteInfo");
 				return;
 			}

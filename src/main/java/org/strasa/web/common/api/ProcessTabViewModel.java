@@ -21,6 +21,7 @@ public class ProcessTabViewModel {
 	public double processTabID;
 	private boolean isUploadMode = false;
 	public boolean isMergeMode = false;
+	public boolean reloadNext = false;
 
 	public boolean isUploadMode() {
 		return isUploadMode;
