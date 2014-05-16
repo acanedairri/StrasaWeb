@@ -1,6 +1,6 @@
 <window id="textViewerHtml" apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('org.strasa.web.analysis.view.ResultViewer')"  height="98%">
-	<tabbox sclass="page-content" vflex="1" hflex="1">
+	<tabbox id="tabBox" sclass="page-content" vflex="1" hflex="1">
 		<tabs >
 			<tab id="txtResult"  label="RESULT" />
 			<tab id="graphResult"  label="GRAPHS" />

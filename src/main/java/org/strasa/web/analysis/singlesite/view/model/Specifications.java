@@ -183,6 +183,9 @@ public class Specifications {
 	private Include incVariableList;
 	private File uploadedFile;
 	private UserFileManager userFileManager;
+	private ListModelList<String> controlsModel;
+	private Listbox genotypeLevelsLb;
+	private ListModelList<String> genotypeLevelsModel;
 
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
@@ -270,6 +273,7 @@ public class Specifications {
 		descriptiveStatCheckBox = (Checkbox) includeOtherOptions.getFellow("descriptiveStatCheckBox");
 		varComponentsCheckBox = (Checkbox) includeOtherOptions.getFellow("varComponentsCheckBox");
 
+		genotypeLevelsLb = (Listbox)  includeOtherOptions.getFellow("genotypeLevelsLb");
 		controlsLb = (Listbox)  includeOtherOptions.getFellow("controlsLb");
 
 		Selectors.wireEventListeners(view, this);
@@ -937,12 +941,16 @@ public class Specifications {
 		//				System.out.println("removeResponse");
 
 		if(varTextBox.getValue().isEmpty() && !set.isEmpty()){
-			//			if(varTextBox.getl)
 			for (String selectedItem : set) {
 				varTextBox.setValue(selectedItem);
 				factorModel.remove(selectedItem);
 			}
-
+			if(varTextBox.getId().equals("genotypeTextBox")){
+				System.out.println("addGenotypeLevels");
+				genotypeLevels = rServeManager.getLevels(columnList, dataList, genotypeTextBox.getValue());
+				genotypeLevelsModel = AnalysisUtils.toListModelList(genotypeLevels);
+				genotypeLevelsLb.setModel(genotypeLevelsModel);
+			}
 			imgButton.setSrc("/images/leftarrow_g.png");
 			return true;
 			//nag add

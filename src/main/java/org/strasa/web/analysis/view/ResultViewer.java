@@ -35,6 +35,7 @@ import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Separator;
 import org.zkoss.zul.Tab;
+import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tabpanel;
 import org.zkoss.zul.Tabpanels;
 import org.zkoss.zul.Tabs;
@@ -231,6 +232,10 @@ public class ResultViewer {
 			tab = (Tab) component.getFellow("graphResult");
 			detach(tabanel,tab);
 		}
+
+		Tabbox tabBox = (Tabbox) component.getFellow("tabBox");
+		tabBox.setSelectedIndex(0);
+		
 	}
 
 	protected void zoomImage(String dynamicProperty, Component component) {

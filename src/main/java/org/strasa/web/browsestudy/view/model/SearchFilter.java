@@ -1,5 +1,6 @@
 package org.strasa.web.browsestudy.view.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class SearchFilter {
 	private boolean validation = false;
 	private HashMap<String,Integer> programListKey = new HashMap<String,Integer>();
 	private HashMap<String,Integer> projectListKey = new HashMap<String,Integer>();
+	private HashMap<String,Integer> locationListKey = new HashMap<String,Integer>();
 
 	public StudySearchFilterModel getSearchFilter() {
 		return searchFilter;
@@ -121,12 +123,15 @@ public class SearchFilter {
 		
 		projectList = projectMan.getAllProject();
 		for(Project proj:projectList){
-			programListKey.put(proj.getName(), proj.getId());
+			projectListKey.put(proj.getName(), proj.getId());
 		}
 		
 		studyTypeList = studyTypeMan.getAllStudyType();
 		countryList = countryMan.getAllCountry();
 		locationList = locationMan.getAllLocations();
+		for(Location l: locationList){
+			locationListKey.put(l.getLocationname(), l.getId());
+		}
 	}
 
 	@NotifyChange("searchFilter")
@@ -168,21 +173,36 @@ public class SearchFilter {
 		
 		Combobox locationCombobox = (Combobox) component.getFellow("locationCombobox");
 		System.out.println("countryName: "+ countryName);
+		locationListKey.clear();
 		try{
 		setLocationList(locationMan.getLocationByCountryName(countryName));
+		for(Location l: locationList){
+			locationListKey.put(l.getLocationname(), l.getId());
+		}
+		}catch(RuntimeException re){
+			setLocationList(new ArrayList<Location>());
+			System.out.println("Nothings been chosen");
+		}
+		
 		locationCombobox.setSelectedIndex(0);
 		searchFilter.setLocationid(0);
-		}catch(RuntimeException re){
-			System.out.println("Nothings been chosen");
-			setLocationList(locationMan.getAllLocations());
-		}
 	}
 		
 	@Command
-	public void updateProjectId( @BindingParam("projectName") String projectName){
+	public void updateProjectId(@BindingParam("projectName") String projectName){
 		try{
 		int projId = projectListKey.get(projectName);
 			searchFilter.setProjectid(projId);
+		}catch(RuntimeException re){
+			searchFilter.setProjectid(0);
+		}
+	}
+	
+	@Command
+	public void updateLocationId(@BindingParam("locationName") String locationName){
+		try{
+		int locId = locationListKey.get(locationName);
+			searchFilter.setLocationid(locId);
 		}catch(RuntimeException re){
 			searchFilter.setProjectid(0);
 		}
