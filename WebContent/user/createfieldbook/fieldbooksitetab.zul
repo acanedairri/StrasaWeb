@@ -9,31 +9,31 @@
 			</button>
 			<hlayout>
 
-				<groupbox hflex="1" mold="3d">
+				<groupbox hflex="1" mold="3d" style="min-height:330px;">
 					<caption label="Site Information"></caption>
 
 					<grid>
 						<columns>
-							<column label="" width="45%"></column>
+							<column label="" width="35%"></column>
 
-							<column label="" width="45%"></column>
+							<column label="" width="55%"></column>
 
-							<column label="" width="10%"></column>
+							
 						</columns>
 						<rows>
 							<row>
 								<label value="Site Name"></label>
 								<textbox value="@bind(vm.site.sitename)"
-									onBlur="@command('updateTab')">
+									onBlur="@command('updateTab')" width = "100%"> 
 								</textbox>
 							</row>
 							<row>
 								<label value="Site Location"></label>
-								<bandbox id="bbox_location"
+								<div><bandbox id="bbox_location"
 									value="@bind(vm.site.location.locationname)"
 									onChange="@command('doLocationSearch')" instant="true"
 									autodrop="true" onOpen="@command('autoFillBandbox')"
-									onClick="@command('openBandbox')" width="100%">
+									onClick="@command('openBandbox')" width="80%">
 									<bandpopup>
 										<vbox width="40%">
 
@@ -87,19 +87,21 @@
 										</vbox>
 									</bandpopup>
 								</bandbox>
-								<toolbarbutton
+								<toolbarbutton width = "10%"
 									id="btnadd_${forEachStatus.index}" image="/images/plus.png"
 									tooltiptext="Add New Location"
 									onClick="@command('addLocation')" />
+									
+								</div>
 							</row>
 							<row>
 								<label value="Year"></label>
-								<textbox value="@bind(vm.site.year)"></textbox>
+								<textbox value="@bind(vm.site.year)" width = "100%"></textbox>
 							</row>
 							<row>
-								<label value="Season"></label>
+								<label value="Season" ></label>
 								<textbox
-									value="@bind(vm.site.season)">
+									value="@bind(vm.site.season)" width = "100%">
 								</textbox>
 							</row>
 							<row>
@@ -147,7 +149,7 @@
 									<combobox
 										model="@load(vm.plantingtypes)" readonly="true"
 										selectedItem="@bind(vm.site.plantingtype)"
-										onSelect="@command('updateLabelDate')" width="100%"
+										onSelect="@command('updateLabelDate')" vflex="1"
 										value="@bind(vm.site.plantingtype.planting)">
 										<template name="model">
 											<comboitem

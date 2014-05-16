@@ -48,10 +48,10 @@
 												<column label="Season"
 													width="80px" />
 												<column
-													label="Eco System" />
+													label="Eco System" width="100px"/>
 												<column
-													label="Soil Type" />
-												<column label="Soil PH" />
+													label="Soil Type" width="100px"/>
+												<column label="Soil PH" width="80px"/>
 											</columns>
 											<template name="model">
 												<row>
@@ -154,7 +154,7 @@
 								<toolbarbutton
 									id="btnadd_${forEachStatus.index}" image="/images/plus.png"
 									tooltiptext="Add New Location"
-									onClick="@command('addLocation',loc = each)" />
+									onClick="@command('addLocation',loc = each)"  width="10%"/>
 							</div>
 							<textbox value="@bind(each.year)"
 								 width="99%"
