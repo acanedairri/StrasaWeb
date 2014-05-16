@@ -34,11 +34,12 @@ public class RelVYgrid {
 	public void setData(){
 		ReleaseInfoManagerImpl mgr= new ReleaseInfoManagerImpl();
 		//		this.areaSummaryVY=mgr.getAreaSummaryGermplasmByYear();
-		String[] category=mgr.getProgramList();
+		category=mgr.getProgramList();
 		allDataVY=mgr.getNoOfVarietyReleaseByYear();
 		currentModelVY=mgr.getNoOfVarietyReleaseByYear();
 		
 		type = "column";
+		
 		model = ChartData.getReleaseInfoByVarietyYear(allDataVY,category);
 	}
 

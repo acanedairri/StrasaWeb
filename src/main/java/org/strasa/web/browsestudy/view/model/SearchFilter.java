@@ -160,9 +160,6 @@ public class SearchFilter {
 			setProjectList(projectMan.getAllProject());
 		}
 		
-//		setcountryList(countryMan.getCountryByProgramId(programId));
-//		countryList = countryMan.getAllCountry();
-//		locationList = locationMan.getAllLocations();
 	}
 	
 	
