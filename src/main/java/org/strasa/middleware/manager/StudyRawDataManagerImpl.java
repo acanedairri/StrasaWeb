@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.strasa.middleware.factory.ConnectionFactory;
+import org.strasa.middleware.mapper.PlantingTypeMapper;
 import org.strasa.middleware.mapper.StudyDerivedDataMapper;
 import org.strasa.middleware.mapper.StudyDerivedRawDataMapper;
 import org.strasa.middleware.mapper.StudyMapper;
@@ -15,6 +16,7 @@ import org.strasa.middleware.mapper.StudyRawDataByDataColumnMapper;
 import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.mapper.StudyRawDerivedDataByDataColumnMapper;
 import org.strasa.middleware.mapper.other.ExtendedStudyDataColumnMapper;
+import org.strasa.middleware.mapper.other.StudySharingMapper;
 import org.strasa.middleware.mapper.other.StudyRawDataBatch;
 import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.Location;
@@ -404,7 +406,7 @@ public class StudyRawDataManagerImpl {
 		return (isRaw) ? "studyrawdata" : "studyderiveddata";
 
 	}
-
+/*
 	public void setPrivacyByStudyId(Integer studyid, Boolean shared) {
 		// TODO Auto-generated method stub
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
@@ -419,6 +421,22 @@ public class StudyRawDataManagerImpl {
 				sdata.setShared(shared);
 				studyDataMapper.updateByPrimaryKey(sdata);
 			}
+			session.commit();
+
+		} finally {
+			session.close();
+		}
+
+	}*/
+	
+	public void setPrivacyByStudyId(Integer studyid, Boolean shared) {
+		// TODO Auto-generated method stub
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudySharingMapper mapper = session.getMapper(StudySharingMapper.class);
+
+		try {
+			mapper.setSharingStudyRawData(studyid,shared);
+			mapper.setSharingStudyDerivedData(studyid,shared);
 			session.commit();
 
 		} finally {
