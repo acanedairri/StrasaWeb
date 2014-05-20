@@ -1,7 +1,7 @@
 <zk>
-	<grid model="@load(vm.newDataRow)"  id="gridresultquery" zclass="none"
+	<grid model="@load(vm.newDataRow)"  id="gridresultquery" zclass="none" mold="paging" pageSize="50"
 		rowRenderer="org.strasa.web.crossstudyquery.view.model.AcrossStudyRowRenderer"
-		sizedByContent="true" height="360px" hflex="1"
+		sizedByContent="true" height="400px" hflex="1"
 		emptyMessage="No data loaded...">
 		<columns children="@load(vm.columnList)">
 			<template name="children">
