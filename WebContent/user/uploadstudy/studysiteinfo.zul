@@ -48,10 +48,11 @@
 												<column label="Season"
 													width="80px" />
 												<column
-													label="Eco System" width="100px"/>
+													label="Eco System" width="100px" />
 												<column
-													label="Soil Type" width="100px"/>
-												<column label="Soil PH" width="80px"/>
+													label="Soil Type" width="100px" />
+												<column label="Soil PH"
+													width="80px" />
 											</columns>
 											<template name="model">
 												<row>
@@ -154,23 +155,23 @@
 								<toolbarbutton
 									id="btnadd_${forEachStatus.index}" image="/images/plus.png"
 									tooltiptext="Add New Location"
-									onClick="@command('addLocation',loc = each)"  width="10%"/>
+									onClick="@command('addLocation',loc = each)" width="10%" />
 							</div>
 							<textbox value="@bind(each.year)"
-								 width="99%"
+								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
 								inplace="@bind(each.updateMode)" />
 
-						<textbox value="@bind(each.season)"
+							<textbox value="@bind(each.season)"
 								width="99%"
 								onClick="@command('updateDesignInfo', id=forEachStatus.index)"
-								inplace="@bind(each.seasonEditable)" /> 
+								inplace="@bind(each.seasonEditable)" />
 
 							<!-- <combobox autodrop="true" onChange="@command('updateDesignInfo', id=forEachStatus.index)" inplace="@bind(each.seasonEditable)"
 								selectedItem="@bind(each.season)" width="60px" >
 								<comboitem value="DS" label="DS" />
 								<comboitem value="WS" label="WS" />
-							</combobox> -->
+								</combobox> -->
 
 
 
@@ -274,9 +275,17 @@
 
 									<label value="Design Structure:"
 										style="color:red" />
-									<textbox
+									<combobox readonly="true"
 										value="@bind(vm.selectedDesignInfo.designstructure)"
-										width="99%" />
+										width="99%" > 
+										
+										<comboitem label ="CRD" value="CRD" />
+										<comboitem label ="RCBD" value="RCBD" />
+										<comboitem label ="LSD" value="LSD" />
+										
+										
+										
+										</combobox>
 								</row>
 								<row>
 									<label value="Treatment Structure:"
@@ -285,11 +294,15 @@
 									<combobox id="cmbTreatmentStructure"
 										value="@bind(vm.selectedDesignInfo.treatmentstructure)"
 										width="99%" onChange="@command('cmbTreatmentOnChange')">
-												<comboitem label="One Factor" value = "One Factor"/>
-									<comboitem label="Two Factor Factorial" value = "Two Factor Factorial"/>
-										<comboitem label="Three Factor Factorial" value = "Three Factor Factorial"/>
-										
-									
+										<comboitem label="One Factor"
+											value="One Factor" />
+										<comboitem
+											label="Two Factor Factorial" value="Two Factor Factorial" />
+										<comboitem
+											label="Three Factor Factorial"
+											value="Three Factor Factorial" />
+
+
 
 									</combobox>
 								</row>

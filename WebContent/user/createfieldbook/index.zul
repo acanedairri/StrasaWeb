@@ -123,13 +123,13 @@
 					</row>
 			   <row>
 								<label class="name" value="Study Description:" />
-								<textbox width='173px'
+								<textbox width='100%'
 									value="@bind(vm.studyDescription)" />
 							</row>
 					<row>
 						<label class="name" value="Study Type:" />
 						<bandbox id="bdStudyType" mold="rounded"
-							autodrop="true" value="@load(vm.txtStudyType)" readonly="true">
+							autodrop="true" value="@load(vm.txtStudyType)" readonly="true" width="100%">
 							<bandpopup>
 								<listbox height="250px" width="450px"
 									mold="paging" autopaging="true" model="@load(vm.studyTypeList)"
@@ -148,12 +148,12 @@
 
 					<row>
 						<label class="name" value="Start Year:" />
-						<spinner width='190px'
+						<spinner width='100%'
 							value="@bind(vm.startYear)" />
 					</row>
 					<row>
 						<label class="name" value="End Year:" />
-						<spinner width='190px'
+						<spinner width='100%'
 							value="@bind(vm.endYear)" />
 					</row>
 					<row>

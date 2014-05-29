@@ -208,7 +208,7 @@
 
 								<label value="Design Structure:"
 									style="color:red" />
-								<combobox id="cmbDesignStructure"
+								<combobox id="cmbDesignStructure" readonly="true"
 									value="@bind(vm.site.design.designstructure)" width="99%">
 									<attribute name="onCreate"><![CDATA[
 	List list2 = new ArrayList();

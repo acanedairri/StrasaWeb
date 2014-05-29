@@ -420,6 +420,7 @@ public class GermplasmDeepInfoModel extends Germplasm {
 		ArrayList<CharacteristicModel> returnVal = new ArrayList<CharacteristicModel>();
 		if (!StringUtils.isEmptyOrWhitespaceOnly(data.getBiotic()))
 			for (String key : data.getBiotic().split(",")) {
+				key = key.trim();
 				if (Biotics.contains(key)) {
 					// System.out.println("Key : " + key);
 					lstBiotics.add(key);
@@ -429,6 +430,7 @@ public class GermplasmDeepInfoModel extends Germplasm {
 
 		if (!StringUtils.isEmptyOrWhitespaceOnly(data.getAbiotic()))
 			for (String key : data.getAbiotic().split(",")) {
+				key = key.trim();
 				if (Abiotics.contains(key)) {
 					lstAbiotic.add(key);
 				} else
@@ -437,6 +439,7 @@ public class GermplasmDeepInfoModel extends Germplasm {
 			}
 		if (!StringUtils.isEmptyOrWhitespaceOnly(data.getGrainQuality()))
 			for (String key : data.getGrainQuality().split(",")) {
+				key = key.trim();
 				if (GrainQualities.contains(key)) {
 					lstGrainQuality.add(key);
 				} else
@@ -445,6 +448,7 @@ public class GermplasmDeepInfoModel extends Germplasm {
 			}
 		if (!StringUtils.isEmptyOrWhitespaceOnly(data.getMajorGenes()))
 			for (String key : data.getMajorGenes().split(",")) {
+				key = key.trim();
 				if (MajorGenes.contains(key)) {
 					lstMajorGenes.add(key);
 				} else
@@ -453,6 +457,9 @@ public class GermplasmDeepInfoModel extends Germplasm {
 			}
 
 		invalidCharacteristic = returnVal;
+		for (CharacteristicModel st : returnVal) {
+			System.out.println("=>" + st.getName() + "<=");
+		}
 		return returnVal.isEmpty();
 
 	}
