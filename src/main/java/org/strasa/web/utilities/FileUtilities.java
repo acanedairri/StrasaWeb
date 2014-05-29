@@ -1,14 +1,17 @@
 package org.strasa.web.utilities;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.input.ReaderInputStream;
-import org.strasa.middleware.filesystem.manager.UserFileManager;
 import org.zkoss.bind.BindContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.UploadEvent;
@@ -38,6 +41,49 @@ public class FileUtilities {
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
+		}
+	}
+
+	static public File zipFolder(String srcFolder) throws Exception {
+		ZipOutputStream zip = null;
+		FileOutputStream fileWriter = null;
+
+		File destZipFile = File.createTempFile(new File(srcFolder).getName(), ".zip");
+
+		fileWriter = new FileOutputStream(destZipFile.getAbsolutePath());
+		zip = new ZipOutputStream(fileWriter);
+
+		addFolderToZip("", srcFolder, zip);
+		zip.flush();
+		zip.close();
+		return destZipFile;
+	}
+
+	static private void addFileToZip(String path, String srcFile, ZipOutputStream zip) throws Exception {
+
+		File folder = new File(srcFile);
+		if (folder.isDirectory()) {
+			addFolderToZip(path, srcFile, zip);
+		} else {
+			byte[] buf = new byte[1024];
+			int len;
+			FileInputStream in = new FileInputStream(srcFile);
+			zip.putNextEntry(new ZipEntry(path + "/" + folder.getName()));
+			while ((len = in.read(buf)) > 0) {
+				zip.write(buf, 0, len);
+			}
+		}
+	}
+
+	static private void addFolderToZip(String path, String srcFolder, ZipOutputStream zip) throws Exception {
+		File folder = new File(srcFolder);
+
+		for (String fileName : folder.list()) {
+			if (path.equals("")) {
+				addFileToZip(folder.getName(), srcFolder + "/" + fileName, zip);
+			} else {
+				addFileToZip(path + "/" + folder.getName(), srcFolder + "/" + fileName, zip);
+			}
 		}
 	}
 
@@ -146,8 +192,7 @@ public class FileUtilities {
 		Filedownload.save(sb.toString().getBytes(), "text/plain", fileName + ".csv");
 	}
 
-	public static File createFileFromDatabase(List<String> columns,
-			List<String[]> rows, String filePath) {
+	public static File createFileFromDatabase(List<String> columns, List<String[]> rows, String filePath) {
 		// TODO Auto-generated method stub
 		List<String[]> grid = rows;
 
@@ -174,18 +219,17 @@ public class FileUtilities {
 			sb.append("\n");
 		}
 
-		
 		FileWriter writer = null;
 		try {
 			writer = new FileWriter(filePath);
 			writer.write(sb.toString());
-			if (writer != null){
+			if (writer != null) {
 				writer.close();
 			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		
+
 		return new File(filePath);
 	}
 
