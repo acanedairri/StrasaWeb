@@ -212,9 +212,9 @@ public class EditUploadedStudies {
 		// if(study.getShared()) study.setShared(1);
 		System.out.println("shared:" + study.getShared());
 		studyMan.updateStudyById(study);
+/*		studyRawMan.setPrivacyByStudyId(study.getId(), study.getShared());
+		studyDerivedMan.setPrivacyByStudyId(study.getId(), study.getShared());*/
 		studyRawMan.setPrivacyByStudyId(study.getId(), study.getShared());
-		studyDerivedMan.setPrivacyByStudyId(study.getId(), study.getShared());
-
-		Messagebox.show("Changes saved.");
+		Messagebox.show("Successfully shared the study", "Info Message", Messagebox.OK, Messagebox.INFORMATION);
 	}
 }

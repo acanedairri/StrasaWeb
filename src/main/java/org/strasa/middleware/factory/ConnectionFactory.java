@@ -52,6 +52,7 @@ import org.strasa.middleware.mapper.other.DistributionAndExtensionSummaryMapper;
 import org.strasa.middleware.mapper.other.ExtendedStudyDataColumnMapper;
 import org.strasa.middleware.mapper.other.GermplasmBreederMapper;
 import org.strasa.middleware.mapper.other.ReleaseInfoSummaryMapper;
+import org.strasa.middleware.mapper.other.StudySharingMapper;
 import org.strasa.middleware.mapper.other.StudySummaryMapper;
 import org.strasa.middleware.model.StudyGermplasmCharacteristics;
 import org.strasa.middleware.model.StudySiteByStudy;
@@ -118,6 +119,7 @@ public class ConnectionFactory {
 				sqlSessionFactory.getConfiguration().addMapper(DistributionAndExtensionSummaryMapper.class);
 				sqlSessionFactory.getConfiguration().addMapper(ReleaseInfoSummaryMapper.class);
 				sqlSessionFactory.getConfiguration().addMapper(SoilTypeMapper.class);
+				sqlSessionFactory.getConfiguration().addMapper(StudySharingMapper.class);
 			}
 			// rServerConnection= new RConnection();
 
