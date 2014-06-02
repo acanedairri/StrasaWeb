@@ -33,8 +33,11 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Tabpanel;
@@ -65,6 +68,8 @@ public class EditUploadedStudies {
 	}
 
 	private List<EditStudyModel> editStudyList;
+
+	private File tempFile;
 
 	@Init
 	public void init() {
@@ -172,19 +177,35 @@ public class EditUploadedStudies {
 	@Command("uploadTemplate")
 	public void uploadGenotype(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view) {
 
-		File tempFile = FileUtilities.getFileFromUpload(ctx, view);
+		tempFile = FileUtilities.getFileFromUpload(ctx, view);
 		if (tempFile == null)
 			return;
 
-		try {
-			new CreateFieldBookManagerImpl().populateStudyFromTemplate(tempFile, SecurityUtil.getDbUser().getId(), true, "Sample");
-		} catch (CreateFieldBookException e) {
-			// TODO Auto-generated catch block
-			Messagebox.show(e.getMessage(), "Error in Fieldbook", Messagebox.OK, org.zkoss.zul.Messagebox.EXCLAMATION);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Clients.showBusy("Uploading Fieldbook please wait...");
+
+		view.addEventListener(Events.ON_CLIENT_INFO, new EventListener<Event>() {
+
+			@Override
+			public void onEvent(Event arg0) throws Exception {
+				try {
+					new CreateFieldBookManagerImpl().populateStudyFromTemplate(tempFile, SecurityUtil.getDbUser().getId(), true, tempFile.getName());
+					Clients.clearBusy();
+					Messagebox.show("Fieldbook successfully uploaded!", "Uploading Fieldbook", Messagebox.OK, org.zkoss.zul.Messagebox.INFORMATION);
+
+				} catch (CreateFieldBookException e) {
+					// TODO Auto-generated catch block
+					Clients.clearBusy();
+					Messagebox.show(e.getMessage(), "Error in Fieldbook", Messagebox.OK, org.zkoss.zul.Messagebox.EXCLAMATION);
+
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		});
+		Events.echoEvent("onClientInfo", view, null);
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -212,8 +233,11 @@ public class EditUploadedStudies {
 		// if(study.getShared()) study.setShared(1);
 		System.out.println("shared:" + study.getShared());
 		studyMan.updateStudyById(study);
-/*		studyRawMan.setPrivacyByStudyId(study.getId(), study.getShared());
-		studyDerivedMan.setPrivacyByStudyId(study.getId(), study.getShared());*/
+		/*
+		 * studyRawMan.setPrivacyByStudyId(study.getId(), study.getShared());
+		 * studyDerivedMan.setPrivacyByStudyId(study.getId(),
+		 * study.getShared());
+		 */
 		studyRawMan.setPrivacyByStudyId(study.getId(), study.getShared());
 		Messagebox.show("Successfully shared the study", "Info Message", Messagebox.OK, Messagebox.INFORMATION);
 	}

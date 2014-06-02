@@ -1,6 +1,11 @@
 <zk>
+ <script><![CDATA[
+        function loadContent () {
+        	zAu.send(new zk.Event(zk.Widget.$('$sidebar'), 'onNavigate', {'hashbang' : window.location.hash.substr(1)}));
+        }
+    ]]></script>
 		<div id="sidebar" sclass="sidebar"
-			apply="org.strasa.web.page.navigation.user.SidebarComposer">
+			apply="org.strasa.web.page.navigation.user.SidebarComposer" >
 			<!-- Shortcuts Button-->
 			<div class="shortcuts">
 				<!-- Display when expanded -->
@@ -29,25 +34,25 @@
 					<nav label="Upload/Modify"
 						iconSclass="z-icon-angle-double-right">
 						<navitem label="Study" iconSclass="z-icon-leaf"
-							id="uploadstudy" />
-						<navitem label="Germplasm" id="uploadgermplasm"
+							id="uploadstudy" href="#/uploadstudy"/>
+						<navitem label="Germplasm" id="uploadgermplasm"  href="#/uploadgermplasm"
 							iconSclass="z-icon-leaf" />
-						<navitem label="Extension" id="uploadextension"
+						<navitem label="Extension" id="uploadextension"  href="#/uploadextension"
 							iconSclass="z-icon-leaf" />
-						<navitem label="Release" id="uploadrelease"
+						<navitem label="Release" id="uploadrelease"  href="#/uploadrelease"
 							iconSclass="z-icon-leaf" />
 					</nav>
 					<nav label="Browse"
 						iconSclass="z-icon-angle-double-right">
-						<navitem label="Study" iconSclass="z-icon-leaf"
+						<navitem label="Study" iconSclass="z-icon-leaf"  href="#/browsestudy"
 							id="browsestudy" />
-						<navitem label="Germplasm" id="browsegermplasm"
+						<navitem label="Germplasm" id="browsegermplasm" href="#/browsegermplasm"
 							iconSclass="z-icon-leaf" />
-						<navitem label="Across Study" id="across"
+						<navitem label="Across Study" id="across" href="#/across"
 							iconSclass="z-icon-leaf" />
-						<navitem label="Extension" id="extension"
+						<navitem label="Extension" id="extension" href="#/extension"
 							iconSclass="z-icon-leaf" />
-						<navitem label="Release" id="releaseinfo"
+						<navitem label="Release" id="releaseinfo" href="#/releaseinfo"
 							iconSclass="z-icon-leaf" />
 					</nav>
 					<navitem id="createfieldbook"
