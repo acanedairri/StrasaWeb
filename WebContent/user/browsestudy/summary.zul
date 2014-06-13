@@ -21,7 +21,7 @@
 				<column label="PVS" width="100px" />
 				<column label="OYT" width="100px" />
 				<column label="PYT" width="100px" />
-				<column label="ATY" width="100px" />
+				<column label="AYT" width="100px" />
 				<column label="IAT" width="100px" />
 				<column label="Genetics" width="150px" />
 			</columns>

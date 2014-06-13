@@ -348,7 +348,7 @@ public class RServeManager {
 								String envtHead = "capture.output(cat(\"\nANALYSIS FOR: "+ environment + "\", \" = \" ,ssa1$output[[" + i	+ "]]$site[[" + j + "]]$env,\"\n\"),file=\""+ outFileName + "\",append = TRUE)";
 								rConnection.eval(sep);
 								System.out.println(envtHead);
-								//								rConnection.eval(envtHead);
+								rConnection.eval(envtHead);
 								rConnection.eval(sep);
 								rConnection.eval(outspace);
 							}
@@ -930,7 +930,7 @@ public class RServeManager {
 									String outAnovaTable9 = "capture.output(a.table,file=\"" + outFileName + "\",append = TRUE)";
 									String outAnovaTable10 = "detach(\"package:lmerTest\")";
 
-									//								rConnection.eval(outspace);
+																	rConnection.eval(outspace);
 									rConnection.eval(outAnovaTable1);
 									rConnection.eval(outAnovaTable2);
 									rConnection.eval(outAnovaTable3);

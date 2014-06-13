@@ -120,4 +120,14 @@ public class AnalysisUtils {
 		}
 		return modelList;
 	}
+
+	public static String[] getItemsFromListAsStringAyrray(Listbox controlsLb) {
+		// TODO Auto-generated method stub
+		ArrayList<String> stringList = new ArrayList<String>();
+		for(Listitem li: controlsLb.getItems()){
+			stringList.add(li.getLabel());
+		}
+		
+		return stringList.toArray(new String[stringList.size()]);
+	}
 }

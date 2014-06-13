@@ -74,7 +74,6 @@ public class StudyInformation {
 		}catch(IndexOutOfBoundsException o){
 			selectedStudyType = new StudyType();
 		}
-
 	}
 
 	public Study getSelectedStudy() {

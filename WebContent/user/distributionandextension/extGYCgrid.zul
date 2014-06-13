@@ -3,7 +3,7 @@
 		viewModel="@id('vm') @init('org.strasa.web.distributionandextension.view.model.ExtGYCgrid')">
 
 		<groupbox mold="3d">
-			<caption label="Area by Year and Country"></caption>
+			<caption label="Area by Country and Year"></caption>
 			<vbox>
 				<hbox>
 					<vlayout>

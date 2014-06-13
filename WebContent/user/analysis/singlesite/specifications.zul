@@ -89,6 +89,7 @@
 				<tabpanels id="tabPanels">
 					<tabpanel vflex="1">
 						<vbox>
+						
 							<hbox>
 								<label value="Type of design" />
 								<combobox
