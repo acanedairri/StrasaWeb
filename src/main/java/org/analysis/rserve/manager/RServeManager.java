@@ -78,11 +78,12 @@ public class RServeManager {
 		return toreturn;
 	}
 
-	public String testSingleEnvironment() {
+	public void testSingleEnvironment() {
 
+		SingleSiteAnalysisModel ssaModel = new SingleSiteAnalysisModel();
+		
 		String resultFolderPath = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH);
 		String outFileName = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH) + "SEA_output.txt";
-
 		String dataFileName = DATA_PATH.replace(BSLASH, FSLASH) + "RCB_ME.csv";
 		int design = 0;
 		String genotype = "Genotype";
@@ -107,13 +108,37 @@ public class RServeManager {
 		boolean excludeControls = false;
 		boolean genoPhenoCorrelation = false;
 
-		System.out.println(OUTPUTFOLDER_PATH);
-//		doSingleEnvironmentAnalysis(dataFileName, outFileName, resultFolderPath, design, respvars, environment, environmentLevels,
-//				genotype, block, rep, row, column, descriptiveStat, varianceComponents, boxplotRawData, histogramRawData, heatmapResiduals, heatmapRow, 
-//				heatmapColumn, diagnosticPlot, genotypeFixed, performPairwise, pairwiseAlpha, genotypeLevels, controlLevels, compareControl, performAllPairwise,
-//				genotypeRandom, excludeControls, genoPhenoCorrelation);
 
-		return OUTPUTFOLDER_PATH + "SEA_output.txt";
+		ssaModel.setResultFolderPath(resultFolderPath);
+		ssaModel.setOutFileName(outFileName);
+		ssaModel.setDataFileName(dataFileName);
+		ssaModel.setDesign(design);
+		ssaModel.setGenotype(genotype);
+		ssaModel.setBlock(block);
+		ssaModel.setRep(rep);
+		ssaModel.setRow(row);
+		ssaModel.setColumn(column);
+		ssaModel.setDescriptiveStat(descriptiveStat);
+		ssaModel.setVarianceComponents(varianceComponents);
+		ssaModel.setBoxplotRawData(boxplotRawData);
+		ssaModel.setHistogramRawData(histogramRawData);
+		ssaModel.setHeatmapResiduals(heatmapResiduals);
+		ssaModel.setHeatmapRow(heatmapRow);
+		ssaModel.setHeatmapColumn(heatmapColumn);
+		ssaModel.setDiagnosticPlot(diagnosticPlot);
+		ssaModel.setGenotypeFixed(genotypeFixed);
+		ssaModel.setPerformPairwise(performPairwise);
+		ssaModel.setPairwiseAlpha(pairwiseAlpha);
+		ssaModel.setCompareControl(compareControl);
+		ssaModel.setPerformAllPairwise(performAllPairwise);
+		ssaModel.setGenotypeRandom(genotypeRandom);
+		ssaModel.setExcludeControls(excludeControls);
+		ssaModel.setGenoPhenoCorrelation(genoPhenoCorrelation);
+		System.out.println(OUTPUTFOLDER_PATH);
+		
+		
+		
+		doSingleEnvironmentAnalysis(ssaModel);
 	}
 
 	public void doSingleEnvironmentAnalysis(SingleSiteAnalysisModel ssaModel) {
