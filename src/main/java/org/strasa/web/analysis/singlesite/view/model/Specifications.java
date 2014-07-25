@@ -155,6 +155,7 @@ public class Specifications {
 	private Combobox dataSetCombo;
 
 	//otheroptions UI
+	private Div divOtherOptions;
 	private Groupbox groupLevelOfControls;
 	private Checkbox performPairwiseCheckBox;
 	private Groupbox groupGenotypeFixed;
@@ -187,6 +188,7 @@ public class Specifications {
 	private Listbox genotypeLevelsLb;
 	private ListModelList<String> genotypeLevelsModel;
 	private boolean genotypeControlsOpen = true;
+	private Include includeOtherOptions;
 	
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
@@ -257,8 +259,9 @@ public class Specifications {
 		fieldRowComboBox = (Combobox) component.getFellow("fieldRowComboBox");
 		fieldColumnComboBox = (Combobox) component.getFellow("fieldColumnComboBox");
 
-
-		Include includeOtherOptions = (Include) component.getFellow("includeOtherOptions");
+		//wire Other Options UI
+		
+		includeOtherOptions =(Include) component.getFellow("includeOtherOptions");
 		groupLevelOfControls = (Groupbox) includeOtherOptions.getFellow("groupLevelOfControls");
 
 		groupGenotypeFixed = (Groupbox) includeOtherOptions.getFellow("groupGenotypeFixed");
@@ -277,7 +280,7 @@ public class Specifications {
 
 		genotypeLevelsLb = (Listbox)  includeOtherOptions.getFellow("genotypeLevelsLb");
 		controlsLb = (Listbox)  includeOtherOptions.getFellow("controlsLb");
-
+		
 		Selectors.wireEventListeners(view, this);
 		userFileManager = new UserFileManager();
 	}
@@ -321,17 +324,26 @@ public class Specifications {
 		if(!columnList.isEmpty()){
 			columnList.clear();
 			dataList.clear();
-			refreshCsv();
+//			refreshCsv();
+			if (!divDatagrid.getChildren().isEmpty()){
+				divDatagrid.getFirstChild().detach();
+				BindUtils.postGlobalCommand(null, null, "setSsaListvariables", null);
+			}
 		}
 
 		List<StudyDataSet> dataSet = studyDataSetMgr.getDataSetsByStudyId(selectedStudy.getId());
 
-		if(!dataSet.isEmpty()){
+		if(!dataSet.isEmpty()){//
 			dataSetCombo.setVisible(true);
 			setStudyDataSets(dataSet);
+			setSelectedDataSet(null);
+			dataSetCombo.setSelectedItem(null);
+			dataSetCombo.setText(null);
 			BindUtils.postNotifyChange(null, null, this, "*");
+			
 		}
 		else{
+			dataSetCombo.setVisible(false);
 			Messagebox.show("Please choose a different study","Study has no data", Messagebox.OK, Messagebox.ERROR);
 		}
 
@@ -522,6 +534,7 @@ public class Specifications {
 		@NotifyChange("*")
 		public void setSsaListvariables(@BindingParam("filePath")String filepath){
 			//...
+			try{
 			ssaModel.setDataFileName(filepath.replace("\\", "/"));
 			rServeManager = new RServeManager();
 			varInfo = rServeManager.getVariableInfo(filepath.replace("\\", "/"), fileFormat, separator);
@@ -535,6 +548,30 @@ public class Specifications {
 			numericLb.setModel(numericModel);
 			factorLb.setModel(factorModel);
 			responseLb.setModel(responseModel);
+			}catch(NullPointerException npe){
+				resetListBoxes();
+				
+			}
+			
+			
+		}
+
+		private void resetListBoxes() {
+			// TODO Auto-generated method stub
+			numericModel= null;
+			factorModel= null;
+			responseModel = null;
+
+			numericLb.setModel(numericModel);
+			factorLb.setModel(factorModel);
+			responseLb.setModel(responseModel);
+			
+			envTextBox.setText("");
+			genotypeTextBox.setText("");
+			blockTextBox.setText("");
+			replicateTextBox.setText("");
+			rowTextBox.setText("");
+			columnTextBox.setText("");
 		}
 
 		@NotifyChange("*")
@@ -589,8 +626,8 @@ public class Specifications {
 			System.out.println("created path "+createPath);
 			uploadedFile = FileUtilities.createFileFromDatabase(columnList, dataList, createPath);
 
-			if (uploadedFile == null)
-				return;
+			if (uploadedFile == null) return;
+			
 
 			Map<String,Object> args = new HashMap<String,Object>();
 			args.put("filePath", uploadedFile.getAbsolutePath());

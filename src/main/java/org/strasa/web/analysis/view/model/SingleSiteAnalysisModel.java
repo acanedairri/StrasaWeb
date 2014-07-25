@@ -12,7 +12,6 @@ public class SingleSiteAnalysisModel {
 	private String resultFolderPath;
 	private String outFileName;
 	private String dataFileName;
-
 	private int design;
 	private String[] respvars= {};
 	private String environment;
@@ -28,7 +27,6 @@ public class SingleSiteAnalysisModel {
 	private boolean histogramRawData;
 	private boolean heatmapResiduals;
 	private String heatmapRow;
-
 	private String heatmapColumn;
 	private boolean diagnosticPlot;
 	private boolean genotypeFixed;
@@ -41,37 +39,72 @@ public class SingleSiteAnalysisModel {
 	private boolean genotypeRandom;
 	private boolean excludeControls;
 	private boolean genoPhenoCorrelation;
-	
 
 	public SingleSiteAnalysisModel() {
-		this.resultFolderPath = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH);
-		this.outFileName = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH) + "SEA_output.txt";
-
-		this.dataFileName = DATA_PATH.replace(BSLASH, FSLASH) + "RCB_ME.csv";
-
-		this.design = 0;
-		this.environment = "Env";
-		this.genotype = "Genotype";
-		this.block = "Block";
-		this.rep = "NULL";
-		this.row = "NULL";
-		this.column = "NULL";
-		this.descriptiveStat = true; 
-		this.varianceComponents = true;
-		this.boxplotRawData = true;
-		this.histogramRawData = false;
-		this.heatmapResiduals = false;
-		this.heatmapRow = "NULL";
-		this.heatmapColumn = "NULL";
-		this.diagnosticPlot = true;
-		this.genotypeFixed = true;
-		this.performPairwise = true;
-		this.pairwiseAlpha = "0.05";
-		this.compareControl = true;
-		this.performAllPairwise = false;
-		this.genotypeRandom = false;
-		this.excludeControls = false;
-		this.genoPhenoCorrelation = false;
+		String resultFolderPath = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH);
+		String outFileName = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH) + "SEA_output.txt";
+		String dataFileName = DATA_PATH.replace(BSLASH, FSLASH) + "RCB_ME.csv";
+		
+		int design = 0;
+		String[] respvars = {"Y1"};
+		String environment = "Site";
+		String[] environmentLevels = {"Env1", "Env2"};
+//		String environment = "NULL";
+//		String[] environmentLevels = {};
+		String genotype = "Gen";
+		String block = "Blk";
+		String rep = "NULL";
+		String row = "NULL";
+		String column = "NULL";
+		boolean descriptiveStat = false; 
+		boolean varianceComponents = false;
+		boolean boxplotRawData = false;
+		boolean histogramRawData = false;
+		boolean heatmapResiduals = false;
+		String heatmapRow = "fieldRow";
+		String heatmapColumn = "fieldColumn";
+		boolean diagnosticPlot = false;
+		boolean genotypeFixed = true;
+		boolean performPairwise = false;
+		String pairwiseAlpha = "0.05";
+		String[] genotypeLevels = {"1",   "2",   "3",   "4",   "5",   "6",   "7",   "8"};
+		String[] controlLevels = {"1", "2", "3"};
+		boolean compareControl = false;
+		boolean performAllPairwise = false;
+		boolean genotypeRandom = false;
+		boolean excludeControls = false;
+		boolean genoPhenoCorrelation = false;
+		
+		setEnvironmentLevels(environmentLevels);
+		setRespvars(respvars);
+		setEnvironment(environment);
+		setResultFolderPath(resultFolderPath);
+		setOutFileName(outFileName);
+		setDataFileName(dataFileName);
+		setDesign(design);
+		setGenotype(genotype);
+		setBlock(block);
+		setRep(rep);
+		setRow(row);
+		setColumn(column);
+		setDescriptiveStat(descriptiveStat);
+		setVarianceComponents(varianceComponents);
+		setBoxplotRawData(boxplotRawData);
+		setHistogramRawData(histogramRawData);
+		setHeatmapResiduals(heatmapResiduals);
+		setHeatmapRow(heatmapRow);
+		setHeatmapColumn(heatmapColumn);
+		setDiagnosticPlot(diagnosticPlot);
+		setGenotypeFixed(genotypeFixed);
+		setPerformPairwise(performPairwise);
+		setPairwiseAlpha(pairwiseAlpha);
+		setGenotypeLevels(genotypeLevels);
+		setControlLevels(controlLevels);
+		setCompareControl(compareControl);
+		setPerformAllPairwise(performAllPairwise);
+		setGenotypeRandom(genotypeRandom);
+		setExcludeControls(excludeControls);
+		setGenoPhenoCorrelation(genoPhenoCorrelation);
 	}
 	
 	@Override
