@@ -20,6 +20,11 @@ public class AddNewProgram {
 	private Program programModel = new Program();
 	private Component mainView;
 
+	@Command
+	public void changenotif() {
+		System.out.println("Sdsdsss");
+	}
+
 	public Component getMainView() {
 		return mainView;
 	}
@@ -43,6 +48,7 @@ public class AddNewProgram {
 	public void Init(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view) {
 		mainView = view;
 		parBinder = ctx.getBinder();
+		System.out.println("REINIT");
 	}
 
 	@NotifyChange("*")

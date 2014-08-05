@@ -82,9 +82,10 @@ public class TestCreateFieldbook {
 
 			lstSiteInfo.add(siteInfo);
 		}
-		CreateFieldBookManagerImpl genMan = new CreateFieldBookManagerImpl(lstSiteInfo, study, new File("C:\\"));
-
-		genMan.generateFieldBook();
+		// // CreateFieldBookManagerImpl genMan = new
+		// CreateFieldBookManagerImpl(lstSiteInfo, study, new File("C:\\"));
+		//
+		// genMan.generateFieldBook();
 	}
 
 }

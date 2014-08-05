@@ -17,7 +17,10 @@
 
 
 	
-	
+	<table schema="MYSCHEMA" tableName="student"
+			domainObjectName="Student">
+			<generatedKey column="id" sqlStatement="JDBC" />
+		</table>
 	
 		<!-- <table schema="MYSCHEMA" tableName="country" domainObjectName="Country">
 		</table>
@@ -126,10 +129,10 @@
 			<generatedKey column="id" sqlStatement="JDBC" />
 		</table>
  -->
-		<table schema="MYSCHEMA" tableName="studyvariable"
+	<!-- 	<table schema="MYSCHEMA" tableName="studyvariable"
 			domainObjectName="StudyVariable">
 			<generatedKey column="id" sqlStatement="JDBC" />
-		</table>
+		</table> -->
 <!-- 
 		<table schema="MYSCHEMA" tableName="user" domainObjectName="DbUser">
 			<generatedKey column="id" sqlStatement="JDBC" />

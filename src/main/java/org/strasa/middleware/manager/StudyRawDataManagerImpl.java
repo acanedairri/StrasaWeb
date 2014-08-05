@@ -1,14 +1,20 @@
 package org.strasa.middleware.manager;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.DriverManager;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.strasa.middleware.factory.ConnectionFactory;
-import org.strasa.middleware.mapper.PlantingTypeMapper;
 import org.strasa.middleware.mapper.StudyDerivedDataMapper;
 import org.strasa.middleware.mapper.StudyDerivedRawDataMapper;
 import org.strasa.middleware.mapper.StudyMapper;
@@ -16,8 +22,8 @@ import org.strasa.middleware.mapper.StudyRawDataByDataColumnMapper;
 import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.mapper.StudyRawDerivedDataByDataColumnMapper;
 import org.strasa.middleware.mapper.other.ExtendedStudyDataColumnMapper;
-import org.strasa.middleware.mapper.other.StudySharingMapper;
 import org.strasa.middleware.mapper.other.StudyRawDataBatch;
+import org.strasa.middleware.mapper.other.StudySharingMapper;
 import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.Study;
@@ -27,7 +33,10 @@ import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudyRawDataByDataColumnExample;
 import org.strasa.middleware.model.StudyRawDataExample;
 import org.strasa.middleware.model.StudySite;
+import org.strasa.web.common.api.ExcelHelper;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
+
+import au.com.bytecode.opencsv.CSVWriter;
 
 public class StudyRawDataManagerImpl {
 
@@ -267,12 +276,17 @@ public class StudyRawDataManagerImpl {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
 		try {
 			if (isRaw) {
+
 				StudyRawDataMapper mapper = session.getMapper(StudyRawDataMapper.class);
 				StudyRawDataExample example = new StudyRawDataExample();
 				example.createCriteria().andStudyidEqualTo(studyid);
-				example.createCriteria().andStudyidEqualTo(studyid);
+
 				if (mapper.countByExample(example) > 0) {
-					return mapper.selectByExample(example).get(mapper.selectByExample(example).size() - 1).getDatarow();
+
+					StudyRawDataBatch mapperCounter = session.getMapper(StudyRawDataBatch.class);
+					Map<String, Object> par = new HashMap<String, Object>();
+					par.put("studyid", studyid);
+					return mapperCounter.getStudyRawLastRow(par);
 				} else {
 					return 0;
 				}
@@ -294,12 +308,13 @@ public class StudyRawDataManagerImpl {
 
 	}
 
-	public void addStudyRawData(Study study, String[] header, List<String[]> rawCSVData, int dataset, boolean isRawData, Integer userid) {
+	public void addStudyRawData(Study study, List<String> header, List<String[]> rawCSVData, int dataset, boolean isRawData, Integer userid) {
 
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
 		StudyRawDataBatch studyRawBatch = session.getMapper(StudyRawDataBatch.class);
-		ArrayList<String> lstTemp = new StudyVariableManagerImpl().correctVariableCase(Arrays.asList(header));
-		header = lstTemp.toArray(new String[lstTemp.size()]);
+		ArrayList<String> lstTemp = new StudyVariableManagerImpl().correctVariableCase(header);
+		header.clear();
+		header.addAll(lstTemp);
 
 		try {
 			addStudy(study);
@@ -309,12 +324,12 @@ public class StudyRawDataManagerImpl {
 			System.out.println("StudyID______________________: " + study.getId());
 			for (int i = 0; i < rawCSVData.size(); i++) {
 				String[] row = rawCSVData.get(i);
-				for (int j = 0; j < header.length; j++) {
+				for (int j = 0; j < header.size(); j++) {
 
-					if (row.length == header.length) {
+					if (row.length == header.size()) {
 						StudyRawData record = new StudyRawData();
 
-						record.setDatacolumn(header[j]);
+						record.setDatacolumn(header.get(j));
 						record.setDatarow((int) (i + 1 + lastRow));
 						record.setDatavalue(row[j]);
 						record.setStudyid(study.getId());
@@ -333,7 +348,89 @@ public class StudyRawDataManagerImpl {
 
 			session.commit();
 
-			new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), header, isRaw, dataset);
+			new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), header.toArray(new String[header.size()]), isRaw, dataset);
+
+		} finally {
+			session.close();
+		}
+
+	}
+
+	public void addStudyRawDataFromSpreadsheet(Study study, ArrayList<String> header, Sheet sheet, int dataset, boolean isRawData, Integer userid) throws Exception {
+		long startTime = System.nanoTime();
+		int in = 0;
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
+		StudyRawDataBatch studyRawBatch = session.getMapper(StudyRawDataBatch.class);
+
+		ArrayList<String> lstTemp = new StudyVariableManagerImpl().correctVariableCase(header);
+		System.out.println(in++ + ": Elapsed Time = " + (System.nanoTime() - startTime) + " ns = " + ((double) (System.nanoTime() - startTime) / 1000000000) + " s");
+
+		header.clear();
+		header.addAll(lstTemp);
+
+		try {
+
+			addStudy(study);
+			System.out.println(in++ + ": Elapsed Time = " + (System.nanoTime() - startTime) + " ns = " + ((double) (System.nanoTime() - startTime) / 1000000000) + " s");
+
+			Integer lastRow = getLastDataRow(study.getId(), isRawData);
+			System.out.println(in++ + ": Elapsed Time = " + (System.nanoTime() - startTime) + " ns = " + ((double) (System.nanoTime() - startTime) / 1000000000) + " s");
+
+			List<StudyRawData> lstData = new ArrayList<StudyRawData>();
+			System.out.println("StudyID: " + study.getId());
+			ExcelHelper excelHelper = new ExcelHelper();
+
+			ArrayList<String[]> arrDump = new ArrayList<String[]>();
+			for (Row row : sheet) {
+				if (row.getRowNum() > 0) {
+					for (Cell cell : row) {
+
+						ArrayList<String> dump = new ArrayList<String>();
+						dump.add("");
+						dump.add(String.valueOf(study.getId()));
+						dump.add(String.valueOf(dataset));
+						dump.add(String.valueOf((int) (row.getRowNum() + 1 + lastRow)));
+						dump.add(String.valueOf(header.get(cell.getColumnIndex())));
+						dump.add(excelHelper.getCellValueToString(cell));
+						dump.add("0");
+						dump.add(String.valueOf(userid));
+
+						arrDump.add(dump.toArray(new String[dump.size()]));
+
+					}
+				}
+			}
+
+			File tempCSVFile = File.createTempFile(study.getName() + System.nanoTime(), ".csv");
+
+			try {
+
+				System.out.println(tempCSVFile.getAbsolutePath());
+				FileWriter mFileWriter = new FileWriter(tempCSVFile.getAbsolutePath());
+				CSVWriter mCsvWriter = new CSVWriter(mFileWriter);
+				mCsvWriter.writeAll(arrDump);
+				mCsvWriter.flush();
+				mCsvWriter.close();
+				java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://localhost/strasa", "root", "root");
+				java.sql.Statement stmt = con.createStatement();
+				String sql = "LOAD DATA LOCAL INFILE '" + tempCSVFile.getAbsolutePath().replace("\\", "\\\\") + "' INTO TABLE studyrawdata FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n'";
+
+				stmt.execute(sql);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+
+			}
+			System.out.println(in++ + ": Elapsed Time = " + (System.nanoTime() - startTime) + " ns = " + ((double) (System.nanoTime() - startTime) / 1000000000) + " s");
+			//
+			// if (isRawData)
+			// studyRawBatch.insertBatchRaw(lstData);
+			// else
+			// studyRawBatch.insertBatchDerived(lstData);
+
+			session.commit();
+			new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), header.toArray(new String[header.size()]), isRaw, dataset);
+			System.out.println(in++ + ": Elapsed Time = " + (System.nanoTime() - startTime) + " ns = " + ((double) (System.nanoTime() - startTime) / 1000000000) + " s");
 
 		} finally {
 			session.close();
@@ -406,37 +503,33 @@ public class StudyRawDataManagerImpl {
 		return (isRaw) ? "studyrawdata" : "studyderiveddata";
 
 	}
-/*
-	public void setPrivacyByStudyId(Integer studyid, Boolean shared) {
-		// TODO Auto-generated method stub
-		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
-		StudyRawDataMapper studyDataMapper = getStudyRawMapper(session);
 
-		try {
-			StudyRawDataExample example = new StudyRawDataExample();
-			example.createCriteria().andStudyidEqualTo(studyid);
+	/*
+	 * public void setPrivacyByStudyId(Integer studyid, Boolean shared) { //
+	 * TODO Auto-generated method stub SqlSession session =
+	 * connectionFactory.sqlSessionFactory.openSession(); StudyRawDataMapper
+	 * studyDataMapper = getStudyRawMapper(session);
+	 * 
+	 * try { StudyRawDataExample example = new StudyRawDataExample();
+	 * example.createCriteria().andStudyidEqualTo(studyid);
+	 * 
+	 * List<StudyRawData> studyData = studyDataMapper.selectByExample(example);
+	 * for (StudyRawData sdata : studyData) { sdata.setShared(shared);
+	 * studyDataMapper.updateByPrimaryKey(sdata); } session.commit();
+	 * 
+	 * } finally { session.close(); }
+	 * 
+	 * }
+	 */
 
-			List<StudyRawData> studyData = studyDataMapper.selectByExample(example);
-			for (StudyRawData sdata : studyData) {
-				sdata.setShared(shared);
-				studyDataMapper.updateByPrimaryKey(sdata);
-			}
-			session.commit();
-
-		} finally {
-			session.close();
-		}
-
-	}*/
-	
 	public void setPrivacyByStudyId(Integer studyid, Boolean shared) {
 		// TODO Auto-generated method stub
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudySharingMapper mapper = session.getMapper(StudySharingMapper.class);
 
 		try {
-			mapper.setSharingStudyRawData(studyid,shared);
-			mapper.setSharingStudyDerivedData(studyid,shared);
+			mapper.setSharingStudyRawData(studyid, shared);
+			mapper.setSharingStudyDerivedData(studyid, shared);
 			session.commit();
 
 		} finally {

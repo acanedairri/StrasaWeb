@@ -804,13 +804,16 @@ public class RawDataView extends ProcessTabViewModel {
 					this.mainTab.setLabel(this.dataset.getTitle());
 					new StudyDataSetManagerImpl().addDataSet(newdataset);
 				}
-				studyRawData.addStudyRawData(study, columnList.toArray(new String[columnList.size()]), dataList, newdataset.getId(), isRawData, this.userID);
+				studyRawData.addStudyRawData(study, columnList, dataList, newdataset.getId(), isRawData, this.userID);
 				this.dataset = newdataset;
 			}
 
 			studyRawData.addStudy(study);
 
-//			new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), columnList.toArray(new String[columnList.size()]), isRawData, this.dataset.getId());
+			// new
+			// StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(),
+			// columnList.toArray(new String[columnList.size()]), isRawData,
+			// this.dataset.getId());
 
 			isDataUploaded = true;
 			BindUtils.postNotifyChange(null, null, this, "*");

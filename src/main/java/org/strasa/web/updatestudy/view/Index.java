@@ -190,6 +190,7 @@ public class Index {
 	}
 
 	public void setTxtStudyName(String txtStudyName) {
+		System.out.println("GENERATED: " + txtStudyName);
 		this.txtStudyName = txtStudyName;
 	}
 

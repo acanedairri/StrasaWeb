@@ -39,7 +39,6 @@ import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
 import org.strasa.middleware.manager.StudyDataSetManagerImpl;
-import org.strasa.middleware.manager.StudyDerivedDataManagerImpl;
 import org.strasa.middleware.manager.StudyGermplasmManagerImpl;
 import org.strasa.middleware.manager.StudyLocationManagerImpl;
 import org.strasa.middleware.manager.StudyManager;
@@ -147,8 +146,7 @@ public class DerivedDataView extends ProcessTabViewModel {
 		return genotypeFileList;
 	}
 
-	public void setGenotypeFileList(
-			ArrayList<GenotypeFileModel> genotypeFileList) {
+	public void setGenotypeFileList(ArrayList<GenotypeFileModel> genotypeFileList) {
 		this.genotypeFileList = genotypeFileList;
 	}
 
@@ -208,7 +206,6 @@ public class DerivedDataView extends ProcessTabViewModel {
 	private Study study;
 
 	public List<UploadCSVDataVariableModel> varData = new ArrayList<UploadCSVDataVariableModel>();
-
 
 	private StudyDataSet newdataset;
 
@@ -307,8 +304,7 @@ public class DerivedDataView extends ProcessTabViewModel {
 		if (true)
 			return dataList;
 		ArrayList<String[]> pageData = new ArrayList<String[]>();
-		for (int i = activePage * pageSize; i < activePage * pageSize
-				+ pageSize; i++) {
+		for (int i = activePage * pageSize; i < activePage * pageSize + pageSize; i++) {
 			pageData.add(dataList.get(i));
 			System.out.println(Arrays.toString(dataList.get(i)));
 		}
@@ -320,15 +316,12 @@ public class DerivedDataView extends ProcessTabViewModel {
 		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
 		if (dataList.isEmpty())
 			return result;
-		for (int i = activePage * pageSize; i < activePage * pageSize
-				+ pageSize
-				&& i < dataList.size(); i++) {
+		for (int i = activePage * pageSize; i < activePage * pageSize + pageSize && i < dataList.size(); i++) {
 			ArrayList<String> row = new ArrayList<String>();
 			row.addAll(Arrays.asList(dataList.get(i)));
 			result.add(row);
 			row.add(0, "  ");
-			System.out.println(Arrays.toString(dataList.get(i)) + "ROW: "
-					+ row.get(0));
+			System.out.println(Arrays.toString(dataList.get(i)) + "ROW: " + row.get(0));
 		}
 		return result;
 	}
@@ -355,27 +348,21 @@ public class DerivedDataView extends ProcessTabViewModel {
 
 	@Command
 	@NotifyChange("variableData")
-	public void changeVar(
-			@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,
-			@ContextParam(ContextType.VIEW) Component view,
-			@BindingParam("oldVar") String oldVar) {
+	public void changeVar(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view, @BindingParam("oldVar") String oldVar) {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 		System.out.println(oldVar);
 		params.put("oldVar", oldVar);
 		params.put("parent", view);
 
-		Window popup = (Window) Executions.createComponents(
-				DataColumnChanged.ZUL_PATH, view, params);
+		Window popup = (Window) Executions.createComponents(DataColumnChanged.ZUL_PATH, view, params);
 
 		popup.doModal();
 	}
 
 	@NotifyChange("*")
 	@Command("uploadCSV")
-	public void uploadCSV(
-			@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,
-			@ContextParam(ContextType.VIEW) Component view) {
+	public void uploadCSV(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view) {
 
 		UploadEvent event = (UploadEvent) ctx.getTriggerEvent();
 
@@ -391,50 +378,46 @@ public class DerivedDataView extends ProcessTabViewModel {
 			}
 
 		if (!name.endsWith(".csv")) {
-			Messagebox.show("Error: File must be a text-based csv format",
-					"Upload Error", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show("Error: File must be a text-based csv format", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
 
-		InputStream in = event.getMedia().isBinary() ? event.getMedia()
-				.getStreamData() : new ReaderInputStream(event.getMedia()
-						.getReaderData());
-				FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
-				BindUtils.postNotifyChange(null, null, this, "*");
+		InputStream in = event.getMedia().isBinary() ? event.getMedia().getStreamData() : new ReaderInputStream(event.getMedia().getReaderData());
+		FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
+		BindUtils.postNotifyChange(null, null, this, "*");
 
-				ArrayList<String> invalidHeader = new ArrayList<String>();
-				boolean isHeaderValid = true;
-				try {
-					StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
-					CSVReader reader = new CSVReader(new FileReader(
-							tempFile.getAbsolutePath()));
-					String[] header = reader.readNext();
-					for (String column : header) {
-						if (!studyVarMan.hasVariable(column)) {
-							invalidHeader.add(column);
-							isHeaderValid = false;
-						}
-					}
-					System.out.println(invalidHeader.size());
-
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+		ArrayList<String> invalidHeader = new ArrayList<String>();
+		boolean isHeaderValid = true;
+		try {
+			StudyVariableManagerImpl studyVarMan = new StudyVariableManagerImpl();
+			CSVReader reader = new CSVReader(new FileReader(tempFile.getAbsolutePath()));
+			String[] header = reader.readNext();
+			for (String column : header) {
+				if (!studyVarMan.hasVariable(column)) {
+					invalidHeader.add(column);
+					isHeaderValid = false;
 				}
+			}
+			System.out.println(invalidHeader.size());
 
-				isVariableDataVisible = true;
-				dataFileName = name;
-				if (!isHeaderValid)
-					openCSVHeaderValidator(tempFile.getAbsolutePath(), false);
-				else {
-					refreshCsv();
-					if (this.isUpdateMode)
-						isNewDataSet = true;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-				}
+		isVariableDataVisible = true;
+		dataFileName = name;
+		if (!isHeaderValid)
+			openCSVHeaderValidator(tempFile.getAbsolutePath(), false);
+		else {
+			refreshCsv();
+			if (this.isUpdateMode)
+				isNewDataSet = true;
+
+		}
 
 	}
 
@@ -459,15 +442,13 @@ public class DerivedDataView extends ProcessTabViewModel {
 		params.put("oldVar", null);
 		params.put("parent", getMainView());
 
-		Window popup = (Window) Executions.createComponents(
-				AddProgram.ZUL_PATH, getMainView(), params);
+		Window popup = (Window) Executions.createComponents(AddProgram.ZUL_PATH, getMainView(), params);
 
 		popup.doModal();
 	}
 
 	@Command("showzulfile")
-	public void showzulfile(@BindingParam("zulFileName") String zulFileName,
-			@BindingParam("target") Tabpanel panel) {
+	public void showzulfile(@BindingParam("zulFileName") String zulFileName, @BindingParam("target") Tabpanel panel) {
 		if (panel != null && panel.getChildren().isEmpty()) {
 			Map arg = new HashMap();
 			arg.put("studyid", this.studyID);
@@ -480,8 +461,7 @@ public class DerivedDataView extends ProcessTabViewModel {
 	public void addProject() {
 
 		if (txtProgram == null) {
-			Messagebox.show("Error: Please specify/select a program first.",
-					"Upload Error", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show("Error: Please specify/select a program first.", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -490,8 +470,7 @@ public class DerivedDataView extends ProcessTabViewModel {
 		params.put("parent", getMainView());
 		params.put("programID", txtProgram.getId());
 
-		Window popup = (Window) Executions.createComponents(
-				AddProject.ZUL_PATH, getMainView(), params);
+		Window popup = (Window) Executions.createComponents(AddProject.ZUL_PATH, getMainView(), params);
 
 		popup.doModal();
 	}
@@ -504,8 +483,7 @@ public class DerivedDataView extends ProcessTabViewModel {
 			Map arg = new HashMap();
 			arg.put("studyid", this.studyID);
 			arg.put("dataset", this.dataset.getId());
-			Executions.createComponents("/user/browsestudy/deriveddata.zul",
-					divRawData, arg);
+			Executions.createComponents("/user/browsestudy/deriveddata.zul", divRawData, arg);
 		}
 	}
 
@@ -515,8 +493,7 @@ public class DerivedDataView extends ProcessTabViewModel {
 	}
 
 	@Init
-	public void init(@ContextParam(ContextType.VIEW) Component view,
-			@ExecutionArgParam("uploadModel") ProcessTabViewModel uploadModel) {
+	public void init(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("uploadModel") ProcessTabViewModel uploadModel) {
 
 		this.initValues(uploadModel);
 
@@ -529,18 +506,14 @@ public class DerivedDataView extends ProcessTabViewModel {
 			StudyManagerImpl studyMan = new StudyManagerImpl();
 			study = studyMan.getStudyById(uploadModel.getStudyID());
 			this.txtStudyName = study.getName();
-			this.txtStudyType = new StudyTypeManagerImpl().getStudyTypeById(
-					study.getStudytypeid()).getStudytype();
-			this.txtProgram = new ProgramManagerImpl().getProgramById(study
-					.getProgramid());
-			this.txtProject = new ProjectManagerImpl().getProjectById(study
-					.getProjectid());
+			this.txtStudyType = new StudyTypeManagerImpl().getStudyTypeById(study.getStudytypeid()).getStudytype();
+			this.txtProgram = new ProgramManagerImpl().getProgramById(study.getProgramid());
+			this.txtProject = new ProjectManagerImpl().getProjectById(study.getProjectid());
 			this.startYear = Integer.parseInt(study.getStartyear());
 			this.endYear = Integer.parseInt(study.getEndyear());
 			isNewDataSet = false;
-			
-		}
-		else{
+
+		} else {
 			this.isDataReUploaded = true;
 		}
 	}
@@ -550,16 +523,14 @@ public class DerivedDataView extends ProcessTabViewModel {
 		params.put("CSVPath", CSVPath);
 		params.put("parent", getMainView());
 		params.put("showAll", showAll);
-		Window popup = (Window) Executions.createComponents(
-				DataColumnValidation.ZUL_PATH, getMainView(), params);
+		Window popup = (Window) Executions.createComponents(DataColumnValidation.ZUL_PATH, getMainView(), params);
 
 		popup.doModal();
 	}
 
 	@NotifyChange("*")
 	@Command("refreshVarList")
-	public void refreshList(@BindingParam("newValue") String newValue,
-			@BindingParam("oldVar") String oldVar) {
+	public void refreshList(@BindingParam("newValue") String newValue, @BindingParam("oldVar") String oldVar) {
 		for (int i = 0; i < varData.size(); i++) {
 
 			if (varData.get(i).getCurrentVariable().equals(oldVar)) {
@@ -575,10 +546,7 @@ public class DerivedDataView extends ProcessTabViewModel {
 	@NotifyChange("*")
 	@Command("removeUpload")
 	public void removeUpload() {
-		Messagebox
-		.show("Are you sure you want to delete the previous uploaded data? WARNING! This cannot be undone.",
-				"Delete all data?", Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+		Messagebox.show("Are you sure you want to delete the previous uploaded data? WARNING! This cannot be undone.", "Delete all data?", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener() {
 			public void onEvent(Event e) {
 				if ("onOK".equals(e.getName())) {
 					isVariableDataVisible = false;
@@ -586,37 +554,23 @@ public class DerivedDataView extends ProcessTabViewModel {
 					isNewDataSet = true;
 					varData.clear();
 					isDataUploaded = false;
-					BindUtils.postGlobalCommand(null, null,
-							"disableTabs", null);
-					BindUtils.postNotifyChange(null, null,
-							DerivedDataView.this, "*");
-					new StudyRawDataManagerImpl(studyType
-							.equalsIgnoreCase("rawdata"))
-					.deleteByStudyId(study.getId());
+					BindUtils.postGlobalCommand(null, null, "disableTabs", null);
+					BindUtils.postNotifyChange(null, null, DerivedDataView.this, "*");
+					new StudyRawDataManagerImpl(studyType.equalsIgnoreCase("rawdata")).deleteByStudyId(study.getId());
 					;
-					new StudySiteManagerImpl(studyType
-							.equalsIgnoreCase("rawdata"))
-					.removeSiteByStudyId(study.getId(),null);
-					new StudyLocationManagerImpl(studyType
-							.equalsIgnoreCase("rawdata"))
-					.removeLocationByStudyId(study
-							.getId());
-					new StudyGermplasmManagerImpl()
-					.removeGermplasmByStudyId(study
-							.getId());
+					new StudySiteManagerImpl(studyType.equalsIgnoreCase("rawdata")).removeSiteByStudyId(study.getId(), null);
+					new StudyLocationManagerImpl(studyType.equalsIgnoreCase("rawdata")).removeLocationByStudyId(study.getId());
+					new StudyGermplasmManagerImpl().removeGermplasmByStudyId(study.getId());
 
 				} else if ("onCancel".equals(e.getName())) {
 
 				}
 
 				/*
-				 * Event Name Mapping list Messagebox.YES =
-				 * "onYes"; Messagebox.NO = "onNo";
-				 * Messagebox.RETRY = "onRetry";
-				 * Messagebox.ABORT = "onAbort";
-				 * Messagebox.IGNORE = "onIgnore";
-				 * Messagebox.CANCEL = "onCancel"; Messagebox.OK
-				 * = "onOK";
+				 * Event Name Mapping list Messagebox.YES = "onYes";
+				 * Messagebox.NO = "onNo"; Messagebox.RETRY = "onRetry";
+				 * Messagebox.ABORT = "onAbort"; Messagebox.IGNORE = "onIgnore";
+				 * Messagebox.CANCEL = "onCancel"; Messagebox.OK = "onOK";
 				 */
 			}
 		});
@@ -627,10 +581,7 @@ public class DerivedDataView extends ProcessTabViewModel {
 	@NotifyChange("*")
 	@Command("removeRawData")
 	public void removeRawData() {
-		Messagebox
-		.show("Are you sure you want to delete the previous uploaded data? You need to fill up the meta information again. WARNING! This cannot be undone.",
-				"Delete all data?", Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+		Messagebox.show("Are you sure you want to delete the previous uploaded data? You need to fill up the meta information again. WARNING! This cannot be undone.", "Delete all data?", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener() {
 			public void onEvent(Event e) {
 				if ("onOK".equals(e.getName())) {
 					isVariableDataVisible = false;
@@ -638,14 +589,10 @@ public class DerivedDataView extends ProcessTabViewModel {
 					isNewDataSet = true;
 					varData.clear();
 					isDataUploaded = false;
-					BindUtils.postGlobalCommand(null, null,
-							"disableTabs", null);
-					BindUtils.postNotifyChange(null, null,
-							DerivedDataView.this, "*");
-					new StudyRawDataManagerImpl(studyType
-							.equalsIgnoreCase("rawdata"))
-					.deleteByStudyId(study.getId());
-					new StudyDataColumnManagerImpl().removeStudyDataColumnByStudyId(DerivedDataView.this.studyID, "rd",dataset.getId());
+					BindUtils.postGlobalCommand(null, null, "disableTabs", null);
+					BindUtils.postNotifyChange(null, null, DerivedDataView.this, "*");
+					new StudyRawDataManagerImpl(studyType.equalsIgnoreCase("rawdata")).deleteByStudyId(study.getId());
+					new StudyDataColumnManagerImpl().removeStudyDataColumnByStudyId(DerivedDataView.this.studyID, "rd", dataset.getId());
 
 					DerivedDataView.this.isDataReUploaded = true;
 
@@ -654,13 +601,10 @@ public class DerivedDataView extends ProcessTabViewModel {
 				}
 
 				/*
-				 * Event Name Mapping list Messagebox.YES =
-				 * "onYes"; Messagebox.NO = "onNo";
-				 * Messagebox.RETRY = "onRetry";
-				 * Messagebox.ABORT = "onAbort";
-				 * Messagebox.IGNORE = "onIgnore";
-				 * Messagebox.CANCEL = "onCancel"; Messagebox.OK
-				 * = "onOK";
+				 * Event Name Mapping list Messagebox.YES = "onYes";
+				 * Messagebox.NO = "onNo"; Messagebox.RETRY = "onRetry";
+				 * Messagebox.ABORT = "onAbort"; Messagebox.IGNORE = "onIgnore";
+				 * Messagebox.CANCEL = "onCancel"; Messagebox.OK = "onOK";
 				 */
 			}
 		});
@@ -674,13 +618,10 @@ public class DerivedDataView extends ProcessTabViewModel {
 		varData.clear();
 		isDataUploaded = false;
 		BindUtils.postGlobalCommand(null, null, "disableTabs", null);
-		new StudyRawDataManagerImpl(studyType.equalsIgnoreCase("rawdata"))
-		.deleteByStudyId(study.getId());
+		new StudyRawDataManagerImpl(studyType.equalsIgnoreCase("rawdata")).deleteByStudyId(study.getId());
 		;
-		new StudySiteManagerImpl(studyType.equalsIgnoreCase("rawdata"))
-		.removeSiteByStudyId(study.getId(),null);
-		new StudyLocationManagerImpl(studyType.equalsIgnoreCase("rawdata"))
-		.removeLocationByStudyId(study.getId());
+		new StudySiteManagerImpl(studyType.equalsIgnoreCase("rawdata")).removeSiteByStudyId(study.getId(), null);
+		new StudyLocationManagerImpl(studyType.equalsIgnoreCase("rawdata")).removeLocationByStudyId(study.getId());
 		new StudyGermplasmManagerImpl().removeGermplasmByStudyId(study.getId());
 
 	}
@@ -699,7 +640,8 @@ public class DerivedDataView extends ProcessTabViewModel {
 			rawData.remove(0);
 			dataList = new ArrayList<String[]>(rawData);
 			System.out.println(Arrays.toString(dataList.get(0)));
-			if(!this.isDataReUploaded) gbUploadData.invalidate();
+			if (!this.isDataReUploaded)
+				gbUploadData.invalidate();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -743,13 +685,14 @@ public class DerivedDataView extends ProcessTabViewModel {
 
 		ProjectManagerImpl programMan = new ProjectManagerImpl();
 		projectList.clear();
-		projectList.addAll(programMan.getProjectList( selected));
+		projectList.addAll(programMan.getProjectList(selected));
 
 	}
 
 	@Override
 	public boolean validateTab() {
-		if(this.isUpdateMode) return true;
+		if (this.isUpdateMode)
+			return true;
 		Runtimer timer = new Runtimer();
 		timer.start();
 		boolean isRawData = false;
@@ -758,68 +701,55 @@ public class DerivedDataView extends ProcessTabViewModel {
 		HashSet noDupSet = new HashSet();
 		noDupSet.addAll(columnList);
 		if (noDupSet.size() != columnList.size()) {
-			Messagebox
-			.show("Error: Column duplication detected. Columns should be unique",
-					"Upload Error", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show("Error: Column duplication detected. Columns should be unique", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 
 			// TODO: must have message DIalog
 			return false;
 		}
 
-
 		if (tempFile == null || !isVariableDataVisible) {
 			if (!isUpdateMode()) {
-				Messagebox.show("Error: You must upload a data first",
-						"Upload Error", Messagebox.OK, Messagebox.ERROR);
+				Messagebox.show("Error: You must upload a data first", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 
 				return false;
 			}
 		}
 
-
-		StudyRawDataManagerImpl studyRawData = new StudyRawDataManagerImpl(
-				isRawData);
+		StudyRawDataManagerImpl studyRawData = new StudyRawDataManagerImpl(isRawData);
 
 		study = studyMan.getStudyByStudyId(this.getStudyID());
 		if (study == null) {
 			study = new Study();
 		}
 
-
 		if (uploadTo.equals("database")) {
 
 			if (isNewDataSet) {
 				System.out.println("DATA UPLOADING! ");
-				if(newdataset == null){
+				if (newdataset == null) {
 					newdataset = new StudyDataSet();
 					newdataset.setStudyid(this.studyID);
 					new StudyDataSetManagerImpl().addDataSet(newdataset);
 				}
-				studyRawData.addStudyRawData(study,
-						columnList.toArray(new String[columnList.size()]),
-						dataList, newdataset.getId(), isRawData,this.userID);
+				studyRawData.addStudyRawData(study, columnList, dataList, newdataset.getId(), isRawData, this.userID);
 				this.dataset = newdataset;
 			}
 
 			studyRawData.addStudy(study);
 
-			new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(),
-					columnList.toArray(new String[columnList.size()]),
-					isRawData,this.dataset.getId());
+			new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), columnList.toArray(new String[columnList.size()]), isRawData, this.dataset.getId());
 
 			isDataUploaded = true;
 			BindUtils.postNotifyChange(null, null, this, "*");
 
-		} 
+		}
 		return true;
 
 	}
 
 	@NotifyChange("genotypeFileList")
 	@Command("uploadGenotypeData")
-	public void uploadGenotypeData(
-			@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,
-			@ContextParam(ContextType.VIEW) Component view) {
+	public void uploadGenotypeData(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view) {
 
 		UploadEvent event = (UploadEvent) ctx.getTriggerEvent();
 
@@ -827,24 +757,18 @@ public class DerivedDataView extends ProcessTabViewModel {
 
 		String name = event.getMedia().getName();
 		if (!name.endsWith(".txt")) {
-			Messagebox.show("Error: File must be a text-based  format",
-					"Upload Error", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show("Error: File must be a text-based  format", "Upload Error", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
 
 		try {
-			String filename = name
-					+ Encryptions.encryptStringToNumber(name,
-							new Date().getTime());
+			String filename = name + Encryptions.encryptStringToNumber(name, new Date().getTime());
 			File tempGenoFile = File.createTempFile(filename, ".tmp");
-			InputStream in = event.getMedia().isBinary() ? event.getMedia()
-					.getStreamData() : new ReaderInputStream(event.getMedia()
-							.getReaderData());
-					FileUtilities.uploadFile(tempGenoFile.getAbsolutePath(), in);
+			InputStream in = event.getMedia().isBinary() ? event.getMedia().getStreamData() : new ReaderInputStream(event.getMedia().getReaderData());
+			FileUtilities.uploadFile(tempGenoFile.getAbsolutePath(), in);
 
-					GenotypeFileModel newGenotypeFile = new GenotypeFileModel(name,
-							tempGenoFile);
-					genotypeFileList.add(newGenotypeFile);
+			GenotypeFileModel newGenotypeFile = new GenotypeFileModel(name, tempGenoFile);
+			genotypeFileList.add(newGenotypeFile);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

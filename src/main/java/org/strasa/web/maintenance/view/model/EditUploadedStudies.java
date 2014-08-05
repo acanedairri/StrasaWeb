@@ -92,6 +92,31 @@ public class EditUploadedStudies {
 		divUpdateStudy.setVisible(false);
 		btnBack.setVisible(false);
 		btnUploadNewStudy.setVisible(true);
+
+		view.addEventListener(Events.ON_CLIENT_INFO, new EventListener<Event>() {
+
+			@Override
+			public void onEvent(Event arg0) throws Exception {
+				try {
+					new CreateFieldBookManagerImpl().populateStudyFromTemplate(tempFile, SecurityUtil.getDbUser().getId(), true, tempFile.getName());
+					Clients.clearBusy();
+					Messagebox.show("Fieldbook successfully uploaded!", "Uploading Fieldbook", Messagebox.OK, org.zkoss.zul.Messagebox.INFORMATION);
+					// System.out.println("WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOH");
+
+				} catch (CreateFieldBookException e) {
+					// TODO Auto-generated catch block
+					Clients.clearBusy();
+					Messagebox.show(e.getMessage(), "Error in Fieldbook", Messagebox.OK, org.zkoss.zul.Messagebox.EXCLAMATION);
+
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} finally {
+
+				}
+
+			}
+		});
 	}
 
 	private void populateEditStudyList() {
@@ -183,27 +208,6 @@ public class EditUploadedStudies {
 
 		Clients.showBusy("Uploading Fieldbook please wait...");
 
-		view.addEventListener(Events.ON_CLIENT_INFO, new EventListener<Event>() {
-
-			@Override
-			public void onEvent(Event arg0) throws Exception {
-				try {
-					new CreateFieldBookManagerImpl().populateStudyFromTemplate(tempFile, SecurityUtil.getDbUser().getId(), true, tempFile.getName());
-					Clients.clearBusy();
-					Messagebox.show("Fieldbook successfully uploaded!", "Uploading Fieldbook", Messagebox.OK, org.zkoss.zul.Messagebox.INFORMATION);
-
-				} catch (CreateFieldBookException e) {
-					// TODO Auto-generated catch block
-					Clients.clearBusy();
-					Messagebox.show(e.getMessage(), "Error in Fieldbook", Messagebox.OK, org.zkoss.zul.Messagebox.EXCLAMATION);
-
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-		});
 		Events.echoEvent("onClientInfo", view, null);
 
 	}

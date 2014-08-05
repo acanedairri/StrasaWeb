@@ -649,13 +649,14 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 	 *             the exception
 	 */
 	public void populateObservation(Study study, Sheet observation, StudyDataSet dataSet, Integer userID, boolean isRaw) throws CreateFieldBookException, Exception {
-		ArrayList<String[]> lstData = readExcelSheetAsArray(observation, 0);
-		String[] header = lstData.get(0);
-		lstData.remove((int) 0);
-
+		long startTime = System.nanoTime();
+		System.out.println("START");
+		int in = 0;
+		ArrayList<String> header = readParticularRowInExcelSheet(observation, 0);
+		System.out.println(in++ + ": Elapsed Time = " + (System.nanoTime() - startTime) + " ns = " + ((double) (System.nanoTime() - startTime) / 1000000000) + " s");
 		new StudyDataSetManagerImpl().addDataSet(dataSet);
-		new StudyRawDataManagerImpl().addStudyRawData(study, header, lstData, dataSet.getId(), isRaw, userID);
-
+		new StudyRawDataManagerImpl().addStudyRawDataFromSpreadsheet(study, header, observation, dataSet.getId(), isRaw, userID);
+		System.out.println("#####" + ": Elapsed Time = " + (System.nanoTime() - startTime) + " ns = " + ((double) (System.nanoTime() - startTime) / 1000000000) + " s");
 	}
 
 	/**

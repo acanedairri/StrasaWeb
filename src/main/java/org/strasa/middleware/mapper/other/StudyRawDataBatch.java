@@ -97,4 +97,5 @@ public interface StudyRawDataBatch {
 
 	public int countGermplasmOccurence(Map<String, Object> param);
 
+	public int getStudyRawLastRow(Map<String, Object> param);
 }
