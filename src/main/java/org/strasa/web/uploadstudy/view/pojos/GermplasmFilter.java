@@ -64,8 +64,11 @@ public class GermplasmFilter {
 	}
 
 	public boolean equals(GermplasmDeepInfoModel data) {
-
-		return data.getGermplasmname().startsWith(gname) && data.getSelectedGermplasmType().getGermplasmtype().startsWith(germplasmType) && data.getBreeder().startsWith(breeder) && data.getMaleparent().startsWith(maleParent) && data.getFemaleparent().startsWith(femaleParent);
+		String germplasmTypeComp = "";
+		if (data.getSelectedGermplasmType() != null) {
+			germplasmTypeComp = data.getSelectedGermplasmType().getGermplasmtype();
+		}
+		return data.getGermplasmname().startsWith(gname) && germplasmTypeComp.startsWith(germplasmType) && data.getBreeder().startsWith(breeder) && data.getMaleparent().startsWith(maleParent) && data.getFemaleparent().startsWith(femaleParent);
 	}
 
 }
