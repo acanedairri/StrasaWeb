@@ -6,9 +6,9 @@
 		align="center" height="98%">
 
 		<vlayout>
-			<groupbox id="grpUpload" mold="3d" width="100%">
+<!-- 			<groupbox id="grpUpload" mold="3d" width="100%">
 				<caption label="Select Data" />
-				<label value=""></label>
+				<label value=""></label> -->
 				<grid zclass="none">
 					<columns>
 						<column label="" width="120px" />
@@ -16,7 +16,7 @@
 					</columns>
 					<rows>
 						<row>
-							<label value="Select Data File" />
+							<label value="Select Data" />
 							<hlayout spacing="50px">
 								<vlayout width="100%">
 									<radiogroup>
@@ -24,70 +24,158 @@
 											spacing="10px">
 											<div align="left">
 												<hlayout>
+													<combobox id="studiesCombo" visible="false"
+														model="@load(vm.studies)" readonly="true"
+														selectedItem="@bind(vm.selectedStudy)"
+														onChange="@command('updateDataSetList')">
+														<template
+															name="model">
+															<comboitem value="@load(each)" label="@load(each.name)" />
+														</template>
+													</combobox>
+													<combobox  id="dataSetCombo" visible="false"
+														model="@load(vm.studyDataSets)" readonly="true"
+														selectedItem="@bind(vm.selectedDataSet)"
+														onChange="@command('displaySelectDataSet')">
+														<template
+															name="model">
+															<comboitem
+																value="@load(each)" label="@load(each.title)" />
+														</template>
+													</combobox>
 													<label
 														id="lblMsgUpload" visible="@load(vm.variableDataVisible)"
 														value="@load(vm.dataFileName)" sclass="label-search" />
+													<button
+														sclass="btn-danger" id="selectDataBtn"
+														label="From a Study"
+														image="/images/find.png"
+														onClick="@command('selectFromDatabase')" />
 
 													<button
-														id="uploadCSV" upload="true" label="Browse"
-														image="/images/find.png" onUpload="@command('uploadCSV')" />
-
+														sclass="btn-danger" id="uploadCSVbtn" upload="true"
+														label="From External File(.csv)" image="/images/find.png"
+														onUpload="@command('uploadCSV')" />
 
 													<button
-														label="Remove" onClick="@command('removeUpload') "
-														image="/images/remove.png"
-														visible="@load(vm.variableDataVisible)" sclass="btn-blue" />
-													<button
-														label="Modify Header" image="/images/modify.png"
-														onClick="@command('modifyDataHeader')"
-														visible="@load(vm.variableDataVisible)" sclass="btn-blue" />
+														id="resetBtn" label="Reset"
+														onClick="@global-command('launchSingleSite')"
+														visible="false" sclass="btn-danger" />
 												</hlayout>
 											</div>
 										</vlayout>
 									</radiogroup>
 								</vlayout>
-
 							</hlayout>
 						</row>
 					</rows>
 				</grid>
+	<!-- 		</groupbox> -->
+			<groupbox id="grpVariableData" mold="3d" width="100%"
+				hflex="1">
+				<caption label="Data Preview" />
+				<hlayout spacing="50px">
+					<vlayout>
+						<div id="datagrid"></div>
+					</vlayout>
+				</hlayout>
 			</groupbox>
 			<tabbox id="tabBox" height="700px" mold="accordion">
 				<tabs id="tabs">
-					<tab label="Model specifications" />
+					<tab label="Model specifications"/>
 					<tab label="Other options" />
 					<tab label="Graph options" />
 				</tabs>
 				<tabpanels id="tabPanels">
-					<tabpanel>
+					<tabpanel vflex="1">
 						<vbox>
+						
 							<hbox>
 								<label value="Type of design" />
 								<combobox
-									model="@load(vm.typeOfDesignList)" readonly="true">
+									model="@load(vm.typeOfDesignList)" readonly="true"
+									selectedIndex="@bind(vm.ssaModel.design)"
+									onChange="@command('updateVariableList', selectedIndex=self.selectedIndex)">
 									<template name="model">
 										<comboitem value="@load(each)"
 											label="@load(each)" />
 									</template>
 								</combobox>
 							</hbox>
-							<include
+							<include id="includeVariableList"
 								src="/user/analysis/singlesite/variablelistboxes.zul" />
 						</vbox>
 					</tabpanel>
 					<tabpanel>
-						<include
-							src="/user/analysis/multisite/otheroptions.zul" />
+						<include id="includeOtherOptions"
+							src="/user/analysis/singlesite/otheroptions.zul" />
 					</tabpanel>
 					<tabpanel>
-						<include
-							src="/user/analysis/multisite/graphoptions.zul" />
+						<listbox id="listbox" width="100%">
+							<listhead>
+								<listheader hflex="1" />
+							</listhead>
+							<listitem>
+								<listcell>
+									<checkbox id="boxplotCheckBox"
+										label="Boxplot of the raw data" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<checkbox id="histogramCheckBox"
+										label="Histogram of the raw data" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+
+									<vbox>
+										<checkbox id="heatmapCheckBox"
+											label="Heatmap of the residuals" />
+										<hbox>
+											<space spacing="20px" />
+											<label
+												value="Field row variable:" />
+											<combobox
+												id="fieldRowComboBox" model="@load(vm.varNames)"
+												readonly="true">
+												<template
+													name="model">
+													<comboitem
+														value="@load(each)" label="@load(each)" />
+												</template>
+											</combobox>
+										</hbox>
+										<hbox>
+											<space spacing="20px" />
+											<label
+												value="Field column variable:" />
+											<combobox
+												id="fieldColumnComboBox" model="@load(vm.varNames)"
+												readonly="true">
+												<template
+													name="model">
+													<comboitem
+														value="@load(each)" label="@load(each)" />
+												</template>
+											</combobox>
+										</hbox>
+									</vbox>
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<checkbox
+										id="diagnosticplotCheckBox" label="Diagnostic plots" />
+								</listcell>
+							</listitem>
+						</listbox>
 					</tabpanel>
 				</tabpanels>
 			</tabbox>
-			<button label="Test"
-				onClick="@global-command('displayTextFileContent')"
-				class="grid-link" />
+			<button label="Run" onClick="@command('validateSsaInputs')"
+				sclass="btn-danger" />
 
 			<label value="@bind(vm.resultRServe)" multiline="true" />
 		</vlayout>

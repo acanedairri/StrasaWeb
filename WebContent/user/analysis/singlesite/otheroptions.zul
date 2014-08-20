@@ -4,7 +4,7 @@
 	<vlayout>
 		<radiogroup id="performPairwiseGroup" />
 
-		<groupbox hflex="1" id="groupGenotypeFixed" open="false">
+		<groupbox hflex="1" id="groupGenotypeFixed" open="true" onOpen="@command('checkIfGenotypeOptionIsSelected', selected='fixedCheckBox', groupbox=self)" >
 			<caption>Options for genotype as fixed</caption>
 			<checkbox id="cbPerformPairwise" checked="false"
 				label="Perform pairwise mean comparisons"
@@ -27,7 +27,7 @@
 
 		<separator />
 
-		<groupbox hflex="1" id="groupGenotypeRandom" open="false">
+		<groupbox hflex="1" id="groupGenotypeRandom" open="false" onOpen="@command('checkIfGenotypeOptionIsSelected', selected='randomCheckBox', groupbox=self)" >
 			<caption>Options for genotype as random</caption>
 			<vbox>
 				<checkbox id="excludeControlsCheckBox"

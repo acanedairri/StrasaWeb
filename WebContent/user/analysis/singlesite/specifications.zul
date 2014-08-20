@@ -3,7 +3,7 @@
 	<div id="singleSiteSpecificationsWindow"
 		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.analysis.singlesite.view.model.Specifications')"
-		align="center" height="98%">
+		align="center" height="100%">
 
 		<vlayout>
 <!-- 			<groupbox id="grpUpload" mold="3d" width="100%">
@@ -71,8 +71,7 @@
 					</rows>
 				</grid>
 	<!-- 		</groupbox> -->
-			<groupbox id="grpVariableData" mold="3d" width="100%"
-				hflex="1">
+			<groupbox id="grpVariableData" mold="3d" width="100%" hflex="1" style="overflow:auto">
 				<caption label="Data Preview" />
 				<hlayout spacing="50px">
 					<vlayout>
@@ -80,16 +79,15 @@
 					</vlayout>
 				</hlayout>
 			</groupbox>
-			<tabbox id="tabBox" height="700px" mold="accordion">
+			<tabbox id="tabBox" height="100%" mold="accordion" >
 				<tabs id="tabs">
-					<tab label="Model specifications"/>
+					<tab id="tabModelSpecifications" label="Model specifications"/>
 					<tab label="Other options" />
 					<tab label="Graph options" />
 				</tabs>
 				<tabpanels id="tabPanels">
 					<tabpanel vflex="1">
 						<vbox>
-						
 							<hbox>
 								<label value="Type of design" />
 								<combobox
@@ -129,7 +127,6 @@
 							</listitem>
 							<listitem>
 								<listcell>
-
 									<vbox>
 										<checkbox id="heatmapCheckBox"
 											label="Heatmap of the residuals" />

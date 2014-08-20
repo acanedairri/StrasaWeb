@@ -63,7 +63,10 @@ import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.Row;
+import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tabpanel;
+import org.zkoss.zul.Tabpanels;
+import org.zkoss.zul.Tabs;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
@@ -84,11 +87,13 @@ public class Specifications {
 	private Button uploadCSVbtn;
 	private Button selectDataBtn;
 	private Div divDatagrid;
+	private Groupbox grpVariableData;
 
 	private Listbox numericLb;
 	private Listbox responseLb;
 	private Listbox factorLb;
-
+	
+	private Tabbox tabBox;
 
 	//DataModels
 	private Study selectedStudy;
@@ -193,17 +198,18 @@ public class Specifications {
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
-		
 		studyMgr = new StudyManagerImpl();
 		studyDataSetMgr = new StudyDataSetManagerImpl();
 
 		studies = studyMgr.getStudiesByUserID(SecurityUtil.getDbUser().getId());
 
+		tabBox = (Tabbox) component.getFellow("tabBox");
 		//init vars
 		typeOfDesignList = getTypeOfDesignList();
 		ssaModel=new SingleSiteAnalysisModel();
 
 		divDatagrid = (Div) component.getFellow("datagrid");
+		grpVariableData = (Groupbox) component.getFellow("grpVariableData");
 		resetBtn = (Button) component.getFellow("resetBtn");
 		uploadCSVbtn = (Button) component.getFellow("uploadCSVbtn");
 		selectDataBtn = (Button) component.getFellow("selectDataBtn");
@@ -746,9 +752,11 @@ public class Specifications {
 			Include incCSVData = new Include();
 			incCSVData.setSrc("/user/updatestudy/csvdata.zul");
 			incCSVData.setParent(divDatagrid);
+//			grpVariableData.setOpen(true);
+//			Messagebox.show("Dataset selected.");
 			gridReUploaded = true;
 		}
-
+		
 		@NotifyChange("*")
 		@Command()
 		public void displayTextFileContent(@ContextParam(ContextType.COMPONENT) Component component,
@@ -757,7 +765,6 @@ public class Specifications {
 			rServeManager = new RServeManager();
 			rServeManager.doSingleEnvironmentAnalysis(new SingleSiteAnalysisModel());
 			System.out.println("end rserve ssa");
-
 		}
 
 		@GlobalCommand("addResponse")
@@ -853,6 +860,13 @@ public class Specifications {
 			ssaModel.setOutFileName(ssaModel.getResultFolderPath()+ "SEA_output.txt");
 
 			//set Vars
+			
+			if(!respvars.isEmpty()) ssaModel.setRespvars(respvars.toArray(new String[respvars.size()]));
+			else{
+				errorMessage = "response variable cannot be empty";
+				return false;
+			}
+			
 			if(!envTextBox.getValue().isEmpty()) ssaModel.setEnvironment(envTextBox.getValue());
 			else{
 				errorMessage = "environment cannot be empty";
@@ -864,7 +878,7 @@ public class Specifications {
 				errorMessage = "genotype cannot be empty";
 				return false;
 			}
-
+			
 			if(!blockTextBox.getValue().isEmpty())ssaModel.setBlock(blockTextBox.getValue());
 			else if(blockRow.isVisible() ){
 				errorMessage = "block cannot be empty";
@@ -909,12 +923,8 @@ public class Specifications {
 					ssaModel.setHeatmapColumn(fieldColumnComboBox.getValue());
 				}
 			}
-
-
 			ssaModel.setDescriptiveStat(descriptiveStatCheckBox.isChecked());
 			ssaModel.setVarianceComponents(varComponentsCheckBox.isChecked());
-
-			ssaModel.setRespvars(respvars.toArray(new String[respvars.size()]));
 
 			if(!ssaModel.getEnvironment().isEmpty()){
 				System.out.println("set Environment Levels for:"+ ssaModel.getEnvironment());
@@ -936,7 +946,6 @@ public class Specifications {
 				ssaModel.setPerformPairwise(performPairwiseCheckBox.isChecked());
 				ssaModel.setPerformAllPairwise(performAllPairwiseBtn.isChecked());
 				ssaModel.setCompareControl(compareWithControlsBtn.isChecked());
-
 				if(ssaModel.isPerformPairwise()){
 					if(ssaModel.isPerformAllPairwise()){
 						if(pairwiseAlphaTextBox.getValue().toString().isEmpty()){
@@ -945,14 +954,12 @@ public class Specifications {
 						}else ssaModel.setPairwiseAlpha(Double.toString(pairwiseAlphaTextBox.getValue()));
 					}
 					else{
-
 						ssaModel.setControlLevels(AnalysisUtils.getItemsFromListAsStringAyrray(controlsLb));
 						//					ssaModel.setControlLevels(controls.toArray(new String[controls.size()]));
 						if(ssaModel.getControlLevels().length<1){
 							errorMessage = "Please specify control variables from the genotype levels.";
 							return false;
 						}
-
 					}
 				}
 			}
@@ -973,6 +980,14 @@ public class Specifications {
 			return true;
 		}
 
+		@Command("checkIfRandomOrFixedIsSelected")
+		public void checkIfRandomOrFixedIsSelected() {
+			if(!fixedCheckBox.isChecked() && !randomCheckBox.isChecked()){
+				 Messagebox.show("Please specify whether the genotype variable is fixed or random.");
+				 tabBox.setSelectedIndex(0);
+			}
+		}
+		
 		@GlobalCommand("chooseVariable")
 		@NotifyChange("*")
 		public boolean chooseVariable(@BindingParam("varTextBox") Textbox varTextBox, @BindingParam("imgButton") Image imgButton ) {
@@ -1020,7 +1035,20 @@ public class Specifications {
 			// TODO Auto-generated method stub
 		}
 
+		
+		@Command("checkIfGenotypeOptionIsSelected")
+		public void checkIfGenotypeOptionIsSelected(@BindingParam("selected") String selected, @BindingParam("groupbox") Groupbox groupbox) {
 
+			Checkbox checkbox = (Checkbox) incVariableList.getFellow(selected);	
+			if(checkbox.isChecked())return;
+			else{
+				groupbox.setOpen(false);
+				Messagebox.show("Please check Random as your genotype to view options.","Option not available", Messagebox.OK, Messagebox.ERROR);
+				
+			}
+			// TODO Auto-generated method stub
+			
+		}
 		private void chooseResponseVariable() {
 			Set<String> set = numericModel.getSelection();
 			System.out.println("addResponse");
@@ -1162,7 +1190,6 @@ public class Specifications {
 
 		@NotifyChange("*")
 		public int getActivePage() {
-
 			return activePage;
 		}
 

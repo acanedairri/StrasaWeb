@@ -1,17 +1,17 @@
 <zk>
 
 	<div id="mainSingleSiteWindow" apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.strasa.web.analysis.singlesite.view.model.Index')">
+		viewModel="@id('vm') @init('org.strasa.web.analysis.singlesite.view.model.Index')" height="90%">
 
 		<separator height="5px"></separator>
 
-			<tabbox id="tabBox" sclass="page-content" height="1000px">
+			<tabbox id="tabBox" sclass="page-content">
 			<tabs id="tabs">
 				<tab label="Single-site Analysis"
 					image="/images/find.png" />
 			</tabs>
 			<tabpanels id="tabPanels">
-				<tabpanel id="specificationsPanel">
+				<tabpanel id="specificationsPanel" 	style="overflow:auto">
 					<include id="includeSpecifications" src="/user/analysis/singlesite/specifications.zul" />
 				</tabpanel>
 			</tabpanels>

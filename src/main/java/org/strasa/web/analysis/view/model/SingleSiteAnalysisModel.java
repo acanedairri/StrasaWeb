@@ -39,7 +39,9 @@ public class SingleSiteAnalysisModel {
 	private boolean genotypeRandom;
 	private boolean excludeControls;
 	private boolean genoPhenoCorrelation;
-
+	private boolean specifiedContrast;
+	private String contrastFileName;
+	
 	public SingleSiteAnalysisModel() {
 		String resultFolderPath = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH);
 		String outFileName = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH) + "SEA_output.txt";
@@ -74,6 +76,8 @@ public class SingleSiteAnalysisModel {
 		boolean genotypeRandom = false;
 		boolean excludeControls = false;
 		boolean genoPhenoCorrelation = false;
+		boolean specifiedContrast = true;
+		String contrastFileName = DATA_PATH + "contrastData.csv";
 		
 		setEnvironmentLevels(environmentLevels);
 		setRespvars(respvars);
@@ -105,6 +109,8 @@ public class SingleSiteAnalysisModel {
 		setGenotypeRandom(genotypeRandom);
 		setExcludeControls(excludeControls);
 		setGenoPhenoCorrelation(genoPhenoCorrelation);
+		setSpecifiedContrast(specifiedContrast);
+		setContrastFileName(contrastFileName);
 	}
 	
 	@Override
@@ -378,6 +384,22 @@ public class SingleSiteAnalysisModel {
 
 	public void setGenoPhenoCorrelation(boolean genoPhenoCorrelation) {
 		this.genoPhenoCorrelation = genoPhenoCorrelation;
+	}
+
+	public boolean isSpecifiedContrast() {
+		return specifiedContrast;
+	}
+
+	public void setSpecifiedContrast(boolean specifiedContrast) {
+		this.specifiedContrast = specifiedContrast;
+	}
+
+	public String getContrastFileName() {
+		return contrastFileName;
+	}
+
+	public void setContrastFileName(String contrastFileName) {
+		this.contrastFileName = contrastFileName;
 	}
 
 }

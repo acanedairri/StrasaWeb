@@ -231,10 +231,9 @@ public class Index {
 	}
 
 	public ArrayList<GermplasmDeepInfoModel> getLstStudyGermplasm() {
-
 		ArrayList<GermplasmDeepInfoModel> lstGerm = new ArrayList<GermplasmDeepInfoModel>(lstStudyGermplasm.values());
 		ArrayList<GermplasmDeepInfoModel> returnVal = new ArrayList<GermplasmDeepInfoModel>();
-		for (GermplasmDeepInfoModel data : lstGerm) {
+		for (GermplasmDeepInfoModel data : lstGerm){
 			if (studyGermplasmFilter.equals(data))
 				returnVal.add(data);
 		}
@@ -270,7 +269,6 @@ public class Index {
 			}
 		}
 		return returnVal;
-
 	}
 
 	public GermplasmType getGermplasmTypeById(Integer id) {
@@ -288,9 +286,7 @@ public class Index {
 		for (GermplasmDeepInfoModel data : arrGermplasmDeepInfo) {
 			// System.out.println(data.toString());
 		}
-
 		// System.out.println("_____________________________________________________________");
-
 	}
 
 	public String getTotalUnknownGermplasm() {

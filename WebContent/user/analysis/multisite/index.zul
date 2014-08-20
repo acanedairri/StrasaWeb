@@ -5,14 +5,14 @@
 
 		<separator height="5px"></separator>
 
-		<tabbox id="tabBox" sclass="page-content" height="100%">
+			<tabbox id="tabBox" sclass="page-content" height="1000px">
 			<tabs id="tabs">
-				<tab label="Single-site Analysis"
+				<tab label="Multi-site Analysis"
 					image="/images/find.png" />
 			</tabs>
 			<tabpanels id="tabPanels">
-				<tabpanel>
-					<include src="/user/analysis/multisite/specifications.zul" />
+				<tabpanel id="specificationsPanel">
+					<include id="includeSpecifications" src="/user/analysis/singlesite/specifications.zul" />
 				</tabpanel>
 			</tabpanels>
 		</tabbox>
