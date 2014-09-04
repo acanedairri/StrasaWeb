@@ -7,21 +7,13 @@
 		<listitem>
 			<listcell>
 				<checkbox id="boxplotCheckBox"
-					label="Boxplot of the raw data" />
+					label="Boxplot across environments" />
 			</listcell>
 		</listitem>
 		<listitem>
 			<listcell>
 				<checkbox id="histogramCheckBox"
-					label="Histogram of the raw data" />
-			</listcell>
-		</listitem>
-		<listitem>
-			<listcell>
-				<checkbox id="heatmapCheckBox"
-					label="Heatmap of the residuals" />
-					<space spacing="20px" />
-				<button label="Specify field row/column" />
+					label="Histogram across environments" />
 			</listcell>
 		</listitem>
 		<listitem>

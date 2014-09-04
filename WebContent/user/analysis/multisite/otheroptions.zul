@@ -1,10 +1,12 @@
-<div viewModel="@id('vm') @init('org.strasa.web.analysis.singlesite.view.model.Specifications')"
-		height="98%">
-		
+<div
+	viewModel="@id('vm') @init('org.strasa.web.analysis.multisite.view.model.Specifications')"
+	height="98%">
+
 	<vlayout>
 		<radiogroup id="performPairwiseGroup" />
 
-		<groupbox hflex="1" id="groupGenotypeFixed" open="false">
+		<groupbox hflex="1" id="groupGenotypeFixed" open="true"
+		onOpen="@command('checkIfGenotypeOptionIsSelected', selected='fixedCheckBox', groupbox=self)">
 			<caption>Options for genotype as fixed</caption>
 			<checkbox id="cbPerformPairwise" checked="false"
 				label="Perform pairwise mean comparisons"
@@ -27,17 +29,20 @@
 
 		<separator />
 
-		<groupbox hflex="1" id="groupGenotypeRandom" open="false">
+		<groupbox hflex="1" id="groupGenotypeRandom" open="false"
+			onOpen="@command('checkIfGenotypeOptionIsSelected', selected='randomCheckBox', groupbox=self)">
 			<caption>Options for genotype as random</caption>
 			<vbox>
 				<checkbox id="excludeControlsCheckBox"
 					label="Exclude controls in the estimation of genotypic variance" />
 				<checkbox id="estimateGenotypeCheckBox"
-					label="Estimate genotypic and phenotypic corelations" disabled="true"/>
+					label="Estimate genotypic and phenotypic corelations"
+					disabled="true" />
 			</vbox>
 		</groupbox>
-	
-		<groupbox hflex="1" id="groupLevelOfControls" open="@bind(vm.genotypeControlsOpen)">
+
+		<groupbox hflex="1" id="groupLevelOfControls"
+			open="@bind(vm.genotypeControlsOpen)">
 			<caption>Specify control(s):</caption>
 			<hbox>
 				<listbox id="genotypeLevelsLb" hflex="1" rows="4"
@@ -74,6 +79,15 @@
 				</listbox>
 			</hbox>
 		</groupbox>
+		<vbox>
+			<checkbox
+				label="Stability Analysis Using Finlay-Wilkinson Model"
+				id="StabilityFinlayWilkinson" />
+			<checkbox label="Stability Analysis Using Shukla's Model"
+				id="StabilityShukla" />
+			<checkbox label="AMMI Analysis" id="Ammi" />
+			<checkbox label="GGE Analysis" id="Gge" />
+		</vbox>
 		<groupbox hflex="1">
 			<caption>Display:</caption>
 			<vbox>

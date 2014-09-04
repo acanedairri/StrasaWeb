@@ -12,7 +12,7 @@
 			</tabs>
 			<tabpanels id="tabPanels">
 				<tabpanel id="specificationsPanel">
-					<include id="includeSpecifications" src="/user/analysis/singlesite/specifications.zul" />
+					<include id="includeSpecifications" src="/user/analysis/multisite/specifications.zul" />
 				</tabpanel>
 			</tabpanels>
 		</tabbox>

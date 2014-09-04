@@ -6,7 +6,7 @@
 			<button label="Export results as .zip" visible="true"
 				sclass="btn-success" image="/images/export16.png" />
 		</div>
-		<tabbox id="tabBox" sclass="page-content" vflex="1" hflex="1">
+		<tabbox id="tabBox" sclass="page-content" height="750px" hflex="1">
 			<tabs>
 				<tab id="txtResult" label="RESULT" />
 				<tab id="graphResult" label="GRAPHS" />
@@ -19,8 +19,7 @@
 					<hlayout>
 						<div id="graphResultDiv" width="250px"
 							height="800px" style="overflow: auto" />
-						<div id="zoomDiv" style="overflow: auto"
-							hflex="1" vflex="1" />
+						<div id="zoomDiv" style="overflow: auto" hflex="1" vflex="1" />
 					</hlayout>
 				</tabpanel>
 				<tabpanel id="csvResultTab" style="overflow: auto" />

@@ -970,7 +970,7 @@ public class Specifications {
 
 				if(excludeControlsCheckBox.isChecked() && !(compareWithControlsBtn.isChecked() && compareWithControlsBtn.isChecked())){
 					ssaModel.setControlLevels(AnalysisUtils.getItemsFromListAsStringAyrray(controlsLb));
-					if(ssaModel.getControlLevels().length<1 && !(ssaModel.getDesign()== 1 || ssaModel.getDesign() == 2 )){
+					if(ssaModel.getControlLevels().length<1 && (ssaModel.getDesign()== 1 || ssaModel.getDesign() == 2 )){
 						errorMessage = "Please specify control variables from the genotype levels.";
 						return false;
 					}
@@ -1043,11 +1043,10 @@ public class Specifications {
 			if(checkbox.isChecked())return;
 			else{
 				groupbox.setOpen(false);
-				Messagebox.show("Please check Random as your genotype to view options.","Option not available", Messagebox.OK, Messagebox.ERROR);
+				Messagebox.show("Please define genotype as "+checkbox.getLabel()+" effect to view this option.","Option not available", Messagebox.OK, Messagebox.ERROR);
 				
 			}
 			// TODO Auto-generated method stub
-			
 		}
 		private void chooseResponseVariable() {
 			Set<String> set = numericModel.getSelection();

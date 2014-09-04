@@ -75,17 +75,22 @@ public class AnalysisUtils {
 	
 	public static String createOutputFolder(String fileName, String analysisType) {
 		// TODO Auto-generated method stub
+		String userFolderPath;
 		String dataFileName = fileName.replaceAll(".csv", "");
 		dataFileName = dataFileName.replaceAll(".tmp", "");
 		
-		String userFolderPath =  Sessions.getCurrent().getWebApp().getRealPath("resultanalysis")+ FILE_SEPARATOR +
+		
+		if(analysisType.equals("ssa")) userFolderPath=Sessions.getCurrent().getWebApp().getRealPath("resultanalysis")+ FILE_SEPARATOR +
 				SecurityUtil.getDbUser().getUsername()+ FILE_SEPARATOR+ "Single-Site";
-
+		else userFolderPath =Sessions.getCurrent().getWebApp().getRealPath("resultanalysis")+ FILE_SEPARATOR +
+				SecurityUtil.getDbUser().getUsername()+ FILE_SEPARATOR+ "Multi-Site";
+		
 		String outputStudyPath = userFolderPath+ FILE_SEPARATOR + getOutputFolderName(dataFileName) +FILE_SEPARATOR;
 		
 		if(createFolder(userFolderPath)){
 			createFolder(outputStudyPath);
 		}
+		
 		return outputStudyPath;
 	}
 	

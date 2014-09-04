@@ -64,7 +64,7 @@
 						iconSclass="z-icon-angle-double-right" />
 					<navitem label="Single-Site" id="singlesite"
 						iconSclass="z-icon-angle-double-right" />
-					<navitem label="Multi-Site"
+					<navitem label="Multi-Site" id="multisite"
 						iconSclass="z-icon-angle-double-right" />
 					<navitem label="Linkage Mapping" id="linkagemapping"
 						iconSclass="z-icon-angle-double-right" />

@@ -6,72 +6,70 @@
 		align="center" height="100%">
 
 		<vlayout>
-<!-- 			<groupbox id="grpUpload" mold="3d" width="100%">
-				<caption label="Select Data" />
-				<label value=""></label> -->
-				<grid zclass="none">
-					<columns>
-						<column label="" width="120px" />
-						<column label="" width="500px" />
-					</columns>
-					<rows>
-						<row>
-							<label value="Select Data" />
-							<hlayout spacing="50px">
-								<vlayout width="100%">
-									<radiogroup>
-										<vlayout width="100%"
-											spacing="10px">
-											<div align="left">
-												<hlayout>
-													<combobox id="studiesCombo" visible="false"
-														model="@load(vm.studies)" readonly="true"
-														selectedItem="@bind(vm.selectedStudy)"
-														onChange="@command('updateDataSetList')">
-														<template
-															name="model">
-															<comboitem value="@load(each)" label="@load(each.name)" />
-														</template>
-													</combobox>
-													<combobox  id="dataSetCombo" visible="false"
-														model="@load(vm.studyDataSets)" readonly="true"
-														selectedItem="@bind(vm.selectedDataSet)"
-														onChange="@command('displaySelectDataSet')">
-														<template
-															name="model">
-															<comboitem
-																value="@load(each)" label="@load(each.title)" />
-														</template>
-													</combobox>
-													<label
-														id="lblMsgUpload" visible="@load(vm.variableDataVisible)"
-														value="@load(vm.dataFileName)" sclass="label-search" />
-													<button
-														sclass="btn-danger" id="selectDataBtn"
-														label="From a Study"
-														image="/images/find.png"
-														onClick="@command('selectFromDatabase')" />
+			<grid zclass="none">
+				<columns>
+					<column label="" width="120px" />
+					<column label="" width="500px" />
+				</columns>
+				<rows>
+					<row>
+						<label value="Select Data" />
+						<hlayout spacing="50px">
+							<vlayout width="100%">
+								<radiogroup>
+									<vlayout width="100%"
+										spacing="10px">
+										<div align="left">
+											<hlayout>
+												<combobox
+													id="studiesCombo" visible="false" model="@load(vm.studies)"
+													readonly="true" selectedItem="@bind(vm.selectedStudy)"
+													onChange="@command('updateDataSetList')">
+													<template
+														name="model">
+														<comboitem
+															value="@load(each)" label="@load(each.name)" />
+													</template>
+												</combobox>
+												<combobox
+													id="dataSetCombo" visible="false"
+													model="@load(vm.studyDataSets)" readonly="true"
+													selectedItem="@bind(vm.selectedDataSet)"
+													onChange="@command('displaySelectDataSet')">
+													<template
+														name="model">
+														<comboitem
+															value="@load(each)" label="@load(each.title)" />
+													</template>
+												</combobox>
+												<label id="lblMsgUpload"
+													visible="@load(vm.variableDataVisible)"
+													value="@load(vm.dataFileName)" sclass="label-search" />
+												<button
+													sclass="btn-danger" id="selectDataBtn" label="From a Study"
+													image="/images/find.png"
+													onClick="@command('selectFromDatabase')" />
 
-													<button
-														sclass="btn-danger" id="uploadCSVbtn" upload="true"
-														label="From External File(.csv)" image="/images/find.png"
-														onUpload="@command('uploadCSV')" />
+												<button
+													sclass="btn-danger" id="uploadCSVbtn" upload="true"
+													label="From External File(.csv)" image="/images/find.png"
+													onUpload="@command('uploadCSV')" />
 
-													<button
-														id="resetBtn" label="Reset"
-														onClick="@global-command('launchSingleSite')"
-														visible="false" sclass="btn-danger" />
-												</hlayout>
-											</div>
-										</vlayout>
-									</radiogroup>
-								</vlayout>
-							</hlayout>
-						</row>
-					</rows>
-				</grid>
-	<!-- 		</groupbox> -->
-			<groupbox id="grpVariableData" mold="3d" width="100%" hflex="1" style="overflow:auto">
+												<button id="resetBtn"
+													label="Reset" onClick="@global-command('launchSingleSite')"
+													visible="false" sclass="btn-danger" />
+											</hlayout>
+										</div>
+									</vlayout>
+								</radiogroup>
+							</vlayout>
+						</hlayout>
+					</row>
+				</rows>
+			</grid>
+			<!-- 		</groupbox> -->
+			<groupbox id="grpVariableData" mold="3d" width="100%"
+				hflex="1" style="overflow:auto">
 				<caption label="Data Preview" />
 				<hlayout spacing="50px">
 					<vlayout>
@@ -79,9 +77,10 @@
 					</vlayout>
 				</hlayout>
 			</groupbox>
-			<tabbox id="tabBox" height="100%" mold="accordion" >
+			<tabbox id="tabBox" height="750px">
 				<tabs id="tabs">
-					<tab id="tabModelSpecifications" label="Model specifications"/>
+					<tab id="tabModelSpecifications"
+						label="Model specifications" />
 					<tab label="Other options" />
 					<tab label="Graph options" />
 				</tabs>

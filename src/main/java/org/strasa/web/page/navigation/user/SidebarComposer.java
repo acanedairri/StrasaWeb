@@ -58,6 +58,9 @@ public class SidebarComposer extends SelectorComposer<Component> {
 	Navitem singlesite;
 
 	@Wire
+	Navitem multisite;
+	
+	@Wire
 	Navitem linkagemapping;
 
 	@Wire
@@ -187,11 +190,21 @@ public class SidebarComposer extends SelectorComposer<Component> {
 
 	}
 
+
 	@Listen("onClick = #singlesite")
 	public void singlesite() {
 		Div d = (Div) sidebar.getRoot().query("#contentui");
 		d.getChildren().clear();
 		Executions.createComponents("../user/analysis/singlesite/index.zul", d, null);
+
+	}
+	
+	
+	@Listen("onClick = #multisite")
+	public void multisite() {
+		Div d = (Div) sidebar.getRoot().query("#contentui");
+		d.getChildren().clear();
+		Executions.createComponents("../user/analysis/multisite/index.zul", d, null);
 
 	}
 

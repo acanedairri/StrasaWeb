@@ -128,7 +128,7 @@
 							id="addReplicateButton" src="/images/rightarrow_g.png"
 							tooltip="Add Replicate variable"
 							onClick="@global-command('chooseVariable', varTextBox=replicateTextBox, imgButton=self)" />
-						Replicate:
+						Replicate: 	
 					</cell>
 					<hlayout>
 						<textbox id="replicateTextBox" width="150px"
