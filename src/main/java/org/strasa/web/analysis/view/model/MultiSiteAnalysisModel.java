@@ -76,7 +76,7 @@ public class MultiSiteAnalysisModel {
 		ammi = true;
 		gge =  true;
 		
-		setDesignIndex(0);
+		setDesign(0);
 		setEnvironment("Env");
 		setGenotype("Genotype");
 		setBlock("Block");
@@ -107,11 +107,12 @@ public class MultiSiteAnalysisModel {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("SingleSiteAnalysisModel \n");
+		sb.append("MultSiteAnalysisModel: \n");
 		sb.append("resultFolderPath: "+resultFolderPath);
 		sb.append("\n outFileName: "+outFileName);
 		sb.append("\n dataFileName: "+dataFileName);
 		sb.append("\n environment: "+environment);
+		sb.append("\n designIndex: "+Integer.toString(designIndex));
 		sb.append("\n genotype: "+genotype);
 		sb.append("\n block: "+block);
 		sb.append("\n row: "+row);
@@ -163,7 +164,7 @@ public class MultiSiteAnalysisModel {
 		return designIndex;
 	}
 
-	public void setDesignIndex(int designIndex) {
+	public void setDesign(int designIndex) {
 		this.designIndex = designIndex;
 	}
 

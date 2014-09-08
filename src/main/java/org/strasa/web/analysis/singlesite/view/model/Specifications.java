@@ -248,6 +248,11 @@ public class Specifications {
 		rowRow = (Row) incVariableList.getFellow("rowRow");
 		columnRow = (Row) incVariableList.getFellow("columnRow");
 
+		blockRow.setAttribute("Textbox", blockTextBox);
+		replicateRow.setAttribute("Textbox", replicateTextBox);
+		rowRow.setAttribute("Textbox", rowTextBox);
+		columnRow.setAttribute("Textbox", columnTextBox);
+		
 		replicateRow.setVisible(false);
 		rowRow.setVisible(false);
 		columnRow.setVisible(false);
@@ -419,6 +424,7 @@ public class Specifications {
 		@Command("updateVariableList")
 		@NotifyChange("*")
 		public void updateVariableList(@BindingParam("selectedIndex") Integer selectedIndex){
+			ssaModel.setDesign(selectedIndex);
 			System.out.println("chose " + Integer.toString(selectedIndex));
 			switch (selectedIndex) {
 			case 1: {//AugmentedRCB
@@ -428,9 +434,9 @@ public class Specifications {
 				}else activateLevelOfConrolsOptions(false);
 
 				blockRow.setVisible(true);
-				replicateRow.setVisible(false);
-				rowRow.setVisible(false);
-				columnRow.setVisible(false);
+				AnalysisUtils.disableRow(replicateRow, factorModel);
+				AnalysisUtils.disableRow(rowRow, factorModel);
+				AnalysisUtils.disableRow(columnRow, factorModel);
 				break;
 			}
 			case 2: {//AugmentedLatin square
@@ -442,8 +448,8 @@ public class Specifications {
 				rowRow.setVisible(true);
 				columnRow.setVisible(true);
 
-				blockRow.setVisible(false);
-				replicateRow.setVisible(false);
+				AnalysisUtils.disableRow(replicateRow, factorModel);
+				AnalysisUtils.disableRow(blockRow, factorModel);
 				break;
 			}
 			case 3: {//Alpha lattice
@@ -455,8 +461,8 @@ public class Specifications {
 				blockRow.setVisible(true);
 				replicateRow.setVisible(true);
 
-				rowRow.setVisible(false);
-				columnRow.setVisible(false);
+				AnalysisUtils.disableRow(rowRow, factorModel);
+				AnalysisUtils.disableRow(columnRow, factorModel);
 
 				break;
 			}
@@ -466,7 +472,7 @@ public class Specifications {
 					activateLevelOfConrolsOptions(true);
 				}else activateLevelOfConrolsOptions(false);
 
-				blockRow.setVisible(false);
+				AnalysisUtils.disableRow(blockRow, factorModel);
 				replicateRow.setVisible(true);
 				rowRow.setVisible(true);
 				columnRow.setVisible(true);
@@ -480,8 +486,8 @@ public class Specifications {
 				blockRow.setVisible(true);
 				replicateRow.setVisible(true);
 
-				rowRow.setVisible(false);
-				columnRow.setVisible(false);
+				AnalysisUtils.disableRow(rowRow, factorModel);
+				AnalysisUtils.disableRow(columnRow, factorModel);
 				break;
 			}
 			case 6: {// Latinized Row Column
@@ -489,7 +495,7 @@ public class Specifications {
 				if(performPairwiseCheckBox.isChecked()){
 					activateLevelOfConrolsOptions(true);
 				}else activateLevelOfConrolsOptions(false);
-				blockRow.setVisible(false);
+				AnalysisUtils.disableRow(blockRow, factorModel);
 				replicateRow.setVisible(true);
 				rowRow.setVisible(true);
 				columnRow.setVisible(true);
@@ -504,10 +510,11 @@ public class Specifications {
 					activateLevelOfConrolsOptions(true);
 				}else activateLevelOfConrolsOptions(false);
 
+
+				AnalysisUtils.disableRow(replicateRow, factorModel);
+				AnalysisUtils.disableRow(rowRow, factorModel);
+				AnalysisUtils.disableRow(columnRow, factorModel);
 				blockRow.setVisible(true);
-				replicateRow.setVisible(false);
-				rowRow.setVisible(false);
-				columnRow.setVisible(false);
 				break;
 			}
 			}

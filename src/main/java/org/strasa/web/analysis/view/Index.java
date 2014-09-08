@@ -1,4 +1,4 @@
-package org.strasa.web.analysis.multisite.view.model;
+package org.strasa.web.analysis.view;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -14,6 +14,7 @@ import org.analysis.rserve.manager.RServeManager;
 import org.strasa.middleware.model.Program;
 import org.strasa.middleware.model.Project;
 import org.strasa.middleware.model.StudyType;
+import org.strasa.web.analysis.view.model.MultiSiteAnalysisModel;
 import org.strasa.web.analysis.view.model.SingleSiteAnalysisModel;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
@@ -65,6 +66,18 @@ public class Index {
 		specificationPage.setSrc("/user/analysis/singlesite/specifications.zul");
 	}
 
+	@NotifyChange("*")
+	@GlobalCommand("launchMultiSite")
+	public void launchMultiSite(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view) {
+		Tabpanel specificationsPanel = (Tabpanel) component.getFellow("specificationsPanel");
+		specificationsPanel.getChildren().get(0).detach();
+		
+		Include specificationPage = new Include();
+		specificationPage.setParent(specificationsPanel);
+		specificationPage.setSrc("/user/analysis/multisite/specifications.zul");
+	}
+
 	@GlobalCommand("displaySsaResult")
 	@NotifyChange("*")
 	public void displaySsaResult(@ContextParam(ContextType.COMPONENT) Component component,
@@ -84,6 +97,31 @@ public class Index {
 		Include studyInformationPage = new Include();
 		studyInformationPage.setParent(newPanel);
 		studyInformationPage.setDynamicProperty("outputFolderPath", ssaModel.getResultFolderPath().replaceAll("\\\\", "/"));
+		studyInformationPage.setSrc("/user/analysis/resultviewer.zul");
+
+		tabPanels.appendChild(newPanel);
+		tabs.appendChild(newTab);
+	}
+	
+	@GlobalCommand("displayMsaResult")
+	@NotifyChange("*")
+	public void displayMsaResult(@ContextParam(ContextType.COMPONENT) Component component,
+			@ContextParam(ContextType.VIEW) Component view, @BindingParam("msaModel") MultiSiteAnalysisModel msaModel) {
+		rServeManager = new RServeManager();
+		rServeManager.doMultiEnvironmentOneStage(msaModel);
+		
+		Tabpanels tabPanels = (Tabpanels) component.getFellow("tabPanels");
+		Tabs tabs = (Tabs) component.getFellow("tabs");
+
+		Tabpanel newPanel = new Tabpanel();
+		Tab newTab = new Tab();
+		newTab.setLabel(new File(msaModel.getOutFileName()).getParentFile().getName());
+		newTab.setClosable(true);
+		
+		//initialize view after view construction.
+		Include studyInformationPage = new Include();
+		studyInformationPage.setParent(newPanel);
+		studyInformationPage.setDynamicProperty("outputFolderPath", msaModel.getResultFolderPath().replaceAll("\\\\", "/"));
 		studyInformationPage.setSrc("/user/analysis/resultviewer.zul");
 
 		tabPanels.appendChild(newPanel);

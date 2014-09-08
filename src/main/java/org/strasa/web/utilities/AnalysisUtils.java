@@ -34,6 +34,16 @@ public class AnalysisUtils {
 
 	private static final String FILE_SEPARATOR  = System.getProperty("file.separator");
 
+	public static void disableRow(Row row, ListModelList<String> factorModel) {
+		// TODO Auto-generated method stub
+		Textbox textbox = (Textbox) row.getAttribute("Textbox");
+		if(!textbox.getValue().isEmpty()){
+			factorModel.add(textbox.getValue());
+			textbox.setValue("");
+		}
+		row.setVisible(false);
+	}
+	
 	public static ListModelList<String> getNumericAsListModel(ArrayList<String> variableInfo) {
 		// TODO Auto-generated method stub
 		ListModelList<String> modelList = new ListModelList<String>();

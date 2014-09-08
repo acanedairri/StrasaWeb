@@ -119,6 +119,7 @@ public class SingleSiteAnalysisModel {
 		sb.append("SingleSiteAnalysisModel \n");
 		sb.append("resultFolderPath: "+resultFolderPath);
 		sb.append("\n outFileName: "+outFileName);
+		sb.append("\n design: "+design);
 		sb.append("\n dataFileName: "+dataFileName);
 		sb.append("\n environment: "+environment);
 		sb.append("\n genotype: "+genotype);
