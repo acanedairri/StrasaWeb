@@ -124,7 +124,7 @@ public class SingleSiteAnalysisModel {
 		sb.append("\n environment: "+environment);
 		sb.append("\n genotype: "+genotype);
 		sb.append("\n block: "+block);
-		sb.append("\n rep: "+design);
+		sb.append("\n rep: "+rep);
 		sb.append("\n row: "+row);
 		sb.append("\n column: "+column);
 		sb.append("\n descriptiveStat: "+descriptiveStat);

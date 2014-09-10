@@ -75,6 +75,7 @@ import au.com.bytecode.opencsv.CSVReader;
 public class Specifications {	
 
 	//Managers
+	private int selectedDesign;
 	private RServeManager rServeManager;
 	private StudyManagerImpl studyMgr;
 	private StudyDataSetManagerImpl studyDataSetMgr;
@@ -424,6 +425,7 @@ public class Specifications {
 		@Command("updateVariableList")
 		@NotifyChange("*")
 		public void updateVariableList(@BindingParam("selectedIndex") Integer selectedIndex){
+			selectedDesign = selectedIndex;
 			ssaModel.setDesign(selectedIndex);
 			System.out.println("chose " + Integer.toString(selectedIndex));
 			switch (selectedIndex) {
@@ -857,6 +859,7 @@ public class Specifications {
 		private boolean validateSsaModel() {
 			// TODO Auto-generated method stub
 
+			ssaModel.setDesign(selectedDesign);
 			String folderPath = AnalysisUtils.createOutputFolder(fileName.replaceAll(" ", ""), "ssa");
 			//set Paths
 			ssaModel.setResultFolderPath(folderPath);

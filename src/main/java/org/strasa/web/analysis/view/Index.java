@@ -49,8 +49,7 @@ public class Index {
 
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
-			@ContextParam(ContextType.VIEW) Component view){
-		
+			@ContextParam(ContextType.VIEW) Component view){		
 	}
 
 
@@ -128,7 +127,7 @@ public class Index {
 		tabs.appendChild(newTab);
 	}
 
-	public Tab getResultTab() {
+	public Tab getResultTab(){
 		return resultTab;
 	}
 

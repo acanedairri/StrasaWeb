@@ -31,6 +31,15 @@
 															value="@load(each)" label="@load(each.name)" />
 													</template>
 												</combobox>
+												<button visible="false"
+													sclass="btn-danger" id="selectDataset" label="selectDataset"
+													image="/images/find.png"
+													onClick="@command('selectDataset')" />
+													
+												<button visible="false"
+													sclass="btn-danger" id="selectUploadedFile" label="selectUploadedFile"
+													image="/images/find.png"
+													onClick="@command('selectFromDatabase')" />
 												<combobox
 													id="dataSetCombo" visible="false"
 													model="@load(vm.studyDataSets)" readonly="true"
@@ -42,6 +51,7 @@
 															value="@load(each)" label="@load(each.title)" />
 													</template>
 												</combobox>
+
 												<label id="lblMsgUpload"
 													visible="@load(vm.variableDataVisible)"
 													value="@load(vm.dataFileName)" sclass="label-search" />

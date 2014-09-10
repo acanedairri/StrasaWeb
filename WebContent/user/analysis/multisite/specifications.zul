@@ -56,7 +56,7 @@
 													onUpload="@command('uploadCSV')" />
 
 												<button id="resetBtn"
-													label="Reset" onClick="@global-command('launchSingleSite')"
+													label="Reset" onClick="@global-command('launchMultiSite')"
 													visible="false" sclass="btn-danger" />
 											</hlayout>
 										</div>
