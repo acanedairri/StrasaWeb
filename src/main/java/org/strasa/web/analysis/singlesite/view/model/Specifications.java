@@ -697,6 +697,8 @@ public class Specifications {
 					args.put("filePath", filePath);
 					BindUtils.postGlobalCommand(null, null, "setSsaListvariables", args);
 
+					if (uploadedFile == null) return;
+					
 					isVariableDataVisible = true;
 					dataFileName = fileName;
 					refreshCsv();

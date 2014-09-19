@@ -8,7 +8,7 @@
 			<tabs id="tabs">
 				<tab label="Results"
 					image="/images/find.png" />
-			</tabs>
+			</tabs> 
 			<tabpanels id="tabPanels">
 			</tabpanels>
 		</tabbox>
