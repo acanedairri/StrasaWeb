@@ -550,7 +550,6 @@ public class Specifications {
 		public void setSsaListvariables(@BindingParam("filePath")String filepath){
 			//...
 			try{
-			ssaModel.setDataFileName(filepath.replace("\\", "/"));
 			rServeManager = new RServeManager();
 			varInfo = rServeManager.getVariableInfo(filepath.replace("\\", "/"), fileFormat, separator);
 
@@ -684,9 +683,9 @@ public class Specifications {
 					FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
 					BindUtils.postNotifyChange(null, null, this, "*");
 
-					uploadedFile = FileUtilities.getFileFromUpload(ctx, view);
+					uploadedFile = FileUtilities.getFileFromUploadAsDatasetCsv(ctx, view);
 					String filePath = userFileManager.uploadFileForAnalysis(fileName, uploadedFile);
-
+					
 					if (tempFile == null)
 						return;
 
@@ -860,15 +859,14 @@ public class Specifications {
 
 		private boolean validateSsaModel() {
 			// TODO Auto-generated method stub
-
 			ssaModel.setDesign(selectedDesign);
 			String folderPath = AnalysisUtils.createOutputFolder(fileName.replaceAll(" ", ""), "ssa");
 			//set Paths
 			ssaModel.setResultFolderPath(folderPath);
 
 
-			userFileManager.moveUploadedFileToOutputFolder(folderPath, fileName.replaceAll(" ", ""), uploadedFile);
-
+			String filePath = userFileManager.moveUploadedFileToOutputFolder(folderPath, fileName.replaceAll(" ", ""), uploadedFile);
+			ssaModel.setDataFileName(filePath.replace("\\", "/"));
 			ssaModel.setOutFileName(ssaModel.getResultFolderPath()+ "SEA_output.txt");
 
 			//set Vars

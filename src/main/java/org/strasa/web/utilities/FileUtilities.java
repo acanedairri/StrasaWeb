@@ -112,6 +112,32 @@ public class FileUtilities {
 		FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
 		return tempFile;
 	}
+	
+	public static File getFileFromUploadAsDatasetCsv(BindContext ctx, Component view) {
+
+		UploadEvent event = (UploadEvent) ctx.getTriggerEvent();
+
+		// System.out.println(event.getMedia().getStringData());
+
+		String name = event.getMedia().getName();
+		File tempFile = null;
+		try {
+			tempFile = File.createTempFile(name.replaceAll(".csv", ""), "(dataset).csv");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		// if (!name.endsWith(".csv")) {
+		// Messagebox.show("Error: File must be a text-based csv format",
+		// "Upload Error", Messagebox.OK, Messagebox.ERROR);
+		// return null;
+		// }
+
+		InputStream in = event.getMedia().isBinary() ? event.getMedia().getStreamData() : new ReaderInputStream(event.getMedia().getReaderData());
+		FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
+		return tempFile;
+	}
 
 	public static void exportData(List<String> columns, List<String[]> rows, String outputFileName) {
 		List<String[]> grid = rows;

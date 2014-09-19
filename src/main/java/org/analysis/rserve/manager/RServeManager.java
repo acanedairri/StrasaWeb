@@ -245,7 +245,8 @@ public class RServeManager {
 				rConnection.eval(setWd);
 			}
 
-			String usedData = "capture.output(cat(\"\nDATA FILE: " + dataFileName + "\n\",file=\"" + outFileName + "\"))";
+			String dataFileNameDisplay = getDisplayName(dataFileName);
+			String usedData = "capture.output(cat(\"\nDATA FILE: " + dataFileNameDisplay + "\n\",file=\"" + outFileName + "\"))";
 			String outFile = "capture.output(cat(\"\nSINGLE-ENVIRONMENT ANALYSIS\n\"),file=\"" + outFileName + "\",append = TRUE)";
 			String usedDesign = "capture.output(cat(\"\nDESIGN: " + designUsed + "\n\n\"),file=\"" + outFileName + "\",append = TRUE)";
 			String sep = "capture.output(cat(\"------------------------------\"),file=\"" + outFileName + "\",append = TRUE)";
@@ -1578,6 +1579,14 @@ public class RServeManager {
 		}
 	}
 
+	private String getDisplayName(String dataFileName) {
+		// TODO Auto-generated method stub
+		String[] newFile = dataFileName.split(FSLASH);
+		String displayName=newFile[newFile.length-2] + FSLASH + newFile[newFile.length-1];
+		System.out.println(displayName);
+		return displayName ;
+	}
+
 	public void doSingleEnvironmentAnalysis2(SingleSiteAnalysisModel ssaModel) {
 
 		// rjava manager for single site analysisn for DMAS
@@ -1682,8 +1691,8 @@ public class RServeManager {
 				System.out.println(setWd);
 				rConnection.eval(setWd);
 			}
-
-			String usedData = "capture.output(cat(\"\nDATA FILE: " + dataFileName + "\n\",file=\"" + outFileName + "\"))";
+			String dataFileNameDisplay = getDisplayName(dataFileName);
+			String usedData = "capture.output(cat(\"\nDATA FILE: " + dataFileNameDisplay + "\n\",file=\"" + outFileName + "\"))";
 			String outFile = "capture.output(cat(\"\nSINGLE-ENVIRONMENT ANALYSIS\n\"),file=\"" + outFileName + "\",append = TRUE)";
 			String usedDesign = "capture.output(cat(\"\nDESIGN: " + designUsed + "\n\n\"),file=\"" + outFileName + "\",append = TRUE)";
 			String sep = "capture.output(cat(\"------------------------------\"),file=\"" + outFileName + "\",append = TRUE)";
@@ -3229,7 +3238,8 @@ public class RServeManager {
 				rConnection.eval(setWd);
 			}
 
-			String usedData = "capture.output(cat(\"\nDATA FILE: " + dataFileName + "\n\",file=\"" + outFileName + "\"))";
+			String dataFileNameDisplay = getDisplayName(dataFileName);
+			String usedData = "capture.output(cat(\"\nDATA FILE: " + dataFileNameDisplay + "\n\",file=\"" + outFileName + "\"))";
 			String outFile = "capture.output(cat(\"\nMULTI-ENVIRONMENT ANALYSIS (ONE-STAGE)\n\"),file=\"" + outFileName + "\",append = TRUE)";
 			String usedDesign = "capture.output(cat(\"\nDESIGN: " + designUsed + "\n\n\"),file=\"" + outFileName + "\",append = TRUE)";
 			String sep = "capture.output(cat(\"------------------------------\n\"),file=\"" + outFileName + "\",append = TRUE)";

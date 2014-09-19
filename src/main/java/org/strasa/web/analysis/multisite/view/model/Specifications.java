@@ -555,7 +555,6 @@ public class Specifications {
 	public void setMsaListvariables(@BindingParam("filePath")String filepath){
 		//...
 		try{
-			msaModel.setDataFileName(filepath.replace("\\", "/"));
 			rServeManager = new RServeManager();
 			varInfo = rServeManager.getVariableInfo(filepath.replace("\\", "/"), fileFormat, separator);
 
@@ -689,7 +688,7 @@ public class Specifications {
 				FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
 				BindUtils.postNotifyChange(null, null, this, "*");
 
-				uploadedFile = FileUtilities.getFileFromUpload(ctx, view);
+				uploadedFile = FileUtilities.getFileFromUploadAsDatasetCsv(ctx, view);
 				String filePath = userFileManager.uploadFileForAnalysis(fileName, uploadedFile);
 
 				if (tempFile == null)
@@ -710,6 +709,8 @@ public class Specifications {
 				resetBtn.setVisible(true);
 				uploadCSVbtn.setVisible(false);
 				selectDataBtn.setVisible(false);
+				
+				
 
 	}
 
@@ -866,7 +867,8 @@ public class Specifications {
 		//set Paths
 		msaModel.setResultFolderPath(folderPath);
 
-		userFileManager.moveUploadedFileToOutputFolder(folderPath, fileName.replaceAll(" ", ""), uploadedFile);
+		String filePath = userFileManager.moveUploadedFileToOutputFolder(folderPath, fileName.replaceAll(" ", ""), uploadedFile);
+		msaModel.setDataFileName(filePath.replace("\\", "/"));
 
 		msaModel.setOutFileName(msaModel.getResultFolderPath()+ "MEA_output.txt");
 
