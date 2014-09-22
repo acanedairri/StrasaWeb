@@ -74,7 +74,9 @@ public class UserFileManager {
 			FileUtils.copyFileToDirectory(dataFile, new File(resultFolderPath + File.separator ),true);
 			movedFile = new File(resultFolderPath + File.separator + dataFile.getName());
 			filePath = movedFile.getAbsolutePath();
-			renamedFile = new File(resultFolderPath+realName.replaceAll(".csv", "(dataset).csv"));
+			
+			if(realName.contains(".csv")) renamedFile = new File(resultFolderPath+realName.replaceAll(".csv", "(dataset).csv"));
+			else renamedFile = new File(resultFolderPath+realName+"(dataset).csv");
 			movedFile.renameTo(renamedFile);
 
 
