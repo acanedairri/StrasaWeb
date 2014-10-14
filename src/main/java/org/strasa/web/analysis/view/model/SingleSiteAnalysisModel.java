@@ -5,10 +5,7 @@ import org.zkoss.zk.ui.Sessions;
 public class SingleSiteAnalysisModel {
 	private static String BSLASH = "\\";
 	private static String FSLASH = "/";
-	private static String OUTPUTFOLDER_PATH =  Sessions.getCurrent().getWebApp().getRealPath("resultanalysis")+ System.getProperty("file.separator")+
-			"user2"+ System.getProperty("file.separator")+"Single-Site"+ System.getProperty("file.separator")+"MyResult"+ System.getProperty("file.separator");
-	public static String DATA_PATH = System.getProperty("user.dir")+ System.getProperty("file.separator") + "sample_datasets" + System.getProperty("file.separator");
-	
+
 	private String resultFolderPath;
 	private String outFileName;
 	private String dataFileName;
@@ -41,18 +38,25 @@ public class SingleSiteAnalysisModel {
 	private boolean genoPhenoCorrelation;
 	private boolean specifiedContrast;
 	private String contrastFileName;
-	
+	private boolean moransTest; // for BIMS always false
+	private String[] spatialStruc;
+
 	public SingleSiteAnalysisModel() {
-		String resultFolderPath = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH);
-		String outFileName = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH) + "SEA_output.txt";
-		String dataFileName = DATA_PATH.replace(BSLASH, FSLASH) + "RCB_ME.csv";
+//		String OUTPUTFOLDER_PATH =  Sessions.getCurrent().getWebApp().getRealPath("resultanalysis")+ System.getProperty("file.separator")+
+//				"user2"+ System.getProperty("file.separator")+"Single-Site"+ System.getProperty("file.separator")+"MyResult"+ System.getProperty("file.separator");
+//		String DATA_PATH = System.getProperty("user.dir")+ System.getProperty("file.separator") + "sample_datasets" + System.getProperty("file.separator");
 		
+		
+		String resultFolderPath = null; //OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH);
+		String outFileName  = null; //OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH) + "SEA_output.txt";
+		String dataFileName  = null; //DATA_PATH.replace(BSLASH, FSLASH) + "RCB_ME.csv";
+
 		int design = 0;
 		String[] respvars = {"Y1"};
 		String environment = "Site";
 		String[] environmentLevels = {"Env1", "Env2"};
-//		String environment = "NULL";
-//		String[] environmentLevels = {};
+		//		String environment = "NULL";
+		//		String[] environmentLevels = {};
 		String genotype = "Gen";
 		String block = "Blk";
 		String rep = "NULL";
@@ -77,8 +81,10 @@ public class SingleSiteAnalysisModel {
 		boolean excludeControls = false;
 		boolean genoPhenoCorrelation = false;
 		boolean specifiedContrast = true;
-		String contrastFileName = DATA_PATH + "contrastData.csv";
-		
+		String contrastFileName  = null; //DATA_PATH + "contrastData.csv";
+		boolean moransTest =  false;// for BIMS always false
+		String[] spatialStruc = {"none", "CompSymm", "Gaus", "Exp", "Spher"};
+
 		setEnvironmentLevels(environmentLevels);
 		setRespvars(respvars);
 		setEnvironment(environment);
@@ -111,8 +117,10 @@ public class SingleSiteAnalysisModel {
 		setGenoPhenoCorrelation(genoPhenoCorrelation);
 		setSpecifiedContrast(specifiedContrast);
 		setContrastFileName(contrastFileName);
+		setMoransTest(moransTest);
+		setSpatialStruc(spatialStruc);
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -146,7 +154,7 @@ public class SingleSiteAnalysisModel {
 
 		return sb.toString();
 	}
-	
+
 	public String getResultFolderPath() {
 		return resultFolderPath;
 	}
@@ -401,6 +409,22 @@ public class SingleSiteAnalysisModel {
 
 	public void setContrastFileName(String contrastFileName) {
 		this.contrastFileName = contrastFileName;
+	}
+
+	public boolean isMoransTest() {
+		return moransTest;
+	}
+
+	public void setMoransTest(boolean moransTest) {
+		this.moransTest = moransTest;
+	}
+
+	public String[] getSpatialStruc() {
+		return spatialStruc;
+	}
+
+	public void setSpatialStruc(String[] spatialStruc) {
+		this.spatialStruc = spatialStruc;
 	}
 
 }

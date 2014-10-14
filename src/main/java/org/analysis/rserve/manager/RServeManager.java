@@ -47,6 +47,7 @@ public class RServeManager {
 
 	public ArrayList<String> getVariableInfo(String fileName, int fileFormat,String separator) {
 		String funcGetVarInfo;
+
 		ArrayList<String> toreturn=new ArrayList<String>();
 		if (fileFormat == 2)  
 			funcGetVarInfo = "varsAndTypes <- getVarInfo(fileName = \"" + fileName + "\", fileFormat = 2, separator = \"" + separator + "\")";
@@ -4502,81 +4503,263 @@ public class RServeManager {
 		}
 	}
 
+	public void doSingleEnvironmentAnalysisPRep(SingleSiteAnalysisModel ssaModel){
+		String resultFolderPath = ssaModel.getResultFolderPath();
+		String dataFileName = ssaModel.getDataFileName(); // "2013WSPYT_rawdata_prep.csv";
+		String[] respvar = ssaModel.getRespvars();
+		String genotype = ssaModel.getGenotype();
+		String row = ssaModel.getRow();
+		String column = ssaModel.getColumn();
+		String environment = ssaModel.getEnvironment();
+		boolean genotypeFixed = ssaModel.isGenotypeFixed();
+		boolean genotypeRandom = ssaModel.isGenotypeRandom();
+		boolean excludeControls = ssaModel.isExcludeControls();
+		String[] controlLevel = ssaModel.getControlLevels(); // c("CIHERANG","CIHERANGSUB1","IRRI105","IRRI119", "IRRI154","IRRI168") 
+		boolean moransTest = ssaModel.isMoransTest();// for BIMS always false
+		String[] spatialStruc = ssaModel.getSpatialStruc(); // {"none", "CompSymm", "Gaus", "Exp", "Spher"}, for BIMS include the five choices, for standalone determine by the user
+		boolean descriptiveStat =ssaModel.isDescriptiveStat();
+		boolean varianceComponents = ssaModel.isVarianceComponents();
+		boolean boxplotRawData = ssaModel.isBoxplotRawData();
+		boolean histogramRawData = ssaModel.isHistogramRawData();
+		boolean heatmapResiduals = ssaModel.isHeatmapResiduals();
+		boolean diagnosticPlot = ssaModel.isDiagnosticPlot();
 
-	public void test() {
-		// TODO Auto-generated method stub
-		try {
-			rConnection.eval("cars <- c(1, 3, 6, 4, 9)");
-			rConnection.eval("pdf(\"E:/cars3.pdf\")");
-			rConnection.eval("plot(cars)");
-			//			rConnection.eval("dev.off()");
+		try{
+		//Single-Site Analysis for p-rep design
+		String readData = "dataRead <- read.csv(\"" + dataFileName + "\", header = TRUE, na.strings = c(\"NA\",\".\", \"\", \" \"), blank.lines.skip=TRUE, sep = \",\")";
+		String sinkIn = "sink(\"" + resultFolderPath + "SSAOutput.txt\")";
+		String usedData = "cat(\"\\nDATA FILE: " + dataFileName + "\\n\")";
+		String analysisDone = "cat(\"\\nSINGLE-ENVIRONMENT ANALYSIS\\n\")";
+		String usedDesign = "cat(\"\\nDESIGN: p-rep Design\\n\\n\")";
 
-			rConnection.close();
-		} catch (RserveException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		String command1 = "ssaTestPrep(data = dataRead, respvar = "+ inputTransform.createRVector(respvar) + ", geno = \""+ genotype + "\"";
+		command1 = command1 + ", row = \"" + row + "\", column = \"" + column + "\"";
+		if (environment != null) {
+			command1 = command1 + ", env = \"" + environment +"\"";
+		} else { 
+			command1 = command1 + ", env = " + String.valueOf(environment).toUpperCase();
+		}
+
+		String command2;
+		if (controlLevel != null) {
+			command2 = ", checkList = " + inputTransform.createRVector(controlLevel);	
+		} else { 
+			command2 = ", checkList = " + String.valueOf(controlLevel).toUpperCase();
+		}
+		command2 = command2 + ", moransTest = " + String.valueOf(moransTest).toUpperCase();
+		command2 = command2 + ", spatialStruc = "+ inputTransform.createRVector(spatialStruc);
+		command2 = command2 + ", descriptive = "+ String.valueOf(descriptiveStat).toUpperCase();
+		command2 = command2 + ", varCorr = "+ String.valueOf(varianceComponents).toUpperCase();
+		command2 = command2 + ", heatmap = "+ String.valueOf(heatmapResiduals).toUpperCase();
+		command2 = command2 + ", diagplot = "+ String.valueOf(diagnosticPlot).toUpperCase();
+		command2 = command2 + ", histogram = "+ String.valueOf(histogramRawData).toUpperCase();
+		command2 = command2 + ", boxplot = "+ String.valueOf(boxplotRawData).toUpperCase();
+		command2 = command2 + ", outputPath = \"" + resultFolderPath + "\")";
+
+		String funcSSAPRepFixed = "resultFixed <- try(" + command1 ;
+		if (genotypeFixed) {
+			funcSSAPRepFixed = funcSSAPRepFixed + ", is.random = FALSE";
+			funcSSAPRepFixed = funcSSAPRepFixed + command2 + ", silent = TRUE)";
+		}
+
+		String funcSSAPRepRandom = "resultRandom <- try(" + command1;
+		if (genotypeRandom) {
+			funcSSAPRepRandom = funcSSAPRepRandom + ", is.random = " + String.valueOf(genotypeRandom).toUpperCase();
+			funcSSAPRepRandom = funcSSAPRepRandom + ", excludeCheck = " + String.valueOf(excludeControls).toUpperCase();
+			funcSSAPRepRandom = funcSSAPRepRandom + command2 + ", silent = TRUE)";
+		} 
+
+		System.out.println(readData);
+		System.out.println(sinkIn);
+		System.out.println(usedData);
+		System.out.println(analysisDone);
+		System.out.println(usedDesign);
+
+		rConnection.eval(readData);
+		rConnection.eval(sinkIn);
+		rConnection.eval(usedData);
+		rConnection.eval(analysisDone);
+		rConnection.eval(usedDesign);
+
+		if (genotypeFixed) {
+			System.out.println(funcSSAPRepFixed);
+			rConnection.eval(funcSSAPRepFixed);
+
+			String runSuccessCommand = rConnection.eval("class(resultFixed)").asString();
+			if (runSuccessCommand.equals("try-error")) {
+				String errorMsg1 = "msg <- trimStrings(strsplit(resultFixed, \":\")[[1]])";
+				String errorMsg2 = "msg <- trimStrings(paste(strsplit(msg, \"\\n\")[[length(msg)]], collapse = \" \"))";
+				String errorMsg3 = "msg <- gsub(\"\\\"\", \"\", msg)";
+				String errorMsg4 = "cat(\"Error in SSATestPrep:\\n\",msg, sep = \"\")";
+
+				System.out.println(errorMsg1);
+				System.out.println(errorMsg2);
+				System.out.println(errorMsg3);
+				System.out.println(errorMsg4);
+
+				rConnection.eval(errorMsg1);
+				rConnection.eval(errorMsg2);
+				rConnection.eval(errorMsg3);
+				rConnection.eval(errorMsg4);
+			} 
+			else{
+				String funcResidFixed = "residFixed <- ssaTestPrepResid(resultFixed)";
+				String funcResidFixedWrite = "if (nrow(residFixed) > 0) { \n";
+				funcResidFixedWrite = funcResidFixedWrite + "  write.csv(residFixed, file = \"" + resultFolderPath + "residuals_fixed.csv\", row.names = FALSE) \n";
+				funcResidFixedWrite = funcResidFixedWrite + "} \n";
+
+				String funcSummaryFixed = "summaryFixed <- ssaTestPrepSummary(resultFixed)";
+				String funcSummaryFixedWrite = "if (nrow(summaryFixed) > 0) { \n";
+				funcSummaryFixedWrite = funcSummaryFixedWrite + "  write.csv(summaryFixed, file = \"" + resultFolderPath + "summaryStats.csv\", row.names = FALSE) \n";
+				funcSummaryFixedWrite = funcSummaryFixedWrite + "} \n";
+
+				System.out.println(funcResidFixed);
+				rConnection.eval(funcResidFixed);
+
+				System.out.println(funcResidFixedWrite);
+				rConnection.eval(funcResidFixedWrite);
+
+				System.out.println(funcSummaryFixed);
+				rConnection.eval(funcSummaryFixed);
+
+				System.out.println(funcSummaryFixedWrite);
+				rConnection.eval(funcSummaryFixedWrite);
+			}
+		}
+
+		if (genotypeRandom) {
+			System.out.println(funcSSAPRepRandom);
+			rConnection.eval(funcSSAPRepRandom);
+
+			String runSuccessCommand = rConnection.eval("class(resultFixed)").asString();
+			if (runSuccessCommand.equals("try-error")) {
+				String errorMsg1 = "msg <- trimStrings(strsplit(resultFixed, \":\")[[1]])";
+				String errorMsg2 = "msg <- trimStrings(paste(strsplit(msg, \"\\n\")[[length(msg)]], collapse = \" \"))";
+				String errorMsg3 = "msg <- gsub(\"\\\"\", \"\", msg)";
+				String errorMsg4 = "cat(\"Error in SSATestPrep:\\n\",msg, sep = \"\")";
+
+				System.out.println(errorMsg1);
+				System.out.println(errorMsg2);
+				System.out.println(errorMsg3);
+				System.out.println(errorMsg4);
+
+				rConnection.eval(errorMsg1);
+				rConnection.eval(errorMsg2);
+				rConnection.eval(errorMsg3);
+				rConnection.eval(errorMsg4);
+			} 
+			else{
+				String funcResidRandom = "residRandom <- ssaTestPrepResid(resultRandom)";
+				String funcResidRandomWrite = "if (nrow(residRandom) > 0) { \n";
+				funcResidRandomWrite = funcResidRandomWrite + "  write.csv(residRandom, file = \"" + resultFolderPath + "residuals_random.csv\", row.names = FALSE) \n";
+				funcResidRandomWrite = funcResidRandomWrite + "} \n";
+
+				String funcSummaryRandom = "summaryRandom <- ssaTestPrepSummary(resultRandom)";
+				String funcSummaryRandomWrite = "if (nrow(summaryRandom) > 0) { \n";
+				funcSummaryRandomWrite = funcSummaryRandomWrite + "  write.csv(summaryRandom, file = \"" + resultFolderPath + "predictedMeans.csv\", row.names = FALSE) \n";
+				funcSummaryRandomWrite = funcSummaryRandomWrite + "} \n";
+
+				System.out.println(funcResidRandom);
+				rConnection.eval(funcResidRandom);
+
+				System.out.println(funcResidRandomWrite);
+				rConnection.eval(funcResidRandomWrite);
+
+				System.out.println(funcSummaryRandom);
+				rConnection.eval(funcSummaryRandom);
+
+				System.out.println(funcSummaryRandomWrite);
+				rConnection.eval(funcSummaryRandomWrite);
+			}
+		}
+
+		String sinkOut = "sink()";
+		System.out.println(sinkOut);
+		rConnection.eval(sinkOut);			
+
+
+	} catch (Exception e) {
+		e.printStackTrace();
+	} finally{
+		rConnection.close();
+	}
+}
+
+
+public void test() {
+	// TODO Auto-generated method stub
+	try {
+		rConnection.eval("cars <- c(1, 3, 6, 4, 9)");
+		rConnection.eval("pdf(\"E:/cars3.pdf\")");
+		rConnection.eval("plot(cars)");
+		//			rConnection.eval("dev.off()");
+
+		rConnection.close();
+	} catch (RserveException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+}
+
+public String[] getLevels(List<String> columnList, List<String[]> dataList,
+		String environment) {
+	// TODO Auto-generated method stub
+	int envtColumn = 0;
+	for (int i = 0; i < columnList.size(); i++) {
+		if (columnList.get(i).equals(environment)) {
+			envtColumn = i;
 		}
 	}
 
-	public String[] getLevels(List<String> columnList, List<String[]> dataList,
-			String environment) {
-		// TODO Auto-generated method stub
-		int envtColumn = 0;
-		for (int i = 0; i < columnList.size(); i++) {
-			if (columnList.get(i).equals(environment)) {
-				envtColumn = i;
-			}
-		}
-
-		ArrayList<String> envts = new ArrayList<String>();
-		for (int j = 0; j <dataList.size(); j++) {
-			String level = dataList.get(j)[envtColumn];
-			if (!envts.contains(level)&& !level.isEmpty()) {
-				envts.add(level);
-			}
-		}
-
-		String[] envtLevels = new String[envts.size()];
-		for (int k = 0; k < envts.size(); k++) {
-			envtLevels[k] = (String) envts.get(k);
-		}
-
-		return envtLevels;
-	}
-
-
-
-	public void doOutlierDetection(String dataFileName, String outputPath, String respvar, String trmt, String replicate) {
-		try {
-			String readData = "dataRead <- read.csv(\"" + dataFileName.replace(BSLASH, FSLASH) + "\", header = TRUE, na.strings = c(\"NA\",\".\", \"\", \" \"), blank.lines.skip=TRUE, sep = \",\")";
-			String funcStmt = "result <- try(";
-//			String command = "OutlierDetection(data = \"dataRead\", var = "+ inputTransform.createRVector(respvar);
-			String command = "OutlierDetection(data = \"dataRead\", var = \""+ respvar + "\"";
-			if (trmt != null) {
-				command = command + ", grp = \""+ trmt + "\"";
-			}
-			if (replicate != null) {
-				command = command + ", rep = \""+ replicate + "\"";
-			}
-
-			command = command + ", path = \""+ outputPath.replace(BSLASH, FSLASH) + "\", method = \"method2\")";
-			funcStmt = funcStmt + command + ", silent = TRUE)";
-			String saveData = "write.csv(result[[1]]$outlier, file = \""+ outputPath.replace(BSLASH, FSLASH) +"Outlier.csv\", row.names = FALSE)";
-
-			System.out.println(readData);
-			System.out.println(funcStmt);
-			System.out.println(saveData);
-
-			rConnection.eval(readData);
-			rConnection.eval(funcStmt);
-			rConnection.eval(saveData);
-
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally{
-			rConnection.close();
+	ArrayList<String> envts = new ArrayList<String>();
+	for (int j = 0; j <dataList.size(); j++) {
+		String level = dataList.get(j)[envtColumn];
+		if (!envts.contains(level)&& !level.isEmpty()) {
+			envts.add(level);
 		}
 	}
+
+	String[] envtLevels = new String[envts.size()];
+	for (int k = 0; k < envts.size(); k++) {
+		envtLevels[k] = (String) envts.get(k);
+	}
+
+	return envtLevels;
+}
+
+
+
+public void doOutlierDetection(String dataFileName, String outputPath, String respvar, String trmt, String replicate) {
+	try {
+		String readData = "dataRead <- read.csv(\"" + dataFileName.replace(BSLASH, FSLASH) + "\", header = TRUE, na.strings = c(\"NA\",\".\", \"\", \" \"), blank.lines.skip=TRUE, sep = \",\")";
+		String funcStmt = "result <- try(";
+		//			String command = "OutlierDetection(data = \"dataRead\", var = "+ inputTransform.createRVector(respvar);
+		String command = "OutlierDetection(data = \"dataRead\", var = \""+ respvar + "\"";
+		if (trmt != null) {
+			command = command + ", grp = \""+ trmt + "\"";
+		}
+		if (replicate != null) {
+			command = command + ", rep = \""+ replicate + "\"";
+		}
+
+		command = command + ", path = \""+ outputPath.replace(BSLASH, FSLASH) + "\", method = \"method2\")";
+		funcStmt = funcStmt + command + ", silent = TRUE)";
+		String saveData = "write.csv(result[[1]]$outlier, file = \""+ outputPath.replace(BSLASH, FSLASH) +"Outlier.csv\", row.names = FALSE)";
+
+		System.out.println(readData);
+		System.out.println(funcStmt);
+		System.out.println(saveData);
+
+		rConnection.eval(readData);
+		rConnection.eval(funcStmt);
+		rConnection.eval(saveData);
+
+
+	} catch (Exception e) {
+		e.printStackTrace();
+	} finally{
+		rConnection.close();
+	}
+}
 
 }

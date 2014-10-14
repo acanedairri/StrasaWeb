@@ -706,7 +706,6 @@ public class Specifications {
 					resetBtn.setVisible(true);
 					uploadCSVbtn.setVisible(false);
 					selectDataBtn.setVisible(false);
-
 		}
 		
 		@Command("refreshCsv")

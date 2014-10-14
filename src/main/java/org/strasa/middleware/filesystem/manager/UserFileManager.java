@@ -19,13 +19,12 @@ public class UserFileManager {
 	public static String BASE_PATH = Sessions.getCurrent().getWebApp().getRealPath( File.separator + "UPLOADS" + File.separator );
 
 	public void createNewFileFromUpload(int userid, int studyid, String realName,File dataFile, String fileType){
-
 		File BASE_FOLDER = new File(buildUserPath(userid, studyid));
 		if(!BASE_FOLDER.exists()) BASE_FOLDER.mkdirs();
 		try {
 			FileUtils.copyFileToDirectory(dataFile, new File(BASE_FOLDER.getAbsolutePath() + File.separator ),true);
 			File movedFile = new File(BASE_FOLDER.getAbsolutePath() + File.separator + dataFile.getName() );
-			File renamedFile = new File(BASE_FOLDER.getAbsolutePath() + File.separator + String.valueOf(  Calendar.getInstance().getTimeInMillis()+ realName));
+			File renamedFile = new File(BASE_FOLDER.getAbsolutePath() + File.separator + String.valueOf(Calendar.getInstance().getTimeInMillis()+ realName));
 			movedFile.renameTo(renamedFile);
 			StudyFile fileRec = new StudyFile();
 			fileRec.setFilename(realName);
@@ -41,7 +40,6 @@ public class UserFileManager {
 		}
 		//		dataFile.renameTo(new File(BASE_FOLDER.getAbsolutePath() + dataFile.getName())); 
 		System.out.println("File moved to: " + BASE_FOLDER.getAbsolutePath());
-
 	}
 
 	public String uploadFileForAnalysis(String realName,File dataFile){
@@ -103,7 +101,7 @@ public class UserFileManager {
 		else{
 			studyBasePath = userid + "_" + studyid;//Encryptions.encryptStringToNumber(new StudyManagerImpl().getStudyById(studyid).getName(), studyid);
 		}
-
+		
 		return BASE_PATH + File.separator  + userBasePath + File.separator  + studyBasePath + File.separator  ;
 	}
 

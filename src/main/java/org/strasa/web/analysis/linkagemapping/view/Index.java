@@ -11,8 +11,10 @@ import java.util.List;
 
 import org.apache.commons.io.input.ReaderInputStream;
 import org.strasa.middleware.filesystem.manager.UserFileManager;
+import org.strasa.middleware.manager.CrosstypeManagerImpl;
 import org.strasa.middleware.manager.EcotypeManagerImpl;
 import org.strasa.middleware.manager.ProgramManagerImpl;
+import org.strasa.middleware.model.Crosstype;
 import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.Program;
 import org.strasa.web.utilities.FileUtilities;
@@ -43,15 +45,15 @@ public class Index {
 	private List<String> columnList = new ArrayList<String>();
 	private List<String[]> dataList = new ArrayList<String[]>();
 	private List<Student> students;
-	private List<Program> programList; 
-	private List<Ecotype> ecotypeList;
+	private List<Program> programList;
+	private List<Crosstype> crosstypeList;
 	
 	BindContext ctx1, ctx2, ctx3;
 	Component view3, view1, view2;
 	InputStream in1, in2, in3;
 
 	private Student jenina;
-	private Ecotype chosenEcotype;
+	private Crosstype chosenCrosstype;
 
 	private String chosenMapping, fileName1, fileName2, fileName3, dataFileName, fileName, comboboxMapping, coboboxmapping2, comboboxmapping3, comboboxmapping4;
 	private String value1, value2, value3;
@@ -64,8 +66,8 @@ public class Index {
 	private int pageSize=10;
 	private int n;
 
-	private Integer chosenDataFormat;
-	private Integer selected;
+	private Integer chosenDataFormat = 0;
+	private Integer selected = 0;
 	private String selectedTraitType;
 
 	private File tempFile,  file1, file2, file3;
@@ -93,13 +95,12 @@ public class Index {
 			@ContextParam(ContextType.VIEW) Component view){
 	
 		typeOfDesignList = getCrossType();
-		jenina = new Student("jenina",1,"asdasd","BSCS","San Vicente", "Binan");
 		students = new ArrayList<Student>();
 		dataFormatList = dFormatList();
 		traitType = tType();
 		mapMethod = mMethod();		
 		programList = getPList();
-		ecotypeList = getEList();
+		crosstypeList = getcrossTypes();
 		pModel = pMList();
 		pMethod = pMethodList();
 		lociMethod = lociMList();
@@ -128,6 +129,12 @@ public class Index {
 		makeDisable();
 	}
 	
+	private List<Crosstype> getcrossTypes() {
+		// TODO Auto-generated method stub
+		CrosstypeManagerImpl em = new CrosstypeManagerImpl();
+		return em.getAllCrosstypes();
+	}
+
 	private void makeDisable() {
 		imputeRadioButton.setDisabled(true);
 		dbDelete.setDisabled(true);
@@ -603,7 +610,7 @@ public class Index {
 			phenobox.getFirstChild().detach();
 		
 		Include phenoboxData = new Include();
-		phenoboxData.setSrc("default.zul");
+		phenoboxData.setSrc("/user/analysis/linkagemapping/default.zul");
 		phenoboxData.setParent(phenobox);
 	
 	}
@@ -613,7 +620,7 @@ public class Index {
 			datagroupbox.getFirstChild().detach();
 		
 		Include dataGroupData = new Include();
-		dataGroupData.setSrc("mapmaker.zul");
+		dataGroupData.setSrc("/user/analysis/linkagemapping/mapmaker.zul");
 		dataGroupData.setParent(datagroupbox);
 		
 	}
@@ -623,7 +630,7 @@ public class Index {
 			crossgroupbox.getFirstChild().detach();
 		
 		Include crossGroupData = new Include();
-		crossGroupData.setSrc("QTL.zul");
+		crossGroupData.setSrc("/user/analysis/linkagemapping/QTL.zul");
 		crossGroupData.setParent(crossgroupbox);
 	}
 		
@@ -632,7 +639,7 @@ public class Index {
 			inputbox.getFirstChild().detach();
 		
 		Include inputGroupData = new Include();
-		inputGroupData.setSrc("inputbox.zul");
+		inputGroupData.setSrc("/user/analysis/linkagemapping/inputbox.zul");
 		inputGroupData.setParent(inputbox);
 	}
 	
@@ -937,11 +944,6 @@ public class Index {
 		return pm.getAllProgram();
 	}
 	
-	public static List<Ecotype> getEList(){
-		EcotypeManagerImpl em = new EcotypeManagerImpl();
-		return em.getAllEcotypes();
-	}
-	
 	public List<Student> getStudents() {
 		Student jenina = new Student("jenina",1,"2011-46686","BSCS","San Vicente", "Binan");
 		Student khem = new Student("khem",2,"2011-00000","BSCS","College","Los Banos");
@@ -1022,20 +1024,12 @@ public class Index {
 		this.programList = programList;
 	}
 	
-	public List<Ecotype> getEcotypeList() {
-		return ecotypeList;
+	public Crosstype getchosenCrosstype() {
+		return chosenCrosstype;
 	}
 
-	public void setEcotypeList(List<Ecotype> ecotypeList) {
-		this.ecotypeList = ecotypeList;
-	}
-
-	public Ecotype getChosenEcotype() {
-		return chosenEcotype;
-	}
-
-	public void setChosenEcotype(Ecotype chosenEcotype) {
-		this.chosenEcotype = chosenEcotype;
+	public void chosenCrosstype(Crosstype chosenCrosstype) {
+		this.chosenCrosstype = chosenCrosstype;
 	}
 
 
@@ -1525,6 +1519,15 @@ public class Index {
 
 	public void setTbMaxNumber(Textbox tbMaxNumber) {
 		this.tbMaxNumber = tbMaxNumber;
+	}
+
+
+	public List<Crosstype> getCrosstypeList() {
+		return crosstypeList;
+	}
+
+	public void setCrosstypeList(List<Crosstype> crosstypeList) {
+		this.crosstypeList = crosstypeList;
 	}
 
 
