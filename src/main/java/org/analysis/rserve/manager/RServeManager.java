@@ -8,6 +8,7 @@ import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
 import org.strasa.web.analysis.view.model.MultiSiteAnalysisModel;
+import org.strasa.web.analysis.view.model.QTLAnalysisModel;
 import org.strasa.web.analysis.view.model.SingleSiteAnalysisModel;
 import org.strasa.web.utilities.InputTransform;
 import org.zkoss.zk.ui.Sessions;
@@ -4525,241 +4526,424 @@ public class RServeManager {
 		boolean diagnosticPlot = ssaModel.isDiagnosticPlot();
 
 		try{
-		//Single-Site Analysis for p-rep design
-		String readData = "dataRead <- read.csv(\"" + dataFileName + "\", header = TRUE, na.strings = c(\"NA\",\".\", \"\", \" \"), blank.lines.skip=TRUE, sep = \",\")";
-		String sinkIn = "sink(\"" + resultFolderPath + "SSAOutput.txt\")";
-		String usedData = "cat(\"\\nDATA FILE: " + dataFileName + "\\n\")";
-		String analysisDone = "cat(\"\\nSINGLE-ENVIRONMENT ANALYSIS\\n\")";
-		String usedDesign = "cat(\"\\nDESIGN: p-rep Design\\n\\n\")";
+			//Single-Site Analysis for p-rep design
+			String readData = "dataRead <- read.csv(\"" + dataFileName + "\", header = TRUE, na.strings = c(\"NA\",\".\", \"\", \" \"), blank.lines.skip=TRUE, sep = \",\")";
+			String sinkIn = "sink(\"" + resultFolderPath + "SSAOutput.txt\")";
+			String usedData = "cat(\"\\nDATA FILE: " + dataFileName + "\\n\")";
+			String analysisDone = "cat(\"\\nSINGLE-ENVIRONMENT ANALYSIS\\n\")";
+			String usedDesign = "cat(\"\\nDESIGN: p-rep Design\\n\\n\")";
 
-		String command1 = "ssaTestPrep(data = dataRead, respvar = "+ inputTransform.createRVector(respvar) + ", geno = \""+ genotype + "\"";
-		command1 = command1 + ", row = \"" + row + "\", column = \"" + column + "\"";
-		if (environment != null) {
-			command1 = command1 + ", env = \"" + environment +"\"";
-		} else { 
-			command1 = command1 + ", env = " + String.valueOf(environment).toUpperCase();
-		}
+			String command1 = "ssaTestPrep(data = dataRead, respvar = "+ inputTransform.createRVector(respvar) + ", geno = \""+ genotype + "\"";
+			command1 = command1 + ", row = \"" + row + "\", column = \"" + column + "\"";
+			if (environment != null) {
+				command1 = command1 + ", env = \"" + environment +"\"";
+			} else { 
+				command1 = command1 + ", env = " + String.valueOf(environment).toUpperCase();
+			}
 
-		String command2;
-		if (controlLevel != null) {
-			command2 = ", checkList = " + inputTransform.createRVector(controlLevel);	
-		} else { 
-			command2 = ", checkList = " + String.valueOf(controlLevel).toUpperCase();
-		}
-		command2 = command2 + ", moransTest = " + String.valueOf(moransTest).toUpperCase();
-		command2 = command2 + ", spatialStruc = "+ inputTransform.createRVector(spatialStruc);
-		command2 = command2 + ", descriptive = "+ String.valueOf(descriptiveStat).toUpperCase();
-		command2 = command2 + ", varCorr = "+ String.valueOf(varianceComponents).toUpperCase();
-		command2 = command2 + ", heatmap = "+ String.valueOf(heatmapResiduals).toUpperCase();
-		command2 = command2 + ", diagplot = "+ String.valueOf(diagnosticPlot).toUpperCase();
-		command2 = command2 + ", histogram = "+ String.valueOf(histogramRawData).toUpperCase();
-		command2 = command2 + ", boxplot = "+ String.valueOf(boxplotRawData).toUpperCase();
-		command2 = command2 + ", outputPath = \"" + resultFolderPath + "\")";
+			String command2;
+			if (controlLevel != null) {
+				command2 = ", checkList = " + inputTransform.createRVector(controlLevel);	
+			} else { 
+				command2 = ", checkList = " + String.valueOf(controlLevel).toUpperCase();
+			}
+			command2 = command2 + ", moransTest = " + String.valueOf(moransTest).toUpperCase();
+			command2 = command2 + ", spatialStruc = "+ inputTransform.createRVector(spatialStruc);
+			command2 = command2 + ", descriptive = "+ String.valueOf(descriptiveStat).toUpperCase();
+			command2 = command2 + ", varCorr = "+ String.valueOf(varianceComponents).toUpperCase();
+			command2 = command2 + ", heatmap = "+ String.valueOf(heatmapResiduals).toUpperCase();
+			command2 = command2 + ", diagplot = "+ String.valueOf(diagnosticPlot).toUpperCase();
+			command2 = command2 + ", histogram = "+ String.valueOf(histogramRawData).toUpperCase();
+			command2 = command2 + ", boxplot = "+ String.valueOf(boxplotRawData).toUpperCase();
+			command2 = command2 + ", outputPath = \"" + resultFolderPath + "\")";
 
-		String funcSSAPRepFixed = "resultFixed <- try(" + command1 ;
-		if (genotypeFixed) {
-			funcSSAPRepFixed = funcSSAPRepFixed + ", is.random = FALSE";
-			funcSSAPRepFixed = funcSSAPRepFixed + command2 + ", silent = TRUE)";
-		}
+			String funcSSAPRepFixed = "resultFixed <- try(" + command1 ;
+			if (genotypeFixed) {
+				funcSSAPRepFixed = funcSSAPRepFixed + ", is.random = FALSE";
+				funcSSAPRepFixed = funcSSAPRepFixed + command2 + ", silent = TRUE)";
+			}
 
-		String funcSSAPRepRandom = "resultRandom <- try(" + command1;
-		if (genotypeRandom) {
-			funcSSAPRepRandom = funcSSAPRepRandom + ", is.random = " + String.valueOf(genotypeRandom).toUpperCase();
-			funcSSAPRepRandom = funcSSAPRepRandom + ", excludeCheck = " + String.valueOf(excludeControls).toUpperCase();
-			funcSSAPRepRandom = funcSSAPRepRandom + command2 + ", silent = TRUE)";
-		} 
-
-		System.out.println(readData);
-		System.out.println(sinkIn);
-		System.out.println(usedData);
-		System.out.println(analysisDone);
-		System.out.println(usedDesign);
-
-		rConnection.eval(readData);
-		rConnection.eval(sinkIn);
-		rConnection.eval(usedData);
-		rConnection.eval(analysisDone);
-		rConnection.eval(usedDesign);
-
-		if (genotypeFixed) {
-			System.out.println(funcSSAPRepFixed);
-			rConnection.eval(funcSSAPRepFixed);
-
-			String runSuccessCommand = rConnection.eval("class(resultFixed)").asString();
-			if (runSuccessCommand.equals("try-error")) {
-				String errorMsg1 = "msg <- trimStrings(strsplit(resultFixed, \":\")[[1]])";
-				String errorMsg2 = "msg <- trimStrings(paste(strsplit(msg, \"\\n\")[[length(msg)]], collapse = \" \"))";
-				String errorMsg3 = "msg <- gsub(\"\\\"\", \"\", msg)";
-				String errorMsg4 = "cat(\"Error in SSATestPrep:\\n\",msg, sep = \"\")";
-
-				System.out.println(errorMsg1);
-				System.out.println(errorMsg2);
-				System.out.println(errorMsg3);
-				System.out.println(errorMsg4);
-
-				rConnection.eval(errorMsg1);
-				rConnection.eval(errorMsg2);
-				rConnection.eval(errorMsg3);
-				rConnection.eval(errorMsg4);
+			String funcSSAPRepRandom = "resultRandom <- try(" + command1;
+			if (genotypeRandom) {
+				funcSSAPRepRandom = funcSSAPRepRandom + ", is.random = " + String.valueOf(genotypeRandom).toUpperCase();
+				funcSSAPRepRandom = funcSSAPRepRandom + ", excludeCheck = " + String.valueOf(excludeControls).toUpperCase();
+				funcSSAPRepRandom = funcSSAPRepRandom + command2 + ", silent = TRUE)";
 			} 
-			else{
-				String funcResidFixed = "residFixed <- ssaTestPrepResid(resultFixed)";
-				String funcResidFixedWrite = "if (nrow(residFixed) > 0) { \n";
-				funcResidFixedWrite = funcResidFixedWrite + "  write.csv(residFixed, file = \"" + resultFolderPath + "residuals_fixed.csv\", row.names = FALSE) \n";
-				funcResidFixedWrite = funcResidFixedWrite + "} \n";
 
-				String funcSummaryFixed = "summaryFixed <- ssaTestPrepSummary(resultFixed)";
-				String funcSummaryFixedWrite = "if (nrow(summaryFixed) > 0) { \n";
-				funcSummaryFixedWrite = funcSummaryFixedWrite + "  write.csv(summaryFixed, file = \"" + resultFolderPath + "summaryStats.csv\", row.names = FALSE) \n";
-				funcSummaryFixedWrite = funcSummaryFixedWrite + "} \n";
+			System.out.println(readData);
+			System.out.println(sinkIn);
+			System.out.println(usedData);
+			System.out.println(analysisDone);
+			System.out.println(usedDesign);
 
-				System.out.println(funcResidFixed);
-				rConnection.eval(funcResidFixed);
+			rConnection.eval(readData);
+			rConnection.eval(sinkIn);
+			rConnection.eval(usedData);
+			rConnection.eval(analysisDone);
+			rConnection.eval(usedDesign);
 
-				System.out.println(funcResidFixedWrite);
-				rConnection.eval(funcResidFixedWrite);
+			if (genotypeFixed) {
+				System.out.println(funcSSAPRepFixed);
+				rConnection.eval(funcSSAPRepFixed);
 
-				System.out.println(funcSummaryFixed);
-				rConnection.eval(funcSummaryFixed);
+				String runSuccessCommand = rConnection.eval("class(resultFixed)").asString();
+				if (runSuccessCommand.equals("try-error")) {
+					String errorMsg1 = "msg <- trimStrings(strsplit(resultFixed, \":\")[[1]])";
+					String errorMsg2 = "msg <- trimStrings(paste(strsplit(msg, \"\\n\")[[length(msg)]], collapse = \" \"))";
+					String errorMsg3 = "msg <- gsub(\"\\\"\", \"\", msg)";
+					String errorMsg4 = "cat(\"Error in SSATestPrep:\\n\",msg, sep = \"\")";
 
-				System.out.println(funcSummaryFixedWrite);
-				rConnection.eval(funcSummaryFixedWrite);
+					System.out.println(errorMsg1);
+					System.out.println(errorMsg2);
+					System.out.println(errorMsg3);
+					System.out.println(errorMsg4);
+
+					rConnection.eval(errorMsg1);
+					rConnection.eval(errorMsg2);
+					rConnection.eval(errorMsg3);
+					rConnection.eval(errorMsg4);
+				} 
+				else{
+					String funcResidFixed = "residFixed <- ssaTestPrepResid(resultFixed)";
+					String funcResidFixedWrite = "if (nrow(residFixed) > 0) { \n";
+					funcResidFixedWrite = funcResidFixedWrite + "  write.csv(residFixed, file = \"" + resultFolderPath + "residuals_fixed.csv\", row.names = FALSE) \n";
+					funcResidFixedWrite = funcResidFixedWrite + "} \n";
+
+					String funcSummaryFixed = "summaryFixed <- ssaTestPrepSummary(resultFixed)";
+					String funcSummaryFixedWrite = "if (nrow(summaryFixed) > 0) { \n";
+					funcSummaryFixedWrite = funcSummaryFixedWrite + "  write.csv(summaryFixed, file = \"" + resultFolderPath + "summaryStats.csv\", row.names = FALSE) \n";
+					funcSummaryFixedWrite = funcSummaryFixedWrite + "} \n";
+
+					System.out.println(funcResidFixed);
+					rConnection.eval(funcResidFixed);
+
+					System.out.println(funcResidFixedWrite);
+					rConnection.eval(funcResidFixedWrite);
+
+					System.out.println(funcSummaryFixed);
+					rConnection.eval(funcSummaryFixed);
+
+					System.out.println(funcSummaryFixedWrite);
+					rConnection.eval(funcSummaryFixedWrite);
+				}
+			}
+
+			if (genotypeRandom) {
+				System.out.println(funcSSAPRepRandom);
+				rConnection.eval(funcSSAPRepRandom);
+
+				String runSuccessCommand = rConnection.eval("class(resultRandom)").asString();
+				if (runSuccessCommand.equals("try-error")) {
+					String errorMsg1 = "msg <- trimStrings(strsplit(resultRandom, \":\")[[1]])";
+					String errorMsg2 = "msg <- trimStrings(paste(strsplit(msg, \"\\n\")[[length(msg)]], collapse = \" \"))";
+					String errorMsg3 = "msg <- gsub(\"\\\"\", \"\", msg)";
+					String errorMsg4 = "cat(\"Error in SSATestPrep:\\n\",msg, sep = \"\")";
+
+					System.out.println(errorMsg1);
+					System.out.println(errorMsg2);
+					System.out.println(errorMsg3);
+					System.out.println(errorMsg4);
+
+					rConnection.eval(errorMsg1);
+					rConnection.eval(errorMsg2);
+					rConnection.eval(errorMsg3);
+					rConnection.eval(errorMsg4);
+				} 
+				else{
+					String funcResidRandom = "residRandom <- ssaTestPrepResid(resultRandom)";
+					String funcResidRandomWrite = "if (nrow(residRandom) > 0) { \n";
+					funcResidRandomWrite = funcResidRandomWrite + "  write.csv(residRandom, file = \"" + resultFolderPath + "residuals_random.csv\", row.names = FALSE) \n";
+					funcResidRandomWrite = funcResidRandomWrite + "} \n";
+
+					String funcSummaryRandom = "summaryRandom <- ssaTestPrepSummary(resultRandom)";
+					String funcSummaryRandomWrite = "if (nrow(summaryRandom) > 0) { \n";
+					funcSummaryRandomWrite = funcSummaryRandomWrite + "  write.csv(summaryRandom, file = \"" + resultFolderPath + "predictedMeans.csv\", row.names = FALSE) \n";
+					funcSummaryRandomWrite = funcSummaryRandomWrite + "} \n";
+
+					System.out.println(funcResidRandom);
+					rConnection.eval(funcResidRandom);
+
+					System.out.println(funcResidRandomWrite);
+					rConnection.eval(funcResidRandomWrite);
+
+					System.out.println(funcSummaryRandom);
+					rConnection.eval(funcSummaryRandom);
+
+					System.out.println(funcSummaryRandomWrite);
+					rConnection.eval(funcSummaryRandomWrite);
+				}
+			}
+
+			String sinkOut = "sink()";
+			System.out.println(sinkOut);
+			rConnection.eval(sinkOut);			
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			rConnection.close();
+		}
+	}
+
+
+	public void test() {
+		// TODO Auto-generated method stub
+		try {
+			rConnection.eval("cars <- c(1, 3, 6, 4, 9)");
+			rConnection.eval("pdf(\"E:/cars3.pdf\")");
+			rConnection.eval("plot(cars)");
+			//			rConnection.eval("dev.off()");
+
+			rConnection.close();
+		} catch (RserveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public String[] getLevels(List<String> columnList, List<String[]> dataList,
+			String environment) {
+		// TODO Auto-generated method stub
+		int envtColumn = 0;
+		for (int i = 0; i < columnList.size(); i++) {
+			if (columnList.get(i).equals(environment)) {
+				envtColumn = i;
 			}
 		}
 
-		if (genotypeRandom) {
-			System.out.println(funcSSAPRepRandom);
-			rConnection.eval(funcSSAPRepRandom);
-
-			String runSuccessCommand = rConnection.eval("class(resultFixed)").asString();
-			if (runSuccessCommand.equals("try-error")) {
-				String errorMsg1 = "msg <- trimStrings(strsplit(resultFixed, \":\")[[1]])";
-				String errorMsg2 = "msg <- trimStrings(paste(strsplit(msg, \"\\n\")[[length(msg)]], collapse = \" \"))";
-				String errorMsg3 = "msg <- gsub(\"\\\"\", \"\", msg)";
-				String errorMsg4 = "cat(\"Error in SSATestPrep:\\n\",msg, sep = \"\")";
-
-				System.out.println(errorMsg1);
-				System.out.println(errorMsg2);
-				System.out.println(errorMsg3);
-				System.out.println(errorMsg4);
-
-				rConnection.eval(errorMsg1);
-				rConnection.eval(errorMsg2);
-				rConnection.eval(errorMsg3);
-				rConnection.eval(errorMsg4);
-			} 
-			else{
-				String funcResidRandom = "residRandom <- ssaTestPrepResid(resultRandom)";
-				String funcResidRandomWrite = "if (nrow(residRandom) > 0) { \n";
-				funcResidRandomWrite = funcResidRandomWrite + "  write.csv(residRandom, file = \"" + resultFolderPath + "residuals_random.csv\", row.names = FALSE) \n";
-				funcResidRandomWrite = funcResidRandomWrite + "} \n";
-
-				String funcSummaryRandom = "summaryRandom <- ssaTestPrepSummary(resultRandom)";
-				String funcSummaryRandomWrite = "if (nrow(summaryRandom) > 0) { \n";
-				funcSummaryRandomWrite = funcSummaryRandomWrite + "  write.csv(summaryRandom, file = \"" + resultFolderPath + "predictedMeans.csv\", row.names = FALSE) \n";
-				funcSummaryRandomWrite = funcSummaryRandomWrite + "} \n";
-
-				System.out.println(funcResidRandom);
-				rConnection.eval(funcResidRandom);
-
-				System.out.println(funcResidRandomWrite);
-				rConnection.eval(funcResidRandomWrite);
-
-				System.out.println(funcSummaryRandom);
-				rConnection.eval(funcSummaryRandom);
-
-				System.out.println(funcSummaryRandomWrite);
-				rConnection.eval(funcSummaryRandomWrite);
+		ArrayList<String> envts = new ArrayList<String>();
+		for (int j = 0; j <dataList.size(); j++) {
+			String level = dataList.get(j)[envtColumn];
+			if (!envts.contains(level)&& !level.isEmpty()) {
+				envts.add(level);
 			}
 		}
 
-		String sinkOut = "sink()";
-		System.out.println(sinkOut);
-		rConnection.eval(sinkOut);			
+		String[] envtLevels = new String[envts.size()];
+		for (int k = 0; k < envts.size(); k++) {
+			envtLevels[k] = (String) envts.get(k);
+		}
 
-
-	} catch (Exception e) {
-		e.printStackTrace();
-	} finally{
-		rConnection.close();
+		return envtLevels;
 	}
-}
 
 
-public void test() {
-	// TODO Auto-generated method stub
-	try {
-		rConnection.eval("cars <- c(1, 3, 6, 4, 9)");
-		rConnection.eval("pdf(\"E:/cars3.pdf\")");
-		rConnection.eval("plot(cars)");
-		//			rConnection.eval("dev.off()");
 
-		rConnection.close();
-	} catch (RserveException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	public void doOutlierDetection(String dataFileName, String outputPath, String respvar, String trmt, String replicate) {
+		try {
+			String readData = "dataRead <- read.csv(\"" + dataFileName.replace(BSLASH, FSLASH) + "\", header = TRUE, na.strings = c(\"NA\",\".\", \"\", \" \"), blank.lines.skip=TRUE, sep = \",\")";
+			String funcStmt = "result <- try(";
+			//			String command = "OutlierDetection(data = \"dataRead\", var = "+ inputTransform.createRVector(respvar);
+			String command = "OutlierDetection(data = \"dataRead\", var = \""+ respvar + "\"";
+			if (trmt != null) {
+				command = command + ", grp = \""+ trmt + "\"";
+			}
+			if (replicate != null) {
+				command = command + ", rep = \""+ replicate + "\"";
+			}
+
+			command = command + ", path = \""+ outputPath.replace(BSLASH, FSLASH) + "\", method = \"method2\")";
+			funcStmt = funcStmt + command + ", silent = TRUE)";
+			String saveData = "write.csv(result[[1]]$outlier, file = \""+ outputPath.replace(BSLASH, FSLASH) +"Outlier.csv\", row.names = FALSE)";
+
+			System.out.println(readData);
+			System.out.println(funcStmt);
+			System.out.println(saveData);
+
+			rConnection.eval(readData);
+			rConnection.eval(funcStmt);
+			rConnection.eval(saveData);
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			rConnection.close();
+		}
 	}
-}
+	
+	public void doCreateQTLData(QTLAnalysisModel qtlModel) {
+		/* GET VARIABLE VALUES */
+		String resultFolderPath =  qtlModel.getResultFolderPath().replace(BSLASH, FSLASH);  // outputPath = "E:/App Files/workspace_Juno/RJavaManager/sample_datasets"
+		String dataFormat = qtlModel.getDataFormat().replace(BSLASH, FSLASH);
+		String format1 = qtlModel.getFormat1();
+		String crossType = qtlModel.getCrossType();
+		String file1 = qtlModel.getFile1().replace(BSLASH, FSLASH);
+		String format2 =  qtlModel.getFormat2();
+		String file2 = qtlModel.getFile2().replace(BSLASH, FSLASH);
+		String format3 =  qtlModel.getFormat3();
+		String file3 = qtlModel.getFile3().replace(BSLASH, FSLASH);
+		String P_geno =qtlModel.getP_geno();
+		int bcNum = qtlModel.getBcNum();
+		int fNum = qtlModel.getfNum();
 
-public String[] getLevels(List<String> columnList, List<String[]> dataList,
-		String environment) {
-	// TODO Auto-generated method stub
-	int envtColumn = 0;
-	for (int i = 0; i < columnList.size(); i++) {
-		if (columnList.get(i).equals(environment)) {
-			envtColumn = i;
+		System.out.println("start QTL");
+		System.out.println("resultFolderPath: " + resultFolderPath);
+
+		try {
+
+//			rConnection.eval("library(qtl)");
+//			System.out.println("library(qtl)");
+//			rConnection.eval("library(lattice)");
+//			System.out.println("library(lattice)");
+//			rConnection.eval("library(qtlbim)");
+//			System.out.println("library(qtlbim)");
+//			rConnection.eval("library(PBTools)");
+//			System.out.println("library(PBTools)");
+
+
+			String readData = "QTLdata <- tryCatch(createQTLdata(\"" + resultFolderPath + "\", \"" + dataFormat + "\", \"" + format1 + "\", \"" + crossType + "\", \"" + file1 + "\", \"" +
+					format2 + "\", \"" + file2 + "\", \"" + format3 + "\", \"" + file3 + "\", \"" + P_geno + "\", " + bcNum + ", " + fNum + "))";
+
+			System.out.println(readData);
+
+			rConnection.eval(readData);
+
+			System.out.println("reached end.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			rConnection.close();
 		}
 	}
 
-	ArrayList<String> envts = new ArrayList<String>();
-	for (int j = 0; j <dataList.size(); j++) {
-		String level = dataList.get(j)[envtColumn];
-		if (!envts.contains(level)&& !level.isEmpty()) {
-			envts.add(level);
+	public void doQtl(QTLAnalysisModel qtlAnalysisModel) {
+		try{
+
+			/* GET VARIABLE VALUES */
+			String dataCheckOutFileName = qtlAnalysisModel.getDataCheckOutFileName();
+			String outFileName = qtlAnalysisModel.getOutFileName();
+			String resultFolderPath = qtlAnalysisModel.getResultFolderPath();
+			String dataFormat =qtlAnalysisModel.getDataFormat();
+			String format1 =qtlAnalysisModel.getFormat1();
+			String crossType = qtlAnalysisModel.getCrossType();
+			String file1 = qtlAnalysisModel.getFile1();
+			String format2 = qtlAnalysisModel.getFormat2();
+			String file2 = qtlAnalysisModel.getFile2();
+			String format3 = qtlAnalysisModel.getFormat3();
+			String file3 = qtlAnalysisModel.getFile3();
+			String P_geno = qtlAnalysisModel.getP_geno();
+			int bcNum = qtlAnalysisModel.getBcNum();
+			int fNum = qtlAnalysisModel.getfNum();
+
+			// parameters
+			boolean doMissing = qtlAnalysisModel.isDoMissing();
+			boolean deleteMiss = qtlAnalysisModel.isDeleteMiss();
+			double cutOff= qtlAnalysisModel.getCutOff();
+			boolean doDistortionTest = qtlAnalysisModel.isDoDistortionTest();
+			double pvalCutOff = qtlAnalysisModel.getPvalCutOff();
+			boolean doCompareGeno = qtlAnalysisModel.isDoCompareGeno();
+			double cutoffP = qtlAnalysisModel.getCutoffP();
+			boolean doCheckMarkerOrder = qtlAnalysisModel.isDoCheckMarkerOrder();
+			double lodThreshold = qtlAnalysisModel.getLodThreshold();
+			boolean doCheckGenoErrors = qtlAnalysisModel.isDoCheckGenoErrors();
+			double lodCutOff = qtlAnalysisModel.getLodCutOff();
+			double errorProb = qtlAnalysisModel.getErrorProb();
+
+			//IM
+			String traitType = qtlAnalysisModel.getTraitType();
+			String[] yVars = qtlAnalysisModel.getyVars();
+			String mMethod = qtlAnalysisModel.getmMethod();
+			double stepCalc = qtlAnalysisModel.getStepCalc();
+			double errCalc = qtlAnalysisModel.getErrCalc();																									
+			String mapCalc = qtlAnalysisModel.getMapCalc();														
+			double lodCutoffM = qtlAnalysisModel.getLodCutoffM();																									
+			String phenoModel = qtlAnalysisModel.getPhenoModel();												
+			String alMethod = qtlAnalysisModel.getAlMethod();
+			int nPermutations = qtlAnalysisModel.getnPermutations();
+			int numCovar = qtlAnalysisModel.getNumCovar();  
+			double winSize = qtlAnalysisModel.getWinSize();
+			String genoName = qtlAnalysisModel.getGenoName();
+			boolean threshLiJi = qtlAnalysisModel.isThreshLiJi();
+			double thresholdNumericalValue = qtlAnalysisModel.getThresholdNumericalValue(); 
+			double minDist = qtlAnalysisModel.getMinDist();
+			double stepSize = qtlAnalysisModel.getStepSize();
+			boolean addModel = qtlAnalysisModel.isAddModel();
+			int numCofac = qtlAnalysisModel.getNumCofac();
+			boolean mlAlgo = qtlAnalysisModel.isMlAlgo();
+			boolean setupModel = qtlAnalysisModel.isSetupModel();																						
+			boolean includeEpistasis = qtlAnalysisModel.isIncludeEpistasis();																				
+			boolean useDepPrior = qtlAnalysisModel.isUseDepPrior();																					
+			int priorMain = qtlAnalysisModel.getPriorMain();																										
+			int priorAll = qtlAnalysisModel.getPriorAll();																							
+			String maxQTLs  = qtlAnalysisModel.getMaxQTLs();																								
+			double priorProb = qtlAnalysisModel.getPriorProb();				
+
+
+			/* START OF QTL ANALYSIS */
+			String yVarsVector= inputTransform.createRVector(yVars);
+			rConnection.eval("library(qtl)");
+			System.out.println("library(qtl)");
+			rConnection.eval("library(lattice)");
+			System.out.println("library(lattice)");
+			rConnection.eval("library(qtlbim)");
+			System.out.println("library(qtlbim)");
+			rConnection.eval("library(PBTools)");
+			System.out.println("library(PBTools)");
+
+
+			String readData = "QTLdata <- tryCatch(createQTLdata(\"" + resultFolderPath + "\", \"" + dataFormat + "\", \"" + format1 + "\", \"" + crossType + "\", \"" + file1 + "\", \"" +
+					format2 + "\", \"" + file2 + "\", \"" + format3 + "\", \"" + file3 + "\", \"" + P_geno + "\", " + bcNum + ", " + fNum + "))";
+			String getData = "crossData = QTLdata$crossObj";
+			//		String sinkCheckData = "sink(paste(\"" + resultFolderPath + "\",\"markerQC.txt\", sep = \"\"))";
+			String sinkCheckData = "sink(\"" + dataCheckOutFileName + "\")";
+			String checkData = "chkQTLdata <- checkQTLdata(\"" + resultFolderPath + "\", crossData, \"" + crossType + "\", " + bcNum + ", " + fNum + ", " +
+					String.valueOf(doMissing).toUpperCase() + ", " + String.valueOf(deleteMiss).toUpperCase() + ", " + cutOff + ", " + String.valueOf(doDistortionTest).toUpperCase() +
+					", " + pvalCutOff + ", " + String.valueOf(doCompareGeno).toUpperCase() + ", " + cutoffP + ", " + String.valueOf(doCheckMarkerOrder).toUpperCase() + ", " + lodThreshold + ", " + 
+					String.valueOf(doCheckGenoErrors).toUpperCase() + ", " + lodCutOff + ", " + errorProb + ")";
+			//used String.valueOf(deleteMiss).toUpperCase() instead of deleteMiss.toString().toUpperCase() , etc
+
+			//		String sinkQTL = "sink(paste(\"" + resultFolderPath + "\",\"QTLout_" + mMethod + ".txt\", sep = \"\"))";
+			String sinkQTL = "sink(\"" + outFileName + "\")";
+
+			String doQTL = null;
+
+			String getBIMdata = null;
+			if (mMethod == "BIM") getBIMdata = "crossData <- qb.genoprob(crossData, map.function = \"" + mapCalc + "\", step = " + stepCalc + ")";
+
+			if (threshLiJi) {
+				doQTL = "runQTL <- doQTLanalysis(\"" + resultFolderPath + "\", crossData, \"" + traitType + "\", " + yVarsVector + ", \"" + mMethod + "\", " + stepCalc + ", " + errCalc + " , \"" +
+						mapCalc + "\", " + lodCutoffM + ", \"" + phenoModel + "\", \"" + alMethod + "\", " + nPermutations + ", " + numCovar + ", " + winSize + ", \"" + genoName + "\", \"thresholdWUR = \"Li&Ji\", " +  
+						minDist + ", " + stepSize + ", " + String.valueOf(addModel).toUpperCase() + ", " + numCofac + ", " + String.valueOf(mlAlgo).toUpperCase() + ", " + String.valueOf(setupModel).toUpperCase() + ", " +  
+						String.valueOf(includeEpistasis).toUpperCase() + ", " + String.valueOf(useDepPrior).toUpperCase() + ", " +
+						priorMain + ", " + priorAll + ", " + maxQTLs + ", " + priorProb + ")";
+			} else {
+				doQTL = "runQTL <- doQTLanalysis(\"" + resultFolderPath + "\", crossData, \"" + traitType + "\", " + yVarsVector + ", \"" + mMethod + "\", " + stepCalc + ", " + errCalc + " , \"" +
+						mapCalc + "\", " + lodCutoffM + ", \"" + phenoModel + "\", \"" + alMethod + "\", " + nPermutations + ", " + numCovar + ", " + winSize + ", \"" + genoName + "\", " + thresholdNumericalValue + ", " +  
+						minDist + ", " + stepSize + ", " + String.valueOf(addModel).toUpperCase() + ", " + numCofac + ", " + String.valueOf(mlAlgo).toUpperCase() + ", " + String.valueOf(setupModel).toUpperCase() + ", " +  
+						String.valueOf(includeEpistasis).toUpperCase() + ", " + String.valueOf(useDepPrior).toUpperCase() + ", " +
+						priorMain + ", " + priorAll + ", " + maxQTLs + ", " + priorProb + ")";
+			}
+
+			//
+
+			System.out.println(readData);
+			System.out.println(getData);
+			System.out.println(sinkCheckData);
+			System.out.println(checkData);
+			System.out.println("sink()");
+			if (mMethod == "BIM") System.out.println(getBIMdata);				
+			System.out.println(sinkQTL);
+			System.out.println(doQTL);
+			System.out.println("sink()");
+
+			rConnection.eval(readData);
+			rConnection.eval(getData);
+			rConnection.eval(sinkCheckData);
+			rConnection.eval(checkData);
+			rConnection.eval("sink()");
+			if (mMethod == "BIM") rConnection.eval(getBIMdata);				
+			rConnection.eval(sinkQTL);
+			rConnection.eval(doQTL);
+			rConnection.eval("sink()");
+
+			System.out.println("reached end.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			rConnection.close();
 		}
 	}
-
-	String[] envtLevels = new String[envts.size()];
-	for (int k = 0; k < envts.size(); k++) {
-		envtLevels[k] = (String) envts.get(k);
-	}
-
-	return envtLevels;
-}
-
-
-
-public void doOutlierDetection(String dataFileName, String outputPath, String respvar, String trmt, String replicate) {
-	try {
-		String readData = "dataRead <- read.csv(\"" + dataFileName.replace(BSLASH, FSLASH) + "\", header = TRUE, na.strings = c(\"NA\",\".\", \"\", \" \"), blank.lines.skip=TRUE, sep = \",\")";
-		String funcStmt = "result <- try(";
-		//			String command = "OutlierDetection(data = \"dataRead\", var = "+ inputTransform.createRVector(respvar);
-		String command = "OutlierDetection(data = \"dataRead\", var = \""+ respvar + "\"";
-		if (trmt != null) {
-			command = command + ", grp = \""+ trmt + "\"";
-		}
-		if (replicate != null) {
-			command = command + ", rep = \""+ replicate + "\"";
-		}
-
-		command = command + ", path = \""+ outputPath.replace(BSLASH, FSLASH) + "\", method = \"method2\")";
-		funcStmt = funcStmt + command + ", silent = TRUE)";
-		String saveData = "write.csv(result[[1]]$outlier, file = \""+ outputPath.replace(BSLASH, FSLASH) +"Outlier.csv\", row.names = FALSE)";
-
-		System.out.println(readData);
-		System.out.println(funcStmt);
-		System.out.println(saveData);
-
-		rConnection.eval(readData);
-		rConnection.eval(funcStmt);
-		rConnection.eval(saveData);
-
-
-	} catch (Exception e) {
-		e.printStackTrace();
-	} finally{
-		rConnection.close();
-	}
-}
 
 }

@@ -358,7 +358,6 @@ public class Specifications {
 			dataSetCombo.setVisible(false);
 			Messagebox.show("Please choose a different study","Study has no data", Messagebox.OK, Messagebox.ERROR);
 		}
-
 	}
 
 	@GlobalCommand("updateRandomOptions")

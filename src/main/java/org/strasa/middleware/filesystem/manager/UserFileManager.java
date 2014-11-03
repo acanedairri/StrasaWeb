@@ -104,20 +104,4 @@ public class UserFileManager {
 		
 		return BASE_PATH + File.separator  + userBasePath + File.separator  + studyBasePath + File.separator  ;
 	}
-
-//	public String moveUploadFileToAnalysisResultFolder(File dataFile) {
-//		// TODO Auto-generated method stub
-//		File BASE_FOLDER = new File(buildUserPath(SecurityUtil.getDbUser().getId(), 0));
-//		File renamedFile = new File(BASE_FOLDER.getAbsolutePath() + File.separator + dataFile.getName());
-//		if(!BASE_FOLDER.exists()) BASE_FOLDER.mkdirs();
-//		try {
-//			FileUtils.copyFileToDirectory(dataFile, new File(BASE_FOLDER.getAbsolutePath() + File.separator ),true);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		//		dataFile.renameTo(new File(BASE_FOLDER.getAbsolutePath() + dataFile.getName())); 
-//		return renamedFile.getAbsolutePath();
-//	}
-
 }

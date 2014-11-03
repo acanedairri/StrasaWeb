@@ -2,17 +2,17 @@ package org.strasa.web.analysis.view.model;
 
 import org.zkoss.zk.ui.Sessions;
 
-public class IndexAnalysisModel {
+public class QTLAnalysisModel {
 	private static String BSLASH = "\\";
 	private static String FSLASH = "/";
 	private static String OUTPUTFOLDER_PATH =  Sessions.getCurrent().getWebApp().getRealPath("resultanalysis")+ System.getProperty("file.separator")+
 			"user2"+ System.getProperty("file.separator")+"Single-Site"+ System.getProperty("file.separator")+"MyResult"+ System.getProperty("file.separator");
-	public static String DATA_PATH = System.getProperty("user.dir")+ System.getProperty("file.separator") + "sample_datasets" + System.getProperty("file.separator");
+	public static String DATA_PATH =  System.getProperty("user.dir")+ System.getProperty("file.separator") + "sample_datasets" + System.getProperty("file.separator");
 
 	private String dataCheckOutFileName; //supply path and name of text file where text output for data quality check is going to be saved
 
 	private String outFileName;	//supply path and name of text file where text output for analysis is going to be saved
-	private String resultFolderPath; //supply path where the graphs will be saved "E:/App Files/workspace_Juno/RJavaManager/sample_datasets"
+	private String resultFolderPath; //supply path where the graphs will be saved "E:/App Fil	es/workspace_Juno/RJavaManager/sample_datasets"
 	private String dataFormat; //supply data format used - "default", "R", Map Maker", "Map Manager", "QTL Cartographer" 
 	private String format1; //supply format of the first input file, whether "csv", "ctxt", "stxt", "ttxt", or "sctxt" 
 	private String crossType; //supply type of cross used, whether "f2", "bc", "risib", "riself", "bcsft"
@@ -20,7 +20,7 @@ public class IndexAnalysisModel {
 	private String format2; //supply format of the second input file, whether "csv", "ctxt", "stxt", "ttxt", or "sctxt" 
 	private String file2; //supply path and name of second input file
 	private String format3; //supply format of the third input file, whether "csv", "ctxt", "stxt", "ttxt", or "sctxt" 
-	private String file3; //supply path and name of third input file
+	private String file3; //supply path and name of third input filel
 	private String P_geno; //supply name of genotype variable
 	private int bcNum; //supply bc generation, if crosstype is "bcsft" 
 	private int fNum; //supply filial generation, if crosstype is "bcsft"
@@ -55,7 +55,7 @@ public class IndexAnalysisModel {
 	private String genoName;			//"Geno"
 	private boolean threshLiJi;			//true
 	private double thresholdNumericalValue; //0 
-	private double minDist;				//10
+	private double minDist;				//10-
 	private double stepSize;				//5.0
 	private boolean addModel;			//true
 	private int numCofac;					//1
@@ -68,7 +68,7 @@ public class IndexAnalysisModel {
 	private String maxQTLs;																								
 	private double priorProb;		
 
-	public IndexAnalysisModel() {
+	public QTLAnalysisModel() {
 
 		setDataCheckOutFileName(DATA_PATH + "QTL_dataCheck.txt");
 		setOutFileName(DATA_PATH + "QTL_output.txt");
@@ -135,7 +135,7 @@ public class IndexAnalysisModel {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("SingleSiteAnalysisModel \n");
+		sb.append("QTL Analysis Model \n");
 		sb.append("resultFolderPath: "+resultFolderPath);
 		sb.append("\n outFileName: "+outFileName);
 		return sb.toString();
