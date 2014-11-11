@@ -1,6 +1,8 @@
 package org.strasa.web.analysis.linkagemapping.view;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -31,6 +33,7 @@ import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.util.media.AMedia;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zul.Checkbox;
@@ -63,7 +66,7 @@ public class Index {
 	InputStream in1, in2, in3;
 
 	private Crosstype chosenCrosstype;
-	private String[] fileFormats = {"txt","csv","txt","txt"};
+	private String[] fileFormats = {"txt","csv","txt","txt",".cro",".maps",".raw"};
 
 	private String chosenMapping, fileName1, fileName2, fileName3, dataFileName, fileName, comboboxMapping, coboboxmapping2, comboboxmapping3, comboboxmapping4;
 	private String value1, value2, value3;
@@ -79,14 +82,14 @@ public class Index {
 	private Integer chosenDataFormat = 0;
 	private Integer selected = 0;
 	private Integer selectedFileFormat = 1;
-//	private Integer selectedFileFormat = 1;
-//	private Integer selectedFileFormat = 1;
+	//	private Integer selectedFileFormat = 1;
+	//	private Integer selectedFileFormat = 1;
 
-	private String selectedTraitType;
+	private String selectedTraitType="Continuous";
 
 	private File tempFile,  file1, file2, file3;
-	private Div defaultbox, phenobox, genobox, mfbox, datagroupbox, crossgroupbox, mapbox1, mapbox2, inputbox, divDatagrid;
-	private Groupbox mfgroupbox, ggroupbox, pgroupbox, grpVariableData;
+	private Div defaultbox, phenobox, genobox, mfbox, datagroupbox, crossgroupbox, mapbox1, mapbox2, inputbox, divDatagrid, divDataCheckTxt;
+	private Groupbox mfgroupbox, ggroupbox, pgroupbox, grpVariableData, grpDataCheckView;
 	private Radio deleteRadioButton;
 	private Radio imputeRadioButton;
 	private Radio lijiRadioButton;
@@ -96,10 +99,9 @@ public class Index {
 	private Radio mLRadioButton;
 	private Radio remlRadioButton;
 
-	private Doublespinner dbDelete;
-	private Doublespinner dbSignificance;
-	private Doublespinner dbMatchGenotypes;
-	private Doublespinner dbThreshold;
+	private Doublespinner dbCutOffP;
+	private Doublespinner dbPvalCutOff;
+	private Doublespinner dbLodThreshold;
 	private Doublespinner dbCutOff; 
 	private Doublespinner dbMainEffects;
 	private Doublespinner dbNPermutations;
@@ -131,6 +133,7 @@ public class Index {
 	private Textbox tbAll;
 	private Textbox tbMaxNumber;
 	private File crossDataFile;
+	private Doublespinner dbLodCutOff;
 
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
@@ -149,14 +152,16 @@ public class Index {
 		phenotypeFormat = phenotype();
 		scanType = scanTypeList();
 		listString = new ArrayList<String>();
-		
-		grpVariableData = (Groupbox) component.getFellow("grpVariableData");
 
+		grpVariableData = (Groupbox) component.getFellow("grpVariableData");
+		grpDataCheckView = (Groupbox) component.getFellow("grpDataCheckView");
 		defaultbox = (Div) component.getFellow("defaultbox");
-		datagroupbox = (Div) component.getFellow("datagroupbox");
-		crossgroupbox = (Div) component.getFellow("crossgroupbox");
-		inputbox = (Div) component.getFellow("inputbox");
+		//		datagroupbox = (Div) component.getFellow("datagroupbox");
+		//		crossgroupbox = (Div) component.getFellow("crossgroupbox");
+		//		inputbox = (Div) component.getFellow("inputbox");
 		divDatagrid = (Div) component.getFellow("datagrid");
+		divDataCheckTxt = (Div) component.getFellow("divDataCheckTxt");
+		
 
 		deleteRadioButton = (Radio) component.getFellow("delete");
 		imputeRadioButton = (Radio) component.getFellow("impute");
@@ -167,16 +172,16 @@ public class Index {
 		mLRadioButton = (Radio) component.getFellow("ML");
 		remlRadioButton = (Radio) component.getFellow("REML");
 
+		dbLodCutOff = (Doublespinner) component.getFellow("dbLodCutOff");
 		dbNPermutations = (Doublespinner) component.getFellow("dbNPermutations");
 		dbCimStep = (Doublespinner) component.getFellow("dbCimStep");
 		dbCimWin = (Doublespinner) component.getFellow("dbCimWin");
 		dbCimMinDist = (Doublespinner) component.getFellow("dbCimMinDist");
-		dbDelete= (Doublespinner) component.getFellow("db9");
-		dbSignificance = (Doublespinner) component.getFellow("db8");
-		dbMatchGenotypes = (Doublespinner) component.getFellow("db7");
-		dbThreshold = (Doublespinner) component.getFellow("db6");
+		dbCutOffP= (Doublespinner) component.getFellow("dbCutOffP");
+		dbPvalCutOff = (Doublespinner) component.getFellow("dbPvalCutOff");
+		dbLodThreshold = (Doublespinner) component.getFellow("dbLodThreshold");
 		dbthresholdNumericalValue = (Doublespinner) component.getFellow("dbthresholdNumericalValue");
-		dbCutOff = (Doublespinner) component.getFellow("db5");
+		dbCutOff = (Doublespinner) component.getFellow("dbCutOff");
 		dbMainEffects = (Doublespinner) component.getFellow("db16");
 		dbMqmStepVal = (Doublespinner) component.getFellow("dbMqmStepVal");
 		dbMqmWinVal = (Doublespinner) component.getFellow("dbMqmWinVal");
@@ -199,9 +204,6 @@ public class Index {
 
 		//show default dataformat option
 		createPhenoBox();
-		detachDiv(datagroupbox);
-		detachDiv(crossgroupbox);
-		detachDiv(inputbox);
 		this.selected=0;
 		this.selectedFileFormat=1;
 		setChosenCrosstype(crosstypeList.get(0));
@@ -216,11 +218,11 @@ public class Index {
 
 	private void makeDisable() {
 		imputeRadioButton.setDisabled(true);
-		dbDelete.setDisabled(true);
+		dbCutOffP.setDisabled(true);
+		dbLodCutOff.setDisabled(true);
 		deleteRadioButton.setDisabled(true);
-		dbSignificance.setDisabled(true);
-		dbMatchGenotypes.setDisabled(true);
-		dbThreshold.setDisabled(true);
+		dbPvalCutOff.setDisabled(true);
+		dbLodThreshold.setDisabled(true);
 		dbCutOff.setDisabled(true);
 		cbSetup1.setDisabled(true);
 		cbSetup2.setDisabled(true);
@@ -248,63 +250,60 @@ public class Index {
 	public void validateInputFiles(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
 
-		Checkbox checkifchecked = (Checkbox) component.getFellow("datacheck1");
-		boolean datacheck1 = checkifchecked.isChecked();
-		Double db9Value = dbDelete.getValue();
+		Checkbox checkifchecked = (Checkbox) component.getFellow("cbMissingData");
+		boolean cbMissingData = checkifchecked.isChecked();
+		Double cutOffValue = dbCutOff.doubleValue();
 		boolean deleteRadioButtonSelected = deleteRadioButton.isSelected();
 		boolean imputeRadioButtonSelected = imputeRadioButton.isSelected();
-		checkifchecked = (Checkbox) component.getFellow("datacheck2");
-		boolean datacheck2 = checkifchecked.isChecked();
-		Double db8Value = dbSignificance.getValue();
-		checkifchecked = (Checkbox) component.getFellow("datacheck3");
-		boolean datacheck3 = checkifchecked.isChecked();
-		Double db7Value = dbMatchGenotypes.getValue();
-		checkifchecked = (Checkbox) component.getFellow("datacheck4");
-		boolean datacheck4 = checkifchecked.isChecked();
-		Double db6Value = dbThreshold.getValue();
-		checkifchecked = (Checkbox) component.getFellow("datacheck5");
-		boolean datacheck5 = checkifchecked.isChecked();
-		Double db5Value = dbCutOff.getValue();
+		checkifchecked = (Checkbox) component.getFellow("checkDistortionTest");
+		boolean distortionTest = checkifchecked.isChecked();
+		Double pvalCutOffValue = dbPvalCutOff.getValue();
+		checkifchecked = (Checkbox) component.getFellow("doCompareGenoErrors");
+		boolean compareGenoErrors = checkifchecked.isChecked();
+		Double cutOffPValue = dbCutOffP.getValue();
+		checkifchecked = (Checkbox) component.getFellow("checkMarkerOrder");
+		boolean checkMarkerOrder = checkifchecked.isChecked();
+		Double thresholdValue = dbLodThreshold.getValue();
+		checkifchecked = (Checkbox) component.getFellow("doCheckGeno");
+		boolean checkGenoValue = checkifchecked.isChecked();
+		Double lodCutOffValue = dbLodCutOff.getValue();
 
-		if(datacheck1!=true && datacheck2!=true && datacheck4!=true && datacheck3!=true && datacheck5!=true){
+
+		if(cbMissingData!=true && distortionTest!=true && checkMarkerOrder!=true && compareGenoErrors!=true && checkGenoValue!=true){
 			Messagebox.show("Please choose one out of all the options.");
 			System.out.println("No checkbox chosen");
 			return;
 		}
 
-		if(datacheck1)
-			System.out.println("Manage Missing data: Checked");
-		if(db9Value!=null&&dbDelete.isDisabled()!=true)
-			System.out.println("Chosen value for Delete: "+ db9Value);
+		if(cbMissingData){ 
+			if(deleteRadioButtonSelected!=true && imputeRadioButtonSelected!=true){
+				Messagebox.show("Please choose between delete and impute.");
+				System.out.println("No Radiobox chosen");		
+				return; 
+			}
+			else{
+				qtlModel.setDeleteMiss(deleteRadioButtonSelected);
+				qtlModel.setDoMissing(imputeRadioButtonSelected);
+				if(deleteRadioButtonSelected) qtlModel.setCutOff(cutOffValue);
 
-		if(deleteRadioButtonSelected!=true && imputeRadioButtonSelected!=true){
-			Messagebox.show("Please choose between delete and impute.");
-			System.out.println("No Radiobox chosen");		
-			return;
+			}
 		}
+		if(distortionTest) qtlModel.setDoDistortionTest(distortionTest); //System.out.println("Test for segregation distortion: Checked");
+		if(pvalCutOffValue!=null && dbPvalCutOff.isDisabled()!=true) qtlModel.setPvalCutOff(pvalCutOffValue);//System.out.println("Chosen value for Level of Significance: "+ significanceValue);
+		if(compareGenoErrors) qtlModel.setDoCompareGeno(compareGenoErrors); //System.out.println("Compare Genotypes: Checked");
+		//		if(compareGeno!=null&& dbCompareGenoErrors.isDisabled()!=true) qtlModel.setDoCheckGenoErrors(compareGenoErrors); //System.out.println("Chosen value for Cut-off proportion of matching genotypes: "+ compareGeno);
+		if(checkMarkerOrder) qtlModel.setDoCheckMarkerOrder(checkMarkerOrder); //System.out.println("Check marker order: Checked");
+		if(thresholdValue!=null&& dbLodThreshold.isDisabled()!=true) qtlModel.setLodThreshold(thresholdValue);//System.out.println("Chosen value for Threshold " + thresholdValue);
+		if(checkGenoValue) qtlModel.setDoCheckGenoErrors(checkGenoValue);//System.out.println("Identify likely genotyping errors: Checked");
+		if(cutOffPValue!=null&&dbCutOffP.isDisabled()!=true) qtlModel.setCutoffP(cutOffPValue);//System.out.println("Chosen value for Cut-off: " + cutOffPValue);
+		if(lodCutOffValue!=null&&dbLodCutOff.isDisabled()!=true) qtlModel.setLodCutOff(lodCutOffValue);
 
-		if(deleteRadioButtonSelected && deleteRadioButton.isDisabled()!=true)
-			System.out.println("Delete: Selected");
-		if(imputeRadioButtonSelected && imputeRadioButton.isDisabled()!=true)
-			System.out.println("Impute: Selected");
+		rServeManager = new RServeManager();
+		rServeManager.doCheckQTLData(qtlModel);
+		
+		reloadTxtGrid();
 
-		if(datacheck2)
-			System.out.println("Test for segregation distortion: Checked");
-		if(db8Value!=null && dbSignificance.isDisabled()!=true)
-			System.out.println("Chosen value for Level of Significance: "+ db8Value);
-		if(datacheck3)
-			System.out.println("Compare Genotypes: Checked");
-		if(db7Value!=null&& dbMatchGenotypes.isDisabled()!=true)
-			System.out.println("Chosen value for Cut-off proportion of matching genotypes: "+ db7Value);
-		if(datacheck4)
-			System.out.println("Check marker order: Checked");
-		if(db6Value!=null&& dbThreshold.isDisabled()!=true)
-			System.out.println("Chosen value for Threshold " + db6Value);
-		if(datacheck5)
-			System.out.println("Identify likely genotyping errors: Checked");
-		if(db5Value!=null&&dbCutOff.isDisabled()!=true)
-			System.out.println("Chosen value for Cut-off: " + db5Value);
-
+		//		displayCrossData(qtlModel.getResultFolderPath());
 	}
 
 	@Command("runQTL")
@@ -504,10 +503,10 @@ public class Index {
 		else 
 			imputeRadioButton.setDisabled(true);
 
-		if(dbDelete.isDisabled()==true)
-			dbDelete.setDisabled(false);
+		if(dbCutOff.isDisabled()==true)
+			dbCutOff.setDisabled(false);
 		else
-			dbDelete.setDisabled(true);
+			dbCutOff.setDisabled(true);
 
 		if(deleteRadioButton.isDisabled()==true)
 			deleteRadioButton.setDisabled(false);
@@ -519,10 +518,10 @@ public class Index {
 	@NotifyChange("*")
 	public void aggregationCheck(){
 
-		if(dbSignificance.isDisabled()==true)
-			dbSignificance.setDisabled(false);
+		if(dbPvalCutOff.isDisabled()==true)
+			dbPvalCutOff.setDisabled(false);
 		else
-			dbSignificance.setDisabled(true);
+			dbPvalCutOff.setDisabled(true);
 
 	}
 
@@ -530,10 +529,10 @@ public class Index {
 	@NotifyChange("*")
 	public void genotypeCheck(){
 
-		if(dbMatchGenotypes.isDisabled()==true)
-			dbMatchGenotypes.setDisabled(false);
+		if(dbCutOffP.isDisabled()==true)
+			dbCutOffP.setDisabled(false);
 		else
-			dbMatchGenotypes.setDisabled(true);
+			dbCutOffP.setDisabled(true);
 
 	}
 
@@ -541,10 +540,10 @@ public class Index {
 	@NotifyChange("*")
 	public void markerCheck(){
 
-		if(dbThreshold.isDisabled()==true)
-			dbThreshold.setDisabled(false);
+		if(dbLodThreshold.isDisabled()==true)
+			dbLodThreshold.setDisabled(false);
 		else
-			dbThreshold.setDisabled(true);
+			dbLodThreshold.setDisabled(true);
 
 	}
 
@@ -552,11 +551,10 @@ public class Index {
 	@NotifyChange("*")
 	public void errorCheck(){
 
-		if(dbCutOff.isDisabled()==true)
-			dbCutOff.setDisabled(false);
+		if(dbLodCutOff.isDisabled()==true)
+			dbLodCutOff.setDisabled(false);
 		else
-			dbCutOff.setDisabled(true);
-
+			dbLodCutOff.setDisabled(true);
 	}
 
 	@Command("QTLCheck")
@@ -601,46 +599,46 @@ public class Index {
 
 		if(selected == 0){
 			createPhenoBox();
-			detachDiv(datagroupbox);
-			detachDiv(crossgroupbox);
-			detachDiv(inputbox);
+			//			detachDiv(datagroupbox);
+			//			detachDiv(crossgroupbox);
+			//			detachDiv(inputbox);
 			this.selected=0;
 			makeNull();
 		}
 
 		else if(selected == 1){
-			detachDiv(phenobox);
+			//			detachDiv(defaultbox);
 			createDataGroupBox();
-			detachDiv(crossgroupbox);
-			detachDiv(inputbox);
+			//			detachDiv(crossgroupbox);
+			//			detachDiv(inputbox);
 			this.selected=1;
 			makeNull();
 		}
 
 		else if(selected == 2){
-			detachDiv(phenobox);
-			detachDiv(datagroupbox);
+			//			detachDiv(phenobox);
+			//			detachDiv(datagroupbox);
 			createCrossGroupBox();
-			detachDiv(inputbox);
+			//			detachDiv(inputbox);
 			this.selected=2;
 			makeNull();
 		}
 
 
 		else if(selected == 3){
-			detachDiv(phenobox);
-			detachDiv(datagroupbox);
-			detachDiv(crossgroupbox);
+			//			detachDiv(phenobox);
+			//			detachDiv(datagroupbox);
+			//			detachDiv(crossgroupbox);
 			createInputBox();
 			this.selected=3;
 			makeNull();
 		}
 
 		else{
-			detachDiv(phenobox);
-			detachDiv(datagroupbox);
-			detachDiv(crossgroupbox);
-			detachDiv(inputbox);
+			//			detachDiv(phenobox);
+			//			detachDiv(datagroupbox);
+			//			detachDiv(crossgroupbox);
+			//			detachDiv(inputbox);
 			this.selected=4;
 			makeNull();
 		}
@@ -674,31 +672,34 @@ public class Index {
 	}
 
 	private void createDataGroupBox(){
-		if (!datagroupbox.getChildren().isEmpty())
-			datagroupbox.getFirstChild().detach();
+		if (!defaultbox.getChildren().isEmpty())
+			defaultbox.getFirstChild().detach();
+
 
 		Include dataGroupData = new Include();
 		dataGroupData.setSrc("/user/analysis/linkagemapping/mapmaker.zul");
-		dataGroupData.setParent(datagroupbox);
+		dataGroupData.setParent(defaultbox);
 
 	}
 
 	private void createCrossGroupBox(){
-		if (!crossgroupbox.getChildren().isEmpty())
-			crossgroupbox.getFirstChild().detach();
+		if (!defaultbox.getChildren().isEmpty())
+			defaultbox.getFirstChild().detach();
+
 
 		Include crossGroupData = new Include();
 		crossGroupData.setSrc("/user/analysis/linkagemapping/QTL.zul");
-		crossGroupData.setParent(crossgroupbox);
+		crossGroupData.setParent(defaultbox);
 	}
 
 	private void createInputBox(){
-		if (!inputbox.getChildren().isEmpty())
-			inputbox.getFirstChild().detach();
+		if (!defaultbox.getChildren().isEmpty())
+			defaultbox.getFirstChild().detach();
+
 
 		Include inputGroupData = new Include();
 		inputGroupData.setSrc("/user/analysis/linkagemapping/inputbox.zul");
-		inputGroupData.setParent(inputbox);
+		inputGroupData.setParent(defaultbox);
 	}
 
 	public void detachDiv(Div div){
@@ -972,6 +973,35 @@ public class Index {
 		incCSVData.setSrc("/user/updatestudy/csvdata.zul");
 		incCSVData.setParent(divDatagrid);
 		gridReUploaded = true;
+	}
+
+	public void reloadTxtGrid() {
+		grpDataCheckView.setVisible(true);
+		
+		if (!divDataCheckTxt.getChildren().isEmpty())
+			divDataCheckTxt.getFirstChild().detach();
+
+		File fileToCreate = new File(qtlModel.getDataCheckOutFileName());
+		byte[] buffer = new byte[(int) fileToCreate.length()];
+		FileInputStream fs;
+		try {
+			fs = new FileInputStream(fileToCreate);
+			fs.read(buffer);
+			fs.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		ByteArrayInputStream is = new ByteArrayInputStream(buffer);
+		AMedia fileContent = new AMedia("report", "text", "text/plain", is);
+		Include studyInformationPage = new Include();
+		studyInformationPage.setParent(divDataCheckTxt);
+		studyInformationPage.setDynamicProperty("txtFile", fileContent);
+		studyInformationPage.setSrc("/user/analysis/txtviewer.zul");
 	}
 
 
@@ -1470,16 +1500,6 @@ public class Index {
 		this.comboboxmapping4 = comboboxmapping4;
 	}
 
-
-	public Doublespinner getDbDelete() {
-		return dbDelete;
-	}
-
-	public void setDbDelete(Doublespinner dbDelete) {
-		this.dbDelete = dbDelete;
-	}
-
-
 	public Radio getImputeRadioButton() {
 		return imputeRadioButton;
 	}
@@ -1490,31 +1510,12 @@ public class Index {
 
 
 	public Doublespinner getDbSignificance() {
-		return dbSignificance;
+		return dbPvalCutOff;
 	}
 
 	public void setDbSignificance(Doublespinner dbSignificance) {
-		this.dbSignificance = dbSignificance;
+		this.dbPvalCutOff = dbSignificance;
 	}
-
-
-	public Doublespinner getDbMatchGenotypes() {
-		return dbMatchGenotypes;
-	}
-
-	public void setDbMatchGenotypes(Doublespinner dbMatchGenotypes) {
-		this.dbMatchGenotypes = dbMatchGenotypes;
-	}
-
-
-	public Doublespinner getDbThreshold() {
-		return dbThreshold;
-	}
-
-	public void setDbThreshold(Doublespinner dbThreshold) {
-		this.dbThreshold = dbThreshold;
-	}
-
 
 	public Doublespinner getDbCutOff() {
 		return dbCutOff;

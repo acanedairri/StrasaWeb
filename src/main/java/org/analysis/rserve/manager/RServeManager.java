@@ -4762,7 +4762,7 @@ public class RServeManager {
 			rConnection.close();
 		}
 	}
-	
+
 	public void doCreateQTLData(QTLAnalysisModel qtlModel) {
 		/* GET VARIABLE VALUES */
 		String resultFolderPath =  qtlModel.getResultFolderPath().replace(BSLASH, FSLASH);  // outputPath = "E:/App Files/workspace_Juno/RJavaManager/sample_datasets"
@@ -4783,14 +4783,14 @@ public class RServeManager {
 
 		try {
 
-//			rConnection.eval("library(qtl)");
-//			System.out.println("library(qtl)");
-//			rConnection.eval("library(lattice)");
-//			System.out.println("library(lattice)");
-//			rConnection.eval("library(qtlbim)");
-//			System.out.println("library(qtlbim)");
-//			rConnection.eval("library(PBTools)");
-//			System.out.println("library(PBTools)");
+			//			rConnection.eval("library(qtl)");
+			//			System.out.println("library(qtl)");
+			//			rConnection.eval("library(lattice)");
+			//			System.out.println("library(lattice)");
+			//			rConnection.eval("library(qtlbim)");
+			//			System.out.println("library(qtlbim)");
+			//			rConnection.eval("library(PBTools)");
+			//			System.out.println("library(PBTools)");
 
 
 			String readData = "QTLdata <- tryCatch(createQTLdata(\"" + resultFolderPath + "\", \"" + dataFormat + "\", \"" + format1 + "\", \"" + crossType + "\", \"" + file1 + "\", \"" +
@@ -4799,6 +4799,83 @@ public class RServeManager {
 			System.out.println(readData);
 
 			rConnection.eval(readData);
+
+			System.out.println("reached end.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			rConnection.close();
+		}
+	}
+
+	public void doCheckQTLData(QTLAnalysisModel qtlModel) {
+
+		System.out.println("check QTL Data");
+//		System.out.println("resultFolderPath: " + resultFolderPath);
+//		System.out.println("outFileName: " + outFileName);
+
+		try {
+
+			rConnection.eval("library(qtl)");
+			System.out.println("library(qtl)");
+			rConnection.eval("library(lattice)");
+			System.out.println("library(lattice)");
+			rConnection.eval("library(qtlbim)");
+			System.out.println("library(qtlbim)");
+			rConnection.eval("library(PBTools)");
+			System.out.println("library(PBTools)");
+
+			String dataCheckOutFileName = qtlModel.getDataCheckOutFileName().replace(BSLASH, FSLASH);;
+			String outFileName = qtlModel.getOutFileName().replace(BSLASH, FSLASH);;
+			String resultFolderPath = qtlModel.getResultFolderPath().replace(BSLASH, FSLASH);;
+			String dataFormat = qtlModel.getDataFormat();
+			String crossType = qtlModel.getCrossType();
+			String format1 = qtlModel.getFormat1();
+			String file1 = qtlModel.getFile1().replace(BSLASH, FSLASH);;
+			String format2 = qtlModel.getFormat2();
+			String file2 = qtlModel.getFile2().replace(BSLASH, FSLASH);;
+			String format3 = qtlModel.getFormat3();
+			String file3 = qtlModel.getFile3().replace(BSLASH, FSLASH);;
+			String P_geno = qtlModel.getP_geno(); 
+			int bcNum = qtlModel.getBcNum();
+			int fNum = qtlModel.getfNum();
+			
+			boolean doMissing = qtlModel.isDoMissing(); //
+			boolean deleteMiss = qtlModel.isDeleteMiss();//
+			double cutOff= qtlModel.getCutOff();
+			boolean doDistortionTest = qtlModel.isDoDistortionTest();//
+			double pvalCutOff = qtlModel.getPvalCutOff();
+			boolean doCompareGeno = qtlModel.isDoCompareGeno();//
+			double cutoffP = qtlModel.getCutoffP();
+			boolean doCheckMarkerOrder = qtlModel.isDoCheckMarkerOrder();
+			double lodThreshold = qtlModel.getLodThreshold();
+			boolean doCheckGenoErrors = qtlModel.isDoCheckGenoErrors();
+			double lodCutOff = qtlModel.getLodCutOff();
+			double errorProb = 0.01; 
+			
+			
+
+			String readData = "QTLdata <- tryCatch(createQTLdata(\"" + resultFolderPath + "\", \"" + dataFormat + "\", \"" + format1 + "\", \"" + crossType + "\", \"" + file1 + "\", \"" +
+					format2 + "\", \"" + file2 + "\", \"" + format3 + "\", \"" + file3 + "\", \"" + P_geno + "\", " + bcNum + ", " + fNum + "))";
+			String getData = "crossData = QTLdata$crossObj";
+
+			String sinkCheckData = "sink(\"" + dataCheckOutFileName + "\")";
+			String checkData = "chkQTLdata <- checkQTLdata(\"" + resultFolderPath + "\", crossData, \"" + crossType + "\", " + bcNum + ", " + fNum + ", " +
+					String.valueOf(doMissing).toUpperCase() + ", " + String.valueOf(deleteMiss).toUpperCase() + ", " + cutOff + ", " + String.valueOf(doDistortionTest).toUpperCase() +
+					", " + pvalCutOff + ", " + String.valueOf(doCompareGeno).toUpperCase() + ", " + cutoffP + ", " + String.valueOf(doCheckMarkerOrder).toUpperCase() + ", " + lodThreshold + ", " + 
+					String.valueOf(doCheckGenoErrors).toUpperCase() + ", " + lodCutOff + ", " + errorProb + ")";
+
+			System.out.println(readData);
+			System.out.println(getData);
+			System.out.println(sinkCheckData);
+			System.out.println(checkData);
+			System.out.println("sink()");
+
+			rConnection.eval(readData);
+			rConnection.eval(getData);
+			rConnection.eval(sinkCheckData);
+			rConnection.eval(checkData);
+			rConnection.eval("sink()");
 
 			System.out.println("reached end.");
 		} catch (Exception e) {
