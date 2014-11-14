@@ -1,6 +1,5 @@
 <zk>
-	<grid model="@bind(vm.dataList)" zclass="none" height="360px"
-		vflex="true" emptyMessage="No data loaded...">
+	<grid sizedByContent="true" model="@bind(vm.dataList)" zclass="none" height="360px" emptyMessage="No data loaded..." >
 		<columns children="@load(vm.columnList)">
 			<template name="children">
 				<column hflex="1" label="@load(each)" />

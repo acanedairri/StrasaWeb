@@ -40,9 +40,9 @@ public class QTLAnalysisModel {
 	private double errorProb;
 
 	//IM
-	private String traitType; //"Ordinal"; //"Continuous"; //c("Continuous", "Binary", "Ordinal"), yVars, mMethod = c("IM", "CIM", "MQM", "BM")	//reqd
+	private String traitType; //"Ordinal"; //"Continuous"; //c("Continuous", "Binary", "Ordinal"), yVars, //reqd
 	private String[] yVars; //{"T264o", "T264o2", "T264o3"}; //{"T264", "T264d", "T264sd"};					//reqd
-	private String mMethod; 																				//reqd
+	private String mMethod; //mMethod = c("IM", "CIM", "MQM", "BM")									//reqd
 	private double stepCalc; 																									
 	private double errCalc;																									
 	private String mapCalc; //c("haldane","kosambi","c-f","morgan")														

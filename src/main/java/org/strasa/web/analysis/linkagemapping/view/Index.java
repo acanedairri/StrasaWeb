@@ -317,11 +317,11 @@ public class Index {
 			args.put("qtlModel", qtlModel);
 			BindUtils.postGlobalCommand(null, null, "displayQtlResult", args);
 		} else Messagebox.show(errorMessage);
-
 	}
 
 	private boolean validateQtlModel() {
 		if(selectedTraitType!=null){
+			qtlModel.setTraitType(selectedTraitType);
 			System.out.println("Chosen Method to find Loci: " + selectedTraitType);
 		}
 		else{			
@@ -333,7 +333,7 @@ public class Index {
 			errorMessage = "Please choose at least one trait";
 			return false;
 		}
-
+		
 		if(cbTraitYield.isChecked()) listString.add("Yield");
 		if(cbTraitPitht.isChecked()) listString.add("Pitht");
 		if(cbTraitAwit.isChecked()) listString.add("Awit");
@@ -341,8 +341,8 @@ public class Index {
 
 
 		if(chosenMapping==null){
-			Messagebox.show("Please choose mapping method");
-			System.out.println("No mapping method chosen");
+			errorMessage = "Please choose mapping method";
+			return false;
 		}
 
 		else if(chosenMapping=="IM"){
@@ -353,14 +353,14 @@ public class Index {
 			if(comboboxMapping != null)
 				System.out.println("Chosen value for Phenotype Model: " + comboboxMapping);
 			else{
-				Messagebox.show("Please choose value for Phenotype Model");
-				System.out.println("No value for phenotype Model chosen");
+				errorMessage = "Please choose value for Phenotype Model";
+				return false; 
 			}
 			if(coboboxmapping2 !=null)
 				System.out.println("Chosen value for Method: " + coboboxmapping2);
 			else{
-				Messagebox.show("Please choose value for Method");
-				System.out.println("No value for Method chosen");
+				errorMessage = "Please choose value for Method";
+				return false; 
 			}
 		}
 		else if(chosenMapping=="CIM"){
@@ -385,8 +385,8 @@ public class Index {
 			boolean Numerical = numericalRadioButton.isSelected();
 
 			if(Numerical!=true && Liji!=true){
-				Messagebox.show("Please choose value for Threshold for p-value");
-				System.out.println("No value for Threshold for p-value chosen");	
+				errorMessage = "Please choose value for Threshold for p-value";
+				return false; 
 			}
 
 			if(Liji)
@@ -414,8 +414,8 @@ public class Index {
 			boolean dominance = dominanceRadioButton.isSelected();
 
 			if(additive!=true && dominance!=true){
-				Messagebox.show("Please choose value for Model");
-				System.out.println("No value for Model chosen");				
+				errorMessage = "Please choose value for Model";
+				return false; 
 			}
 
 			if(additive)
@@ -428,8 +428,8 @@ public class Index {
 			boolean REML = remlRadioButton.isSelected();
 
 			if(ML!=true && REML!=true){
-				Messagebox.show("Please choose value for Algorithm");
-				System.out.println("No value for Algorithm chosen");				
+				errorMessage = "Please choose value for Algorithm";
+				return false; 
 			}
 
 			if(ML)
@@ -448,15 +448,14 @@ public class Index {
 				System.out.println("Chosen Method to find Loci: " + comboboxmapping3);
 			}
 			else{
-				Messagebox.show("Please choose value for Method to find Loci");
-				System.out.println("No value for Method to find Loci chosen");				
+				errorMessage = "Please choose value for Method to find Loci";
+				return false; 			
 			}
-
 			if(comboboxmapping4!=null)
 				System.out.println("Chosen Type of Scan: " + comboboxmapping4);
 			else{
-				Messagebox.show("Please choose value for Type of scan");
-				System.out.println("No value for Type of scan chosen");	
+				errorMessage = "Please choose value for Type of scan";
+				return false; 	
 			}
 		}
 
@@ -491,7 +490,7 @@ public class Index {
 			System.out.println("Max Number Value: " + maxnumber);
 		}
 
-		return gridReUploaded;
+		return true;
 	}
 
 	@Command("missingDataCheck")
