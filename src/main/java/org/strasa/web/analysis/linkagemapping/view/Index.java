@@ -730,6 +730,24 @@ public class Index {
 		}
 	}
 
+	@NotifyChange("pModel")
+	@Command
+	@DependsOn("selectedTraitType")
+	public void updatePModel(){
+		if(selectedTraitType=="Continuous"){
+			pModel = continuousMList();
+			setCoboboxmapping2("Normal");
+		}
+		else if(selectedTraitType=="Binary"){
+			pModel = binaryMList();
+			setCoboboxmapping2("Binary");
+		}
+		else{ // if(selectedTraitType=="Ordinal")
+			pModel = ordinalMList();
+			setCoboboxmapping2("Non-parametric");
+		}
+	}
+
 	@NotifyChange("*")
 	@Command("chooseFile1value1")
 	public void chooseFileValue1(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,
@@ -1031,6 +1049,16 @@ public class Index {
 
 	public static List<String> pMList(){
 		return Arrays.asList(new String[]{"Normal", "Binary", "Two-Part", "Non-parametric"});
+	}
+	
+	public static List<String> continuousMList(){
+		return Arrays.asList(new String[]{"Normal", "Two-Part", "Non-parametric"});
+	}
+	public static List<String> binaryMList(){
+		return Arrays.asList(new String[]{ "Binary"});
+	}
+	public static List<String> ordinalMList(){
+		return Arrays.asList(new String[]{"Non-parametric"});
 	}
 
 	public static List<String> pMethodList(){
@@ -1475,6 +1503,7 @@ public class Index {
 		return coboboxmapping2;
 	}
 
+	@NotifyChange("coboboxmapping2")
 	public void setCoboboxmapping2(String coboboxmapping2) {
 		this.coboboxmapping2 = coboboxmapping2;
 	}

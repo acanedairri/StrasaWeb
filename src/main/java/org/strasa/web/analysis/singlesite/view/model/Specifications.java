@@ -800,11 +800,10 @@ public class Specifications {
 
 		/**
 		 * @return current response data list
-		 */
+		 */	
 		public List<String> getresponseDataList() {
 			return new ArrayList<String>(responseModel);
 		}
-
 
 		@GlobalCommand("toFactor")
 		@NotifyChange({"factorModel, numericModel"})

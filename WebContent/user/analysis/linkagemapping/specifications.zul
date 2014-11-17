@@ -137,7 +137,8 @@
 							<listcell>
 								<combobox id="traitType"
 									model="@load(vm.traitType)" autodrop="true"
-									selectedItem="@bind(vm.selectedTraitType)">
+									selectedItem="@bind(vm.selectedTraitType)"
+									onChange="@command('updatePModel')">
 									<template name="model">
 										<comboitem label="${each}" />
 									</template>
