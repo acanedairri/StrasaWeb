@@ -39,6 +39,7 @@ import org.strasa.middleware.filesystem.manager.UserFileManager;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
+import org.strasa.middleware.manager.StudyDataDynamicColumnManager;
 import org.strasa.middleware.manager.StudyDataSetManagerImpl;
 import org.strasa.middleware.manager.StudyGermplasmManagerImpl;
 import org.strasa.middleware.manager.StudyLocationManagerImpl;
@@ -798,14 +799,9 @@ public class UploadData extends ProcessTabViewModel {
 				this.dataset.setDatatype((isRawData) ? "rd" : "dd");
 				this.dataset.setTitle("Dataset 1");
 				new StudyDataSetManagerImpl().addDataSet(this.dataset);
-				studyRawData.addStudyRawData(study, columnList, dataList, this.dataset.getId(), isRawData, this.userID);
-
+				new StudyDataDynamicColumnManager(isRawData).addStudyDataFromCsv(study, columnList, dataList, this.dataset.getId(), isRawData, this.userID);
+				new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), columnList.toArray(new String[columnList.size()]), isRawData, this.dataset.getId());
 			}
-
-			// new
-			// StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(),
-			// columnList.toArray(new String[columnList.size()]), isRawData,
-			// this.dataset.getId());
 
 			isDataUploaded = true;
 			BindUtils.postNotifyChange(null, null, this, "*");

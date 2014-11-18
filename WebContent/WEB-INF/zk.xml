@@ -19,4 +19,8 @@
 		<name>org.zkoss.theme.preferred</name>
 		<value>sapphire</value>
 	</library-property>  -->
+	
+	<system-config>
+    <id-generator-class>org.strasa.web.utilities.SequenceIdGenerator</id-generator-class>
+</system-config>
 </zk>

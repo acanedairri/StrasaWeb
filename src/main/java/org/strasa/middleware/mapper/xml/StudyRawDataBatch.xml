@@ -22,6 +22,15 @@
 </insert>
 
 
+
+<insert id="insertBatchDynaColRaw" parameterType="org.strasa.middleware.model.custom.StudyRawDataDynCol">
+
+    INSERT INTO studyrawdatadynacol(studyid,dataset,datarow,dynamic_cols) VALUES (5,5,5,COLUMN_CREATE(<foreach collection="rows" item="rowcol" open="'" separator="','" close="'">#{rowcol}</foreach>));
+      
+</insert>
+
+
+
 <resultMap id="countGermplasmOccurence" type="int">
   <result property="datavalue" column="datavalue" />
 </resultMap>

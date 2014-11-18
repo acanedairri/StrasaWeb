@@ -49,6 +49,7 @@ import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.mapper.StudyTypeMapper;
 import org.strasa.middleware.mapper.StudyVariableMapper;
 import org.strasa.middleware.mapper.UserDataFileMapper;
+import org.strasa.middleware.mapper.UserValidationMapper;
 import org.strasa.middleware.mapper.other.DistributionAndExtensionSummaryMapper;
 import org.strasa.middleware.mapper.other.ExtendedStudyDataColumnMapper;
 import org.strasa.middleware.mapper.other.GermplasmBreederMapper;
@@ -122,6 +123,7 @@ public class ConnectionFactory {
 				sqlSessionFactory.getConfiguration().addMapper(SoilTypeMapper.class);
 				sqlSessionFactory.getConfiguration().addMapper(StudySharingMapper.class);
 				sqlSessionFactory.getConfiguration().addMapper(StudentMapper.class);
+				sqlSessionFactory.getConfiguration().addMapper(UserValidationMapper.class);
 			}
 			// rServerConnection= new RConnection();
 

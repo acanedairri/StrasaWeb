@@ -229,4 +229,17 @@ public class StudyVariableManagerImpl {
 			session.close();
 		}
 	}
+
+	public List<StudyVariable> getVariableByDataType(String string, List<String> lstvars) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+
+		try {
+			StudyVariableExample query = new StudyVariableExample();
+			query.createCriteria().andDatatypeEqualTo(string).andVariablecodeIn(lstvars);
+			return getMapper(session).selectByExample(query);
+		} finally {
+			session.close();
+		}
+
+	}
 }

@@ -4,7 +4,7 @@
 
 	<context id="context1"  targetRuntime="MyBatis3">
 	<plugin type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin"></plugin>
-	
+	 <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin" />
 	
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
 			connectionURL="jdbc:mysql://localhost:3306/strasa" userId="root"
@@ -17,10 +17,10 @@
 
 
 	
-	<table schema="MYSCHEMA" tableName="student"
-			domainObjectName="Student">
+<!-- 	<table schema="MYSCHEMA" tableName="uservalidation"
+			domainObjectName="UserValidation">
 			<generatedKey column="id" sqlStatement="JDBC" />
-		</table>
+		</table> -->
 	
 		<!-- <table schema="MYSCHEMA" tableName="country" domainObjectName="Country">
 		</table>
@@ -97,13 +97,13 @@
 			domainObjectName="StudyLocation">
 			<generatedKey column="id" sqlStatement="JDBC" />
 		</table>
-
+-->
 
 		<table schema="MYSCHEMA" tableName="studyrawdata"
 			domainObjectName="StudyRawData">
 			<generatedKey column="id" sqlStatement="JDBC" />
 		</table>
-
+<!-- 
 		<table schema="MYSCHEMA" tableName="studysite" domainObjectName="StudySite">
 			<generatedKey column="id" sqlStatement="JDBC" />
 		</table>

@@ -55,6 +55,7 @@ import org.strasa.web.createfieldbook.view.pojos.CreateFieldbookTemplateParser;
 import org.strasa.web.createfieldbook.view.pojos.ExtSiteInformationModel;
 import org.strasa.web.createfieldbook.view.pojos.SiteInformationModel;
 import org.strasa.web.uploadstudy.view.pojos.StudySiteInfoModel;
+import org.strasa.web.view.model.UploadTemplateSimulator;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -82,6 +83,8 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 	/** The lst site info. */
 	private ArrayList<SiteInformationModel> lstSiteInfo = new ArrayList<SiteInformationModel>();
 
+	private boolean simulation = false;
+
 	/**
 	 * Instantiates a new CreateFieldBookManageImpl.
 	 * 
@@ -99,6 +102,17 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 		this.study = study;
 		this.outputFolder = outputFolder;
 		this.mainThread = thread;
+
+	}
+
+	// SIMULATION PROCESS ONLY
+	public CreateFieldBookManagerImpl(ArrayList<SiteInformationModel> lstSiteInfo, Study study, File outputFolder, CreateFieldBookThread thread, boolean simulation) {
+
+		this.lstSiteInfo = lstSiteInfo;
+		this.study = study;
+		this.outputFolder = outputFolder;
+		this.mainThread = thread;
+		this.simulation = simulation;
 
 	}
 
@@ -443,6 +457,7 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 
 		ArrayList<ArrayList<String>> hmLayout = readExcelSheet(shLayout, 1);
 		// printMap(hmGenotype);
+
 		for (ArrayList<String> lstLayout : hmLayout) {
 
 			String key = lstLayout.get(colLayout).trim();
@@ -458,6 +473,13 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 			lstNewRow.add(siteInfo.getSeason());
 
 			lstNewRow.addAll(lstLayout);
+			// SIMULATION ONLY
+			if (simulation) {
+				for (int i = 0; i < siteInfo.lstStudyVariable.size(); i++) {
+					lstNewRow.add(String.valueOf(UploadTemplateSimulator.randInt(1, 1000)));
+
+				}
+			}
 			writeRowFromList(lstNewRow, sheet, sheet.getLastRowNum() + 1, null);
 		}
 
@@ -655,7 +677,7 @@ public class CreateFieldBookManagerImpl extends ExcelHelper {
 		ArrayList<String> header = readParticularRowInExcelSheet(observation, 0);
 		System.out.println(in++ + ": Elapsed Time = " + (System.nanoTime() - startTime) + " ns = " + ((double) (System.nanoTime() - startTime) / 1000000000) + " s");
 		new StudyDataSetManagerImpl().addDataSet(dataSet);
-		new StudyRawDataManagerImpl().addStudyRawDataFromSpreadsheet(study, header, observation, dataSet.getId(), isRaw, userID);
+		new StudyDataDynamicColumnManager(true).addStudyRawDataFromSpreadsheetUsingDynaCols(study, header, observation, dataSet.getId(), isRaw, userID);
 		System.out.println("#####" + ": Elapsed Time = " + (System.nanoTime() - startTime) + " ns = " + ((double) (System.nanoTime() - startTime) / 1000000000) + " s");
 	}
 

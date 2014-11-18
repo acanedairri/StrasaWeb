@@ -203,6 +203,7 @@ public class GermplasmDeepInfoModel extends Germplasm {
 	}
 
 	public GermplasmType getSelectedGermplasmType() {
+
 		return selectedGermplasmType;
 	}
 

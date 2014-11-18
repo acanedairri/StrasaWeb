@@ -21,33 +21,34 @@ import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Toolbarbutton;
 
-public class  AcrossStudyRowRenderer implements RowRenderer<AcrossStudyData>{
+public class AcrossStudyRowRenderer implements RowRenderer<AcrossStudyData> {
 
-	
 	private Tab crossstudySearchTab;
-//	private Binder parBinder;
-	
+
+	// private Binder parBinder;
+
 	@NotifyChange("newDataRow")
 	@Init
-	public void setInitialData(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,@ContextParam(ContextType.VIEW) Component view,@ExecutionArgParam("crossstudySearchTab")Tab crossstudySearchTab){
+	public void setInitialData(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("crossstudySearchTab") Tab crossstudySearchTab) {
 		this.crossstudySearchTab = crossstudySearchTab;
-//        parBinder =  (Binder) view.getParent().getAttribute("binder");
+		// parBinder = (Binder) view.getParent().getAttribute("binder");
 	}
-	
+
 	private int getStudyIdByStudyName(String studyname) {
-		int toreturn=0;
+		int toreturn = 0;
 		StudyManager mgr = new StudyManager();
-		toreturn=mgr.getStudyByStudyName(studyname);
-		
+		toreturn = mgr.getStudyByStudyName(studyname);
+
 		return toreturn;
 	}
-	
+
 	@Override
 	public void render(Row row, final AcrossStudyData data, int index) throws Exception {
 
-//		row.appendChild(new Label(String.valueOf(data.getStudyId())));
-		
-		Toolbarbutton studyNameLink=  new Toolbarbutton();
+		// row.appendChild(new Label(String.valueOf(data.getStudyId())));
+
+		// System.out.println(data.toString());
+		Toolbarbutton studyNameLink = new Toolbarbutton();
 		studyNameLink.setLabel(data.getStudyname());
 		studyNameLink.setClass("grid-link");
 		studyNameLink.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
@@ -57,9 +58,9 @@ public class  AcrossStudyRowRenderer implements RowRenderer<AcrossStudyData>{
 				// TODO Auto-generated method stub
 
 				Map<String, Object> params = new HashMap<String, Object>();
-				params.put("studyid",getStudyIdByStudyName(data.getStudyname()));
-				params.put("studyName",data.getStudyname());
-				
+				params.put("studyid", getStudyIdByStudyName(data.getStudyname()));
+				params.put("studyName", data.getStudyname());
+
 				BindUtils.postGlobalCommand(null, null, "openStudyDetailInAcrossStudy", params);
 			}
 
@@ -67,11 +68,11 @@ public class  AcrossStudyRowRenderer implements RowRenderer<AcrossStudyData>{
 
 		row.appendChild(studyNameLink);
 
-		Toolbarbutton gNameLink=  new Toolbarbutton();
+		Toolbarbutton gNameLink = new Toolbarbutton();
 		gNameLink.setLabel(data.getGname());
 		gNameLink.setClass("grid-link");
 		row.appendChild(gNameLink);
-		
+
 		gNameLink.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
 			@Override
@@ -79,17 +80,17 @@ public class  AcrossStudyRowRenderer implements RowRenderer<AcrossStudyData>{
 				// TODO Auto-generated method stub
 
 				Map<String, Object> params = new HashMap<String, Object>();
-				params.put("gname",data.getGname());
-				
+				params.put("gname", data.getGname());
+
 				BindUtils.postGlobalCommand(null, null, "openGermplasmDetailInAcrossStudy", params);
 			}
 
 		});
 
-		for(String s: data.getOtherdata()){
+		for (String s : data.getOtherdata()) {
 			row.appendChild(new Label(s));
 
 		}
 
 	}
-}	
+}

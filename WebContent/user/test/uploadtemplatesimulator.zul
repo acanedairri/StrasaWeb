@@ -1,0 +1,98 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.view.model.UploadTemplateSimulator')"
+		width="98%">
+
+
+		<vlayout>
+		<grid vflex="1" hflex="1">
+			<auxhead>
+				<auxheader label="Stress Test Uploading" colspan="2"></auxheader>
+			</auxhead>
+			<columns>
+				<column label="Field" />
+				<column label="Value" />
+			</columns>
+			<rows>
+				<row>
+					<label value="Study Name" width="150px" />
+					<textbox value='@bind(vm.studyName)'
+						constraint="no empty" width="150px"
+						 />
+				</row>
+				<row>
+					<label value="Total User" width="150px" />
+					<textbox value='@bind(vm.totalUsers)'
+						constraint="no empty" width="150px" />
+				</row>
+				<row>
+					<label value="Uploads per User" width="150px" />
+					<textbox value='@bind(vm.uploadPerUser)'
+						constraint="no empty" width="150px" />
+				</row>
+				<row>
+					<label value="Sites per Study" width="150px" />
+					<textbox value='@bind(vm.sitePerStudy)'
+						constraint="no empty" width="150px" />
+				</row>
+				<row>
+					<label value="Variate Per study" width="150px" />
+					<textbox value='@bind(vm.variatePerStudy)'
+						constraint="no empty" width="150px" />
+				</row>
+				<row>
+					<label value="Upload Genotype" width="150px" />
+					<button label="Browse"
+										onUpload="@command('uploadGenotype')" upload="true"
+										class="btn btn-primary">
+									</button>
+				</row>
+				<row>
+					<label value="Upload layout" width="150px" />
+					<button label="Browse"
+										onUpload="@command('uploadLayout')" upload="true"
+										class="btn btn-primary">
+									</button>
+				</row>
+				<row>
+					<label></label>
+					<button label="Generate" onClick="@command('generate')"
+						image="/images/save16.png" sclass="btn-warning">
+					</button>
+					<button label="Upload Generated Templates" onClick="@command('uploadTemplates')"
+						image="/images/save16.png" sclass="btn-warning">
+					</button>
+				</row>
+			</rows>
+		</grid>
+		
+<listbox height="160px" model="@bind(vm.lstGenerationReport)" style="margin-top:10px">
+        <listhead>
+            <listheader label="Study Name" />
+            <listheader label="Elapse" />
+ 
+        </listhead>
+        <template name="model">
+            <listitem>
+                <listcell label="@bind(each.studyname)"></listcell>
+                <listcell label="@bind(each.elapseTime)"></listcell>
+            </listitem>
+        </template>
+    </listbox>
+    
+    <listbox height="160px" model="@bind(vm.lstUploadReport)" style="margin-top:10px">
+        <listhead>
+            <listheader label="Study Name" />
+            <listheader label="Elapse" />
+ 
+        </listhead>
+        <template name="model">
+            <listitem>
+                <listcell label="@bind(each.studyname)"></listcell>
+                <listcell label="@bind(each.elapseTime)"></listcell>
+            </listitem>
+        </template>
+    </listbox>
+        </vlayout>
+	</window>
+</zk>

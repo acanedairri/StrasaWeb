@@ -1,12 +1,11 @@
 package org.strasa.web.browsestudy.view.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import org.strasa.middleware.manager.BrowseStudyManagerImpl;
 import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
+import org.strasa.middleware.manager.StudyDataDynamicColumnManager;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.model.StudyDataColumn;
 import org.strasa.web.utilities.FileUtilities;
@@ -28,21 +27,23 @@ public class Data {
 	private int activePage = 0;
 	private String filePath;
 	private String studyName;
-
+	private Long totalRows;
 	private List<String> columnList;
 	private List<String[]> dataList;
-
+	private Integer studyid;
+	private Integer dataset;
 	private BrowseStudyManagerImpl browseStudyManagerImpl;
 	private StudyManagerImpl studyMan;
 	private String dataType;
 	private Div divDatagrid;
+	private List<StudyDataColumn> columns;
 
 	public Data() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public int getTotalSize() {
-		return dataList.size();
+	public Long getTotalSize() {
+		return totalRows;
 	}
 
 	public int getPageSize() {
@@ -51,6 +52,7 @@ public class Data {
 
 	@NotifyChange("*")
 	public void setPageSize(int pageSize) {
+
 		this.pageSize = pageSize;
 	}
 
@@ -61,7 +63,7 @@ public class Data {
 
 	@NotifyChange("*")
 	public void setActivePage(int activePage) {
-		System.out.println("pageSize");
+		System.out.println("pageSize + " + activePage);
 		includeDataGrid();
 		this.activePage = activePage;
 	}
@@ -77,28 +79,12 @@ public class Data {
 
 	public ArrayList<ArrayList<String>> getRowData() {
 		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
-		if (dataList.isEmpty())
-			return null;
-		for (int i = activePage * pageSize; i < activePage * pageSize + pageSize && i < dataList.size(); i++) {
-			ArrayList<String> row = new ArrayList<String>();
-			row.addAll(Arrays.asList(dataList.get(i)));
-			result.add(row);
-			row.add(0, "  ");
-			System.out.println(Arrays.toString(dataList.get(i)) + "ROW: " + row.get(0));
-		}
-		return result;
-	}
 
-	public List<String[]> getDataList() {
-		if (true)
-			return dataList;
-		ArrayList<String[]> pageData = new ArrayList<String[]>();
-		for (int i = activePage * pageSize; i < activePage * pageSize + pageSize; i++) {
-			pageData.add(dataList.get(i));
-			System.out.println(Arrays.toString(dataList.get(i)));
-		}
+		Integer start = activePage * pageSize;
+		Integer limit = pageSize;
+		System.out.println("START: " + dataType);
 
-		return pageData;
+		return new StudyDataDynamicColumnManager(dataType.equals("rd")).getStudyRawDataDynaCols(studyid, dataset, start, limit);
 	}
 
 	@Init
@@ -109,37 +95,30 @@ public class Data {
 		browseStudyManagerImpl = new BrowseStudyManagerImpl();
 		columnList = new ArrayList<String>();
 		dataList = new ArrayList<String[]>();
+		this.dataType = dataType;
+		studyid = studyId;
+		this.dataset = dataset;
 
+		System.out.println("DATATYPE: " + dataType);
 		// change this value as parameter
 
 		// System.out.println("StudyId:"+ Integer.toString(studyId));
 		// System.out.println("and dataset:" +Integer.toString(dataset));
-		List<HashMap<String, String>> toreturn = browseStudyManagerImpl.getStudyData(studyId, dataType, dataset);
-		System.out.println("Size:" + toreturn.size());
-		List<StudyDataColumn> columns = new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyId, dataType, dataset); // rd
-																																	// as
-																																	// raw
-																																	// data,
-																																	// dd
-																																	// as
-																																	// derived
-																																	// data
+		// List<HashMap<String, String>> toreturn =
+		// browseStudyManagerImpl.getStudyData(studyId, dataType, dataset);
+		columns = new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyId, dataType, dataset); // rd
+																											// as
+		totalRows = new StudyDataDynamicColumnManager(dataType.endsWith("rd")).countStudyDynamicCOl(studyId, dataset); // raw
+		// data,
+		// dd
+		// as
+		// derived
+		// data
 		for (StudyDataColumn d : columns) {
 			columnList.add(d.getColumnheader());
 			System.out.print(d.getColumnheader() + "\t");
 		}
 		System.out.println("\n ");
-		for (HashMap<String, String> rec : toreturn) {
-			ArrayList<String> newRow = new ArrayList<String>();
-			for (StudyDataColumn d : columns) {
-				String value = rec.get(d.getColumnheader());
-				newRow.add(value);
-				System.out.print(value + "\t");
-			}
-			System.out.println("\n ");
-			dataList.add(newRow.toArray(new String[newRow.size()]));
-
-		}
 
 		setStudyName(studyMan.getStudyById(studyId).getName());
 	}
@@ -159,15 +138,15 @@ public class Data {
 	}
 
 	@Command
-	public void exportRowData(@BindingParam("columns") List<String> columns, @BindingParam("rows") List<String[]> rows, @BindingParam("studyName") String studyName, @BindingParam("dataType") String dataType) {
+	public void exportRowData(@BindingParam("columns") List<String> columns, @BindingParam("studyName") String studyName, @BindingParam("dataType") String dataType) {
 		// List<String[]> grid = new ArrayList<String[]>();
 		// grid.addAll(rows);
 		// grid.add(0,columns.toArray(new String[columns.size()]));
 
 		if (dataType.endsWith("rd"))
-			FileUtilities.exportData(columns, rows, studyName + "_rawData.csv");
+			FileUtilities.exportData2(columns, new StudyDataDynamicColumnManager(true).getStudyRawDataDynaCols(studyid, dataset, null, null), studyName + "_rawData.csv");
 		else
-			FileUtilities.exportData(columns, rows, studyName + "_derivedData.csv");
+			FileUtilities.exportData2(columns, new StudyDataDynamicColumnManager(false).getStudyRawDataDynaCols(studyid, dataset, null, null), studyName + "_derivedData.csv");
 	}
 
 	public String getFilePath() {

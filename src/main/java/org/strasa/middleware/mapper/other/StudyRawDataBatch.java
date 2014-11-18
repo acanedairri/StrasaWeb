@@ -11,6 +11,7 @@ import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.Location;
 import org.strasa.middleware.model.StudyRawData;
 import org.strasa.middleware.model.StudySite;
+import org.strasa.middleware.model.custom.StudyRawDataDynCol;
 
 public interface StudyRawDataBatch {
 	String MQL_LOCATION = "SELECT DISTINCT " + "datavalue AS locationname " + " FROM ${param2} WHERE studyid = #{param1} AND dataset = #{param3}  AND datacolumn = 'Location' GROUP BY datarow";
@@ -42,6 +43,12 @@ public interface StudyRawDataBatch {
 	String MQL_Germplasm = "SELECT DISTINCT " + " datavalue AS germplasmname " + " FROM ${param2} WHERE studyid = #{param1,jdbcType=INTEGER} AND dataset = #{param3} AND datacolumn = 'GName' GROUP BY datarow";
 	String MQL_GermplasmNoDataset = "SELECT DISTINCT " + " datavalue AS germplasmname " + " FROM ${param2} WHERE studyid = #{param1,jdbcType=INTEGER}  AND datacolumn = 'GName' GROUP BY datarow";
 
+	String MQL_StudyRawSelect = "SELECT * FROM (SELECT id, datarow,datacolumn, datavalue FROM studyrawdata WHERE studyid = #{param1,jdbcType=INTEGER} AND dataset = #{param2,jdbcType=INTEGER} LIMIT #{param3,jdbcType=INTEGER}, #{param4,jdbcType=INTEGER} ) s ORDER BY id; ";
+	String MQL_StudyRawSelectNO_DATASET = "SELECT * FROM (SELECT id, datarow,datacolumn, datavalue FROM studyrawdata WHERE studyid = #{param1,jdbcType=INTEGER}  LIMIT #{param2,jdbcType=INTEGER}, #{param3,jdbcType=INTEGER} ) s ORDER BY id; ";
+
+	String MQL_StudyRawCountWithDataset = "SELECT COUNT(DISTINCT datarow) FROM studyrawdata WHERE studyid = #{param1,jdbcType=INTEGER} AND dataset = #{param2,jdbcType=INTEGER};";
+	String MQL_StudyRawCount = "SELECT COUNT(DISTINCT datarow) FROM studyrawdata WHERE studyid = #{param1,jdbcType=INTEGER} ";
+
 	// String MQL_Germplasm = "SELECT DISTINCT " +
 	// " MAX(CASE datacolumn WHEN 'GID' THEN datavalue ELSE '' END) AS gid, " +
 	// " MAX(CASE datacolumn WHEN 'GName' THEN datavalue ELSE '' END) AS germplasmname, "
@@ -69,6 +76,8 @@ public interface StudyRawDataBatch {
 	public void insertBatchRaw(List<StudyRawData> datalist);
 
 	public void insertBatchDerived(List<StudyRawData> datalist);
+
+	public void insertBatchDynaColRaw(StudyRawDataDynCol datalist);
 
 	@Select(MQL_LOCATION)
 	public List<Location> getRawLocation(int studyid, String tname, int dataset);
@@ -98,4 +107,19 @@ public interface StudyRawDataBatch {
 	public int countGermplasmOccurence(Map<String, Object> param);
 
 	public int getStudyRawLastRow(Map<String, Object> param);
+
+	@Results({ @Result(column = "datarow", property = "datarow", jdbcType = JdbcType.INTEGER), @Result(column = "datarow", property = "datacolumn", jdbcType = JdbcType.INTEGER) })
+	@Select(MQL_StudyRawSelect)
+	public List<StudyRawData> getStudyRawWithDataset(int studyid, int dataset, int start, int limit);
+
+	@Results({ @Result(column = "datarow", property = "datarow", jdbcType = JdbcType.INTEGER), @Result(column = "datarow", property = "datacolumn", jdbcType = JdbcType.INTEGER) })
+	@Select(MQL_StudyRawSelectNO_DATASET)
+	public List<StudyRawData> getStudyRaw(int studyid, int start, int limit);
+
+	@Select(MQL_StudyRawCountWithDataset)
+	public Long countStudyRowWithDataset(int studyid, int dataset);
+
+	@Select(MQL_StudyRawCount)
+	public Long countStudyRow(int studyid);
+
 }

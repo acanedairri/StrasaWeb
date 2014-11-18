@@ -16,7 +16,7 @@
 				<row>
 					<label value="Name" width="150px" />
 					<textbox value='@bind(vm.programModel.name)'
-						constraint="no empty" width="150px" />
+						constraint="no empty" width="150px" onChange="@command('changenotif')"/>
 				</row>
 				<row>
 					<label value="Objective" width="150px" />

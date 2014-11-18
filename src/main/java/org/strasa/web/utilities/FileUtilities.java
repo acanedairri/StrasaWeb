@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -112,35 +113,9 @@ public class FileUtilities {
 		FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
 		return tempFile;
 	}
-	
-	public static File getFileFromUploadAsDatasetCsv(BindContext ctx, Component view) {
 
-		UploadEvent event = (UploadEvent) ctx.getTriggerEvent();
-
-		// System.out.println(event.getMedia().getStringData());
-
-		String name = event.getMedia().getName();
-		File tempFile = null;
-		try {
-			tempFile = File.createTempFile(name.replaceAll(".csv", ""), "(dataset).csv");
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		// if (!name.endsWith(".csv")) {
-		// Messagebox.show("Error: File must be a text-based csv format",
-		// "Upload Error", Messagebox.OK, Messagebox.ERROR);
-		// return null;
-		// }
-
-		InputStream in = event.getMedia().isBinary() ? event.getMedia().getStreamData() : new ReaderInputStream(event.getMedia().getReaderData());
-		FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
-		return tempFile;
-	}
-
-	public static void exportData(List<String> columns, List<String[]> rows, String outputFileName) {
-		List<String[]> grid = rows;
+	public static void exportData2(List<String> columns, List<ArrayList<String>> rows, String outputFileName) {
+		List<ArrayList<String>> grid = rows;
 
 		StringBuffer sb = new StringBuffer();
 
@@ -154,12 +129,12 @@ public class FileUtilities {
 		}
 		sb.append("\n");
 
-		for (String[] row : grid) {
+		for (ArrayList<String> row : grid) {
 			ctr = 0;
 			for (String s : row) {
 				ctr++;
 				sb.append(s);
-				if (ctr != row.length)
+				if (ctr != row.size())
 					sb.append(",");
 			}
 			sb.append("\n");
@@ -257,6 +232,63 @@ public class FileUtilities {
 		}
 
 		return new File(filePath);
+	}
+
+	public static void exportData(List<String> columnList, List<String[]> dataList, String name) {
+		List<String[]> grid = dataList;
+
+		StringBuffer sb = new StringBuffer();
+
+		System.out.println("creating File...");
+		int ctr = 0;
+		for (String s : columnList) {
+			ctr++;
+			sb.append(s);
+			if (ctr != columnList.size())
+				sb.append(",");
+		}
+		sb.append("\n");
+
+		for (String[] row : grid) {
+			ctr = 0;
+			for (String s : row) {
+				ctr++;
+				sb.append(s);
+				if (ctr != row.length)
+					sb.append(",");
+			}
+			sb.append("\n");
+		}
+
+		System.out.println("downloading File...");
+		Filedownload.save(sb.toString().getBytes(), "text/plain", name + ".csv");
+
+	}
+
+	public static File getFileFromUploadAsDatasetCsv(BindContext ctx, Component view) {
+
+		UploadEvent event = (UploadEvent) ctx.getTriggerEvent();
+
+		// System.out.println(event.getMedia().getStringData());
+
+		String name = event.getMedia().getName();
+		File tempFile = null;
+		try {
+			tempFile = File.createTempFile(name.replaceAll(".csv", ""), "(dataset).csv");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		// if (!name.endsWith(".csv")) {
+		// Messagebox.show("Error: File must be a text-based csv format",
+		// "Upload Error", Messagebox.OK, Messagebox.ERROR);
+		// return null;
+		// }
+
+		InputStream in = event.getMedia().isBinary() ? event.getMedia().getStreamData() : new ReaderInputStream(event.getMedia().getReaderData());
+		FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
+		return tempFile;
 	}
 
 }
