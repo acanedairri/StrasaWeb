@@ -15,6 +15,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.strasa.middleware.factory.ConnectionFactory;
+import org.strasa.middleware.factory.MariaDBConnectionSettings;
 import org.strasa.middleware.mapper.other.StudyRawDataBatch;
 import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.Study;
@@ -31,9 +32,9 @@ public class StudyDataDynamicColumnManager {
 	@WireVariable
 	ConnectionFactory connectionFactory;
 
-	String databaseURL = "jdbc:mysql://localhost:3488/strasa";
-	String user = "root";
-	String password = "root";
+	String databaseURL = MariaDBConnectionSettings.databaseURL;
+	String user = MariaDBConnectionSettings.user;
+	String password = MariaDBConnectionSettings.password;
 
 	private boolean isRaw;
 
