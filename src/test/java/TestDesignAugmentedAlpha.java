@@ -12,7 +12,7 @@ public class TestDesignAugmentedAlpha {
 		//supply path where the output will be saved
 		String path = DATA_PATH; 
 		//supply the fieldbook name specified by the user
-		String fieldBookName = "fieldbookAugmentedAlphaLattice"; 
+		String fieldBookName = "fieldbookDesignAugmentedAlphaLattice"; 
 		
 		//specify parameters
 		Integer numCheck = 9;
@@ -30,7 +30,7 @@ public class TestDesignAugmentedAlpha {
 		String newTrmt = null;
 		
 		RServeManager rServeManager = new RServeManager();
-		rServeManager.doDesignAugmentedAlpha(path, fieldBookName, numCheck, numNew, trmtName, blkSize, rep, trial, rowPerBlk, rowPerRep, numFieldRow, fieldOrder, trmtLabel, checkTrmt, newTrmt);
+		rServeManager.doDesignAugmentedAlpha(path.replace(BSLASH, FSLASH), fieldBookName, numCheck, numNew, trmtName, blkSize, rep, trial, rowPerBlk, rowPerRep, numFieldRow, fieldOrder, trmtLabel, checkTrmt, newTrmt);
 		
 //		RJavaManager rJavaManager= new RJavaManager();
 //		rJavaManager.initPBtool();

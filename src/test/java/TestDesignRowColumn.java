@@ -13,7 +13,7 @@ public class TestDesignRowColumn {
 		//supply path where the output will be saved
 		String path = DATA_PATH; 
 		//supply the fieldbook name specified by the user
-		String fieldBookName = "fieldbookPBToolsRowColumn1"; 
+		String fieldBookName = "fieldbookDesignRowColumn"; 
 		
 		//specify parameters
 		Integer numTrmt = 20;
@@ -24,7 +24,7 @@ public class TestDesignRowColumn {
 		String fieldOrder = "Serpentine";
 		
 		RServeManager rServeManager = new RServeManager();
-		rServeManager.doDesignRowColumn(path, fieldBookName, numTrmt, rep, trial, rowPerRep, numFieldRow, fieldOrder);
+		rServeManager.doDesignRowColumn(path.replace(BSLASH, FSLASH), fieldBookName, numTrmt, rep, trial, rowPerRep, numFieldRow, fieldOrder);
 //		RJavaManager rJavaManager= new RJavaManager();
 //		rJavaManager.initPBtool();
 //		rJavaManager.getPbToolRandomizationManager().doDesignRowColumn(path, fieldBookName, numTrmt, 
@@ -33,5 +33,4 @@ public class TestDesignRowColumn {
 //		StringBuilder s = rJavaManager.getSTARDesignManager().getRscriptCommand();
 //		System.out.println("Script Command:\n" +s.toString());
 	}
-
 }

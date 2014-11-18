@@ -13,7 +13,7 @@ public class TestDesignLatinizedAlpha {
 		//supply path where the output will be saved
 		String path = DATA_PATH; 
 		//supply the fieldbook name specified by the user
-		String fieldBookName = "fieldbookPBToolsLatinizedAlphaLattice2"; 
+		String fieldBookName = "fieldbookDesignLatinizedAlphaLattice"; 
 		
 		//specify parameters
 		// sample test for case 1: number of fieldrows is divisible by the number of blocks per replicate
@@ -22,7 +22,7 @@ public class TestDesignLatinizedAlpha {
 //		Integer rep = 3;
 //		Integer trial = 1;
 //		Integer numFieldRow = 15;
-//		String fieldOrder = "Serpentine";
+//		String fieldOrder = "Serpentine"; 
 		
 		// sample test for case 1: number of fieldrows is divisible by the number of blocks per replicate
 		Integer numTrmt = 15;
@@ -33,7 +33,7 @@ public class TestDesignLatinizedAlpha {
 		String fieldOrder = "Serpentine";
 		
 		RServeManager rServeManager = new RServeManager();
-		rServeManager.doDesignLatinizedAlpha(path, fieldBookName, numTrmt, blkSize, rep, trial, numFieldRow, fieldOrder);
+		rServeManager.doDesignLatinizedAlpha(path.replace(BSLASH, FSLASH), fieldBookName, numTrmt, blkSize, rep, trial, numFieldRow, fieldOrder);
 //		RJavaManager rJavaManager= new RJavaManager();
 //		rJavaManager.initPBtool();
 //		rJavaManager.getPbToolRandomizationManager().doDesignLatinizedAlpha(path, fieldBookName, numTrmt, blkSize, 

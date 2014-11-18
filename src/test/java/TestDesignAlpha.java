@@ -1,3 +1,4 @@
+import org.analysis.rserve.manager.RServeManager;
 import org.irri.breedingtool.rjava.manager.RJavaManager;
 
 public class TestDesignAlpha {
@@ -11,7 +12,7 @@ public class TestDesignAlpha {
 		//supply path where the output will be saved
 		String path = DATA_PATH; 
 		//supply the fieldbook name specified by the user
-		String fieldBookName = "fieldbookPBToolsAlphaLattice"; 
+		String fieldBookName = "fieldbookDesignAlphaLattice"; 
 				
 		//specify parameters
 		Integer numTrmt = 70;
@@ -22,11 +23,14 @@ public class TestDesignAlpha {
 		Integer rowPerRep = 14;
 		Integer numFieldRow = 28;
 		String fieldOrder = "Serpentine";
-				
-		RJavaManager rJavaManager= new RJavaManager();
-		rJavaManager.initPBtool();
-		rJavaManager.getPbToolRandomizationManager().doDesignAlpha(path, fieldBookName, numTrmt, blkSize, 
-				rep, trial, rowPerBlk, rowPerRep, numFieldRow, fieldOrder);
+		
+		RServeManager rServeManager = new RServeManager();
+		rServeManager.doDesignAlpha(path.replace(BSLASH, FSLASH), fieldBookName, numTrmt, blkSize, rep, trial, rowPerBlk, rowPerRep, numFieldRow, fieldOrder);
+
+//		RJavaManager rJavaManager= new RJavaManager();
+//		rJavaManager.initPBtool();
+//		rJavaManager.getPbToolRandomizationManager().doDesignAlpha(path, fieldBookName, numTrmt, blkSize, 
+//				rep, trial, rowPerBlk, rowPerRep, numFieldRow, fieldOrder);
 	}
 
 }

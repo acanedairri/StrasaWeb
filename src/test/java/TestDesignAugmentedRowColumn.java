@@ -13,7 +13,7 @@ public class TestDesignAugmentedRowColumn {
 		//supply path where the output will be saved
 		String path = DATA_PATH; 
 		//supply the fieldbook name specified by the user
-		String fieldBookName = "fieldbookAugmentedRowColumn"; 
+		String fieldBookName = "fieldbookDesignAugmentedRowColumn"; 
 		
 		//specify parameters
 		Integer numCheck = 12;
@@ -30,7 +30,7 @@ public class TestDesignAugmentedRowColumn {
 		String newTrmt = null;
 		
 		RServeManager rServeManager = new RServeManager();
-		rServeManager.doDesignAugmentedRowColumn(path, fieldBookName, numCheck, numNew, trmtName, rep, trial, rowblkPerRep, rowPerRowblk, numFieldRow, fieldOrder, trmtLabel, checkTrmt, newTrmt);
+		rServeManager.doDesignAugmentedRowColumn(path.replace(BSLASH, FSLASH), fieldBookName, numCheck, numNew, trmtName, rep, trial, rowblkPerRep, rowPerRowblk, numFieldRow, fieldOrder, trmtLabel, checkTrmt, newTrmt);
 //		RJavaManager rJavaManager= new RJavaManager();
 //		rJavaManager.initPBtool();
 //		rJavaManager.getPbToolRandomizationManager().doDesignAugmentedRowColumn(path, fieldBookName, numCheck, numNew,

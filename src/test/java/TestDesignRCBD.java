@@ -12,7 +12,7 @@ public class TestDesignRCBD {
 
 		// revised by AAGulles for PBTools version 1.5 and up and BIMS
 		String path = DATA_PATH;
-		String fieldBookName = "fieldbookPBToolsRCBD";
+		String fieldBookName = "fieldbookDesignRCBD";
 		String[] factorName = {"EntryNo"}; // for PBTools Version 1.5 and up and BIMS, only one factor should be entered
 		String[] factorID = {"V"};
 		Integer[] factorLevel = {24};
@@ -23,7 +23,7 @@ public class TestDesignRCBD {
 		String fieldOrder = "Serpentine";
 
 		RServeManager rServeManager = new RServeManager();
-		rServeManager.doDesignRCBD(path, fieldBookName, factorName, factorID, factorLevel, blk, trial, numFieldRow, rowPerBlk, fieldOrder);
+		rServeManager.doDesignRCBD(path.replace(BSLASH, FSLASH), fieldBookName, factorName, factorID, factorLevel, blk, trial, numFieldRow, rowPerBlk, fieldOrder);
 		//		RJavaManager rJavaManager= new RJavaManager();
 		//		rJavaManager.initPBtool();
 		//		rJavaManager.getPbToolRandomizationManager().doDesignRCBD(path, fieldBookName, factorName, factorID, factorLevel,

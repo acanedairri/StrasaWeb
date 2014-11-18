@@ -106,28 +106,19 @@ public class InputTransform {
 		return tempList; 
 	}
 
-	public String createRList(String[] stringArrayInput, Integer[] integerLevelInput, Integer[] stringArrayIDInput) {
+	public String createRList(String[] stringArrayInput, Integer[] startVal, Integer[] integerLevelInput) {
 		String tempList = "list(";
-
+		
 		for (int i = 0; i < stringArrayInput.length; i++) {
-			String stringVectorR = "c(";
-			for (int j = 1; j <= integerLevelInput[i]; j++) {
-				if (j > 1)
-					stringVectorR = stringVectorR + ", " + "\"" + stringArrayIDInput[i] + j + "\"";
-				else
-					stringVectorR = stringVectorR + "\"" + stringArrayIDInput[i] + j + "\"";
-			}
-			stringVectorR = stringVectorR + ")";
-
-			if (i > 0) 
-				tempList = tempList + ", " + stringArrayInput[i] + " = "+ stringVectorR;
+			if (i > 0)
+				tempList = tempList + ", " + stringArrayInput[i] + " = c(" + startVal[i] + ":" + integerLevelInput[i] +")";
 			else
-				tempList = tempList + stringArrayInput[i] + " = "+ stringVectorR;
+				tempList = tempList + stringArrayInput[i] + " = c(" + startVal[i] + ":" + integerLevelInput[i] + ")";
 		}
-
+		
 		tempList = tempList + ")";
-
-		return tempList; 
+		
+		return tempList;
 	}
 
 	public String createRList(String[] stringArrayInput, Integer[] integerLevelInput, String[] stringArrayIDInput) {

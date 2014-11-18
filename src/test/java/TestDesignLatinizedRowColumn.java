@@ -24,7 +24,7 @@ public class TestDesignLatinizedRowColumn {
 		String fieldOrder = "Serpentine";
 		
 		RServeManager rServeManager = new RServeManager();
-		rServeManager.doDesignLatinizedRowColumn(path, fieldBookName, numTrmt, rep, trial, rowPerRep, numFieldRow, fieldOrder);
+		rServeManager.doDesignLatinizedRowColumn(path.replace(BSLASH, FSLASH), fieldBookName, numTrmt, rep, trial, rowPerRep, numFieldRow, fieldOrder);
 //		RJavaManager rJavaManager= new RJavaManager();
 //		rJavaManager.initPBtool();
 //		rJavaManager.getPbToolRandomizationManager().doDesignLatinizedRowColumn(path, fieldBookName, numTrmt, 

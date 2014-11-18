@@ -13,7 +13,7 @@ public class TestDesignPRep {
 		//supply path where the output will be saved
 		String path = DATA_PATH; 
 		//supply the fieldbook name specified by the user
-		String fieldBookName = "fieldbookPRep"; 
+		String fieldBookName = "fieldbookDesignPRep"; 
 		
 		//specify parameters
 		String[] trmtGrpName = {"NewRepTrmt", "NewUnrepTrmt", "Parent"};
@@ -29,7 +29,7 @@ public class TestDesignPRep {
 		String trmtListPerGrp = null;
 		
 		RServeManager rServeManager = new RServeManager();
-		rServeManager.doDesignPRep(path, fieldBookName, trmtGrpName, numTrmtPerGrp, trmtRepPerGrp, trmtName, blk, trial, rowPerBlk, numFieldRow, fieldOrder, trmtLabel, trmtListPerGrp);
+		rServeManager.doDesignPRep(path.replace(BSLASH, FSLASH), fieldBookName, trmtGrpName, numTrmtPerGrp, trmtRepPerGrp, trmtName, blk, trial, rowPerBlk, numFieldRow, fieldOrder, trmtLabel, trmtListPerGrp);
 //		RJavaManager rJavaManager= new RJavaManager();
 //		rJavaManager.initPBtool();
 //		rJavaManager.getPbToolRandomizationManager().doDesignPRep(path, fieldBookName, trmtGrpName, numTrmtPerGrp, 
