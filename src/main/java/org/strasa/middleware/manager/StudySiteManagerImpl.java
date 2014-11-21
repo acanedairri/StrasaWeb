@@ -1,6 +1,7 @@
 package org.strasa.middleware.manager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -9,18 +10,14 @@ import org.strasa.middleware.mapper.EcotypeMapper;
 import org.strasa.middleware.mapper.LocationMapper;
 import org.strasa.middleware.mapper.PlantingTypeMapper;
 import org.strasa.middleware.mapper.StudyAgronomyMapper;
-import org.strasa.middleware.mapper.StudyDerivedDataMapper;
 import org.strasa.middleware.mapper.StudyDesignMapper;
 import org.strasa.middleware.mapper.StudyLocationMapper;
-import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
 import org.strasa.middleware.model.StudyAgronomy;
 import org.strasa.middleware.model.StudyAgronomyExample;
-import org.strasa.middleware.model.StudyDerivedDataExample;
 import org.strasa.middleware.model.StudyDesignExample;
 import org.strasa.middleware.model.StudyLocation;
 import org.strasa.middleware.model.StudyRawDataByDataColumn;
-import org.strasa.middleware.model.StudyRawDataExample;
 import org.strasa.middleware.model.StudySite;
 import org.strasa.middleware.model.StudySiteExample;
 import org.strasa.web.uploadstudy.view.pojos.StudySiteInfoModel;
@@ -57,27 +54,10 @@ public class StudySiteManagerImpl {
 
 	public boolean hasSiteHeader(int studyID, Integer dataset) {
 
-		if (isRaw) {
-			System.out.println("Checking for Raw...");
-			StudyRawDataMapper mapper = connectionFactory.sqlSessionFactory.openSession().getMapper(StudyRawDataMapper.class);
+		StudyDataColumnManagerImpl studycolumnMan = new StudyDataColumnManagerImpl();
 
-			StudyRawDataExample example = new StudyRawDataExample();
-			if (dataset != null)
-				example.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset).andDatacolumnEqualTo("Site");
-			else
-				example.createCriteria().andStudyidEqualTo(studyID).andDatacolumnEqualTo("Site");
-			return mapper.countByExample(example) > 0;
+		return !studycolumnMan.getExistingColumn(studyID, (isRaw) ? "rd" : "dd", dataset, Arrays.asList("Site")).isEmpty();
 
-		} else {
-
-			StudyDerivedDataMapper mapper = connectionFactory.sqlSessionFactory.openSession().getMapper(StudyDerivedDataMapper.class);
-			StudyDerivedDataExample example = new StudyDerivedDataExample();
-			if (dataset != null)
-				example.createCriteria().andStudyidEqualTo(studyID).andDatasetEqualTo(dataset).andDatacolumnEqualTo("Site");
-			else
-				example.createCriteria().andStudyidEqualTo(studyID).andDatacolumnEqualTo("Site");
-			return mapper.countByExample(example) > 0;
-		}
 	}
 
 	public void removeSiteByStudyId(int studyID, Integer dataset) {

@@ -37,8 +37,8 @@ import org.strasa.middleware.manager.GermplasmCharacteristicMananagerImpl;
 import org.strasa.middleware.manager.GermplasmManagerImpl;
 import org.strasa.middleware.manager.GermplasmTypeManagerImpl;
 import org.strasa.middleware.manager.KeyCharacteristicManagerImpl;
+import org.strasa.middleware.manager.StudyDataDynamicColumnManager;
 import org.strasa.middleware.manager.StudyGermplasmManagerImpl;
-import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.GermplasmType;
 import org.strasa.middleware.model.KeyMajorGenes;
@@ -250,7 +250,7 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 	}
 
 	public String getTotalKnownGermplasm() {
-		return "List of uploaded germplasm ("+lstKnownGermplasm.size() + " records )";
+		return "List of uploaded germplasm (" + lstKnownGermplasm.size() + " records )";
 	}
 
 	@Command
@@ -327,8 +327,8 @@ public class StudyGermplasmInfo extends ProcessTabViewModel {
 
 		lstGermplasmType = germMan.getAllGermplasmType();
 		GermplasmCharacteristicMananagerImpl germCharMan = new GermplasmCharacteristicMananagerImpl();
-		StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
-		List<Germplasm> lst = rawMan.getStudyGermplasmInfo(studyID, dataset.getId());
+		// StudyRawDataManagerImpl rawMan = new StudyRawDataManagerImpl(isRaw);
+		List<Germplasm> lst = new StudyDataDynamicColumnManager(isRaw).getStudyGermplasmFromDataset(studyID, dataset.getId());
 
 		StudyGermplasmManagerImpl studyGermMan = new StudyGermplasmManagerImpl();
 

@@ -33,6 +33,7 @@ import org.strasa.middleware.model.StudyRawDataByDataColumn;
 import org.strasa.middleware.model.StudyRawDataByDataColumnExample;
 import org.strasa.middleware.model.StudyRawDataExample;
 import org.strasa.middleware.model.StudySite;
+import org.strasa.middleware.model.custom.StudyRawDataDynCol;
 import org.strasa.web.common.api.ExcelHelper;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 
@@ -230,6 +231,45 @@ public class StudyRawDataManagerImpl {
 
 	}
 
+	public void addStudyRawUsingDynaCols(Study study, List<String[]> rawCSVData, int dataset) {
+		String[] header = rawCSVData.get(0);
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
+		StudyRawDataBatch studyRawBatch = session.getMapper(StudyRawDataBatch.class);
+		StudyRawDataMapper rawMapper = session.getMapper(StudyRawDataMapper.class);
+		try {
+			addStudy(study);
+			List<StudyRawDataDynCol> lstData = new ArrayList<StudyRawDataDynCol>();
+
+			System.out.println("USING STUDYRAWDYNACOL IN STUDYID: " + study.getId());
+			for (int i = 1; i < rawCSVData.size(); i++) {
+				String[] row = rawCSVData.get(i);
+				StudyRawDataDynCol lstRow = new StudyRawDataDynCol();
+				lstRow.setDatarow(i);
+				lstRow.setDataset(dataset);
+				lstRow.setStudyid(study.getId());
+				ArrayList<String> lstDynaCols = new ArrayList<String>();
+
+				for (int j = 0; j < header.length; j++) {
+
+					if (row.length == header.length) {
+
+						lstDynaCols.add(header[j]);
+						lstDynaCols.add(row[j]);
+					}
+					lstRow.setRows(lstDynaCols);
+					lstData.add(lstRow);
+				}
+			}
+
+			// studyRawBatch.insertBatchDynaColRaw(lstData);
+			session.commit();
+
+		} finally {
+			session.close();
+		}
+
+	}
+
 	public void addStudyRawDataByRawCsvList(Study study, List<String[]> rawCSVData, int dataset) {
 		String[] header = rawCSVData.get(0);
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession(ExecutorType.BATCH);
@@ -411,6 +451,7 @@ public class StudyRawDataManagerImpl {
 				mCsvWriter.writeAll(arrDump);
 				mCsvWriter.flush();
 				mCsvWriter.close();
+
 				java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://localhost/strasa", "root", "root");
 				java.sql.Statement stmt = con.createStatement();
 				String sql = "LOAD DATA LOCAL INFILE '" + tempCSVFile.getAbsolutePath().replace("\\", "\\\\") + "' INTO TABLE studyrawdata FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n'";

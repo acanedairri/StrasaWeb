@@ -38,6 +38,7 @@ import org.apache.commons.io.input.ReaderInputStream;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
+import org.strasa.middleware.manager.StudyDataDynamicColumnManager;
 import org.strasa.middleware.manager.StudyDataSetManagerImpl;
 import org.strasa.middleware.manager.StudyGermplasmManagerImpl;
 import org.strasa.middleware.manager.StudyLocationManagerImpl;
@@ -804,7 +805,8 @@ public class RawDataView extends ProcessTabViewModel {
 					this.mainTab.setLabel(this.dataset.getTitle());
 					new StudyDataSetManagerImpl().addDataSet(newdataset);
 				}
-				studyRawData.addStudyRawData(study, columnList, dataList, newdataset.getId(), isRawData, this.userID);
+				new StudyDataDynamicColumnManager(isRawData).addStudyDataFromCsv(study, columnList, dataList, newdataset.getId(), isRawData, this.userID);
+				new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), columnList.toArray(new String[columnList.size()]), isRawData, newdataset.getId());
 				this.dataset = newdataset;
 			}
 

@@ -38,6 +38,7 @@ import org.apache.commons.io.input.ReaderInputStream;
 import org.strasa.middleware.manager.ProgramManagerImpl;
 import org.strasa.middleware.manager.ProjectManagerImpl;
 import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
+import org.strasa.middleware.manager.StudyDataDynamicColumnManager;
 import org.strasa.middleware.manager.StudyDataSetManagerImpl;
 import org.strasa.middleware.manager.StudyGermplasmManagerImpl;
 import org.strasa.middleware.manager.StudyLocationManagerImpl;
@@ -731,13 +732,20 @@ public class DerivedDataView extends ProcessTabViewModel {
 					newdataset.setStudyid(this.studyID);
 					new StudyDataSetManagerImpl().addDataSet(newdataset);
 				}
-				studyRawData.addStudyRawData(study, columnList, dataList, newdataset.getId(), isRawData, this.userID);
+
+				new StudyDataDynamicColumnManager(isRawData).addStudyDataFromCsv(study, columnList, dataList, newdataset.getId(), isRawData, this.userID);
+				new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), columnList.toArray(new String[columnList.size()]), isRawData, newdataset.getId());
+				// studyRawData.addStudyRawData(study, columnList, dataList,
+				// newdataset.getId(), isRawData, this.userID);
 				this.dataset = newdataset;
 			}
 
 			studyRawData.addStudy(study);
 
-			new StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(), columnList.toArray(new String[columnList.size()]), isRawData, this.dataset.getId());
+			// new
+			// StudyDataColumnManagerImpl().addStudyDataColumn(study.getId(),
+			// columnList.toArray(new String[columnList.size()]), isRawData,
+			// this.dataset.getId());
 
 			isDataUploaded = true;
 			BindUtils.postNotifyChange(null, null, this, "*");

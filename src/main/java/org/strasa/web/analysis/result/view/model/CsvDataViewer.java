@@ -18,7 +18,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Include;
-import org.zkoss.zul.Window;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -27,23 +26,16 @@ public class CsvDataViewer {
 	@Wire("#datagrid")
 	Div divDatagrid;
 
-
-
 	private String filePath;
 
 	private List<String> columnList;
-	private List<String[]> dataList=new ArrayList<String[]>();
-
+	private List<String[]> dataList = new ArrayList<String[]>();
 
 	private String dataType;
 	private CSVReader reader;
 	private List<String[]> rawData;
 
-
-
 	private Object na;
-
-
 
 	private String name;
 
@@ -51,19 +43,13 @@ public class CsvDataViewer {
 		// TODO Auto-generated constructor stub
 	}
 
-
-
 	public List<String[]> getDataList() {
 		return dataList;
 	}
 
-
-
 	public void setDataList(List<String[]> dataList) {
 		this.dataList = dataList;
 	}
-
-
 
 	public List<String> getColumnList() {
 
@@ -74,21 +60,20 @@ public class CsvDataViewer {
 		this.columnList = columnList;
 	}
 
-
 	public ArrayList<ArrayList<String>> getCsvData() {
 		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
 		if (dataList.isEmpty())
 			return result;
-		for (int i = 0;  i < dataList.size(); i++) {
+		for (int i = 0; i < dataList.size(); i++) {
 			ArrayList<String> row = new ArrayList<String>();
 			row.addAll(Arrays.asList(dataList.get(i)));
 			result.add(row);
 			row.add(0, "  ");
-//			System.out.println(Arrays.toString(dataList.get(i)) + "ROW: " + row.get(0));
+			// System.out.println(Arrays.toString(dataList.get(i)) + "ROW: " +
+			// row.get(0));
 		}
 		return result;
 	}
-
 
 	@Init
 	public void init(@ExecutionArgParam("csvReader") CSVReader reader, @ExecutionArgParam("name") String name) throws IOException {
@@ -103,8 +88,10 @@ public class CsvDataViewer {
 	}
 
 	public void includeDataGrid() {
-		/*		if (!divDatagrid.getChildren().isEmpty())
-			divDatagrid.getFirstChild().detach();*/
+		/*
+		 * if (!divDatagrid.getChildren().isEmpty())
+		 * divDatagrid.getFirstChild().detach();
+		 */
 		Include incCSVData = new Include();
 		incCSVData.setSrc("/user/analysis/csvgrid.zul");
 		incCSVData.setParent(divDatagrid);
@@ -112,7 +99,7 @@ public class CsvDataViewer {
 
 	@Command
 	public void exportRowData(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx, @ContextParam(ContextType.VIEW) Component view) {
-		FileUtilities.exportData(getColumnList(),getDataList(),name);
+		FileUtilities.exportData(getColumnList(), getDataList(), name);
 
 	}
 
@@ -131,7 +118,7 @@ public class CsvDataViewer {
 			columnList = new ArrayList<String>(Arrays.asList(rawData.get(0)));
 			rawData.remove(0);
 			dataList = new ArrayList<String[]>(rawData);
-//			System.out.println(Arrays.toString(dataList.get(0)));
+			// System.out.println(Arrays.toString(dataList.get(0)));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -141,6 +128,7 @@ public class CsvDataViewer {
 		}
 
 	}
+
 	public void reloadCsvGrid() {
 
 		if (!divDatagrid.getChildren().isEmpty())
@@ -149,6 +137,5 @@ public class CsvDataViewer {
 		incCSVData.setSrc("/user/updatestudy/csvdata.zul");
 		incCSVData.setParent(divDatagrid);
 	}
-
 
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.strasa.middleware.manager.BrowseStudyManagerImpl;
 import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
+import org.strasa.middleware.manager.StudyDataDynamicColumnManager;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.model.StudyDataColumn;
 import org.strasa.web.utilities.FileUtilities;
@@ -25,22 +26,22 @@ public class DataSet {
 	private int activePage = 0;
 	private String filePath;
 	private String studyName;
-
+	private Long totalRows;
 	private List<String> columnList;
 	private List<String[]> dataList;
 
 	private BrowseStudyManagerImpl browseStudyManagerImpl;
 	private StudyManagerImpl studyMan;
 
-	private Integer studyId;
+	private Integer studyid;
 	private Integer dataset;
 
 	public Integer getStudyId() {
-		return studyId;
+		return studyid;
 	}
 
 	public void setStudyId(Integer studyId) {
-		this.studyId = studyId;
+		this.studyid = studyId;
 	}
 
 	public Integer getDataset() {
@@ -61,15 +62,15 @@ public class DataSet {
 	public void showzulfile(@BindingParam("zulFileName") String zulFileName, @BindingParam("target") Tabpanel panel) {
 		if (panel != null && panel.getChildren().isEmpty()) {
 			Map arg = new HashMap();
-			arg.put("studyId", studyId);
-			arg.put("studyid", studyId);
+			arg.put("studyId", studyid);
+			arg.put("studyid", studyid);
 			arg.put("dataset", dataset);
 			Executions.createComponents(zulFileName, panel, arg);
 		}
 	}
 
-	public int getTotalSize() {
-		return dataList.size();
+	public Long getTotalSize() {
+		return totalRows;
 	}
 
 	public int getPageSize() {
@@ -102,16 +103,12 @@ public class DataSet {
 
 	public ArrayList<ArrayList<String>> getRowData() {
 		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
-		if (dataList.isEmpty())
-			return null;
-		for (int i = activePage * pageSize; i < activePage * pageSize + pageSize && i < dataList.size(); i++) {
-			ArrayList<String> row = new ArrayList<String>();
-			row.addAll(Arrays.asList(dataList.get(i)));
-			result.add(row);
-			row.add(0, "  ");
-			System.out.println(Arrays.toString(dataList.get(i)) + "ROW: " + row.get(0));
-		}
-		return result;
+
+		Integer start = activePage * pageSize;
+		Integer limit = pageSize;
+		System.out.println("START");
+
+		return new StudyDataDynamicColumnManager(dataType.endsWith("rd")).getStudyRawDataDynaCols(studyid, null, start, limit);
 	}
 
 	public List<String[]> getDataList() {
@@ -142,8 +139,8 @@ public class DataSet {
 		// System.out.println("StudyId:"+ Integer.toString(studyId)
 		// +" and dataset:" +Integer.toString(dataset));
 		System.out.println("MERGED DATASETTYPE: " + dataType + " - " + dataset);
-		List<HashMap<String, String>> toreturn = browseStudyManagerImpl.getStudyData(studyId, dataType, dataset);
-		System.out.println("Size:" + toreturn.size());
+
+		totalRows = new StudyDataDynamicColumnManager(dataType.endsWith("rd")).countStudyDynamicCOl(studyId, null);
 		List<StudyDataColumn> columns = new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyId, dataType, dataset); // rd
 																																	// as
 																																	// raw
@@ -156,18 +153,6 @@ public class DataSet {
 			columnList.add(d.getColumnheader());
 			System.out.print(d.getColumnheader() + "\t");
 		}
-		System.out.println("\n ");
-		for (HashMap<String, String> rec : toreturn) {
-			ArrayList<String> newRow = new ArrayList<String>();
-			for (StudyDataColumn d : columns) {
-				String value = rec.get(d.getColumnheader());
-				newRow.add(value);
-				System.out.print(value + "\t");
-			}
-			System.out.println("\n ");
-			dataList.add(newRow.toArray(new String[newRow.size()]));
-
-		}
 
 		setStudyName(studyMan.getStudyById(studyId).getName());
 	}
@@ -179,9 +164,9 @@ public class DataSet {
 		// grid.add(0,columns.toArray(new String[columns.size()]));
 
 		if (dataType.endsWith("dd"))
-			FileUtilities.exportData(columns, rows, studyName + "_rawData.csv");
+			FileUtilities.exportData2(columns, new StudyDataDynamicColumnManager(false).getStudyRawDataDynaCols(studyid, dataset, null, null), studyName + "_rawData.csv");
 		else
-			FileUtilities.exportData(columns, rows, studyName + "_derivedData.csv");
+			FileUtilities.exportData2(columns, new StudyDataDynamicColumnManager(false).getStudyRawDataDynaCols(studyid, dataset, null, null), studyName + "_derivedData.csv");
 	}
 
 	public String getFilePath() {

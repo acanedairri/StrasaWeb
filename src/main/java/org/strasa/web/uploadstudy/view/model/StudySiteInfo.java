@@ -29,9 +29,9 @@ import org.strasa.middleware.manager.LocationManagerImpl;
 import org.strasa.middleware.manager.PlantingTypeManagerImpl;
 import org.strasa.middleware.manager.SoilTypeManagerImpl;
 import org.strasa.middleware.manager.StudyAgronomyManagerImpl;
+import org.strasa.middleware.manager.StudyDataDynamicColumnManager;
 import org.strasa.middleware.manager.StudyDesignManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
-import org.strasa.middleware.manager.StudyRawDataManagerImpl;
 import org.strasa.middleware.manager.StudySiteManagerImpl;
 import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.Location;
@@ -619,8 +619,6 @@ public class StudySiteInfo extends ProcessTabViewModel {
 
 		lstLocations.addAll(new LocationManagerImpl().getAllLocations());
 
-		StudyRawDataManagerImpl studyRawMan = new StudyRawDataManagerImpl(isRaw);
-
 		String studyStartYear = new StudyManagerImpl().getStudyById(this.getStudyID()).getStartyear();
 
 		if (studySiteMan.isSiteRecordExist(this.getStudyID()) && !this.isDataReUploaded) {
@@ -641,7 +639,7 @@ public class StudySiteInfo extends ProcessTabViewModel {
 			}
 
 		} else {
-			List<StudySite> lstSiteRaw = studyRawMan.getStudySiteInfo(this.getStudyID(), dataset.getId());
+			List<StudySite> lstSiteRaw = new StudyDataDynamicColumnManager(isRaw).getStudySiteFromDataset(this.getStudyID(), dataset.getId());
 
 			System.out.println("SITE COUNT: " + lstSiteRaw.size());
 			for (StudySite siteData : lstSiteRaw) {

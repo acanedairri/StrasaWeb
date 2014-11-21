@@ -7,8 +7,10 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.factory.ConnectionFactory;
+import org.strasa.middleware.mapper.other.StudyRawDataBatch;
 import org.strasa.middleware.mapper.other.StudySummaryMapper;
 import org.strasa.middleware.model.StudyDataColumn;
+import org.strasa.middleware.model.StudyRawData;
 import org.strasa.web.browsestudy.view.model.StudyDataColumnModel;
 import org.strasa.web.browsestudy.view.model.StudySearchFilterModel;
 import org.strasa.web.browsestudy.view.model.StudySearchResultModel;
@@ -65,7 +67,7 @@ public class BrowseStudyManagerImpl {
 				rec.setStudyGenetics(6);
 				List<StudySummaryModel> genetics = mapper.selectCountOfStudyByStudyType(p.getProgramId(), rec.getStudyGenetics(), SecurityUtil.getDbUser().getId());
 				rec.setCountStudyGenetics(genetics.get(0).getCountStudyTypeId());
-				
+
 				System.out.println("rec:" + rec.toString());
 				s.add(rec);
 
@@ -139,4 +141,51 @@ public class BrowseStudyManagerImpl {
 
 	}
 
+	public List<StudyRawData> getStudyRawDataWithLimit(Integer studyid, Integer dataset, Integer start, Integer limit) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		try {
+			StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
+
+			return mapper.getStudyRawWithDataset(studyid, dataset, start, limit);
+
+		} finally {
+			session.close();
+		}
+	}
+
+	public List<StudyRawData> getStudyRawDataWithLimit(Integer studyid, Integer start, Integer limit) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		try {
+			StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
+
+			return mapper.getStudyRaw(studyid, start, limit);
+
+		} finally {
+			session.close();
+		}
+	}
+
+	public Long countStudyRawData(Integer studyid) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		try {
+			StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
+
+			return mapper.countStudyRow(studyid);
+
+		} finally {
+			session.close();
+		}
+	}
+
+	public Long countStudyRawData(Integer studyid, Integer dataset) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		try {
+			StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
+
+			return mapper.countStudyRowWithDataset(studyid, dataset);
+
+		} finally {
+			session.close();
+		}
+	}
 }

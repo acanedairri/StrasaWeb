@@ -1,8 +1,10 @@
 package org.strasa.middleware.manager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -55,6 +57,62 @@ public class StudyDataColumnManagerImpl {
 		} finally {
 			session.close();
 		}
+
+	}
+
+	public ArrayList<String> getExistingColumn(int studyId, String datatype, Integer dataset, List<String> list) {
+		List<StudyDataColumn> lstColumns = getStudyDataColumnByStudyId(studyId, datatype, dataset);
+		ArrayList<String> returnVal = new ArrayList<String>();
+
+		for (StudyDataColumn col : lstColumns) {
+			if (list.contains(col.getColumnheader())) {
+				returnVal.add(col.getColumnheader());
+			}
+		}
+
+		return returnVal;
+
+	}
+
+	public List<Integer> getDatasetIdsFromColumns(String datatype, ArrayList<String> columns) {
+
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudyDataColumnMapper mapper = session.getMapper(StudyDataColumnMapper.class);
+		List<Integer> returnVal = new ArrayList<Integer>();
+		try {
+			HashMap<Integer, Integer> hshIdCount = new HashMap<Integer, Integer>();
+
+			for (String column : columns) {
+				StudyDataColumnExample example = new StudyDataColumnExample();
+				example.createCriteria().andColumnheaderEqualTo(column).andDatatypeEqualTo(datatype);
+				List<StudyDataColumn> preResult = mapper.selectByExample(example);
+				for (StudyDataColumn stCol : preResult) {
+					if (hshIdCount.containsKey(stCol.getDataset())) {
+						Integer curVal = hshIdCount.get(stCol.getDataset()) + 1;
+						hshIdCount.put(stCol.getDataset(), curVal);
+					} else {
+						hshIdCount.put(stCol.getDataset(), 1);
+					}
+				}
+
+			}
+			System.out.println(hshIdCount.size() + " HASHCOUNT");
+
+			for (Entry<Integer, Integer> entry : hshIdCount.entrySet()) {
+				Integer key = entry.getKey();
+				Integer value = entry.getValue();
+
+				if (value == columns.size())
+					returnVal.add(key);
+
+			}
+			System.out.println(returnVal.size() + " RETURNVALCOUNT");
+
+		} finally {
+			session.close();
+		}
+
+		return returnVal;
 
 	}
 
