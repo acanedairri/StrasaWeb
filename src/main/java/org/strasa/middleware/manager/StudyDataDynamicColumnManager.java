@@ -32,9 +32,9 @@ public class StudyDataDynamicColumnManager {
 	@WireVariable
 	ConnectionFactory connectionFactory;
 
-	String databaseURL = MariaDBConnectionSettings.databaseURL;
-	String user = MariaDBConnectionSettings.user;
-	String password = MariaDBConnectionSettings.password;
+	String databaseURL = MariaDBConnectionSettings.getDatabaseURL();
+	String user = MariaDBConnectionSettings.getUsername();
+	String password = MariaDBConnectionSettings.getPassword();
 
 	private boolean isRaw;
 
