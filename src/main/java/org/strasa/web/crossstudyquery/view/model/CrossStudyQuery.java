@@ -200,7 +200,7 @@ public class CrossStudyQuery extends StudyVariable {
 
 			@Override
 			public void onEvent(Event arg0) throws Exception {
-				StudyDataDynamicColumnQueryBuilder queryBuilder = new StudyDataDynamicColumnQueryBuilder();
+				StudyDataDynamicColumnQueryBuilder queryBuilder = new StudyDataDynamicColumnQueryBuilder(dataCategory.equals("rd"));
 				for (CrossStudyQueryFilterModel qfilter : crossStudyFilterModelList) {
 					if (qfilter.getOperator().equals("Equal")) {
 
@@ -222,7 +222,7 @@ public class CrossStudyQuery extends StudyVariable {
 					queryBuilder.addOtherVariable(studyvar.getVariablecode());
 				}
 
-				System.out.println("STARTING QUERY WITH" + queryBuilder.getQueriesColumn().size());
+				System.out.println("STARTING QUERY WITH" + dataCategory);
 
 				ArrayList<AcrossStudyData> toreturn = new StudyDataDynamicColumnManager(dataCategory.equals("rd")).getAcrossStudyResult(queryBuilder);
 				// System.out.println("Size:"+toreturn.size());

@@ -256,8 +256,10 @@ public class StudyManagerImpl {
 		StudySiteMapper siteMapper = session.getMapper(StudySiteMapper.class);
 		StudyLocationMapper locMapper = session.getMapper(StudyLocationMapper.class);
 		StudyDataColumnMapper dataColMapper = session.getMapper(StudyDataColumnMapper.class);
-		StudyDerivedDataMapper derivedMapper = session.getMapper(StudyDerivedDataMapper.class);
-		StudyRawDataMapper rawMapper = session.getMapper(StudyRawDataMapper.class);
+		// StudyDerivedDataMapper derivedMapper =
+		// session.getMapper(StudyDerivedDataMapper.class);
+		// StudyRawDataMapper rawMapper =
+		// session.getMapper(StudyRawDataMapper.class);
 		StudyFileMapper fileMapper = session.getMapper(StudyFileMapper.class);
 		StudyGermplasmMapper germplasmMapper = session.getMapper(StudyGermplasmMapper.class);
 
@@ -289,13 +291,8 @@ public class StudyManagerImpl {
 			dataColEx.createCriteria().andStudyidEqualTo(studyId);
 			dataColMapper.deleteByExample(dataColEx);
 
-			StudyRawDataExample rawEx = new StudyRawDataExample();
-			rawEx.createCriteria().andStudyidEqualTo(studyId);
-			rawMapper.deleteByExample(rawEx);
-
-			StudyDerivedDataExample derivedEx = new StudyDerivedDataExample();
-			derivedEx.createCriteria().andStudyidEqualTo(studyId);
-			derivedMapper.deleteByExample(derivedEx);
+			new StudyDataDynamicColumnManager(true).deleteStudyData(studyId);
+			new StudyDataDynamicColumnManager(false).deleteStudyData(studyId);
 
 			StudyFileExample fileEx = new StudyFileExample();
 			fileEx.createCriteria().andStudyidEqualTo(studyId);
@@ -384,8 +381,10 @@ public class StudyManagerImpl {
 		StudySiteMapper siteMapper = session.getMapper(StudySiteMapper.class);
 		StudyLocationMapper locMapper = session.getMapper(StudyLocationMapper.class);
 		StudyDataColumnMapper dataColMapper = session.getMapper(StudyDataColumnMapper.class);
-		StudyDerivedDataMapper derivedMapper = session.getMapper(StudyDerivedDataMapper.class);
-		StudyRawDataMapper rawMapper = session.getMapper(StudyRawDataMapper.class);
+		// StudyDerivedDataMapper derivedMapper =
+		// session.getMapper(StudyDerivedDataMapper.class);
+		// StudyRawDataMapper rawMapper =
+		// session.getMapper(StudyRawDataMapper.class);
 		StudyFileMapper fileMapper = session.getMapper(StudyFileMapper.class);
 		StudyGermplasmMapper germplasmMapper = session.getMapper(StudyGermplasmMapper.class);
 		StudyDataSetMapper datasetMapper = session.getMapper(StudyDataSetMapper.class);
@@ -416,15 +415,8 @@ public class StudyManagerImpl {
 			;
 			dataColMapper.deleteByExample(dataColEx);
 
-			StudyRawDataExample rawEx = new StudyRawDataExample();
-			rawEx.createCriteria().andStudyidEqualTo(studyId).andDatasetEqualTo(dataset);
-			;
-			rawMapper.deleteByExample(rawEx);
-
-			StudyDerivedDataExample derivedEx = new StudyDerivedDataExample();
-			derivedEx.createCriteria().andStudyidEqualTo(studyId).andDatasetEqualTo(dataset);
-			;
-			derivedMapper.deleteByExample(derivedEx);
+			String datatype = new StudyDataSetManagerImpl().getDataSet(dataset).getDatatype();
+			new StudyDataDynamicColumnManager(datatype.equals("rd")).deleteStudyDataset(dataset);
 
 			StudyGermplasmExample germplasmEx = new StudyGermplasmExample();
 			germplasmEx.createCriteria().andStudyidEqualTo(studyId).andDatasetEqualTo(dataset);

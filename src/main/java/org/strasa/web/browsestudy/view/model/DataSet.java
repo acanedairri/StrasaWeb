@@ -140,7 +140,7 @@ public class DataSet {
 		// +" and dataset:" +Integer.toString(dataset));
 		System.out.println("MERGED DATASETTYPE: " + dataType + " - " + dataset);
 
-		totalRows = new StudyDataDynamicColumnManager(dataType.endsWith("rd")).countStudyDynamicCOl(studyId, null);
+		totalRows = new StudyDataDynamicColumnManager(dataType.endsWith("rd")).countStudyDynamicCol(studyId, null);
 		List<StudyDataColumn> columns = new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyId, dataType, dataset); // rd
 																																	// as
 																																	// raw
