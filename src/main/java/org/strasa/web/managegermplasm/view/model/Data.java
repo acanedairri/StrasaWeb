@@ -1,4 +1,4 @@
-package org.strasa.web.browsestudy.view.model;
+package org.strasa.web.managegermplasm.view.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
 import org.strasa.middleware.manager.StudyDataDynamicColumnManager;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.model.StudyDataColumn;
+import org.strasa.middleware.model.custom.StudyDataDynamicColumnQueryBuilder;
 import org.strasa.web.utilities.FileUtilities;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
@@ -37,6 +38,7 @@ public class Data {
 	private String dataType;
 	private Div divDatagrid;
 	private List<StudyDataColumn> columns;
+	private StudyDataDynamicColumnQueryBuilder query;
 
 	public Data() {
 		// TODO Auto-generated constructor stub
@@ -84,11 +86,11 @@ public class Data {
 		Integer limit = pageSize;
 		System.out.println("START: " + dataType);
 
-		return new StudyDataDynamicColumnManager(dataType.equals("rd")).getStudyRawDataDynaCols(studyid, dataset, start, limit);
+		return new StudyDataDynamicColumnManager(dataType.equals("rd")).getStudyRawDataDynaColsWithWhere(studyid, dataset, start, limit, query);
 	}
 
 	@Init
-	public void init(@ExecutionArgParam("dataType") String dataType, @ExecutionArgParam("studyId") Integer studyId, @ExecutionArgParam("dataset") Integer dataset) {
+	public void init(@ExecutionArgParam("dataType") String dataType, @ExecutionArgParam("studyId") Integer studyId, @ExecutionArgParam("dataset") Integer dataset, @ExecutionArgParam("GName") String gName) {
 		setDataType(dataType);
 
 		studyMan = new StudyManagerImpl();
@@ -106,9 +108,13 @@ public class Data {
 		// System.out.println("and dataset:" +Integer.toString(dataset));
 		// List<HashMap<String, String>> toreturn =
 		// browseStudyManagerImpl.getStudyData(studyId, dataType, dataset);
-		columns = new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyId, dataType, dataset); // rd
-																											// as
-		totalRows = new StudyDataDynamicColumnManager(dataType.endsWith("rd")).countStudyDynamicCol(studyId, dataset); // raw
+
+		query = new StudyDataDynamicColumnQueryBuilder(dataType.equals("rd"));
+		query.andEqualTo("GName", gName);
+
+		columns = new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyId, dataType); // rd
+																									// as
+		totalRows = new StudyDataDynamicColumnManager(dataType.endsWith("rd")).countStudyDynamicColWithWhereClause(studyId, dataset, query); // raw
 		// data,
 		// dd
 		// as
@@ -133,7 +139,7 @@ public class Data {
 		if (!divDatagrid.getChildren().isEmpty())
 			divDatagrid.getFirstChild().detach();
 		Include incCSVData = new Include();
-		incCSVData.setSrc("/user/browsestudy/datagrid.zul");
+		incCSVData.setSrc("/user/managegermplasm/datagrid.zul");
 		incCSVData.setParent(divDatagrid);
 	}
 
@@ -171,5 +177,13 @@ public class Data {
 
 	public void setStudyName(String studyName) {
 		this.studyName = studyName;
+	}
+
+	public Integer getStudyid() {
+		return studyid;
+	}
+
+	public void setStudyid(Integer studyid) {
+		this.studyid = studyid;
 	}
 }

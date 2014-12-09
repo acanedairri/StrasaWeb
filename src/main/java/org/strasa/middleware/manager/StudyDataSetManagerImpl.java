@@ -56,6 +56,22 @@ public class StudyDataSetManagerImpl {
 
 	}
 
+	public List<StudyDataSet> getDataSetsByStudyId(Integer studyID, String datatype) {
+
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudyDataSetMapper mapper = session.getMapper(StudyDataSetMapper.class);
+
+		try {
+			StudyDataSetExample example = new StudyDataSetExample();
+			example.createCriteria().andStudyidEqualTo(studyID).andDatatypeEqualTo(datatype);
+			System.out.println("STUDYID : + " + studyID);
+			return mapper.selectByExample(example);
+		} finally {
+			session.close();
+		}
+
+	}
+
 	public StudyDataSet getDataSet(Integer datasetID) {
 
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();

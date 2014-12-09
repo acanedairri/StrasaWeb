@@ -105,49 +105,16 @@
 
 		<groupbox id="StudyTestedId" mold="3d">
 			<caption label="Studies where this germplasm is tested" />
-			<grid height="200px" model="@load(vm.studyTested)" oddRowSclass="odd"
-				emptyMessage="No Record Found" sizedByContent="true"
-				zclass="none">
-
-				<columns sizable="true">
-					<column label="Study Name" width="200px"/>
-					<column label="Program" />
-					<column label="Project" />
-					<column label="Study Type" />
-					<column label="Start Year" />
-					<column label="End Year" />
-					<column label="Location" />
-					<column label="Country" />
-
-				</columns>
-				<template name="model">
-					<row>
-						<toolbarbutton if="${vm.parentSource=='study'}"
-							label="@load(each.studyname)"
-							onClick="@global-command('openStudyDetailInStudy', studyid=each.id,studyName=each.studyname)"
-							class="grid-link" />
-
-						<toolbarbutton
-							if="${vm.parentSource=='germplasm'}"
-							label="@load(each.studyname)"
-							onClick="@global-command('openStudyDetailInGermplasm', studyid=each.id,studyName=each.studyname)"
-							class="grid-link" />
-
-						<toolbarbutton
-							if="${vm.parentSource=='crossstudy'}"
-							label="@load(each.studyname)"
-							onClick="@global-command('openStudyDetailInAcrossStudy', studyid=each.id,studyName=each.studyname)"
-							class="grid-link" />
-						<label value="@load(each.programname)" />
-						<label value="@load(each.projectname)" />
-						<label value="@load(each.studytypename)" />
-						<label value="@load(each.startyear)" />
-						<label value="@load(each.endyear)" />
-						<label value="@load(each.locationname)" />
-						<label value="@load(each.country)" />
-					</row>
-				</template>
-			</grid>
+			<tabbox id="tabData" mold="accordion">
+				<tabs>
+					<tab label="" />
+					<tab label="" />
+				</tabs>
+				<tabpanels>
+					<tabpanel></tabpanel>
+					<tabpanel></tabpanel>
+				</tabpanels>
+			</tabbox>
 		</groupbox>
 	</div>
 

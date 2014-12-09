@@ -2,6 +2,7 @@ package org.strasa.middleware.manager;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.ibatis.session.ExecutorType;
@@ -31,6 +32,41 @@ public class StudyGermplasmManagerImpl {
 			StudyGermplasmExample example = new StudyGermplasmExample();
 			example.createCriteria().andStudyidEqualTo(studyID);
 			return mapper.selectByExample(example);
+
+		} finally {
+			session.close();
+		}
+	}
+
+	public List<StudyGermplasm> getStudyGermplasmByStudyIdAndByGref(int studyID, Integer gref) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
+
+		try {
+			StudyGermplasmExample example = new StudyGermplasmExample();
+			example.createCriteria().andStudyidEqualTo(studyID).andGrefEqualTo(gref);
+			return mapper.selectByExample(example);
+
+		} finally {
+			session.close();
+		}
+	}
+
+	public ArrayList<Integer> getStudyIDFromGermplasmID(int germplasmID) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
+
+		try {
+			HashSet<Integer> setUniq = new HashSet<Integer>();
+			StudyGermplasmExample example = new StudyGermplasmExample();
+			example.createCriteria().andGrefEqualTo(germplasmID);
+			List<StudyGermplasm> lstStudyGerm = mapper.selectByExample(example);
+			ArrayList<Integer> returnVal = new ArrayList<Integer>();
+			for (StudyGermplasm stgm : lstStudyGerm) {
+				if (setUniq.add(stgm.getStudyid()))
+					returnVal.add(stgm.getStudyid());
+			}
+			return returnVal;
 
 		} finally {
 			session.close();

@@ -1,0 +1,35 @@
+<zk>
+	<!-- <style src="../css/main.css" /> -->
+	<style>
+		.gridMaxBodyHeight550 .z-grid-body { max-height: 550px; height:
+		350px; overflow: auto; .odd, .odd > td { color:black;
+		background-color:#F5F5F5 !important; }
+	</style>
+	<script src="http://stanlemon.net/javascript/jquery.jgrowl.js" />
+	<style src="http://stanlemon.net/stylesheet/jquery.jgrowl.css" />
+
+	<div width="100%" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.common.api.DynamicGridView')">
+
+		
+<grid id="reportGrid" model="@load(vm.lstRows)" mold="paging" pageSize="50">
+  <columns children="@load(vm.lstColumns)">
+    <template name="children" var="columnName">
+      <column label="@load(columnName)"/>
+    </template>
+  </columns>
+  <rows children="@bind(vm.lstRows)">
+  	<template name="children" var="data">
+  		<row>
+  			<label forEach="${data}" value="${each}" />
+  		</row>
+  	</template>
+  </rows>
+</grid>
+
+
+
+
+	</div>
+
+</zk>

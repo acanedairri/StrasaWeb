@@ -68,7 +68,7 @@ public class UploadTemplateSimulator {
 		// StudyDataDynamicColumnManager().getStudyRawDataDynaCols(139, null, 0,
 		// 10);
 
-		StudyDataDynamicColumnQueryBuilder sqlBuilder = new StudyDataDynamicColumnQueryBuilder();
+		StudyDataDynamicColumnQueryBuilder sqlBuilder = new StudyDataDynamicColumnQueryBuilder(true);
 		sqlBuilder.andEqualTo("CMD", "200").andEqualTo("AMY", "200");
 		ArrayList<AcrossStudyData> lstResult = new StudyDataDynamicColumnManager(true).getAcrossStudyResult(sqlBuilder);
 		for (AcrossStudyData res : lstResult) {

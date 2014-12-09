@@ -3,15 +3,21 @@ package org.strasa.middleware.model.custom;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.strasa.middleware.manager.StudyDataColumnManagerImpl;
+import org.strasa.web.managegermplasm.view.model.AcrossQueryException;
 
 import com.mysql.jdbc.PreparedStatement;
 
 public class StudyDataDynamicColumnQueryBuilder {
+	public boolean isRaw;
+	public ArrayList<Queries> arrQueries = new ArrayList<Queries>();
 
-	ArrayList<Queries> arrQueries = new ArrayList<Queries>();
+	public StudyDataDynamicColumnQueryBuilder(boolean isRaw) {
+		this.isRaw = isRaw;
+	}
 
 	public StudyDataDynamicColumnQueryBuilder andEqualTo(String column, String value) {
 
@@ -60,7 +66,7 @@ public class StudyDataDynamicColumnQueryBuilder {
 		return this;
 	}
 
-	public PreparedStatement buildQuery(java.sql.Connection con) throws SQLException {
+	public PreparedStatement buildQuery(java.sql.Connection con) throws SQLException, AcrossQueryException {
 		StringBuilder strBaseQuery = new StringBuilder();
 		System.out.print("BUILDING QUERY");
 		HashSet<String> lstDuplicate = new HashSet<String>();
@@ -68,13 +74,16 @@ public class StudyDataDynamicColumnQueryBuilder {
 		strBaseQuery.append("SELECT * from (SELECT studyid, COLUMN_GET(dynamic_cols, 'GName' as char) AS Gname ");
 
 		for (Queries q : arrQueries) {
-			if (lstDuplicate.add(q.column))
+			if (lstDuplicate.add(q.column) && !q.column.equals("GName"))
 				strBaseQuery.append(", COLUMN_GET(dynamic_cols, '" + q.column + "' as char) AS '" + q.column + "'");
 
 		}
-
-		strBaseQuery.append("FROM  studyrawdatadynacol WHERE dataset IN (");
-		strBaseQuery.append(StringUtils.join(new StudyDataColumnManagerImpl().getDatasetIdsFromColumns("rd", getQueriesColumn()).toArray(), ","));
+		List<Integer> lstCols = new StudyDataColumnManagerImpl().getDatasetIdsFromColumns(((isRaw) ? "rd" : "dd"), getQueriesColumn());
+		if (lstCols.isEmpty()) {
+			throw new AcrossQueryException("No study is using this study");
+		}
+		strBaseQuery.append("FROM  " + ((isRaw) ? "studyrawdatadynacol" : "studyderivedatadynacol") + " WHERE dataset IN (");
+		strBaseQuery.append(StringUtils.join(lstCols.toArray(), ","));
 		strBaseQuery.append(")) as s WHERE ");
 		ArrayList<String> arrWhereSQL = new ArrayList<String>();
 		for (Queries q : arrQueries) {
