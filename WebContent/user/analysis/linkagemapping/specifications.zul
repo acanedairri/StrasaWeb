@@ -5,9 +5,9 @@
 		viewModel="@id('vm') @init('org.strasa.web.analysis.linkagemapping.view.Index')"
 		height="100%">
 		<tabbox id="tb" width="100%" height="750px" mold="accordion">
-			<tabs>
+		<tabs>
 				<tab label="Load Data" />
-				<tab label="Data Quality Check" />
+				<tab label="Data Quality Check" /> 	
 				<tab label="Analysis:" />
 			</tabs>
 			<tabpanels>
@@ -18,21 +18,24 @@
 							Cross Type:
 							<combobox id="crosstype"
 								model="@load(vm.crosstypeList)"
-								selectedItem="@bind(vm.chosenCrosstype)" autodrop="true">
-								<template name="model">
+								selectedItem="@bind(vm.chosenCrosstype)"
+								onChange="@command('chooseCrossType', selected = self.selectedIndex)"
+								autodrop="true">
+								<template name="mod	el">
 									<comboitem
-										label="@load(each.crosstype)" />
+										label="@load(each)" />
 								</template>
 							</combobox>
-							BC:
-							<spinner id="spinnerBCnum" value="0" />
-							F:
-							<spinner id="spinnerFnum" value="0" />
+							
+							<label id="lblBCSpinner" value="BC:" visible="false"/>
+							<spinner id="spinnerBCnum" value="0" visible="false" />
+							<label id="lblFSpinner" value="F:" visible="true"/>
+							<spinner id="spinnerFnum" value="0" visible="true" />
 							<separator bar="true" />
 							Data Format:
 							<combobox id="dataformat"
 								model="@load(vm.dataFormatList)"
-								selectedIndex="@bind(vm.chosenDataFormat)" visible="true"
+								selectedItem="@bind(vm.chosenDataFormat)" visible="true"
 								autodrop="true"
 								onChange="@command('visibility', selected = self.selectedIndex)">
 								<template name="model">
@@ -139,7 +142,8 @@
 									model="@load(vm.traitType)" autodrop="true"
 									selectedItem="@bind(vm.selectedTraitType)"
 									onChange="@command('updatePModel')">
-									<template name="model">
+			    
+			    						<template name="model">
 										<comboitem label="${each}" />
 									</template>
 								</combobox>
@@ -148,16 +152,9 @@
 						<listitem>
 							<listcell label="Traits:" />
 							<listcell>
-								<vlayout>
-									<checkbox id="traitYield"
-										label="Yield" />
-									<checkbox id="traitPitht"
-										label="Pitht" />
-									<checkbox id="traitAwit"
-										label="Awit" />
-									<checkbox id="traitAwwd"
-										label="Awwd" />
-								</vlayout>
+								<div id="checkboxDiv">
+								<vlayout id="divVlayout" />
+								</div>
 							</listcell>
 						</listitem>
 						<listitem>
@@ -217,13 +214,14 @@
 										visible="@load(vm.mapping1)">
 										<caption label="Options:" />
 										No. Of Permutations:
-										<doublespinner
-											id="dbNPermutations" value="100" step="0.1" />
+										<spinner
+											id="dbNPermutations" value="99" step="1" />
 										<separator bar="false" />
 										Phenotype Model :
 										<combobox id="pModel"
 											model="@load(vm.pModel)" autodrop="true"
-											selectedItem="@bind(vm.comboboxMapping)">
+											selectedItem="@bind(vm.comboboxMapping)"
+											onChange="@command('choosePModel', selected = self.selectedItem)">
 											<template name="model">
 												<comboitem
 													label="${each}" />
@@ -231,7 +229,7 @@
 										</combobox>
 										<separator bar="false" />
 										Method:
-										<combobox id="pMethodList"
+										<combobox id="comboPMethod"
 											model="@load(vm.pMethod)" autodrop="true"
 											selectedItem="@bind(vm.coboboxmapping2)">
 											<template name="model">
@@ -323,7 +321,7 @@
 										Prior expected number of QTLs:
 										<space width="10px" bar="false" />
 										Main Effect:
-										<textbox width="50px"
+										<textbox width="50px"           
 											id="maineffect" value="0" />
 										<space width="10px" bar="false" />
 										All:

@@ -13,7 +13,7 @@ public class QTLAnalysisModel {
 
 	private String outFileName;	//supply path and name of text file where text output for analysis is going to be saved
 	private String resultFolderPath; //supply path where the graphs will be saved "E:/App Fil	es/workspace_Juno/RJavaManager/sample_datasets"
-	private String dataFormat; //supply data format used - "default", "R", Map Maker", "Map Manager", "QTL Cartographer" 
+	private String dataFormat; //supply data frmat used - "default", "R", Map Maker", "Map Manager", "QTL Cartographer" 
 	private String format1; //supply format of the first input file, whether "csv", "ctxt", "stxt", "ttxt", or "sctxt" 
 	private String crossType; //supply type of cross used, whether "f2", "bc", "risib", "riself", "bcsft"
 	private String file1; //supply path and name of first input file
@@ -48,7 +48,7 @@ public class QTLAnalysisModel {
 	private String mapCalc; //c("haldane","kosambi","c-f","morgan")														
 	private double lodCutoffM;																				//reqd																									
 	private String phenoModel; // "binary"; //"normal";//c("normal","binary","2part","np")														
-	private String alMethod;//c("em","imp","hk","ehk","mr","mr-imp","mr-argmax")							//reqd
+	private String	alMethod;//c("em","imp","hk","ehk","mr","mr-imp","mr-argmax")							//reqd
 	private int nPermutations;//100																			//reqd
 	private int numCovar; 					//3  	
 	private double winSize;				//10
@@ -72,7 +72,7 @@ public class QTLAnalysisModel {
 
 		setDataCheckOutFileName(DATA_PATH + "QTL_dataCheck.txt");
 		setOutFileName(DATA_PATH + "QTL_output.txt");
-		setResultFolderPath(DATA_PATH);  // outputPath = "E:/App Files/workspace_Juno/RJavaManager/sample_datasets"
+		setResultFolderPath(DATA_PATH.replace(BSLASH, FSLASH));  // outputPath = "E:/App Files/workspace_Juno/RJavaManager/sample_datasets"
 		setDataFormat("default");
 		setFormat1("csv");
 		setCrossType ("f2"); 

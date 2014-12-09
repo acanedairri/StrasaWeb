@@ -39,7 +39,7 @@ public class RServeManager {
 	}
 
 	private void readData(String dataFileName){
-		String readData = "dataRead <- read.csv(\"" + dataFileName + "\", header = TRUE, na.strings = c(\"NA\",\".\",\"\"), blank.lines.skip=TRUE, sep = \",\")";
+		String readData = "dataRead <- read.csv(\"" + dataFileName + "\", header = TRUE, na.strings = c(\"NA\",\".\",\"-\",\"\"), blank.lines.skip=TRUE, sep = \",\")";
 		System.out.println(readData);
 		try {
 			rConnection.eval(readData);
@@ -627,8 +627,8 @@ public class RServeManager {
 					}
 
 					//default output: save the means, standard error of the mean, variance and no. of reps in a file
-					String checkMeanSSE = rConnection.eval("ssa1$meansseWarning").toString();
-					String checkVarRep = rConnection.eval("ssa1$varrepWarning").toString();
+					String checkMeanSSE = rConnection.eval("ssa1$meansseWarning").asString();
+					String checkVarRep = rConnection.eval("ssa1$varrepWarning").asString();
 					System.out.println("checkMeanSSE: " + checkMeanSSE);
 					System.out.println("checkVarRep: " + checkVarRep);
 
@@ -1790,7 +1790,7 @@ public class RServeManager {
 							String outDescStat = "capture.output(cat(\"DESCRIPTIVE STATISTICS:\n\n\"),file=\"" + outFileName + "\",append = TRUE)"; 
 							String outDescStat2 = "capture.output(outDesc,file=\"" + outFileName + "\",append = TRUE)";
 
-							String runSuccessDescStat = rConnection.eval("class(outDesc)").toString();	
+							String runSuccessDescStat = rConnection.eval("class(outDesc)").asString();	
 							if (runSuccessDescStat != null && runSuccessDescStat.equals("try-error")) {	
 								System.out.println("desc stat: error");
 								String checkError = "msg <- trimStrings(strsplit(outDesc, \":\")[[1]])";
@@ -1845,7 +1845,7 @@ public class RServeManager {
 								printAllOutputFixed=false;
 
 							} else {
-								String lmerRun=rConnection.eval("ssa1$output[[" + i + "]]$site[[" + j + "]]$lmerRun").toString();
+								String lmerRun=rConnection.eval("ssa1$output[[" + i + "]]$site[[" + j + "]]$lmerRun").asString();
 								if (lmerRun.equals("ERROR")) {
 									String lmerError = rConnection.eval("ssa1$output[[" + i + "]]$site[[" + j + "]]$lmerError").toString();
 									String printError1 = "capture.output(cat(\"***\\n\"), file=\"" + outFileName + "\",append = TRUE)";
@@ -1874,7 +1874,7 @@ public class RServeManager {
 								rConnection.eval(funcTrialSum);
 								//								System.out.println(funcTrialSum);
 
-								String runSuccessTS = rConnection.eval("class(funcTrialSum)").toString();
+								String runSuccessTS = rConnection.eval("class(funcTrialSum)").asString();
 								if (runSuccessTS != null && runSuccessTS.equals("try-error")) {	
 									System.out.println("class info: error");
 									String checkError = "msg <- trimStrings(strsplit(funcTrialSum, \":\")[[1]])";
@@ -1988,7 +1988,7 @@ public class RServeManager {
 										System.out.println(compareCtrl);
 										rConnection.eval(compareCtrl);
 
-										String runSuccessCompareCtrl = rConnection.eval("class(cntrl)").toString();
+										String runSuccessCompareCtrl = rConnection.eval("class(cntrl)").asString();
 										if (runSuccessCompareCtrl != null && runSuccessCompareCtrl.equals("try-error")) {
 											System.out.println("compare with control: error");
 											String checkError = "msg <- trimStrings(strsplit(cntrl, \":\")[[1]])";
@@ -2018,7 +2018,7 @@ public class RServeManager {
 										String readContrastData = "contrastData <- read.csv(\"" + contrastFileName + "\", header = TRUE, na.strings = c(\"NA\",\".\",\" \",\"\"), blank.lines.skip=TRUE, sep = \",\")";
 										System.out.println(readContrastData);
 										rConnection.eval(readContrastData);
-										String runSuccessContrastData = rConnection.eval("contrastData").toString();
+										String runSuccessContrastData = rConnection.eval("contrastData").asString();
 
 										if (runSuccessContrastData != null && runSuccessContrastData.equals("notRun")) {	
 											System.out.println("error");
@@ -2028,7 +2028,7 @@ public class RServeManager {
 											System.out.println(userContrast);
 											rConnection.eval(userContrast);
 
-											String runSuccessUserCtrl = rConnection.eval("class(userContrast)").toString();
+											String runSuccessUserCtrl = rConnection.eval("class(userContrast)").asString();
 											if (runSuccessUserCtrl != null && runSuccessUserCtrl.equals("try-error")) {
 												System.out.println("compare with control: error");
 												String checkUError = "msg <- trimStrings(strsplit(userContrast, \":\")[[1]])";
@@ -2057,7 +2057,7 @@ public class RServeManager {
 
 									} // end stmt if (specifiedContrast)
 
-								} // end stmt if (compareControl || specifiedContrast)
+								} // end stmt if (compareControl || specifiedContrast) 	
 
 
 								//								if (performPairwise) {
@@ -3594,8 +3594,7 @@ public class RServeManager {
 										outCompareControl = outCompareControl + "}";
 										//										System.out.println(outCompareControl);
 										rConnection.eval(outCompareControl);	
-									}	
-
+									}
 								} // end stmt if-else (runSuccessContrastData != null && runSuccessContrastData.equals("notRun")) 
 
 							} // end stmt if (specifiedContrastGeno)
@@ -4717,11 +4716,11 @@ public class RServeManager {
 	}
 
 	public String[] getLevels(List<String> columnList, List<String[]> dataList,
-			String environment) {
+			String columnName) {
 		// TODO Auto-generated method stub
 		int envtColumn = 0;
 		for (int i = 0; i < columnList.size(); i++) {
-			if (columnList.get(i).equals(environment)) {
+			if (columnList.get(i).equals(columnName)) {
 				envtColumn = i;
 			}
 		}
@@ -6528,16 +6527,19 @@ public class RServeManager {
 		String isNumericOut = null;
 		try{
 			readData(dataFileName);
-			String isNumeric = "is.numeric(dataRead$" + columnName +")";
+			String isNumeric = "is.numeric(dataRead$" + columnName +" )";
 			System.out.println(isNumeric);
 			isNumericOut=rConnection.eval(isNumeric).asString();
-			System.out.println("reached end.");
+			System.out.println("reached end. "+isNumericOut.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally{
-			rConnection.close();
-		}	
+		}
 		return isNumericOut;
+	}
+
+	public void end() {
+		// TODO Auto-generated method stub
+		rConnection.close();
 	}
 
 }

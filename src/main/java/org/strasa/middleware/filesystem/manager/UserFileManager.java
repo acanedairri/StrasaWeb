@@ -101,7 +101,6 @@ public class UserFileManager {
 		else{
 			studyBasePath = userid + "_" + studyid;//Encryptions.encryptStringToNumber(new StudyManagerImpl().getStudyById(studyid).getName(), studyid);
 		}
-		
 		return BASE_PATH + File.separator  + userBasePath + File.separator  + studyBasePath + File.separator  ;
 	}
 }
