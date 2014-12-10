@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.spring.security.model.SecurityUtil;
@@ -20,7 +19,7 @@ import org.strasa.middleware.mapper.StudyLocationMapper;
 import org.strasa.middleware.mapper.StudyMapper;
 import org.strasa.middleware.mapper.StudyRawDataMapper;
 import org.strasa.middleware.mapper.StudySiteMapper;
-import org.strasa.middleware.mapper.other.StudyRawDataBatch;
+import org.strasa.middleware.model.Germplasm;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyAgronomyExample;
 import org.strasa.middleware.model.StudyDataColumn;
@@ -61,41 +60,11 @@ public class StudyManagerImpl {
 		}
 	}
 
-	public boolean validateCSVDataForGermplasmComparision(Integer studyid, List<String[]> dataPrep, int germplasmColumn, boolean isRaw) {
+	public ArrayList<String> validateCSVDataForGermplasmComparision(Integer studyid, List<String[]> dataPrep, int germplasmColumn, boolean isRaw) {
 
-		HashSet<String> noDupSet = new HashSet<String>();
-		ArrayList<String> germplasmData = new ArrayList<String>();
-		for (String[] row : dataPrep) {
-
-			if (noDupSet.add(row[germplasmColumn])) {
-				germplasmData.add(row[germplasmColumn]);
-
-			}
-
-		}
-		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
-		StudyRawDataBatch mapper = session.getMapper(StudyRawDataBatch.class);
-		Map<String, Object> params = new HashMap<String, Object>();
-
-		params.put("studyid", studyid);
-		params.put("table", ((isRaw) ? "studyrawdata" : "studyderiveddata"));
-		params.put("list", germplasmData);
-
-		try {
-			System.out.println(mapper.countGermplasmOccurence(params) + " COUNT");
-			return mapper.countGermplasmOccurence(params) == germplasmData.size();
-
-		} finally {
-			session.close();
-		}
-
-	}
-
-	public ArrayList<String> getUnknownGermplasmFromCSVData(Integer studyid, List<String[]> dataPrep, int germplasmColumn, boolean isRaw) {
-		HashSet<String> noDupSet = new HashSet<String>();
-		ArrayList<String> germplasmData = new ArrayList<String>();
 		ArrayList<String> returnVal = new ArrayList<String>();
-
+		HashSet<String> noDupSet = new HashSet<String>();
+		ArrayList<String> germplasmData = new ArrayList<String>();
 		for (String[] row : dataPrep) {
 
 			if (noDupSet.add(row[germplasmColumn])) {
@@ -104,38 +73,18 @@ public class StudyManagerImpl {
 			}
 
 		}
-		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
-		if (isRaw) {
-			try {
-				StudyRawDataMapper mapper = session.getMapper(StudyRawDataMapper.class);
-				for (String gname : germplasmData) {
-					StudyRawDataExample example = new StudyRawDataExample();
-					example.createCriteria().andDatacolumnEqualTo("Gname").andStudyidEqualTo(studyid).andDatavalueEqualTo(gname);
-					if (mapper.countByExample(example) == 0)
-						returnVal.add(gname);
-				}
-				return returnVal;
-			}
 
-			finally {
-				session.close();
-			}
-		} else {
-			try {
-				StudyDerivedDataMapper mapper = session.getMapper(StudyDerivedDataMapper.class);
-				for (String gname : germplasmData) {
-					StudyDerivedDataExample example = new StudyDerivedDataExample();
-					example.createCriteria().andDatacolumnEqualTo("Gname").andStudyidEqualTo(studyid).andDatavalueEqualTo(gname);
-					if (mapper.countByExample(example) == 0)
-						returnVal.add(gname);
-				}
-				return returnVal;
-			}
+		Integer datasetFirst = new StudyDataSetManagerImpl().getDataSetsByStudyId(studyid).get(0).getId();
+		ArrayList<Integer> lstGref = new StudyGermplasmManagerImpl().getGrefFromStudy(studyid);
+		HashMap<String, Germplasm> lstGermplasm = new GermplasmManagerImpl().getGermplasmBatchAsMap(lstGref);
 
-			finally {
-				session.close();
+		for (String germ : germplasmData) {
+			if (!lstGermplasm.containsKey(germ)) {
+				returnVal.add(germ);
 			}
 		}
+
+		return returnVal;
 
 	}
 

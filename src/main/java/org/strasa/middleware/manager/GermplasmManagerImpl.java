@@ -86,6 +86,26 @@ public class GermplasmManagerImpl {
 
 	}
 
+	public HashMap<String, Germplasm> getGermplasmBatchAsMap(ArrayList<Integer> germplasmList) {
+
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+
+		try {
+			GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
+			GermplasmExample example = new GermplasmExample();
+			HashMap<String, Germplasm> returnVal = new HashMap<String, Germplasm>();
+			example.createCriteria().andIdIn(germplasmList);
+			List<Germplasm> lst = mapper.selectByExample(example);
+			for (Germplasm germ : lst) {
+				returnVal.put(germ.getGermplasmname(), germ);
+			}
+			return returnVal;
+		} finally {
+			session.close();
+		}
+
+	}
+
 	public List<Germplasm> getAllGermplasm() {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 
