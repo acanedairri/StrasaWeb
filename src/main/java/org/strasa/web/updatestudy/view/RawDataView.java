@@ -407,9 +407,10 @@ public class RawDataView extends ProcessTabViewModel {
 			}
 			List<String[]> dataPrep = reader.readAll();
 			dataPrep.remove(0);
-			if (!new StudyManagerImpl().validateCSVDataForGermplasmComparision(this.studyID, dataPrep, 0, this.isRaw)) {
+			ArrayList<String> lstCompareGermplasm = new StudyManagerImpl().validateCSVDataForGermplasmComparision(this.studyID, dataPrep, 0, this.isRaw);
+			if (!lstCompareGermplasm.isEmpty()) {
 				Map<String, Object> arguments = new HashMap<String, Object>();
-				arguments.put("list", new StudyManagerImpl().getUnknownGermplasmFromCSVData(this.studyID, dataPrep, 0, this.isRaw));
+				arguments.put("list", lstCompareGermplasm);
 
 				String template = "/user/updatestudy/validategermplasmbox.zul";
 				Window window = (Window) Executions.createComponents(template, null, arguments);

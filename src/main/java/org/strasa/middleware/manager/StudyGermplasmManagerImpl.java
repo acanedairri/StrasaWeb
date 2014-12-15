@@ -173,6 +173,27 @@ public class StudyGermplasmManagerImpl {
 
 	}
 
+	public ArrayList<Integer> getGrefFromStudy(Integer studyID) {
+
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
+
+		try {
+			List<StudyGermplasm> lstStudyGerm = getStudyGermplasmByStudyId(studyID);
+
+			ArrayList<Integer> returnVal = new ArrayList<Integer>();
+
+			for (StudyGermplasm sgerm : lstStudyGerm) {
+				returnVal.add(sgerm.getGref());
+			}
+
+			return returnVal;
+		} finally {
+			session.close();
+		}
+
+	}
+
 	public int addStudyGermplasm(StudyGermplasm record) {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		StudyGermplasmMapper mapper = session.getMapper(StudyGermplasmMapper.class);
