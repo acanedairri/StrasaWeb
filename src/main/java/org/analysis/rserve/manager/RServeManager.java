@@ -4741,8 +4741,6 @@ public class RServeManager {
 		return envtLevels;
 	}
 
-
-
 	public void doOutlierDetection(String dataFileName, String outputPath, String respvar, String trmt, String replicate) {
 		try {
 			String readData = "dataRead <- read.csv(\"" + dataFileName.replace(BSLASH, FSLASH) + "\", header = TRUE, na.strings = c(\"NA\",\".\", \"\", \" \"), blank.lines.skip=TRUE, sep = \",\")";
@@ -4844,11 +4842,11 @@ public class RServeManager {
 			String dataFormat = qtlModel.getDataFormat();
 			String crossType = qtlModel.getCrossType();
 			String format1 = qtlModel.getFormat1();
-			String file1 = qtlModel.getFile1().replace(BSLASH, FSLASH);;
+			String file1 = qtlModel.getFile1().replace(BSLASH, FSLASH);
 			String format2 = qtlModel.getFormat2();
-			String file2 = qtlModel.getFile2().replace(BSLASH, FSLASH);;
+			String file2 = qtlModel.getFile2().replace(BSLASH, FSLASH);
 			String format3 = qtlModel.getFormat3();
-			String file3 = qtlModel.getFile3().replace(BSLASH, FSLASH);;
+			String file3 = qtlModel.getFile3().replace(BSLASH, FSLASH);
 			String P_geno = qtlModel.getP_geno(); 
 			int bcNum = qtlModel.getBcNum();
 			int fNum = qtlModel.getfNum();
@@ -4864,9 +4862,7 @@ public class RServeManager {
 			double lodThreshold = qtlModel.getLodThreshold();
 			boolean doCheckGenoErrors = qtlModel.isDoCheckGenoErrors();
 			double lodCutOff = qtlModel.getLodCutOff();
-			double errorProb = 0.01; 
-
-
+			double errorProb = 0.01;
 
 			String readData = "QTLdata <- tryCatch(createQTLdata(\"" + resultFolderPath + "\", \"" + dataFormat + "\", \"" + format1 + "\", \"" + crossType + "\", \"" + file1 + "\", \"" +
 					format2 + "\", \"" + file2 + "\", \"" + format3 + "\", \"" + file3 + "\", \"" + P_geno + "\", " + bcNum + ", " + fNum + "))";

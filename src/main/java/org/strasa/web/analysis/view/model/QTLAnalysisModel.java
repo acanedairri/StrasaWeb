@@ -79,8 +79,8 @@ public class QTLAnalysisModel {
 		setFile1(DATA_PATH + "listeria1_pheno_mv.csv");
 		setFormat2("csv");
 		setFile2(DATA_PATH + "listeria1_geno.csv");
-		setFormat3("csv");
-		setFile3(DATA_PATH + "listeria1_map.csv");
+		setFormat3("NULL"); //csv
+		setFile3("NULL");//DATA_PATH + "listeria1_map.csv"
 		setP_geno("Geno");
 		setBcNum(0);
 		setfNum(0);

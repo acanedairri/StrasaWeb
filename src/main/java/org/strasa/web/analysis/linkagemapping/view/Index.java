@@ -66,16 +66,15 @@ public class Index {
 	private List<String[]> dataList = new ArrayList<String[]>();
 	private List<Program> programList;
 	private List<String> crosstypeList;
-
+	private List<String> file1Formats; //{"csv","txt","cro","raw", "qtx"};
+	private List<String> file2Formats; //{"csv","txt","maps"};
+	private List<String> file3Formats; //{"csv","txt"};
 	BindContext ctx1, ctx2, ctx3;
 	Component view3, view1, view2;
 	InputStream in1, in2, in3;
 
 	private String chosenCrosstype;
-	private String[] fileFormats = {"txt","csv","txt","txt",".cro",".maps",".raw"};
-	private String[] defaultFileFormats = {"txt","csv"}; //
-	private String[] mapMakerFileFormats = {"txt","csv","txt","txt",".cro",".maps",".raw"};
-//	private String[] fileFormats = {"txt","csv","txt","txt",".cro",".maps",".raw"};
+	
 	
 	private String chosenMapping, fileName1, fileName2, fileName3, dataFileName, fileName, comboboxMapping, coboboxmapping2, comboboxmapping3, comboboxmapping4;
 	private String value1, value2, value3;
@@ -147,6 +146,7 @@ public class Index {
 	
 	private Label lblBCSpinner, lblFSpinner;
 	private ArrayList<Checkbox> checkBoxList;
+	private String fileType;
 
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
@@ -165,13 +165,13 @@ public class Index {
 		phenotypeFormat = phenotype();
 		scanType = scanTypeList();
 		listString = new ArrayList<String>();
+		file1Formats = new ArrayList<String>();
+		file2Formats = new ArrayList<String>();
+		file3Formats = new ArrayList<String>();
 		checkBoxList  = new ArrayList<Checkbox>();
 		grpVariableData = (Groupbox) component.getFellow("grpVariableData");
 		grpDataCheckView = (Groupbox) component.getFellow("grpDataCheckView");
 		defaultbox = (Div) component.getFellow("defaultbox");
-		//		datagroupbox = (Div) component.getFellow("datagroupbox");
-		//		crossgroupbox = (Div) component.getFellow("crossgroupbox");
-		//		inputbox = (Div) component.getFellow("inputbox");
 		divDatagrid = (Div) component.getFellow("datagrid");
 		divDataCheckTxt = (Div) component.getFellow("divDataCheckTxt");
 		
@@ -202,10 +202,6 @@ public class Index {
 		spinnerFnum = (Spinner) component.getFellow("spinnerFnum");
 		cbSetup1= (Checkbox) component.getFellow("setup1");
 		cbSetup2 = (Checkbox) component.getFellow("setup2");
-//		cbTraitYield = (Checkbox) component.getFellow("traitYield");
-//		cbTraitPitht = (Checkbox) component.getFellow("traitPitht");
-//		cbTraitAwit = (Checkbox) component.getFellow("traitAwit");
-//		cbTraitAwwd = (Checkbox) component.getFellow("traitAwwd");
 		cbHpresent = (Checkbox) component.getFellow("cbHpresent");
 		cbSetupModel = (Checkbox) component.getFellow("cbSetupModel");
 		comboPMethod = (Combobox) component.getFellow("comboPMethod");
@@ -269,7 +265,7 @@ public class Index {
 	}
 
 	@Command("validateInputFiles")
-	@NotifyChange("*")
+//	@NotifyChange("*")
 	public void validateInputFiles(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
 
@@ -325,7 +321,6 @@ public class Index {
 		rServeManager.doCheckQTLData(qtlModel);
 		
 		reloadTxtGrid();
-
 		//		displayCrossData(qtlModel.getResultFolderPath());
 	}
 
@@ -356,7 +351,6 @@ public class Index {
 //			errorMessage = "Please choose at least one trait";
 //			return false;
 //		}
-		
 //		if(cbTraitYield.isChecked()) listString.add("Yield");
 //		if(cbTraitPitht.isChecked()) listString.add("Pitht");
 //		if(cbTraitAwit.isChecked()) listString.add("Awit");
@@ -519,7 +513,6 @@ public class Index {
 	}
 
 	@Command("missingDataCheck")
-	@NotifyChange("*")
 	public void missingDataCheck(){
 
 		if(imputeRadioButton.isDisabled()==true)
@@ -539,7 +532,6 @@ public class Index {
 	}
 
 	@Command("aggregationCheck")
-	@NotifyChange("*")
 	public void aggregationCheck(){
 
 		if(dbPvalCutOff.isDisabled()==true)
@@ -550,7 +542,6 @@ public class Index {
 	}
 
 	@Command("genotypeCheck")
-	@NotifyChange("*")
 	public void genotypeCheck(){
 
 		if(dbCutOffP.isDisabled()==true)
@@ -561,7 +552,6 @@ public class Index {
 	}
 
 	@Command("markerCheck")
-	@NotifyChange("*")
 	public void markerCheck(){
 
 		if(dbLodThreshold.isDisabled()==true)
@@ -571,7 +561,6 @@ public class Index {
 	}
 	
 	@Command("errorCheck")
-	@NotifyChange("*")
 	public void errorCheck(){
 
 		if(dbLodCutOff.isDisabled()==true)
@@ -581,7 +570,6 @@ public class Index {
 	}
 
 	@Command("QTLCheck")
-	@NotifyChange("*")
 	public void QTLCheck(){
 
 		if(cbSetup1.isDisabled()==true)
@@ -617,39 +605,37 @@ public class Index {
 	}
 
 	@Command("visibility")
-	@NotifyChange("*")
 	public void visibility(@BindingParam("selected") Integer selected){
 
+		this.selected = selected;
 		if(selected == 0){
+			qtlModel.setDataFormat("default");
 			createPhenoBox();
-//			this.selected=0;
 			makeNull();
 		}
-
+		
 		else if(selected == 1){
-			createDataGroupBox();
-//			this.selected=1;
+			createDataGroupBox();//Map Maker
+			qtlModel.setDataFormat("MapMaker");
 			makeNull();
 		}
 
-		else if(selected == 2){
+		else if(selected == 2){//QTL Cartographer
 			createCrossGroupBox();
-//			this.selected=2;
+			qtlModel.setDataFormat("QTL Cartographer");
 			makeNull();
 		}
 
 
-		else if(selected == 3){
+		else if(selected == 3){//Map Manager
 			createInputBox();
-//			this.selected=3;
+			qtlModel.setDataFormat("Map Manager");
 			makeNull();
 		}
 
 		else{
-//			this.selected=4;
 			makeNull();
 		}
-//		setChosenDataFormat(selected);
 	}
 	
 	@Command("chooseCrossType")
@@ -697,11 +683,16 @@ public class Index {
 		fileName1 = null;
 		fileName2 = null;
 		fileName3 = null;
+	}
+	
 
+	private void clearFileFormats() {
+		// TODO Auto-generated method stub
+		file1Formats.clear();
+		file2Formats.clear();
 	}
 
-	public void createPhenoBox(){
-
+	public void createPhenoBox(){ 
 		if (!defaultbox.getChildren().isEmpty())
 			defaultbox.getFirstChild().detach();
 
@@ -709,9 +700,15 @@ public class Index {
 		includeDefaultzul.setId("includeDefaultzul");
 		includeDefaultzul.setSrc("/user/analysis/linkagemapping/default.zul");
 		includeDefaultzul.setParent(defaultbox);
+		
+		clearFileFormats();
+		file1Formats.add("csv");
+		file1Formats.add("txt");
 
-
+		file2Formats.add("txt");
+		file2Formats.add("csv");
 	}
+
 
 	private void createDataGroupBox(){
 		if (!defaultbox.getChildren().isEmpty())
@@ -720,7 +717,12 @@ public class Index {
 		Include dataGroupData = new Include();
 		dataGroupData.setSrc("/user/analysis/linkagemapping/mapmaker.zul");
 		dataGroupData.setParent(defaultbox);
+		
+		clearFileFormats();
+		file1Formats.add("raw");
 
+		file2Formats.add("txt");
+		file2Formats.add("maps");
 	}
 
 	private void createCrossGroupBox(){
@@ -730,6 +732,10 @@ public class Index {
 		Include crossGroupData = new Include();
 		crossGroupData.setSrc("/user/analysis/linkagemapping/QTL.zul");
 		crossGroupData.setParent(defaultbox);
+		
+		clearFileFormats();
+		file1Formats.add("cro");
+		file2Formats.add("maps");
 	}
 
 	private void createInputBox(){
@@ -739,6 +745,10 @@ public class Index {
 		Include inputGroupData = new Include();
 		inputGroupData.setSrc("/user/analysis/linkagemapping/inputbox.zul");
 		inputGroupData.setParent(defaultbox);
+		
+
+		clearFileFormats();
+		file1Formats.add("qtx");
 	}
 
 	public void detachDiv(Div div){
@@ -809,25 +819,31 @@ public class Index {
 		tempFile = new File(event.getMedia().getName());
 		setFileName1(event.getMedia().getName());
 		System.out.println(tempFile.getAbsolutePath());	
-
+		fileType = fileName1.split("\\.")[1];
+		
 		value1 = tempFile.getAbsolutePath();
 		if (file1 == null)
 			try {
-				file1 = File.createTempFile(fileName1, ".csv");
+				file1 = File.createTempFile(fileName1, "."+fileType);
 				System.out.println(file1.getAbsolutePath());
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 
-		if (!fileName1.endsWith(".csv")  && !fileName1.endsWith(".txt")) {
-			Messagebox.show("Error: File must be in a .txt or .csv format",
+		
+		if (!file1Formats.contains(fileType)) {
+			errorMessage = "Error: File must be in a ";
+			for(String s: file1Formats){
+				errorMessage = errorMessage+"."+s;
+			}
+			Messagebox.show(errorMessage+" format",
 					"Upload Error", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
-
+		
 		in1 = event.getMedia().isBinary() ? event.getMedia().getStreamData() : new ReaderInputStream(event.getMedia().getReaderData());
 		qtlModel.setFile1(file1.getAbsolutePath());
-		qtlModel.setFormat1(fileFormats[formatIndex]);
+		qtlModel.setFormat1(fileType);
 
 	}
 
@@ -844,25 +860,32 @@ public class Index {
 		tempFile = new File(event.getMedia().getName());
 		setFileName2(event.getMedia().getName());
 		System.out.println(tempFile.getAbsolutePath());	
-
+		fileType = fileName2.split("\\.")[1];
+		
 		value2 = tempFile.getAbsolutePath();
 		if (file2 == null)
 			try {
-					file2 = File.createTempFile(fileName2, ".csv");
+					file2 = File.createTempFile(fileName2, "."+fileType);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 
-		if (!fileName2.endsWith(".csv")  && !fileName2.endsWith(".txt") ) {
-			Messagebox.show("Error: File must be in a .txt or .csv format",
+		
+		if (!file2Formats.contains(fileType)) {
+			errorMessage = "Error: File must be in a ";
+			for(String s: file2Formats){
+				errorMessage = errorMessage+"."+s;
+			}
+			Messagebox.show(errorMessage+" format",
 					"Upload Error", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
+		
 
 		in2 = event.getMedia().isBinary() ? event.getMedia().getStreamData() : new ReaderInputStream(event.getMedia().getReaderData());
 
 		qtlModel.setFile2(file2.getAbsolutePath());
-		qtlModel.setFormat2(fileFormats[formatIndex]);
+		qtlModel.setFormat2(fileType);
 	}
 
 	@NotifyChange("*")
@@ -896,7 +919,7 @@ public class Index {
 
 		in3 = event.getMedia().isBinary() ? event.getMedia().getStreamData() : new ReaderInputStream(event.getMedia().getReaderData());
 		qtlModel.setFile3(file3.getAbsolutePath());
-		qtlModel.setFormat3(fileFormats[formatIndex]);
+		qtlModel.setFormat3("csv");
 	}
 
 

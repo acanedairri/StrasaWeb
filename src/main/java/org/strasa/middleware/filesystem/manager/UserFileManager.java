@@ -33,7 +33,6 @@ public class UserFileManager {
 			fileRec.setStudyid(studyid);
 			fileRec.setTypeofdata(fileType);
 			new StudyFileManagerImpl().addRecord(fileRec);
-
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
