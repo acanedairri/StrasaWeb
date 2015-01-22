@@ -1,5 +1,6 @@
 package org.strasa.web.analysis.view.model;
 
+import org.strasa.web.utilities.AnalysisUtils;
 import org.zkoss.zk.ui.Sessions;
 
 public class MultiSiteAnalysisModel {
@@ -50,57 +51,68 @@ public class MultiSiteAnalysisModel {
 		dataFileName = DATA_PATH.replace(BSLASH, FSLASH) + "RCB_ME.csv";
 		contrastGenoFilename = DATA_PATH.replace(BSLASH, FSLASH) + "contrastMEOGeno_RCB_ME.csv";
 		
-		designIndex = 0;
-		environment = "Env";
-		genotype = "Genotype";
-		block = "Block";
-		rep = "NULL";
-		row = "NULL";
-		column = "NULL";
-		descriptiveStat = true; 
-		varianceComponents = true;
-		boxplotRawData = false;
-		histogramRawData = false;
-		diagnosticPlot = false;
-		genotypeFixed = true;
-		performPairwise = true;
-		pairwiseAlpha = "0.05";
-		compareControl = true;
-		performAllPairwise = false;
-		genotypeRandom = false;
-		stabilityFinlay = true; 
-		stabilityShukla = true;
-		specifiedContrastGeno = false;
-		specifiedContrastEnv = false; 
-		contrastEnvFilename = null;
-		ammi = true;
-		gge =  true;
+
+		 int designIndex = 0;
+		 String[] respvars =  {"NULL"};
+		 String environment =  "NULL";
+		 String[] environmentLevels = {"NULL"};
+		 String genotype =  "NULL";
+		 String block =  "NULL";
+		 String rep =  "NULL";
+		 String row =  "NULL";
+		 String column =  "NULL";
+		 boolean descriptiveStat = false;
+		 boolean varianceComponents= false;
+		 boolean boxplotRawData= false;
+		 boolean histogramRawData= false;
+		 boolean diagnosticPlot= false;
+		 boolean genotypeFixed= false;
+		 boolean performPairwise= false;
+		 String pairwiseAlpha = "0";
+		 String[] genotypeLevels= {"NULL"};
+		 String[] controlLevels = {"NULL"};
+		 boolean compareControl= false;
+		 boolean performAllPairwise= false;
+		 boolean genotypeRandom= false;
+		 boolean stabilityFinlay= false;
+		 boolean stabilityShukla= false;
+		 boolean specifiedContrastGeno= false;
+		 String contrastGenoFilename =  "NULL";
+		 boolean specifiedContrastEnv= false;
+		 String contrastEnvFilename =  "NULL";
+		 boolean ammi= false;
+		 boolean gge= false;
 		
-		setDesign(0);
-		setEnvironment("Env");
-		setGenotype("Genotype");
-		setBlock("Block");
-		setRep("NULL");
-		setRow("NULL");
-		setColumn("NULL");
-		setDescriptiveStat(true); 
-		setVarianceComponents(true);
-		setBoxplotRawData(false);
-		setHistogramRawData(false);
-		setDiagnosticPlot(false);
-		setGenotypeFixed(true);
-		setPerformPairwise(true);
-		setPairwiseAlpha("0.05");
-		setCompareControl(true);
-		setPerformAllPairwise(false);
-		setGenotypeRandom(false);
-		setStabilityFinlay(true); 
-		setStabilityShukla(true);
-		setSpecifiedContrastGeno(true);
-		setSpecifiedContrastEnv(false); 
-		setContrastEnvFilename(null);
-		setAmmi(true);
-		setGge(true);
+		setEnvironmentLevels(environmentLevels);
+		setGenotypeLevels(genotypeLevels);
+		setControlLevels(controlLevels);
+		setContrastGenoFilename(contrastGenoFilename);
+		setRespvars(respvars);
+		setDesign(designIndex);
+		setEnvironment(environment);
+		setGenotype(genotype);
+		setBlock(block);
+		setRep(rep);
+		setRow(row);
+		setColumn(column);
+		setDescriptiveStat(descriptiveStat); 
+		setVarianceComponents(varianceComponents);
+		setBoxplotRawData(boxplotRawData);
+		setHistogramRawData(histogramRawData);
+		setDiagnosticPlot(diagnosticPlot);
+		setGenotypeFixed(genotypeFixed);
+		setPerformPairwise(performPairwise);
+		setPairwiseAlpha(pairwiseAlpha);
+		setCompareControl(compareControl);
+		setPerformAllPairwise(performAllPairwise);
+		setGenotypeRandom(genotypeRandom);
+		setStabilityFinlay(stabilityFinlay); 
+		setStabilityShukla(stabilityShukla);
+		setSpecifiedContrastGeno(specifiedContrastGeno);
+		setSpecifiedContrastEnv(specifiedContrastEnv); 
+		setContrastEnvFilename(contrastEnvFilename);
+		setAmmi(ammi);
+		setGge(gge);
 		
 	}
 	
@@ -128,11 +140,11 @@ public class MultiSiteAnalysisModel {
 		sb.append("\n compareControl: "+compareControl);
 		sb.append("\n performAllPairwise: "+performAllPairwise);
 		sb.append("\n genotypeRandom: "+genotypeRandom);
+		sb.append("\n respvars: "+AnalysisUtils.arrayToString(respvars));
+		sb.append("\n environmentLevels: "+AnalysisUtils.arrayToString(environmentLevels));
+		sb.append("\n genotypeLevels: "+AnalysisUtils.arrayToString(genotypeLevels));
+		sb.append("\n controlLevels: "+AnalysisUtils.arrayToString(controlLevels));
 
-		sb.append("\n respvars: ");
-		for(String s: respvars){
-			sb.append(s+", ");
-		}
 		return sb.toString();
 	}
 	

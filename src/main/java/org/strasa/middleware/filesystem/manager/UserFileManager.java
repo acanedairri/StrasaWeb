@@ -71,11 +71,10 @@ public class UserFileManager {
 			FileUtils.copyFileToDirectory(dataFile, new File(resultFolderPath + File.separator ),true);
 			movedFile = new File(resultFolderPath + File.separator + dataFile.getName());
 			filePath = movedFile.getAbsolutePath();
-			
+				
 			if(realName.contains(".csv")) renamedFile = new File(resultFolderPath+realName.replaceAll(".csv", "(dataset).csv"));
 			else renamedFile = new File(resultFolderPath+realName+"(dataset).csv");
 			movedFile.renameTo(renamedFile);
-
 
 			System.out.println("resultFolderPath to:"+resultFolderPath);
 			System.out.println("realname:"+realName);
@@ -90,9 +89,10 @@ public class UserFileManager {
 		System.out.println("File moved to: " + resultFolderPath);
 		return renamedFile.getAbsolutePath();
 	}
+	
 	public static String buildUserPath(int userid, int studyid){
 
-		String userBasePath =  userid + "_" + studyid;//Encryptions.encryptStringToNumber(new UserManagerImpl().getUserById(userid).getUsername(),userid); 
+		String userBasePath =  userid + "_" + studyid;//Encryptions.encryptStringToNumber(new UserManagerImpl().getUserById(userid).getUsername(), userid); 
 		String studyBasePath;
 		if(studyid == 0){
 			studyBasePath = "tmp";

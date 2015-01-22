@@ -1,9 +1,9 @@
 <zk>
 	<div id="mainSingleSiteWindow" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.analysis.view.Index')" height="90%">
-
-		<separator height="5px"></separator>
-
+		<div sclass="page-header">
+			<label value="Single-site Analysis" />
+		</div>
 			<tabbox id="tabBox" sclass="page-content">
 			<tabs id="tabs">
 				<tab label="Single-site Analysis"

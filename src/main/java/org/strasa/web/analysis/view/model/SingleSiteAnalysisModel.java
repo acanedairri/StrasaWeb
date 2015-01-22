@@ -1,5 +1,6 @@
 package org.strasa.web.analysis.view.model;
 
+import org.strasa.web.utilities.AnalysisUtils;
 import org.zkoss.zk.ui.Sessions;
 
 public class SingleSiteAnalysisModel {
@@ -52,13 +53,11 @@ public class SingleSiteAnalysisModel {
 		String dataFileName  = null; //DATA_PATH.replace(BSLASH, FSLASH) + "RCB_ME.csv";
 
 		int design = 0;
-		String[] respvars = {"Y1"};
-		String environment = "Site";
-		String[] environmentLevels = {"Env1", "Env2"};
-		//		String environment = "NULL";
-		//		String[] environmentLevels = {};
-		String genotype = "Gen";
-		String block = "Blk";
+		String[] respvars = {"NULL"};
+		String environment = "NULL";
+		String[] environmentLevels ={"NULL"};
+		String genotype = "NULL";
+		String block = "NULL";
 		String rep = "NULL";
 		String row = "NULL";
 		String column = "NULL";
@@ -67,23 +66,23 @@ public class SingleSiteAnalysisModel {
 		boolean boxplotRawData = false;
 		boolean histogramRawData = false;
 		boolean heatmapResiduals = false;
-		String heatmapRow = "fieldRow";
-		String heatmapColumn = "fieldColumn";
+		String heatmapRow = "NULL";
+		String heatmapColumn = "NULL";
 		boolean diagnosticPlot = false;
-		boolean genotypeFixed = true;
+		boolean genotypeFixed = false;
 		boolean performPairwise = false;
-		String pairwiseAlpha = "0.05";
-		String[] genotypeLevels = {"1",   "2",   "3",   "4",   "5",   "6",   "7",   "8"};
-		String[] controlLevels = {"1", "2", "3"};
+		String pairwiseAlpha = "0";
+		String[] genotypeLevels = {"NULL"};
+		String[] controlLevels = {"NULL"};
 		boolean compareControl = false;
 		boolean performAllPairwise = false;
 		boolean genotypeRandom = false;
 		boolean excludeControls = false;
 		boolean genoPhenoCorrelation = false;
-		boolean specifiedContrast = true;
-		String contrastFileName  = null; //DATA_PATH + "contrastData.csv";
+		boolean specifiedContrast = false;
+		String contrastFileName  = "NULL";//DATA_PATH + "contrastData.csv";
 		boolean moransTest =  false;// for BIMS always false
-		String[] spatialStruc = {"none", "CompSymm", "Gaus", "Exp", "Spher"};
+		String[] spatialStruc = {"NULL"};
 
 		setEnvironmentLevels(environmentLevels);
 		setRespvars(respvars);
@@ -127,7 +126,7 @@ public class SingleSiteAnalysisModel {
 		sb.append("SingleSiteAnalysisModel \n");
 		sb.append("resultFolderPath: "+resultFolderPath);
 		sb.append("\n outFileName: "+outFileName);
-		sb.append("\n design: "+design);
+		sb.append("\n design: "+Integer.toString(design));
 		sb.append("\n dataFileName: "+dataFileName);
 		sb.append("\n environment: "+environment);
 		sb.append("\n genotype: "+genotype);
@@ -151,6 +150,10 @@ public class SingleSiteAnalysisModel {
 		sb.append("\n genotypeRandom: "+genotypeRandom);
 		sb.append("\n excludeControls: "+excludeControls);
 		sb.append("\n genoPhenoCorrelation: "+genoPhenoCorrelation);
+		sb.append("\n respvars: "+AnalysisUtils.arrayToString(respvars));
+		sb.append("\n environmentLevels: "+AnalysisUtils.arrayToString(environmentLevels));
+		sb.append("\n genotypeLevels: "+AnalysisUtils.arrayToString(genotypeLevels));
+		sb.append("\n controlLevels: "+AnalysisUtils.arrayToString(controlLevels));
 
 		return sb.toString();
 	}

@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.analysis.rserve.manager.RServeManager;
 import org.apache.commons.io.input.ReaderInputStream;
+import org.apache.ibatis.io.Resources;
 import org.strasa.middleware.filesystem.manager.UserFileManager;
 import org.strasa.middleware.manager.CrosstypeManagerImpl;
 import org.strasa.middleware.manager.EcotypeManagerImpl;
@@ -23,6 +24,7 @@ import org.strasa.middleware.model.Crosstype;
 import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.Program;
 import org.strasa.web.analysis.view.model.QTLAnalysisModel;
+import org.strasa.web.utilities.AnalysisUtils;
 import org.strasa.web.utilities.FileUtilities;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
@@ -66,13 +68,14 @@ public class Index {
 	private List<String[]> dataList = new ArrayList<String[]>();
 	private List<Program> programList;
 	private List<String> crosstypeList;
+	private String[] crossTypeFunctions={"f2", "bc", "risib", "riself", "bcsft"};
 	private List<String> file1Formats; //{"csv","txt","cro","raw", "qtx"};
 	private List<String> file2Formats; //{"csv","txt","maps"};
 	private List<String> file3Formats; //{"csv","txt"};
 	BindContext ctx1, ctx2, ctx3;
 	Component view3, view1, view2;
 	InputStream in1, in2, in3;
-
+	 
 	private String chosenCrosstype;
 	
 	
@@ -227,6 +230,16 @@ public class Index {
 		setComboboxMapping("Normal");// PModel
 		setCoboboxmapping2("Haley-Knott Regression");
 		setMapping1(true);
+		InputStream is = null;
+		try {
+			is = Resources.getResourceAsStream("");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String tempdir = AnalysisUtils.getUserTempFolder();
+		
+		qtlModel.setResultFolderPath(tempdir);
 	}
 
 //	private List<Crosstype> getcrossTypes() {
@@ -250,8 +263,6 @@ public class Index {
 		tbAll.setDisabled(true);
 		tbMaxNumber.setDisabled(true);
 	}
-
-
 
 	@Command
 	public void save(){
@@ -304,7 +315,6 @@ public class Index {
 				qtlModel.setDeleteMiss(deleteRadioButtonSelected);
 				qtlModel.setDoMissing(imputeRadioButtonSelected);
 				if(deleteRadioButtonSelected) qtlModel.setCutOff(cutOffValue);
-
 			}
 		}
 		if(distortionTest) qtlModel.setDoDistortionTest(distortionTest); //System.out.println("Test for segregation distortion: Checked");
@@ -318,10 +328,10 @@ public class Index {
 		if(lodCutOffValue!=null&&dbLodCutOff.isDisabled()!=true) qtlModel.setLodCutOff(lodCutOffValue);
 
 		rServeManager = new RServeManager();
+		System.out.println(qtlModel.toString());
 		rServeManager.doCheckQTLData(qtlModel);
-		
 		reloadTxtGrid();
-		//		displayCrossData(qtlModel.getResultFolderPath());
+//		displayCrossData(qtlModel.getResultFolderPath());
 	}
 
 	@Command("runQTL")
@@ -329,12 +339,9 @@ public class Index {
 	public void runQTL(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){	
 		if(validateQtlModel()){
-			System.out.println("pasing variables");
-			rServeManager = new RServeManager();
-			rServeManager.doQtl(qtlModel);
-//			Map<String,Object> args = new HashMap<String,Object>();
-//			args.put("qtlModel", qtlModel);
-//			BindUtils.postGlobalCommand(null, null, "displayQtlResult", args);
+			Map<String,Object> args = new HashMap<String,Object>();
+			args.put("qtlModel", qtlModel);
+			BindUtils.postGlobalCommand(null, null, "displayQtlResult", args);
 		} else Messagebox.show(errorMessage);
 	}
 
@@ -347,14 +354,12 @@ public class Index {
 			errorMessage = "Please choose a trait type";
 			return false;
 		}
-//		if(cbTraitYield.isChecked()!=true && cbTraitPitht.isChecked()!=true && cbTraitAwit.isChecked()!=true && cbTraitAwwd.isChecked()!=true){
-//			errorMessage = "Please choose at least one trait";
-//			return false;
-//		}
-//		if(cbTraitYield.isChecked()) listString.add("Yield");
-//		if(cbTraitPitht.isChecked()) listString.add("Pitht");
-//		if(cbTraitAwit.isChecked()) listString.add("Awit");
-//		if(cbTraitAwwd.isChecked()) listString.add("Awwd");
+		
+		listString = getCheckedBoxes(checkBoxList);
+		if(listString.size()<1){//
+			errorMessage = "Please choose at least one trait";
+			return false;
+		}
 
 		qtlModel.setmMethod(chosenMapping);
 		if(chosenMapping==null){
@@ -512,6 +517,17 @@ public class Index {
 		return true;
 	}
 
+	private ArrayList<String>  getCheckedBoxes(ArrayList<Checkbox> checkBoxList) {
+		// TODO Auto-generated method stub
+		
+		ArrayList<String> ls= new ArrayList<String>();
+		for(Checkbox c: checkBoxList){
+			System.out.println(c.getLabel() +" is Checked?" +  c.isChecked());
+			if(c.isChecked()) ls.add(c.getLabel());
+		}
+		return ls;
+	}
+
 	@Command("missingDataCheck")
 	public void missingDataCheck(){
 
@@ -641,7 +657,6 @@ public class Index {
 	@Command("chooseCrossType")
 	@NotifyChange("*")
 	public void chooseCrossType(@BindingParam("selected") Integer selected){
-
 		lblFSpinner.setVisible(false);
 		spinnerFnum.setVisible(false);
 		lblBCSpinner.setVisible(false);
@@ -656,6 +671,7 @@ public class Index {
 			spinnerBCnum.setVisible(true);
 		}
 
+		qtlModel.setCrossType(crossTypeFunctions[selected]);
 	}
 
 	@Command("choosePModel")
@@ -685,7 +701,6 @@ public class Index {
 		fileName3 = null;
 	}
 	
-
 	private void clearFileFormats() {
 		// TODO Auto-generated method stub
 		file1Formats.clear();
@@ -709,7 +724,6 @@ public class Index {
 		file2Formats.add("csv");
 	}
 
-
 	private void createDataGroupBox(){
 		if (!defaultbox.getChildren().isEmpty())
 			defaultbox.getFirstChild().detach();
@@ -720,7 +734,6 @@ public class Index {
 		
 		clearFileFormats();
 		file1Formats.add("raw");
-
 		file2Formats.add("txt");
 		file2Formats.add("maps");
 	}
@@ -728,14 +741,13 @@ public class Index {
 	private void createCrossGroupBox(){
 		if (!defaultbox.getChildren().isEmpty())
 			defaultbox.getFirstChild().detach();
-
 		Include crossGroupData = new Include();
 		crossGroupData.setSrc("/user/analysis/linkagemapping/QTL.zul");
 		crossGroupData.setParent(defaultbox);
 		
 		clearFileFormats();
 		file1Formats.add("cro");
-		file2Formats.add("maps");
+		file2Formats.add("map");
 	}
 
 	private void createInputBox(){
@@ -779,6 +791,7 @@ public class Index {
 			mapping3=false; mapping4=true;
 		}
 	}
+	
 	@NotifyChange("pModel")
 	@Command
 	@DependsOn("selectedTraitType")
@@ -948,9 +961,10 @@ public class Index {
 		qtlModel.setfNum(spinnerFnum.getValue());
 		qtlModel.setBcNum(spinnerBCnum.getValue());
 		rServeManager = new RServeManager();
+		System.out.println(qtlModel.toString());
 		rServeManager.doCreateQTLData(qtlModel);
-
-		displayCrossData(qtlModel.getResultFolderPath());
+//
+//		displayCrossData(qtlModel.getResultFolderPath());
 	}
 
 	private void displayCrossData(String resultFolderPath) {
@@ -1180,9 +1194,11 @@ public class Index {
 	public static List<String> continuousMList(){
 		return Arrays.asList(new String[]{"Normal", "Two-Part", "Non-parametric"});
 	}
+	
 	public static List<String> binaryMList(){
 		return Arrays.asList(new String[]{ "Binary"});
 	}
+	
 	public static List<String> ordinalMList(){
 		return Arrays.asList(new String[]{"Non-parametric"});
 	}
@@ -1249,7 +1265,6 @@ public class Index {
 	public void setTraitType(List<String> traitType) {
 		this.traitType = traitType;
 	}
-
 
 	public List<String> getMapMethod() {
 		return mapMethod;

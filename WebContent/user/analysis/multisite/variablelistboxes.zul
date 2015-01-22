@@ -93,10 +93,10 @@
 					<label />
 					<cell>
 						<checkbox id="fixedCheckBox" label="Fixed" checked="true"
-							onClick="@global-command('updateFixedOptions', selected=self.checked)" />
+							onClick="@command('updateFixedOptions', selected=self.checked)" />
 						<space spacing="20px" />
 						<checkbox id="randomCheckBox" label="Random"
-							onClick="@global-command('updateRandomOptions', selected=self.checked)" />
+							onClick="@command('updateRandomOptions', selected=self.checked)" />
 					</cell>
 				</row>
 

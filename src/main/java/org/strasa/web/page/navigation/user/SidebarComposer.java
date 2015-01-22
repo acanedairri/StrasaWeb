@@ -93,11 +93,9 @@ public class SidebarComposer extends SelectorComposer<Component> {
 				if (currClick != null) {
 					Events.postEvent("onClick", currClick, null);
 				}
-
 			}
 		});
 		Clients.evalJavaScript("loadContent();");
-
 	}
 
 	// Toggle sidebar to collapse or expand
@@ -190,22 +188,18 @@ public class SidebarComposer extends SelectorComposer<Component> {
 
 	}
 
-
 	@Listen("onClick = #singlesite")
 	public void singlesite() {
 		Div d = (Div) sidebar.getRoot().query("#contentui");
 		d.getChildren().clear();
 		Executions.createComponents("../user/analysis/singlesite/index.zul", d, null);
-
 	}
-	
 	
 	@Listen("onClick = #multisite")
 	public void multisite() {
 		Div d = (Div) sidebar.getRoot().query("#contentui");
 		d.getChildren().clear();
 		Executions.createComponents("../user/analysis/multisite/index.zul", d, null);
-
 	}
 
 	@Listen("onClick = #linkagemapping")
@@ -213,23 +207,37 @@ public class SidebarComposer extends SelectorComposer<Component> {
 		Div d = (Div) sidebar.getRoot().query("#contentui");
 		d.getChildren().clear();
 		Executions.createComponents("../user/analysis/linkagemapping/index.zul", d, null);
-
 	}
-
+	@Listen("onClick = #geneticsimilarity")
+	public void geneticsimilarity() {
+		Div d = (Div) sidebar.getRoot().query("#contentui");
+		d.getChildren().clear();
+		Executions.createComponents("../user/analysis/geneticsimilarity/index.zul", d, null);
+	}
+	@Listen("onClick = #gblup")
+	public void gblup() {
+		Div d = (Div) sidebar.getRoot().query("#contentui");
+		d.getChildren().clear();
+		Executions.createComponents("../user/analysis/genomicsselection/gblup/index.zul", d, null);
+	}
+	@Listen("onClick = #bayesian")
+	public void bayesian() {
+		Div d = (Div) sidebar.getRoot().query("#contentui");
+		d.getChildren().clear();
+		Executions.createComponents("../user/analysis/genomicsselection/bayesian/index.zul", d, null);
+	}
 	@Listen("onClick = #settings")
 	public void settings() {
 		Div d = (Div) sidebar.getRoot().query("#contentui");
 		d.getChildren().clear();
 		Executions.createComponents("../user/maintenance/index.zul", d, null);
-
 	}
 
 	@Listen("onClick = #createfieldbook")
-	public void createfieldbook() {
+	public void createfieldbook(){
 		Div d = (Div) sidebar.getRoot().query("#contentui");
 		d.getChildren().clear();
 		Executions.createComponents("../user/createfieldbook/index.zul", d, null);
-
 	}
 
 	@Listen("onClick = #browseanalysisresult")
@@ -237,7 +245,6 @@ public class SidebarComposer extends SelectorComposer<Component> {
 		Div d = (Div) sidebar.getRoot().query("#contentui");
 		d.getChildren().clear();
 		Executions.createComponents("../user/analysis/resultanalysistree.zul", d, null);
-
 	}
 
 }

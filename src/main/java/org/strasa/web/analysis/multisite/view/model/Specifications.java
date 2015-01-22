@@ -197,7 +197,7 @@ public class Specifications {
 	private ListModelList<String> controlsModel;
 	private Listbox genotypeLevelsLb;
 	private ListModelList<String> genotypeLevelsModel;
-	private boolean genotypeControlsOpen = true;
+	private boolean genotypeControlsOpen = false;
 	private Include includeOtherOptions;
 
 	@AfterCompose
@@ -315,8 +315,14 @@ public class Specifications {
 		designs.add("Latinized Row-Column");
 		return designs;
 	}
+	
+	@Command("updateControlOptionsVisibility")
+	public void updateControlOptionsVisibility() {
+		if((checkBoxExcludeControls.isChecked() && checkBoxExcludeControls.isVisible()) || (compareWithControlsBtn.isSelected() && performPairwiseCheckBox.isChecked())) activateLevelOfConrolsOptions(true);
+		else activateLevelOfConrolsOptions(false);
+	}
 
-	@GlobalCommand("updateFixedOptions")
+	@Command("updateFixedOptions")
 	@NotifyChange("*")
 	public void updateFixedOptions(@BindingParam("selected") Boolean selected){
 		System.out.println("activate Fixed");
@@ -326,7 +332,7 @@ public class Specifications {
 		}
 		else{//if unchecked
 			activateFixedOptions(false);
-			if(!checkBoxExcludeControls.isChecked() || !checkBoxExcludeControls.isVisible()) activateLevelOfConrolsOptions(false);
+			if(!checkBoxExcludeControls.isChecked() || !randomCheckBox.isChecked()) activateLevelOfConrolsOptions(false);
 			else if(msaModel.getDesign()==1 || msaModel.getDesign()==2) activateLevelOfConrolsOptions(false);
 
 		}
@@ -381,35 +387,31 @@ public class Specifications {
 		}
 		else{//if unchecked
 			activateRandomOptions(false);
-			if((!compareWithControlsBtn.isSelected() || !compareWithControlsBtn.isVisible())) activateLevelOfConrolsOptions(false);
+			if((!compareWithControlsBtn.isSelected() || !performPairwiseCheckBox.isChecked())) activateLevelOfConrolsOptions(false);
 
 		}
 	}
 
 	private void activateRandomOptions(boolean state) {
 		// TODO Auto-generated method stub
+		checkBoxEstimateGenotype.setDisabled(true);
 		groupGenotypeRandom.setOpen(state);
-		if(!responseModel.isEmpty()) checkBoxEstimateGenotype.setVisible(state);
+		if(state && !responseModel.isEmpty()){
+			checkBoxEstimateGenotype.setDisabled(false);
+		}
 	}
 
 	private void activateFixedOptions(boolean state) {
 		// TODO Auto-generated method stub
 		groupGenotypeFixed.setOpen(state);
-		activatePerformPairwiseOptions(state);
-
-		if(!state && !checkBoxExcludeControls.isChecked()) activateLevelOfConrolsOptions(false);
+		updatePairwiseOptions(state);
 	}
 
-	@GlobalCommand("updatePairwiseOptions")
+	@Command("updatePairwiseOptions")
 	@NotifyChange("*")
-	public void updatePairwiseOptions(@BindingParam("selected") Boolean selected){
-		System.out.println("activate updatePairwiseOptions");
-		activatePerformPairwiseOptions(selected);
-	}
-
-	protected void activatePerformPairwiseOptions(boolean state) {
+	public void updatePairwiseOptions(@BindingParam("selected") Boolean state) {
 		// TODO Auto-generated method stub
-		if(performPairwiseCheckBox.isChecked() && state) groupPerformPairwise.setOpen(true);
+			if(performPairwiseCheckBox.isChecked() && state) groupPerformPairwise.setOpen(true);
 		else groupPerformPairwise.setOpen(false);
 		compareWithControlsBtn.setSelected(true);
 
@@ -425,6 +427,8 @@ public class Specifications {
 				Messagebox.show("Please select a genotype variable",
 						"Error", Messagebox.OK, Messagebox.ERROR);
 			}
+		}else{
+			if(!checkBoxExcludeControls.isChecked() || !randomCheckBox.isChecked()) activateLevelOfConrolsOptions(false);
 		}
 	}
 
@@ -529,6 +533,8 @@ public class Specifications {
 
 	private void activateLevelOfConrolsOptions(boolean state) {
 		// TODO Auto-generated method stub
+
+		setGenotypeControlsOpen(state);
 		groupLevelOfControls.setOpen(state);
 	}
 
@@ -1048,8 +1054,18 @@ public class Specifications {
 
 		}
 		// TODO Auto-generated method stub
-
 	}
+	
+	@Command("checkIfControlLevelsNeeded")
+	public void checkIfControlLevelsNeeded() {
+		if((checkBoxExcludeControls.isChecked() && checkBoxExcludeControls.isVisible()) || (compareWithControlsBtn.isSelected() && performPairwiseCheckBox.isChecked())) return;
+		else{
+			activateLevelOfConrolsOptions(false);
+			Messagebox.show("Select Pairwise mean comparisons: Compare with control(s) or\nExclude controls in the estimation of genotypic variance","Option not available", Messagebox.OK, Messagebox.ERROR);
+		}
+		
+	}
+	
 	private void chooseResponseVariable() {
 		Set<String> set = numericModel.getSelection();
 		System.out.println("addResponse");
