@@ -3,8 +3,8 @@
 		<groupbox width="600px" id="pgroupbox">
 			Phenotype File:
 			<separator />
-			Format:
-			<combobox id="phenoFormat" model="@load(vm.phenotypeFormat)"
+			Format
+			<combobox id="geboFormat" model="@load(vm.fileFormats)"
 				autodrop="true" selectedIndex="@load(vm.selectedFileFormat)">
 				<template name="model">
 					<comboitem label="${each}" />
@@ -23,10 +23,18 @@
 			Relationship Matrix File:
 			<separator />
 			<radiogroup id="radiogroupMatrix" />
-			<radio label="import" radiogroup="radiogroupMatrix" /> <space width="20px" />
+			<radio label="import" radiogroup="radiogroupMatrix" selected="true"/> <space width="20px" />
 			<radio label="calculate" radiogroup="radiogroupMatrix" />
 			<separator />
-			Name:
+			<label id="typeOfMatrixLabel" value="Type of matrix to generate:" />
+			<combobox id="typeOfMatrixCombobox" model="@load(vm.matrixTypes)"
+				autodrop="true">
+				<template name="model">
+					<comboitem label="${each}" />
+				</template>
+			</combobox>
+			<separator />
+			<label id="matrixFileNameLabel" value="Name:" />
 			<textbox width="400px" value="@load(vm.value1)" />
 			<button id="uploadButton1" label="Browse..." upload="true"
 				onUpload="@command('chooseFile1value1', fileFormat=phenoFormat.selectedIndex)" />
@@ -37,10 +45,10 @@
 	<div id="genobox">
 		<groupbox id="ggroupBox" closable="true" sclass="z-demo-config"
 			width="600px">
-			Genotypic File:
+			Genotype File:
 			<separator />
 			Format:
-			<combobox id="genoFormat" model="@load(vm.phenotypeFormat)"
+			<combobox id="genoFormat" model="@load(vm.genotypeFileMarkerFormats)"
 				autodrop="true" selectedIndex="@load(vm.selectedFileFormat)">
 				<template name="model">
 					<comboitem label="${each}" />
@@ -60,7 +68,7 @@
 			Map file:
 			<separator />
 			Format
-			<combobox id="mapFormat" model="@load(vm.phenotypeFormat)"
+			<combobox id="mapFormat" model="@load(vm.fileFormats)"
 				autodrop="true" selectedIndex="@load(vm.selectedFileFormat)">
 				<template name="model">
 					<comboitem label="${each}" />

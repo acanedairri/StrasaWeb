@@ -1,9 +1,9 @@
 <zk>
 	<div id="phenobox">
-		<groupbox width="600px" id="pgroupbox">
+		<groupbox width="600px" id="pgroupbox" >
 			Select Phenotype File:
 			<separator />
-			Format:
+			Format:	
 			<combobox id="phenoFormat" model="@load(vm.phenotypeFormat)"
 				autodrop="true" selectedIndex="@load(vm.selectedFileFormat)">
 				<template name="model">
@@ -15,9 +15,8 @@
 			<textbox width="400px" value="@load(vm.value1)" />
 			<button id="uploadButton1" label="Browse..." upload="true"
 				onUpload="@command('chooseFile1value1', fileFormat=phenoFormat.selectedIndex)" />
-		</groupbox>
+		</groupbox >
 		<separator/>
-
 	</div>
 	<div id="genobox">
 		<groupbox id="ggroupBox" closable="true" sclass="z-demo-config"
@@ -25,7 +24,7 @@
 			Select Genotypic File:
 			<separator />
 			Format:
-			<combobox id="genoFormat" model="@load(vm.phenotypeFormat)"
+			<combobox id="genoFormat" model="@load(vm.genotypeFormat)"
 				autodrop="true" selectedIndex="@load(vm.selectedFileFormat)">
 				<template name="model">
 					<comboitem label="${each}" />
