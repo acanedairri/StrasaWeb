@@ -111,6 +111,30 @@ public class Index {
 //		qtlModel.setFormat1(fileType);
 	}
 	
+	@Command("updateRadioOptions")
+	public void updateRadioOptions(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,
+			@ContextParam(ContextType.VIEW) Component view, @BindingParam("chosenValue") String chosenValue){
+		
+		if(chosenValue.equals("pedigree")){
+			enablePedigreeOptions(true);
+			enablePerformAllOptions(false);
+		}
+		else if(chosenValue.equals("performAll")){
+			enablePedigreeOptions(false);
+			enablePerformAllOptions(true);
+		}
+	}
+	
+	private void enablePerformAllOptions(boolean state) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void enablePedigreeOptions(boolean state) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@NotifyChange("genotypicFilePath")
 	@Command("chooseGenotypicFile")
 	public void chooseGenotypicFile(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx,

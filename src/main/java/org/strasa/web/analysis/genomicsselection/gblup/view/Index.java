@@ -60,7 +60,7 @@ public class Index {
 	private String errorMessage;
 
 	private ArrayList<String> listString;
-	private List<String> phenotypeFormat, typeOfDesignList, dataFormatList, traitType, mapMethod, pModel, pMethod, lociMethod, scanType;
+	private List<String> matrixTypes, fileFormats, imputationTypes, dataFormatList, genotypeFileMarkerFormats, mapMethod, pModel, pMethod, lociMethod, scanType;
 	private List<String> columnList = new ArrayList<String>();
 	private List<String> continuousVarsList = new ArrayList<String>(); // variable names(columns) from the cross data with Numeric Levels.
 	private List<String> binaryVarsList = new ArrayList<String>(); // variable names(columns) from the cross data with 2 Numeric Levels.
@@ -75,10 +75,9 @@ public class Index {
 	BindContext ctx1, ctx2, ctx3;
 	Component view3, view1, view2;
 	InputStream in1, in2, in3;
-	 
 	private String chosenCrosstype;
-	
-	
+
+
 	private String chosenMapping, fileName1, fileName2, fileName3, dataFileName, fileName, comboboxMapping, coboboxmapping2, comboboxmapping3, comboboxmapping4;
 	private String value1, value2, value3;
 
@@ -100,7 +99,7 @@ public class Index {
 	private Div defaultbox, phenobox, genobox, mfbox, datagroupbox, crossgroupbox, mapbox1, mapbox2, inputbox, divDatagrid, divDataCheckTxt, checkboxDiv;
 	private Vlayout divVlayout;
 	private Groupbox mfgroupbox, ggroupbox, pgroupbox, grpVariableData, grpDataCheckView;
-	
+
 	private Radio deleteRadioButton;
 	private Radio imputeRadioButton;
 	private Radio lijiRadioButton;
@@ -128,13 +127,13 @@ public class Index {
 	private Combobox genoFormat;
 	private Combobox mapFormat;
 	private Combobox comboPMethod;
-	
+
 	private Checkbox cbSetup1;
 	private Checkbox cbSetup2;
 	private Checkbox cbTraitYield;
-//	private Checkbox cbTraitPitht;
-//	private Checkbox cbTraitAwit;
-//	private Checkbox cbTraitAwwd;
+	//	private Checkbox cbTraitPitht;
+	//	private Checkbox cbTraitAwit;
+	//	private Checkbox cbTraitAwwd;
 	private Checkbox cbHpresent;
 	private Checkbox cbSetupModel;
 
@@ -143,7 +142,7 @@ public class Index {
 	private Textbox tbMaxNumber;
 	private File crossDataFile;
 	private Doublespinner dbLodCutOff;
-	
+
 	private Label lblBCSpinner, lblFSpinner;
 	private ArrayList<Checkbox> checkBoxList;
 	private String fileType;
@@ -183,7 +182,7 @@ public class Index {
 	}
 
 	@Command("validateInputFiles")
-//	@NotifyChange("*")
+	//	@NotifyChange("*")
 	public void validateInputFiles(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
 
@@ -238,7 +237,7 @@ public class Index {
 		System.out.println(qtlModel.toString());
 		rServeManager.doCheckQTLData(qtlModel);
 		reloadTxtGrid();
-//		displayCrossData(qtlModel.getResultFolderPath());
+		//		displayCrossData(qtlModel.getResultFolderPath());
 	}
 
 	@Command("runQTL")
@@ -261,7 +260,7 @@ public class Index {
 			errorMessage = "Please choose a trait type";
 			return false;
 		}
-		
+
 		listString = getCheckedBoxes(checkBoxList);
 		if(listString.size()<1){//
 			errorMessage = "Please choose at least one trait";
@@ -426,7 +425,7 @@ public class Index {
 
 	private ArrayList<String>  getCheckedBoxes(ArrayList<Checkbox> checkBoxList) {
 		// TODO Auto-generated method stub
-		
+
 		ArrayList<String> ls= new ArrayList<String>();
 		for(Checkbox c: checkBoxList){
 			System.out.println(c.getLabel() +" is Checked?" +  c.isChecked());
@@ -482,7 +481,7 @@ public class Index {
 		else
 			dbLodThreshold.setDisabled(true);
 	}
-	
+
 	@Command("errorCheck")
 	public void errorCheck(){
 
@@ -540,7 +539,7 @@ public class Index {
 			makeNull();
 		}
 	}
-	
+
 
 	@Command("choosePModel")
 	@NotifyChange("pMethod")
@@ -568,7 +567,7 @@ public class Index {
 		fileName2 = null;
 		fileName3 = null;
 	}
-	
+
 	private void clearFileFormats() {
 		// TODO Auto-generated method stub
 		file1Formats.clear();
@@ -576,8 +575,8 @@ public class Index {
 	}
 
 	public void createPhenoBox(){ 
-//		if (!defaultbox.getChildren().isEmpty())
-//			defaultbox.getFirstChild().detach();
+		//		if (!defaultbox.getChildren().isEmpty())
+		//			defaultbox.getFirstChild().detach();
 
 		Include includeDefaultzul = new Include();
 		includeDefaultzul.setId("includeDefaultzul");
@@ -613,7 +612,7 @@ public class Index {
 			mapping3=false; mapping4=true;
 		}
 	}
-	
+
 	@NotifyChange("pModel")
 	@Command
 	@DependsOn("selectedTraitType")
@@ -653,9 +652,9 @@ public class Index {
 
 		tempFile = new File(event.getMedia().getName());
 		setFileName1(event.getMedia().getName());
-		System.out.println(tempFile.getAbsolutePath());	
+		System.out.println(tempFile.getAbsolutePath());
 		fileType = fileName1.split("\\.")[1];
-		
+
 		value1 = tempFile.getAbsolutePath();
 		if (file1 == null)
 			try {
@@ -665,7 +664,7 @@ public class Index {
 				e1.printStackTrace();
 			}
 
-		
+
 		if (!file1Formats.contains(fileType)) {
 			errorMessage = "Error: File must be in a ";
 			for(String s: file1Formats){
@@ -675,7 +674,7 @@ public class Index {
 					"Upload Error", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
-		
+
 		in1 = event.getMedia().isBinary() ? event.getMedia().getStreamData() : new ReaderInputStream(event.getMedia().getReaderData());
 		qtlModel.setFile1(file1.getAbsolutePath());
 		qtlModel.setFormat1(fileType);
@@ -696,16 +695,16 @@ public class Index {
 		setFileName2(event.getMedia().getName());
 		System.out.println(tempFile.getAbsolutePath());	
 		fileType = fileName2.split("\\.")[1];
-		
+
 		value2 = tempFile.getAbsolutePath();
 		if (file2 == null)
 			try {
-					file2 = File.createTempFile(fileName2, "."+fileType);
+				file2 = File.createTempFile(fileName2, "."+fileType);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 
-		
+
 		if (!file2Formats.contains(fileType)) {
 			errorMessage = "Error: File must be in a ";
 			for(String s: file2Formats){
@@ -715,7 +714,7 @@ public class Index {
 					"Upload Error", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
-		
+
 
 		in2 = event.getMedia().isBinary() ? event.getMedia().getStreamData() : new ReaderInputStream(event.getMedia().getReaderData());
 
@@ -782,8 +781,8 @@ public class Index {
 		rServeManager = new RServeManager();
 		System.out.println(qtlModel.toString());
 		rServeManager.doCreateQTLData(qtlModel);
-//
-//		displayCrossData(qtlModel.getResultFolderPath());
+		//
+		//		displayCrossData(qtlModel.getResultFolderPath());
 	}
 
 	private void displayCrossData(String resultFolderPath) {
@@ -801,7 +800,7 @@ public class Index {
 		dataFileName = crossDataFile.getName();
 		refreshCsv();
 		if (this.isUpdateMode) setNewDataSet(true);
-		
+
 	}
 
 	private void uploadFile1(){
@@ -855,13 +854,13 @@ public class Index {
 			rawData.remove(0);
 			dataList = new ArrayList<String[]>(rawData);
 			System.out.println(Arrays.toString(dataList.get(0)));
-			
+
 			continuousVarsList = getContinuousVarsFromList(columnList);
 			binaryVarsList = getBinaryVarsFromList(continuousVarsList);
 			ordinalVarsList = getOrdinalVarsFromList(continuousVarsList);
-			
+
 			createCheckboxes(continuousVarsList);
-			
+
 			if (!this.isDataReUploaded)
 				System.out.println("gbUploadData.invalidate()");
 		} catch (FileNotFoundException e) {
@@ -880,13 +879,13 @@ public class Index {
 		// TODO Auto-generated method stub
 		Checkbox newCheckbox= new Checkbox();
 		for(String s: varList){
-			 newCheckbox= new Checkbox(s);
-//			newCheckbox.setLabel(s);
-			 divVlayout.appendChild(newCheckbox);
+			newCheckbox= new Checkbox(s);
+			//			newCheckbox.setLabel(s);
+			divVlayout.appendChild(newCheckbox);
 			newCheckbox.setParent(divVlayout);
 			checkBoxList.add(newCheckbox);
 			divVlayout.setVisible(true);
-			
+
 		}
 	}
 
@@ -898,17 +897,17 @@ public class Index {
 				varList.add(s);
 			}
 		}
-	return varList;
+		return varList;
 	}
-	
+
 	private List<String> getBinaryVarsFromList(List<String> numvarList) {
 		// TODO Auto-generated method stub
 		List<String> varList = new ArrayList<String>();
-			for(String s:numvarList){
-				if(rServeManager.getLevels(columnList, dataList, s).length==2){//if levels is only 2
-					varList.add(s);
-				}
+		for(String s:numvarList){
+			if(rServeManager.getLevels(columnList, dataList, s).length==2){//if levels is only 2
+				varList.add(s);
 			}
+		}
 		return varList;
 	}
 	private List<String> getContinuousVarsFromList(List<String> columnNames) {
@@ -924,7 +923,7 @@ public class Index {
 		rServeManager.end();
 		return varList;
 	}
-	
+
 	public ArrayList<ArrayList<String>> getCsvData() {
 		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
 		if (dataList.isEmpty())
@@ -954,7 +953,7 @@ public class Index {
 
 	public void reloadTxtGrid() {
 		grpDataCheckView.setVisible(true);
-		
+
 		if (!divDataCheckTxt.getChildren().isEmpty())
 			divDataCheckTxt.getFirstChild().detach();
 
@@ -979,10 +978,10 @@ public class Index {
 		studyInformationPage.setParent(divDataCheckTxt);
 		studyInformationPage.setDynamicProperty("txtFile", fileContent);
 		studyInformationPage.setSrc("/user/analysis/txtviewer.zul");
-		
+
 	}
 
-	
+
 	public static List<String> mMethod(){
 		return Arrays.asList(new String[]{"IM", "CIM", "MQM", "Bayesian Mapping", "Two-d Mapping", "QTLRel", "MAGIC"});
 	}
@@ -1009,15 +1008,15 @@ public class Index {
 	public static List<String> pMList(){
 		return Arrays.asList(new String[]{"Normal", "Binary", "Two-Part", "Non-parametric"});
 	}
-	
+
 	public static List<String> continuousMList(){
 		return Arrays.asList(new String[]{"Normal", "Two-Part", "Non-parametric"});
 	}
-	
+
 	public static List<String> binaryMList(){
 		return Arrays.asList(new String[]{ "Binary"});
 	}
-	
+
 	public static List<String> ordinalMList(){
 		return Arrays.asList(new String[]{"Non-parametric"});
 	}
@@ -1028,7 +1027,7 @@ public class Index {
 	public static List<String> pMethodBInaryList(){
 		return Arrays.asList(new String[]{"Maximum Likehood via EM", "Haley-Knott Regression"});
 	}	
-	
+
 	public static List<String> genotype(){
 		return Arrays.asList(new String[]{"Comma-separated (.csv) file", "Tab Delimited text (.txt) file"});
 	}
@@ -1044,7 +1043,7 @@ public class Index {
 
 	public List<String[]> getDataList() {
 		System.out.println("DatALIST GEt");
-		
+
 		if (true)
 			return dataList;
 
@@ -1057,32 +1056,24 @@ public class Index {
 		return pageData;
 	}
 
-	public List<String> getTypeOfDesignList() {
-		return typeOfDesignList;
+	public List<String> getImputationTypes() {
+			return Arrays.asList(new String[]{"random", "family"});
 	}
 
 	public boolean checkVisibility(int num){
 		return true;
 	}
 
-	public void setTypeOfDesignList(List<String> typeOfDesignList) {
-		this.typeOfDesignList = typeOfDesignList;
-	}
-
 	public List<String> getDataFormatList() {
-	 	return Arrays.asList(new String[]{"default","synbreed gpData"});
+		return Arrays.asList(new String[]{"default","synbreed gpData"});
 	}
 
 	public void setDataFormatList(List<String> dataFormatList) {
 		this.dataFormatList = dataFormatList;
 	}
 
-	public List<String> getTraitType() {
-		return traitType;
-	}
-
-	public void setTraitType(List<String> traitType) {
-		this.traitType = traitType;
+	public List<String> getGenotypeFileMarkerFormats() {
+		return Arrays.asList(new String[]{"AA, AB, BB, NA", "AG, CT, ..., NA", "A/G, C/T, NA", "0(AA), 1(AB), 2(BB), NA", "No heterozygous genotype"});
 	}
 
 	public List<String> getMapMethod() {
@@ -1322,12 +1313,15 @@ public class Index {
 		this.inputbox = inputbox;
 	}
 
-	public List<String> getPhenotypeFormat() {
+	public List<String> getMatrixTypes() {
+		return Arrays.asList(new String[]{"realized relatedness (Habier/Van Raden)","realized relatedness (Astle and Balding)","realized relatedness by simple matching","realized relatedness by corrected simple matching"});
+	}
+	public List<String> getFileFormats() {
 		return Arrays.asList(new String[]{"Space-separated (.txt)", "Comma-separated (.csv)", "Tab-separated (.txt)", "Semi-colon-separated (.txt)"});
 	}
 
-	public void setPhenotypeFormat(List<String> phenotypeFormat) {
-		this.phenotypeFormat = phenotypeFormat;
+	public void setMatrixTypes(List<String> matrixTypes) {
+		this.matrixTypes = matrixTypes;
 	}
 
 	public Integer getSelected() {
