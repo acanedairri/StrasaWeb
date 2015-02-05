@@ -13,12 +13,15 @@ import org.strasa.web.analysis.view.model.QTLAnalysisModel;
 import org.strasa.web.analysis.view.model.SingleSiteAnalysisModel;
 import org.strasa.web.utilities.InputTransform;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zul.Messagebox;
 public class RServeManager {
 	private RConnection rConnection;
 
 	private InputTransform inputTransform;
 
 	private StringBuilder rscriptCommand;
+
+	private String errorMessage;
 
 	private static String BSLASH = "\\";
 	private static String FSLASH = "/";
@@ -34,12 +37,16 @@ public class RServeManager {
 			//			rConnection.eval("library(STAR)"); // not yet 3.0.2
 		} catch (RserveException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			 errorMessage="RConnection refused.\nRServe Library was not initialized, please contact your administrator.";
+			 e.printStackTrace();
+			 
+			 Messagebox.show(errorMessage);
+			
 		}
 	}
 
 	private void readData(String dataFileName){
-		String readData = "dataRead <- read.csv(\"" + dataFileName + "\", header = TRUE, na.strings = c(\"NA\",\".\",\"\"), blank.lines.skip=TRUE, sep = \",\")";
+		String readData = "dataRead <- read.csv(\"" + dataFileName + "\", header = TRUE, na.strings = c(\"NA\",\".\",\"-\",\"\"), blank.lines.skip=TRUE, sep = \",\")";
 		System.out.println(readData);
 		try {
 			rConnection.eval(readData);
@@ -82,7 +89,8 @@ public class RServeManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		rConnection.close();
+		end();
+//		rConnection.close();
 		return toreturn;
 	}
 
@@ -346,7 +354,7 @@ public class RServeManager {
 							String outDescStat = "capture.output(cat(\"DESCRIPTIVE STATISTICS:\n\n\"),file=\"" + outFileName + "\",append = TRUE)"; 
 							String outDescStat2 = "capture.output(outDesc,file=\"" + outFileName + "\",append = TRUE)";
 
-							String runSuccessDescStat = rConnection.eval("class(outDesc)").toString();	
+							String runSuccessDescStat = rConnection.eval("class(outDesc)").asString();	
 							if (runSuccessDescStat != null && runSuccessDescStat.equals("try-error")) {	
 								System.out.println("desc stat: error");
 								String checkError = "msg <- trimStrings(strsplit(outDesc, \":\")[[1]])";
@@ -387,7 +395,7 @@ public class RServeManager {
 							//check if the data has too many missing observation
 							double nrowData=rConnection.eval("ssa1$output[[" + i + "]]$site[[" + j + "]]$responseRate").asDouble();
 							if (nrowData < 0.80) {
-								String allNAWarning = rConnection.eval("ssa1$output[[" + i + "]]$site[[" + j + "]]$manyNAWarning").toString();
+								String allNAWarning = rConnection.eval("ssa1$output[[" + i + "]]$site[[" + j + "]]$manyNAWarning").asString();
 								String printError1 = "capture.output(cat(\"***\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 								String printError2 = "capture.output(cat(\"ERROR:\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 								String printError3 = "capture.output(cat(\"" + allNAWarning + "\\n\"), file=\"" + outFileName + "\",append = TRUE)";
@@ -402,9 +410,9 @@ public class RServeManager {
 								printAllOutputFixed=false;
 
 							} else {
-								String lmerRun=rConnection.eval("ssa1$output[[" + i + "]]$site[[" + j + "]]$lmerRun").toString();
+								String lmerRun=rConnection.eval("ssa1$output[[" + i + "]]$site[[" + j + "]]$lmerRun").asString();
 								if (lmerRun.equals("ERROR")) {
-									String lmerError = rConnection.eval("ssa1$output[[" + i + "]]$site[[" + j + "]]$lmerError").toString();
+									String lmerError = rConnection.eval("ssa1$output[[" + i + "]]$site[[" + j + "]]$lmerError").asString();
 									String printError1 = "capture.output(cat(\"***\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 									String printError2 = "capture.output(cat(\"ERROR:\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 									String printError3 = "capture.output(cat(\"" + lmerError + "\\n\"), file=\"" + outFileName + "\",append = TRUE)";
@@ -431,7 +439,7 @@ public class RServeManager {
 								rConnection.eval(funcTrialSum);
 								//								System.out.println(funcTrialSum);
 
-								String runSuccessTS = rConnection.eval("class(funcTrialSum)").toString();
+								String runSuccessTS = rConnection.eval("class(funcTrialSum)").asString();
 								if (runSuccessTS != null && runSuccessTS.equals("try-error")) {	
 									System.out.println("class info: error");
 									String checkError = "msg <- trimStrings(strsplit(funcTrialSum, \":\")[[1]])";
@@ -555,7 +563,7 @@ public class RServeManager {
 										rConnection.eval(outCompareControl);
 
 
-										String runSuccessPwC = rConnection.eval("class(pwControl)").toString();	
+										String runSuccessPwC = rConnection.eval("class(pwControl)").asString();	
 										if (runSuccessPwC != null && runSuccessPwC.equals("try-error")) {	
 											System.out.println("compare with control: error");
 											String checkError = "msg <- trimStrings(strsplit(pwControl, \":\")[[1]])";
@@ -572,7 +580,7 @@ public class RServeManager {
 											rConnection.eval(outCompareControl2n);
 
 											// display warning generated by checkTest in ssa.test
-											String warningControlTest = rConnection.eval("pwControl$controlTestWarning").toString();
+											String warningControlTest = rConnection.eval("pwControl$controlTestWarning").asString();
 
 											if (!warningControlTest.equals("NONE")) {
 												String warningCheckTest2 = "capture.output(cat(\"----- \nNOTE:\\n\"), file=\"" + outFileName + "\",append = TRUE)";
@@ -597,7 +605,7 @@ public class RServeManager {
 											rConnection.eval(funcPwAll);
 											//												System.out.println(funcPwAll);
 
-											String runSuccessPwAll = rConnection.eval("class(pwAll)").toString();
+											String runSuccessPwAll = rConnection.eval("class(pwAll)").asString();
 											if (runSuccessPwAll != null && runSuccessPwAll.equals("try-error")) {
 												System.out.println("all pairwise: error");
 												String checkError = "msg <- trimStrings(strsplit(pwAll, \":\")[[1]])";
@@ -627,8 +635,8 @@ public class RServeManager {
 					}
 
 					//default output: save the means, standard error of the mean, variance and no. of reps in a file
-					String checkMeanSSE = rConnection.eval("ssa1$meansseWarning").toString();
-					String checkVarRep = rConnection.eval("ssa1$varrepWarning").toString();
+					String checkMeanSSE = rConnection.eval("ssa1$meansseWarning").asString();
+					String checkVarRep = rConnection.eval("ssa1$varrepWarning").asString();
 					System.out.println("checkMeanSSE: " + checkMeanSSE);
 					System.out.println("checkVarRep: " + checkVarRep);
 
@@ -648,7 +656,7 @@ public class RServeManager {
 						rConnection.eval(funcSaveSesVarRep);
 						rConnection.eval(funcSaveSesVarRepCsv);
 
-						String runSuccessSaveMeansSes = rConnection.eval("class(saveMeans)").toString();
+						String runSuccessSaveMeansSes = rConnection.eval("class(saveMeans)").asString();
 						if (runSuccessSaveMeansSes != null && runSuccessSaveMeansSes.equals("try-error")) {	
 							System.out.println("saving means file: error");
 							String checkError = "msg <- trimStrings(strsplit(saveMeans, \":\")[[1]])";
@@ -673,7 +681,7 @@ public class RServeManager {
 						System.out.println(diagPlotsFunc);
 						rConnection.eval(diagPlotsFunc);
 
-						String runSuccessDiagPlots = rConnection.eval("class(diagPlots)").toString();
+						String runSuccessDiagPlots = rConnection.eval("class(diagPlots)").asString();
 						if (runSuccessDiagPlots != null && runSuccessDiagPlots.equals("try-error")) {	
 							System.out.println("diagnostic plots(genotype fixed): error");
 							String checkError = "msg <- trimStrings(strsplit(diagPlots, \":\")[[1]])";
@@ -770,7 +778,7 @@ public class RServeManager {
 				rConnection.eval(outspace);
 				System.out.println(funcSsaRandom);
 
-				String runSuccess2 = rConnection.eval("class(ssa2)").toString();	
+				String runSuccess2 = rConnection.eval("class(ssa2)").asString();	
 				if (runSuccess2 != null && runSuccess2.equals("try-error")) {	
 					System.out.println("ssa2: error");
 					String checkError = "msg <- trimStrings(strsplit(ssa2, \":\")[[1]])";
@@ -807,7 +815,7 @@ public class RServeManager {
 							String outDescStat = "capture.output(cat(\"DESCRIPTIVE STATISTICS:\n\n\"),file=\"" + outFileName + "\",append = TRUE)";
 							String outDescStat2 = "capture.output(outDesc,file=\"" + outFileName + "\",append = TRUE)"; 
 
-							String runSuccessDescStat = rConnection.eval("class(outDesc)").toString();
+							String runSuccessDescStat = rConnection.eval("class(outDesc)").asString();
 							if (runSuccessDescStat != null && runSuccessDescStat.equals("try-error")) {	
 								System.out.println("desc stat: error");
 								String checkError = "msg <- trimStrings(strsplit(outDesc, \":\")[[1]])";
@@ -847,7 +855,7 @@ public class RServeManager {
 							//check if the data has too many missing observations
 							double responseRate=rConnection.eval("ssa2$output[[" + i + "]]$site[[" + j + "]]$responseRate").asDouble();
 							if (responseRate < 0.8) {
-								String allNAWarning2 = rConnection.eval("ssa2$output[[" + i + "]]$site[[" + j + "]]$manyNAWarning").toString();
+								String allNAWarning2 = rConnection.eval("ssa2$output[[" + i + "]]$site[[" + j + "]]$manyNAWarning").asString();
 								String printError1 = "capture.output(cat(\"***\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 								String printError2 = "capture.output(cat(\"ERROR:\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 								String printError3 = "capture.output(cat(\"" + allNAWarning2 + "\\n\"), file=\"" + outFileName + "\",append = TRUE)";
@@ -861,9 +869,9 @@ public class RServeManager {
 								rConnection.eval(outspace);
 								printAllOutputRandom=false;
 							} else {
-								String lmerRun=rConnection.eval("ssa2$output[[" + i + "]]$site[[" + j + "]]$lmerRun").toString();
+								String lmerRun=rConnection.eval("ssa2$output[[" + i + "]]$site[[" + j + "]]$lmerRun").asString();
 								if (lmerRun.equals("ERROR")) {
-									String lmerError = rConnection.eval("ssa2$output[[" + i + "]]$site[[" + j + "]]$lmerError").toString();
+									String lmerError = rConnection.eval("ssa2$output[[" + i + "]]$site[[" + j + "]]$lmerError").asString();
 									String printError1 = "capture.output(cat(\"***\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 									String printError2 = "capture.output(cat(\"ERROR:\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 									String printError3 = "capture.output(cat(\"" + lmerError + "\\n\"), file=\"" + outFileName + "\",append = TRUE)";
@@ -903,7 +911,7 @@ public class RServeManager {
 
 								rConnection.eval(funcTrialSum);
 
-								String runSuccessTS = rConnection.eval("class(funcTrialSum)").toString();
+								String runSuccessTS = rConnection.eval("class(funcTrialSum)").asString();
 								if (runSuccessTS != null && runSuccessTS.equals("try-error")) {	
 									System.out.println("class info: error");
 									String checkError = "msg <- trimStrings(strsplit(funcTrialSum, \":\")[[1]])";
@@ -1061,7 +1069,7 @@ public class RServeManager {
 						System.out.println(funcEstCorr);
 						rConnection.eval(funcEstCorr);	
 
-						String runSuccessGPCorr = rConnection.eval("class(gpcorr)").toString();
+						String runSuccessGPCorr = rConnection.eval("class(gpcorr)").asString();
 						if (runSuccessGPCorr != null && runSuccessGPCorr.equals("try-error")) {	
 							System.out.println("geno pheno corr: error");
 							String checkError = "msg <- trimStrings(strsplit(gpcorr, \":\")[[1]])";
@@ -1129,7 +1137,7 @@ public class RServeManager {
 						rConnection.eval(meansFileName2);
 						rConnection.eval(funcSavePredMeansCsv);
 
-						String runSuccessSavePredMeans = rConnection.eval("class(saveDataB1)").toString();
+						String runSuccessSavePredMeans = rConnection.eval("class(saveDataB1)").asString();
 						if (runSuccessSavePredMeans != null && runSuccessSavePredMeans.equals("try-error")) {	
 							System.out.println("save pred means: error");
 							String checkError = "msg <- trimStrings(strsplit(saveDataB1, \":\")[[1]])";
@@ -1154,7 +1162,7 @@ public class RServeManager {
 						System.out.println(diagPlotsFunc);
 						rConnection.eval(diagPlotsFunc);
 
-						String runSuccessDiagPlots = rConnection.eval("class(diagPlots)").toString();
+						String runSuccessDiagPlots = rConnection.eval("class(diagPlots)").asString();
 						if (runSuccessDiagPlots != null && runSuccessDiagPlots.equals("try-error")) {	
 							System.out.println("diagnostic plots (genotype random): error");
 							String checkError = "msg <- trimStrings(strsplit(diagPlots, \":\")[[1]])";
@@ -1185,7 +1193,7 @@ public class RServeManager {
 					System.out.println(runSsaResid1);
 					rConnection.eval(runSsaResid1);
 
-					String runSuccessDiagPlots = rConnection.eval("class(resid_f)").toString();
+					String runSuccessDiagPlots = rConnection.eval("class(resid_f)").asString();
 					if (runSuccessDiagPlots != null && runSuccessDiagPlots.equals("try-error")) {	
 						System.out.println("ssa.resid (genotype fixed): error");
 						String checkError = "msg <- trimStrings(strsplit(resid_f, \":\")[[1]])";
@@ -1206,7 +1214,7 @@ public class RServeManager {
 							rConnection.eval(residFileNameFixed);
 							rConnection.eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = rConnection.eval("class(saveResid)").toString();
+							String runSuccessSaveResid = rConnection.eval("class(saveResid)").asString();
 							if (runSuccessSaveResid != null && runSuccessSaveResid.equals("try-error")) {	
 								System.out.println("save residuals: error");
 								String checkError = "msg <- trimStrings(strsplit(saveResid, \":\")[[1]])";
@@ -1230,7 +1238,7 @@ public class RServeManager {
 								System.out.println(funcHeat);
 								rConnection.eval(funcHeat);
 
-								String runSuccessHeat = rConnection.eval("class(heat1)").toString();
+								String runSuccessHeat = rConnection.eval("class(heat1)").asString();
 								if (runSuccessHeat != null && runSuccessHeat.equals("try-error")) {	
 									System.out.println("heatmap (fixed): error");
 									String checkError = "msg <- trimStrings(strsplit(heat1, \":\")[[1]])";
@@ -1251,7 +1259,7 @@ public class RServeManager {
 											int j = m + 1; // 1-relative index;
 
 											String warningListCommand = "heat1[[" + i + "]]$site[["+ j + "]]";
-											String warningList = rConnection.eval(warningListCommand).toString();
+											String warningList = rConnection.eval(warningListCommand).asString();
 
 											if (warningList.equals("empty")) {
 
@@ -1278,7 +1286,7 @@ public class RServeManager {
 					System.out.println(runSsaResid2);
 					rConnection.eval(runSsaResid2);
 
-					String runSuccessDiagPlots = rConnection.eval("class(resid_r)").toString();
+					String runSuccessDiagPlots = rConnection.eval("class(resid_r)").asString();
 					if (runSuccessDiagPlots != null && runSuccessDiagPlots.equals("try-error")) {	
 						System.out.println("ssa.resid (genotype random): error");
 						String checkError = "msg <- trimStrings(strsplit(resid_r, \":\")[[1]])";
@@ -1291,7 +1299,7 @@ public class RServeManager {
 						rConnection.eval(checkError4);
 					} else {
 						String checkResid1 = rConnection.eval("resid_r$residWarning").asString();
-						System.out.println("checkResid2: " + checkResid1);
+						System.out.println("checkResid1: " + checkResid1);
 						if (checkResid1.equals("empty")) {
 							System.out.println("Saving resid (random) not done.");
 						} else {
@@ -1299,7 +1307,7 @@ public class RServeManager {
 							rConnection.eval(residFileNameRandom);
 							rConnection.eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = rConnection.eval("class(saveResid)").toString();
+							String runSuccessSaveResid = rConnection.eval("class(saveResid)").asString();
 							if (runSuccessSaveResid != null && runSuccessSaveResid.equals("try-error")) {	
 								System.out.println("save residuals: error");
 								String checkError = "msg <- trimStrings(strsplit(saveResid, \":\")[[1]])";
@@ -1323,7 +1331,7 @@ public class RServeManager {
 								System.out.println(funcHeat);
 								rConnection.eval(funcHeat);
 
-								String runSuccessHeat = rConnection.eval("class(heat2)").toString();
+								String runSuccessHeat = rConnection.eval("class(heat2)").asString();
 								if (runSuccessHeat != null && runSuccessHeat.equals("try-error")) {	
 									System.out.println("heatmap (random): error");
 									String checkError = "msg <- trimStrings(strsplit(heat2, \":\")[[1]])";
@@ -1344,7 +1352,7 @@ public class RServeManager {
 											int j = m + 1; // 1-relative index;
 
 											String warningListCommand = "heat2[[" + i + "]]$site[["+ j + "]]";
-											String warningList = rConnection.eval(warningListCommand).toString();
+											String warningList = rConnection.eval(warningListCommand).asString();
 
 											if (warningList.equals("empty")) {
 
@@ -1376,7 +1384,7 @@ public class RServeManager {
 					rConnection.eval(runSsaResid1);
 					rConnection.eval(runSsaResid2);
 
-					String runSuccessResidFixed = rConnection.eval("class(resid_f)").toString();
+					String runSuccessResidFixed = rConnection.eval("class(resid_f)").asString();
 					if (runSuccessResidFixed != null && runSuccessResidFixed.equals("try-error")) {	
 						System.out.println("ssa.resid (genotype fixed): error");
 						String checkError = "msg <- trimStrings(strsplit(resid_f, \":\")[[1]])";
@@ -1388,7 +1396,7 @@ public class RServeManager {
 						rConnection.eval(checkError3);
 						rConnection.eval(checkError4);
 					} else {
-						String checkResid1 = rConnection.eval("resid_f$residWarning").toString();
+						String checkResid1 = rConnection.eval("resid_f$residWarning").asString();
 						System.out.println("checkResid1: " + checkResid1);
 						if (checkResid1.equals("empty")) {
 							System.out.println("Saving resid (fixed) not done.");
@@ -1397,7 +1405,7 @@ public class RServeManager {
 							rConnection.eval(residFileNameFixed);
 							rConnection.eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = rConnection.eval("class(saveResid)").toString();
+							String runSuccessSaveResid = rConnection.eval("class(saveResid)").asString();
 							if (runSuccessSaveResid != null && runSuccessSaveResid.equals("try-error")) {	
 								System.out.println("save residuals: error");
 								String checkError = "msg <- trimStrings(strsplit(saveResid, \":\")[[1]])";
@@ -1421,7 +1429,7 @@ public class RServeManager {
 								System.out.println(funcHeat);
 								rConnection.eval(funcHeat);
 
-								String runSuccessHeat = rConnection.eval("class(heat1)").toString();
+								String runSuccessHeat = rConnection.eval("class(heat1)").asString();
 								if (runSuccessHeat != null && runSuccessHeat.equals("try-error")) {	
 									System.out.println("heatmap (fixed): error");
 									String checkError = "msg <- trimStrings(strsplit(heat1, \":\")[[1]])";
@@ -1442,7 +1450,7 @@ public class RServeManager {
 											int j = m + 1; // 1-relative index;
 
 											String warningListCommand = "heat1[[" + i + "]]$site[["+ j + "]]";
-											String warningList = rConnection.eval(warningListCommand).toString();
+											String warningList = rConnection.eval(warningListCommand).asString();
 
 											if (warningList.equals("empty")) {
 
@@ -1459,7 +1467,7 @@ public class RServeManager {
 						}
 					}
 
-					String runSuccessResidRandom = rConnection.eval("class(resid_r)").toString();
+					String runSuccessResidRandom = rConnection.eval("class(resid_r)").asString();
 					if (runSuccessResidRandom != null && runSuccessResidRandom.equals("try-error")) {	
 						System.out.println("ssa.resid (genotype random): error");
 						String checkError = "msg <- trimStrings(strsplit(resid_r, \":\")[[1]])";
@@ -1472,8 +1480,8 @@ public class RServeManager {
 						rConnection.eval(checkError3);
 						rConnection.eval(checkError4);
 					} else {
-						String checkResid1 = rConnection.eval("resid_r$residWarning").toString();
-						System.out.println("checkResid2: " + checkResid1);
+						String checkResid1 = rConnection.eval("resid_r$residWarning").asString();
+						System.out.println("checkResid1: " + checkResid1);
 						if (checkResid1.equals("empty")) {
 							System.out.println("Saving resid (random) not done.");
 						} else {
@@ -1481,7 +1489,7 @@ public class RServeManager {
 							rConnection.eval(residFileNameRandom);
 							rConnection.eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = rConnection.eval("class(saveResid2)").toString();
+							String runSuccessSaveResid = rConnection.eval("class(saveResid2)").asString();
 							if (runSuccessSaveResid != null && runSuccessSaveResid.equals("try-error")) {	
 								System.out.println("save residuals: error");
 								String checkError = "msg <- trimStrings(strsplit(saveResid2, \":\")[[1]])";
@@ -1504,7 +1512,7 @@ public class RServeManager {
 								System.out.println(funcHeat);
 								rConnection.eval(funcHeat);
 
-								String runSuccessHeat = rConnection.eval("class(heat2)").toString();
+								String runSuccessHeat = rConnection.eval("class(heat2)").asString();
 								if (runSuccessHeat != null && runSuccessHeat.equals("try-error")) {	
 									System.out.println("heatmap (random): error");
 									String checkError = "msg <- trimStrings(strsplit(heat2, \":\")[[1]])";
@@ -1525,7 +1533,7 @@ public class RServeManager {
 											int j = m + 1; // 1-relative index;
 
 											String warningListCommand = "heat2[[" + i + "]]$site[["+ j + "]]";
-											String warningList = rConnection.eval(warningListCommand).toString();
+											String warningList = rConnection.eval(warningListCommand).asString();
 
 											if (warningList.equals("empty")) {
 
@@ -1562,7 +1570,7 @@ public class RServeManager {
 			System.out.println(boxHistFunc);
 			rConnection.eval(boxHistFunc);
 
-			String runSuccessBoxHist = rConnection.eval("class(boxHist)").toString();
+			String runSuccessBoxHist = rConnection.eval("class(boxHist)").asString();
 			if (runSuccessBoxHist != null && runSuccessBoxHist.equals("try-error")) {	
 				System.out.println("boxplot/histogram: error");
 				String checkError = "msg <- trimStrings(strsplit(boxHist, \":\")[[1]])";
@@ -1581,7 +1589,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 	}
 
@@ -1752,7 +1761,7 @@ public class RServeManager {
 
 				System.out.println(funcSsaFixed);
 
-				String runSuccess = rConnection.eval("class(ssa1)").toString();
+				String runSuccess = rConnection.eval("class(ssa1)").asString();
 				if (runSuccess != null && runSuccess.equals("try-error")) {	
 					System.out.println("ssa.test: error");
 					String checkError = "msg <- trimStrings(strsplit(ssa1, \":\")[[1]])";
@@ -1790,7 +1799,7 @@ public class RServeManager {
 							String outDescStat = "capture.output(cat(\"DESCRIPTIVE STATISTICS:\n\n\"),file=\"" + outFileName + "\",append = TRUE)"; 
 							String outDescStat2 = "capture.output(outDesc,file=\"" + outFileName + "\",append = TRUE)";
 
-							String runSuccessDescStat = rConnection.eval("class(outDesc)").toString();	
+							String runSuccessDescStat = rConnection.eval("class(outDesc)").asString();	
 							if (runSuccessDescStat != null && runSuccessDescStat.equals("try-error")) {	
 								System.out.println("desc stat: error");
 								String checkError = "msg <- trimStrings(strsplit(outDesc, \":\")[[1]])";
@@ -1830,7 +1839,7 @@ public class RServeManager {
 							//check if the data has too many missing observation
 							double nrowData=rConnection.eval("ssa1$output[[" + i + "]]$site[[" + j + "]]$responseRate").asDouble();
 							if (nrowData < 0.80) {
-								String allNAWarning = rConnection.eval("ssa1$output[[" + i + "]]$site[[" + j + "]]$manyNAWarning").toString();
+								String allNAWarning = rConnection.eval("ssa1$output[[" + i + "]]$site[[" + j + "]]$manyNAWarning").asString();
 								String printError1 = "capture.output(cat(\"***\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 								String printError2 = "capture.output(cat(\"ERROR:\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 								String printError3 = "capture.output(cat(\"" + allNAWarning + "\\n\"), file=\"" + outFileName + "\",append = TRUE)";
@@ -1845,9 +1854,9 @@ public class RServeManager {
 								printAllOutputFixed=false;
 
 							} else {
-								String lmerRun=rConnection.eval("ssa1$output[[" + i + "]]$site[[" + j + "]]$lmerRun").toString();
+								String lmerRun=rConnection.eval("ssa1$output[[" + i + "]]$site[[" + j + "]]$lmerRun").asString();
 								if (lmerRun.equals("ERROR")) {
-									String lmerError = rConnection.eval("ssa1$output[[" + i + "]]$site[[" + j + "]]$lmerError").toString();
+									String lmerError = rConnection.eval("ssa1$output[[" + i + "]]$site[[" + j + "]]$lmerError").asString();
 									String printError1 = "capture.output(cat(\"***\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 									String printError2 = "capture.output(cat(\"ERROR:\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 									String printError3 = "capture.output(cat(\"" + lmerError + "\\n\"), file=\"" + outFileName + "\",append = TRUE)";
@@ -1874,7 +1883,7 @@ public class RServeManager {
 								rConnection.eval(funcTrialSum);
 								//								System.out.println(funcTrialSum);
 
-								String runSuccessTS = rConnection.eval("class(funcTrialSum)").toString();
+								String runSuccessTS = rConnection.eval("class(funcTrialSum)").asString();
 								if (runSuccessTS != null && runSuccessTS.equals("try-error")) {	
 									System.out.println("class info: error");
 									String checkError = "msg <- trimStrings(strsplit(funcTrialSum, \":\")[[1]])";
@@ -1988,7 +1997,7 @@ public class RServeManager {
 										System.out.println(compareCtrl);
 										rConnection.eval(compareCtrl);
 
-										String runSuccessCompareCtrl = rConnection.eval("class(cntrl)").toString();
+										String runSuccessCompareCtrl = rConnection.eval("class(cntrl)").asString();
 										if (runSuccessCompareCtrl != null && runSuccessCompareCtrl.equals("try-error")) {
 											System.out.println("compare with control: error");
 											String checkError = "msg <- trimStrings(strsplit(cntrl, \":\")[[1]])";
@@ -2018,7 +2027,7 @@ public class RServeManager {
 										String readContrastData = "contrastData <- read.csv(\"" + contrastFileName + "\", header = TRUE, na.strings = c(\"NA\",\".\",\" \",\"\"), blank.lines.skip=TRUE, sep = \",\")";
 										System.out.println(readContrastData);
 										rConnection.eval(readContrastData);
-										String runSuccessContrastData = rConnection.eval("contrastData").toString();
+										String runSuccessContrastData = rConnection.eval("contrastData").asString();
 
 										if (runSuccessContrastData != null && runSuccessContrastData.equals("notRun")) {	
 											System.out.println("error");
@@ -2028,7 +2037,7 @@ public class RServeManager {
 											System.out.println(userContrast);
 											rConnection.eval(userContrast);
 
-											String runSuccessUserCtrl = rConnection.eval("class(userContrast)").toString();
+											String runSuccessUserCtrl = rConnection.eval("class(userContrast)").asString();
 											if (runSuccessUserCtrl != null && runSuccessUserCtrl.equals("try-error")) {
 												System.out.println("compare with control: error");
 												String checkUError = "msg <- trimStrings(strsplit(userContrast, \":\")[[1]])";
@@ -2057,7 +2066,7 @@ public class RServeManager {
 
 									} // end stmt if (specifiedContrast)
 
-								} // end stmt if (compareControl || specifiedContrast)
+								} // end stmt if (compareControl || specifiedContrast) 	
 
 
 								//								if (performPairwise) {
@@ -2293,7 +2302,7 @@ public class RServeManager {
 				rConnection.eval(outspace);
 				System.out.println(funcSsaRandom);
 
-				String runSuccess2 = rConnection.eval("class(ssa2)").toString();	
+				String runSuccess2 = rConnection.eval("class(ssa2)").asString();	
 				if (runSuccess2 != null && runSuccess2.equals("try-error")) {	
 					System.out.println("ssa2: error");
 					String checkError = "msg <- trimStrings(strsplit(ssa2, \":\")[[1]])";
@@ -2330,7 +2339,7 @@ public class RServeManager {
 							String outDescStat = "capture.output(cat(\"DESCRIPTIVE STATISTICS:\n\n\"),file=\"" + outFileName + "\",append = TRUE)";
 							String outDescStat2 = "capture.output(outDesc,file=\"" + outFileName + "\",append = TRUE)"; 
 
-							String runSuccessDescStat = rConnection.eval("class(outDesc)").toString();
+							String runSuccessDescStat = rConnection.eval("class(outDesc)").asString();
 							if (runSuccessDescStat != null && runSuccessDescStat.equals("try-error")) {	
 								System.out.println("desc stat: error");
 								String checkError = "msg <- trimStrings(strsplit(outDesc, \":\")[[1]])";
@@ -2370,7 +2379,7 @@ public class RServeManager {
 							//check if the data has too many missing observations
 							double responseRate=rConnection.eval("ssa2$output[[" + i + "]]$site[[" + j + "]]$responseRate").asDouble();
 							if (responseRate < 0.8) {
-								String allNAWarning2 = rConnection.eval("ssa2$output[[" + i + "]]$site[[" + j + "]]$manyNAWarning").toString();
+								String allNAWarning2 = rConnection.eval("ssa2$output[[" + i + "]]$site[[" + j + "]]$manyNAWarning").asString();
 								String printError1 = "capture.output(cat(\"***\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 								String printError2 = "capture.output(cat(\"ERROR:\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 								String printError3 = "capture.output(cat(\"" + allNAWarning2 + "\\n\"), file=\"" + outFileName + "\",append = TRUE)";
@@ -2386,7 +2395,7 @@ public class RServeManager {
 							} else {
 								String lmerRun=rConnection.eval("ssa2$output[[" + i + "]]$site[[" + j + "]]$lmerRun").asString();
 								if (lmerRun.equals("ERROR")) {
-									String lmerError = rConnection.eval("ssa2$output[[" + i + "]]$site[[" + j + "]]$lmerError").toString();
+									String lmerError = rConnection.eval("ssa2$output[[" + i + "]]$site[[" + j + "]]$lmerError").asString();
 									String printError1 = "capture.output(cat(\"***\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 									String printError2 = "capture.output(cat(\"ERROR:\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 									String printError3 = "capture.output(cat(\"" + lmerError + "\\n\"), file=\"" + outFileName + "\",append = TRUE)";
@@ -2470,7 +2479,7 @@ public class RServeManager {
 								rConnection.eval(outspace);
 
 								//default output: test for check effect
-								String newExcludeCheck = rConnection.eval("ssa2$output[[" + i + "]]$site[[" + j + "]]$newExcludeCheck").toString();
+								String newExcludeCheck = rConnection.eval("ssa2$output[[" + i + "]]$site[[" + j + "]]$newExcludeCheck").asString();
 								System.out.println("newExcludeCheck: " + newExcludeCheck);
 
 								if (newExcludeCheck.equals("TRUE")) {
@@ -2602,7 +2611,7 @@ public class RServeManager {
 						System.out.println(funcEstCorr);
 						rConnection.eval(funcEstCorr);	
 
-						String runSuccessGPCorr = rConnection.eval("class(gpcorr)").toString();
+						String runSuccessGPCorr = rConnection.eval("class(gpcorr)").asString();
 						if (runSuccessGPCorr != null && runSuccessGPCorr.equals("try-error")) {	
 							System.out.println("geno pheno corr: error");
 							String checkError = "msg <- trimStrings(strsplit(gpcorr, \":\")[[1]])";
@@ -2670,7 +2679,7 @@ public class RServeManager {
 						rConnection.eval(meansFileName2);
 						rConnection.eval(funcSavePredMeansCsv);
 
-						String runSuccessSavePredMeans = rConnection.eval("class(saveDataB1)").toString();
+						String runSuccessSavePredMeans = rConnection.eval("class(saveDataB1)").asString();
 						if (runSuccessSavePredMeans != null && runSuccessSavePredMeans.equals("try-error")) {	
 							System.out.println("save pred means: error");
 							String checkError = "msg <- trimStrings(strsplit(saveDataB1, \":\")[[1]])";
@@ -2695,7 +2704,7 @@ public class RServeManager {
 						System.out.println(diagPlotsFunc);
 						rConnection.eval(diagPlotsFunc);
 
-						String runSuccessDiagPlots = rConnection.eval("class(diagPlots)").toString();
+						String runSuccessDiagPlots = rConnection.eval("class(diagPlots)").asString();
 						if (runSuccessDiagPlots != null && runSuccessDiagPlots.equals("try-error")) {	
 							System.out.println("diagnostic plots (genotype random): error");
 							String checkError = "msg <- trimStrings(strsplit(diagPlots, \":\")[[1]])";
@@ -2743,7 +2752,7 @@ public class RServeManager {
 					System.out.println(runSsaResid1);
 					rConnection.eval(runSsaResid1);
 
-					String runSuccessDiagPlots = rConnection.eval("class(resid_f)").toString();
+					String runSuccessDiagPlots = rConnection.eval("class(resid_f)").asString();
 					if (runSuccessDiagPlots != null && runSuccessDiagPlots.equals("try-error")) {	
 						System.out.println("ssa.resid (genotype fixed): error");
 						String checkError = "msg <- trimStrings(strsplit(resid_f, \":\")[[1]])";
@@ -2764,7 +2773,7 @@ public class RServeManager {
 							rConnection.eval(residFileNameFixed);
 							rConnection.eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = rConnection.eval("class(saveResid)").toString();
+							String runSuccessSaveResid = rConnection.eval("class(saveResid)").asString();
 							if (runSuccessSaveResid != null && runSuccessSaveResid.equals("try-error")) {	
 								System.out.println("save residuals: error");
 								String checkError = "msg <- trimStrings(strsplit(saveResid, \":\")[[1]])";
@@ -2788,7 +2797,7 @@ public class RServeManager {
 								System.out.println(funcHeat);
 								rConnection.eval(funcHeat);
 
-								String runSuccessHeat = rConnection.eval("class(heat1)").toString();
+								String runSuccessHeat = rConnection.eval("class(heat1)").asString();
 								if (runSuccessHeat != null && runSuccessHeat.equals("try-error")) {	
 									System.out.println("heatmap (fixed): error");
 									String checkError = "msg <- trimStrings(strsplit(heat1, \":\")[[1]])";
@@ -2809,7 +2818,7 @@ public class RServeManager {
 											int j = m + 1; // 1-relative index;
 
 											String warningListCommand = "heat1[[" + i + "]]$site[["+ j + "]]";
-											String warningList = rConnection.eval(warningListCommand).toString();
+											String warningList = rConnection.eval(warningListCommand).asString();
 
 											if (warningList.equals("empty")) {
 
@@ -2836,7 +2845,7 @@ public class RServeManager {
 					System.out.println(runSsaResid2);
 					rConnection.eval(runSsaResid2);
 
-					String runSuccessDiagPlots = rConnection.eval("class(resid_r)").toString();
+					String runSuccessDiagPlots = rConnection.eval("class(resid_r)").asString();
 					if (runSuccessDiagPlots != null && runSuccessDiagPlots.equals("try-error")) {	
 						System.out.println("ssa.resid (genotype random): error");
 						String checkError = "msg <- trimStrings(strsplit(resid_r, \":\")[[1]])";
@@ -2849,7 +2858,7 @@ public class RServeManager {
 						rConnection.eval(checkError4);
 					} else {
 						String checkResid1 = rConnection.eval("resid_r$residWarning").asString();
-						System.out.println("checkResid2: " + checkResid1);
+						System.out.println("checkResid1: " + checkResid1);
 						if (checkResid1.equals("empty")) {
 							System.out.println("Saving resid (random) not done.");
 						} else {
@@ -2857,7 +2866,7 @@ public class RServeManager {
 							rConnection.eval(residFileNameRandom);
 							rConnection.eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = rConnection.eval("class(saveResid)").toString();
+							String runSuccessSaveResid = rConnection.eval("class(saveResid)").asString();
 							if (runSuccessSaveResid != null && runSuccessSaveResid.equals("try-error")) {	
 								System.out.println("save residuals: error");
 								String checkError = "msg <- trimStrings(strsplit(saveResid, \":\")[[1]])";
@@ -2903,7 +2912,7 @@ public class RServeManager {
 											int j = m + 1; // 1-relative index;
 
 											String warningListCommand = "heat2[[" + i + "]]$site[["+ j + "]]";
-											String warningList = rConnection.eval(warningListCommand).toString();
+											String warningList = rConnection.eval(warningListCommand).asString();
 
 											if (warningList.equals("empty")) {
 
@@ -3004,7 +3013,7 @@ public class RServeManager {
 											int j = m + 1; // 1-relative index;
 
 											String warningListCommand = "heat1[[" + i + "]]$site[["+ j + "]]";
-											String warningList = rConnection.eval(warningListCommand).toString();
+											String warningList = rConnection.eval(warningListCommand).asString();
 
 											if (warningList.equals("empty")) {
 
@@ -3089,7 +3098,7 @@ public class RServeManager {
 											int j = m + 1; // 1-relative index;
 
 											String warningListCommand = "heat2[[" + i + "]]$site[["+ j + "]]";
-											String warningList = rConnection.eval(warningListCommand).toString();
+											String warningList = rConnection.eval(warningListCommand).asString();
 
 											if (warningList.equals("empty")) {
 
@@ -3145,7 +3154,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 	}
 
@@ -3294,7 +3304,7 @@ public class RServeManager {
 				rConnection.eval(outSpace);
 
 				System.out.println(funcMeaOneStageFixed);
-				String runSuccess = rConnection.eval("class(meaOne1)").toString();
+				String runSuccess = rConnection.eval("class(meaOne1)").asString();
 				if (runSuccess != null && runSuccess.equals("try-error")) {	
 					System.out.println("GEOneStage.test: error");
 					String checkError = "msg <- trimStrings(strsplit(meaOne1, \":\")[[1]])";
@@ -3321,7 +3331,7 @@ public class RServeManager {
 						//check if the data has too many missing observations
 						double responseRate = rConnection.eval("meaOne1$output[[" + i + "]]$responseRate").asDouble(); //error double part
 						if (responseRate < 0.80) {
-							String allNAWarning = rConnection.eval("meaOne1$output[[" + i + "]]$manyNAWarning").toString();
+							String allNAWarning = rConnection.eval("meaOne1$output[[" + i + "]]$manyNAWarning").asString();
 							String printError1 = "capture.output(cat(\"***\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 							String printError2 = "capture.output(cat(\"ERROR:\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 							String printError3 = "capture.output(cat(\"" + allNAWarning + "\\n\"), file=\"" + outFileName + "\",append = TRUE)";
@@ -3346,7 +3356,7 @@ public class RServeManager {
 
 							rConnection.eval(funcTrialSum);
 
-							String runSuccessTS = rConnection.eval("class(funcTrialSum)").toString();
+							String runSuccessTS = rConnection.eval("class(funcTrialSum)").asString();
 							if (runSuccessTS != null && runSuccessTS.equals("try-error")) {	
 								System.out.println("class info: error");
 								String checkError = "msg <- trimStrings(strsplit(funcTrialSum, \":\")[[1]])";
@@ -3375,7 +3385,7 @@ public class RServeManager {
 								String outDescStat = "capture.output(cat(\"\nDESCRIPTIVE STATISTICS:\n\n\"),file=\"" + outFileName + "\",append = TRUE)";
 								String outDescStat2 = "capture.output(outDesc,file=\"" + outFileName + "\",append = TRUE)"; 
 
-								String runSuccessDescStat = rConnection.eval("class(outDesc)").toString();	
+								String runSuccessDescStat = rConnection.eval("class(outDesc)").asString();	
 								if (runSuccessDescStat != null && runSuccessDescStat.equals("try-error")) {	
 									System.out.println("desc stat: error");
 									String checkError = "msg <- trimStrings(strsplit(outDesc, \":\")[[1]])";
@@ -3490,7 +3500,7 @@ public class RServeManager {
 									rConnection.eval(funcPwC);
 									rConnection.eval(outCompareControl);
 
-									String runSuccessPwC = rConnection.eval("class(pwControl)").toString();	
+									String runSuccessPwC = rConnection.eval("class(pwControl)").asString();	
 									if (runSuccessPwC != null && runSuccessPwC.equals("try-error")) {	
 										System.out.println("compare with control: error");
 										String checkError = "msg <- trimStrings(strsplit(pwControl, \":\")[[1]])";
@@ -3508,7 +3518,7 @@ public class RServeManager {
 										rConnection.eval(outCompareControl2);
 
 										// display warning generated by checkTest in ssa.pairwise
-										String warningControlTest = rConnection.eval("pwControl$controlTestWarning").toString();
+										String warningControlTest = rConnection.eval("pwControl$controlTestWarning").asString();
 
 										if (!warningControlTest.equals("NONE")) {
 											String warningCheckTest2 = "capture.output(cat(\"----- \nNOTE:\\n\"), file=\"" + outFileName + "\",append = TRUE)";
@@ -3530,7 +3540,7 @@ public class RServeManager {
 										String outPerformAllPairwise2n = "capture.output(pwAll$result,file=\"" + outFileName + "\",append = TRUE)";
 										rConnection.eval(funcPwAll);
 
-										String runSuccessPwAll = rConnection.eval("class(pwAll)").toString();
+										String runSuccessPwAll = rConnection.eval("class(pwAll)").asString();
 										if (runSuccessPwAll != null && runSuccessPwAll.equals("try-error")) {	
 											System.out.println("all pairwise: error");
 											String checkError = "msg <- trimStrings(strsplit(pwAll, \":\")[[1]])";
@@ -3561,7 +3571,7 @@ public class RServeManager {
 								String readContrastData = "contrastGenoData <- read.csv(\"" + contrastGenoFilename + "\", header = TRUE, na.strings = c(\"NA\",\".\",\" \",\"\"), blank.lines.skip=TRUE, sep = \",\")";
 								System.out.println(readContrastData);
 								rConnection.eval(readContrastData);
-								String runSuccessContrastData = rConnection.eval("contrastGenoData").toString();
+								String runSuccessContrastData = rConnection.eval("contrastGenoData").asString();
 
 								if (runSuccessContrastData != null && runSuccessContrastData.equals("notRun")) {	
 									System.out.println("error");
@@ -3571,7 +3581,7 @@ public class RServeManager {
 									System.out.println(userContrast);
 									rConnection.eval(userContrast);
 
-									String runSuccessUserCtrl = rConnection.eval("class(userContrast)").toString();
+									String runSuccessUserCtrl = rConnection.eval("class(userContrast)").asString();
 									if (runSuccessUserCtrl != null && runSuccessUserCtrl.equals("try-error")) {
 										System.out.println("compare with control: error");
 										String checkUError = "msg <- trimStrings(strsplit(userContrast, \":\")[[1]])";
@@ -3594,8 +3604,7 @@ public class RServeManager {
 										outCompareControl = outCompareControl + "}";
 										//										System.out.println(outCompareControl);
 										rConnection.eval(outCompareControl);	
-									}	
-
+									}
 								} // end stmt if-else (runSuccessContrastData != null && runSuccessContrastData.equals("notRun")) 
 
 							} // end stmt if (specifiedContrastGeno)
@@ -3664,7 +3673,7 @@ public class RServeManager {
 									rConnection.eval(outTestStability1);
 									System.out.println(funcStability1);
 
-									String runSuccessStab = rConnection.eval("class(funcStability1)").toString();
+									String runSuccessStab = rConnection.eval("class(funcStability1)").asString();
 									if (runSuccessStab != null && runSuccessStab.equals("try-error")) {	
 										System.out.println("stability reg: error");
 										String checkError = "msg <- trimStrings(strsplit(funcStability1, \":\")[[1]])";
@@ -3700,7 +3709,7 @@ public class RServeManager {
 									rConnection.eval(funcStability2);
 									rConnection.eval(outTestStability2);
 
-									String runSuccessStab = rConnection.eval("class(funcStability2)").toString();
+									String runSuccessStab = rConnection.eval("class(funcStability2)").asString();
 									if (runSuccessStab != null && runSuccessStab.equals("try-error")) {	
 										System.out.println("stability shukla: error");
 										String checkError = "msg <- trimStrings(strsplit(funcStability2, \":\")[[1]])";
@@ -3741,7 +3750,7 @@ public class RServeManager {
 									System.out.println(setWd);
 									System.out.println(ammiOut);
 
-									String runSuccessAmmi = rConnection.eval("class(ammiOut)").toString();
+									String runSuccessAmmi = rConnection.eval("class(ammiOut)").asString();
 									if (runSuccessAmmi != null && runSuccessAmmi.equals("try-error")) {	
 										System.out.println("ammi: error");
 										String checkError = "msg <- trimStrings(strsplit(ammiOut, \":\")[[1]])";
@@ -3784,7 +3793,7 @@ public class RServeManager {
 									System.out.println(setWd);
 									System.out.println(ggeOut);
 
-									String runSuccessAmmi = rConnection.eval("class(ggeOut)").toString();
+									String runSuccessAmmi = rConnection.eval("class(ggeOut)").asString();
 									if (runSuccessAmmi != null && runSuccessAmmi.equals("try-error")) {	
 										System.out.println("gge1: error");
 										String checkError = "msg <- trimStrings(strsplit(ggeOut, \":\")[[1]])";
@@ -3917,7 +3926,7 @@ public class RServeManager {
 					} //end of for loop respvars
 
 					//default output: save Genotype x Environment Means to a csv file
-					String checkGenoEnvMean = rConnection.eval("meaOne1$meansGenoEnvWarning").toString();
+					String checkGenoEnvMean = rConnection.eval("meaOne1$meansGenoEnvWarning").asString();
 					System.out.println("checkGenoEnvMean: " + checkGenoEnvMean);
 
 					if (checkGenoEnvMean.equals("empty")) {
@@ -3927,7 +3936,7 @@ public class RServeManager {
 						System.out.println(funcSaveGEMeansCsv);
 						rConnection.eval(funcSaveGEMeansCsv);
 
-						String runSuccessSaveGEMeans = rConnection.eval("class(saveGEMeans)").toString();
+						String runSuccessSaveGEMeans = rConnection.eval("class(saveGEMeans)").asString();
 						if (runSuccessSaveGEMeans != null && runSuccessSaveGEMeans.equals("try-error")) {	
 							System.out.println("save GxE means: error");
 							String checkError = "msg <- trimStrings(strsplit(saveGEMeans, \":\")[[1]])";
@@ -3943,7 +3952,7 @@ public class RServeManager {
 					}
 
 					//default output: save Genotype Means to a csv file
-					String checkGenoMean = rConnection.eval("meaOne1$meansGenoWarning").toString();
+					String checkGenoMean = rConnection.eval("meaOne1$meansGenoWarning").asString();
 					System.out.println("checkGenoMean: " + checkGenoMean);
 
 					if (checkGenoMean.equals("empty")) {
@@ -3953,7 +3962,7 @@ public class RServeManager {
 						System.out.println(funcSaveGMeansCsv);
 						rConnection.eval(funcSaveGMeansCsv);
 
-						String runSuccessSaveGMeans = rConnection.eval("class(saveGMeans)").toString();
+						String runSuccessSaveGMeans = rConnection.eval("class(saveGMeans)").asString();
 						if (runSuccessSaveGMeans != null && runSuccessSaveGMeans.equals("try-error")) {	
 							System.out.println("save G means: error");
 							String checkError = "msg <- trimStrings(strsplit(saveGMeans, \":\")[[1]])";
@@ -3973,7 +3982,7 @@ public class RServeManager {
 						System.out.println(diagPlotsMea1SFunc);
 						rConnection.eval(diagPlotsMea1SFunc);
 
-						String runSuccessDiag = rConnection.eval("class(diagPlotsMea1S)").toString();
+						String runSuccessDiag = rConnection.eval("class(diagPlotsMea1S)").asString();
 						if (runSuccessDiag != null && runSuccessDiag.equals("try-error")) {	
 							System.out.println("diagnostic plot: error");
 							String checkError = "msg <- trimStrings(strsplit(diagPlotsMea1S, \":\")[[1]])";
@@ -4015,7 +4024,7 @@ public class RServeManager {
 				rConnection.eval(outSpace);
 
 				System.out.println(funcMeaOneStageRandom);
-				String runSuccess2 = rConnection.eval("class(meaOne2)").toString();
+				String runSuccess2 = rConnection.eval("class(meaOne2)").asString();
 				if (runSuccess2 != null && runSuccess2.equals("try-error")) {	
 					System.out.println("GEOneStage.test: error");
 					String checkError = "msg <- trimStrings(strsplit(meaOne2, \":\")[[1]])";
@@ -4041,7 +4050,7 @@ public class RServeManager {
 
 						double responseRate = rConnection.eval("meaOne2$output[[" + i + "]]$responseRate").asDouble();
 						if (responseRate < 0.80) {
-							String allNAWarning = rConnection.eval("meaOne2$output[[" + i + "]]$manyNAWarning").toString();
+							String allNAWarning = rConnection.eval("meaOne2$output[[" + i + "]]$manyNAWarning").asString();
 							String printError1 = "capture.output(cat(\"***\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 							String printError2 = "capture.output(cat(\"ERROR:\\n\"), file=\"" + outFileName + "\",append = TRUE)";
 							String printError3 = "capture.output(cat(\"" + allNAWarning + "\\n\"), file=\"" + outFileName + "\",append = TRUE)";
@@ -4066,7 +4075,7 @@ public class RServeManager {
 
 							rConnection.eval(funcTrialSum);
 
-							String runSuccessTS = rConnection.eval("class(funcTrialSum)").toString();
+							String runSuccessTS = rConnection.eval("class(funcTrialSum)").asString();
 							if (runSuccessTS != null && runSuccessTS.equals("try-error")) {	
 								System.out.println("class info: error");
 								String checkError = "msg <- trimStrings(strsplit(funcTrialSum, \":\")[[1]])";
@@ -4095,7 +4104,7 @@ public class RServeManager {
 								String outDescStat = "capture.output(cat(\"\nDESCRIPTIVE STATISTICS:\n\n\"),file=\"" + outFileName + "\",append = TRUE)";
 								String outDescStat2 = "capture.output(outDesc,file=\"" + outFileName + "\",append = TRUE)"; 
 
-								String runSuccessDescStat = rConnection.eval("class(outDesc)").toString();	
+								String runSuccessDescStat = rConnection.eval("class(outDesc)").asString();	
 								if (runSuccessDescStat != null && runSuccessDescStat.equals("try-error")) {	
 									System.out.println("desc stat: error");
 									String checkError = "msg <- trimStrings(strsplit(outDesc, \":\")[[1]])";
@@ -4247,7 +4256,7 @@ public class RServeManager {
 					}
 
 					//default output: save Genotype x Environment Means to a csv file
-					String checkGenoEnvMean = rConnection.eval("meaOne2$meansGenoEnvWarning").toString();
+					String checkGenoEnvMean = rConnection.eval("meaOne2$meansGenoEnvWarning").asString();
 					System.out.println("checkGenoEnvMean: " + checkGenoEnvMean);
 
 					if (checkGenoEnvMean.equals("empty")) {
@@ -4257,7 +4266,7 @@ public class RServeManager {
 						System.out.println(funcSaveGEMeansCsv);
 						rConnection.eval(funcSaveGEMeansCsv);
 
-						String runSuccessSaveGEMeans = rConnection.eval("class(saveGEMeans)").toString();
+						String runSuccessSaveGEMeans = rConnection.eval("class(saveGEMeans)").asString();
 						if (runSuccessSaveGEMeans != null && runSuccessSaveGEMeans.equals("try-error")) {	
 							System.out.println("save GxE means: error");
 							String checkError = "msg <- trimStrings(strsplit(saveGEMeans, \":\")[[1]])";
@@ -4273,7 +4282,7 @@ public class RServeManager {
 					}
 
 					//default output: save Genotype Means to a csv file
-					String checkGenoMean = rConnection.eval("meaOne2$meansGenoWarning").toString();
+					String checkGenoMean = rConnection.eval("meaOne2$meansGenoWarning").asString();
 					System.out.println("checkGenoMean: " + checkGenoMean);
 
 					if (checkGenoMean.equals("empty")) {
@@ -4283,7 +4292,7 @@ public class RServeManager {
 						System.out.println(funcSaveGMeansCsv);
 						rConnection.eval(funcSaveGMeansCsv);
 
-						String runSuccessSaveGMeans = rConnection.eval("class(saveGMeans)").toString();
+						String runSuccessSaveGMeans = rConnection.eval("class(saveGMeans)").asString();
 						if (runSuccessSaveGMeans != null && runSuccessSaveGMeans.equals("try-error")) {	
 							System.out.println("save G means: error");
 							String checkError = "msg <- trimStrings(strsplit(saveGMeans, \":\")[[1]])";
@@ -4303,7 +4312,7 @@ public class RServeManager {
 						System.out.println(diagPlotsMea1SFunc);
 						rConnection.eval(diagPlotsMea1SFunc);
 
-						String runSuccessDiag = rConnection.eval("class(diagPlotsMea1S)").toString();
+						String runSuccessDiag = rConnection.eval("class(diagPlotsMea1S)").asString();
 						if (runSuccessDiag != null && runSuccessDiag.equals("try-error")) {	
 							System.out.println("diagnostic plot: error");
 							String checkError = "msg <- trimStrings(strsplit(diagPlotsMea1S, \":\")[[1]])";
@@ -4330,7 +4339,7 @@ public class RServeManager {
 					System.out.println(runSsaResid1);
 					rConnection.eval(runSsaResid1);
 
-					String runSuccessDiagPlots = rConnection.eval("class(resid_f)").toString();
+					String runSuccessDiagPlots = rConnection.eval("class(resid_f)").asString();
 					if (runSuccessDiagPlots != null && runSuccessDiagPlots.equals("try-error")) {	
 						System.out.println("GEOneStage_resid (genotype fixed): error");
 						String checkError = "msg <- trimStrings(strsplit(resid_f, \":\")[[1]])";
@@ -4342,7 +4351,7 @@ public class RServeManager {
 						rConnection.eval(checkError3);
 						rConnection.eval(checkError4);
 					} else {
-						String checkResid1 = rConnection.eval("resid_f$ge1residWarning").toString();
+						String checkResid1 = rConnection.eval("resid_f$ge1residWarning").asString();
 						System.out.println("checkResid1: " + checkResid1);
 						if (checkResid1.equals("empty")) {
 							System.out.println("Saving resid (fixed) not done.");
@@ -4351,7 +4360,7 @@ public class RServeManager {
 							rConnection.eval(residFileNameFixed);
 							rConnection.eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = rConnection.eval("class(saveResid)").toString();
+							String runSuccessSaveResid = rConnection.eval("class(saveResid)").asString();
 							if (runSuccessSaveResid != null && runSuccessSaveResid.equals("try-error")) {	
 								System.out.println("save residuals: error");
 								String checkError = "msg <- trimStrings(strsplit(saveResid, \":\")[[1]])";
@@ -4371,7 +4380,7 @@ public class RServeManager {
 					System.out.println(runSsaResid2);
 					rConnection.eval(runSsaResid2);
 
-					String runSuccessDiagPlots = rConnection.eval("class(resid_r)").toString();
+					String runSuccessDiagPlots = rConnection.eval("class(resid_r)").asString();
 					if (runSuccessDiagPlots != null && runSuccessDiagPlots.equals("try-error")) {	
 						System.out.println("GEOneStage_resid (genotype random): error");
 						String checkError = "msg <- trimStrings(strsplit(resid_r, \":\")[[1]])";
@@ -4383,8 +4392,8 @@ public class RServeManager {
 						rConnection.eval(checkError3);
 						rConnection.eval(checkError4);
 					} else {
-						String checkResid1 = rConnection.eval("resid_r$ge1residWarning").toString();
-						System.out.println("checkResid2: " + checkResid1);
+						String checkResid1 = rConnection.eval("resid_r$ge1residWarning").asString();
+						System.out.println("checkResid1: " + checkResid1);
 						if (checkResid1.equals("empty")) {
 							System.out.println("Saving resid (random) not done.");
 						} else {
@@ -4392,7 +4401,7 @@ public class RServeManager {
 							rConnection.eval(residFileNameRandom);
 							rConnection.eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = rConnection.eval("class(saveResid)").toString();
+							String runSuccessSaveResid = rConnection.eval("class(saveResid)").asString();
 							if (runSuccessSaveResid != null && runSuccessSaveResid.equals("try-error")) {	
 								System.out.println("save residuals: error");
 								String checkError = "msg <- trimStrings(strsplit(saveResid, \":\")[[1]])";
@@ -4415,7 +4424,7 @@ public class RServeManager {
 					rConnection.eval(runSsaResid1);
 					rConnection.eval(runSsaResid2);
 
-					String runSuccessResidFixed = rConnection.eval("class(resid_f)").toString();
+					String runSuccessResidFixed = rConnection.eval("class(resid_f)").asString();
 					if (runSuccessResidFixed != null && runSuccessResidFixed.equals("try-error")) {	
 						System.out.println("GEOneStage_resid (genotype fixed): error");
 						String checkError = "msg <- trimStrings(strsplit(resid_f, \":\")[[1]])";
@@ -4427,7 +4436,7 @@ public class RServeManager {
 						rConnection.eval(checkError3);
 						rConnection.eval(checkError4);
 					} else {
-						String checkResid1 = rConnection.eval("resid_f$ge1residWarning").toString();
+						String checkResid1 = rConnection.eval("resid_f$ge1residWarning").asString();
 						System.out.println("checkResid1: " + checkResid1);
 						if (checkResid1.equals("empty")) {
 							System.out.println("Saving resid (fixed) not done.");
@@ -4436,7 +4445,7 @@ public class RServeManager {
 							rConnection.eval(residFileNameFixed);
 							rConnection.eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = rConnection.eval("class(saveResid)").toString();
+							String runSuccessSaveResid = rConnection.eval("class(saveResid)").asString();
 							if (runSuccessSaveResid != null && runSuccessSaveResid.equals("try-error")) {	
 								System.out.println("save residuals: error");
 								String checkError = "msg <- trimStrings(strsplit(saveResid, \":\")[[1]])";
@@ -4451,7 +4460,7 @@ public class RServeManager {
 						}
 					}
 
-					String runSuccessResidRandom = rConnection.eval("class(resid_r)").toString();
+					String runSuccessResidRandom = rConnection.eval("class(resid_r)").asString();
 					if (runSuccessResidRandom != null && runSuccessResidRandom.equals("try-error")) {	
 						System.out.println("GEOneStage_resid (genotype random): error");
 						String checkError = "msg <- trimStrings(strsplit(resid_r, \":\")[[1]])";
@@ -4463,8 +4472,8 @@ public class RServeManager {
 						rConnection.eval(checkError3);
 						rConnection.eval(checkError4);
 					} else {
-						String checkResid1 = rConnection.eval("resid_r$ge1residWarning").toString();
-						System.out.println("checkResid2: " + checkResid1);
+						String checkResid1 = rConnection.eval("resid_r$ge1residWarning").asString();
+						System.out.println("checkResid1: " + checkResid1);
 						if (checkResid1.equals("empty")) {
 							System.out.println("Saving resid (random) not done.");
 						} else {
@@ -4472,7 +4481,7 @@ public class RServeManager {
 							rConnection.eval(residFileNameRandom);
 							rConnection.eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = rConnection.eval("class(saveResid2)").toString();
+							String runSuccessSaveResid = rConnection.eval("class(saveResid2)").asString();
 							if (runSuccessSaveResid != null && runSuccessSaveResid.equals("try-error")) {	
 								System.out.println("save residuals: error");
 								String checkError = "msg <- trimStrings(strsplit(saveResid2, \":\")[[1]])";
@@ -4514,8 +4523,10 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
+		
 	}
 
 	public void doSingleEnvironmentAnalysisPRep(SingleSiteAnalysisModel ssaModel){
@@ -4696,7 +4707,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 	}
 
@@ -4709,7 +4721,8 @@ public class RServeManager {
 			rConnection.eval("plot(cars)");
 			//			rConnection.eval("dev.off()");
 
-			rConnection.close();
+//			rConnection.close();
+			end();
 		} catch (RserveException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -4717,11 +4730,11 @@ public class RServeManager {
 	}
 
 	public String[] getLevels(List<String> columnList, List<String[]> dataList,
-			String environment) {
+			String columnName) {
 		// TODO Auto-generated method stub
 		int envtColumn = 0;
 		for (int i = 0; i < columnList.size(); i++) {
-			if (columnList.get(i).equals(environment)) {
+			if (columnList.get(i).equals(columnName)) {
 				envtColumn = i;
 			}
 		}
@@ -4741,8 +4754,6 @@ public class RServeManager {
 
 		return envtLevels;
 	}
-
-
 
 	public void doOutlierDetection(String dataFileName, String outputPath, String respvar, String trmt, String replicate) {
 		try {
@@ -4773,7 +4784,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 	}
 
@@ -4806,7 +4818,6 @@ public class RServeManager {
 			//						rConnection.eval("library(PBTools)");
 			//						System.out.println("library(PBTools)");
 
-
 			String readData = "QTLdata <- tryCatch(createQTLdata(\"" + resultFolderPath + "\", \"" + dataFormat + "\", \"" + format1 + "\", \"" + crossType + "\", \"" + file1 + "\", \"" +
 					format2 + "\", \"" + file2 + "\", \"" + format3 + "\", \"" + file3 + "\", \"" + P_geno + "\", " + bcNum + ", " + fNum + "))";
 
@@ -4818,7 +4829,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+			end();
 		}
 	}
 
@@ -4845,11 +4856,11 @@ public class RServeManager {
 			String dataFormat = qtlModel.getDataFormat();
 			String crossType = qtlModel.getCrossType();
 			String format1 = qtlModel.getFormat1();
-			String file1 = qtlModel.getFile1().replace(BSLASH, FSLASH);;
+			String file1 = qtlModel.getFile1().replace(BSLASH, FSLASH);
 			String format2 = qtlModel.getFormat2();
-			String file2 = qtlModel.getFile2().replace(BSLASH, FSLASH);;
+			String file2 = qtlModel.getFile2().replace(BSLASH, FSLASH);
 			String format3 = qtlModel.getFormat3();
-			String file3 = qtlModel.getFile3().replace(BSLASH, FSLASH);;
+			String file3 = qtlModel.getFile3().replace(BSLASH, FSLASH);
 			String P_geno = qtlModel.getP_geno(); 
 			int bcNum = qtlModel.getBcNum();
 			int fNum = qtlModel.getfNum();
@@ -4865,9 +4876,7 @@ public class RServeManager {
 			double lodThreshold = qtlModel.getLodThreshold();
 			boolean doCheckGenoErrors = qtlModel.isDoCheckGenoErrors();
 			double lodCutOff = qtlModel.getLodCutOff();
-			double errorProb = 0.01; 
-
-
+			double errorProb = 0.01;
 
 			String readData = "QTLdata <- tryCatch(createQTLdata(\"" + resultFolderPath + "\", \"" + dataFormat + "\", \"" + format1 + "\", \"" + crossType + "\", \"" + file1 + "\", \"" +
 					format2 + "\", \"" + file2 + "\", \"" + format3 + "\", \"" + file3 + "\", \"" + P_geno + "\", " + bcNum + ", " + fNum + "))";
@@ -4895,7 +4904,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 	}
 
@@ -4977,7 +4987,6 @@ public class RServeManager {
 				checkOutput = checkOutput + "}";
 
 				System.out.println(checkOutput);
-				rConnection.eval(checkOutput);
 
 				System.out.println(checkOutput);
 				rConnection.eval(checkOutput);
@@ -4993,7 +5002,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 		//return msg;
 	}
@@ -5073,7 +5083,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 	}
 
@@ -5130,7 +5141,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 		//return msg;
 	}
@@ -5234,7 +5246,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 		//return msg;
 	}
@@ -5316,7 +5329,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 		//return msg;
 	}
@@ -5395,7 +5409,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 	}
 
@@ -5489,7 +5504,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 		//return msg;
 	}
@@ -5564,7 +5580,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 	}
 
@@ -5640,7 +5657,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 	}
 
@@ -5744,7 +5762,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 		//return msg;
 	}
@@ -5833,7 +5852,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 		//return msg;
 	}
@@ -5911,7 +5931,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 	}
 
@@ -6000,7 +6021,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 		//return msg;
 	}
@@ -6089,7 +6111,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 	}
 
@@ -6174,15 +6197,15 @@ public class RServeManager {
 			rscriptCommand.append(command+"\n");
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally{
-			rConnection.close();
+		} finally{	
+//			rConnection.close();
+			end();
 		}
 		//return msg;
 	}
 
 	public void doQtl(QTLAnalysisModel qtlAnalysisModel) {
 		try{
-
 			/* GET VARIABLE VALUES */
 			String dataCheckOutFileName = qtlAnalysisModel.getDataCheckOutFileName();
 			String outFileName = qtlAnalysisModel.getOutFileName();
@@ -6314,7 +6337,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 	}
 
@@ -6423,7 +6447,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 	}
 
@@ -6520,7 +6545,8 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			rConnection.close();
+//			rConnection.close();
+			end();
 		}
 	}
  
@@ -6528,16 +6554,23 @@ public class RServeManager {
 		String isNumericOut = null;
 		try{
 			readData(dataFileName);
-			String isNumeric = "is.numeric(dataRead$" + columnName +")";
+			String isNumeric = "is.numeric(dataRead$" + columnName +" )";
 			System.out.println(isNumeric);
 			isNumericOut=rConnection.eval(isNumeric).asString();
-			System.out.println("reached end.");
+			System.out.println("reached end. "+isNumericOut.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally{
-			rConnection.close();
-		}	
+		}
 		return isNumericOut;
+	}
+
+	public void end() {
+		// TODO Auto-generated method stub
+		try{
+			rConnection.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
 	}
 
 }

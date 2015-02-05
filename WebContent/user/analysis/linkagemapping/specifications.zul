@@ -4,35 +4,38 @@
 		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.analysis.linkagemapping.view.Index')"
 		height="100%">
-		<tabbox id="tb" width="100%" height="750px" mold="accordion">
-			<tabs>
+		<tabbox id="tb" width="100%" heig ht="750px" mold="accordion">
+		<tabs>
 				<tab label="Load Data" />
-				<tab label="Data Quality Check" />
+				<tab label="Data Quality Check" /> 
 				<tab label="Analysis:" />
 			</tabs>
 			<tabpanels>
 				<tabpanel vflex="1">
-					<hlayout>
+					<hlayout>			
 						<div>
 							<separator bar="false" />
 							Cross Type:
 							<combobox id="crosstype"
 								model="@load(vm.crosstypeList)"
-								selectedItem="@bind(vm.chosenCrosstype)" autodrop="true">
+								selectedItem="@bind(vm.chosenCrosstype)"
+								onChange="@command('chooseCrossType', selected = self.selectedIndex)"
+								autodrop="true">
 								<template name="model">
 									<comboitem
-										label="@load(each.crosstype)" />
+										label="@load(each)" />
 								</template>
 							</combobox>
-							BC:
-							<spinner id="spinnerBCnum" value="0" />
-							F:
-							<spinner id="spinnerFnum" value="0" />
+							
+							<label id="lblBCSpinner" value="BC:" visible="false"/>
+							<spinner id="spinnerBCnum" value="0" visible="false" />
+							<label id="lblFSpinner" value="F:" visible="true"/>
+							<spinner id="spinnerFnum" value="0" visible="true" />
 							<separator bar="true" />
 							Data Format:
 							<combobox id="dataformat"
 								model="@load(vm.dataFormatList)"
-								selectedIndex="@bind(vm.chosenDataFormat)" visible="true"
+								selectedItem="@bind(vm.chosenDataFormat)" visible="true"
 								autodrop="true"
 								onChange="@command('visibility', selected = self.selectedIndex)">
 								<template name="model">
@@ -89,7 +92,7 @@
 							<separator bar="false" />
 							<space spacing="20px" />
 							Cut-off proportion of matching genotypes:
-							<doublespinner id="dbCutOffP" value="0.05"
+							<doublespinner id="dbCutOffP" value="0.90"
 								step="0.1" />
 							<separator bar="false" spacing="20px" />
 							<checkbox id="checkMarkerOrder"
@@ -114,14 +117,10 @@
 							<button label="Run"
 								onClick="@command('validateInputFiles')" sclass="btn-danger" />
 							<separator bar="false" />
-							<separator bar="false" />
-						</div>
 						<groupbox id="grpDataCheckView" mold="3d"
 							visible="false" width="100%" height="100%" vflex="1" hflex="1">
 							<caption label="Data Quality Check Preview" />
-							<div id="divDataCheckTxt"
-								style="overflow:auto" vflex="1">
-							</div>
+							<div id="divDataCheckTxt" style="overflow:auto" vflex="1"> </div>
 						</groupbox>
 					</hlayout>
 				</tabpanel>
@@ -139,7 +138,8 @@
 									model="@load(vm.traitType)" autodrop="true"
 									selectedItem="@bind(vm.selectedTraitType)"
 									onChange="@command('updatePModel')">
-									<template name="model">
+			    
+			    						<template name="model">
 										<comboitem label="${each}" />
 									</template>
 								</combobox>
@@ -148,30 +148,12 @@
 						<listitem>
 							<listcell label="Traits:" />
 							<listcell>
-								<vlayout>
-									<checkbox id="traitYield"
-										label="Yield" />
-									<checkbox id="traitPitht"
-										label="Pitht" />
-									<checkbox id="traitAwit"
-										label="Awit" />
-									<checkbox id="traitAwwd"
-										label="Awwd" />
-								</vlayout>
+								<div id="checkboxDiv">
+								<vlayout id="divVlayout" />
+								</div>
 							</listcell>
 						</listitem>
 						<listitem>
-							<listcell label="Mapping Method:" />
-							<listcell>
-								<combobox id="mapMethod"
-									model="@load(vm.mapMethod)"
-									selectedItem="@bind(vm.chosenMapping)" autodrop="true"
-									onChange="@command('mappingVisibility')">
-									<template name="model">
-										<comboitem label="${each}" />
-									</template>
-								</combobox>
-
 							</listcell>
 						</listitem>
 						<listitem>
@@ -217,13 +199,14 @@
 										visible="@load(vm.mapping1)">
 										<caption label="Options:" />
 										No. Of Permutations:
-										<doublespinner
-											id="dbNPermutations" value="100" step="0.1" />
+										<spinner
+											id="dbNPermutations" value="99" step="1" />
 										<separator bar="false" />
 										Phenotype Model :
 										<combobox id="pModel"
 											model="@load(vm.pModel)" autodrop="true"
-											selectedItem="@bind(vm.comboboxMapping)">
+											selectedItem="@bind(vm.comboboxMapping)"
+											onChange="@command('choosePModel', selected = self.selectedItem)">
 											<template name="model">
 												<comboitem
 													label="${each}" />
@@ -231,7 +214,7 @@
 										</combobox>
 										<separator bar="false" />
 										Method:
-										<combobox id="pMethodList"
+										<combobox id="comboPMethod"
 											model="@load(vm.pMethod)" autodrop="true"
 											selectedItem="@bind(vm.coboboxmapping2)">
 											<template name="model">
@@ -297,7 +280,7 @@
 											model="@load(vm.scanType)" autodrop="true"
 											selectedItem="@bind(vm.comboboxmapping4)">
 											<template name="model">
-												<comboitem
+												<comboitem	
 													label="${each}" />
 											</template>
 										</combobox>
@@ -323,7 +306,7 @@
 										Prior expected number of QTLs:
 										<space width="10px" bar="false" />
 										Main Effect:
-										<textbox width="50px"
+										<textbox width="50px"           
 											id="maineffect" value="0" />
 										<space width="10px" bar="false" />
 										All:

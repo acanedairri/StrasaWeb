@@ -1,5 +1,6 @@
 package org.strasa.web.analysis.view.model;
 
+import org.strasa.web.utilities.AnalysisUtils;
 import org.zkoss.zk.ui.Sessions;
 
 public class QTLAnalysisModel {
@@ -13,7 +14,7 @@ public class QTLAnalysisModel {
 
 	private String outFileName;	//supply path and name of text file where text output for analysis is going to be saved
 	private String resultFolderPath; //supply path where the graphs will be saved "E:/App Fil	es/workspace_Juno/RJavaManager/sample_datasets"
-	private String dataFormat; //supply data format used - "default", "R", Map Maker", "Map Manager", "QTL Cartographer" 
+	private String dataFormat; //supply data frmat used - "default", "R", Map Maker", "Map Manager", "QTL Cartographer" 
 	private String format1; //supply format of the first input file, whether "csv", "ctxt", "stxt", "ttxt", or "sctxt" 
 	private String crossType; //supply type of cross used, whether "f2", "bc", "risib", "riself", "bcsft"
 	private String file1; //supply path and name of first input file
@@ -22,7 +23,7 @@ public class QTLAnalysisModel {
 	private String format3; //supply format of the third input file, whether "csv", "ctxt", "stxt", "ttxt", or "sctxt" 
 	private String file3; //supply path and name of third input filel
 	private String P_geno; //supply name of genotype variable
-	private int bcNum; //supply bc generation, if crosstype is "bcsft" 
+	private int bcNum; //supply bc generation, if crosstype is "bcsft"
 	private int fNum; //supply filial generation, if crosstype is "bcsft"
 
 	//specify parameters
@@ -48,7 +49,7 @@ public class QTLAnalysisModel {
 	private String mapCalc; //c("haldane","kosambi","c-f","morgan")														
 	private double lodCutoffM;																				//reqd																									
 	private String phenoModel; // "binary"; //"normal";//c("normal","binary","2part","np")														
-	private String alMethod;//c("em","imp","hk","ehk","mr","mr-imp","mr-argmax")							//reqd
+	private String	alMethod;//c("em","imp","hk","ehk","mr","mr-imp","mr-argmax")							//reqd
 	private int nPermutations;//100																			//reqd
 	private int numCovar; 					//3  	
 	private double winSize;				//10
@@ -70,18 +71,19 @@ public class QTLAnalysisModel {
 
 	public QTLAnalysisModel() {
 
-		setDataCheckOutFileName(DATA_PATH + "QTL_dataCheck.txt");
-		setOutFileName(DATA_PATH + "QTL_output.txt");
-		setResultFolderPath(DATA_PATH);  // outputPath = "E:/App Files/workspace_Juno/RJavaManager/sample_datasets"
-		setDataFormat("default");
-		setFormat1("csv");
-		setCrossType ("f2"); 
-		setFile1(DATA_PATH + "listeria1_pheno_mv.csv");
-		setFormat2("csv");
-		setFile2(DATA_PATH + "listeria1_geno.csv");
-		setFormat3("csv");
-		setFile3(DATA_PATH + "listeria1_map.csv");
-		setP_geno("Geno");
+		//re-initialize everything to null
+		setDataCheckOutFileName("NULL");
+		setOutFileName("NULL");
+		setResultFolderPath("NULL");  // outputPath = "E:/App Files/workspace_Juno/RJavaManager/sample_datasets"
+		setDataFormat("NULL");
+		setFormat1("NULL");
+		setCrossType ("NULL"); 
+		setFile1("NULL");
+		setFormat2("NULL");
+		setFile2("NULL");
+		setFormat3("NULL"); //csv
+		setFile3("NULL");//DATA_PATH + "listeria1_map.csv"
+		setP_geno("NULL");
 		setBcNum(0);
 		setfNum(0);
 
@@ -89,55 +91,112 @@ public class QTLAnalysisModel {
 		//		              P_geno, bcNum, fNum)
 
 		//specify parameters
-		setDoMissing(true); //
-		setDeleteMiss(true);//
-		setCutOff(0.15);
-		setDoDistortionTest(true);//
-		setPvalCutOff(0.01);
-		setDoCompareGeno(true);//
-		setCutoffP(0.70);
-		setDoCheckMarkerOrder(true);
-		setLodThreshold(3);
-		setDoCheckGenoErrors(true);
-		setLodCutOff(5);
-		setErrorProb(0.01); 
+		setDoMissing(false); //
+		setDeleteMiss(false);//
+		setCutOff(0);
+		setDoDistortionTest(false);//
+		setPvalCutOff(0);
+		setDoCompareGeno(false);//
+		setCutoffP(0);
+		setDoCheckMarkerOrder(false);
+		setLodThreshold(0);
+		setDoCheckGenoErrors(false);
+		setLodCutOff(0);
+		setErrorProb(0); 
 
 		//IM
-		setTraitType("Binary"); //"Ordinal"; //"Continuous"; //c("Continuous", "Binary", "Ordinal"), yVars, mMethod = c("IM", "CIM", "MQM", "BM")	//reqd
+		setTraitType("NULL"); //"Ordinal"; //"Continuous"; //c("Continuous", "Binary", "Ordinal"), yVars, mMethod = c("IM", "CIM", "MQM", "BM")	//reqd
 		//		 yVars = {"T264b", "T264b2"}; //{"T264o", "T264o2", "T264o3"}; //{"T264", "T264d", "T264sd"};																								//reqd
-		setmMethod("IM"); 																								//reqd
+		setmMethod("NULL"); 																								//reqd
 		setStepCalc(0); 																									
-		setErrCalc(0.01);																									
-		setMapCalc("haldane"); //c("haldane","kosambi","c-f","morgan")														
-		setLodCutoffM(3);																									//reqd																									
-		setPhenoModel("np"); // "binary"); //"normal";//c("normal","binary","2part","np")														
-		setAlMethod("em");//c("em","imp","hk","ehk","mr","mr-imp","mr-argmax")												//reqd
-		setnPermutations(100);//100																							//reqd
-		setNumCovar(1); 					//3  	
-		setWinSize(10);				//10
+		setErrCalc(0);																									
+		setMapCalc("NULL"); //c("haldane","kosambi","c-f","morgan")														
+		setLodCutoffM(0);																									//reqd																									
+		setPhenoModel("NULL"); // "binary"); //"normal";//c("normal","binary","2part","np")														
+		setAlMethod("NULL");//c("em","imp","hk","ehk","mr","mr-imp","mr-argmax")												//reqd
+		setnPermutations(0);//100																							//reqd
+		setNumCovar(0); 					//3  	
+		setWinSize(0);				//10
 		setGenoName("NULL");			//"Geno"
 		setThreshLiJi(false);			//true
 		setThresholdNumericalValue(0); //0 
-		setMinDist(10);				//10
-		setStepSize(5.0);				//5.0
+		setMinDist(0);				//10
+		setStepSize(0);				//5.0
 		setAddModel(false);			//true
-		setNumCofac(1);					//1
-		setMlAlgo(true);				//true
-		setSetupModel(true); //TRUE																						
+		setNumCofac(0);					//1
+		setMlAlgo(false);				//true
+		setSetupModel(false); //TRUE																						
 		setIncludeEpistasis(false); //FALSE																				
 		setUseDepPrior(false); //FALSE,																					
-		setPriorMain(3);																										
-		setPriorAll(priorMain + 3);																							
+		setPriorMain(0);																										
+		setPriorAll(0);																							
 		setMaxQTLs ("NULL");																								
-		setPriorProb(0.5);		
+		setPriorProb(0);		
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("QTL Analysis Model \n");
+		sb.append("--- Create cross data --- \n");
 		sb.append("resultFolderPath: "+resultFolderPath);
 		sb.append("\n outFileName: "+outFileName);
+		sb.append("\n dataCheckOutFileName: "+dataCheckOutFileName);
+		sb.append("\n crossType: "+crossType);
+		sb.append("\n dataFormat: "+dataFormat);
+		sb.append("\n format1: "+format1);
+		sb.append("\n file1: "+file1);
+		sb.append("\n format2: "+format2);
+		sb.append("\n file2: "+file2);
+		sb.append("\n format3: "+format3);
+		sb.append("\n file3: "+file3);
+		sb.append("\n P_geno: "+P_geno);
+		sb.append("\n bcNum: "+Integer.toString(bcNum));
+		sb.append("\n fNum: "+Integer.toString(fNum));
+
+		sb.append("--- Check cross data --- \n");
+		sb.append("\n doMissing: "+doMissing);
+		sb.append("\n deleteMiss: "+deleteMiss);
+		sb.append("\n cutOff: "+cutOff);
+		sb.append("\n doDistortionTest: "+doDistortionTest);
+		sb.append("\n pvalCutOff: "+pvalCutOff);
+		sb.append("\n doCompareGeno: "+doCompareGeno);
+		sb.append("\n cutoffP: "+cutoffP);
+		sb.append("\n doCheckMarkerOrder: "+doCheckMarkerOrder);
+		sb.append("\n lodThreshold: "+lodThreshold);
+		sb.append("\n doCheckGenoErrors: "+doCheckGenoErrors);
+		sb.append("\n lodCutOff: "+lodCutOff);
+		sb.append("\n errorProb: "+errorProb);
+
+		//IM
+		sb.append("--- Run qtl options--- \n");
+		sb.append("\n traitType: "+traitType);
+//		sb.append("\n yVars: "+AnalysisUtils.arrayToString(yVars));
+		sb.append("\n mMethod: "+mMethod);
+		sb.append("\n stepCalc: "+stepCalc);
+		sb.append("\n errCalc: "+errCalc);
+		sb.append("\n mapCalc: "+mapCalc);
+		sb.append("\n lodCutoffM: "+lodCutoffM);
+		sb.append("\n phenoModel: "+phenoModel);
+		sb.append("\n alMethod: "+alMethod);
+		sb.append("\n nPermutations: "+nPermutations);
+		sb.append("\n numCovar: "+numCovar);
+		sb.append("\n winSize: "+winSize);
+		sb.append("\n genoName: "+genoName);
+		sb.append("\n threshLiJi: "+threshLiJi);
+		sb.append("\n thresholdNumericalValue: "+thresholdNumericalValue);
+		sb.append("\n minDist: "+minDist);
+		sb.append("\n stepSize: "+stepSize);
+		sb.append("\n addModel: "+addModel);
+		sb.append("\n numCofac: "+numCofac);
+		sb.append("\n mlAlgo: "+mlAlgo);
+		sb.append("\n setupModel: "+setupModel);
+		sb.append("\n includeEpistasis: "+includeEpistasis);
+		sb.append("\n useDepPrior: "+useDepPrior);
+		sb.append("\n priorMain: "+Integer.toString(priorMain));
+		sb.append("\n priorAll: "+Integer.toString(priorAll));
+		sb.append("\n maxQTLs: "+maxQTLs);
+		sb.append("\n priorProb: "+priorProb);
 		return sb.toString();
 	}
 

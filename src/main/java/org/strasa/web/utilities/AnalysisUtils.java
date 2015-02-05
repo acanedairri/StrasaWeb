@@ -52,7 +52,7 @@ public class AnalysisUtils {
 		}
 		return modelList;
 	}
-
+	
 	public static ListModelList<String> getFactorsAsListModel(ArrayList<String> variableInfo) {
 		// TODO Auto-generated method stub
 		ListModelList<String> modelList = new ListModelList<String>();
@@ -97,16 +97,39 @@ public class AnalysisUtils {
 		
 		String outputStudyPath = userFolderPath+ FILE_SEPARATOR + getOutputFolderName(dataFileName) +FILE_SEPARATOR;
 		
-		if(createFolder(userFolderPath)){
+		if(createFolder(userFolderPath)){	
 			createFolder(outputStudyPath);
 		}
 		
 		return outputStudyPath;
 	}
 	
+	public static String getUserTempFolder() {
+		// TODO Auto-generated method stub
+		String tmpFolderPath;
+
+		tmpFolderPath=Sessions.getCurrent().getWebApp().getRealPath("resultanalysis")+ FILE_SEPARATOR +
+				SecurityUtil.getDbUser().getUsername()+ FILE_SEPARATOR+ "tmp"+ FILE_SEPARATOR;
+		
+		
+//		String outputStudyPath = userFolderPath+ FILE_SEPARATOR + getOutputFolderName(dataFileName) +FILE_SEPARATOR;
+		createTmpFolder(tmpFolderPath);
+		 System.out.println("created folder"+tmpFolderPath);
+			
+		return tmpFolderPath;
+	}
+	
+	public static void createTmpFolder(String folderPath){
+		File outputFolder = new File(folderPath);
+		if(outputFolder.exists()){
+			outputFolder.mkdir();
+			outputFolder.deleteOnExit();
+		}
+	}
+	
 	public static boolean createFolder(String folderPath){
 		File outputFolder = new File(folderPath);
-		
+
 		if(outputFolder.exists()) return true;
 		return outputFolder.mkdir();
 	}
@@ -144,5 +167,14 @@ public class AnalysisUtils {
 		}
 		
 		return stringList.toArray(new String[stringList.size()]);
+	}
+	
+	public static String arrayToString(String[] stringArray) {
+		// TODO Auto-generated method stub
+		StringBuilder sb = new StringBuilder();
+		for(String s : stringArray){
+			sb.append(s+", ");
+		}
+		return sb.toString();
 	}
 }

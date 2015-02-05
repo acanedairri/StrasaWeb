@@ -39,6 +39,22 @@ public class GermplasmManagerImpl {
 		}
 	}
 
+	public List<Germplasm> getGermplasmByNameInList(String value) {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
+
+		try {
+			GermplasmExample example = new GermplasmExample();
+			example.createCriteria().andGermplasmnameEqualTo(value);
+			if (mapper.countByExample(example) < 1)
+				return null;
+			return mapper.selectByExample(example);
+
+		} finally {
+			session.close();
+		}
+	}
+
 	public Germplasm getGermplasmById(int id) {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
@@ -70,6 +86,40 @@ public class GermplasmManagerImpl {
 
 	}
 
+	public HashMap<String, Germplasm> getGermplasmBatchAsMap(ArrayList<Integer> germplasmList) {
+
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+
+		try {
+			GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
+			GermplasmExample example = new GermplasmExample();
+			HashMap<String, Germplasm> returnVal = new HashMap<String, Germplasm>();
+			example.createCriteria().andIdIn(germplasmList);
+			List<Germplasm> lst = mapper.selectByExample(example);
+			for (Germplasm germ : lst) {
+				returnVal.put(germ.getGermplasmname(), germ);
+			}
+			return returnVal;
+		} finally {
+			session.close();
+		}
+
+	}
+
+	public List<Germplasm> getAllGermplasm() {
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+
+		GermplasmMapper mapper = session.getMapper(GermplasmMapper.class);
+
+		try {
+
+			return mapper.selectByExample(null);
+
+		} finally {
+
+		}
+	}
+
 	public List<Germplasm> getGermplasmBatch(List<String> germList) {
 		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
 
@@ -91,7 +141,8 @@ public class GermplasmManagerImpl {
 
 		for (Germplasm germ : lstGerm) {
 			returnVal.add(germ.getGermplasmname());
-			if(germ.getGermplasmname().equals("DR017x")) System.out.println("FOUND: DR017x");
+			if (germ.getGermplasmname().equals("DR017x"))
+				System.out.println("FOUND: DR017x");
 		}
 		return returnVal;
 	}

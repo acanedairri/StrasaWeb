@@ -29,7 +29,11 @@
 			<transactionManager type="JDBC" />
 			<dataSource type="POOLED">
 				<property name="driver" value="com.mysql.jdbc.Driver" />
+<<<<<<< .mine
 				<property name="url" value="jdbc:mysql://localhost:3306/strasa" />
+=======
+				<property name="url" value="jdbc:mysql://localhost:3488/dmas" />
+>>>>>>> .theirs
 				<property name="username" value="root" />
 				<property name="password" value="root" />
 			</dataSource>

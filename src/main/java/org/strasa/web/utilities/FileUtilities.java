@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.analysis.rserve.manager.RServeManager;
 import org.apache.commons.io.input.ReaderInputStream;
 import org.zkoss.bind.BindContext;
 import org.zkoss.zk.ui.Component;
@@ -27,6 +28,7 @@ import org.zkoss.zul.Toolbarbutton;
 
 public class FileUtilities {
 
+	RServeManager rServeManager;
 	public static void uploadFile(String filepath, InputStream file) {
 		try {
 			OutputStream out = new java.io.FileOutputStream(filepath);
@@ -113,7 +115,50 @@ public class FileUtilities {
 		FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
 		return tempFile;
 	}
+//	public String isNumeric(String absolutePath, String columnName){
+//		// TODO Auto-generated method stub
+//		
+//		System.out.println("called isNumeric");
+//		String isNumeric = "FALSE";
+//		try{
+//			rServeManager = new RServeManager();
+//			isNumeric = rServeManager.isColumnNumeric(absolutePath.replaceAll("\\\\","/"), columnName);
+//		}
+//		catch(NullPointerException npe){
+////			isNumeric = ProjectExplorerView.rJavaManager.getRJavaDataManipulationManager().isColumnNumeric(absolutePath.replaceAll("\\\\","/"), columnName.replaceAll(" ","."));
+//			System.out.println("caught Exception from isNumericable");
+//		}
+//
+//		return isNumeric;
+//	}
 
+	
+//	public static String[] getLevels(String varName, File file) {
+//		int envtColumn = 0;
+//		
+//		for (int i = 0; i < table.getColumnCount(); i++) {
+//			if (table.getColumn(i).getText()
+//					.equals(facEnvt)) {
+//				envtColumn = i;
+//			}
+//		}
+//		ArrayList<String> envts = new ArrayList<String>();
+//		for (int j = 0; j < table.getItemCount(); j++) {
+//			String level = table.getItem(j).getText(
+//					envtColumn);
+//			if (!envts.contains(level)&& !level.isEmpty()) {
+//				envts.add(level);
+//			}
+//		}
+//
+//		String[] envtLevels = new String[envts.size()];
+//		for (int k = 0; k < envts.size(); k++) {
+//			envtLevels[k] = (String) envts.get(k);
+//		}
+//		
+//		return envtLevels;
+//	}
+	
 	public static void exportData2(List<String> columns, List<ArrayList<String>> rows, String outputFileName) {
 		List<ArrayList<String>> grid = rows;
 

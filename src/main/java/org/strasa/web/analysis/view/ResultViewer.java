@@ -48,10 +48,10 @@ public class ResultViewer {
 	String textFileContent = null;
 	private AMedia fileContent;
 	private File tempFile;
-	private static final String FILE_SEPARATOR  = System.getProperty("file.separator");
 	private static final String IMAGE_THUMBNAIL_HEIGHT = "150px";
 	private static final String IMAGE_THUMBNAIL_WIDTH = "150px";
-	private static String RESULT_ANALYSIS_PATH=FILE_SEPARATOR+"resultanalysis"+FILE_SEPARATOR+SecurityUtil.getUserName()+FILE_SEPARATOR+"Single-Site"+FILE_SEPARATOR;
+	private static final String FILE_SEPARATOR  = System.getProperty("file.separator");
+	private static String RESULT_ANALYSIS_PATH=(Sessions.getCurrent().getWebApp().getRealPath("resultanalysis")).replaceAll("\\\\", "/");
 
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) final Component component,
@@ -92,9 +92,9 @@ public class ResultViewer {
 					sb.append("txt");
 				}
 				if(file.endsWith(".png")){
-					//					System.out.println("display image:" + outputFolderPath+file);
 					Div div = (Div) component.getFellow("graphResultDiv");
-					final String path = RESULT_ANALYSIS_PATH+outputFolder.getName()+"/"+file;
+					final String path = outputFolderPath.replace(RESULT_ANALYSIS_PATH, "/resultanalysis").trim()+file;
+										System.out.println("display image:" + RESULT_ANALYSIS_PATH);
 					final Groupbox newGroupBox = new Groupbox();
 					//					newGroupBox.setStyle("overflow: auto");
 					newGroupBox.setTitle(file.replaceAll(".csv", ""));

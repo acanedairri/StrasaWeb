@@ -1,9 +1,13 @@
 package org.strasa.web.crossstudyquery.view.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.strasa.middleware.manager.GermplasmManagerImpl;
+import org.strasa.middleware.manager.StudyGermplasmManagerImpl;
 import org.strasa.middleware.manager.StudyManager;
+import org.strasa.middleware.model.Germplasm;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.ContextParam;
@@ -71,6 +75,7 @@ public class AcrossStudyRowRenderer implements RowRenderer<AcrossStudyData> {
 		Toolbarbutton gNameLink = new Toolbarbutton();
 		gNameLink.setLabel(data.getGname());
 		gNameLink.setClass("grid-link");
+
 		row.appendChild(gNameLink);
 
 		gNameLink.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
@@ -79,9 +84,24 @@ public class AcrossStudyRowRenderer implements RowRenderer<AcrossStudyData> {
 			public void onEvent(Event arg0) throws Exception {
 				// TODO Auto-generated method stub
 
+				GermplasmManagerImpl germMan = new GermplasmManagerImpl();
+				List<Germplasm> lstGerm = germMan.getGermplasmByNameInList(data.getGname());
+
+				Integer finalGermplasmID = 0;
+				if (lstGerm.size() < 2) {
+					finalGermplasmID = lstGerm.get(0).getId();
+				} else {
+					StudyGermplasmManagerImpl studyGermMan = new StudyGermplasmManagerImpl();
+					for (Germplasm germ : lstGerm) {
+						if (!studyGermMan.getStudyGermplasmByStudyIdAndByGref(data.getStudyId(), germ.getId()).isEmpty()) {
+							finalGermplasmID = germ.getId();
+						}
+					}
+				}
+
 				Map<String, Object> params = new HashMap<String, Object>();
 				params.put("gname", data.getGname());
-
+				params.put("gref", finalGermplasmID);
 				BindUtils.postGlobalCommand(null, null, "openGermplasmDetailInAcrossStudy", params);
 			}
 

@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.analysis.rserve.manager.RServeManager;
 import org.apache.commons.io.input.ReaderInputStream;
+import org.apache.ibatis.io.Resources;
 import org.strasa.middleware.filesystem.manager.UserFileManager;
 import org.strasa.middleware.manager.CrosstypeManagerImpl;
 import org.strasa.middleware.manager.EcotypeManagerImpl;
@@ -23,6 +24,7 @@ import org.strasa.middleware.model.Crosstype;
 import org.strasa.middleware.model.Ecotype;
 import org.strasa.middleware.model.Program;
 import org.strasa.web.analysis.view.model.QTLAnalysisModel;
+import org.strasa.web.utilities.AnalysisUtils;
 import org.strasa.web.utilities.FileUtilities;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
@@ -38,14 +40,17 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Doublespinner;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Include;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.Spinner;
 import org.zkoss.zul.Textbox;
+import org.zkoss.zul.Vlayout;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -57,17 +62,23 @@ public class Index {
 	private ArrayList<String> listString;
 	private List<String> phenotypeFormat, typeOfDesignList, dataFormatList, traitType, mapMethod, pModel, pMethod, lociMethod, scanType;
 	private List<String> columnList = new ArrayList<String>();
+	private List<String> continuousVarsList = new ArrayList<String>(); // variable names(columns) from the cross data with Numeric Levels.
+	private List<String> binaryVarsList = new ArrayList<String>(); // variable names(columns) from the cross data with 2 Numeric Levels.
+	private List<String> ordinalVarsList = new ArrayList<String>(); // variable names(columns) from the cross data with atleast 2 Levels.
 	private List<String[]> dataList = new ArrayList<String[]>();
 	private List<Program> programList;
-	private List<Crosstype> crosstypeList;
-
+	private List<String> crosstypeList;
+	private String[] crossTypeFunctions={"f2", "bc", "risib", "riself", "bcsft"};
+	private List<String> file1Formats; //{"csv","txt","cro","raw", "qtx"};
+	private List<String> file2Formats; //{"csv","txt","maps"};
+	private List<String> file3Formats; //{"csv","txt"};
 	BindContext ctx1, ctx2, ctx3;
 	Component view3, view1, view2;
 	InputStream in1, in2, in3;
-
-	private Crosstype chosenCrosstype;
-	private String[] fileFormats = {"txt","csv","txt","txt",".cro",".maps",".raw"};
-
+	 
+	private String chosenCrosstype;
+	
+	
 	private String chosenMapping, fileName1, fileName2, fileName3, dataFileName, fileName, comboboxMapping, coboboxmapping2, comboboxmapping3, comboboxmapping4;
 	private String value1, value2, value3;
 
@@ -79,17 +90,17 @@ public class Index {
 	private int pageSize=10;
 	private int n;
 
-	private Integer chosenDataFormat = 0;
+	private String chosenDataFormat = null;
 	private Integer selected = 0;
 	private Integer selectedFileFormat = 1;
-	//	private Integer selectedFileFormat = 1;
-	//	private Integer selectedFileFormat = 1;
 
 	private String selectedTraitType="Continuous";
 
 	private File tempFile,  file1, file2, file3;
-	private Div defaultbox, phenobox, genobox, mfbox, datagroupbox, crossgroupbox, mapbox1, mapbox2, inputbox, divDatagrid, divDataCheckTxt;
+	private Div defaultbox, phenobox, genobox, mfbox, datagroupbox, crossgroupbox, mapbox1, mapbox2, inputbox, divDatagrid, divDataCheckTxt, checkboxDiv;
+	private Vlayout divVlayout;
 	private Groupbox mfgroupbox, ggroupbox, pgroupbox, grpVariableData, grpDataCheckView;
+	
 	private Radio deleteRadioButton;
 	private Radio imputeRadioButton;
 	private Radio lijiRadioButton;
@@ -104,7 +115,7 @@ public class Index {
 	private Doublespinner dbLodThreshold;
 	private Doublespinner dbCutOff; 
 	private Doublespinner dbMainEffects;
-	private Doublespinner dbNPermutations;
+	private Spinner dbNPermutations;
 	private Doublespinner dbCimStep; 
 	private Doublespinner dbCimWin;
 	private Doublespinner dbCimMinDist;
@@ -119,13 +130,14 @@ public class Index {
 	private Combobox phenoFormat;
 	private Combobox genoFormat;
 	private Combobox mapFormat;
-
+	private Combobox comboPMethod;
+	
 	private Checkbox cbSetup1;
 	private Checkbox cbSetup2;
 	private Checkbox cbTraitYield;
-	private Checkbox cbTraitPitht;
-	private Checkbox cbTraitAwit;
-	private Checkbox cbTraitAwwd;
+//	private Checkbox cbTraitPitht;
+//	private Checkbox cbTraitAwit;
+//	private Checkbox cbTraitAwwd;
 	private Checkbox cbHpresent;
 	private Checkbox cbSetupModel;
 
@@ -134,6 +146,10 @@ public class Index {
 	private Textbox tbMaxNumber;
 	private File crossDataFile;
 	private Doublespinner dbLodCutOff;
+	
+	private Label lblBCSpinner, lblFSpinner;
+	private ArrayList<Checkbox> checkBoxList;
+	private String fileType;
 
 	@AfterCompose
 	public void init(@ContextParam(ContextType.COMPONENT) Component component,
@@ -145,24 +161,23 @@ public class Index {
 		traitType = tType();
 		mapMethod = mMethod();		
 		programList = getPList();
-		crosstypeList = getcrossTypes();
+		crosstypeList = getCrossType();
 		pModel = pMList();
 		pMethod = pMethodList();
 		lociMethod = lociMList();
 		phenotypeFormat = phenotype();
 		scanType = scanTypeList();
 		listString = new ArrayList<String>();
-
+		file1Formats = new ArrayList<String>();
+		file2Formats = new ArrayList<String>();
+		file3Formats = new ArrayList<String>();
+		checkBoxList  = new ArrayList<Checkbox>();
 		grpVariableData = (Groupbox) component.getFellow("grpVariableData");
 		grpDataCheckView = (Groupbox) component.getFellow("grpDataCheckView");
 		defaultbox = (Div) component.getFellow("defaultbox");
-		//		datagroupbox = (Div) component.getFellow("datagroupbox");
-		//		crossgroupbox = (Div) component.getFellow("crossgroupbox");
-		//		inputbox = (Div) component.getFellow("inputbox");
 		divDatagrid = (Div) component.getFellow("datagrid");
 		divDataCheckTxt = (Div) component.getFellow("divDataCheckTxt");
 		
-
 		deleteRadioButton = (Radio) component.getFellow("delete");
 		imputeRadioButton = (Radio) component.getFellow("impute");
 		lijiRadioButton= (Radio) component.getFellow("Liji");
@@ -173,7 +188,7 @@ public class Index {
 		remlRadioButton = (Radio) component.getFellow("REML");
 
 		dbLodCutOff = (Doublespinner) component.getFellow("dbLodCutOff");
-		dbNPermutations = (Doublespinner) component.getFellow("dbNPermutations");
+		dbNPermutations = (Spinner) component.getFellow("dbNPermutations");
 		dbCimStep = (Doublespinner) component.getFellow("dbCimStep");
 		dbCimWin = (Doublespinner) component.getFellow("dbCimWin");
 		dbCimMinDist = (Doublespinner) component.getFellow("dbCimMinDist");
@@ -190,31 +205,48 @@ public class Index {
 		spinnerFnum = (Spinner) component.getFellow("spinnerFnum");
 		cbSetup1= (Checkbox) component.getFellow("setup1");
 		cbSetup2 = (Checkbox) component.getFellow("setup2");
-		cbTraitYield = (Checkbox) component.getFellow("traitYield");
-		cbTraitPitht = (Checkbox) component.getFellow("traitPitht");
-		cbTraitAwit = (Checkbox) component.getFellow("traitAwit");
-		cbTraitAwwd = (Checkbox) component.getFellow("traitAwwd");
 		cbHpresent = (Checkbox) component.getFellow("cbHpresent");
 		cbSetupModel = (Checkbox) component.getFellow("cbSetupModel");
-
+		comboPMethod = (Combobox) component.getFellow("comboPMethod");
+		
+		 checkboxDiv = (Div) component.getFellow("checkboxDiv");
+		 divVlayout  = (Vlayout) component.getFellow("divVlayout");
+			
 		tbMEffect = (Textbox) component.getFellow("maineffect");
 		tbAll = (Textbox) component.getFellow("all");
 		tbMaxNumber = (Textbox) component.getFellow("maxnumber");
+		
+		lblBCSpinner= (Label) component.getFellow("lblBCSpinner");
+		lblFSpinner= (Label) component.getFellow("lblFSpinner");
 		makeDisable();
 
 		//show default dataformat option
 		createPhenoBox();
 		this.selected=0;
 		this.selectedFileFormat=1;
+		setChosenDataFormat("default");
 		setChosenCrosstype(crosstypeList.get(0));
-
+		setChosenMapping(mapMethod.get(0));
+		setComboboxMapping("Normal");// PModel
+		setCoboboxmapping2("Haley-Knott Regression");
+		setMapping1(true);
+		InputStream is = null;
+		try {
+			is = Resources.getResourceAsStream("");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String tempdir = AnalysisUtils.getUserTempFolder();
+		
+		qtlModel.setResultFolderPath(tempdir);
 	}
 
-	private List<Crosstype> getcrossTypes() {
-		// TODO Auto-generated method stub
-		CrosstypeManagerImpl em = new CrosstypeManagerImpl();
-		return em.getAllCrosstypes();
-	}
+//	private List<Crosstype> getcrossTypes() {
+//		// TODO Auto-generated method stub
+//		CrosstypeManagerImpl em = new CrosstypeManagerImpl();
+//		return em.getAllCrosstypes();
+//	}
 
 	private void makeDisable() {
 		imputeRadioButton.setDisabled(true);
@@ -232,8 +264,6 @@ public class Index {
 		tbMaxNumber.setDisabled(true);
 	}
 
-
-
 	@Command
 	public void save(){
 		int i = 0;
@@ -246,7 +276,7 @@ public class Index {
 	}
 
 	@Command("validateInputFiles")
-	@NotifyChange("*")
+//	@NotifyChange("*")
 	public void validateInputFiles(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
 
@@ -285,7 +315,6 @@ public class Index {
 				qtlModel.setDeleteMiss(deleteRadioButtonSelected);
 				qtlModel.setDoMissing(imputeRadioButtonSelected);
 				if(deleteRadioButtonSelected) qtlModel.setCutOff(cutOffValue);
-
 			}
 		}
 		if(distortionTest) qtlModel.setDoDistortionTest(distortionTest); //System.out.println("Test for segregation distortion: Checked");
@@ -299,20 +328,17 @@ public class Index {
 		if(lodCutOffValue!=null&&dbLodCutOff.isDisabled()!=true) qtlModel.setLodCutOff(lodCutOffValue);
 
 		rServeManager = new RServeManager();
+		System.out.println(qtlModel.toString());
 		rServeManager.doCheckQTLData(qtlModel);
-		
 		reloadTxtGrid();
-
-		//		displayCrossData(qtlModel.getResultFolderPath());
+//		displayCrossData(qtlModel.getResultFolderPath());
 	}
 
 	@Command("runQTL")
 	@NotifyChange("*")
 	public void runQTL(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){	
-
 		if(validateQtlModel()){
-			System.out.println("pasing variables");
 			Map<String,Object> args = new HashMap<String,Object>();
 			args.put("qtlModel", qtlModel);
 			BindUtils.postGlobalCommand(null, null, "displayQtlResult", args);
@@ -328,36 +354,35 @@ public class Index {
 			errorMessage = "Please choose a trait type";
 			return false;
 		}
-
-		if(cbTraitYield.isChecked()!=true && cbTraitPitht.isChecked()!=true && cbTraitAwit.isChecked()!=true && cbTraitAwwd.isChecked()!=true){
+		
+		listString = getCheckedBoxes(checkBoxList);
+		if(listString.size()<1){//
 			errorMessage = "Please choose at least one trait";
 			return false;
 		}
-		
-		if(cbTraitYield.isChecked()) listString.add("Yield");
-		if(cbTraitPitht.isChecked()) listString.add("Pitht");
-		if(cbTraitAwit.isChecked()) listString.add("Awit");
-		if(cbTraitAwwd.isChecked()) listString.add("Awwd");
 
-
+		qtlModel.setmMethod(chosenMapping);
 		if(chosenMapping==null){
 			errorMessage = "Please choose mapping method";
 			return false;
 		}
-
 		else if(chosenMapping=="IM"){
-			Double dbNPermutationsVal = dbNPermutations.doubleValue();
-
+			Integer dbNPermutationsVal = dbNPermutations.getValue();
+			qtlModel.setnPermutations(dbNPermutationsVal);
 			if(dbNPermutationsVal!=null)
 				System.out.println("Chosen value for Cut-off: " + dbNPermutationsVal);
-			if(comboboxMapping != null)
+			if(comboboxMapping != null){
+				qtlModel.setPhenoModel(comboboxMapping);
 				System.out.println("Chosen value for Phenotype Model: " + comboboxMapping);
+			}
 			else{
 				errorMessage = "Please choose value for Phenotype Model";
-				return false; 
+				return false;
 			}
-			if(coboboxmapping2 !=null)
+			if(coboboxmapping2 !=null){
+				qtlModel.setAlMethod(coboboxmapping2);
 				System.out.println("Chosen value for Method: " + coboboxmapping2);
+			}
 			else{
 				errorMessage = "Please choose value for Method";
 				return false; 
@@ -407,7 +432,6 @@ public class Index {
 			Double mqmWinVal = dbMqmWinVal.getValue();
 			if(mqmWinVal!=null)
 				System.out.println("Chosen value for Window Size: " + mqmWinVal);
-
 
 			boolean additive = additiveRadioButton.isSelected();
 
@@ -493,8 +517,18 @@ public class Index {
 		return true;
 	}
 
+	private ArrayList<String>  getCheckedBoxes(ArrayList<Checkbox> checkBoxList) {
+		// TODO Auto-generated method stub
+		
+		ArrayList<String> ls= new ArrayList<String>();
+		for(Checkbox c: checkBoxList){
+			System.out.println(c.getLabel() +" is Checked?" +  c.isChecked());
+			if(c.isChecked()) ls.add(c.getLabel());
+		}
+		return ls;
+	}
+
 	@Command("missingDataCheck")
-	@NotifyChange("*")
 	public void missingDataCheck(){
 
 		if(imputeRadioButton.isDisabled()==true)
@@ -514,7 +548,6 @@ public class Index {
 	}
 
 	@Command("aggregationCheck")
-	@NotifyChange("*")
 	public void aggregationCheck(){
 
 		if(dbPvalCutOff.isDisabled()==true)
@@ -525,7 +558,6 @@ public class Index {
 	}
 
 	@Command("genotypeCheck")
-	@NotifyChange("*")
 	public void genotypeCheck(){
 
 		if(dbCutOffP.isDisabled()==true)
@@ -536,18 +568,15 @@ public class Index {
 	}
 
 	@Command("markerCheck")
-	@NotifyChange("*")
 	public void markerCheck(){
 
 		if(dbLodThreshold.isDisabled()==true)
 			dbLodThreshold.setDisabled(false);
 		else
 			dbLodThreshold.setDisabled(true);
-
 	}
-
+	
 	@Command("errorCheck")
-	@NotifyChange("*")
 	public void errorCheck(){
 
 		if(dbLodCutOff.isDisabled()==true)
@@ -557,7 +586,6 @@ public class Index {
 	}
 
 	@Command("QTLCheck")
-	@NotifyChange("*")
 	public void QTLCheck(){
 
 		if(cbSetup1.isDisabled()==true)
@@ -593,54 +621,71 @@ public class Index {
 	}
 
 	@Command("visibility")
-	@NotifyChange("*")
 	public void visibility(@BindingParam("selected") Integer selected){
 
+		this.selected = selected;
 		if(selected == 0){
+			qtlModel.setDataFormat("default");
 			createPhenoBox();
-			//			detachDiv(datagroupbox);
-			//			detachDiv(crossgroupbox);
-			//			detachDiv(inputbox);
-			this.selected=0;
 			makeNull();
 		}
-
+		
 		else if(selected == 1){
-			//			detachDiv(defaultbox);
-			createDataGroupBox();
-			//			detachDiv(crossgroupbox);
-			//			detachDiv(inputbox);
-			this.selected=1;
+			createDataGroupBox();//Map Maker
+			qtlModel.setDataFormat("MapMaker");
 			makeNull();
 		}
 
-		else if(selected == 2){
-			//			detachDiv(phenobox);
-			//			detachDiv(datagroupbox);
+		else if(selected == 2){//QTL Cartographer
 			createCrossGroupBox();
-			//			detachDiv(inputbox);
-			this.selected=2;
+			qtlModel.setDataFormat("QTL Cartographer");
 			makeNull();
 		}
 
 
-		else if(selected == 3){
-			//			detachDiv(phenobox);
-			//			detachDiv(datagroupbox);
-			//			detachDiv(crossgroupbox);
+		else if(selected == 3){//Map Manager
 			createInputBox();
-			this.selected=3;
+			qtlModel.setDataFormat("Map Manager");
 			makeNull();
 		}
 
 		else{
-			//			detachDiv(phenobox);
-			//			detachDiv(datagroupbox);
-			//			detachDiv(crossgroupbox);
-			//			detachDiv(inputbox);
-			this.selected=4;
 			makeNull();
 		}
+	}
+	
+	@Command("chooseCrossType")
+	@NotifyChange("*")
+	public void chooseCrossType(@BindingParam("selected") Integer selected){
+		lblFSpinner.setVisible(false);
+		spinnerFnum.setVisible(false);
+		lblBCSpinner.setVisible(false);
+		spinnerBCnum.setVisible(false);
+		
+		if(selected == 0){ //F selected
+			lblFSpinner.setVisible(true);
+			spinnerFnum.setVisible(true);
+		} 
+		else if(selected == 1){ // BC selected
+			lblBCSpinner.setVisible(true);
+			spinnerBCnum.setVisible(true);
+		}
+
+		qtlModel.setCrossType(crossTypeFunctions[selected]);
+	}
+
+	@Command("choosePModel")
+	@NotifyChange("pMethod")
+	public void choosePModel(@BindingParam("selected") Comboitem selected){
+		//"Normal", "Binary", "Two-Part", "Non-parametric"
+		comboPMethod.setDisabled(false);
+		if(selected.getLabel().equals("Binary")){ //"Binary", 
+			pMethod = pMethodBInaryList();
+		} 
+		else if(selected.getLabel().equals("Non-parametric")){ //Non-parametric
+			comboPMethod.setDisabled(true);
+		}
+		else pMethod = pMethodList();
 	}
 
 	private void makeNull(){
@@ -654,11 +699,15 @@ public class Index {
 		fileName1 = null;
 		fileName2 = null;
 		fileName3 = null;
-
+	}
+	
+	private void clearFileFormats() {
+		// TODO Auto-generated method stub
+		file1Formats.clear();
+		file2Formats.clear();
 	}
 
-	public void createPhenoBox(){
-
+	public void createPhenoBox(){ 
 		if (!defaultbox.getChildren().isEmpty())
 			defaultbox.getFirstChild().detach();
 
@@ -666,39 +715,52 @@ public class Index {
 		includeDefaultzul.setId("includeDefaultzul");
 		includeDefaultzul.setSrc("/user/analysis/linkagemapping/default.zul");
 		includeDefaultzul.setParent(defaultbox);
+		
+		clearFileFormats();
+		file1Formats.add("csv");
+		file1Formats.add("txt");
 
-
+		file2Formats.add("txt");
+		file2Formats.add("csv");
 	}
 
 	private void createDataGroupBox(){
 		if (!defaultbox.getChildren().isEmpty())
 			defaultbox.getFirstChild().detach();
 
-
 		Include dataGroupData = new Include();
 		dataGroupData.setSrc("/user/analysis/linkagemapping/mapmaker.zul");
 		dataGroupData.setParent(defaultbox);
-
+		
+		clearFileFormats();
+		file1Formats.add("raw");
+		file2Formats.add("txt");
+		file2Formats.add("maps");
 	}
 
 	private void createCrossGroupBox(){
 		if (!defaultbox.getChildren().isEmpty())
 			defaultbox.getFirstChild().detach();
-
-
 		Include crossGroupData = new Include();
 		crossGroupData.setSrc("/user/analysis/linkagemapping/QTL.zul");
 		crossGroupData.setParent(defaultbox);
+		
+		clearFileFormats();
+		file1Formats.add("cro");
+		file2Formats.add("map");
 	}
 
 	private void createInputBox(){
 		if (!defaultbox.getChildren().isEmpty())
 			defaultbox.getFirstChild().detach();
 
-
 		Include inputGroupData = new Include();
 		inputGroupData.setSrc("/user/analysis/linkagemapping/inputbox.zul");
 		inputGroupData.setParent(defaultbox);
+		
+
+		clearFileFormats();
+		file1Formats.add("qtx");
 	}
 
 	public void detachDiv(Div div){
@@ -729,7 +791,7 @@ public class Index {
 			mapping3=false; mapping4=true;
 		}
 	}
-
+	
 	@NotifyChange("pModel")
 	@Command
 	@DependsOn("selectedTraitType")
@@ -737,15 +799,24 @@ public class Index {
 		if(selectedTraitType=="Continuous"){
 			pModel = continuousMList();
 			setCoboboxmapping2("Normal");
+			refreshTraitCheckboxes(continuousVarsList);
 		}
 		else if(selectedTraitType=="Binary"){
 			pModel = binaryMList();
 			setCoboboxmapping2("Binary");
+			refreshTraitCheckboxes(binaryVarsList);
 		}
 		else{ // if(selectedTraitType=="Ordinal")
 			pModel = ordinalMList();
 			setCoboboxmapping2("Non-parametric");
+			refreshTraitCheckboxes(ordinalVarsList);
 		}
+	}
+
+	private void refreshTraitCheckboxes(List<String> varsListList) {
+		// TODO Auto-generated method stub
+		divVlayout.getChildren().clear();
+		createCheckboxes(varsListList);
 	}
 
 	@NotifyChange("*")
@@ -761,25 +832,31 @@ public class Index {
 		tempFile = new File(event.getMedia().getName());
 		setFileName1(event.getMedia().getName());
 		System.out.println(tempFile.getAbsolutePath());	
-
+		fileType = fileName1.split("\\.")[1];
+		
 		value1 = tempFile.getAbsolutePath();
 		if (file1 == null)
 			try {
-				file1 = File.createTempFile(fileName1, ".csv");
+				file1 = File.createTempFile(fileName1, "."+fileType);
 				System.out.println(file1.getAbsolutePath());
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 
-		if (!fileName1.endsWith(".csv")  && !fileName1.endsWith(".txt")) {
-			Messagebox.show("Error: File must be in a .txt or .csv format",
+		
+		if (!file1Formats.contains(fileType)) {
+			errorMessage = "Error: File must be in a ";
+			for(String s: file1Formats){
+				errorMessage = errorMessage+"."+s;
+			}
+			Messagebox.show(errorMessage+" format",
 					"Upload Error", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
-
+		
 		in1 = event.getMedia().isBinary() ? event.getMedia().getStreamData() : new ReaderInputStream(event.getMedia().getReaderData());
 		qtlModel.setFile1(file1.getAbsolutePath());
-		qtlModel.setFormat1(fileFormats[formatIndex]);
+		qtlModel.setFormat1(fileType);
 
 	}
 
@@ -796,25 +873,32 @@ public class Index {
 		tempFile = new File(event.getMedia().getName());
 		setFileName2(event.getMedia().getName());
 		System.out.println(tempFile.getAbsolutePath());	
-
+		fileType = fileName2.split("\\.")[1];
+		
 		value2 = tempFile.getAbsolutePath();
 		if (file2 == null)
 			try {
-				file2 = File.createTempFile(fileName2, ".csv");
+					file2 = File.createTempFile(fileName2, "."+fileType);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 
-		if (!fileName2.endsWith(".csv")  && !fileName2.endsWith(".txt") ) {
-			Messagebox.show("Error: File must be in a .txt or .csv format",
+		
+		if (!file2Formats.contains(fileType)) {
+			errorMessage = "Error: File must be in a ";
+			for(String s: file2Formats){
+				errorMessage = errorMessage+"."+s;
+			}
+			Messagebox.show(errorMessage+" format",
 					"Upload Error", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
+		
 
 		in2 = event.getMedia().isBinary() ? event.getMedia().getStreamData() : new ReaderInputStream(event.getMedia().getReaderData());
 
 		qtlModel.setFile2(file2.getAbsolutePath());
-		qtlModel.setFormat2(fileFormats[formatIndex]);
+		qtlModel.setFormat2(fileType);
 	}
 
 	@NotifyChange("*")
@@ -848,7 +932,7 @@ public class Index {
 
 		in3 = event.getMedia().isBinary() ? event.getMedia().getStreamData() : new ReaderInputStream(event.getMedia().getReaderData());
 		qtlModel.setFile3(file3.getAbsolutePath());
-		qtlModel.setFormat3(fileFormats[formatIndex]);
+		qtlModel.setFormat3("csv");
 	}
 
 
@@ -877,9 +961,10 @@ public class Index {
 		qtlModel.setfNum(spinnerFnum.getValue());
 		qtlModel.setBcNum(spinnerBCnum.getValue());
 		rServeManager = new RServeManager();
+		System.out.println(qtlModel.toString());
 		rServeManager.doCreateQTLData(qtlModel);
-
-		displayCrossData(qtlModel.getResultFolderPath());
+//
+//		displayCrossData(qtlModel.getResultFolderPath());
 	}
 
 	private void displayCrossData(String resultFolderPath) {
@@ -897,6 +982,7 @@ public class Index {
 		dataFileName = crossDataFile.getName();
 		refreshCsv();
 		if (this.isUpdateMode) setNewDataSet(true);
+		
 	}
 
 	private void uploadFile1(){
@@ -912,7 +998,6 @@ public class Index {
 	}
 
 	private void uploadFile2(){
-
 		System.out.println(file2.getAbsolutePath());
 		FileUtilities.uploadFile(file2.getAbsolutePath(), in2);
 		BindUtils.postNotifyChange(null, null, this, "*");
@@ -951,6 +1036,13 @@ public class Index {
 			rawData.remove(0);
 			dataList = new ArrayList<String[]>(rawData);
 			System.out.println(Arrays.toString(dataList.get(0)));
+			
+			continuousVarsList = getContinuousVarsFromList(columnList);
+			binaryVarsList = getBinaryVarsFromList(continuousVarsList);
+			ordinalVarsList = getOrdinalVarsFromList(continuousVarsList);
+			
+			createCheckboxes(continuousVarsList);
+			
 			if (!this.isDataReUploaded)
 				System.out.println("gbUploadData.invalidate()");
 		} catch (FileNotFoundException e) {
@@ -965,6 +1057,55 @@ public class Index {
 		}
 	}
 
+	private void createCheckboxes(List<String> varList) {
+		// TODO Auto-generated method stub
+		Checkbox newCheckbox= new Checkbox();
+		for(String s: varList){
+			 newCheckbox= new Checkbox(s);
+//			newCheckbox.setLabel(s);
+			 divVlayout.appendChild(newCheckbox);
+			newCheckbox.setParent(divVlayout);
+			checkBoxList.add(newCheckbox);
+			divVlayout.setVisible(true);
+			
+		}
+	}
+
+	private List<String> getOrdinalVarsFromList(List<String> numvarList) {
+		// TODO Auto-generated method stub
+		List<String> varList = new ArrayList<String>();
+		for(String s:numvarList){
+			if(rServeManager.getLevels(columnList, dataList, s).length>=2){//if levels is atleast 2
+				varList.add(s);
+			}
+		}
+	return varList;
+	}
+	
+	private List<String> getBinaryVarsFromList(List<String> numvarList) {
+		// TODO Auto-generated method stub
+		List<String> varList = new ArrayList<String>();
+			for(String s:numvarList){
+				if(rServeManager.getLevels(columnList, dataList, s).length==2){//if levels is only 2
+					varList.add(s);
+				}
+			}
+		return varList;
+	}
+	private List<String> getContinuousVarsFromList(List<String> columnNames) {
+		// TODO Auto-generated method stub
+		List<String> varList = new ArrayList<String>();
+		rServeManager = new RServeManager();
+		for(String s:columnNames){
+			if(rServeManager.isColumnNumeric(qtlModel.getResultFolderPath()+"crossData.csv", s).equals("TRUE")){
+				varList.add(s);
+			}
+		}
+
+		rServeManager.end();
+		return varList;
+	}
+	
 	public ArrayList<ArrayList<String>> getCsvData() {
 		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
 		if (dataList.isEmpty())
@@ -983,7 +1124,7 @@ public class Index {
 		if (gridReUploaded) {
 			gridReUploaded = false;
 			return;
-		}
+		}	
 		if (!divDatagrid.getChildren().isEmpty())
 			divDatagrid.getFirstChild().detach();
 		Include incCSVData = new Include();
@@ -1019,15 +1160,15 @@ public class Index {
 		studyInformationPage.setParent(divDataCheckTxt);
 		studyInformationPage.setDynamicProperty("txtFile", fileContent);
 		studyInformationPage.setSrc("/user/analysis/txtviewer.zul");
+		
 	}
 
-
+	
 	public static List<String> mMethod(){
 		return Arrays.asList(new String[]{"IM", "CIM", "MQM", "Bayesian Mapping", "Two-d Mapping", "QTLRel", "MAGIC"});
 	}
-
 	public static List<String> getCrossType() {
-		return Arrays.asList(new String[]{"F2", "BC", "RIL(SIB)", "RIL(SELF)", "[Other]", "BC", "DH", "F", "RIL(self)", "Ril(sib)", "[Other]"});
+		return Arrays.asList(new String[]{"F2", "BC", "RIL(SIB)", "RIL(SELF)", "[Other]"}); // "BC", "DH", "F", "RIL(self)", "Ril(sib)", "[Other]"}
 	}
 
 	public static List<String> scanTypeList(){
@@ -1039,9 +1180,8 @@ public class Index {
 	}
 
 	public static List<String> phenotype(){
-		return Arrays.asList(new String[]{"Space-separated (.txt) file", "Comma-separated (.csv) file", "Tab-separated (.txt) file", "Semi-colon-separated (.txt) file"});
+		return Arrays.asList(new String[]{"Space-separated (.txt)", "Comma-separated (.csv)", "Tab-separated (.txt)", "Semi-colon-separated (.txt)"});
 	}
-
 
 	public static List<String> lociMList(){
 		return Arrays.asList(new String[]{"Mean", "Mode", "Scan"});
@@ -1054,9 +1194,11 @@ public class Index {
 	public static List<String> continuousMList(){
 		return Arrays.asList(new String[]{"Normal", "Two-Part", "Non-parametric"});
 	}
+	
 	public static List<String> binaryMList(){
 		return Arrays.asList(new String[]{ "Binary"});
 	}
+	
 	public static List<String> ordinalMList(){
 		return Arrays.asList(new String[]{"Non-parametric"});
 	}
@@ -1064,7 +1206,10 @@ public class Index {
 	public static List<String> pMethodList(){
 		return Arrays.asList(new String[]{"Maximum Likehood via EM", "Haley-Knott Regression", "Extended Haley-Knott Method", "Imputation"});
 	}
-
+	public static List<String> pMethodBInaryList(){
+		return Arrays.asList(new String[]{"Maximum Likehood via EM", "Haley-Knott Regression"});
+	}	
+	
 	public static List<String> genotype(){
 		return Arrays.asList(new String[]{"Comma-separated (.csv) file", "Tab Delimited text (.txt) file"});
 	}
@@ -1079,8 +1224,8 @@ public class Index {
 	}
 
 	public List<String[]> getDataList() {
-		System.out.println("DaALIST GEt");
-		reloadCsvGrid();
+		System.out.println("DatALIST GEt");
+		
 		if (true)
 			return dataList;
 
@@ -1089,7 +1234,7 @@ public class Index {
 			pageData.add(dataList.get(i));
 			System.out.println(Arrays.toString(dataList.get(i)));
 		}
-
+		reloadCsvGrid();
 		return pageData;
 	}
 
@@ -1121,7 +1266,6 @@ public class Index {
 		this.traitType = traitType;
 	}
 
-
 	public List<String> getMapMethod() {
 		return mapMethod;
 	}
@@ -1138,11 +1282,11 @@ public class Index {
 		this.programList = programList;
 	}
 
-	public Crosstype getchosenCrosstype() {
+	public String getchosenCrosstype() {
 		return chosenCrosstype;
 	}
 
-	public void setChosenCrosstype(Crosstype chosenCrosstype) {
+	public void setChosenCrosstype(String chosenCrosstype) {
 		this.chosenCrosstype = chosenCrosstype;
 	}
 
@@ -1266,11 +1410,11 @@ public class Index {
 		this.isNewDataSet = isNewDataSet;
 	}
 
-	public Integer getChosenDataFormat() {
+	public String getChosenDataFormat() {
 		return chosenDataFormat;
 	}
 
-	public void setChosenDataFormat(Integer chosenDataFormat) {
+	public void setChosenDataFormat(String chosenDataFormat) {
 		this.chosenDataFormat = chosenDataFormat;
 	}
 
@@ -1553,7 +1697,6 @@ public class Index {
 		this.dbCutOff = dbCutOff;
 	}
 
-
 	public Checkbox getCbSetup1() {
 		return cbSetup1;
 	}
@@ -1608,11 +1751,11 @@ public class Index {
 	}
 
 
-	public List<Crosstype> getCrosstypeList() {
+	public List<String> getCrosstypeList() {
 		return crosstypeList;
 	}
 
-	public void setCrosstypeList(List<Crosstype> crosstypeList) {
+	public void setCrosstypeList(List<String> crosstypeList) {
 		this.crosstypeList = crosstypeList;
 	}
 

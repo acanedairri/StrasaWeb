@@ -14,7 +14,7 @@
 
 		<groupbox id="mapbox2" closable="true" sclass="z-demo-config"
 			width="600px">
-			Select map file (.maps):
+			Select map file (.map):
 			<separator />
 			Name:
 			<textbox width="400px" value="@load(vm.value2)" />

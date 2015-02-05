@@ -108,7 +108,7 @@ public class Data {
 		// browseStudyManagerImpl.getStudyData(studyId, dataType, dataset);
 		columns = new StudyDataColumnManagerImpl().getStudyDataColumnByStudyId(studyId, dataType, dataset); // rd
 																											// as
-		totalRows = new StudyDataDynamicColumnManager(dataType.endsWith("rd")).countStudyDynamicCOl(studyId, dataset); // raw
+		totalRows = new StudyDataDynamicColumnManager(dataType.endsWith("rd")).countStudyDynamicCol(studyId, dataset); // raw
 		// data,
 		// dd
 		// as

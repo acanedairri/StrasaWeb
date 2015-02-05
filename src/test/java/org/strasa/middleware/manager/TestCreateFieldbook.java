@@ -2,9 +2,17 @@ package org.strasa.middleware.manager;
 
 import java.io.File;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
 
 import net.sf.jxls.reader.ReaderBuilder;
 import net.sf.jxls.reader.XLSReadStatus;
@@ -19,6 +27,9 @@ import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyVariable;
 import org.strasa.web.createfieldbook.view.pojos.CreateFieldbookTemplateParser;
 import org.strasa.web.createfieldbook.view.pojos.SiteInformationModel;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class TestCreateFieldbook {
 
@@ -38,6 +49,27 @@ public class TestCreateFieldbook {
 	public void afterEachTest() {
 		long elapsedTime = System.nanoTime() - startTime;
 		System.out.println("#####" + ": Elapsed Time = " + elapsedTime + " ns = " + ((double) elapsedTime / 1000000000) + " s");
+	}
+
+	@Test
+	public void testFile() throws Exception {
+		URL path = TestCreateFieldbook.class.getClassLoader().getResource("SqlMapConfig.xml");
+		System.out.println(path.toString());
+
+		File fXmlFile = new File(path.getFile());
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document doc = builder.parse(path.getFile());
+		XPathFactory xPathfactory = XPathFactory.newInstance();
+		XPath xpath = xPathfactory.newXPath();
+		XPathExpression expr = xpath.compile("/configuration/environments/environment/dataSource/property");
+		NodeList nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Node node = nodeList.item(i);
+			System.out.println(node.getAttributes().item(1).getNodeValue());
+			// do your stuff
+		}
 	}
 
 	@Test
