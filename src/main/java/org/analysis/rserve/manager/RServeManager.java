@@ -156,19 +156,19 @@ public class RServeManager {
 
 	public void doGBLUP(GenomicSelectionModel gblupModel) {
 
-		String resultFolderPath = gblupModel.getResultFolderPath(); 
-		String pheno_file = gblupModel.getPhenoFile();
-		String geno_file =  gblupModel.getGenoFile();
+		String resultFolderPath = gblupModel.getResultFolderPath().replace(BSLASH, FSLASH); 
+		String pheno_file = gblupModel.getPhenoFile().replace(BSLASH, FSLASH);
+		String geno_file =  gblupModel.getGenoFile().replace(BSLASH, FSLASH);
 		int markerFormat = gblupModel.getMarkerFormat();
 		String importRel = gblupModel.getImportRel(); 
-		String rel_file = gblupModel.getRelFile();
+		String rel_file = gblupModel.getRelFile().replace(BSLASH, FSLASH);
 		String rMatType = gblupModel.getrMatType();
-		String map_file = gblupModel.getMapFile();
+		String map_file = gblupModel.getMapFile().replace(BSLASH, FSLASH);
 		String[] traitNames = gblupModel.getTraitNames();
 		String[] covariates = gblupModel.getCovariates();
 		String doCV = gblupModel.getDoCV();
 		String samplingStrat = gblupModel.getSamplingStrat();
-		String popStruc_file =gblupModel.getPopStrucFile();
+		String popStruc_file =gblupModel.getPopStrucFile().replace(BSLASH, FSLASH);
 		int nfolds = gblupModel.getNfolds();
 		int nrep = gblupModel.getNrep();
 
@@ -458,11 +458,8 @@ public class RServeManager {
 			//				rEngine.eval(source7);
 			//				rEngine.eval(source8);
 			rConnection.eval(getGSDataPrepOut);
-
 			//				rEngine.eval("sink()");
-
-
-
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{

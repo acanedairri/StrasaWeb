@@ -5,11 +5,12 @@ import org.zkoss.zk.ui.Sessions;
 
 public class GenomicSelectionModel {
 
-	private String DATA_PATH;
 
 	private static String BSLASH = "\\";
 	private static String FSLASH = "/";
-
+	private static String PATH1 = System.getProperty("user.dir")+ System.getProperty("file.separator") + "SampleData" + System.getProperty("file.separator");
+	public static String DATA_PATH = System.getProperty("user.dir")+ System.getProperty("file.separator") + "SampleData" + System.getProperty("file.separator");
+	
 	String resultFolderPath;  // outputPath = "E:/App Files/workspace_Juno/RJavaManager/sample_datasets"
 
 	String phenoFile;// = resultFolderPath + "phenoData2V.csv"; //fixed filename, output of GSDataCheck 

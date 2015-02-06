@@ -4,10 +4,11 @@ import org.irri.breedingtool.rjava.manager.RJavaManager;
 import org.strasa.web.analysis.view.model.GenomicSelectionModel;
 
 public class TestGBLUP {
+
 	private static String BSLASH = "\\";
 	private static String FSLASH = "/";
-	private static String PATH1 = System.getProperty("user.dir")+ System.getProperty("file.separator") + "sample_datasets" + System.getProperty("file.separator");
-	public static String DATA_PATH = PATH1.replace(BSLASH, FSLASH);
+	private static String PATH1 = System.getProperty("user.dir")+ System.getProperty("file.separator") + "SampleData" + System.getProperty("file.separator");
+	public static String DATA_PATH = System.getProperty("user.dir")+ System.getProperty("file.separator") + "SampleData" + System.getProperty("file.separator");
 
 	public static void main(String[] args) {
 
