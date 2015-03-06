@@ -172,7 +172,7 @@ public class RServeManager {
 		int nfolds = gblupModel.getNfolds();
 		int nrep = gblupModel.getNrep();
 
-		gblupModel.toString("GBLUP");
+		System.out.println(gblupModel.toString("GBLUP"));
 		try {
 			//		rJavaManager.getWebToolManager().doGBLUP(
 			//				resultFolderPath, pheno_file, geno_file, markerFormat, importRel, rel_file, rMatType, 
@@ -211,7 +211,7 @@ public class RServeManager {
 			//			
 			//			String source2 = "source(\"E:/StarPbtools/GS/script/BLUP_synbreed_gv.R\")";
 			//			String source4 = "source(\"E:/StarPbtools/GS/script/BLUP_synbreed_cv.R\")";
-			//			String source5 = "source(\'E:/StarPbtools/GS/script/doGBLUP.R\')";
+//						String source5 = "source(\'E:/StarPbtools/GS/script/doGBLUP.R\')";
 			//			String source7 = "source(\'E:/StarPbtools/GS/script/createGSPlots.R\')";
 			String source8 = "sink(paste(\"" + resultFolderPath + "GBLUPOut.txt\", sep = \"\"))";
 			//			String getGBLUPOut  = null;
@@ -229,36 +229,49 @@ public class RServeManager {
 			//					resultFolderPath, pheno_file, geno_file, markerFormat, importRel, rel_file, rMatType, 
 			//	                map_file, traitNames, covariates, doCV, varCompEst, samplingStrat, nfolds, nrep);
 
-			System.out.println(source1);
-			System.out.println(source2);
-			System.out.println(source3);
-			System.out.println(source4);
-			//			System.out.println(source5);
+			//			System.out.println(source1);
+			//		System.out.println(source5);
 			//			System.out.println(source6);
 			//			System.out.println(source7);
-			System.out.println(source8);
-			System.out.println(getGBLUPOut);
-			System.out.println(source9);
 
 			rConnection.eval(source1); //rEngine.eval("source(\'E:/StarPbtools/QTL/irri_new/trimStrings.R\')");
+			System.out.println(source1);
 			rConnection.eval(source2);
+			System.out.println(source2);
 			rConnection.eval(source3);
+			System.out.println(source3);
 			rConnection.eval(source4);
-			//			rEngine.eval(source5);
+			System.out.println(source4);
+//						rEngine.eval(source5);
 			//			rEngine.eval(source6);
 			//			rEngine.eval(source7);
-			if (doCV == "TRUE") rConnection.eval(source8);
+			//			IF (DOCV == "TRUE"){
+			//				RCONNECTION.EVAL(SOURCE8);
+			//				SYSTEM.OUT.PRINTLN(SOURCE8);
+			//			}
+			if (doCV == "TRUE"){
+				rConnection.eval(source8);
+				System.out.println(source8);
+			}
+
 			rConnection.eval(getGBLUPOut);
-			if (doCV == "TRUE") rConnection.eval(source9);
+			System.out.println(getGBLUPOut);
+
+			if (doCV == "TRUE"){
+				rConnection.eval(source9);
+				System.out.println(source9);
+			}
 
 			//			rEngine.eval("sink()");
 			//			rEngineEnd();
 
 			System.out.println("reached end.");
 		} catch (Exception e) {
+			System.out.println("exception!!!!!!");
 			e.printStackTrace();
 		} finally{
 			//			rConnection.close();
+			System.out.println("reached end.");
 			end();
 		}
 	}	
@@ -459,7 +472,7 @@ public class RServeManager {
 			//				rEngine.eval(source8);
 			rConnection.eval(getGSDataPrepOut);
 			//				rEngine.eval("sink()");
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
@@ -2273,7 +2286,8 @@ public class RServeManager {
 								String outAnovaTable3 = "model1b <- lmer(formula(ssa1$output[[" + i + "]]$site[[" + j + "]]$formula1), data = ssa1$output[[" + i + "]]$site[[" + j + "]]$data, REML = T)";
 								String outAnovaTable4 = "a.table <- anova(model1b)";
 								String outAnovaTable5 = "pvalue <- formatC(as.numeric(format(a.table[1,6], scientific=FALSE)), format=\"f\")";
-								String outAnovaTable6 = "a.table<-cbind(round(a.table[,1:5], digits=4),pvalue)";
+								String outAnovaTable6 = "a.table<-cbind(round(a.table[,c(\"NumDF\", \"Sum Sq\", \"Mean Sq\", \"F.value\", \"DenDF\")], digits=4),pvalue)";
+//								String outAnovaTable6 = "a.table<-cbind(round(a.table[,1:5], digits=4),pvalue)";
 								String outAnovaTable7 = "colnames(a.table)<-c(\"Df\", \"Sum Sq\", \"Mean Sq\", \"F value\", \"Denom\", \"Pr(>F)\")";
 								String outAnovaTable8 = "capture.output(cat(\"Analysis of Variance Table with Satterthwaite Denominator Df\n\"),file=\"" + outFileName + "\",append = TRUE)";
 								String outAnovaTable9 = "capture.output(a.table,file=\"" + outFileName + "\",append = TRUE)";
@@ -5160,9 +5174,7 @@ public class RServeManager {
 
 		System.out.println("start QTL");
 		System.out.println("resultFolderPath: " + resultFolderPath);
-
 		try {
-
 			//						rConnection.eval("library(qtl)");
 			//						System.out.println("library(qtl)");
 			//						rConnection.eval("library(lattice)");
@@ -5171,7 +5183,6 @@ public class RServeManager {
 			//						System.out.println("library(qtlbim)");
 			//						rConnection.eval("library(PBTools)");
 			//						System.out.println("library(PBTools)");
-
 			String readData = "QTLdata <- tryCatch(createQTLdata(\"" + resultFolderPath + "\", \"" + dataFormat + "\", \"" + format1 + "\", \"" + crossType + "\", \"" + file1 + "\", \"" +
 					format2 + "\", \"" + file2 + "\", \"" + format3 + "\", \"" + file3 + "\", \"" + P_geno + "\", " + bcNum + ", " + fNum + "))";
 
