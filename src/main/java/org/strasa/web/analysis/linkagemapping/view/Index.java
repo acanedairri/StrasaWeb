@@ -209,8 +209,8 @@ public class Index {
 		cbSetupModel = (Checkbox) component.getFellow("cbSetupModel");
 		comboPMethod = (Combobox) component.getFellow("comboPMethod");
 		
-		 checkboxDiv = (Div) component.getFellow("checkboxDiv");
-		 divVlayout  = (Vlayout) component.getFellow("divVlayout");
+		checkboxDiv = (Div) component.getFellow("checkboxDiv");
+		divVlayout  = (Vlayout) component.getFellow("divVlayout");
 			
 		tbMEffect = (Textbox) component.getFellow("maineffect");
 		tbAll = (Textbox) component.getFellow("all");
@@ -279,7 +279,6 @@ public class Index {
 //	@NotifyChange("*")
 	public void validateInputFiles(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
-
 		Checkbox checkifchecked = (Checkbox) component.getFellow("cbMissingData");
 		boolean cbMissingData = checkifchecked.isChecked();
 		Double cutOffValue = dbCutOff.doubleValue();

@@ -116,8 +116,8 @@
 							<listcell
 								label="Type of relationship matrix to be generated:" />
 							<listcell>
-								<combobox id="traitType"
-									model="@load(vm.traitType)" autodrop="true"
+								<combobox id="relMatrixCombo"
+									model="@load(vm.relMatrixTypes)" autodrop="true"
 									selectedItem="@bind(vm.selectedTraitType)"
 									onChange="@command('updatePModel')">
 
@@ -131,7 +131,7 @@
 							<listcell label="Trait:" />
 							<listcell>
 								<combobox id="traitTypes"
-									model="@load(vm.traitType)" autodrop="true"
+									model="@load(vm.traitTypes)" autodrop="true"
 									selectedItem="@bind(vm.selectedTraitType)"
 									onChange="@command('updatePModel')">
 
@@ -166,7 +166,7 @@
 							</listcell>
 							<listcell>
 								<combobox id="trasitTypes"
-									model="@load(vm.traitType)" autodrop="true"
+									model="@load(vm.traitHeritabilityTypes)" autodrop="true"
 									selectedItem="@bind(vm.selectedTraitType)"
 									onChange="@command('updatePModel')">
 
@@ -200,10 +200,9 @@
 							<listcell label="Model:" />
 							<listcell>
 								<combobox id="trassitTypes"
-									model="@load(vm.traitType)" autodrop="true"
+									model="@load(vm.modelTypes)" autodrop="true"
 									selectedItem="@bind(vm.selectedTraitType)"
-									onChange="@command('updatePModel')">
-
+									onChange="@command('updateModelParameters')">
 									<template name="model">
 										<comboitem label="${each}" />
 									</template>
@@ -279,7 +278,7 @@
 							<listcell>Sampling strategy:</listcell>
 							<listcell>
 								<combobox id="dataforsmata"
-									model="@load(vm.dataFormatList)"
+									model="@load(vm.samplingStrategies)"
 									selectedItem="@bind(vm.chosenDataFormat)" visible="true"
 									autodrop="true"
 									onChange="@command('visibility', selected = self.selectedIndex)">

@@ -7,11 +7,10 @@
 		<vlayout>
 			<separator spacing="20px"/>
 			<hlayout>
-				<radiogroup id="performPairwiseGroup" />
+				<radiogroup id="performPairwiseGroup" onCheck="@command('updateRadioOptions', chosenValue = self.selectedItem.value)" />
 				<vbox hflex="1">
-					<radio id="pedigree" label="Pedigree-based"
-						radiogroup="performPairwiseGroup"
-						onClick="@command('updateControlOptionsVisibility')" />
+					<radio id="pedigree" label="Pedigree-based" value="pedigree"
+						radiogroup="performPairwiseGroup" />
 					<hbox>
 						<space bar="false" width="20px" />
 						<checkbox label="additive" id="cbAdditive" />
@@ -23,8 +22,7 @@
 				</vbox>
 				<vbox hflex="1">
 					<radio id="performAllPairwiseBtn"
-						label="Perform all comparisons" radiogroup="performPairwiseGroup"
-						onClick="@command('updateControlOptionsVisibility')" />
+						label="Perform all comparisons" radiogroup="performPairwiseGroup" value="performAll" />
 					<hbox>
 						<space bar="false" width="20px" />
 						<checkbox

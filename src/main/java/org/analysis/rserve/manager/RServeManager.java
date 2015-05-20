@@ -8,6 +8,8 @@ import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
+import org.strasa.web.analysis.view.model.GenomicSelectionModel;
+import org.strasa.web.analysis.view.model.GeneticSimilarityModel;
 import org.strasa.web.analysis.view.model.MultiSiteAnalysisModel;
 import org.strasa.web.analysis.view.model.QTLAnalysisModel;
 import org.strasa.web.analysis.view.model.SingleSiteAnalysisModel;
@@ -18,11 +20,8 @@ public class RServeManager {
 	private RConnection rConnection;
 
 	private InputTransform inputTransform;
-
 	private StringBuilder rscriptCommand;
-
 	private String errorMessage;
-
 	private static String BSLASH = "\\";
 	private static String FSLASH = "/";
 	private static String OUTPUTFOLDER_PATH;  //Sessions.getCurrent().getWebApp().getRealPath("resultanalysis")+ System.getProperty("file.separator");
@@ -37,11 +36,11 @@ public class RServeManager {
 			//			rConnection.eval("library(STAR)"); // not yet 3.0.2
 		} catch (RserveException e) {
 			// TODO Auto-generated catch block
-			 errorMessage="RConnection refused.\nRServe Library was not initialized, please contact your administrator.";
-			 e.printStackTrace();
-			 
-			 Messagebox.show(errorMessage);
-			
+			errorMessage="RConnection refused.\nRServe Library was not initialized, please contact your administrator.";
+			e.printStackTrace();
+
+			Messagebox.show(errorMessage);
+
 		}
 	}
 
@@ -90,7 +89,7 @@ public class RServeManager {
 			e.printStackTrace();
 		}
 		end();
-//		rConnection.close();
+		//		rConnection.close();
 		return toreturn;
 	}
 
@@ -154,6 +153,374 @@ public class RServeManager {
 
 		doSingleEnvironmentAnalysis(ssaModel);
 	}
+
+	public void doGBLUP(GenomicSelectionModel gblupModel) {
+
+		String resultFolderPath = gblupModel.getResultFolderPath().replace(BSLASH, FSLASH); 
+		String pheno_file = gblupModel.getPhenoFile().replace(BSLASH, FSLASH);
+		String geno_file =  gblupModel.getGenoFile().replace(BSLASH, FSLASH);
+		int markerFormat = gblupModel.getMarkerFormat();
+		String importRel = gblupModel.getImportRel(); 
+		String rel_file = gblupModel.getRelFile().replace(BSLASH, FSLASH);
+		String rMatType = gblupModel.getrMatType();
+		String map_file = gblupModel.getMapFile().replace(BSLASH, FSLASH);
+		String[] traitNames = gblupModel.getTraitNames();
+		String[] covariates = gblupModel.getCovariates();
+		String doCV = gblupModel.getDoCV();
+		String samplingStrat = gblupModel.getSamplingStrat();
+		String popStruc_file =gblupModel.getPopStrucFile().replace(BSLASH, FSLASH);
+		int nfolds = gblupModel.getNfolds();
+		int nrep = gblupModel.getNrep();
+
+		System.out.println(gblupModel.toString("GBLUP"));
+		try {
+			//		rJavaManager.getWebToolManager().doGBLUP(
+			//				resultFolderPath, pheno_file, geno_file, markerFormat, importRel, rel_file, rMatType, 
+			//                map_file, traitNames, covariates, doCV, varCompEst, samplingStrat, nfolds, nrep);
+			String traitNamesVector = inputTransform.createRVector(traitNames);
+			String covariatesVector = "NULL";
+			if (covariates[0] != "NULL") covariatesVector = inputTransform.createRVector(covariates);
+			//		String [] respVarMean = new String[respvar.length];
+
+			String genoFile = null;
+			if (geno_file == "NULL") genoFile = geno_file; else genoFile = "\"" + geno_file + "\"";
+
+			String relFile = null;
+			if (rel_file == "NULL") relFile = rel_file; else relFile = "\"" + rel_file + "\"";
+
+			String mapFile = null;
+			if (map_file == "NULL") mapFile = map_file; else mapFile = "\"" + map_file + "\"";
+
+			String popStrucFile = null;
+			if (popStruc_file == "NULL") popStrucFile = popStruc_file; else popStrucFile = "\"" + popStruc_file + "\"";
+
+			System.out.println("start GBLUP");
+			System.out.println("resultFolderPath: " + resultFolderPath);
+			//		System.out.println("outFileName: " + outFileName);
+
+			String source1 = "library(synbreed)";
+			//			String source2 = "library(pedigreemm)";
+			String source2 = "library(PBTools)";
+			String source3 = "library(Matrix)";
+			String source4 = "library(pbtgs)";
+			////			String source4 = "source(\'E:/StarPbtools/GS/script/trimStrings.R\')";
+			////			String source5 = "source(\"E:/StarPbtools/GS/script/GSDataCheck.R\")";
+			//			String source6 = "source(\"E:/StarPbtools/GS/script/marker_relationship.R\")";
+			////			String source7 = "source(\"E:/StarPbtools/GS/script/pedigree_relationship.R\")";
+			////			String source8 = "source(\"E:/StarPbtools/GS/script/doGenSim.R\")";
+			//			
+			//			String source2 = "source(\"E:/StarPbtools/GS/script/BLUP_synbreed_gv.R\")";
+			//			String source4 = "source(\"E:/StarPbtools/GS/script/BLUP_synbreed_cv.R\")";
+//						String source5 = "source(\'E:/StarPbtools/GS/script/doGBLUP.R\')";
+			//			String source7 = "source(\'E:/StarPbtools/GS/script/createGSPlots.R\')";
+			String source8 = "sink(paste(\"" + resultFolderPath + "GBLUPOut.txt\", sep = \"\"))";
+			//			String getGBLUPOut  = null;
+			String getGBLUPOut = "gsGBLUP <- doGBLUP(\"" + resultFolderPath + "\", \"" + pheno_file + "\", " + genoFile + ", " + markerFormat + ", " + importRel + 
+					", " + relFile + ", \"" + rMatType + "\", " + mapFile + ", " + traitNamesVector + ", " + covariatesVector + ", " + doCV + ", \"" + 
+					//					varCompEst + "\", \"" +
+					samplingStrat + "\", " + popStrucFile + ", " + nfolds + ", " + nrep + ")";
+			String source9 = "sink()";
+			//			doGBLUP <- function(outputPath, pheno_file, geno_file = NULL, markerFormat = c(1, 2, 3), , 
+			//                    importRel = FALSE, rel_file = NULL, rMatType = c("t1", "t2", "t3", "t4"), 
+			//                    map_file = NULL, # ped_file = NULL, #peFormat = NULL, #data quality check options, ...,
+			//                    traitNames, covariates = NULL, doCV = FALSE, varCompEst = c("BL", "BRR"), samplingStrat = c("random","within popStruc"), nfolds = 2, nrep = 1) {
+
+			//			rJavaManager.getWebToolManager().doGBLUP(
+			//					resultFolderPath, pheno_file, geno_file, markerFormat, importRel, rel_file, rMatType, 
+			//	                map_file, traitNames, covariates, doCV, varCompEst, samplingStrat, nfolds, nrep);
+
+			//			System.out.println(source1);
+			//		System.out.println(source5);
+			//			System.out.println(source6);
+			//			System.out.println(source7);
+
+			rConnection.eval(source1); //rEngine.eval("source(\'E:/StarPbtools/QTL/irri_new/trimStrings.R\')");
+			System.out.println(source1);
+			rConnection.eval(source2);
+			System.out.println(source2);
+			rConnection.eval(source3);
+			System.out.println(source3);
+			rConnection.eval(source4);
+			System.out.println(source4);
+//						rEngine.eval(source5);
+			//			rEngine.eval(source6);
+			//			rEngine.eval(source7);
+			//			IF (DOCV == "TRUE"){
+			//				RCONNECTION.EVAL(SOURCE8);
+			//				SYSTEM.OUT.PRINTLN(SOURCE8);
+			//			}
+			if (doCV == "TRUE"){
+				rConnection.eval(source8);
+				System.out.println(source8);
+			}
+
+			rConnection.eval(getGBLUPOut);
+			System.out.println(getGBLUPOut);
+
+			if (doCV == "TRUE"){
+				rConnection.eval(source9);
+				System.out.println(source9);
+			}
+
+			//			rEngine.eval("sink()");
+			//			rEngineEnd();
+
+			System.out.println("reached end.");
+		} catch (Exception e) {
+			System.out.println("exception!!!!!!");
+			e.printStackTrace();
+		} finally{
+			//			rConnection.close();
+			System.out.println("reached end.");
+			end();
+		}
+	}	
+
+	public void doGSDataCheck(GenomicSelectionModel genSelModel) {
+
+		String resultFolderPath = genSelModel.getResultFolderPath();
+		String geno_file = genSelModel.getGenoFile();
+		double maxCorr = genSelModel.getMaxCorr();
+		double maxMissingP = genSelModel.getMaxMissingP();
+		double minMAF = genSelModel.getMinMAF();
+		int markerFormat = genSelModel.getMarkerFormat();
+
+		System.out.println("start GSDataCheck");
+		genSelModel.toString("GSDataCheck");
+
+		//			String yVarsVector= inputTransform.createRVector(yVars);
+		//			String [] respVarMean = new String[respvar.length];
+		try {
+			String source1 = "library(pbtgs)";
+			//				String source1 = "library(synbreed)";
+			//				String source2 = "library(pedigreemm)";
+			//				String source3 = "library(GeneticsPed)";
+			//				String source4 = "source(\'E:/StarPbtools/GS/script/trimStrings.R\')";
+			//				String source5 = "source(\"E:/StarPbtools/GS/script/GSDataCheck.R\")";
+			//				String source6 = "source(\"E:/StarPbtools/GS/script/marker_relationship.R\")";
+			//				String source7 = "source(\"E:/StarPbtools/GS/script/pedigree_relationship.R\")";
+			//				String source8 = "source(\"E:/StarPbtools/GS/script/doGenSim.R\")";
+
+			//				String source1 = "source(\"E:/StarPbtools/GS/script/GSDataCheck.R\")";
+			//				String source2 = "source(\'E:/StarPbtools/GS/script/trimStrings.R\')";
+			//				String getGSDataPrepOut = "gsDataPrepOut <- GSDataPrep(\"" + resultFolderPath + "\", \"" + pheno_file + "\", \"" + geno_file + "\", \"" + map_file +
+			//						"\", \"" + rel_file + "\", \"" + pFormat + "\", \"" + gFormat + "\", \"" + mFormat + "\", \"" + rFormat + "\")";
+			String getGSDataCheckOut = "gsDataCheckOut <- GSDataCheck(\"" + resultFolderPath + "\", \"" + geno_file + "\", " + markerFormat + ", " + maxMissingP +
+					", " + minMAF + ", " + maxCorr + ")";
+			//				GSDataCheck <- function(outputPath, geno_file, type, nmiss = 0.1, maf = 0.05, cor_threshold = 0.90)
+			//				maxMissingP, maf = minMAF, cor_threshold = maxCorr)
+
+			System.out.println(source1);
+			//				System.out.println(source2);
+			//				System.out.println(source3);
+			//				System.out.println(source4);
+			//				System.out.println(source5);
+			//				System.out.println(source6);
+			//				System.out.println(source7);
+			//				System.out.println(source8);
+			System.out.println(getGSDataCheckOut);
+			//				
+			rConnection.eval(source1); //rEngine.eval("source(\'E:/StarPbtools/QTL/irri_new/trimStrings.R\')");
+			//				rEngine.eval(source2);
+			//				rEngine.eval(source3);
+			//				rEngine.eval(source4);
+			//				rEngine.eval(source5);
+			//				rEngine.eval(source6);
+			//				rEngine.eval(source7);
+			//				rEngine.eval(source8);
+			rConnection.eval(getGSDataCheckOut);
+
+			//				rEngine.eval("sink()");
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			//			rConnection.close();
+			end();
+		}
+	}
+
+
+	public void doGSDataImputation(GenomicSelectionModel genSelModel) {
+
+		String resultFolderPath = genSelModel.getResultFolderPath();
+		String geno_file = genSelModel.getGenoFile();
+		String impType = genSelModel.getImpType();
+		String pheno_file = genSelModel.getPhenoFile(); 
+		String familyTrait = genSelModel.getFamilyTrait();
+		String packageFormat = genSelModel.getPackageFormat();
+
+		System.out.println("start GSDataImputation");
+		genSelModel.toString("GSDataImputation");
+		//			System.out.println("outFileName: " + outFileName);
+
+		//			String yVarsVector= inputTransform.createRVector(yVars);
+		//			String [] respVarMean = new String[respvar.length];
+
+		try {
+			String source1 = "library(synbreed)";
+			String source2 = "library(pbtgs)";
+			String source3 = "library(PBTools)";
+			//				String source2 = "library(pedigreemm)";
+			//				String source3 = "library(GeneticsPed)";
+			//				String source4 = "source(\'E:/StarPbtools/GS/script/trimStrings.R\')";
+			//				String source5 = "source(\"E:/StarPbtools/GS/script/GSDataCheck.R\")";
+			//				String source6 = "source(\"E:/StarPbtools/GS/script/marker_relationship.R\")";
+			//				String source7 = "source(\"E:/StarPbtools/GS/script/pedigree_relationship.R\")";
+			//				String source8 = "source(\"E:/StarPbtools/GS/script/doGenSim.R\")";
+
+			//				String source2 = "source(\"E:/StarPbtools/GS/script/GSDataImputation.R\")";
+			//				String source2 = "source(\'E:/StarPbtools/GS/script/trimStrings.R\')";
+			String getGSDataImputation  = null;
+			if (impType == "random") 
+				getGSDataImputation = "gsDataImputation <- GSDataImputation(\"" + resultFolderPath + "\", \"" + geno_file + "\", \"" + impType + "\", NULL, NULL, \"" + packageFormat + "\")";
+			else getGSDataImputation = "gsDataImputation <- GSDataImputation(\"" + resultFolderPath + "\", \"" + geno_file + "\", \"" + impType + "\", \"" + pheno_file +
+					"\", \"" + familyTrait + "\", \"" + packageFormat + "\")";
+			//				
+			//				GSDataImputation <- function(outputPath, geno_file, impType = c("random", "family"), pheno_file = NULL, familyTrait = NULL, packageFormat = c("synbreed", "rrBLUP", "BGLR")) {
+
+
+			System.out.println(source1);
+			System.out.println(source2);
+			System.out.println(source3);
+			//				System.out.println(source4);
+			//				System.out.println(source5);
+			//				System.out.println(source6);
+			//				System.out.println(source7);
+			//				System.out.println(source8);
+			System.out.println(getGSDataImputation);
+			//				
+			rConnection.eval(source1); //rEngine.eval("source(\'E:/StarPbtools/QTL/irri_new/trimStrings.R\')");
+			rConnection.eval(source2);
+			rConnection.eval(source3);
+			//				rEngine.eval(source4);
+			//				rEngine.eval(source5);
+			//				rEngine.eval(source6);
+			//				rEngine.eval(source7);
+			//				rEngine.eval(source8);
+			rConnection.eval(getGSDataImputation);
+
+			//				rEngine.eval("sink()");
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			//			rConnection.close();
+			end();
+		}
+	}	
+
+
+	public void doGSDataPrep(GenomicSelectionModel genSelModel) {
+
+		String resultFolderPath =genSelModel.getResultFolderPath();
+
+		String pheno_file = genSelModel.getPhenoFile();
+		String geno_file = genSelModel.getGenoFile();
+		String cov_file = genSelModel.getCovFile();
+		String map_file = genSelModel.getMapFile();
+		String rel_file =genSelModel.getRelFile();
+		String ped_file = genSelModel.getPedFile();
+		String pFormat = genSelModel.getpFormat();
+		String gFormat = genSelModel.getgFormat();
+		String cFormat =genSelModel.getcFormat();
+		String mFormat = genSelModel.getmFormat();
+		String rFormat = genSelModel.getrFormat(); 
+		String peFormat = genSelModel.getPeFormat();
+
+		System.out.println("start GSDataPrep");
+		genSelModel.toString("GSDataPrep");
+
+		//			String yVarsVector= inputTransform.createRVector(yVars);
+		//			String [] respVarMean = new String[respvar.length];
+		try {
+			//				String source1 = "library(synbreed)";
+			String source1 = "library(PBTools)";
+			String source2 = "library(pbtgs)";
+			//				String source2 = "library(pedigreemm)";
+			//				String source3 = "library()";
+			//				String source4 = "source(\'E:/StarPbtools/GS/script/trimStrings.R\')";
+			//				String source5 = "source(\"E:/StarPbtools/GS/script/GSDataCheck.R\")";
+			//				String source6 = "source(\"E:/StarPbtools/GS/script/marker_relationship.R\")";
+			//				String source7 = "source(\"E:/StarPbtools/GS/script/pedigree_relationship.R\")";
+			//				String source8 = "source(\"E:/StarPbtools/GS/script/doGenSim.R\")";
+
+			//				String source1 = "source(\"E:/StarPbtools/GS/script/GSDataPrep.R\")";
+			//				String source2 = "source(\'E:/StarPbtools/GS/script/trimStrings.R\')";
+			String getGSDataPrepOut = "gsDataPrepOut <- GSDataPrep(\"" + resultFolderPath + "\", \"" + pheno_file + "\", \"" + geno_file + "\", \"" + map_file +
+					"\", \"" + rel_file + "\", \"" + pFormat + "\", \"" + gFormat + "\", \"" + mFormat + "\", \"" + rFormat + "\")";
+
+			System.out.println(source1);
+			System.out.println(source2);
+			//				System.out.println(source3);
+			//				System.out.println(source4);
+			//				System.out.println(source5);
+			//				System.out.println(source6);
+			//				System.out.println(source7);
+			//				System.out.println(source8);
+			System.out.println(getGSDataPrepOut);
+			//				
+			rConnection.eval(source1); //rEngine.eval("source(\'E:/StarPbtools/QTL/irri_new/trimStrings.R\')");
+			rConnection.eval(source2);
+			//				rEngine.eval(source3);
+			//				rEngine.eval(source4);
+			//				rEngine.eval(source5);
+			//				rEngine.eval(source6);
+			//				rEngine.eval(source7);
+			//				rEngine.eval(source8);
+			rConnection.eval(getGSDataPrepOut);
+			//				rEngine.eval("sink()");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			//			rConnection.close();
+			end();
+		}
+	}
+	public void doGenSim(GeneticSimilarityModel genSimModel) {
+
+		String resultFolderPath = genSimModel.getResultFolderPath();
+		String doPedigree =  genSimModel.getDoPedigree(); 
+		String fileFormat =  genSimModel.getFileFormat(); 
+		String fileName =  genSimModel.getFileName();
+		String relType =  genSimModel.getRelType();
+		String outFileName =  genSimModel.getOutFileName();
+		int markerFormat =  genSimModel.getMarkerFormat();
+
+		System.out.println("start GenSim");
+		genSimModel.toString();
+
+		try {
+			String source1 = "library(synbreed)";
+			String source2 = "library(pedigreemm)";
+			String source3 = "library(PBTools)";
+			String source4 = "library(pbtgs)";
+			String getGenSimOut = "genSimOut <- doGenSim(\"" + resultFolderPath + "\", \"" + fileName + "\", \"" + fileFormat + "\", " + doPedigree +
+					", \"" + relType + "\", \"" + outFileName + "\", " + markerFormat + ")";
+
+			System.out.println(source1);
+			System.out.println(source2);
+			System.out.println(source3);
+			System.out.println(source4);
+			System.out.println(getGenSimOut);
+
+			rConnection.eval(source1); //rEngine.eval("source(\'E:/StarPbtools/QTL/irri_new/trimStrings.R\')");
+			rConnection.eval(source2);
+			rConnection.eval(source3);
+			rConnection.eval(source4);
+			rConnection.eval(getGenSimOut);
+			System.out.println("reached end.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			//			rConnection.close();
+			end();
+		}
+	}	
+
 
 	public void doSingleEnvironmentAnalysis(SingleSiteAnalysisModel ssaModel) {
 
@@ -1589,7 +1956,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 	}
@@ -1919,7 +2286,8 @@ public class RServeManager {
 								String outAnovaTable3 = "model1b <- lmer(formula(ssa1$output[[" + i + "]]$site[[" + j + "]]$formula1), data = ssa1$output[[" + i + "]]$site[[" + j + "]]$data, REML = T)";
 								String outAnovaTable4 = "a.table <- anova(model1b)";
 								String outAnovaTable5 = "pvalue <- formatC(as.numeric(format(a.table[1,6], scientific=FALSE)), format=\"f\")";
-								String outAnovaTable6 = "a.table<-cbind(round(a.table[,1:5], digits=4),pvalue)";
+								String outAnovaTable6 = "a.table<-cbind(round(a.table[,c(\"NumDF\", \"Sum Sq\", \"Mean Sq\", \"F.value\", \"DenDF\")], digits=4),pvalue)";
+//								String outAnovaTable6 = "a.table<-cbind(round(a.table[,1:5], digits=4),pvalue)";
 								String outAnovaTable7 = "colnames(a.table)<-c(\"Df\", \"Sum Sq\", \"Mean Sq\", \"F value\", \"Denom\", \"Pr(>F)\")";
 								String outAnovaTable8 = "capture.output(cat(\"Analysis of Variance Table with Satterthwaite Denominator Df\n\"),file=\"" + outFileName + "\",append = TRUE)";
 								String outAnovaTable9 = "capture.output(a.table,file=\"" + outFileName + "\",append = TRUE)";
@@ -2411,7 +2779,7 @@ public class RServeManager {
 								}
 								System.out.println("lmerRun:"+lmerRun);	
 							}
-							
+
 							if (printAllOutputRandom) {
 								// display warning generated by checkTest in ssa.test
 								String warningCheckTest = rConnection.eval("ssa2$output[[" + i	+ "]]$site[[" + j + "]]$checkTestWarning").asString();
@@ -3154,7 +3522,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 	}
@@ -4523,10 +4891,10 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
-		
+
 	}
 
 	public void doSingleEnvironmentAnalysisPRep(SingleSiteAnalysisModel ssaModel){
@@ -4707,7 +5075,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 	}
@@ -4721,7 +5089,7 @@ public class RServeManager {
 			rConnection.eval("plot(cars)");
 			//			rConnection.eval("dev.off()");
 
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		} catch (RserveException e) {
 			// TODO Auto-generated catch block
@@ -4784,7 +5152,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 	}
@@ -4806,9 +5174,7 @@ public class RServeManager {
 
 		System.out.println("start QTL");
 		System.out.println("resultFolderPath: " + resultFolderPath);
-
 		try {
-
 			//						rConnection.eval("library(qtl)");
 			//						System.out.println("library(qtl)");
 			//						rConnection.eval("library(lattice)");
@@ -4817,7 +5183,6 @@ public class RServeManager {
 			//						System.out.println("library(qtlbim)");
 			//						rConnection.eval("library(PBTools)");
 			//						System.out.println("library(PBTools)");
-
 			String readData = "QTLdata <- tryCatch(createQTLdata(\"" + resultFolderPath + "\", \"" + dataFormat + "\", \"" + format1 + "\", \"" + crossType + "\", \"" + file1 + "\", \"" +
 					format2 + "\", \"" + file2 + "\", \"" + format3 + "\", \"" + file3 + "\", \"" + P_geno + "\", " + bcNum + ", " + fNum + "))";
 
@@ -4904,7 +5269,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 	}
@@ -5002,7 +5367,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 		//return msg;
@@ -5083,7 +5448,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 	}
@@ -5141,7 +5506,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 		//return msg;
@@ -5246,7 +5611,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 		//return msg;
@@ -5329,7 +5694,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 		//return msg;
@@ -5409,7 +5774,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 	}
@@ -5504,7 +5869,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 		//return msg;
@@ -5580,7 +5945,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 	}
@@ -5657,7 +6022,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 	}
@@ -5762,7 +6127,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 		//return msg;
@@ -5852,7 +6217,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 		//return msg;
@@ -5931,7 +6296,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 	}
@@ -6021,7 +6386,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 		//return msg;
@@ -6111,7 +6476,7 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 	}
@@ -6198,10 +6563,218 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{	
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 		//return msg;
+	}
+
+	public void doDesignSplit(String path, String fieldBookName, String main, String sub, String ssub, 
+			String sssub, String[]  factorID, Integer[] factorLevel, Integer rep, Integer trial, String design, 
+			Integer numFieldRow, Integer rowPerBlk, Integer rowPerMain, Integer rowPerSub, Integer rowPerSubSub, 
+			String fieldOrder){
+		try{
+			//defining the R statements for randomization of Family of Split plot design
+			rscriptCommand = new StringBuilder();
+			String CSVOutput = path + fieldBookName + ".csv";
+			String TxtOuptut = path + fieldBookName + ".txt";
+
+			String sinkIn = "sink(\"" + TxtOuptut + "\")";
+			String pkgIntro = "cat(\"Result of Randomization\\n\",date(),\"\\n\\n\\n\", sep = \"\")";
+			String funcRandomize = "result <- try(";
+			String command = "designSplit(main = list("+ main +" = paste(\""+ factorID[0] +"\", paste(1:"+ factorLevel[0] +"), sep = \"\"))";
+			command = command + ", sub = list("+ sub +" = paste(\""+ factorID[1] +"\", paste(1:"+ factorLevel[1] +"), sep = \"\"))";
+			if (ssub != null) {
+				command = command + ", ssub = list("+ ssub +" = paste(\""+ factorID[2] +"\", paste(1:"+ factorLevel[2] +"), sep = \"\"))";
+			}
+			if (sssub != null) {
+				command = command + ", sssub = list("+ sssub +" = paste(\""+ factorID[3] +"\", paste(1:"+ factorLevel[3] +"), sep = \"\"))";
+			}
+			if (design != "lsd") {
+				command = command + ", r = "+ rep ;
+			}
+			command = command + ", trial = "+ trial + ", design = \""+ design +"\"";
+			if (design != "lsd") {
+				command = command + ", numFieldRow = "+ numFieldRow;
+			}
+			if (design == "rcbd") {
+				command = command + ", rowPerBlk = "+ rowPerBlk;
+			}
+			command = command + ", rowPerMain = "+ rowPerMain;
+			if (ssub != null) {
+				command = command + ", rowPerSub = "+ rowPerSub;
+			}
+			if (sssub != null) {
+				command = command + ", rowPerSubSub = "+ rowPerSubSub;
+			}
+			if (fieldOrder == "Plot Order") {
+				command = command + ", serpentine = FALSE";
+			} else {
+				command = command + ", serpentine = TRUE";
+			}
+			command = command + ", file = \"" + CSVOutput +"\")";
+			funcRandomize = funcRandomize + command + ", silent = TRUE)";
+
+			System.out.println(sinkIn);
+			System.out.println(pkgIntro);
+			System.out.println(funcRandomize);
+
+			rConnection.eval(sinkIn);
+			rConnection.eval(pkgIntro);
+			rConnection.eval(funcRandomize);
+
+			//	String sortFile = "write.csv(result$fieldbook, file = \""+ CSVOutput +"\", row.names = FALSE)";
+			//	System.out.println(sortFile);
+			//	rEngine.eval(sortFile);
+
+			String runSuccessCommand = rConnection.eval("class(result)").asString();
+			if (runSuccessCommand.equals("try-error")) {
+				String errorMsg1 = "msg <- trimStrings(strsplit(result, \":\")[[1]])";
+				String errorMsg2 = "msg <- trimStrings(paste(strsplit(msg, \"\\n\")[[length(msg)]], collapse = \" \"))";
+				String errorMsg3 = "msg <- gsub(\"\\\"\", \"\", msg)";
+				String errorMsg4 = "cat(\"Error in designSplit:\\n\",msg, sep = \"\")";
+
+				System.out.println(errorMsg1);
+				System.out.println(errorMsg2);
+				System.out.println(errorMsg3);
+				System.out.println(errorMsg4);
+
+				rConnection.eval(errorMsg1);
+				rConnection.eval(errorMsg2);
+				rConnection.eval(errorMsg3);
+				rConnection.eval(errorMsg4);
+			} 
+			else {
+				String checkOutput = "if (nrow(result$fieldbook) != 0) {\n";
+				checkOutput = checkOutput + "    cat(\"\\nLayout for \")\n";
+				if (ssub == null && sssub == null) checkOutput = checkOutput + "    cat(\"Split Plot in \")\n";
+				if (ssub != null && sssub == null) checkOutput = checkOutput + "    cat(\"Split-Split Plot in \")\n";
+				if (ssub != null && sssub != null) checkOutput = checkOutput + "    cat(\"Split-Split-Split Plot in \")\n";
+				if (design == "crd") checkOutput = checkOutput + "    cat(\"Completely Randomized Design: \",\"\\n\\n\")\n";
+				if (design == "rcbd") checkOutput = checkOutput + "    cat(\"Randomized Complete Block Design: \",\"\\n\\n\")\n";
+				if (design == "lsd") checkOutput = checkOutput + "    cat(\"Latin Square Design: \",\"\\n\\n\")\n";
+				checkOutput = checkOutput + "    for (i in (1:length(result$layout))) { \n";
+				checkOutput = checkOutput + "          printLayout(result$layout[[i]], result$plotNum, RowLabel = rownames(result$layout[[i]]), ColLabel = colnames(result$layout[[i]]), title = paste(\"Trial = \", i, sep = \"\"))\n";
+				checkOutput = checkOutput + "          cat(\"\\n\")\n";
+				checkOutput = checkOutput + "    }\n";
+				checkOutput = checkOutput + "    cat(\"\\n\",\"**Note: Cells contain plot numbers on top, treatments/entries below\")\n";
+				checkOutput = checkOutput + "}";
+
+				System.out.println(checkOutput);
+				rConnection.eval(checkOutput);
+			}
+
+			String sinkOut = "sink()";
+			System.out.println(sinkOut);
+			rConnection.eval(sinkOut);
+
+			rscriptCommand.append(command+"\n");
+
+			System.out.println("reached end.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			//			rConnection.close();
+			end();
+		}
+	}
+
+	public void doDesignStrip(String path, String fieldBookName, String vertical, String horizontal, String sub, String ssub, 
+			String[] factorID, Integer[] factorLevel, Integer rep, Integer trial, Integer numFieldRow, Integer rowPerMain, 
+			Integer rowPerSub, String fieldOrder){
+
+		try{
+			//defining the R statements for randomization for Family of Strip Design
+			rscriptCommand = new StringBuilder();
+			String CSVOutput = path + fieldBookName + ".csv";
+			String TxtOuptut = path + fieldBookName + ".txt";
+
+			String sinkIn = "sink(\"" + TxtOuptut + "\")";
+			String pkgIntro = "cat(\"Result of Randomization\\n\",date(),\"\\n\\n\\n\", sep = \"\")";		
+			String funcRandomize = "result <- try(";
+			String command = "designStrip(vertical = list("+ vertical +" = paste(\""+ factorID[0] +"\", paste(1:"+ factorLevel[0] +"), sep = \"\"))";
+			command = command + ", horizontal = list("+ horizontal +" = paste(\""+ factorID[1] +"\", paste(1:"+ factorLevel[1] +"), sep = \"\"))";
+			if (sub != null) {
+				command = command + ", sub = list("+ sub +" = paste(\""+ factorID[2] +"\", paste(1:"+ factorLevel[2] +"), sep = \"\"))";
+			}
+			if (ssub != null) {
+				command = command + ", ssub = list("+ ssub +" = paste(\""+ factorID[3] +"\", paste(1:"+ factorLevel[3] +"), sep = \"\"))";
+			}
+
+			command = command + ", r = "+ rep +", trial = "+ trial +", numFieldRow = "+ numFieldRow;
+			if (sub != null) {
+				command = command + ", rowPerMain = "+ rowPerMain;
+			} 
+			if (ssub != null) {
+				command = command + ", rowPerSub = "+ rowPerSub;
+			}
+			if (fieldOrder == "Plot Order") {
+				command = command + ", serpentine = FALSE";
+			} else {
+				command = command + ", serpentine = TRUE";
+			}
+			command = command + ", file = \"" + CSVOutput +"\")";
+			funcRandomize = funcRandomize + command + ", silent = TRUE)";
+
+			System.out.println(sinkIn);
+			System.out.println(pkgIntro);
+			System.out.println(funcRandomize);
+
+			//R statements passed on to the R engine
+			rConnection.eval(sinkIn);
+			rConnection.eval(pkgIntro);
+			rConnection.eval(funcRandomize);
+
+			//		String sortFile = "write.csv(result$fieldbook, file = \""+ CSVOutput +"\", row.names = FALSE)";
+			//		System.out.println(sortFile);
+			//		rEngine.eval(sortFile);
+
+			String runSuccessCommand = rConnection.eval("class(result)").asString();
+			if (runSuccessCommand.equals("try-error")) {
+				String errorMsg1 = "msg <- trimStrings(strsplit(result, \":\")[[1]])";
+				String errorMsg2 = "msg <- trimStrings(paste(strsplit(msg, \"\\n\")[[length(msg)]], collapse = \" \"))";
+				String errorMsg3 = "msg <- gsub(\"\\\"\", \"\", msg)";
+				String errorMsg4 = "cat(\"Error in designStrip:\\n\",msg, sep = \"\")";
+
+				System.out.println(errorMsg1);
+				System.out.println(errorMsg2);
+				System.out.println(errorMsg3);
+				System.out.println(errorMsg4);
+
+				rConnection.eval(errorMsg1);
+				rConnection.eval(errorMsg2);
+				rConnection.eval(errorMsg3);
+				rConnection.eval(errorMsg4);
+			} 
+			else {
+				String checkOutput = "if (nrow(result$fieldbook) != 0) {\n";
+				if (sub == null && ssub == null) checkOutput = checkOutput + "    cat(\"\\nLayout for Strip Plot:\",\"\\n\\n\")\n";
+				if (sub != null && ssub == null) checkOutput = checkOutput + "    cat(\"\\nLayout for Strip-Split Plot:\",\"\\n\\n\")\n";
+				if (sub != null && ssub != null) checkOutput = checkOutput + "    cat(\"\\nLayout for Strip-Split-Split Plot:\",\"\\n\\n\")\n";
+				checkOutput = checkOutput + "    for (i in (1:length(result$layout))) { \n";
+				checkOutput = checkOutput + "          printLayout(result$layout[[i]], result$plotNum, RowLabel = rownames(result$layout[[i]]), ColLabel = colnames(result$layout[[i]]), title = paste(\"Trial = \", i, sep = \"\"))\n";
+				checkOutput = checkOutput + "          cat(\"\\n\")\n";
+				checkOutput = checkOutput + "    }\n";
+				checkOutput = checkOutput + "    cat(\"\\n\",\"**Note: Cells contain plot numbers on top, treatments/entries below\")\n";
+				checkOutput = checkOutput + "}";
+
+				System.out.println(checkOutput);
+				rConnection.eval(checkOutput);
+			}
+
+			String sinkOut = "sink()";
+			System.out.println(sinkOut);
+			rConnection.eval(sinkOut);
+
+			rscriptCommand.append(command+"\n");
+
+			System.out.println("reached end.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			//			rConnection.close();
+			end();
+		}
 	}
 
 	public void doQtl(QTLAnalysisModel qtlAnalysisModel) {
@@ -6337,219 +6910,11 @@ public class RServeManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-//			rConnection.close();
+			//			rConnection.close();
 			end();
 		}
 	}
 
-	public void doDesignSplit(String path, String fieldBookName, String main, String sub, String ssub, 
-			String sssub, String[]  factorID, Integer[] factorLevel, Integer rep, Integer trial, String design, 
-			Integer numFieldRow, Integer rowPerBlk, Integer rowPerMain, Integer rowPerSub, Integer rowPerSubSub, 
-			String fieldOrder){
-		try{
-			//defining the R statements for randomization of Family of Split plot design
-			rscriptCommand = new StringBuilder();
-			String CSVOutput = path + fieldBookName + ".csv";
-			String TxtOuptut = path + fieldBookName + ".txt";
-
-			String sinkIn = "sink(\"" + TxtOuptut + "\")";
-			String pkgIntro = "cat(\"Result of Randomization\\n\",date(),\"\\n\\n\\n\", sep = \"\")";
-			String funcRandomize = "result <- try(";
-			String command = "designSplit(main = list("+ main +" = paste(\""+ factorID[0] +"\", paste(1:"+ factorLevel[0] +"), sep = \"\"))";
-			command = command + ", sub = list("+ sub +" = paste(\""+ factorID[1] +"\", paste(1:"+ factorLevel[1] +"), sep = \"\"))";
-			if (ssub != null) {
-				command = command + ", ssub = list("+ ssub +" = paste(\""+ factorID[2] +"\", paste(1:"+ factorLevel[2] +"), sep = \"\"))";
-			}
-			if (sssub != null) {
-				command = command + ", sssub = list("+ sssub +" = paste(\""+ factorID[3] +"\", paste(1:"+ factorLevel[3] +"), sep = \"\"))";
-			}
-			if (design != "lsd") {
-				command = command + ", r = "+ rep ;
-			}
-			command = command + ", trial = "+ trial + ", design = \""+ design +"\"";
-			if (design != "lsd") {
-				command = command + ", numFieldRow = "+ numFieldRow;
-			}
-			if (design == "rcbd") {
-				command = command + ", rowPerBlk = "+ rowPerBlk;
-			}
-			command = command + ", rowPerMain = "+ rowPerMain;
-			if (ssub != null) {
-				command = command + ", rowPerSub = "+ rowPerSub;
-			}
-			if (sssub != null) {
-				command = command + ", rowPerSubSub = "+ rowPerSubSub;
-			}
-			if (fieldOrder == "Plot Order") {
-				command = command + ", serpentine = FALSE";
-			} else {
-				command = command + ", serpentine = TRUE";
-			}
-			command = command + ", file = \"" + CSVOutput +"\")";
-			funcRandomize = funcRandomize + command + ", silent = TRUE)";
-
-			System.out.println(sinkIn);
-			System.out.println(pkgIntro);
-			System.out.println(funcRandomize);
-
-			rConnection.eval(sinkIn);
-			rConnection.eval(pkgIntro);
-			rConnection.eval(funcRandomize);
-
-			//	String sortFile = "write.csv(result$fieldbook, file = \""+ CSVOutput +"\", row.names = FALSE)";
-			//	System.out.println(sortFile);
-			//	rEngine.eval(sortFile);
-
-			String runSuccessCommand = rConnection.eval("class(result)").asString();
-			if (runSuccessCommand.equals("try-error")) {
-				String errorMsg1 = "msg <- trimStrings(strsplit(result, \":\")[[1]])";
-				String errorMsg2 = "msg <- trimStrings(paste(strsplit(msg, \"\\n\")[[length(msg)]], collapse = \" \"))";
-				String errorMsg3 = "msg <- gsub(\"\\\"\", \"\", msg)";
-				String errorMsg4 = "cat(\"Error in designSplit:\\n\",msg, sep = \"\")";
-
-				System.out.println(errorMsg1);
-				System.out.println(errorMsg2);
-				System.out.println(errorMsg3);
-				System.out.println(errorMsg4);
-
-				rConnection.eval(errorMsg1);
-				rConnection.eval(errorMsg2);
-				rConnection.eval(errorMsg3);
-				rConnection.eval(errorMsg4);
-			} 
-			else {
-				String checkOutput = "if (nrow(result$fieldbook) != 0) {\n";
-				checkOutput = checkOutput + "    cat(\"\\nLayout for \")\n";
-				if (ssub == null && sssub == null) checkOutput = checkOutput + "    cat(\"Split Plot in \")\n";
-				if (ssub != null && sssub == null) checkOutput = checkOutput + "    cat(\"Split-Split Plot in \")\n";
-				if (ssub != null && sssub != null) checkOutput = checkOutput + "    cat(\"Split-Split-Split Plot in \")\n";
-				if (design == "crd") checkOutput = checkOutput + "    cat(\"Completely Randomized Design: \",\"\\n\\n\")\n";
-				if (design == "rcbd") checkOutput = checkOutput + "    cat(\"Randomized Complete Block Design: \",\"\\n\\n\")\n";
-				if (design == "lsd") checkOutput = checkOutput + "    cat(\"Latin Square Design: \",\"\\n\\n\")\n";
-				checkOutput = checkOutput + "    for (i in (1:length(result$layout))) { \n";
-				checkOutput = checkOutput + "          printLayout(result$layout[[i]], result$plotNum, RowLabel = rownames(result$layout[[i]]), ColLabel = colnames(result$layout[[i]]), title = paste(\"Trial = \", i, sep = \"\"))\n";
-				checkOutput = checkOutput + "          cat(\"\\n\")\n";
-				checkOutput = checkOutput + "    }\n";
-				checkOutput = checkOutput + "    cat(\"\\n\",\"**Note: Cells contain plot numbers on top, treatments/entries below\")\n";
-				checkOutput = checkOutput + "}";
-
-				System.out.println(checkOutput);
-				rConnection.eval(checkOutput);
-			}
-
-			String sinkOut = "sink()";
-			System.out.println(sinkOut);
-			rConnection.eval(sinkOut);
-
-			rscriptCommand.append(command+"\n");
-
-			System.out.println("reached end.");
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally{
-//			rConnection.close();
-			end();
-		}
-	}
-
-	public void doDesignStrip(String path, String fieldBookName, String vertical, String horizontal, String sub, String ssub, 
-			String[] factorID, Integer[] factorLevel, Integer rep, Integer trial, Integer numFieldRow, Integer rowPerMain, 
-			Integer rowPerSub, String fieldOrder){
-
-		try{
-			//defining the R statements for randomization for Family of Strip Design
-			rscriptCommand = new StringBuilder();
-			String CSVOutput = path + fieldBookName + ".csv";
-			String TxtOuptut = path + fieldBookName + ".txt";
-
-			String sinkIn = "sink(\"" + TxtOuptut + "\")";
-			String pkgIntro = "cat(\"Result of Randomization\\n\",date(),\"\\n\\n\\n\", sep = \"\")";		
-			String funcRandomize = "result <- try(";
-			String command = "designStrip(vertical = list("+ vertical +" = paste(\""+ factorID[0] +"\", paste(1:"+ factorLevel[0] +"), sep = \"\"))";
-			command = command + ", horizontal = list("+ horizontal +" = paste(\""+ factorID[1] +"\", paste(1:"+ factorLevel[1] +"), sep = \"\"))";
-			if (sub != null) {
-				command = command + ", sub = list("+ sub +" = paste(\""+ factorID[2] +"\", paste(1:"+ factorLevel[2] +"), sep = \"\"))";
-			}
-			if (ssub != null) {
-				command = command + ", ssub = list("+ ssub +" = paste(\""+ factorID[3] +"\", paste(1:"+ factorLevel[3] +"), sep = \"\"))";
-			}
-
-			command = command + ", r = "+ rep +", trial = "+ trial +", numFieldRow = "+ numFieldRow;
-			if (sub != null) {
-				command = command + ", rowPerMain = "+ rowPerMain;
-			} 
-			if (ssub != null) {
-				command = command + ", rowPerSub = "+ rowPerSub;
-			}
-			if (fieldOrder == "Plot Order") {
-				command = command + ", serpentine = FALSE";
-			} else {
-				command = command + ", serpentine = TRUE";
-			}
-			command = command + ", file = \"" + CSVOutput +"\")";
-			funcRandomize = funcRandomize + command + ", silent = TRUE)";
-
-			System.out.println(sinkIn);
-			System.out.println(pkgIntro);
-			System.out.println(funcRandomize);
-
-			//R statements passed on to the R engine
-			rConnection.eval(sinkIn);
-			rConnection.eval(pkgIntro);
-			rConnection.eval(funcRandomize);
-
-			//		String sortFile = "write.csv(result$fieldbook, file = \""+ CSVOutput +"\", row.names = FALSE)";
-			//		System.out.println(sortFile);
-			//		rEngine.eval(sortFile);
-
-			String runSuccessCommand = rConnection.eval("class(result)").asString();
-			if (runSuccessCommand.equals("try-error")) {
-				String errorMsg1 = "msg <- trimStrings(strsplit(result, \":\")[[1]])";
-				String errorMsg2 = "msg <- trimStrings(paste(strsplit(msg, \"\\n\")[[length(msg)]], collapse = \" \"))";
-				String errorMsg3 = "msg <- gsub(\"\\\"\", \"\", msg)";
-				String errorMsg4 = "cat(\"Error in designStrip:\\n\",msg, sep = \"\")";
-
-				System.out.println(errorMsg1);
-				System.out.println(errorMsg2);
-				System.out.println(errorMsg3);
-				System.out.println(errorMsg4);
-
-				rConnection.eval(errorMsg1);
-				rConnection.eval(errorMsg2);
-				rConnection.eval(errorMsg3);
-				rConnection.eval(errorMsg4);
-			} 
-			else {
-				String checkOutput = "if (nrow(result$fieldbook) != 0) {\n";
-				if (sub == null && ssub == null) checkOutput = checkOutput + "    cat(\"\\nLayout for Strip Plot:\",\"\\n\\n\")\n";
-				if (sub != null && ssub == null) checkOutput = checkOutput + "    cat(\"\\nLayout for Strip-Split Plot:\",\"\\n\\n\")\n";
-				if (sub != null && ssub != null) checkOutput = checkOutput + "    cat(\"\\nLayout for Strip-Split-Split Plot:\",\"\\n\\n\")\n";
-				checkOutput = checkOutput + "    for (i in (1:length(result$layout))) { \n";
-				checkOutput = checkOutput + "          printLayout(result$layout[[i]], result$plotNum, RowLabel = rownames(result$layout[[i]]), ColLabel = colnames(result$layout[[i]]), title = paste(\"Trial = \", i, sep = \"\"))\n";
-				checkOutput = checkOutput + "          cat(\"\\n\")\n";
-				checkOutput = checkOutput + "    }\n";
-				checkOutput = checkOutput + "    cat(\"\\n\",\"**Note: Cells contain plot numbers on top, treatments/entries below\")\n";
-				checkOutput = checkOutput + "}";
-
-				System.out.println(checkOutput);
-				rConnection.eval(checkOutput);
-			}
-
-			String sinkOut = "sink()";
-			System.out.println(sinkOut);
-			rConnection.eval(sinkOut);
-
-			rscriptCommand.append(command+"\n");
-
-			System.out.println("reached end.");
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally{
-//			rConnection.close();
-			end();
-		}
-	}
- 
 	public String isColumnNumeric (String dataFileName, String columnName){
 		String isNumericOut = null;
 		try{
@@ -6572,5 +6937,6 @@ public class RServeManager {
 			e.printStackTrace();
 		} 
 	}
+
 
 }

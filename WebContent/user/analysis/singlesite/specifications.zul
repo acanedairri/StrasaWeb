@@ -4,7 +4,7 @@
 		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.strasa.web.analysis.singlesite.view.model.Specifications')"
 		align="center" height="100%">
-
+		
 		<vlayout>
 			<grid zclass="none">
 				<columns>
