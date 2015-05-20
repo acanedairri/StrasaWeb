@@ -79,7 +79,7 @@ public class Index {
 
 
 	private String chosenMapping, fileName1, fileName2, fileName3, dataFileName, fileName, comboboxMapping, coboboxmapping2, comboboxmapping3, comboboxmapping4;
-	private String value1, value2, value3;
+	private String value1, value2, value3,value4;
 
 	private boolean mapping1, mapping2, mapping3, mapping4, isNewDataSet, isVariableDataVisible;
 	public boolean isUpdateMode = false;
@@ -1358,7 +1358,17 @@ public class Index {
 	public void setValue3(String value3) {
 		this.value3 = value3;
 	}
+	
+	
 
+
+	public String getValue4() {
+		return value4;
+	}
+
+	public void setValue4(String value4) {
+		this.value4 = value4;
+	}
 
 	public File getFile1() {
 		return file1;
@@ -1580,4 +1590,6 @@ public class Index {
 	public void setSelectedFileFormat(Integer selectedFileFormat) {
 		this.selectedFileFormat = selectedFileFormat;
 	}
+	
+	
 }

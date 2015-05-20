@@ -84,7 +84,7 @@
 								onClick="@command('validateInputFiles')" sclass="btn-danger" />
 							<separator bar="false" />
 							<separator bar="false" />
-						</div>
+						
 						<groupbox id="grpDataCheckView" mold="3d"
 							visible="false" width="100%" height="100%" vflex="1" hflex="1">
 							<caption label="Data Quality Check Preview" />
@@ -92,6 +92,7 @@
 								style="overflow:auto" vflex="1">
 							</div>
 						</groupbox>
+					</div>
 					</hlayout>
 				</tabpanel>
 				<tabpanel style="overflow:auto">
