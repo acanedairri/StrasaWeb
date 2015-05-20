@@ -122,6 +122,7 @@
 							<caption label="Data Quality Check Preview" />
 							<div id="divDataCheckTxt" style="overflow:auto" vflex="1"> </div>
 						</groupbox>
+						</div>
 					</hlayout>
 				</tabpanel>
 
@@ -154,7 +155,7 @@
 							</listcell>
 						</listitem>
 						<listitem>
-							</listcell>
+							<listcell />
 						</listitem>
 						<listitem>
 							<listcell />
