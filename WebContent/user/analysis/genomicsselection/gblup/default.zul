@@ -22,22 +22,22 @@
 		<groupbox width="600px" id="mgroupbox">
 			Relationship Matrix File:
 			<separator />
-			<radiogroup id="radiogroupMatrix" />
-			<radio label="import" radiogroup="radiogroupMatrix" selected="true"/> <space width="20px" />
-			<radio label="calculate" radiogroup="radiogroupMatrix" />
+			<radiogroup id="radiogroupMatrix" onCheck="@command('updateRadioOptions', chosenValue = self.selectedItem.value)" />
+			<radio label="import" value="import" radiogroup="radiogroupMatrix" selected="true"/> <space width="20px" />
+			<radio label="calculate"  value="calculate" radiogroup="radiogroupMatrix" />
 			<separator />
-			<label id="typeOfMatrixLabel" value="Type of matrix to generate:" />
+			<label id="lblTypeOfMatrix" value="Type of matrix to generate:" visible="false"/>
 			<combobox id="typeOfMatrixCombobox" model="@load(vm.matrixTypes)"
-				autodrop="true">
+				autodrop="true" visible="false">
 				<template name="model">
 					<comboitem label="${each}" />
 				</template>
 			</combobox>
 			<separator />
 			<label id="matrixFileNameLabel" value="Name:" />
-			<textbox width="400px" value="@load(vm.value1)" />
-			<button id="uploadButton1" label="Browse..." upload="true"
-				onUpload="@command('chooseFile1value1', fileFormat=phenoFormat.selectedIndex)" />
+			<textbox width="400px" value="@load(vm.value4)" />
+			<button id="btnUploadMatrixFile" label="Browse..." upload="true"
+				onUpload="@command('chooseFile1value4', fileFormat=phenoFormat.selectedIndex)" />
 		</groupbox>
 		<separator />
 
